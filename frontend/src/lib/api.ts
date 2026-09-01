@@ -3,10 +3,39 @@ import type {
   JsonSchema, MaskResult, SavedTest, ServerFile,
 } from '@/types'
 
+/**
+ * Every endpoint behind this helper answers with JSON. When one doesn't — the API server is
+ * down and Vite's proxy answers 502 with an empty body, or something returns an HTML error
+ * page — report that, rather than letting `res.json()` fail with "Unexpected end of JSON
+ * input", which names neither the cause nor the fix.
+ */
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  const data = await res.json()
-  if (!res.ok && data.error) throw new Error(data.error)
+  let res: Response
+  try {
+    res = await fetch(url, init)
+  } catch {
+    throw new Error(`Cannot reach ${location.host}. Is the app still running?`)
+  }
+
+  const body = await res.text()
+
+  if (!body.trim()) {
+    throw new Error(
+      res.status >= 502 && res.status <= 504
+        ? 'The API server is not responding. Start it with `npm run dev` — Express listens on port 3000.'
+        : `The server returned an empty response (HTTP ${res.status}).`
+    )
+  }
+
+  let data: unknown
+  try {
+    data = JSON.parse(body)
+  } catch {
+    throw new Error(`The server returned a non-JSON response (HTTP ${res.status}): ${body.slice(0, 200)}`)
+  }
+
+  const error = (data as { error?: unknown }).error
+  if (!res.ok && typeof error === 'string') throw new Error(error)
   return data as T
 }
 

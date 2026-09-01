@@ -10,6 +10,7 @@ const TAG_STYLE: Record<string, string> = {
   'tag-rev': 'bg-[#eaf2ee] text-[#2c5f4a]',
   'tag-warn': 'bg-[#fbf3e6] text-[#8a5410]',
   'tag-file': 'bg-slate-100 text-slate-600',
+  'tag-nondet': 'bg-[#fbf3e6] text-[#8a5410] ring-1 ring-[#8a5410]',
 }
 
 /**

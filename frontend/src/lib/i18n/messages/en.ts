@@ -32,6 +32,10 @@ export const en = {
 
   // Tester — general
   'tester.format': 'Format: ',
+  'tester.nonDeterministic': 'Non-deterministic',
+  'tester.nonDetShuffle': 'Every run produces a different permutation for the same input and key — by design. Shuffle does not preserve joins across tables or across runs.',
+  'tester.nonDetTokenization': 'With ivLength above zero (the default is 8) a fresh initialization vector is drawn on every run, so the same value yields a different token each time. Tokens all reverse correctly, but they do not preserve joins. Set ivLength to 0 for deterministic output.',
+  'tester.nonDetSecureLookup': 'hashMethod RANDOMIZE picks a random line on every run, so the same value gets a different replacement each time. Use SHA256 to keep the result deterministic.',
   'tester.tabTest': 'Test',
   'tester.tabDoc': 'Documentation',
   'tester.docLoading': 'Loading documentation…',

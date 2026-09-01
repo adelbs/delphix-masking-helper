@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Play, Code2, Zap, Save, Copy, Check, PanelLeftOpen, Plus, Trash2, RotateCcw, FlaskConical, BookOpen } from 'lucide-react'
+import { Play, Code2, Zap, Save, Copy, Check, PanelLeftOpen, Plus, Trash2, RotateCcw, FlaskConical, BookOpen, AlertTriangle } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
-import { getAlgoMetadata } from '@/lib/algo-metadata'
+import { getAlgoMetadata, nonDeterminismKey } from '@/lib/algo-metadata'
 import { useT, type I18n } from '@/lib/i18n'
 import { ConfigForm } from './ConfigForm'
 import { AlgoDoc } from './AlgoDoc'
@@ -141,6 +141,9 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
     }
     return config
   }
+
+  // Recomputed on every render: editing ivLength or hashMethod flips the warning live.
+  const nonDetKey = nonDeterminismKey(algo.className, getEffectiveConfig())
 
   const loadExample = async () => {
     if (!meta?.example) return
@@ -311,6 +314,18 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
               <span className="font-medium">{t('tester.format')}</span>{meta.inputFormat}
             </p>
           )}
+        </div>
+      )}
+
+      {/* Non-determinism warning — depends on the current configuration, so it appears
+          and disappears as the user edits the parameter that controls it. */}
+      {nonDetKey && (
+        <div className="px-5 py-2.5 bg-amber-50 border-b border-amber-200 flex items-start gap-2 flex-shrink-0">
+          <AlertTriangle size={15} className="text-amber-600 flex-shrink-0 mt-px" />
+          <p className="text-xs text-amber-900">
+            <span className="font-semibold">{t('tester.nonDeterministic')}. </span>
+            {t(nonDetKey)}
+          </p>
         </div>
       )}
 

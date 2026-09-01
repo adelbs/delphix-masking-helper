@@ -31,6 +31,10 @@ export const ptBR: Messages = {
 
   // Tester — general
   'tester.format': 'Formato: ',
+  'tester.nonDeterministic': 'Não determinístico',
+  'tester.nonDetShuffle': 'Cada execução gera uma permutação diferente para a mesma entrada e chave — de propósito. O Shuffle não preserva junções entre tabelas nem entre execuções.',
+  'tester.nonDetTokenization': 'Com ivLength maior que zero (o padrão é 8), um vetor de inicialização novo é sorteado a cada execução, então o mesmo valor gera um token diferente toda vez. Todos revertem corretamente, mas não preservam junções. Use ivLength 0 para saída determinística.',
+  'tester.nonDetSecureLookup': 'O hashMethod RANDOMIZE sorteia uma linha a cada execução, então o mesmo valor recebe um substituto diferente toda vez. Use SHA256 para manter o resultado determinístico.',
   'tester.tabTest': 'Testar',
   'tester.tabDoc': 'Documentação',
   'tester.docLoading': 'Carregando a documentação…',

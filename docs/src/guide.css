@@ -155,6 +155,9 @@ body{
 .tag-rev{ background:var(--out-wash); color:var(--out); }
 .tag-warn{ background:var(--warn-wash); color:var(--warn); }
 .tag-file{ background:#eceff2; color:var(--ink-2); }
+/* Non-determinism gets its own tag rather than the generic warning one: it is the single
+   property most likely to break an expectation, so it must read the same everywhere. */
+.tag-nondet{ background:var(--warn-wash); color:var(--warn); border:.3mm solid var(--warn); }
 
 .algo-body{ margin-left:14mm; }
 .algo-desc{ margin:0 0 3mm; line-height:1.58; max-width:14.5cm; }

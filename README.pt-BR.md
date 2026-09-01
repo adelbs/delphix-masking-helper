@@ -24,6 +24,8 @@ O servidor Node expõe uma API REST que delega cada operação para o `Algorithm
 
 ## Guia dos algoritmos
 
+📖 **[Ler a referência dos algoritmos online](https://adelbs.github.io/delphix-masking-helper/algorithms.pt-BR.html)** — o mesmo conteúdo dos PDFs, em três idiomas.
+
 Cada algoritmo abre com duas abas: **Testar** e **Documentação**. A aba de documentação mostra a
 seção daquele algoritmo no guia de referência, no idioma da interface — o mesmo conteúdo dos PDFs
 abaixo, lido da mesma fonte, então os dois nunca divergem.

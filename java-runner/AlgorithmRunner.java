@@ -16,6 +16,11 @@ import java.util.logging.*;
 
 public class AlgorithmRunner {
 
+    // Fallback key for direct CLI use. The server always sends the key explicitly, so this
+    // only applies when the runner is driven by hand. It must stay equal to MASKING_KEY in
+    // server.js: masking the same value under two different keys gives two different outputs.
+    static final String DEFAULT_KEY = "delphix-default-key";
+
     // Plugin JAR path — resolved at startup from system property or default location
     static String PLUGIN_JAR_PATH = System.getProperty("plugin.jar",
         "../lib/delphix-algorithm-plugin-2026.3.0-SNAPSHOT.jar");
@@ -162,7 +167,7 @@ public class AlgorithmRunner {
             String input = req.has("input") ? req.get("input").asText() : "";
             String configJson = req.has("config") && !req.get("config").isNull()
                     ? mapper.writeValueAsString(req.get("config")) : "{}";
-            String keyString = req.has("key") ? req.get("key").asText() : "delphix-default-key";
+            String keyString = req.has("key") ? req.get("key").asText() : DEFAULT_KEY;
             String mode = req.has("mode") ? req.get("mode").asText() : "MASK";
 
             MaskingComponent component = instantiate(className);
@@ -223,7 +228,7 @@ public class AlgorithmRunner {
             String className = req.get("algorithm").asText();
             String configJson = req.has("config") && !req.get("config").isNull()
                     ? mapper.writeValueAsString(req.get("config")) : "{}";
-            String keyString = req.has("key") ? req.get("key").asText() : "delphix-default-key";
+            String keyString = req.has("key") ? req.get("key").asText() : DEFAULT_KEY;
             JsonNode columnsNode = req.has("columns") ? req.get("columns") : mapper.createArrayNode();
 
             Map<String, JsonNode> extraAlgos = new HashMap<>();
@@ -342,7 +347,7 @@ public class AlgorithmRunner {
             String className = req.get("algorithm").asText();
             String configJson = req.has("config") && !req.get("config").isNull()
                     ? mapper.writeValueAsString(req.get("config")) : "{}";
-            String keyString = req.has("key") ? req.get("key").asText() : "delphix-default-key";
+            String keyString = req.has("key") ? req.get("key").asText() : DEFAULT_KEY;
             JsonNode inputsNode = req.get("inputs");
 
             final int size = inputsNode.size();

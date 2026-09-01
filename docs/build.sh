@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-# Regenerates the algorithm guide PDFs from the HTML sources in docs/src/.
+# Regenerates everything derived from the algorithm guide in docs/src/:
+# the PDFs, and the GitHub Pages site.
 #
 # Usage:  ./docs/build.sh            # builds all languages
-#         ./docs/build.sh pt-BR es   # builds only the given languages
+#         ./docs/build.sh pt-BR es   # PDFs for the given languages only
+#
+# The site is always rebuilt for all three languages — it is cheap, and a partial site
+# would leave one language quoting an older version of the guide.
 #
 # Requires Google Chrome (headless) — the guides use fonts installed on macOS
 # (Iowan Old Style, Seravek, Menlo), so PDFs are best regenerated on a Mac.
@@ -43,5 +47,9 @@ for lang in "${LANGS[@]}"; do
 
   printf '  → %s (%s)\n' "${out#"$DOCS_DIR/"}" "$(du -h "$out" | cut -f1 | tr -d ' ')"
 done
+
+echo
+echo "building the GitHub Pages site …"
+node "$DOCS_DIR/build-site.mjs"
 
 echo "done."

@@ -647,3 +647,36 @@ export function getAlgoGroup(className: string): AlgoGroup {
   const key = resolveKey(className)
   return (key && METADATA[key].group) || 'other'
 }
+
+// ── Non-determinism ───────────────────────────────────────────────────────────
+
+/**
+ * Which algorithms return a different output for the same input and key on every run.
+ * Verified by executing each of the 31 five times; only these three ever varied.
+ *
+ * Two of them are non-deterministic only under a given configuration, so the check takes
+ * the config: warning unconditionally would be wrong, and staying silent would let someone
+ * pick Tokenization to preserve joins and find out much later that it does not.
+ *
+ * The message keys live in the i18n catalogs; the guide carries the same warning as a tag.
+ */
+const NON_DETERMINISTIC: Record<string, (config: Record<string, unknown>) => boolean> = {
+  // Always: the permutation is drawn per run, by design.
+  Shuffle: () => true,
+  // A fresh AES initialization vector per call. `ivLength: 0` makes it deterministic.
+  Tokenization: (cfg) => Number(cfg?.ivLength ?? 8) !== 0,
+  // Only this hashMethod; SHA256 and LEGACY derive the row from the value and the key.
+  SecureLookup: (cfg) => cfg?.hashMethod === 'RANDOMIZE',
+}
+
+/** i18n key explaining why this algorithm is non-deterministic, or null when it is not. */
+export function nonDeterminismKey(
+  className: string,
+  config: Record<string, unknown>,
+): 'tester.nonDetShuffle' | 'tester.nonDetTokenization' | 'tester.nonDetSecureLookup' | null {
+  const simple = className.split('.').pop() ?? className
+  if (!NON_DETERMINISTIC[simple]?.(config ?? {})) return null
+  return simple === 'Shuffle' ? 'tester.nonDetShuffle'
+    : simple === 'Tokenization' ? 'tester.nonDetTokenization'
+    : 'tester.nonDetSecureLookup'
+}

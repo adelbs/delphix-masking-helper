@@ -1,0 +1,224 @@
+/* Delphix Masking Helper — GitHub Pages.
+   Generated pages share this sheet; the algorithm blocks reuse the guide's own class names
+   (.algo-desc, .label, .xf, .p-row, .note…) restyled here for screen. */
+
+:root {
+  --ink: #0f1720;
+  --ink-2: #46525f;
+  --ink-3: #7b8592;
+  --rule: #e2e7ec;
+  --rule-soft: #eef1f4;
+  --paper: #ffffff;
+  --wash: #f5f8fa;
+  --accent: #0b4f6c;
+  --accent-2: #1189bd;
+  --accent-wash: #e6f0f5;
+  --warn: #8a5410;
+  --warn-wash: #fbf3e6;
+  --out: #2c5f4a;
+  --night: #101a24;
+  --night-2: #18242f;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent-2); }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+.narrow { max-width: 760px; }
+
+/* ── top bar ─────────────────────────────────────────────────────────────── */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(255, 255, 255, .92);
+  backdrop-filter: saturate(1.6) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar .wrap { display: flex; align-items: center; gap: 16px; height: 60px; }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 650; color: var(--ink); text-decoration: none; letter-spacing: -.01em; }
+.brand svg { width: 22px; height: 22px; }
+.topbar nav { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.topbar nav a { color: var(--ink-2); text-decoration: none; font-size: 14.5px; padding: 6px 10px; border-radius: 7px; }
+.topbar nav a:hover { background: var(--wash); color: var(--ink); }
+
+.langs { display: flex; gap: 2px; margin-left: 10px; padding-left: 12px; border-left: 1px solid var(--rule); }
+.langs a { font-size: 13px; padding: 5px 8px; border-radius: 6px; text-decoration: none; color: var(--ink-3); }
+.langs a:hover { background: var(--wash); color: var(--ink); }
+.langs a[aria-current="true"] { background: var(--accent-wash); color: var(--accent); font-weight: 650; }
+
+/* The bar stays on one line at every width. Rather than hiding languages behind a menu,
+   the names shrink to codes; the brand truncates last. */
+.topbar .wrap { gap: 12px; }
+.brand { min-width: 0; }
+.brand span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.brand svg { flex: 0 0 auto; }
+.topbar nav { flex: 0 0 auto; }
+.topbar nav a { white-space: nowrap; }
+.langs a .abbr { display: none; }
+
+@media (max-width: 860px) {
+  .topbar nav > a[href*="algorithms"] { display: none; }
+}
+@media (max-width: 620px) {
+  .langs a .full { display: none; }
+  .langs a .abbr { display: inline; }
+  .langs { margin-left: 4px; padding-left: 8px; }
+}
+@media (max-width: 420px) {
+  .topbar nav > a[href*="github"] { display: none; }
+}
+
+/* ── hero ────────────────────────────────────────────────────────────────── */
+.hero { background: var(--night); color: #e8eef4; padding: 76px 0 68px; }
+.hero h1 {
+  margin: 0 0 14px; font-size: clamp(34px, 5.2vw, 52px); line-height: 1.1;
+  letter-spacing: -.025em; font-weight: 700; color: #fff;
+}
+.hero .tagline { font-size: clamp(18px, 2.3vw, 22px); color: #a9bccd; margin: 0 0 20px; max-width: 40ch; }
+.hero .lede { color: #8fa4b6; max-width: 58ch; margin: 0 0 30px; font-size: 16.5px; }
+
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 20px; border-radius: 9px; text-decoration: none;
+  font-weight: 600; font-size: 15.5px; transition: transform .12s ease, background .12s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent-2); color: #fff; }
+.btn-primary:hover { background: #14a0da; }
+.btn-ghost { background: rgba(255,255,255,.08); color: #dbe6ef; border: 1px solid rgba(255,255,255,.16); }
+.btn-ghost:hover { background: rgba(255,255,255,.14); }
+
+.shot { margin-top: 44px; }
+.shot img { border-radius: 12px; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 18px 50px rgba(0,0,0,.4); }
+.shot figcaption { color: #7f95a8; font-size: 13.5px; margin-top: 12px; max-width: 68ch; }
+
+/* ── sections ────────────────────────────────────────────────────────────── */
+section { padding: 68px 0; }
+section.alt { background: var(--wash); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+h2.sec { font-size: clamp(24px, 3.2vw, 32px); letter-spacing: -.02em; margin: 0 0 10px; line-height: 1.2; }
+p.sec-lede { color: var(--ink-2); margin: 0 0 34px; max-width: 62ch; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 22px; }
+.card { background: var(--paper); border: 1px solid var(--rule); border-radius: 13px; padding: 24px; }
+section.alt .card { background: var(--paper); }
+.card h3 { margin: 0 0 9px; font-size: 19px; letter-spacing: -.01em; }
+.card p { margin: 0; color: var(--ink-2); font-size: 15.5px; }
+.card .n { display: block; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--accent-2); margin-bottom: 10px; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; }
+@media (max-width: 780px) { .split { grid-template-columns: 1fr; gap: 26px; } }
+
+.note-line { color: var(--ink-3); font-size: 14.5px; margin-top: 14px; }
+
+/* downloads */
+.dl { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.dl a {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--rule); border-radius: 9px; padding: 10px 15px;
+  text-decoration: none; color: var(--ink); background: var(--paper); font-size: 14.5px; font-weight: 550;
+}
+.dl a:hover { border-color: var(--accent-2); color: var(--accent); }
+.dl .sz { color: var(--ink-3); font-weight: 400; font-size: 13px; }
+
+/* ── footer ──────────────────────────────────────────────────────────────── */
+footer { background: var(--night); color: #8fa4b6; padding: 44px 0; font-size: 14.5px; }
+footer a { color: #b9cbdb; }
+footer .rows { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: baseline; }
+footer .lic { color: #6b8195; font-size: 13px; margin-top: 14px; max-width: 70ch; }
+
+/* ── algorithms page ─────────────────────────────────────────────────────── */
+.algos-head { padding: 54px 0 30px; border-bottom: 1px solid var(--rule); }
+.algos-head h1 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.025em; margin: 0 0 10px; }
+.algos-head p { color: var(--ink-2); max-width: 62ch; margin: 0; }
+
+/* minmax(0,…) so the column may shrink below its content: a plain 1fr is floored by the
+   widest table inside, which pushes the whole page into horizontal scroll on narrow screens. */
+.algos-layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 46px; align-items: start; padding: 34px 0 70px; }
+@media (max-width: 900px) { .algos-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+
+.toc { position: sticky; top: 76px; font-size: 14px; max-height: calc(100vh - 100px); overflow-y: auto; }
+/* Stacked above the content on narrow screens, the full 31-entry index would push the first
+   algorithm off the first two screenfuls. Cap it into a compact scrollable card instead. */
+@media (max-width: 900px) {
+  .toc {
+    position: static; max-height: 232px; overflow-y: auto;
+    border: 1px solid var(--rule); border-radius: 10px;
+    padding: 14px 16px; background: var(--wash);
+  }
+  .toc .grp:first-of-type { margin-top: 8px; }
+}
+.toc .t { font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin-bottom: 10px; }
+.toc .grp { font-size: 11.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin: 16px 0 5px; }
+.toc a { display: block; color: var(--ink-2); text-decoration: none; padding: 3px 0; }
+.toc a:hover { color: var(--accent-2); }
+
+.part-head { margin: 46px 0 22px; padding-top: 12px; border-top: 2px solid var(--ink); }
+.part-head:first-child { margin-top: 0; }
+.part-head .lbl { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent-2); font-weight: 700; }
+.part-head h2 { margin: 4px 0 6px; font-size: 25px; letter-spacing: -.02em; }
+.part-head p { margin: 0; color: var(--ink-2); font-size: 15px; max-width: 62ch; }
+
+.algo-card { border: 1px solid var(--rule); border-radius: 13px; padding: 26px 28px; margin-bottom: 20px; scroll-margin-top: 76px; }
+.algo-card > header { border-bottom: 1px solid var(--rule-soft); padding-bottom: 15px; margin-bottom: 18px; }
+.algo-card .hd { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.algo-card .num { font-size: 13px; font-weight: 700; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.algo-card h3 { margin: 0; font-size: 21px; letter-spacing: -.015em; }
+.algo-card .meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 9px; }
+.algo-card .cls { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--ink-3); word-break: break-all; }
+
+.tg { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; white-space: nowrap; }
+.tg-det { background: var(--accent-wash); color: var(--accent); }
+.tg-rev { background: #eaf2ee; color: var(--out); }
+.tg-warn { background: var(--warn-wash); color: var(--warn); }
+.tg-file { background: #eef1f4; color: var(--ink-2); }
+.tg-nondet { background: var(--warn-wash); color: var(--warn); box-shadow: inset 0 0 0 1px var(--warn); }
+
+/* guide markup, restyled for screen */
+.gd { font-size: 15.5px; }
+/* Enum values and parameter names are long unbroken identifiers
+   (APPLY_FIRSTNAME_AND_LASTNAME_ALGORITHMS); let them break rather than widen the page. */
+.gd .p-desc, .gd .p-name, .gd .algo-desc, .gd .fmt, .gd .note { overflow-wrap: anywhere; }
+.gd .algo-desc { margin: 0 0 18px; max-width: 66ch; }
+.gd .label { font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin: 24px 0 8px; }
+.gd .label:first-child { margin-top: 0; }
+.gd .fmt { font-size: 14.5px; color: var(--ink-2); border-left: 2px solid var(--rule); padding-left: 13px; margin-bottom: 4px; max-width: 66ch; }
+.gd .xf { width: 100%; table-layout: fixed; border-collapse: collapse; margin-bottom: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; }
+.gd .xf th { text-align: left; font-family: inherit; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; padding: 0 12px 7px 0; border-bottom: 1px solid var(--rule); }
+.gd .xf td { padding: 8px 12px 8px 0; border-bottom: 1px solid var(--rule-soft); vertical-align: top; word-break: break-all; }
+.gd .xf .c-in { width: 41%; color: var(--ink); }
+.gd .xf .c-ar { width: 5%; color: var(--ink-3); text-align: center; word-break: normal; }
+.gd .xf .c-out { width: 54%; color: var(--out); font-weight: 600; }
+.gd .xf .err { color: var(--warn); font-weight: 400; }
+.gd .xf tr:last-child td { border-bottom: none; }
+.gd .p-row { display: grid; grid-template-columns: 15rem 1fr; gap: 18px; padding: 9px 0; border-bottom: 1px solid var(--rule-soft); }
+@media (max-width: 640px) { .gd .p-row { grid-template-columns: 1fr; gap: 4px; } }
+.gd .p-row:last-child { border-bottom: none; }
+.gd .p-name { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; color: var(--accent); font-weight: 600; word-break: break-word; }
+.gd .p-name .req { color: var(--warn); font-weight: 700; }
+.gd .p-name .sub { color: var(--ink-3); font-weight: 400; }
+.gd .p-desc { font-size: 14.5px; color: var(--ink-2); }
+.gd .p-desc strong { color: var(--ink); font-weight: 600; }
+.gd .p-none { font-size: 14.5px; color: var(--ink-3); font-style: italic; }
+.gd .p-desc code, .gd .inline, .gd .note code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; background: var(--wash); padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+.gd .note { border-left: 3px solid var(--warn); background: var(--warn-wash); padding: 13px 16px; margin: 18px 0 4px; font-size: 14.5px; color: #5c3809; max-width: 66ch; border-radius: 0 6px 6px 0; }
+.gd .note b { color: var(--warn); }
+.gd .note.tip { border-left-color: var(--accent); background: var(--accent-wash); color: #0a3a4d; }
+.gd .note.tip code { background: rgba(11,79,108,.09); }
+.gd pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; line-height: 1.5; background: var(--wash); border-left: 3px solid var(--accent); padding: 13px 16px; margin: 0 0 4px; overflow-x: auto; }
+
+/* Wide content must scroll in its own box, never widen the page. */
+.scroll-x { overflow-x: auto; }

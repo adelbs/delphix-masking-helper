@@ -24,6 +24,8 @@ El servidor Node expone una API REST que delega cada operación en `AlgorithmRun
 
 ## Guía de los algoritmos
 
+📖 **[Leer la referencia de los algoritmos en línea](https://adelbs.github.io/delphix-masking-helper/algorithms.es.html)** — el mismo contenido de los PDF, en tres idiomas.
+
 Cada algoritmo abre con dos pestañas: **Probar** y **Documentación**. La pestaña de documentación
 muestra la sección de ese algoritmo en la guía de referencia, en el idioma de la interfaz — el
 mismo contenido de los PDF de abajo, leído de la misma fuente, así que nunca divergen.

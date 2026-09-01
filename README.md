@@ -24,6 +24,8 @@ The Node server exposes a REST API that delegates every operation to `AlgorithmR
 
 ## Algorithm guide
 
+📖 **[Browse the algorithm reference online](https://adelbs.github.io/delphix-masking-helper/algorithms.html)** — the same content as the PDFs, in three languages.
+
 Every algorithm opens with two tabs: **Test** and **Documentation**. The Documentation tab shows
 that algorithm's section of the reference guide, in the interface language — the same content as
 the PDFs below, read from the same source, so the two never disagree.

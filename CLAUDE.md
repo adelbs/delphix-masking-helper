@@ -149,6 +149,25 @@ Todo algoritmo determinístico deriva a saída dela, então trocá-la muda todo 
 produz, inclusive os pares entrada → saída do guia e da aba Documentação. Não troque sem regerar
 essa documentação.
 
+## Algoritmos não determinísticos
+
+Três, verificados executando os 31 cinco vezes com a mesma entrada e chave — e dois deles só sob
+certa configuração:
+
+| Algoritmo | Quando | Como tornar determinístico |
+|---|---|---|
+| Shuffle | sempre | não dá — a permutação é sorteada por design |
+| Tokenization | `ivLength` > 0 (padrão `8`) | `ivLength: 0` (continua reversível) |
+| Secure Lookup | `hashMethod: RANDOMIZE` | `SHA256` ou `LEGACY` |
+
+A UI avisa com uma faixa âmbar acima da configuração (`AlgoTester`), e o aviso **acompanha a
+config**: editar `ivLength` ou `hashMethod` faz a faixa aparecer e sumir na hora. A regra está em
+`nonDeterminismKey()` no `algo-metadata.ts` — um predicado por algoritmo, não uma lista fixa,
+justamente porque dois deles dependem de parâmetro.
+
+Nos guias o mesmo aviso é a tag `.tag-nondet` (com `⚠`), e o apêndice A traz a tabela acima. Ao
+mexer nisso, mantenha os dois lados alinhados: são fontes independentes.
+
 ## Aba de documentação
 
 Cada algoritmo abre com duas abas: **Testar** (padrão) e **Documentação**. A segunda mostra a
@@ -229,6 +248,33 @@ NomeDaClasse: {
 ```
 
 A chave é o nome simples da classe (último segmento do `className`). O lookup também aceita `className` completo ou variação case-insensitive. O bloco acima é o pt-BR — acrescente as versões em inglês e espanhol em `algo-text.en.ts` e `algo-text.es.ts` com as mesmas chaves de `params`/`labels`.
+
+## Site (GitHub Pages)
+
+O site vive em `docs/`, que é a pasta que o GitHub Pages serve quando configurado como *deploy
+from branch → /docs*. Seis páginas geradas, duas por idioma:
+
+```
+docs/index.html            landing em inglês (raiz do site)   docs/algorithms.html
+docs/index.pt-BR.html      landing em português                docs/algorithms.pt-BR.html
+docs/index.es.html         landing em espanhol                 docs/algorithms.es.html
+docs/site.css  docs/favicon.svg  docs/.nojekyll
+```
+
+**Não edite esses HTML à mão** — são gerados por `docs/build-site.mjs` e sobrescritos. O texto de
+marketing está em `docs/site-content.mjs` (as três línguas lado a lado, mesmas chaves); o conteúdo
+dos algoritmos vem de `docs/src/guide.<locale>.html`, o mesmo fonte dos PDFs e da aba Documentação
+do app. As três superfícies leem o guia pelo mesmo parser, `docs/guide-parser.mjs`.
+
+`./docs/build.sh` regenera PDFs **e** site. Rode-o depois de mexer no guia, senão o site fica
+citando uma versão antiga.
+
+**Divisão de conteúdo.** A landing é deliberadamente não técnica: diz para que serve e para quem,
+e manda quem quer jars, portas e passos de build para o README. Detalhe técnico não sobe para lá.
+A página de algoritmos carrega a referência completa — é o material do guia.
+
+Pendência: as orientações de download e instalação entram nas landings quando houver a primeira
+release. Ainda não há seção para isso; a CTA hoje aponta para o repositório.
 
 ## Editar o guia dos algoritmos
 

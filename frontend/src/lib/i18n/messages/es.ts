@@ -31,6 +31,10 @@ export const es: Messages = {
 
   // Tester — general
   'tester.format': 'Formato: ',
+  'tester.nonDeterministic': 'No determinista',
+  'tester.nonDetShuffle': 'Cada ejecución genera una permutación distinta para la misma entrada y clave — a propósito. Shuffle no preserva uniones entre tablas ni entre ejecuciones.',
+  'tester.nonDetTokenization': 'Con ivLength mayor que cero (el valor por defecto es 8) se sortea un vector de inicialización nuevo en cada ejecución, así que el mismo valor genera un token distinto cada vez. Todos se revierten correctamente, pero no preservan uniones. Usa ivLength 0 para salida determinista.',
+  'tester.nonDetSecureLookup': 'El hashMethod RANDOMIZE elige una línea al azar en cada ejecución, así que el mismo valor recibe un sustituto distinto cada vez. Usa SHA256 para mantener el resultado determinista.',
   'tester.tabTest': 'Probar',
   'tester.tabDoc': 'Documentación',
   'tester.docLoading': 'Cargando la documentación…',
