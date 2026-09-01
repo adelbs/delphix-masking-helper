@@ -8,6 +8,10 @@ export const ptBR: Messages = {
   'sidebar.noResults': 'Nenhum algoritmo encontrado',
   'sidebar.savedTests': 'Testes/Algoritmos Salvos',
   'sidebar.settings': 'Configurações',
+  'sidebar.language': 'Idioma da interface',
+  'sidebar.languageAuto': '{locale} — seguindo o navegador',
+  'sidebar.languageReset': 'auto',
+  'sidebar.languageResetHint': 'Voltar a seguir o idioma do navegador',
 
   // Algorithm groups
   'group.personal': 'Dados Pessoais',
@@ -27,6 +31,11 @@ export const ptBR: Messages = {
 
   // Tester — general
   'tester.format': 'Formato: ',
+  'tester.tabTest': 'Testar',
+  'tester.tabDoc': 'Documentação',
+  'tester.docLoading': 'Carregando a documentação…',
+  'tester.docMissing': 'Ainda não há seção do guia para este algoritmo.',
+  'tester.docSource': 'Mesmo conteúdo do guia de referência em PDF, em docs/.',
   'tester.configuration': 'Configuração',
   'tester.example': 'Exemplo',
   'tester.editJson': 'Editar JSON diretamente',
@@ -148,14 +157,9 @@ export const ptBR: Messages = {
   'settings.tab.files': 'Arquivos',
   'settings.saved': 'Configurações salvas!',
   'settings.saveError': 'Erro ao salvar configurações',
-  'settings.globalKey': 'Chave global de mascaramento',
-  'settings.globalKeyHint': 'Usada por todos os algoritmos determinísticos.',
   'settings.filesDir': 'Diretório de arquivos no servidor',
   'settings.filesDirPlaceholder': '/caminho/absoluto/ou/relativo',
   'settings.filesDirHint': 'Onde ficam os arquivos de lookup. Caminho relativo ao projeto ou absoluto.',
-  'settings.language': 'Idioma da interface',
-  'settings.languageHint': 'Automático segue o idioma do navegador.',
-  'settings.languageAuto': 'Automático ({locale})',
   'settings.save': 'Salvar',
   'settings.saving': 'Salvando…',
 

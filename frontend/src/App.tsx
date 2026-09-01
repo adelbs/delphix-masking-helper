@@ -22,7 +22,6 @@ export default function App() {
   const [view, setView] = useState<View>('welcome')
   const [tester, setTester] = useState<TesterState | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [globalKey, setGlobalKey] = useState('delphix-default-key')
   const [filesDir, setFilesDir] = useState('')
   // Seeded from localStorage so the first paint is already in the right language;
   // the server config is the source of truth and overrides it once it arrives.
@@ -31,7 +30,6 @@ export default function App() {
   useEffect(() => {
     api.getAlgorithms().catch(() => []).then(setAlgorithms)
     api.getConfig().then(cfg => {
-      setGlobalKey(cfg.globalKey)
       setFilesDir(cfg.filesDir)
       if (isLocalePref(cfg.locale)) {
         setLocalePref(cfg.locale)
@@ -45,9 +43,15 @@ export default function App() {
     storePref(pref)
   }
 
-  const selectAlgo = (algo: Algorithm, config: Record<string, unknown> = {}, input = '', key?: string) => {
+  // The sidebar switcher applies immediately, so it persists on its own instead of
+  // waiting for a Save button. A failed write only costs the cross-browser preference.
+  const changeLocale = (pref: LocalePref) => {
+    applyLocalePref(pref)
+    api.updateConfig({ locale: pref }).catch(() => {})
+  }
+
+  const selectAlgo = (algo: Algorithm, config: Record<string, unknown> = {}, input = '') => {
     setTester({ algo, config, input })
-    if (key) setGlobalKey(key)
     setView('tester')
     setSidebarOpen(false)
   }
@@ -64,6 +68,8 @@ export default function App() {
     onShowSaved: showSaved,
     onOpenSettings: showSettings,
     onGoHome: showHome,
+    localePref,
+    onLocaleChange: changeLocale,
   }
 
   return (
@@ -100,23 +106,20 @@ export default function App() {
               algo={tester.algo}
               initialConfig={tester.config}
               initialInput={tester.input}
-              globalKey={globalKey}
               onToggleSidebar={toggleSidebar}
             />
           )}
           {view === 'saved' && (
             <SavedTests
               algorithms={algorithms}
-              onEdit={(algo, config, input, key) => selectAlgo(algo, config, input, key)}
+              onEdit={(algo, config, input) => selectAlgo(algo, config, input)}
               onToggleSidebar={toggleSidebar}
             />
           )}
           {view === 'settings' && (
             <Settings
-              globalKey={globalKey}
               filesDir={filesDir}
-              localePref={localePref}
-              onSave={(k, d, pref) => { setGlobalKey(k); setFilesDir(d); applyLocalePref(pref) }}
+              onSave={(d) => setFilesDir(d)}
               onToggleSidebar={toggleSidebar}
             />
           )}

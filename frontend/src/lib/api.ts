@@ -17,7 +17,7 @@ export const api = {
   getSchema: (className: string) =>
     request<{ schema: JsonSchema }>(`/api/algorithms/${encodeURIComponent(className)}/schema`),
 
-  mask: (payload: { algorithm: string; config: unknown; input: string; key: string; mode?: string; additionalAlgorithms?: Array<{ name: string; className: string; config: unknown }> }) =>
+  mask: (payload: { algorithm: string; config: unknown; input: string; mode?: string; additionalAlgorithms?: Array<{ name: string; className: string; config: unknown }> }) =>
     request<MaskResult>('/api/mask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -29,7 +29,7 @@ export const api = {
     return request<SavedTest[]>(`/api/tests${qs}`)
   },
 
-  saveTest: (test: Omit<SavedTest, 'id' | 'created_at' | 'updated_at'>) =>
+  saveTest: (test: Omit<SavedTest, 'id' | 'created_at' | 'updated_at' | 'key_value'>) =>
     request<SavedTest>('/api/tests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -89,7 +89,7 @@ export const api = {
   deleteFile: (name: string) =>
     request<{ ok: boolean }>(`/api/files/${encodeURIComponent(name)}`, { method: 'DELETE' }),
 
-  maskBatch: (payload: { algorithm: string; config: unknown; inputs: string[]; key: string }) =>
+  maskBatch: (payload: { algorithm: string; config: unknown; inputs: string[] }) =>
     request<{ results: Array<{ output?: string; error?: string }> }>('/api/mask-batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -100,7 +100,6 @@ export const api = {
     algorithm: string;
     config: unknown;
     columns: Array<{ name: string; value: string | null; type: string }>;
-    key: string;
   }) =>
     request<{ columns?: Record<string, string | null>; error?: string; errorType?: string }>('/api/mask-multicolumn', {
       method: 'POST',

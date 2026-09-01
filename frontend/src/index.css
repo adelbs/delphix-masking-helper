@@ -12,3 +12,103 @@
   ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
   ::-webkit-scrollbar-thumb:hover { background: #64748b; }
 }
+
+/* ── Algorithm documentation tab ───────────────────────────────────────────────
+   The markup comes straight from docs/src/guide.<locale>.html (the PDF source),
+   so these rules restate the guide's print styles in screen units. Class names
+   and their meaning are the guide's; only the sizing changes. */
+@layer components {
+  .algo-doc {
+    --doc-ink: #14181d;
+    --doc-ink-2: #4b5560;
+    --doc-ink-3: #7b8592;
+    --doc-rule: #d8dde3;
+    --doc-rule-soft: #e8ecf0;
+    --doc-wash: #f4f7f9;
+    --doc-accent: #0b4f6c;
+    --doc-warn: #8a5410;
+    --doc-warn-wash: #fbf3e6;
+    --doc-out: #2c5f4a;
+    --doc-accent-wash: #e6f0f5;
+    color: var(--doc-ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .algo-doc .algo-desc { margin: 0 0 1rem; max-width: 62ch; }
+
+  .algo-doc .label {
+    font-size: 10px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--doc-ink-3); font-weight: 700; margin: 1.5rem 0 .5rem;
+  }
+  .algo-doc .label:first-child { margin-top: 0; }
+
+  .algo-doc .fmt {
+    font-size: 13px; color: var(--doc-ink-2);
+    border-left: 2px solid var(--doc-rule); padding-left: .75rem;
+    margin-bottom: .25rem; max-width: 62ch;
+  }
+
+  /* transform table */
+  .algo-doc .xf {
+    width: 100%; border-collapse: collapse; margin-bottom: .25rem;
+    font-family: ui-monospace, Menlo, monospace; font-size: 12.5px;
+  }
+  .algo-doc .xf th {
+    text-align: left; font-family: inherit; font-size: 10px;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--doc-ink-3); font-weight: 700;
+    padding: 0 .6rem .4rem 0; border-bottom: 1px solid var(--doc-rule);
+  }
+  .algo-doc .xf td {
+    padding: .4rem .6rem .4rem 0; border-bottom: 1px solid var(--doc-rule-soft);
+    vertical-align: top; word-break: break-all;
+  }
+  .algo-doc .xf .c-in { width: 41%; color: var(--doc-ink); }
+  .algo-doc .xf .c-ar { width: 5%; color: var(--doc-ink-3); text-align: center; word-break: normal; }
+  .algo-doc .xf .c-out { width: 54%; color: var(--doc-out); font-weight: 600; }
+  .algo-doc .xf .err { color: var(--doc-warn); font-weight: 400; }
+  .algo-doc .xf tr:last-child td { border-bottom: none; }
+
+  /* parameters */
+  .algo-doc .p-row {
+    display: grid; grid-template-columns: 15rem 1fr; gap: .9rem;
+    padding: .5rem 0; border-bottom: 1px solid var(--doc-rule-soft);
+  }
+  .algo-doc .p-row:last-child { border-bottom: none; }
+  .algo-doc .p-name {
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+    color: var(--doc-accent); font-weight: 600; word-break: break-word;
+  }
+  .algo-doc .p-name .req { color: var(--doc-warn); font-weight: 700; }
+  .algo-doc .p-name .sub { color: var(--doc-ink-3); font-weight: 400; }
+  .algo-doc .p-desc { font-size: 13px; color: var(--doc-ink-2); }
+  .algo-doc .p-desc strong { color: var(--doc-ink); font-weight: 600; }
+  .algo-doc .p-none { font-size: 13px; color: var(--doc-ink-3); font-style: italic; }
+
+  .algo-doc .p-desc code, .algo-doc .inline, .algo-doc .note code {
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px;
+    background: var(--doc-wash); padding: .05rem .25rem;
+    border-radius: 3px; color: var(--doc-ink);
+  }
+
+  .algo-doc .note {
+    border-left: 2px solid var(--doc-warn); background: var(--doc-warn-wash);
+    padding: .7rem .9rem; margin: 1rem 0 .25rem; font-size: 13px;
+    color: #5c3809; max-width: 62ch; border-radius: 0 4px 4px 0;
+  }
+  .algo-doc .note b { color: var(--doc-warn); }
+  .algo-doc .note.tip {
+    border-left-color: var(--doc-accent); background: var(--doc-accent-wash); color: #0a3a4d;
+  }
+  .algo-doc .note.tip code { background: rgba(11, 79, 108, .09); }
+
+  .algo-doc pre {
+    font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5;
+    background: var(--doc-wash); border-left: 2px solid var(--doc-accent);
+    padding: .7rem .9rem; margin: 0 0 .25rem; overflow-x: auto;
+  }
+
+  /* Wide tables must scroll inside the panel, never widen the page. */
+  .algo-doc .xf-scroll { overflow-x: auto; }
+}

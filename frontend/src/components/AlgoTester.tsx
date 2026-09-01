@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Play, Code2, Zap, Save, Copy, Check, PanelLeftOpen, Plus, Trash2, RotateCcw } from 'lucide-react'
+import { Play, Code2, Zap, Save, Copy, Check, PanelLeftOpen, Plus, Trash2, RotateCcw, FlaskConical, BookOpen } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { getAlgoMetadata } from '@/lib/algo-metadata'
 import { useT, type I18n } from '@/lib/i18n'
 import { ConfigForm } from './ConfigForm'
+import { AlgoDoc } from './AlgoDoc'
 import { cn } from '@/lib/utils'
 import type { Algorithm, JsonSchema, JsonSchemaProperty, SavedTest } from '@/types'
 
@@ -37,13 +38,13 @@ interface Props {
   algo: Algorithm
   initialConfig?: Record<string, unknown>
   initialInput?: string
-  globalKey: string
   onToggleSidebar: () => void
 }
 
-export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onToggleSidebar }: Props) {
+export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar }: Props) {
   const { t, tx, locale } = useT()
   const meta = getAlgoMetadata(algo.className, locale)
+  const [tab, setTab] = useState<'test' | 'doc'>('test')
   const [schema, setSchema] = useState<JsonSchema | null>(null)
   const [schemaLoading, setSchemaLoading] = useState(true)
   const [config, setConfig] = useState<Record<string, unknown>>(initialConfig ?? {})
@@ -184,7 +185,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onTog
       const additionalAlgorithms = savedTests
         .filter(t => refNames.includes(t.name))
         .map(t => ({ name: t.name, className: t.algorithm, config: parseConfig(t.config) }))
-      const result = await api.mask({ algorithm: algo.className, config: effectiveConfig, input, key: globalKey, mode: maskMode, additionalAlgorithms })
+      const result = await api.mask({ algorithm: algo.className, config: effectiveConfig, input, mode: maskMode, additionalAlgorithms })
       if (result.output !== undefined) {
         setOutput({ value: result.output, ok: true })
       } else {
@@ -206,7 +207,6 @@ export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onTog
         algorithm: algo.className,
         config: getEffectiveConfig(),
         columns: mcColumns.map(c => ({ name: c.name, value: c.value || null, type: c.type })),
-        key: globalKey,
       })
       if (result.columns) {
         setMcResult(result.columns)
@@ -226,7 +226,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onTog
     setBatchMasking(true)
     setBatchResults([])
     try {
-      const result = await api.maskBatch({ algorithm: algo.className, config: getEffectiveConfig(), inputs: batchRows, key: globalKey })
+      const result = await api.maskBatch({ algorithm: algo.className, config: getEffectiveConfig(), inputs: batchRows })
       setBatchResults(result.results)
     } catch (e) {
       toast.error((e as Error).message)
@@ -251,7 +251,6 @@ export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onTog
         display_name: algo.displayName,
         config: JSON.stringify(getEffectiveConfig()),
         input,
-        key_value: globalKey,
         output: output?.ok ? output.value : null,
       })
       toast.success(t('tester.testSaved'))
@@ -274,6 +273,35 @@ export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onTog
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white flex-shrink-0">
+        {([
+          { id: 'test', label: t('tester.tabTest'), Icon: FlaskConical },
+          { id: 'doc', label: t('tester.tabDoc'), Icon: BookOpen },
+        ] as const).map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            aria-current={tab === id}
+            className={cn(
+              'flex items-center gap-1.5 px-3 py-2 text-sm font-medium border-b-2 -mb-px transition-colors',
+              tab === id
+                ? 'border-blue-600 text-blue-700'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            )}
+          >
+            <Icon size={14} />
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'doc' ? (
+        <div className="flex-1 overflow-auto p-5 bg-slate-50">
+          <AlgoDoc className={algo.className} />
+        </div>
+      ) : (
+      <>
       {/* Info bar */}
       {meta && (
         <div className="px-5 py-3 bg-blue-50 border-b border-blue-100 flex-shrink-0">
@@ -699,6 +727,8 @@ export function AlgoTester({ algo, initialConfig, initialInput, globalKey, onTog
           </div>
         </div>
       </div>
+      </>
+      )}
     </div>
   )
 }

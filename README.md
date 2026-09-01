@@ -24,6 +24,10 @@ The Node server exposes a REST API that delegates every operation to `AlgorithmR
 
 ## Algorithm guide
 
+Every algorithm opens with two tabs: **Test** and **Documentation**. The Documentation tab shows
+that algorithm's section of the reference guide, in the interface language — the same content as
+the PDFs below, read from the same source, so the two never disagree.
+
 The [`docs/`](docs/) directory holds a reference guide for the plugin's 31 algorithms, in three languages:
 
 | Language | File |
@@ -159,8 +163,9 @@ GitHub Copilot itself has no public chat API for third-party applications.
 ## Interface language
 
 The UI is available in English, Portuguese (BR) and Spanish. By default it follows your browser
-language; to pin one, use **Settings → General → Interface language**. The choice is stored
-server-side, so it applies on every browser that opens the app.
+language; to pin one, click a flag at the bottom of the sidebar. It applies immediately. Once you
+have pinned a language an **auto** link appears next to the flags, which goes back to following the
+browser. The choice is stored server-side, so it applies on every browser that opens the app.
 
 ## AlgorithmRunner
 

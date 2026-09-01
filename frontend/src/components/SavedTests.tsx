@@ -8,7 +8,7 @@ import { useT } from '@/lib/i18n'
 
 interface Props {
   algorithms: Algorithm[]
-  onEdit: (algo: Algorithm, config: Record<string, unknown>, input: string, key: string) => void
+  onEdit: (algo: Algorithm, config: Record<string, unknown>, input: string) => void
   onToggleSidebar: () => void
 }
 
@@ -63,7 +63,7 @@ export function SavedTests({ algorithms, onEdit, onToggleSidebar }: Props) {
   const handleEdit = (t: SavedTest, inputOverride?: string) => {
     const algo = algorithms.find((a) => a.className === t.algorithm)
     if (!algo) { toast.error(msg('saved.algoNotFound')); return }
-    onEdit(algo, parseConfig(t.config), inputOverride ?? t.input, t.key_value)
+    onEdit(algo, parseConfig(t.config), inputOverride ?? t.input)
   }
 
   const handleExport = async () => {
@@ -200,7 +200,6 @@ function TestCard({ test: t, onEdit, onDelete, onSave }: {
         algorithm: t.algorithm,
         config,
         input: inputDraft,
-        key: t.key_value,
       })
       setExecResult(result.output !== undefined
         ? { value: result.output, ok: true }

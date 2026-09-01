@@ -58,7 +58,6 @@ export type Locale = 'en' | 'pt-BR' | 'es'
 export type LocalePref = Locale | 'auto'
 
 export interface AppConfig {
-  globalKey: string
   filesDir: string
   locale: LocalePref
 }

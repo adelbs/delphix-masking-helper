@@ -440,39 +440,22 @@ public class AlgorithmRunner {
     @SuppressWarnings("unchecked")
     static String invokeMask(MaskingComponent component, String input) throws Exception {
         // Find the real (non-bridge) mask method to discover the expected parameter type.
+        // Every algorithm in ALGORITHMS declares mask() public on its own class; the extra
+        // overloads that show up here are the bridges generated for MaskingAlgorithm<T>.
         java.lang.reflect.Method maskMethod = null;
-        java.lang.reflect.Method bridgeMethod = null;
         for (java.lang.reflect.Method m : component.getClass().getMethods()) {
-            if ("mask".equals(m.getName()) && m.getParameterCount() == 1) {
-                if (!m.isBridge()) { maskMethod = m; break; }
-                else if (bridgeMethod == null) { bridgeMethod = m; }
+            if ("mask".equals(m.getName()) && m.getParameterCount() == 1 && !m.isBridge()) {
+                maskMethod = m;
+                break;
             }
         }
-        // Some algorithms (e.g. Encryption, DateConverter) declare mask() as private, so only
-        // the compiler-generated bridge appears in getMethods(). In that case, find the real
-        // parameter type via getDeclaredMethods (for type coercion), then invoke through the
-        // public bridge (which calls the private impl internally — no cross-module access issue).
-        if (maskMethod == null && bridgeMethod != null) {
-            Class<?> cls = component.getClass();
-            while (cls != null) {
-                for (java.lang.reflect.Method m : cls.getDeclaredMethods()) {
-                    if ("mask".equals(m.getName()) && m.getParameterCount() == 1 && !m.isBridge()) {
-                        maskMethod = m; break;
-                    }
-                }
-                if (maskMethod != null) break;
-                cls = cls.getSuperclass();
-            }
-        }
-        // Determine which method to actually invoke: prefer bridge for private impls.
-        final java.lang.reflect.Method invokeMethod = (maskMethod != null && java.lang.reflect.Modifier.isPublic(maskMethod.getModifiers()))
-            ? maskMethod : (bridgeMethod != null ? bridgeMethod : maskMethod);
-        if (invokeMethod == null) {
+        // Defensive: handleMask accepts any className, so a component that only exposes the
+        // bridge would land here. Treat it as the plain String algorithm it declares itself to be.
+        if (maskMethod == null) {
             return ((MaskingAlgorithm<String>) component).mask(input);
         }
 
-        // Use maskMethod for type detection (may be private), invokeMethod for actual call (must be public).
-        Class<?> paramType = maskMethod != null ? maskMethod.getParameterTypes()[0] : invokeMethod.getParameterTypes()[0];
+        Class<?> paramType = maskMethod.getParameterTypes()[0];
         Object inputObj;
         try {
             if (paramType == java.math.BigDecimal.class) {
@@ -491,7 +474,7 @@ public class AlgorithmRunner {
                 "Input cannot be converted to " + paramType.getSimpleName() + ": " + e.getMessage());
         }
 
-        Object result = invokeMethod.invoke(component, inputObj);
+        Object result = maskMethod.invoke(component, inputObj);
         return result != null ? result.toString() : null;
     }
 

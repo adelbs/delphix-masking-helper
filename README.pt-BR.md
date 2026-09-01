@@ -24,6 +24,10 @@ O servidor Node expõe uma API REST que delega cada operação para o `Algorithm
 
 ## Guia dos algoritmos
 
+Cada algoritmo abre com duas abas: **Testar** e **Documentação**. A aba de documentação mostra a
+seção daquele algoritmo no guia de referência, no idioma da interface — o mesmo conteúdo dos PDFs
+abaixo, lido da mesma fonte, então os dois nunca divergem.
+
 O diretório [`docs/`](docs/) contém um guia de referência dos 31 algoritmos do plugin, em três idiomas:
 
 | Idioma | Arquivo |
@@ -160,8 +164,9 @@ GitHub Copilot em si não expõe API de chat para aplicações de terceiros.
 ## Idioma da interface
 
 A UI está disponível em inglês, português (BR) e espanhol. Por padrão segue o idioma do
-navegador; para fixar um, use **Configurações → Geral → Idioma da interface**. A escolha é
-guardada no servidor, então vale para qualquer navegador que abrir a aplicação.
+navegador; para fixar um, clique numa bandeira no rodapé da barra lateral. Vale na hora. Depois de
+fixar um idioma aparece um link **auto** ao lado das bandeiras, que volta a seguir o navegador. A
+escolha é guardada no servidor, então vale para qualquer navegador que abrir a aplicação.
 
 ## AlgorithmRunner
 

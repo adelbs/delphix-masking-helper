@@ -72,6 +72,8 @@ npm run build  # só compila o frontend (gera frontend/dist/)
 │   │   │       └── messages/      # en.ts (fonte das chaves), pt-BR.ts, es.ts
 │   │   └── components/
 │   │       ├── Sidebar.tsx        # Lista de algoritmos com busca
+│   │       ├── LocaleFlags.tsx    # Troca de idioma por bandeiras (rodapé da sidebar)
+│   │       ├── AlgoDoc.tsx        # Aba Documentação: a seção do guia daquele algoritmo
 │   │       ├── WelcomeScreen.tsx  # Home: cabeçalho + chat com a IA
 │   │       ├── Chat.tsx           # Chat com a IA (streaming SSE)
 │   │       ├── AlgoTester.tsx     # Painel principal de teste (config + execução)
@@ -79,7 +81,8 @@ npm run build  # só compila o frontend (gera frontend/dist/)
 │   │       ├── ConfigForm.tsx     # Formulário dinâmico gerado via JSON Schema
 │   │       └── Settings.tsx       # Configurações: Geral, IA e Arquivos
 │   ├── dist/                      # Build de produção (gerado por npm run build)
-│   └── vite.config.ts             # Proxy /api → Express porta 3000
+│   ├── vite.config.ts             # Proxy /api → Express porta 3000
+│   └── vite-plugin-algo-guide.ts  # Serve o guia de docs/src/ como virtual:algo-guide/<locale>
 ├── db/
 │   └── tests.db                   # SQLite com testes salvos
 └── docs/                          # Guia de referência dos algoritmos (PDF, 3 idiomas)
@@ -135,12 +138,52 @@ O catálogo ocupa ~12k tokens de contexto — folgado para Claude e Gemini, aper
 locais pequenos. Se um modelo do Ollama vier com contexto de 8k, ele trunca o catálogo e erra a
 escolha do algoritmo.
 
+## Chave de mascaramento
+
+`MASKING_KEY`, no topo do `server.js`, é uma constante do projeto — não é configuração. Não sai no
+`GET /api/config`, o `PUT` ignora `globalKey`, e `/api/mask`, `/api/mask-batch` e
+`/api/mask-multicolumn` descartam qualquer `key` que venha no corpo: o servidor é a única
+autoridade. Não há campo para ela na UI.
+
+Todo algoritmo determinístico deriva a saída dela, então trocá-la muda todo valor que a ferramenta
+produz, inclusive os pares entrada → saída do guia e da aba Documentação. Não troque sem regerar
+essa documentação.
+
+## Aba de documentação
+
+Cada algoritmo abre com duas abas: **Testar** (padrão) e **Documentação**. A segunda mostra a
+seção daquele algoritmo no guia de referência — o mesmo conteúdo dos PDFs.
+
+O conteúdo **não é duplicado**. O plugin `frontend/vite-plugin-algo-guide.ts` lê
+`docs/src/guide.<locale>.html` em tempo de build, recorta os blocos `.algo` e os expõe como o
+módulo virtual `virtual:algo-guide/<locale>`, indexado por `className` (o `<span class="algo-cls">`
+de cada bloco é a chave de junção). Não existe arquivo gerado em disco, então a aba e o PDF não
+têm como divergir: editar o guia muda os dois, e em dev o `handleHotUpdate` do plugin atualiza a
+aba aberta na hora.
+
+São três chunks, um por idioma, carregados sob demanda (`frontend/src/lib/algo-guide.ts`) — o
+bundle principal não carrega o guia.
+
+O `AlgoDoc.tsx` injeta o HTML do bloco com `dangerouslySetInnerHTML`. É conteúdo do próprio
+repositório lido em build, nunca entrada de usuário. Os atributos `style` inline são removidos na
+extração, porque são tamanhos de impressão em `pt`; o restante das classes do guia (`.algo-desc`,
+`.label`, `.fmt`, `.xf`, `.p-row`, `.note`…) é restilizado para tela no bloco `.algo-doc` do
+`frontend/src/index.css`.
+
+Ao adicionar um algoritmo, dê a ele um bloco `.algo` nos três guias — sem isso a aba mostra
+"ainda não há seção do guia para este algoritmo".
+
 ## Idiomas da interface (i18n)
 
 A UI existe em inglês, português (BR) e espanhol. A preferência fica em `config.locale`
 no SQLite (`'auto' | 'en' | 'pt-BR' | 'es'`, padrão `'auto'` = idioma do navegador) e é
 espelhada em `localStorage` para que a primeira renderização já saia no idioma certo.
-O usuário troca em **Configurações → Geral → Idioma da interface**.
+O usuário troca pelas bandeiras no rodapé da barra lateral (`LocaleFlags.tsx`), que aplicam
+na hora: o clique chama `applyLocalePref` e dispara o `PUT /api/config` sozinho, sem botão de
+salvar. As bandeiras são SVG inline em vez de emoji, porque emoji de indicador regional não
+renderiza como bandeira no Windows — degrada para o par de letras ("BR", "ES"). A bandeira ativa
+é `resolveLocale(pref)`, então sob `'auto'` a detectada aparece marcada (anel cinza em vez de
+azul); com um idioma fixado, aparece um link `auto` que volta a seguir o navegador.
 
 Duas camadas de texto:
 

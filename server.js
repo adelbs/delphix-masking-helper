@@ -13,8 +13,14 @@ app.use(express.static(DIST));
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
+// The masking key is a project constant, not a setting: it is deliberately not exposed
+// through /api/config and cannot be changed from the UI. Every deterministic algorithm
+// derives its output from it, so changing it changes every masked value the tool produces
+// — including the pairs printed in the reference guide. See the internal repository's
+// documentation for what this key is and why it is fixed.
+const MASKING_KEY = 'delphix-default-key';
+
 const DEFAULT_CONFIG = {
-  globalKey: 'delphix-default-key',
   filesDir: path.join(__dirname, 'test-files'),
   // 'auto' | 'en' | 'pt-BR' | 'es' — 'auto' lets the browser language decide.
   locale: 'auto',
@@ -137,6 +143,7 @@ db.exec(`
 function readConfig() {
   const rows = db.prepare('SELECT key, value FROM config').all();
   const stored = Object.fromEntries(rows.map(r => [r.key, r.value]));
+  delete stored.globalKey;   // left over from when the key was editable; the constant wins
   return { ...DEFAULT_CONFIG, ...stored };
 }
 
@@ -144,6 +151,9 @@ function writeConfig(config) {
   const stmt = db.prepare('INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)');
   for (const [k, v] of Object.entries(config)) stmt.run(k, String(v));
 }
+
+// The key used to be an editable setting; drop any value older installs stored.
+db.prepare("DELETE FROM config WHERE key = 'globalKey'").run();
 
 ensureDir(path.resolve(__dirname, readConfig().filesDir));
 
@@ -175,6 +185,7 @@ app.put('/api/config', (req, res) => {
   const current = readConfig();
   const patch = {};
   for (const [k, v] of Object.entries(req.body)) {
+    if (k === 'globalKey') continue;               // constant, never settable
     if (k.endsWith('.set')) continue;              // read-only UI flag
     if (isApiKey(k) && v === KEY_MASK) continue;   // untouched masked field
     patch[k] = v;
@@ -216,7 +227,7 @@ async function validateAndSave(spec) {
   const input = testInput ?? '';
   let result;
   try {
-    result = await runJava({ command: 'mask', algorithm: algo.className, config: config || {}, input, key: readConfig().globalKey });
+    result = await runJava({ command: 'mask', algorithm: algo.className, config: config || {}, input, key: MASKING_KEY });
   } catch (err) {
     return { error: `The configuration failed to run: ${err.message}` };
   }
@@ -227,7 +238,7 @@ async function validateAndSave(spec) {
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
   const info = stmt.run(name, algo.className, algo.displayName,
-    JSON.stringify(config || {}), input, readConfig().globalKey, result.output ?? null);
+    JSON.stringify(config || {}), input, MASKING_KEY, result.output ?? null);
   return {
     saved: {
       id: Number(info.lastInsertRowid), name, className: algo.className,
@@ -435,12 +446,13 @@ app.get('/api/algorithms/:className/schema', async (req, res) => {
 
 // Execute multi-column masking (for GenericDataRow algorithms like MultiColumnCondition)
 app.post('/api/mask-multicolumn', async (req, res) => {
-  const { algorithm, config, columns, key } = req.body;
+  const { algorithm, config, columns } = req.body;
   if (!algorithm || !Array.isArray(columns)) {
     return res.status(400).json({ error: 'algorithm and columns[] are required' });
   }
   try {
-    const result = await runJava({ command: 'mask_multicolumn', algorithm, config, columns, key });
+    // A `key` in the request body is ignored on purpose — the key is a constant.
+    const result = await runJava({ command: 'mask_multicolumn', algorithm, config, columns, key: MASKING_KEY });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -449,12 +461,12 @@ app.post('/api/mask-multicolumn', async (req, res) => {
 
 // Execute batch masking (for algorithms like Shuffle that require multiple values)
 app.post('/api/mask-batch', async (req, res) => {
-  const { algorithm, config, inputs, key } = req.body;
+  const { algorithm, config, inputs } = req.body;
   if (!algorithm || !Array.isArray(inputs)) {
     return res.status(400).json({ error: 'algorithm and inputs[] are required' });
   }
   try {
-    const result = await runJava({ command: 'mask_batch', algorithm, config, inputs, key });
+    const result = await runJava({ command: 'mask_batch', algorithm, config, inputs, key: MASKING_KEY });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -463,12 +475,12 @@ app.post('/api/mask-batch', async (req, res) => {
 
 // Execute masking
 app.post('/api/mask', async (req, res) => {
-  const { algorithm, config, input, key, mode, additionalAlgorithms } = req.body;
+  const { algorithm, config, input, mode, additionalAlgorithms } = req.body;
   if (!algorithm || input === undefined) {
     return res.status(400).json({ error: 'algorithm and input are required' });
   }
   try {
-    const result = await runJava({ command: 'mask', algorithm, config, input, key, mode, additionalAlgorithms });
+    const result = await runJava({ command: 'mask', algorithm, config, input, key: MASKING_KEY, mode, additionalAlgorithms });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -490,7 +502,7 @@ app.get('/api/tests', (req, res) => {
 
 // Save a test
 app.post('/api/tests', (req, res) => {
-  const { name, algorithm, display_name, config, input, key_value, output } = req.body;
+  const { name, algorithm, display_name, config, input, output } = req.body;
   if (!name || !algorithm) {
     return res.status(400).json({ error: 'name and algorithm are required' });
   }
@@ -501,7 +513,7 @@ app.post('/api/tests', (req, res) => {
   const configStr = typeof config === 'string' ? config : JSON.stringify(config || {});
   const result = stmt.run(
     name, algorithm, display_name || algorithm,
-    configStr, input || '', key_value || '', output || null
+    configStr, input || '', MASKING_KEY, output || null
   );
   const row = db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(row);
@@ -509,14 +521,14 @@ app.post('/api/tests', (req, res) => {
 
 // Update a test
 app.put('/api/tests/:id', (req, res) => {
-  const { name, config, input, key_value, output } = req.body;
+  const { name, config, input, output } = req.body;
   const stmt = db.prepare(`
     UPDATE saved_tests
     SET name=?, config=?, input=?, key_value=?, output=?, updated_at=datetime('now')
     WHERE id=?
   `);
   const configStr = typeof config === 'string' ? config : JSON.stringify(config || {});
-  stmt.run(name, configStr, input || '', key_value || '', output || null, req.params.id);
+  stmt.run(name, configStr, input || '', MASKING_KEY, output || null, req.params.id);
   const row = db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(req.params.id);
   res.json(row);
 });
@@ -545,7 +557,7 @@ app.post('/api/tests/import', (req, res) => {
   let count = 0;
   for (const t of tests) {
     try {
-      stmt.run(t.name, t.algorithm, t.display_name, t.config, t.input, t.key_value, t.output);
+      stmt.run(t.name, t.algorithm, t.display_name, t.config, t.input, MASKING_KEY, t.output);
       count++;
     } catch {}
   }

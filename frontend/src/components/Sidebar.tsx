@@ -3,7 +3,8 @@ import { Search, BookmarkCheck, ShieldCheck, X, Settings, ChevronDown, ChevronRi
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { getAlgoGroup, GROUP_ORDER, type AlgoGroup } from '@/lib/algo-metadata'
-import type { Algorithm } from '@/types'
+import { LocaleFlags } from '@/components/LocaleFlags'
+import type { Algorithm, LocalePref } from '@/types'
 
 interface Props {
   algorithms: Algorithm[]
@@ -12,10 +13,12 @@ interface Props {
   onShowSaved: () => void
   onOpenSettings: () => void
   onGoHome: () => void
+  localePref: LocalePref
+  onLocaleChange: (pref: LocalePref) => void
   onClose?: () => void
 }
 
-export function Sidebar({ algorithms, activeClassName, onSelect, onShowSaved, onOpenSettings, onGoHome, onClose }: Props) {
+export function Sidebar({ algorithms, activeClassName, onSelect, onShowSaved, onOpenSettings, onGoHome, localePref, onLocaleChange, onClose }: Props) {
   const { t } = useT()
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(
@@ -120,6 +123,7 @@ export function Sidebar({ algorithms, activeClassName, onSelect, onShowSaved, on
           <Settings size={15} />
           {t('sidebar.settings')}
         </button>
+        <LocaleFlags pref={localePref} onChange={onLocaleChange} />
       </div>
     </div>
   )

@@ -9,6 +9,10 @@ export const en = {
   'sidebar.noResults': 'No algorithm found',
   'sidebar.savedTests': 'Saved Tests/Algorithms',
   'sidebar.settings': 'Settings',
+  'sidebar.language': 'Interface language',
+  'sidebar.languageAuto': '{locale} — following your browser',
+  'sidebar.languageReset': 'auto',
+  'sidebar.languageResetHint': 'Follow the browser language again',
 
   // Algorithm groups
   'group.personal': 'Personal data',
@@ -28,6 +32,11 @@ export const en = {
 
   // Tester — general
   'tester.format': 'Format: ',
+  'tester.tabTest': 'Test',
+  'tester.tabDoc': 'Documentation',
+  'tester.docLoading': 'Loading documentation…',
+  'tester.docMissing': 'No guide section for this algorithm yet.',
+  'tester.docSource': 'Same content as the PDF reference guide in docs/.',
   'tester.configuration': 'Configuration',
   'tester.example': 'Example',
   'tester.editJson': 'Edit the JSON directly',
@@ -149,14 +158,9 @@ export const en = {
   'settings.tab.files': 'Files',
   'settings.saved': 'Settings saved!',
   'settings.saveError': 'Failed to save settings',
-  'settings.globalKey': 'Global masking key',
-  'settings.globalKeyHint': 'Used by every deterministic algorithm.',
   'settings.filesDir': 'Server file directory',
   'settings.filesDirPlaceholder': '/absolute/or/relative/path',
   'settings.filesDirHint': 'Where the lookup files live. Path relative to the project, or absolute.',
-  'settings.language': 'Interface language',
-  'settings.languageHint': 'Automatic follows your browser language.',
-  'settings.languageAuto': 'Automatic ({locale})',
   'settings.save': 'Save',
   'settings.saving': 'Saving…',
 

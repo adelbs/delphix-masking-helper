@@ -8,6 +8,10 @@ export const es: Messages = {
   'sidebar.noResults': 'Ningún algoritmo encontrado',
   'sidebar.savedTests': 'Pruebas/Algoritmos Guardados',
   'sidebar.settings': 'Configuración',
+  'sidebar.language': 'Idioma de la interfaz',
+  'sidebar.languageAuto': '{locale} — siguiendo el navegador',
+  'sidebar.languageReset': 'auto',
+  'sidebar.languageResetHint': 'Volver a seguir el idioma del navegador',
 
   // Algorithm groups
   'group.personal': 'Datos personales',
@@ -27,6 +31,11 @@ export const es: Messages = {
 
   // Tester — general
   'tester.format': 'Formato: ',
+  'tester.tabTest': 'Probar',
+  'tester.tabDoc': 'Documentación',
+  'tester.docLoading': 'Cargando la documentación…',
+  'tester.docMissing': 'Todavía no hay sección de la guía para este algoritmo.',
+  'tester.docSource': 'El mismo contenido de la guía de referencia en PDF, en docs/.',
   'tester.configuration': 'Configuración',
   'tester.example': 'Ejemplo',
   'tester.editJson': 'Editar el JSON directamente',
@@ -148,14 +157,9 @@ export const es: Messages = {
   'settings.tab.files': 'Archivos',
   'settings.saved': '¡Configuración guardada!',
   'settings.saveError': 'Error al guardar la configuración',
-  'settings.globalKey': 'Clave global de enmascaramiento',
-  'settings.globalKeyHint': 'Usada por todos los algoritmos deterministas.',
   'settings.filesDir': 'Directorio de archivos en el servidor',
   'settings.filesDirPlaceholder': '/ruta/absoluta/o/relativa',
   'settings.filesDirHint': 'Donde están los archivos de lookup. Ruta relativa al proyecto o absoluta.',
-  'settings.language': 'Idioma de la interfaz',
-  'settings.languageHint': 'Automático sigue el idioma del navegador.',
-  'settings.languageAuto': 'Automático ({locale})',
   'settings.save': 'Guardar',
   'settings.saving': 'Guardando…',
 

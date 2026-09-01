@@ -3,20 +3,18 @@ import { PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw,
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
-import { useT, buildI18n, resolveLocale, LOCALES, LOCALE_NAMES, detectLocale } from '@/lib/i18n'
-import type { AiStatus, LocalePref, ServerFile } from '@/types'
+import { useT } from '@/lib/i18n'
+import type { AiStatus, ServerFile } from '@/types'
 
 interface Props {
-  globalKey: string
   filesDir: string
-  localePref: LocalePref
-  onSave: (key: string, filesDir: string, localePref: LocalePref) => void
+  onSave: (filesDir: string) => void
   onToggleSidebar: () => void
 }
 
 type Tab = 'general' | 'ai' | 'files'
 
-export function Settings({ globalKey, filesDir, localePref, onSave, onToggleSidebar }: Props) {
+export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
   const { t } = useT()
   const [tab, setTab] = useState<Tab>('general')
 
@@ -48,7 +46,7 @@ export function Settings({ globalKey, filesDir, localePref, onSave, onToggleSide
 
       <div className="flex-1 overflow-auto p-5">
         {tab === 'general' && (
-          <GeneralTab globalKey={globalKey} filesDir={filesDir} localePref={localePref} onSave={onSave} />
+          <GeneralTab filesDir={filesDir} onSave={onSave} />
         )}
         {tab === 'ai' && (
           <AiTab />
@@ -61,24 +59,19 @@ export function Settings({ globalKey, filesDir, localePref, onSave, onToggleSide
   )
 }
 
-function GeneralTab({ globalKey, filesDir, localePref, onSave }: Omit<Props, 'onToggleSidebar'>) {
+function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar'>) {
   const { t } = useT()
-  const [localKey, setLocalKey] = useState(globalKey)
   const [localDir, setLocalDir] = useState(filesDir)
-  const [localLocale, setLocalLocale] = useState<LocalePref>(localePref)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => { setLocalKey(globalKey) }, [globalKey])
   useEffect(() => { setLocalDir(filesDir) }, [filesDir])
-  useEffect(() => { setLocalLocale(localePref) }, [localePref])
 
   const save = async () => {
     setSaving(true)
     try {
-      await api.updateConfig({ globalKey: localKey, filesDir: localDir, locale: localLocale })
-      onSave(localKey, localDir, localLocale)
-      // The UI is about to switch languages — greet the user in the new one.
-      toast.success(buildI18n(resolveLocale(localLocale)).t('settings.saved'))
+      await api.updateConfig({ filesDir: localDir })
+      onSave(localDir)
+      toast.success(t('settings.saved'))
     } catch {
       toast.error(t('settings.saveError'))
     } finally {
@@ -91,18 +84,6 @@ function GeneralTab({ globalKey, filesDir, localePref, onSave }: Omit<Props, 'on
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-            {t('settings.globalKey')}
-          </label>
-          <input
-            type="text"
-            value={localKey}
-            onChange={e => setLocalKey(e.target.value)}
-            className={fieldCls}
-          />
-          <p className="text-xs text-slate-400 mt-1">{t('settings.globalKeyHint')}</p>
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {t('settings.filesDir')}
           </label>
           <input
@@ -113,22 +94,6 @@ function GeneralTab({ globalKey, filesDir, localePref, onSave }: Omit<Props, 'on
             className={fieldCls}
           />
           <p className="text-xs text-slate-400 mt-1">{t('settings.filesDirHint')}</p>
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-            {t('settings.language')}
-          </label>
-          <select
-            value={localLocale}
-            onChange={e => setLocalLocale(e.target.value as LocalePref)}
-            className={fieldCls}
-          >
-            <option value="auto">{t('settings.languageAuto', { locale: LOCALE_NAMES[detectLocale()] })}</option>
-            {LOCALES.map(l => (
-              <option key={l} value={l}>{LOCALE_NAMES[l]}</option>
-            ))}
-          </select>
-          <p className="text-xs text-slate-400 mt-1">{t('settings.languageHint')}</p>
         </div>
         <button
           onClick={save}
