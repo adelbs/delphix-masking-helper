@@ -5,6 +5,7 @@ const fs = require('fs');
 const { pathToFileURL } = require('url');
 const { DatabaseSync } = require('node:sqlite');
 const ai = require('./ai');
+const delphix = require('./delphix');
 
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ const DEFAULT_CONFIG = {
   // 'auto' | 'en' | 'pt-BR' | 'es' — 'auto' lets the browser language decide.
   locale: 'auto',
   ...ai.DEFAULTS,
+  ...delphix.DEFAULTS,
 };
 
 function ensureDir(dir) {
@@ -119,6 +121,16 @@ const DB_PATH = path.join(__dirname, 'db', 'tests.db');
 ensureDir(path.dirname(DB_PATH));
 const db = new DatabaseSync(DB_PATH);
 
+// The database holds the engine password and the AI keys in the clear, so it must not be
+// readable by other accounts on the machine. This is the protection that actually applies to
+// a local tool — the same posture as ~/.aws/credentials or ~/.npmrc. Encrypting the file with
+// a key that lives beside it would obscure the values without protecting them.
+try {
+  fs.chmodSync(DB_PATH, 0o600);
+} catch (err) {
+  console.warn(`  ⚠  Could not restrict permissions on ${DB_PATH}: ${err.message}`);
+}
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS config (
     key   TEXT PRIMARY KEY,
@@ -138,13 +150,51 @@ db.exec(`
   )
 `);
 
+// Where this algorithm lives on a Delphix engine, when it came from one or was pushed to one.
+// Kept as its own migration so existing databases gain the columns without being recreated.
+for (const [col, decl] of [
+  ['delphix_name', 'TEXT'],       // algorithmName on the engine — exporting again updates it
+  ['delphix_origin', 'TEXT'],     // the engine's API root, so a name is not reused across engines
+]) {
+  const has = db.prepare(`SELECT COUNT(*) AS n FROM pragma_table_info('saved_tests') WHERE name = ?`).get(col);
+  if (!has.n) db.exec(`ALTER TABLE saved_tests ADD COLUMN ${col} ${decl}`);
+}
+
 // ── Config helpers (DB-backed) ────────────────────────────────────────────────
 
-function readConfig() {
+// A secret may come from the environment instead of the database, for anyone who would rather
+// not have it on disk at all. The names are namespaced so nothing is adopted by accident.
+const SECRET_ENV = {
+  'delphix.password': 'DLPX_ENGINE_PASSWORD',
+  'ai.anthropic.apiKey': 'DLPX_AI_ANTHROPIC_KEY',
+  'ai.gemini.apiKey': 'DLPX_AI_GEMINI_KEY',
+  'ai.copilot.apiKey': 'DLPX_AI_COPILOT_KEY',
+};
+
+/** Which secrets the environment is currently supplying. */
+function fromEnv() {
+  const out = {};
+  for (const [key, name] of Object.entries(SECRET_ENV)) {
+    if (process.env[name]) out[key] = process.env[name];
+  }
+  return out;
+}
+
+/** Config as it is on disk — no environment overlay. This is what may be written back. */
+function readStoredConfig() {
   const rows = db.prepare('SELECT key, value FROM config').all();
   const stored = Object.fromEntries(rows.map(r => [r.key, r.value]));
   delete stored.globalKey;   // left over from when the key was editable; the constant wins
   return { ...DEFAULT_CONFIG, ...stored };
+}
+
+/**
+ * Config as the app should use it. The environment wins over the database, which is how a
+ * secret is kept off disk entirely — so this must never be the basis of a write, or the
+ * value it was meant to keep out of the file would be saved straight into it.
+ */
+function readConfig() {
+  return { ...readStoredConfig(), ...fromEnv() };
 }
 
 function writeConfig(config) {
@@ -161,15 +211,19 @@ ensureDir(path.resolve(__dirname, readConfig().filesDir));
 
 // Config
 const KEY_MASK = '\u2022'.repeat(8);
-const isApiKey = (k) => k.startsWith('ai.') && k.endsWith('.apiKey');
+const isApiKey = (k) =>
+  (k.startsWith('ai.') && k.endsWith('.apiKey')) || k === 'delphix.password';
 
 /** Replaces stored API keys with a mask, plus a `<key>.set` flag so the UI can show state. */
 function publicConfig(config) {
+  const env = fromEnv();
   const out = {};
   for (const [k, v] of Object.entries(config)) {
     if (isApiKey(k)) {
       out[k] = v ? KEY_MASK : '';
       out[`${k}.set`] = Boolean(v);
+      // Saving over an environment-provided secret would have no effect; the UI says so.
+      if (env[k]) out[`${k}.fromEnv`] = SECRET_ENV[k];
     } else {
       out[k] = v;
     }
@@ -182,18 +236,19 @@ app.get('/api/config', (req, res) => {
 });
 
 app.put('/api/config', (req, res) => {
-  const current = readConfig();
+  const current = readStoredConfig();   // never readConfig(): env secrets must not be persisted
   const patch = {};
   for (const [k, v] of Object.entries(req.body)) {
     if (k === 'globalKey') continue;               // constant, never settable
-    if (k.endsWith('.set')) continue;              // read-only UI flag
+    if (k.endsWith('.set') || k.endsWith('.fromEnv')) continue;   // read-only UI flags
+    if (SECRET_ENV[k] && process.env[SECRET_ENV[k]]) continue;    // the environment owns it
     if (isApiKey(k) && v === KEY_MASK) continue;   // untouched masked field
     patch[k] = v;
   }
   const updated = { ...current, ...patch };
   writeConfig(updated);
   ensureDir(path.resolve(__dirname, updated.filesDir));
-  res.json(publicConfig(updated));
+  res.json(publicConfig(readConfig()));
 });
 
 // ── AI assistant ─────────────────────────────────────────────────────────────
@@ -285,6 +340,157 @@ app.post('/api/chat', async (req, res) => {
     if (!controller.signal.aborted) send('error', { message: err.message });
   }
   res.end();
+});
+
+// ── Delphix engine ────────────────────────────────────────────────────────────
+
+/** Tolerates rows saved before and after the double-serialisation fix, like the frontend does. */
+function parseStoredConfig(raw) {
+  try {
+    const first = JSON.parse(raw || '{}');
+    return typeof first === 'string' ? JSON.parse(first) : (first ?? {});
+  } catch {
+    return {};
+  }
+}
+
+
+const delphixCfg = () => delphix.settings(readConfig());
+
+/** Reports whether the configured engine is reachable and the credentials work. */
+app.get('/api/delphix/status', async (req, res) => {
+  const cfg = delphixCfg();
+  res.json({ configured: delphix.isConfigured(cfg), ...(await delphix.probe(cfg)) });
+});
+
+/**
+ * Tries credentials that have not been saved yet, so "test connection" answers about what is
+ * on screen. A blank password means "keep the stored one" — the form shows a mask, never the
+ * real value, so it has nothing to send back.
+ */
+app.post('/api/delphix/test', async (req, res) => {
+  const stored = readConfig();
+  const cfg = delphix.settings({
+    ...stored,
+    'delphix.baseUrl': req.body.baseUrl ?? stored['delphix.baseUrl'],
+    'delphix.username': req.body.username ?? stored['delphix.username'],
+    'delphix.password': req.body.password || stored['delphix.password'],
+    'delphix.allowSelfSigned': String(req.body.allowSelfSigned ?? stored['delphix.allowSelfSigned']),
+  });
+  res.json({ configured: delphix.isConfigured(cfg), ...(await delphix.probe(cfg)) });
+});
+
+/** The algorithms on the engine, flagged with whether this tool can run them locally. */
+app.get('/api/delphix/algorithms', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine is configured.' });
+  }
+  try {
+    const list = await delphix.listAlgorithms(cfg);
+    const origin = delphix.apiRoot(cfg.baseUrl);
+    const known = new Set(
+      (await runJava({ command: 'list' })).map((a) => a.className));
+    // Already imported once? Then importing again overwrites that row rather than duplicating.
+    const seen = db.prepare(
+      'SELECT delphix_name FROM saved_tests WHERE delphix_origin = ?').all(origin)
+      .map((r) => r.delphix_name);
+    res.json(list.map((a) => ({
+      ...a,
+      supported: Boolean(a.className) && known.has(a.className),
+      alreadyImported: seen.includes(a.algorithmName),
+    })));
+  } catch (err) {
+    res.status(502).json({ error: err.message });
+  }
+});
+
+/** Copies the named engine algorithms into the local saved list. */
+app.post('/api/delphix/import', async (req, res) => {
+  const cfg = delphixCfg();
+  const names = Array.isArray(req.body.names) ? req.body.names : [];
+  if (!names.length) return res.status(400).json({ error: 'names[] is required' });
+  try {
+    const origin = delphix.apiRoot(cfg.baseUrl);
+    const remote = await delphix.listAlgorithms(cfg);
+    const byName = Object.fromEntries(remote.map((a) => [a.algorithmName, a]));
+    const list = await runJava({ command: 'list' });
+    const display = Object.fromEntries(list.map((a) => [a.className, a.displayName]));
+
+    const imported = [], skipped = [];
+    const insert = db.prepare(`
+      INSERT INTO saved_tests (name, algorithm, display_name, config, input, key_value, output,
+                               delphix_name, delphix_origin)
+      VALUES (?, ?, ?, ?, '', ?, NULL, ?, ?)
+    `);
+    const update = db.prepare(`
+      UPDATE saved_tests SET name = ?, algorithm = ?, display_name = ?, config = ?,
+             updated_at = datetime('now')
+      WHERE delphix_name = ? AND delphix_origin = ?
+    `);
+    for (const name of names) {
+      const a = byName[name];
+      if (!a) { skipped.push({ name, reason: 'not-found' }); continue; }
+      if (!a.className || !display[a.className]) {
+        // A framework this tool cannot run locally — importing it would create a row that
+        // can never be tested, so it is refused with the reason rather than half-imported.
+        skipped.push({ name, reason: 'unsupported-framework', framework: a.frameworkName });
+        continue;
+      }
+      const cfgJson = JSON.stringify(a.config ?? {});
+      const existing = db.prepare(
+        'SELECT id FROM saved_tests WHERE delphix_name = ? AND delphix_origin = ?').get(name, origin);
+      if (existing) update.run(name, a.className, display[a.className], cfgJson, name, origin);
+      else insert.run(name, a.className, display[a.className], cfgJson, MASKING_KEY, name, origin);
+      imported.push(name);
+    }
+    res.json({ imported, skipped });
+  } catch (err) {
+    res.status(502).json({ error: err.message });
+  }
+});
+
+/** Pushes one saved algorithm to the engine — updating it when it came from there. */
+app.post('/api/delphix/export/:id', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine is configured.' });
+  }
+  const row = db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).json({ error: 'Saved algorithm not found' });
+
+  // Rows written before the double-serialisation fix hold a JSON *string*, not an object.
+  // Sending that as algorithmExtension makes the engine fail with its generic 500.
+  const config = parseStoredConfig(row.config);
+
+  const origin = delphix.apiRoot(cfg.baseUrl);
+  // Only update in place when the row came from *this* engine; the same name on a different
+  // engine is a different algorithm.
+  const linked = row.delphix_origin === origin ? row.delphix_name : null;
+  const asked = req.body.name ? String(req.body.name).trim() : null;
+
+  // The engine refuses a changed algorithmName on update, so a rename can only ever mean a new
+  // algorithm. Asking for a name different from the linked one is therefore a deliberate
+  // "save a copy under this name"; with no name given, the linked algorithm is updated and the
+  // local rename is reported back instead of being silently dropped.
+  const existingName = asked && asked !== linked ? null : linked;
+  const name = asked || linked || String(row.name).trim();
+  const renamedLocally = Boolean(existingName && !asked && String(row.name).trim() !== existingName);
+
+  try {
+    const out = await delphix.saveAlgorithm(cfg, {
+      name,
+      className: row.algorithm,
+      config,
+      description: req.body.description,
+      existingName,
+    });
+    db.prepare(`UPDATE saved_tests SET delphix_name = ?, delphix_origin = ?,
+                updated_at = datetime('now') WHERE id = ?`).run(out.name, origin, row.id);
+    res.json({ mode: out.mode, name: out.name, engine: origin, renamed: Boolean(out.renamed) || renamedLocally });
+  } catch (err) {
+    res.status(502).json({ error: err.message });
+  }
 });
 
 // File management
@@ -521,16 +727,56 @@ app.post('/api/tests', (req, res) => {
 
 // Update a test
 app.put('/api/tests/:id', (req, res) => {
-  const { name, config, input, output } = req.body;
-  const stmt = db.prepare(`
+  const { config, input, output } = req.body;
+  // The name is identity, mirroring the engine: it is set on create or on duplicate, never
+  // edited. Accepting a new one here would let a local copy drift from the algorithm it tracks.
+  const current = db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(req.params.id);
+  if (!current) return res.status(404).json({ error: 'Saved algorithm not found' });
+
+  // Only what the caller sent is changed. Defaulting an absent field would let an update of,
+  // say, just the input silently erase the configuration.
+  const configStr = config === undefined
+    ? current.config
+    : (typeof config === 'string' ? config : JSON.stringify(config ?? {}));
+
+  db.prepare(`
     UPDATE saved_tests
-    SET name=?, config=?, input=?, key_value=?, output=?, updated_at=datetime('now')
+    SET config=?, input=?, key_value=?, output=?, updated_at=datetime('now')
     WHERE id=?
-  `);
-  const configStr = typeof config === 'string' ? config : JSON.stringify(config || {});
-  stmt.run(name, configStr, input || '', MASKING_KEY, output || null, req.params.id);
+  `).run(
+    configStr,
+    input === undefined ? current.input : input,
+    MASKING_KEY,
+    output === undefined ? current.output : (output || null),
+    req.params.id,
+  );
   const row = db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(req.params.id);
   res.json(row);
+});
+
+/**
+ * Copies a saved algorithm under a new name.
+ *
+ * This replaces renaming. On a Masking Engine the algorithm name is its identity — `PUT` answers
+ * "Cannot update 'algorithmName' field" — so a rename could never travel, while a copy under a
+ * new name is exactly what the engine does support. The copy starts unlinked: it is a new
+ * algorithm, not another view of the one already on the engine.
+ */
+app.post('/api/tests/:id/duplicate', (req, res) => {
+  const row = db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).json({ error: 'Saved algorithm not found' });
+
+  const name = String(req.body.name ?? '').trim();
+  if (!name) return res.status(400).json({ code: 'name-required', error: 'A name is required.' });
+
+  const clash = db.prepare('SELECT id FROM saved_tests WHERE name = ?').get(name);
+  if (clash) return res.status(409).json({ code: 'name-taken', error: `"${name}" already exists.` });
+
+  const info = db.prepare(`
+    INSERT INTO saved_tests (name, algorithm, display_name, config, input, key_value, output)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `).run(name, row.algorithm, row.display_name, row.config, row.input, MASKING_KEY, row.output);
+  res.status(201).json(db.prepare('SELECT * FROM saved_tests WHERE id = ?').get(info.lastInsertRowid));
 });
 
 // Delete a test

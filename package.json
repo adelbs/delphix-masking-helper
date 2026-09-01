@@ -1,7 +1,7 @@
 {
   "name": "delphix-masking-helper",
   "version": "1.0.0",
-  "description": "Understand, test and build Delphix masking algorithms \u2014 locally, without a Masking Engine",
+  "description": "Understand, test and build Delphix masking algorithms — locally, without a Masking Engine",
   "main": "server.js",
   "scripts": {
     "start": "npm run build --prefix frontend && node server.js",
@@ -13,7 +13,9 @@
     "express": "^4.19.2"
   },
   "devDependencies": {
-    "concurrently": "^10.0.3"
+    "concurrently": "^10.0.3",
+    "gifenc": "^1.0.3",
+    "puppeteer-core": "^25.9.0"
   },
   "license": "MPL-2.0",
   "repository": {

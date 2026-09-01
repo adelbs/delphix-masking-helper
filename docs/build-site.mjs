@@ -119,13 +119,25 @@ ${topbar(locale, 'home', t)}
   </figure>
 </div></div>
 
+<section class="notice"><div class="wrap narrow">
+  <h2 class="notice-h">${esc(t.noticeTitle)}</h2>
+  <p>${raw(t.noticeIndependent)}</p>
+  <p>${raw(t.noticeLicense)}</p>
+</div></section>
+
 <section><div class="wrap">
   <h2 class="sec">${esc(t.featuresTitle)}</h2>
   <div class="cards">${cards}
   </div>
 </div></section>
 
-<section class="alt"><div class="wrap">
+<section class="alt"><div class="wrap narrow">
+  <h2 class="sec">${esc(t.syncTitle)}</h2>
+  <p class="sec-lede" style="margin-bottom:0">${esc(t.syncP)}</p>
+  <p class="note-line">${esc(t.syncNote)}</p>
+</div></section>
+
+<section><div class="wrap">
   <div class="split">
     <div>
       <h2 class="sec">${esc(t.assistantTitle)}</h2>
@@ -140,14 +152,12 @@ ${topbar(locale, 'home', t)}
   </div>
 </div></section>
 
-<section><div class="wrap narrow">
+<section class="alt"><div class="wrap narrow">
   <h2 class="sec">${esc(t.pdfTitle)}</h2>
   <p class="sec-lede">${esc(t.pdfP)}</p>
   <div class="dl">
     ${pdfLinks(t)}
   </div>
-  <h2 class="sec" style="margin-top:52px">${esc(t.langTitle)}</h2>
-  <p class="sec-lede" style="margin-bottom:0">${esc(t.langP)}</p>
 </div></section>
 
 ${footer(locale, t)}`

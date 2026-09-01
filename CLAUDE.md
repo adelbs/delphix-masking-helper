@@ -192,6 +192,96 @@ extração, porque são tamanhos de impressão em `pt`; o restante das classes d
 Ao adicionar um algoritmo, dê a ele um bloco `.algo` nos três guias — sem isso a aba mostra
 "ainda não há seção do guia para este algoritmo".
 
+## Segredos
+
+Ficam na tabela `config` do SQLite — a senha do engine e as chaves de IA — **em texto puro**.
+Duas coisas os protegem:
+
+1. `db/tests.db` é criado e mantido em `0600` (o servidor força na subida). Essa é a proteção
+   que de fato se aplica a uma ferramenta local, e é a mesma postura de `~/.aws/credentials` ou
+   `~/.npmrc`. Antes disso o arquivo estava `0644`, legível por qualquer conta da máquina.
+2. Quem preferir não ter o segredo em disco define uma variável de ambiente; ela vence o banco:
+
+   | Config | Variável |
+   |---|---|
+   | `delphix.password` | `DLPX_ENGINE_PASSWORD` |
+   | `ai.anthropic.apiKey` | `DLPX_AI_ANTHROPIC_KEY` |
+   | `ai.gemini.apiKey` | `DLPX_AI_GEMINI_KEY` |
+   | `ai.copilot.apiKey` | `DLPX_AI_COPILOT_KEY` |
+
+   Os nomes são namespaced de propósito: adotar `ANTHROPIC_API_KEY` do ambiente sem o usuário
+   pedir seria uma surpresa desagradável.
+
+**Cuidado ao mexer nisso:** `readConfig()` sobrepõe o ambiente por cima do banco e **não pode**
+ser a base de uma escrita — `PUT /api/config` usa `readStoredConfig()`. Usar `readConfig()` ali
+grava no arquivo justamente o segredo que a variável existia para manter fora dele. Foi o que
+aconteceu na primeira versão.
+
+**Não criptografamos o arquivo.** Com a chave morando ao lado do banco, num repositório público,
+seria ofuscação e não proteção: quem lê o `.db` lê a chave. O que traria proteção real seria o
+chaveiro do SO (Keychain / Credential Manager), e isso é decisão em aberto — ver as pendências
+do repositório interno.
+
+## Integração com uma instância Delphix
+
+`delphix.js` importa e exporta algoritmos de um Masking Engine. Configuração em
+**Configurações → Delphix** (`delphix.baseUrl`, `delphix.username`, `delphix.password`,
+`delphix.allowSelfSigned`); a senha é mascarada na resposta da API igual às chaves de IA.
+
+Contrato, lido do OpenAPI de uma instância (`/masking/api/swagger-basepath.json`):
+
+- Base `{host}/masking/api` — **sem versão**. Verificado: a versionada `/v5.1.49` também
+  responde, mas quebraria contra instância de outra versão; `/v5.1` e `/v5` dão 404.
+- `POST /login` → `{Authorization: "<token>"}`; o header é o **token cru**, não `Bearer`.
+- `POST /algorithms` cria, `PUT /algorithms/{algorithmName}` atualiza. Ambos devolvem
+  `AsyncTask`, mas a alteração já está visível no `GET` seguinte — não é preciso poll.
+
+**Duas armadilhas que o código contorna:**
+
+1. `GET /algorithms` devolve `frameworkId` mas **não** `frameworkName`. Os frameworks são
+   buscados à parte e casados por id. Ler o nome direto do algoritmo deixaria tudo sem
+   identificação.
+2. Nomes de framework **não são únicos entre plugins** — uma instância padrão tem `IBAN` do
+   `dlpx-core` (id 50) e outro do plugin `IBAN` (id 40). A resolução exige
+   `plugin.pluginName === 'dlpx-core'`, senão a exportação anexa o framework errado.
+
+O mapa `className → frameworkName` no `delphix.js` foi **gerado do JAR do plugin**
+(`MaskingComponent.getName()`), não digitado: os nomes divergem dos nossos rótulos de UI
+(`Redact` → `Redact Input`, `Numeric Mapping` → `CM Numeric`, `Min/Max BigDecimal` →
+`MinMax Number`).
+
+**O nome é identidade, e não se renomeia.** `PUT /algorithms/{name}` com um `algorithmName`
+diferente no corpo responde `"Cannot update 'algorithmName' field"`. A ferramenta segue a mesma
+regra: o nome de um algoritmo salvo é definido ao criar ou ao **duplicar**, nunca editado. O
+`PUT /api/tests/:id` ignora `name` de propósito, e a UI não tem campo para isso.
+
+Dar um nome novo é duplicar: `POST /api/tests/:id/duplicate` com `{name}` copia a linha e a
+deixa **sem vínculo** (`delphix_name`/`delphix_origin` nulos), porque a cópia é um algoritmo
+novo e não outra visão do que já está no engine — enviá-la cria um lá. O endpoint recusa nome
+vazio (`name-required`) e nome já usado (`name-taken`).
+
+Linhas antigas podem ter nome local diferente do `delphix_name`, de antes desta regra; a
+exportação atualiza o vinculado e devolve `renamed: true` para a UI avisar.
+
+**Atualização parcial.** `PUT /api/tests/:id` só altera os campos presentes no corpo. Antes ele
+usava `config || {}`, então atualizar apenas o input apagava a configuração — silenciosamente, e
+a exportação seguinte falhava na validação do engine.
+
+**Config vazia é recusada na atualização.** Uma linha local sem configuração sobrescreveria a do
+engine com nada — perda de dados silenciosa. Antes de atualizar, compara-se: se a local está
+vazia e a remota não, recusa com instrução de reimportar. Linhas salvas antes da correção de
+dupla serialização guardam a config como *string* JSON; `parseStoredConfig()` no `server.js`
+tolera as duas formas, como o frontend já fazia.
+
+**Editar em vez de duplicar.** `saved_tests` ganhou `delphix_name` e `delphix_origin`. Só se
+atualiza no lugar quando a linha veio *daquela* instância — o mesmo nome em outra instância é
+outro algoritmo. Migração por `ALTER TABLE`, sem recriar a tabela.
+
+Instâncias com plugin mais antigo não têm todos os frameworks (a de laboratório não tem Phone,
+Shuffle, Redact Input, Repeat First Digit, Null Secure Lookup nem os Date Shift Discrete/
+Variable). Exportar para elas falha com mensagem explicando; importar marca o algoritmo como
+não suportado em vez de criar uma linha que nunca poderia ser executada.
+
 ## Idiomas da interface (i18n)
 
 A UI existe em inglês, português (BR) e espanhol. A preferência fica em `config.locale`
@@ -249,6 +339,31 @@ NomeDaClasse: {
 
 A chave é o nome simples da classe (último segmento do `className`). O lookup também aceita `className` completo ou variação case-insensitive. O bloco acima é o pt-BR — acrescente as versões em inglês e espanhol em `algo-text.en.ts` e `algo-text.es.ts` com as mesmas chaves de `params`/`labels`.
 
+## Regravar o demo.gif
+
+`node docs/record-demo.mjs` dirige o app rodando em Chrome headless e escreve `docs/demo.gif`
+com as três cenas: o assistente construindo um algoritmo, um algoritmo sendo testado, e a
+sincronização com uma instância Delphix.
+
+Precisa do app no ar (`npm run dev`), do Ollama para a cena 1 e de uma instância Delphix
+configurada para a cena 3. O script força a interface para inglês durante a gravação e devolve o
+idioma anterior no fim — o GIF aparece nos três READMEs e no site.
+
+Sem ffmpeg e sem ImageMagick: o próprio Chrome decodifica e redimensiona cada captura no canvas,
+e o `gifenc` quantiza. As duas dependências (`puppeteer-core`, `gifenc`) são `devDependencies` e
+o `puppeteer-core` usa o Chrome já instalado, sem baixar Chromium.
+
+Tamanho e nitidez saem de três constantes no topo do script: `VIEW`, `SCALE` e `COLORS`. Em
+0.66/40 cores o resultado fica em torno de 1,3 MB.
+
+**Espere por estado, não por tempo.** As esperas do script são condicionais (`waitFor`): listar
+uma instância remota leva cerca de **oito segundos**, e um `sleep` fixo menor gravou um diálogo
+vazio. A cena 1 espera o cartão verde de "algoritmo salvo" — esperar por um balão de mensagem
+casava com a pergunta do próprio usuário e encerrava a cena na hora.
+
+A gravação cria um algoritmo local (o que o assistente constrói) e importa um da instância.
+Limpe-os depois, ou o GIF seguinte mostra "já importado".
+
 ## Site (GitHub Pages)
 
 O site vive em `docs/`, que é a pasta que o GitHub Pages serve quando configurado como *deploy
@@ -272,6 +387,19 @@ citando uma versão antiga.
 **Divisão de conteúdo.** A landing é deliberadamente não técnica: diz para que serve e para quem,
 e manda quem quer jars, portas e passos de build para o README. Detalhe técnico não sobe para lá.
 A página de algoritmos carrega a referência completa — é o material do guia.
+
+**Aviso de independência e licença.** Logo abaixo do hero, antes das capacidades: o projeto não
+tem vínculo com a Delphix, e exige licença Delphix ativa porque os algoritmos vêm das bibliotecas
+do produto. Fica ali de propósito — decide se a pessoa pode usar a ferramenta, então não é letra
+miúda para se achar depois. A mesma coisa aparece no topo dos três READMEs e, em forma curta, nos
+rodapés. Ao mexer no texto do site, os campos são `noticeTitle`, `noticeIndependent` e
+`noticeLicense`, e os dois últimos **aceitam HTML** (`<strong>`), então são renderizados com
+`raw()` e não com `esc()`.
+
+**Posicionamento.** São quatro capacidades, não três: entender, testar, construir e **sincronizar**
+com um Masking Engine. A sincronização tem seção própria na landing, porque é o que faz a
+ferramenta cobrir a vida inteira de um algoritmo em vez de só a criação. Ao mexer no texto, os três
+idiomas ficam lado a lado em `docs/site-content.mjs` com as mesmas chaves.
 
 Pendência: as orientações de download e instalação entram nas landings quando houver a primeira
 release. Ainda não há seção para isso; a CTA hoje aponta para o repositório.

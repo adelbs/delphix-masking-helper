@@ -2,21 +2,33 @@
 
 [English](README.md) · **Português (BR)** · [Español](README.es.md)
 
-Um companheiro local para o plugin de mascaramento do Delphix. Ajuda a **entender** como cada
-framework de mascaramento se comporta, **testar** um algoritmo contra valores reais e **construir**
-um algoritmo já configurado a partir de um problema descrito em linguagem natural — tudo sem
-precisar criar um Rule Set ou executar um Job em um Masking Engine.
+🌐 **[Site](https://adelbs.github.io/delphix-masking-helper/index.pt-BR.html)** — o que a ferramenta faz, e a referência completa dos algoritmos, em três idiomas.
 
-> **Você precisa do SDK da Delphix para rodar isto.** Os algoritmos de mascaramento vivem em jars
-> licenciados do produto Delphix, que **não** são distribuídos aqui. Solicite o Masking Devkit
-> (SDK) à Delphix e coloque quinze jars em `lib/` — veja [Bibliotecas do Delphix](#bibliotecas-do-delphix)
-> abaixo. Referência: [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
+Um companheiro local para o plugin de mascaramento do Delphix, cobrindo a vida inteira de um
+algoritmo. Ajuda a **entender** como cada framework se comporta, **testar** um algoritmo contra
+valores reais, **construir** um algoritmo já configurado a partir de um problema descrito em
+linguagem natural e **sincronizar** com um Masking Engine — trazendo os algoritmos dele para
+trabalhar e devolvendo os seus. Tudo sem precisar criar um Rule Set nem executar um masking job.
 
-![O assistente criando um algoritmo e o algoritmo sendo testado](docs/demo.gif)
+> ### Projeto independente, e exige licença Delphix ativa
+>
+> **Sem qualquer relação com a Delphix.** Este é um projeto open source independente. Não é feito,
+> endossado, revisado nem suportado pela Delphix ou por seus detentores, e nada aqui é produto
+> oficial. Delphix e os nomes de produto citados são marcas de seus respectivos donos.
+>
+> **É necessária uma licença Delphix ativa.** Os algoritmos de mascaramento vivem em jars
+> licenciados do produto Delphix, que **não** são distribuídos aqui — este projeto não os
+> entrega nem os substitui. Você já precisa ter direito a eles e conseguir o Masking Devkit (SDK)
+> com a Delphix, normalmente por meio de uma licença ativa e do seu time de conta. Coloque quinze
+> jars em `lib/` — veja [Bibliotecas do Delphix](#bibliotecas-do-delphix) abaixo. Referência: [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
 
-<sub>Gravado com o provedor local padrão (Ollama · `llama3.1:8b`) num M1 Pro. A resposta do
-modelo está acelerada — localmente leva cerca de um minuto. Todos os valores mascarados são
-saída real do plugin.</sub>
+![O assistente construindo um algoritmo, um algoritmo sendo testado, e algoritmos sendo sincronizados com uma instância Delphix](docs/demo.gif)
+
+<sub>Três coisas, nesta ordem: pedir um algoritmo ao assistente e vê-lo construir e validar um;
+executar um algoritmo com um valor real; importar de uma instância Delphix e devolver um. Gravado
+com o provedor local padrão (Ollama · `llama3.1:8b`) num M1 Pro — a resposta do modelo está
+acelerada, porque localmente leva cerca de um minuto. Todos os valores mascarados são saída real
+do plugin, e a instância é real.</sub>
 
 ## Como funciona
 
@@ -163,6 +175,29 @@ GitHub Copilot em si não expõe API de chat para aplicações de terceiros.
 > folgado para Claude e Gemini, mas apertado para modelos locais pequenos — um com janela de 8k
 > vai truncar o catálogo e errar a escolha do algoritmo. Prefira um modelo com contexto grande.
 
+## Sincronizar com um Masking Engine
+
+Aponte a ferramenta para uma instância Delphix em **Configurações → Delphix** — endereço, usuário
+e senha — e clique em **Testar conexão**; ele responde antes de você salvar qualquer coisa.
+
+**Importar.** *Testes/Algoritmos Salvos → Importar do Delphix* lista o que a instância tem. O que
+estiver sobre um framework que a ferramenta não consegue executar aparece, mas não é selecionável
+— assim você nunca fica com um algoritmo salvo que não dá para testar.
+
+**Exportar.** Cada algoritmo salvo tem o botão **Enviar ao Delphix**. O que veio da instância é
+atualizado lá; o que você construiu aqui é criado. A ferramenta lembra de onde cada algoritmo veio,
+então exportar duas vezes nunca deixa uma duplicata.
+
+**Nomes.** Na instância o nome do algoritmo é a identidade dele e não pode ser alterado, então a
+ferramenta segue a mesma regra: nomes não são editáveis. Para trabalhar com outro nome, use
+**Duplicar** e dê o nome à cópia — a cópia não fica vinculada, então enviá-la cria um algoritmo novo.
+
+Se o plugin de mascaramento da instância for mais antigo que o de `lib/`, alguns frameworks não
+existirão lá; exportar um algoritmo desses falha com uma mensagem explicando.
+
+Se preferir não guardar a senha em disco, defina `DLPX_ENGINE_PASSWORD` no ambiente — ela tem
+precedência e o campo passa a aparecer somente leitura.
+
 ## Idioma da interface
 
 A UI está disponível em inglês, português (BR) e espanhol. Por padrão segue o idioma do
@@ -197,3 +232,8 @@ jar cfe AlgorithmRunner.jar AlgorithmRunner *.class
 [Mozilla Public License 2.0](LICENSE). Modificações nos arquivos deste projeto continuam abertas;
 você pode combiná-lo com código sob outras licenças. Os jars do Delphix carregados em runtime não
 são cobertos por esta licença e não são distribuídos aqui.
+
+**Marcas e vínculo.** Delphix, Delphix Continuous Compliance e os demais nomes de produto citados
+aqui são marcas de seus respectivos donos. Este projeto é independente: não tem vínculo com eles,
+não é endossado nem suportado por eles, e usá-lo não concede qualquer direito sobre o software da
+Delphix que ele carrega.

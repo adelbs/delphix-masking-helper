@@ -12,7 +12,7 @@ interface Props {
   onToggleSidebar: () => void
 }
 
-type Tab = 'general' | 'ai' | 'files'
+type Tab = 'general' | 'ai' | 'delphix' | 'files'
 
 export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
   const { t } = useT()
@@ -28,7 +28,7 @@ export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
       </div>
 
       <div className="flex gap-1 px-5 pt-4 flex-shrink-0 border-b border-slate-200 bg-white">
-        {(['general', 'ai', 'files'] as Tab[]).map(id => (
+        {(['general', 'ai', 'delphix', 'files'] as Tab[]).map(id => (
           <button
             key={id}
             onClick={() => setTab(id)}
@@ -50,6 +50,9 @@ export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
         )}
         {tab === 'ai' && (
           <AiTab />
+        )}
+        {tab === 'delphix' && (
+          <DelphixTab />
         )}
         {tab === 'files' && (
           <FilesTab />
@@ -210,10 +213,13 @@ function AiTab() {
               type="password"
               value={get('apiKey')}
               onChange={e => set(`ai.${provider}.apiKey`, e.target.value)}
-              className={fieldCls}
+              disabled={Boolean(cfg[`ai.${provider}.apiKey.fromEnv`])}
+              className={cn(fieldCls, cfg[`ai.${provider}.apiKey.fromEnv`] && 'opacity-60')}
             />
             <p className="text-xs text-slate-400 mt-1">
-              {cfg[`ai.${provider}.apiKey.set`] ? t('settings.ai.apiKeySet') : t('settings.ai.apiKeyHint')}
+              {cfg[`ai.${provider}.apiKey.fromEnv`]
+                ? t('settings.secretFromEnv', { name: String(cfg[`ai.${provider}.apiKey.fromEnv`]) })
+                : cfg[`ai.${provider}.apiKey.set`] ? t('settings.ai.apiKeySet') : t('settings.ai.apiKeyHint')}
             </p>
           </div>
         )}
@@ -459,5 +465,131 @@ function FilesTab() {
   )
 }
 
+
+/** Connection to a Delphix Continuous Compliance engine, used to import and export algorithms. */
+function DelphixTab() {
+  const { t } = useT()
+  const [baseUrl, setBaseUrl] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [selfSigned, setSelfSigned] = useState(false)
+  // What the config returned for the password: a mask, never the real value. Comparing against
+  // it tells us whether the user actually typed a new one.
+  const [maskedPassword, setMaskedPassword] = useState('')
+  // Set when the password comes from an environment variable: the field then has no effect.
+  const [passwordEnv, setPasswordEnv] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState<{ configured?: boolean; ok?: boolean; error?: string; apiRoot?: string } | null>(null)
+  const [checking, setChecking] = useState(false)
+
+  useEffect(() => {
+    api.getConfig().then(cfg => {
+      const c = cfg as unknown as Record<string, string>
+      setBaseUrl(c['delphix.baseUrl'] ?? '')
+      setUsername(c['delphix.username'] ?? '')
+      setPassword(c['delphix.password'] ?? '')
+      setMaskedPassword(c['delphix.password'] ?? '')
+      setPasswordEnv(c['delphix.password.fromEnv'] ?? null)
+      setSelfSigned(String(c['delphix.allowSelfSigned']) === 'true')
+    }).catch(() => {})
+  }, [])
+
+  // Tests what is on screen, so the button works before anything is saved. An untouched
+  // password field still holds the mask, so it is sent blank and the server uses the stored one.
+  const check = async () => {
+    setChecking(true)
+    try {
+      setStatus(await api.delphixTest({
+        baseUrl,
+        username,
+        password: password === maskedPassword ? '' : password,
+        allowSelfSigned: selfSigned,
+      }))
+    } catch (e) {
+      setStatus({ ok: false, error: (e as Error).message })
+    } finally { setChecking(false) }
+  }
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      await api.updateConfig({
+        'delphix.baseUrl': baseUrl,
+        'delphix.username': username,
+        'delphix.password': password,
+        'delphix.allowSelfSigned': String(selfSigned),
+      } as unknown as Record<string, string>)
+      const cfg = await api.getConfig() as unknown as Record<string, string>
+      setPassword(cfg['delphix.password'] ?? '')
+      setMaskedPassword(cfg['delphix.password'] ?? '')
+      toast.success(t('settings.saved'))
+      await check()
+    } catch { toast.error(t('settings.saveError')) }
+    finally { setSaving(false) }
+  }
+
+  return (
+    <div className="max-w-lg space-y-5">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+            {t('settings.dlpxUrl')}
+          </label>
+          <input type="text" value={baseUrl} onChange={e => setBaseUrl(e.target.value)}
+                 placeholder="masking.example.com" className={fieldCls} />
+          <p className="text-xs text-slate-400 mt-1">{t('settings.dlpxUrlHint')}</p>
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+            {t('settings.dlpxUser')}
+          </label>
+          <input type="text" value={username} onChange={e => setUsername(e.target.value)}
+                 autoComplete="off" className={fieldCls} />
+        </div>
+        <div>
+          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+            {t('settings.dlpxPassword')}
+          </label>
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                 autoComplete="new-password" disabled={Boolean(passwordEnv)}
+                 className={cn(fieldCls, passwordEnv && 'opacity-60')} />
+          <p className="text-xs text-slate-400 mt-1">
+            {passwordEnv
+              ? t('settings.secretFromEnv', { name: passwordEnv })
+              : t('settings.dlpxPasswordHint')}
+          </p>
+        </div>
+        <label className="flex items-start gap-2 text-sm text-slate-700">
+          <input type="checkbox" checked={selfSigned} onChange={e => setSelfSigned(e.target.checked)}
+                 className="mt-1" />
+          <span>
+            {t('settings.dlpxSelfSigned')}
+            <span className="block text-xs text-slate-400">{t('settings.dlpxSelfSignedHint')}</span>
+          </span>
+        </label>
+        <div className="flex items-center gap-2">
+          <button onClick={save} disabled={saving}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
+            <Save size={14} />{saving ? t('settings.saving') : t('settings.save')}
+          </button>
+          <button onClick={check} disabled={checking}
+                  className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-60 transition-colors">
+            {checking ? t('settings.dlpxTesting') : t('settings.dlpxTest')}
+          </button>
+        </div>
+      </div>
+
+      {status && (
+        <div className={cn('rounded-xl border p-4 text-sm',
+          status.ok ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                    : 'bg-amber-50 border-amber-200 text-amber-900')}>
+          {status.ok
+            ? <>{t('settings.dlpxOk')} <span className="font-mono text-xs">{status.apiRoot}</span></>
+            : <>{t('settings.dlpxFail')} {status.error === 'not-configured' ? t('settings.dlpxNotSet') : status.error}</>}
+        </div>
+      )}
+    </div>
+  )
+}
 
 const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'

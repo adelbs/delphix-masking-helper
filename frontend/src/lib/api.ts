@@ -34,8 +34,13 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
     throw new Error(`The server returned a non-JSON response (HTTP ${res.status}): ${body.slice(0, 200)}`)
   }
 
-  const error = (data as { error?: unknown }).error
-  if (!res.ok && typeof error === 'string') throw new Error(error)
+  const { error, code } = data as { error?: unknown; code?: unknown }
+  if (!res.ok && typeof error === 'string') {
+    const err = new Error(error) as Error & { code?: string }
+    // Some failures are states the UI can word better in the user's own language.
+    if (typeof code === 'string') err.code = code
+    throw err
+  }
   return data as T
 }
 
@@ -65,7 +70,16 @@ export const api = {
       body: JSON.stringify(test),
     }),
 
-  updateTest: (id: number, patch: { name?: string; input?: string; config?: string; output?: string }) =>
+  /** Copies a saved algorithm under a new name. Replaces renaming: on the engine the name is
+   *  identity, so a copy is the only thing a new name can mean. */
+  duplicateTest: (id: number, name: string) =>
+    request<SavedTest>(`/api/tests/${id}/duplicate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    }),
+
+  updateTest: (id: number, patch: { input?: string; config?: string; output?: string }) =>
     request<SavedTest>(`/api/tests/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -135,6 +149,41 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     }),
+
+  // ── Delphix engine ─────────────────────────────────────────────────────────
+  delphixStatus: () =>
+    request<{ configured: boolean; ok: boolean; error?: string; apiRoot?: string }>('/api/delphix/status'),
+
+  /** Probes credentials straight from the form, before they are saved. */
+  delphixTest: (body: { baseUrl: string; username: string; password: string; allowSelfSigned: boolean }) =>
+    request<{ configured: boolean; ok: boolean; error?: string; apiRoot?: string }>('/api/delphix/test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+
+  delphixAlgorithms: () =>
+    request<Array<{
+      algorithmName: string; frameworkName: string | null; className: string | null;
+      description: string; config: Record<string, unknown>;
+      supported: boolean; alreadyImported: boolean;
+    }>>('/api/delphix/algorithms'),
+
+  delphixImport: (names: string[]) =>
+    request<{ imported: string[]; skipped: Array<{ name: string; reason: string; framework?: string }> }>(
+      '/api/delphix/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ names }),
+      }),
+
+  delphixExport: (id: number, name?: string) =>
+    request<{ mode: 'created' | 'updated'; name: string; engine: string; renamed: boolean }>(
+      `/api/delphix/export/${id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      }),
 
   getAiStatus: () =>
     request<AiStatus>('/api/ai/status'),

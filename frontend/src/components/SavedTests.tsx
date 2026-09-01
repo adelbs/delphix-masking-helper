@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Download, Upload, Trash2, Play, Search, BookmarkCheck, PanelLeftOpen, ChevronDown, ChevronUp, Pencil, Check, X, ExternalLink } from 'lucide-react'
+import { Download, Upload, Trash2, Play, Search, BookmarkCheck, PanelLeftOpen, ChevronDown, ChevronUp, Check, X, ExternalLink, Server, CloudUpload, Loader2, Copy } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import type { Algorithm, SavedTest } from '@/types'
@@ -24,6 +24,7 @@ function parseConfig(raw: string): Record<string, unknown> {
 }
 
 export function SavedTests({ algorithms, onEdit, onToggleSidebar }: Props) {
+  const [engineOpen, setEngineOpen] = useState(false)
   const { t: msg } = useT()
   const [tests, setTests] = useState<SavedTest[]>([])
   const [query, setQuery] = useState('')
@@ -109,6 +110,9 @@ export function SavedTests({ algorithms, onEdit, onToggleSidebar }: Props) {
             <Upload size={14} /> {msg('saved.import')}
             <input type="file" accept=".json" className="hidden" onChange={handleImport} />
           </label>
+          <button onClick={() => setEngineOpen(true)} className={cn(actionBtn, 'text-blue-700 border-blue-200 bg-blue-50 hover:bg-blue-100')}>
+            <Server size={14} /> {msg('saved.importFromEngine')}
+          </button>
         </div>
       </div>
 
@@ -144,51 +148,213 @@ export function SavedTests({ algorithms, onEdit, onToggleSidebar }: Props) {
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onSave={handleUpdate}
+                onDuplicated={load}
               />
             ))}
           </div>
         )}
       </div>
+
+      {engineOpen && (
+        <EngineImport onClose={() => setEngineOpen(false)} onImported={load} />
+      )}
     </div>
   )
 }
 
-function TestCard({ test: t, onEdit, onDelete, onSave }: {
+/** Lists what the configured engine has and imports the chosen algorithms. */
+function EngineImport({ onClose, onImported }: { onClose: () => void; onImported: () => void }) {
+  const { t: msg } = useT()
+  const [rows, setRows] = useState<Awaited<ReturnType<typeof api.delphixAlgorithms>> | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [picked, setPicked] = useState<Set<string>>(new Set())
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    api.delphixAlgorithms().then(setRows).catch((e: Error & { code?: string }) =>
+      setError(e.code === 'not-configured' ? msg('saved.engineNotSet') : e.message))
+  }, [])
+
+  const toggle = (name: string) => setPicked(prev => {
+    const next = new Set(prev)
+    if (next.has(name)) next.delete(name); else next.add(name)
+    return next
+  })
+
+  const run = async () => {
+    setBusy(true)
+    try {
+      const out = await api.delphixImport([...picked])
+      toast.success(msg('saved.importDone', { n: out.imported.length }))
+      if (out.skipped.length) toast.warning(msg('saved.importSkipped', { n: out.skipped.length }))
+      onImported()
+      onClose()
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally { setBusy(false) }
+  }
+
+  const importable = (rows ?? []).filter(r => r.supported)
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+        <div className="flex items-center gap-2 px-5 py-4 border-b border-slate-200">
+          <Server size={16} className="text-blue-600" />
+          <h3 className="text-sm font-semibold text-slate-800 flex-1">{msg('saved.importTitle')}</h3>
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
+        </div>
+
+        <div className="flex-1 overflow-auto p-5">
+          {error && <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3">{error}</p>}
+          {!rows && !error && (
+            <p className="text-sm text-slate-400 flex items-center gap-2">
+              <Loader2 size={14} className="animate-spin" />{msg('saved.importLoading')}
+            </p>
+          )}
+          {rows && importable.length === 0 && !error && (
+            <p className="text-sm text-slate-500">{msg('saved.importNone')}</p>
+          )}
+          {rows?.map(r => (
+            <label key={r.algorithmName}
+                   className={cn('flex items-start gap-3 py-2.5 border-b border-slate-100 last:border-0',
+                                 r.supported ? 'cursor-pointer' : 'opacity-55')}>
+              <input type="checkbox" disabled={!r.supported} className="mt-1"
+                     checked={picked.has(r.algorithmName)}
+                     onChange={() => toggle(r.algorithmName)} />
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-medium text-slate-800 truncate">{r.algorithmName}</span>
+                <span className="block text-xs text-slate-400 truncate">{r.frameworkName ?? '—'}</span>
+                {!r.supported && (
+                  <span className="text-xs text-amber-700">{msg('saved.importUnsupported')}</span>
+                )}
+                {r.alreadyImported && (
+                  <span className="text-xs text-slate-400">{msg('saved.importAlready')}</span>
+                )}
+              </span>
+            </label>
+          ))}
+        </div>
+
+        <div className="px-5 py-4 border-t border-slate-200">
+          <button onClick={run} disabled={busy || picked.size === 0}
+                  className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
+            {msg('saved.importSelected', { n: picked.size })}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/** Asks for the new algorithm's name. Duplicating is how a new name is given, since the engine
+ *  treats the name as identity and refuses to change it on an existing algorithm. */
+function DuplicatePrompt({ suggested, onConfirm, onCancel }: {
+  suggested: string
+  onConfirm: (name: string) => Promise<void>
+  onCancel: () => void
+}) {
+  const { t: msg } = useT()
+  const [name, setName] = useState(suggested)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const confirm = async () => {
+    const trimmed = name.trim()
+    if (!trimmed) { setError(msg('saved.duplicateNameRequired')); return }
+    setBusy(true); setError(null)
+    try {
+      await onConfirm(trimmed)
+      toast.success(msg('saved.duplicateDone', { name: trimmed }))
+    } catch (e) {
+      setError((e as Error).message)
+    } finally { setBusy(false) }
+  }
+
+  return (
+    <div className="px-4 pb-4 -mt-1">
+      <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+          {msg('saved.duplicateName')}
+        </label>
+        <div className="flex items-center gap-2">
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => { setName(e.target.value); setError(null) }}
+            onKeyDown={(e) => { if (e.key === 'Enter') confirm(); if (e.key === 'Escape') onCancel() }}
+            className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <button onClick={confirm} disabled={busy}
+                  className="flex items-center gap-1 text-xs font-semibold px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
+            {busy ? <Loader2 size={12} className="animate-spin" /> : <Check size={12} />}
+            {msg('saved.duplicateConfirm')}
+          </button>
+          <button onClick={onCancel} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg">
+            <X size={14} />
+          </button>
+        </div>
+        {error && <p className="text-xs text-amber-800 mt-1.5">{error}</p>}
+        <p className="text-xs text-slate-400 mt-1.5">{msg('saved.duplicateHint')}</p>
+      </div>
+    </div>
+  )
+}
+
+function TestCard({ test: t, onEdit, onDelete, onSave, onDuplicated }: {
   test: SavedTest
   onEdit: (t: SavedTest, inputOverride?: string) => void
   onDelete: (id: number) => void
-  onSave: (id: number, patch: { name?: string; input?: string }) => Promise<void>
+  onSave: (id: number, patch: { input?: string }) => Promise<void>
+  onDuplicated: () => void
 }) {
   const { t: msg, locale } = useT()
+  const [sending, setSending] = useState(false)
+  const [duplicating, setDuplicating] = useState(false)
+
+  // Sends this algorithm to the configured engine. A row that came from that same engine is
+  // updated there rather than copied, which is what delphix_origin/delphix_name record.
+  const sendToEngine = async () => {
+    setSending(true)
+    try {
+      const out = await api.delphixExport(t.id)
+      toast.success(msg(out.mode === 'updated' ? 'saved.exportUpdated' : 'saved.exportCreated',
+        { name: out.name }))
+      // The engine rejects a changed algorithmName on update, so a local rename cannot travel.
+      // Saying so beats leaving the user to notice the old name in the toast.
+      if (out.renamed) toast.warning(msg('saved.exportRenamed', { name: out.name }))
+    } catch (e) {
+      const err = e as Error & { code?: string }
+      toast.error(err.code === 'not-configured'
+        ? msg('saved.engineNotSet')
+        : msg('saved.exportFailed', { error: err.message }))
+    } finally { setSending(false) }
+  }
   const [expanded, setExpanded] = useState(false)
-  const [nameDraft, setNameDraft] = useState(t.name)
-  const [editingName, setEditingName] = useState(false)
   const [inputDraft, setInputDraft] = useState(t.input)
   const [saving, setSaving] = useState(false)
   const [executing, setExecuting] = useState(false)
   const [execResult, setExecResult] = useState<{ value: string; ok: boolean } | null>(null)
 
   useEffect(() => {
-    setNameDraft(t.name)
     setInputDraft(t.input)
     setExecResult(null)
-  }, [t.name, t.input])
+  }, [t.input])
 
-  const dirty = nameDraft !== t.name || inputDraft !== t.input
+  const dirty = inputDraft !== t.input
 
   const handleSave = async () => {
     setSaving(true)
     try {
-      await onSave(t.id, { name: nameDraft, input: inputDraft })
+      await onSave(t.id, { input: inputDraft })
     } finally {
       setSaving(false)
     }
   }
 
   const handleCancelEdit = () => {
-    setNameDraft(t.name)
     setInputDraft(t.input)
-    setEditingName(false)
   }
 
   const handleExecute = async () => {
@@ -227,32 +393,9 @@ function TestCard({ test: t, onEdit, onDelete, onSave }: {
       {/* Header row */}
       <div className="flex items-start gap-3 p-4">
         <div className="min-w-0 flex-1">
-          {editingName ? (
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <input
-                autoFocus
-                value={nameDraft}
-                onChange={(e) => setNameDraft(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') setEditingName(false)
-                  if (e.key === 'Escape') { setNameDraft(t.name); setEditingName(false) }
-                }}
-                className="flex-1 text-sm font-semibold text-slate-800 border-b border-blue-400 outline-none bg-transparent"
-              />
-              <button onClick={() => setEditingName(false)} className="text-green-600 hover:text-green-700"><Check size={13} /></button>
-              <button onClick={() => { setNameDraft(t.name); setEditingName(false) }} className="text-slate-400 hover:text-slate-600"><X size={13} /></button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 mb-0.5 group">
-              <p className="font-semibold text-slate-800 text-sm truncate">{nameDraft}</p>
-              <button
-                onClick={() => { setEditingName(true); setExpanded(true) }}
-                className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-600 transition-opacity"
-              >
-                <Pencil size={11} />
-              </button>
-            </div>
-          )}
+          {/* The name is identity, as on the engine: it is set when the algorithm is created or
+              duplicated, never edited in place. */}
+          <p className="font-semibold text-slate-800 text-sm truncate mb-0.5">{t.name}</p>
           <p className="text-xs text-slate-400">
             <span className="font-mono">{t.display_name}</span>
             {' · '}
@@ -269,6 +412,22 @@ function TestCard({ test: t, onEdit, onDelete, onSave }: {
             <ExternalLink size={12} /> {msg('saved.edit')}
           </button>
           <button
+            onClick={() => setDuplicating(true)}
+            title={msg('saved.duplicate')}
+            className="flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors"
+          >
+            <Copy size={12} /> {msg('saved.duplicate')}
+          </button>
+          <button
+            onClick={sendToEngine}
+            disabled={sending}
+            title={msg('saved.exportToEngine')}
+            className="flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors disabled:opacity-50"
+          >
+            {sending ? <Loader2 size={12} className="animate-spin" /> : <CloudUpload size={12} />}
+            {msg('saved.exportToEngine')}
+          </button>
+          <button
             onClick={() => onDelete(t.id)}
             className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
           >
@@ -282,6 +441,18 @@ function TestCard({ test: t, onEdit, onDelete, onSave }: {
           </button>
         </div>
       </div>
+
+      {duplicating && (
+        <DuplicatePrompt
+          suggested={`${t.name} (2)`}
+          onCancel={() => setDuplicating(false)}
+          onConfirm={async (name) => {
+            await api.duplicateTest(t.id, name)
+            setDuplicating(false)
+            onDuplicated()
+          }}
+        />
+      )}
 
       {/* Collapsed summary */}
       {!expanded && (

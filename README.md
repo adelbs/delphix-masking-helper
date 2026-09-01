@@ -2,21 +2,34 @@
 
 **English** · [Português (BR)](README.pt-BR.md) · [Español](README.es.md)
 
-A local companion for the Delphix masking plugin. It helps you **understand** how each masking
-framework behaves, **test** an algorithm against real values, and **build** a configured algorithm
-from a problem described in plain language — all without creating a Rule Set or running a Job on a
-Masking Engine.
+🌐 **[Website](https://adelbs.github.io/delphix-masking-helper/)** — what it does, and the full algorithm reference, in three languages.
 
-> **You need the Delphix SDK to run this.** The masking algorithms live in Delphix product jars,
-> which are licensed and are **not** distributed here. Request the Masking Devkit (SDK) from
-> Delphix and drop fifteen jars into `lib/` — see [Delphix libraries](#delphix-libraries) below.
+A local companion for the Delphix masking plugin, covering an algorithm's whole life. It helps you
+**understand** how each masking framework behaves, **test** an algorithm against real values,
+**build** a configured algorithm from a problem described in plain language, and **sync** with a
+Masking Engine — pulling its algorithms down to work on and pushing yours back up. All without
+creating a Rule Set or running a masking job.
+
+> ### Independent project, and it needs an active Delphix licence
+>
+> **No affiliation with Delphix.** This is an independent open source project. It is not built,
+> endorsed, reviewed or supported by Delphix or its owners, and nothing here is an official
+> product. Delphix and the product names used here are trademarks of their respective owners.
+>
+> **An active Delphix licence is required.** The masking algorithms live in Delphix product jars,
+> which are licensed and are **not** distributed here — this project neither ships nor replaces
+> them. You must already be entitled to them and able to obtain the Masking Devkit (SDK) from
+> Delphix, normally through an active licence and your account team. Drop fifteen jars into
+> `lib/` — see [Delphix libraries](#delphix-libraries) below.
 > Reference: [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
 
-![The assistant building an algorithm and the algorithm being tested](docs/demo.gif)
+![The assistant building an algorithm, an algorithm being tested, and algorithms being synced with a Delphix engine](docs/demo.gif)
 
-<sub>Recorded against the default local provider (Ollama · `llama3.1:8b`) on an M1 Pro. The
-model's reply is time-lapsed — locally it takes around a minute. Every masked value is real
-output from the plugin.</sub>
+<sub>Three things, in order: asking the assistant for an algorithm and watching it build and
+validate one; running an algorithm against a real value; importing from a Delphix engine and
+sending one back. Recorded against the default local provider (Ollama · `llama3.1:8b`) on an M1
+Pro — the model's reply is time-lapsed, since locally it takes around a minute. Every masked value
+is real output from the plugin, and the engine is a real one.</sub>
 
 ## How it works
 
@@ -162,6 +175,29 @@ GitHub Copilot itself has no public chat API for third-party applications.
 > comfortable for Claude and Gemini, but tight for small local models — one with an 8k window
 > will truncate the catalog and pick the wrong algorithm. Prefer a model with a large context.
 
+## Syncing with a Masking Engine
+
+Point the tool at a Delphix engine under **Settings → Delphix** — address, user and password —
+and press **Test connection**; it answers before anything is saved.
+
+**Importing.** *Saved Tests/Algorithms → Import from Delphix* lists what the engine has. Anything
+built on a framework this tool cannot run locally is shown but not selectable, so you never end up
+with a saved algorithm that cannot be tested.
+
+**Exporting.** Each saved algorithm has a **Send to Delphix** button. One that came from the engine
+is updated there; one you built here is created. The tool remembers where each algorithm came
+from, so exporting twice never leaves a duplicate behind.
+
+**Naming.** On the engine an algorithm's name is its identity and cannot be changed, so the tool
+follows the same rule: names are not editable. To work under a different name, use **Duplicate**
+and give the copy its name — the copy is unlinked, so sending it creates a new algorithm.
+
+If the engine's masking plugin is older than the one in `lib/`, some frameworks will not exist
+there; exporting such an algorithm fails with a message saying so.
+
+If you would rather not keep the password on disk, set `DLPX_ENGINE_PASSWORD` in the
+environment — it takes precedence and the field is then shown as read-only.
+
 ## Interface language
 
 The UI is available in English, Portuguese (BR) and Spanish. By default it follows your browser
@@ -196,3 +232,8 @@ jar cfe AlgorithmRunner.jar AlgorithmRunner *.class
 [Mozilla Public License 2.0](LICENSE). Modifications to this project's files stay open; you can
 combine it with code under other licenses. The Delphix jars it loads at runtime are not covered by
 this license and are not distributed here.
+
+**Trademarks and affiliation.** Delphix, Delphix Continuous Compliance and any other product names
+referenced here are trademarks of their respective owners. This project is independent: it is not
+affiliated with, endorsed by or supported by them, and using it does not grant any right to the
+Delphix software it loads.

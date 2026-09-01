@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Delphix Masking Helper — Understand, test and build Delphix masking algorithms — on your own machine.</title>
-<meta name="description" content="Work out which masking framework fits your data, try it against real values, and get a ready-to-use configuration — without creating a Rule Set or waiting on a Masking Engine.">
-<meta property="og:title" content="Delphix Masking Helper — Understand, test and build Delphix masking algorithms — on your own machine.">
-<meta property="og:description" content="Work out which masking framework fits your data, try it against real values, and get a ready-to-use configuration — without creating a Rule Set or waiting on a Masking Engine.">
+<title>Delphix Masking Helper — Build, test and maintain Delphix masking algorithms — on your own machine.</title>
+<meta name="description" content="Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.">
+<meta property="og:title" content="Delphix Masking Helper — Build, test and maintain Delphix masking algorithms — on your own machine.">
+<meta property="og:description" content="Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="site.css">
@@ -26,20 +26,26 @@
 
 <div class="hero"><div class="wrap">
   <h1>Delphix Masking Helper</h1>
-  <p class="tagline">Understand, test and build Delphix masking algorithms — on your own machine.</p>
-  <p class="lede">Work out which masking framework fits your data, try it against real values, and get a ready-to-use configuration — without creating a Rule Set or waiting on a Masking Engine.</p>
+  <p class="tagline">Build, test and maintain Delphix masking algorithms — on your own machine.</p>
+  <p class="lede">Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.</p>
   <div class="cta">
     <a class="btn btn-primary" href="https://github.com/adelbs/delphix-masking-helper">View on GitHub</a>
     <a class="btn btn-ghost" href="algorithms.html">Browse the algorithms</a>
   </div>
   <figure class="shot">
-    <img src="demo.gif" alt="The assistant choosing an algorithm, configuring it, and the configuration being tested" loading="lazy" width="1200">
-    <figcaption>Describing a problem in plain language; the assistant picks the framework, configures it, and the result is real output from the plugin.</figcaption>
+    <img src="demo.gif" alt="The assistant building an algorithm, an algorithm being tested, and algorithms being synced with a Delphix engine" loading="lazy" width="1200">
+    <figcaption>Three things, in order: asking the assistant for an algorithm and watching it build and validate one; running an algorithm against a real value; importing from a Delphix engine and sending one back. Every masked value is real output from the plugin.</figcaption>
   </figure>
 </div></div>
 
+<section class="notice"><div class="wrap narrow">
+  <h2 class="notice-h">An independent project — and what you need to use it</h2>
+  <p><strong>No affiliation with Delphix.</strong> This is an independent open source project. It is not built, endorsed, reviewed or supported by Delphix or its owners, and nothing here is an official product. Delphix and the product names used on this site are trademarks of their respective owners.</p>
+  <p><strong>An active Delphix licence is required.</strong> The masking algorithms live in Delphix product libraries, which this project does not distribute and cannot replace. To run the tool you must already be entitled to those libraries and able to obtain the Masking Devkit (SDK) from Delphix — normally through an active licence and your account team.</p>
+</div></section>
+
 <section><div class="wrap">
-  <h2 class="sec">Three things it does well</h2>
+  <h2 class="sec">Everything an algorithm needs, in one place</h2>
   <div class="cards">
       <div class="card">
         <span class="n">01</span>
@@ -56,10 +62,21 @@
         <h3>Build</h3>
         <p>Describe the problem in your own words and get back a configured algorithm, saved and ready to run. You do not need to know which framework to reach for.</p>
       </div>
+      <div class="card">
+        <span class="n">04</span>
+        <h3>Sync</h3>
+        <p>Connect to a Masking Engine and pull its algorithms down to work on, or push yours up. An algorithm that came from the engine is updated there, not duplicated beside it.</p>
+      </div>
   </div>
 </div></section>
 
-<section class="alt"><div class="wrap">
+<section class="alt"><div class="wrap narrow">
+  <h2 class="sec">Connected to your engine</h2>
+  <p class="sec-lede" style="margin-bottom:0">Point the tool at a Masking Engine and its algorithms are yours to work on: pull one down, change it, run it against real values until it does what you need, and send it back. The engine gets an update, not a second copy — the tool remembers where each algorithm came from. Anything you build from scratch goes up as a new algorithm.</p>
+  <p class="note-line">Nothing is sent anywhere until you ask for it.</p>
+</div></section>
+
+<section><div class="wrap">
   <div class="split">
     <div>
       <h2 class="sec">An assistant that checks its own work</h2>
@@ -74,7 +91,7 @@
   </div>
 </div></section>
 
-<section><div class="wrap narrow">
+<section class="alt"><div class="wrap narrow">
   <h2 class="sec">Or take it with you</h2>
   <p class="sec-lede">The same reference as a printable PDF, one per language.</p>
   <div class="dl">
@@ -82,15 +99,13 @@
     <a href="delphix-algorithms-guide.pt-BR.pdf" download>Português <span class="sz">PDF · 1.1 MB</span></a>
     <a href="delphix-algorithms-guide.es.pdf" download>Español <span class="sz">PDF · 1.1 MB</span></a>
   </div>
-  <h2 class="sec" style="margin-top:52px">In your language</h2>
-  <p class="sec-lede" style="margin-bottom:0">The application, this site and the reference guide are all available in English, Portuguese and Spanish.</p>
 </div></section>
 
 <footer><div class="wrap">
   <div class="rows">
     <a href="https://github.com/adelbs/delphix-masking-helper">Source and technical documentation on GitHub</a>
   </div>
-  <p class="lic">Mozilla Public License 2.0. Delphix product libraries are not distributed with the project.</p>
+  <p class="lic">Mozilla Public License 2.0. An independent open source project, not affiliated with or endorsed by Delphix; Delphix product libraries are not distributed with it, and an active Delphix licence is required to use it. Trademarks belong to their respective owners.</p>
 </div></footer>
 </body>
 </html>

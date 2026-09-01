@@ -112,7 +112,10 @@ section.alt { background: var(--wash); border-top: 1px solid var(--rule); border
 h2.sec { font-size: clamp(24px, 3.2vw, 32px); letter-spacing: -.02em; margin: 0 0 10px; line-height: 1.2; }
 p.sec-lede { color: var(--ink-2); margin: 0 0 34px; max-width: 62ch; }
 
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 22px; }
+/* Four cards: an auto-fit grid leaves a lone card stranded on the second row at some widths.
+   Two columns from tablet up gives a clean 2x2 at every size. */
+.cards { display: grid; grid-template-columns: 1fr; gap: 22px; }
+@media (min-width: 640px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .card { background: var(--paper); border: 1px solid var(--rule); border-radius: 13px; padding: 24px; }
 section.alt .card { background: var(--paper); }
 .card h3 { margin: 0 0 9px; font-size: 19px; letter-spacing: -.01em; }
@@ -123,6 +126,17 @@ section.alt .card { background: var(--paper); }
 @media (max-width: 780px) { .split { grid-template-columns: 1fr; gap: 26px; } }
 
 .note-line { color: var(--ink-3); font-size: 14.5px; margin-top: 14px; }
+
+/* Independence and licensing notice. Sits directly under the hero because it decides whether
+   a visitor can use the tool at all — not fine print to be found later. */
+.notice { background: var(--warn-wash); border-bottom: 1px solid #e8d9bd; padding: 30px 0 34px; }
+.notice .notice-h {
+  font-size: 12px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+  color: var(--warn); margin: 0 0 12px;
+}
+.notice p { margin: 0 0 10px; font-size: 15px; line-height: 1.6; color: #5c3809; max-width: 74ch; }
+.notice p:last-child { margin-bottom: 0; }
+.notice strong { color: #402505; font-weight: 650; }
 
 /* downloads */
 .dl { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
