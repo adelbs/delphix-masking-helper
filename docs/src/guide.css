@@ -1,0 +1,250 @@
+:root{
+  --ink:#14181d;
+  --ink-2:#4b5560;
+  --ink-3:#7b8592;
+  --rule:#d8dde3;
+  --rule-soft:#e8ecf0;
+  --paper:#ffffff;
+  --wash:#f4f7f9;
+  --accent:#0b4f6c;
+  --accent-wash:#e6f0f5;
+  --warn:#8a5410;
+  --warn-wash:#fbf3e6;
+  --out:#2c5f4a;
+  --out-wash:#eaf2ee;
+}
+
+@page{
+  size:A4;
+  margin:19mm 17mm 17mm 17mm;
+}
+@page:first{ margin:0; }
+
+*{box-sizing:border-box;}
+html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+body{
+  margin:0;
+  font-family:"Seravek","Avenir Next",-apple-system,sans-serif;
+  font-size:9.4pt;
+  line-height:1.52;
+  color:var(--ink);
+  background:var(--paper);
+}
+
+/* ─── COVER ─────────────────────────────────────────── */
+.cover{
+  page-break-after:always;
+  height:297mm;
+  padding:34mm 24mm 22mm;
+  display:flex;
+  flex-direction:column;
+  background:var(--accent);
+  color:#fff;
+}
+.cover-rule{ height:2px; background:rgba(255,255,255,.38); margin-bottom:11mm; }
+.cover-eyebrow{
+  font-size:8pt; letter-spacing:.20em; text-transform:uppercase;
+  color:rgba(255,255,255,.72); margin-bottom:7mm; font-weight:600;
+}
+.cover h1{
+  font-family:"Iowan Old Style","Charter",Georgia,serif;
+  font-size:41pt; line-height:1.03; font-weight:400; margin:0 0 6mm;
+  letter-spacing:-.012em; text-wrap:balance; max-width:15cm;
+}
+.cover-sub{
+  font-size:12.5pt; line-height:1.45; color:rgba(255,255,255,.82);
+  max-width:12.5cm; font-weight:300;
+}
+.cover-spacer{ flex:1; }
+.cover-facts{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:7mm;
+  border-top:1px solid rgba(255,255,255,.3); padding-top:6mm; margin-bottom:9mm;
+}
+.cover-fact-n{
+  font-family:"Iowan Old Style",Georgia,serif; font-size:25pt; line-height:1;
+  display:block; margin-bottom:2mm;
+}
+.cover-fact-l{
+  font-size:7.6pt; letter-spacing:.10em; text-transform:uppercase;
+  color:rgba(255,255,255,.68); font-weight:600;
+}
+.cover-meta{
+  font-size:8.4pt; color:rgba(255,255,255,.62);
+  border-top:1px solid rgba(255,255,255,.2); padding-top:5mm;
+  display:flex; justify-content:space-between;
+}
+.cover-meta code{ font-family:"Menlo",monospace; font-size:7.8pt; color:rgba(255,255,255,.75); }
+
+/* ─── TOC ───────────────────────────────────────────── */
+.toc{ page-break-after:always; }
+.doc-title{
+  font-family:"Iowan Old Style",Georgia,serif;
+  font-size:22pt; font-weight:400; margin:0 0 2mm; letter-spacing:-.01em;
+}
+.doc-lede{
+  font-size:9.6pt; color:var(--ink-2); max-width:13.5cm;
+  margin:0 0 9mm; line-height:1.6;
+}
+.toc-part{
+  font-size:7.8pt; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); font-weight:700;
+  border-bottom:1.5px solid var(--accent); padding-bottom:1.6mm;
+  margin:7mm 0 3mm;
+}
+.toc-part:first-of-type{ margin-top:0; }
+.toc-row{
+  display:flex; align-items:baseline; gap:2.5mm;
+  padding:1.35mm 0; border-bottom:1px solid var(--rule-soft);
+  font-size:9.1pt;
+}
+.toc-num{
+  font-family:"Menlo",monospace; font-size:7.9pt; color:var(--accent);
+  min-width:11mm; font-weight:600;
+}
+.toc-name{ font-weight:500; }
+.toc-cls{
+  font-family:"Menlo",monospace; font-size:7.3pt; color:var(--ink-3);
+  margin-left:auto; text-align:right;
+}
+
+/* ─── PART DIVIDERS ─────────────────────────────────── */
+.part{
+  page-break-before:always;
+  border-top:2.5px solid var(--accent);
+  padding-top:4mm; margin-bottom:7mm;
+}
+.part-n{
+  font-size:7.8pt; letter-spacing:.17em; text-transform:uppercase;
+  color:var(--accent); font-weight:700; margin-bottom:1.5mm;
+}
+.part h2{
+  font-family:"Iowan Old Style",Georgia,serif;
+  font-size:20pt; font-weight:400; margin:0 0 2.5mm; letter-spacing:-.01em;
+}
+.part-lede{ font-size:9.3pt; color:var(--ink-2); max-width:13.5cm; line-height:1.58; }
+
+/* ─── ALGORITHM ─────────────────────────────────────── */
+.algo{
+  page-break-inside:avoid;
+  margin-bottom:8mm; padding-bottom:6mm;
+  border-bottom:1px solid var(--rule);
+}
+.algo:last-child{ border-bottom:none; }
+.algo-head{ display:flex; align-items:baseline; gap:3mm; margin-bottom:1.2mm; }
+.algo-n{
+  font-family:"Menlo",monospace; font-size:8.6pt; font-weight:700;
+  color:var(--accent); white-space:nowrap;
+}
+.algo h3{
+  font-family:"Iowan Old Style",Georgia,serif;
+  font-size:14.5pt; font-weight:400; margin:0; letter-spacing:-.005em;
+}
+.algo-cls{
+  font-family:"Menlo",monospace; font-size:7.3pt; color:var(--ink-3);
+  word-break:break-all; line-height:1.3; margin-right:1mm;
+}
+.algo-tags{
+  display:flex; gap:1.5mm; margin:.8mm 0 2.5mm 14mm;
+  flex-wrap:wrap; align-items:center;
+}
+.tag{
+  font-size:6.9pt; letter-spacing:.07em; text-transform:uppercase; font-weight:700;
+  padding:.7mm 2mm; border-radius:1mm; white-space:nowrap;
+}
+.tag-det{ background:var(--accent-wash); color:var(--accent); }
+.tag-rev{ background:var(--out-wash); color:var(--out); }
+.tag-warn{ background:var(--warn-wash); color:var(--warn); }
+.tag-file{ background:#eceff2; color:var(--ink-2); }
+
+.algo-body{ margin-left:14mm; }
+.algo-desc{ margin:0 0 3mm; line-height:1.58; max-width:14.5cm; }
+
+.label{
+  font-size:7.2pt; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:700; margin:4mm 0 1.6mm;
+}
+.label:first-child{ margin-top:0; }
+
+.fmt{
+  font-size:8.8pt; color:var(--ink-2); line-height:1.55;
+  border-left:2px solid var(--rule); padding-left:3mm; margin-bottom:1mm;
+  max-width:14.5cm;
+}
+
+/* transform table — the centerpiece */
+.xf{
+  width:100%; border-collapse:collapse; margin-bottom:1mm;
+  font-family:"Menlo",monospace; font-size:8pt;
+}
+.xf th{
+  text-align:left; font-family:"Seravek","Avenir Next",sans-serif;
+  font-size:6.9pt; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:700;
+  padding:0 2.5mm 1.2mm 0; border-bottom:1px solid var(--rule);
+}
+.xf td{
+  padding:1.35mm 2.5mm 1.35mm 0; border-bottom:1px solid var(--rule-soft);
+  vertical-align:top; word-break:break-all;
+}
+.xf .c-in{ width:41%; color:var(--ink); }
+.xf .c-ar{ width:5%; color:var(--ink-3); text-align:center; word-break:normal; }
+.xf .c-out{ width:54%; color:var(--out); font-weight:600; }
+.xf .err{ color:var(--warn); font-weight:400; font-style:normal; }
+.xf tr:last-child td{ border-bottom:none; }
+
+/* params */
+.params{ margin:0; }
+.p-row{
+  display:grid; grid-template-columns:47mm 1fr; gap:3.5mm;
+  padding:1.5mm 0; border-bottom:1px solid var(--rule-soft);
+  page-break-inside:avoid;
+}
+.p-row:last-child{ border-bottom:none; }
+.p-name{
+  font-family:"Menlo",monospace; font-size:7.4pt; color:var(--accent);
+  font-weight:600; word-break:break-word; line-height:1.4; padding-top:.2mm;
+}
+.p-name .req{ color:var(--warn); font-weight:700; }
+.p-name .sub{ color:var(--ink-3); font-weight:400; }
+.p-desc{ font-size:8.5pt; line-height:1.5; color:var(--ink-2); }
+.p-desc strong{ color:var(--ink); font-weight:600; }
+.p-desc code, .inline{
+  font-family:"Menlo",monospace; font-size:7.5pt;
+  background:var(--wash); padding:.3mm 1mm; border-radius:.7mm; color:var(--ink);
+}
+.p-none{ font-size:8.6pt; color:var(--ink-3); font-style:italic; }
+
+/* code block */
+pre{
+  font-family:"Menlo",monospace; font-size:7.5pt; line-height:1.5;
+  background:var(--wash); border-left:2px solid var(--accent);
+  padding:2.5mm 3mm; margin:0 0 1mm; overflow-x:auto;
+  white-space:pre-wrap; word-break:break-word; color:var(--ink);
+}
+
+/* callout */
+.note{
+  border-left:2px solid var(--warn); background:var(--warn-wash);
+  padding:2.2mm 3mm; margin:3mm 0 1mm; font-size:8.4pt; line-height:1.5;
+  color:#5c3809; max-width:14.5cm; page-break-inside:avoid;
+}
+.note b{ color:var(--warn); }
+.note code{ font-family:"Menlo",monospace; font-size:7.5pt; background:rgba(138,84,16,.09); padding:.3mm 1mm; border-radius:.7mm; }
+.note.tip{ border-left-color:var(--accent); background:var(--accent-wash); color:#0a3a4d; }
+.note.tip b{ color:var(--accent); }
+.note.tip code{ background:rgba(11,79,108,.09); }
+
+/* appendix */
+.cat{
+  columns:3; column-gap:6mm; font-family:"Menlo",monospace;
+  font-size:7.4pt; line-height:1.62; color:var(--ink-2);
+}
+.cat div{ break-inside:avoid; }
+.tbl{ width:100%; border-collapse:collapse; font-size:8.5pt; margin-bottom:3mm; }
+.tbl th{
+  text-align:left; font-size:6.9pt; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:700; padding:0 3mm 1.4mm 0;
+  border-bottom:1px solid var(--rule);
+}
+.tbl td{ padding:1.5mm 3mm 1.5mm 0; border-bottom:1px solid var(--rule-soft); vertical-align:top; }
+.tbl code{ font-family:"Menlo",monospace; font-size:7.5pt; color:var(--accent); }

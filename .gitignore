@@ -1,0 +1,36 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Frontend build output
+frontend/dist/
+
+# SQLite
+db/*.db
+db/*.db-shm
+db/*.db-wal
+
+# Delphix product libraries — licensed files, never committed.
+# Obtain them from the Delphix Masking Devkit (SDK); see lib/README.md.
+lib/*.jar
+
+# Java compiled output
+java-runner/*.class
+java-runner/*.jar
+!java-runner/AlgorithmRunner.jar
+
+# Local lookup files created at runtime
+test-files/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Code local settings
+.claude/

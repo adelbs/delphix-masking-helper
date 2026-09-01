@@ -1,0 +1,526 @@
+{
+  "CharacterMapping": {
+    "description": "Maps each input character to a substitute drawn from the configured character groups. Deterministic: the same input+key always produces the same output. Ideal for masking alphanumeric text while preserving its length.",
+    "inputFormat": "Text string of any length. Characters outside the configured groups are preserved unchanged. E.g. \"John Smith\", \"ABC123\".",
+    "params": {
+      "characterGroups": "List of strings, each defining a group of interchangeable characters (e.g. \"abcdefghijklmnopqrstuvwxyz\"). Characters are only mapped within the same group.",
+      "caseSensitive": "If true, upper and lower case are treated as separate groups.",
+      "minMaskedPositions": "Minimum number of positions that must be masked.",
+      "preserveRanges": "Array of {start, length, direction} marking parts of the string to leave unmasked.",
+      "preserveLeadingZeros": "If true, leading zeros are preserved."
+    },
+    "labels": {
+      "characterGroups": "Character groups",
+      "caseSensitive": "Case sensitive",
+      "minMaskedPositions": "Minimum masked positions",
+      "preserveRanges": "Ranges to preserve",
+      "preserveLeadingZeros": "Preserve leading zeros"
+    }
+  },
+  "NumericMapping": {
+    "description": "Maps a numeric value onto another one deterministically, within the range [minValue, maxValue].",
+    "inputFormat": "Positive whole number, no decimals, no punctuation. E.g. \"12345\".",
+    "params": {
+      "minValue": "Lower bound of the output range.",
+      "maxValue": "Upper bound of the output range."
+    },
+    "labels": {
+      "minValue": "Minimum value",
+      "maxValue": "Maximum value"
+    }
+  },
+  "PaymentCard": {
+    "description": "Masks a payment card number. Preserves the BIN and/or the trailing digits while keeping the Luhn check digit valid.",
+    "inputFormat": "Card number, with or without spaces/dashes. E.g. \"4111 1111 1111 1111\"",
+    "params": {
+      "minMaskedPositions": "Minimum number of masked positions.",
+      "preserve": "How many digits at the end of the card to preserve."
+    },
+    "labels": {
+      "minMaskedPositions": "Minimum masked positions",
+      "preserve": "Trailing digits to preserve"
+    }
+  },
+  "CharacterReplacement": {
+    "description": "Applies character-by-character replacement rules: each rule defines which input characters get swapped and what they are swapped for. Useful for normalizing or redacting specific characters (e.g. replacing vowels with \"*\").",
+    "inputFormat": "Text string of any length. E.g. \"Some text 123\".",
+    "params": {
+      "stringAlgorithm": "Masking algorithm applied to the input before the replacement rules. Give the name of a catalog instance. Its result is then processed by replacementRules.",
+      "replacementRules": "List of replacement rules applied in sequence. Each rule defines a set of characters to detect and the character that replaces them.",
+      "replacementRules.filteredCharacters": "Characters this rule detects in the input (simple form: when you are not using separate input/output sets). Every occurrence of any character in this list is replaced by replacementCharacter.",
+      "replacementRules.replacementCharacter": "Single character that replaces each character found in filteredCharacters. E.g. \"*\" turns \"John\" into \"J*hn\" (if filteredCharacters = [\"o\"]).",
+      "replacementRules.inputFilteredCharacters": "Characters this rule detects in the input (advanced form with separate input/output sets). An alternative to filteredCharacters — it lets you use different sets for reading and writing.",
+      "replacementRules.inputReplacementCharacter": "Character used when the match comes from inputFilteredCharacters. Replaced in the final output by outputReplacementCharacter.",
+      "replacementRules.outputFilteredCharacters": "Characters that will be replaced if they show up in the output of another algorithm (stringAlgorithm). Used together with outputReplacementCharacter.",
+      "replacementRules.outputReplacementCharacter": "Character that replaces the characters found in outputFilteredCharacters.",
+      "requireInputChange": "If true, at least one replacement must have happened. If no rule changed the input, the algorithm raises an error. Useful to guarantee the masking actually altered the value.",
+      "filterAccents": "Strips accents before applying the rules, after, at both stages, or never. INPUT = strips accents from the input before processing the rules. OUTPUT = strips accents from the final result. BOTH = strips at both stages. NONE = does not strip accents (default)."
+    },
+    "labels": {
+      "stringAlgorithm": "Pre-processing algorithm (applied before the rules)",
+      "replacementRules": "Replacement rules",
+      "replacementRules.filteredCharacters": "Characters to replace",
+      "replacementRules.replacementCharacter": "Replacement character",
+      "replacementRules.inputFilteredCharacters": "Input characters to detect (advanced)",
+      "replacementRules.inputReplacementCharacter": "Replacement for inputFilteredCharacters",
+      "replacementRules.outputFilteredCharacters": "Output characters to replace (advanced)",
+      "replacementRules.outputReplacementCharacter": "Replacement for outputFilteredCharacters",
+      "requireInputChange": "Require at least one replacement",
+      "filterAccents": "Accent stripping"
+    }
+  },
+  "SegmentMapping": {
+    "description": "Splits the string into fixed-length segments and masks each one independently. Ideal for documents with a defined format: national IDs, postal codes, barcodes.",
+    "inputFormat": "String with a fixed format. Separators (dots, dashes, slashes) are skipped automatically when autoIgnoreCharacters=true. E.g. \"123.456.789-09\", \"12.345.678/0001-90\".",
+    "params": {
+      "segments": "Required. List of segments in the order they appear in the value (ignoring the ignoreCharacters). Each segment defines its length and how it should be handled.",
+      "segments.length": "Required. How many characters this segment spans (ignored characters do not count). E.g. in \"123.456.789-09\" the first segment has length=3.",
+      "segments.segmentType": "Required. MASK_NUMERIC = masks the digits by replacing them with other random digits (0-9). MASK_ALPHANUMERIC = masks with alphanumeric characters. PRESERVE = keeps the original characters unchanged. CONSTANT = replaces the whole segment with a fixed value defined in maskValues.",
+      "segments.inputValues": "Set of characters valid for this segment in the input, as one continuous string. E.g. \"0123456789\" to accept digits only. If the input has a character outside this set, behavior depends on the configuration. Leave empty to accept anything.",
+      "segments.maskValues": "Set of characters used as the replacement pool for this segment, as one continuous string. E.g. \"123456789\" (no zero) makes sure the masked segment never starts with 0. Leave empty to use the type default (0-9 for MASK_NUMERIC).",
+      "ignoreCharacters": "ASCII codes of the characters to skip when splitting the string into segments. E.g. 46 = dot, 45 = dash, 47 = slash. These characters are skipped when counting segment positions and put back in the output at their original place.",
+      "autoIgnoreCharacters": "If true, automatically detects non-alphanumeric characters and skips them when splitting into segments — the equivalent of listing every separator in ignoreCharacters by hand. Turn this on for formatted IDs and postal codes so you do not have to look up ASCII codes.",
+      "allowShortSegments": "If true, accepts input shorter than the total length defined by the segments. Trailing incomplete segments are processed with whatever is there. false (default) = raises an error when the input is shorter than expected.",
+      "processPreserveBeforeIgnore": "Controls the ordering between ignored characters and PRESERVE segments. true = PRESERVE segments are computed before the ignored characters are removed (useful when a separator falls inside a PRESERVE segment). false (default) = ignored characters are removed before segment positions are computed."
+    },
+    "labels": {
+      "segments": "Segments",
+      "segments.length": "Length (characters)",
+      "segments.segmentType": "Segment type",
+      "segments.inputValues": "Valid input characters (input pool)",
+      "segments.maskValues": "Characters used for replacement (output pool)",
+      "ignoreCharacters": "Characters to ignore (ASCII codes)",
+      "autoIgnoreCharacters": "Detect separators automatically",
+      "allowShortSegments": "Accept input shorter than expected",
+      "processPreserveBeforeIgnore": "Compute PRESERVE before removing ignored characters"
+    }
+  },
+  "Shuffle": {
+    "description": "Redistributes values across records at random — each row gets another row’s value, so the original set is preserved. The order changes on every run (not deterministic): that is intentional, since a reproducible permutation would let anyone re-run the shuffle and de-anonymize the data. Works in batch mode: it needs several values at once.",
+    "inputFormat": "Several text values (one per table row). Each value must be at least minimumShuffleSize long. Values are swapped between rows — nothing is invented, only the position changes. Every click on \"Shuffle batch\" gives a different order.",
+    "params": {
+      "minimumShuffleSize": "Minimum length a value must have to be shuffled (default: 3)."
+    },
+    "labels": {
+      "minimumShuffleSize": "Minimum size"
+    }
+  },
+  "StringAlgorithmChain": {
+    "description": "Chains several algorithms in sequence: each one’s output is the next one’s input. At least 2 algorithms. The names must be instances from the built-in catalog (e.g. \"dlpx-core:FirstName\") or from the Masking Engine.",
+    "inputFormat": "Text string compatible with the first algorithm in the chain. The example chains names: FirstName → LastName.",
+    "params": {
+      "algorithmReferences": "Array of algorithm references by instance name. Minimum: 2 entries. E.g. [{ name: \"dlpx-core:FirstName\" }, { name: \"dlpx-core:LastName\" }]."
+    },
+    "labels": {
+      "algorithmReferences": "Algorithms in sequence"
+    }
+  },
+  "RegexDecompose": {
+    "description": "Decomposes the string into parts using a regex and applies a different action to each part. The regex must match the whole string; each capture group (parentheses) gets its own action. Text between groups is preserved automatically.",
+    "inputFormat": "Any string. The algorithm tries each pattern in order until one matches. If none matches, the \"Fallback action\" applies. E.g. \"user@company.com\" with regex \"([^@]+)(@.+)\" → group 1 = \"user\", group 2 = \"@company.com\".",
+    "params": {
+      "maskPatterns": "List of patterns tried in order. The first whose regex matches the whole string is used. Each pattern has a regex and a list of actions — there must be exactly one action per capture group (parentheses).",
+      "maskPatterns.regex": "Regular expression that must match the WHOLE string (implicitly anchored). Use capture groups (parentheses) to delimit the parts that get actions. Text between groups is preserved automatically.",
+      "maskPatterns.actions": "One action per capture group, in the same order as the parentheses in the regex. If the regex has 2 groups, provide 2 actions.",
+      "maskPatterns.actions.type": "PRESERVE — keeps the group’s original text unchanged. TRUNCATE — removes the group entirely (replaces it with an empty string). REDACT — replaces the group with fixed text or a fixed character (configured below). APPLY_ALGORITHM — runs the group through a masking algorithm (pick it below).",
+      "maskPatterns.actions.redactString": "Fixed text that replaces the entire group. E.g. \"***\" turns \"john\" into \"***\". Use it when you want a uniform replacement regardless of length. Only used when the type is REDACT.",
+      "maskPatterns.actions.redactCharacter": "Single character used to replace each character of the group individually. E.g. \"X\" turns \"john\" into \"XXXX\" (length preserved). Only used when the type is REDACT. Mutually exclusive with \"Fixed replacement text\" — use one or the other.",
+      "maskPatterns.actions.algorithm": "Masking algorithm applied to the group. Pick a saved test/algorithm from the dropdown, or type a built-in catalog name directly (e.g. dlpx-core:FirstName). Only used when the type is APPLY_ALGORITHM.",
+      "fallbackAction": "Action applied when the string matches none of the patterns. If \"Require a match\" is on, this action is ignored and the algorithm raises an error instead.",
+      "fallbackAction.type": "PRESERVE — returns the original value unchanged. TRUNCATE — returns an empty string. REDACT — replaces the whole value. APPLY_ALGORITHM — runs the value through an algorithm.",
+      "fallbackAction.redactString": "Fixed text that replaces the whole value in the fallback.",
+      "fallbackAction.redactCharacter": "Character used to replace each character of the value in the fallback.",
+      "fallbackAction.algorithm": "Algorithm applied to the whole value in the fallback.",
+      "trimInput": "Strips spaces and line breaks from both ends of the value before trying to match the patterns. Useful when the data comes padded from the database.",
+      "requireMask": "When on, raises an error if the string matches no pattern (instead of using the fallback). Use it when values outside the expected format should be rejected.",
+      "maxInputLength": "Maximum allowed length of the input value, in characters. Longer values raise an error. Leave empty for no limit."
+    },
+    "labels": {
+      "maskPatterns": "Masking patterns",
+      "maskPatterns.regex": "Regex (must match the whole string)",
+      "maskPatterns.actions": "Actions per capture group",
+      "maskPatterns.actions.type": "Action type",
+      "maskPatterns.actions.redactString": "Fixed replacement text",
+      "maskPatterns.actions.redactCharacter": "Replacement character (preserves length)",
+      "maskPatterns.actions.algorithm": "Algorithm to apply",
+      "fallbackAction": "Fallback action (when no pattern matches)",
+      "fallbackAction.type": "Action type",
+      "fallbackAction.redactString": "Fixed replacement text",
+      "fallbackAction.redactCharacter": "Replacement character",
+      "fallbackAction.algorithm": "Algorithm to apply",
+      "trimInput": "Trim surrounding whitespace before processing",
+      "requireMask": "Require a match (error when no pattern matches)",
+      "maxInputLength": "Maximum input length (characters)"
+    }
+  },
+  "FreeTextRedaction": {
+    "description": "Finds and redacts sensitive entities in free text using regexes and/or a lookup file. Everything else is preserved.",
+    "inputFormat": "Free text. E.g. \"Contact John at john@company.com or on 555-0100.\"",
+    "params": {
+      "regularExpressions": "Array of {patternString} with the regexes that identify the passages to redact.",
+      "isDenyList": "true = deny list: redacts the matches. false = allow list: redacts everything that does NOT match.",
+      "regExRedactValue": "Text that replaces the passages found by the regular expressions.",
+      "lookupFile": "Text file with a list of terms (one per line) to search for in the input. Every occurrence found is redacted.",
+      "lookupFileRedactValue": "Text that replaces the passages found via the lookup file (independent of regExRedactValue)."
+    },
+    "labels": {
+      "regularExpressions": "Regular expressions",
+      "isDenyList": "Deny-list mode",
+      "regExRedactValue": "Replacement for regex matches",
+      "lookupFile": "Term file (lookup)",
+      "lookupFileRedactValue": "Replacement for lookup-file matches"
+    }
+  },
+  "Redact": {
+    "description": "Replaces the parts of the value that match regular expressions with the configured replacement text. With no regex configured, it returns the input value unmasked.",
+    "inputFormat": "Any text string. Passages matching the configured regexes get redacted.",
+    "params": {
+      "regexRedact": "Map of {regex → replacement_text}. If empty, the whole value is redacted."
+    },
+    "labels": {
+      "regexRedact": "Regex → replacement mapping"
+    }
+  },
+  "MinMaxBigDecimal": {
+    "description": "Clamps a decimal number to the range [minValue, maxValue]: returns the value unchanged if it is already inside the range, minValue if it is below, or maxValue if it is above.",
+    "inputFormat": "Decimal number. E.g. \"5000.50\", \"3.14\"",
+    "params": {
+      "minValue": "Required. Lower bound.",
+      "maxValue": "Required. Upper bound.",
+      "nonConformingDataDefaultValue": "Value returned when the input is not a valid number. If empty, the algorithm raises a non-conforming data error."
+    },
+    "labels": {
+      "minValue": "Minimum value",
+      "maxValue": "Maximum value",
+      "nonConformingDataDefaultValue": "Default value for invalid data"
+    }
+  },
+  "MinMaxLocalDateTime": {
+    "description": "Clamps a date/time to the range [minDate, maxDate]: returns the value unchanged if it is already inside the range, minDate if it is earlier, or maxDate if it is later.",
+    "inputFormat": "Date/time in ISO format. E.g. \"2024-03-15T14:30:00\"",
+    "params": {
+      "minDate": "Required. Minimum date/time (ISO format).",
+      "maxDate": "Required. Maximum date/time (ISO format).",
+      "nonConformingDataDefaultValue": "Value returned when the input is not a valid date/time. If empty, the algorithm raises a non-conforming data error."
+    },
+    "labels": {
+      "minDate": "Minimum date/time",
+      "maxDate": "Maximum date/time",
+      "nonConformingDataDefaultValue": "Default value for invalid data"
+    }
+  },
+  "NumericExpression": {
+    "description": "Evaluates a one-line Java expression over the numeric input value and returns the result as a BigDecimal. The expression has access to the variable \"input\" (the input value as a BigDecimal) and \"seed\" (a long derived from the key, useful for deterministic masking). Extra named constants can be declared in the \"constants\" field.",
+    "inputFormat": "Number (integer or decimal). E.g. \"1000\", \"3.14\"",
+    "params": {
+      "expression": "Required. Valid Java expression returning a BigDecimal. Available variables: \"input\" (BigDecimal holding the input value) and \"seed\" (deterministic long derived from the key). E.g. input.multiply(new java.math.BigDecimal(2)) — doubles the value. E.g. new java.math.BigDecimal(seed % 9000 + 1000) — produces a value between 1000 and 9999 based on the key.",
+      "inputType": "How to interpret the input before handing it to the expression: DOUBLE, LONG or BIG_DECIMAL (default).",
+      "constants": "Named constants reachable from the expression. Each constant has a \"name\" and a \"value\" (string). E.g. name=\"rate\", value=\"0.8\" — used in the expression as new java.math.BigDecimal(rate).",
+      "nonConformingDataDefaultValue": "Value returned when the input is not a valid number. If empty, the algorithm raises a non-conforming data error."
+    },
+    "labels": {
+      "expression": "Java expression",
+      "inputType": "Input numeric type",
+      "constants": "Constants",
+      "nonConformingDataDefaultValue": "Default value for invalid data"
+    }
+  },
+  "RepeatFirstDigit": {
+    "description": "Masks the last 4 digits by repeating the first of them 4 times.",
+    "inputFormat": "Numeric string with exactly 4, 9, 10 or 14 digits (no punctuation). E.g. \"1234\", \"123456789\"."
+  },
+  "DateShift": {
+    "description": "Shifts a date/time by a random amount within the range [minRange, maxRange]. The shift is deterministic per key: the same input+key always produces the same result.",
+    "inputFormat": "Date or date/time in ISO 8601: \"yyyy-MM-dd\" or \"yyyy-MM-ddTHH:mm:ss\". E.g. \"2024-03-15\", \"2024-03-15T14:30:00\".",
+    "params": {
+      "minRange": "Minimum shift, in units of \"unit\". Use a negative value to allow shifting into the past. E.g. -365 with unit=DAYS allows going back up to a year.",
+      "maxRange": "Maximum shift, in units of \"unit\". Use a positive value to allow shifting into the future. E.g. 365 with unit=DAYS allows going forward up to a year.",
+      "unit": "Shift unit: SECONDS, MINUTES, HOURS, DAYS, MONTHS, YEARS.",
+      "roll": "Controls what happens when the shift lands on an invalid date — mostly relevant with unit=MONTHS or YEARS. E.g. January 31 + 1 month = February 31, which does not exist. true (roll) = the date \"shrinks\" to the last valid day of the target month (→ Feb 28). false (add) = the date overflows into the next month (→ Mar 3). When in doubt, use false."
+    },
+    "labels": {
+      "minRange": "Minimum shift",
+      "maxRange": "Maximum shift",
+      "unit": "Time unit",
+      "roll": "Roll (clamp to the last valid day) instead of overflowing"
+    }
+  },
+  "DateShiftDiscrete": {
+    "description": "A Date Shift variant with a discrete set of possible shifts, defined through a configuration file.",
+    "inputFormat": "Date or date/time in ISO 8601: \"yyyy-MM-dd\" or \"yyyy-MM-ddTHH:mm:ss\". E.g. \"2024-03-15\", \"2024-03-15T14:30:00\"."
+  },
+  "DateReplacement": {
+    "description": "Replaces the date/time with a random absolute value within the range [minDate, maxDate]. The configuration dates must use the format \"yyyy-MM-ddTHH:mm:ss\".",
+    "inputFormat": "Date/time in ISO 8601: \"yyyy-MM-ddTHH:mm:ss\". E.g. \"1985-07-20T00:00:00\".",
+    "params": {
+      "minDate": "Earliest possible date (format: \"yyyy-MM-ddTHH:mm:ss\").",
+      "maxDate": "Latest possible date (format: \"yyyy-MM-ddTHH:mm:ss\").",
+      "unit": "SECONDS, MINUTES, HOURS, DAYS."
+    },
+    "labels": {
+      "minDate": "Minimum date",
+      "maxDate": "Maximum date",
+      "unit": "Time unit"
+    }
+  },
+  "SecureLookup": {
+    "description": "Replaces the value with an item from a lookup file, chosen deterministically by hash. The same input+key always selects the same substitute from the file.",
+    "inputFormat": "Any non-null string. The algorithm hashes the value+key and uses that to pick a line from the lookup file.",
+    "params": {
+      "lookupFile": "Required. Text file with one substitute value per line. The algorithm uses the hash of the input to pick which line to return. The more lines, the more varied the substitutes.",
+      "hashMethod": "Algorithm used to derive the index into the lookup file. SHA256 = secure cryptographic hash, deterministic per key (recommended default). LEGACY = the old hashing method, kept for backward compatibility. RANDOMIZE = non-deterministic random selection (each run may return a different value).",
+      "maskedValueCase": "Capitalization applied to the value returned from the file. PRESERVE_LOOKUP_FILE = returns it exactly as it appears in the file. PRESERVE_INPUT = gives the substitute the same capitalization as the input (e.g. all-uppercase input → all-uppercase substitute). ALL_LOWER = forces lower case. ALL_UPPER = forces upper case.",
+      "inputCaseSensitive": "If true, \"John\" and \"JOHN\" are treated as different values and may get different substitutes. If false, the comparison ignores case before hashing.",
+      "trimWhitespaceFromInput": "If true, strips spaces and tabs from both ends of the input before hashing. Useful when the data comes padded from the database and you want \"  John  \" to produce the same result as \"John\".",
+      "trimWhitespaceInLookupFile": "If true, strips spaces and tabs from both ends of each lookup-file line as it is loaded. Prevents lines with trailing whitespace from being treated as distinct values."
+    },
+    "labels": {
+      "lookupFile": "Lookup file (one value per line)",
+      "hashMethod": "Substitute selection method",
+      "maskedValueCase": "Result capitalization",
+      "inputCaseSensitive": "Case-sensitive input",
+      "trimWhitespaceFromInput": "Trim input whitespace before hashing",
+      "trimWhitespaceInLookupFile": "Trim whitespace from lookup-file lines"
+    }
+  },
+  "NullSecureLookup": {
+    "description": "A Secure Lookup variant that handles null values. It has no configurable parameters — it uses the lookup file embedded in the plugin. In the standalone runner it returns null for any input (expected behavior without the Masking Engine context).",
+    "inputFormat": "Any string. In the standalone runner the output is always null (no engine context). In the Masking Engine, a null input returns null; otherwise the configured lookup applies."
+  },
+  "Mapping": {
+    "description": "Maintains a persistent one-to-one mapping from originals to substitutes, guaranteeing referential consistency: the same original value always gets the same substitute across every table. Requires the mapping database — it does not work in the standalone runner.",
+    "inputFormat": "Any string. The algorithm looks up (or creates) a record in the mapping set and always returns the same substitute for a given original value.",
+    "params": {
+      "mappingSet": "Required. Reference to the mapping set that stores the correspondences. In the standalone runner that database is unavailable and the algorithm will fail.",
+      "mappingSet.algorithmName": "Required. Name of the mapping set in the Masking Engine — identifies which set of mappings to use. E.g. \"client-name-mapping\".",
+      "mappingSet.host": "Host of the database holding the mapping set. Used when the mapping set lives on a remote Masking Engine instance.",
+      "mappingSet.port": "Port of the remote mapping-set database.",
+      "mappingSet.database": "Database name of the remote mapping set.",
+      "mappingSet.schema": "Database schema of the remote mapping set.",
+      "mappingSet.isRemote": "If true, the mapping set lives on a remote Masking Engine instance (using the host/port/database/schema above). If false, the local instance is used.",
+      "mappingSet.mappingLookupKey": "Extra key used to partition the mapping set. Lets one mapping set serve several isolated contexts.",
+      "mappingSet.propertiesRef": "Properties file with the connection settings for the remote mapping-set database (an alternative to setting host/port/database/schema individually).",
+      "ignoreCharacters": "ASCII codes of the characters to strip from the input before looking it up in the mapping set. E.g. 45 = dash, 46 = dot. Useful for mapping formatted and unformatted IDs to the same entry."
+    },
+    "labels": {
+      "mappingSet": "Mapping set",
+      "mappingSet.algorithmName": "Mapping set name",
+      "mappingSet.host": "Remote database host",
+      "mappingSet.port": "Remote database port",
+      "mappingSet.database": "Remote database",
+      "mappingSet.schema": "Remote database schema",
+      "mappingSet.isRemote": "Remote mapping set",
+      "mappingSet.mappingLookupKey": "Mapping set partition key",
+      "mappingSet.propertiesRef": "Connection properties file",
+      "ignoreCharacters": "Characters to ignore in the input (ASCII codes)"
+    }
+  },
+  "DataCleansing": {
+    "description": "Replaces the value with the match defined in a mapping file (original → substitute). Unlike Secure Lookup, the mapping is explicit and deterministic: you control exactly which value becomes which.",
+    "inputFormat": "String that should have a match in the mapping file. With no match, the default behavior is to return the original value unchanged. E.g. \"CA\" → \"California\", \"M\" → \"Male\".",
+    "params": {
+      "lookupFile": "Required. Text file with one mapping per line. Each line holds the original value and the substitute, separated by the delimiter. With delimiter=\",\": \"CA,California\" or \"male,M\".",
+      "delimiter": "Separator between the original value and the substitute on each line of the file. E.g. \",\" for CSV, \";\" for semicolon, \"\\t\" for tab. If omitted, tab is used.",
+      "caseSensitive": "If true, \"CA\" and \"ca\" are treated as different values and each needs its own entry in the file. If false (recommended for most cases), the comparison ignores case.",
+      "trimWhitespace": "If true, strips spaces and tabs from both ends of the input and of every file line before comparing. Prevents match failures caused by stray whitespace in the database or the file."
+    },
+    "labels": {
+      "lookupFile": "Mapping file (original → substitute)",
+      "delimiter": "Delimiter between original and substitute",
+      "caseSensitive": "Case sensitive",
+      "trimWhitespace": "Trim surrounding whitespace before comparing"
+    }
+  },
+  "Email": {
+    "description": "Masks an email address by generating a synthetic one.",
+    "inputFormat": "Valid email address. E.g. \"john.smith@company.com\"",
+    "params": {
+      "nameAction": "Required. How to mask the name part: UNIQUE, LOOKUP, APPLY_ALGORITHM, APPLY_FIRSTNAME_AND_LASTNAME_ALGORITHMS.",
+      "domainAction": "Required. How to mask the domain: REPLACEMENT (swap for domainReplacementString), APPLY_ALGORITHM, PRESERVE.",
+      "domainReplacementString": "Substitute domain used when domainAction=REPLACEMENT. E.g. \"example.com\".",
+      "errorHandlingAction": "What to do on error: EXCEPTION, CHARACTER_MAPPING, PRESERVE."
+    },
+    "labels": {
+      "nameAction": "Action for the name",
+      "domainAction": "Action for the domain",
+      "domainReplacementString": "Substitute domain",
+      "errorHandlingAction": "Action on error"
+    }
+  },
+  "Phone": {
+    "description": "Generates a synthetic phone number preserving the original formatting.",
+    "inputFormat": "Phone number in any format. E.g. \"(11) 99999-8888\"",
+    "params": {
+      "isPhoneUnique": "Required. If true, guarantees unique substitutes."
+    },
+    "labels": {
+      "isPhoneUnique": "Guarantee unique numbers"
+    }
+  },
+  "Name": {
+    "description": "Replaces a simple name (first name or surname) with another one drawn deterministically from a lookup file. The same input+key always produces the same substitute.",
+    "inputFormat": "Simple name, no separators. E.g. \"John\", \"Smith\", \"Mary\". For compound names use FullName.",
+    "params": {
+      "lookupFile": "Required. Text file with one name per line. The algorithm draws a name from that file deterministically (based on the key). Any list works — first names, surnames, and so on.",
+      "maskedValueCase": "Capitalization applied to the name drawn from the file. PRESERVE_LOOKUP_FILE = uses the name exactly as it appears in the file. PRESERVE_INPUT = gives the substitute the same capitalization as the input (e.g. input \"JOHN\" → uppercase substitute). ALL_LOWER = all lower case. ALL_UPPER = all upper case.",
+      "particlesToRemoveFile": "File with the particles to strip from the input before the lookup (one per line). E.g. \"de\", \"van\", \"of\" — keeps particles from influencing the hash and producing nonsensical substitutes.",
+      "particlesToPreserveFile": "File with the particles to keep in the result even after masking (one per line). E.g. \"de\", \"van\" — the generated substitute preserves the particles from the original input.",
+      "maxLengthOfMaskedName": "Maximum length of the substitute name, in characters. Lookup-file names longer than this are skipped during selection. Useful when the database column has a size limit.",
+      "maxNumberNames": "Maximum number of names returned when the algorithm runs in multi-value mode. For simple use (a single field), leave it empty.",
+      "filterAccent": "If true, strips accents from the input before hashing for substitute selection. Useful for treating \"Jose\" and \"José\" as equivalent, so they produce the same masked name.",
+      "inputCaseSensitive": "If true, \"John\" and \"JOHN\" are treated as different inputs and may produce different substitutes. If false (default), the comparison ignores case."
+    },
+    "labels": {
+      "lookupFile": "File of substitute names",
+      "maskedValueCase": "Result capitalization",
+      "particlesToRemoveFile": "File of particles to remove (e.g. \"de\", \"van\")",
+      "particlesToPreserveFile": "File of particles to keep in the result",
+      "maxLengthOfMaskedName": "Maximum substitute name length",
+      "maxNumberNames": "Maximum number of names (multi-value mode)",
+      "filterAccent": "Ignore accents when picking the substitute",
+      "inputCaseSensitive": "Case-sensitive input"
+    }
+  },
+  "FullName": {
+    "description": "Masks a full name by separating first name(s) from surname and applying a different algorithm to each part. The split is done on spaces (or on the configured separators).",
+    "inputFormat": "Full name with spaces. E.g. \"John van der Berg\", \"Mary Oliveira Santos\".",
+    "params": {
+      "lastNameAtTheEnd": "Says where the surname is. true = the surname is the last word (\"John Smith\" → surname \"Smith\"). false = the surname is the first word (\"Smith John\" → surname \"Smith\").",
+      "ifSingleWordConsiderAsLastName": "What to do when the input is a single word. true = treat it as a surname and apply lastNameAlgorithmRef. false = treat it as a first name and apply firstNameAlgorithmRef.",
+      "firstNameAlgorithmRef": "Algorithm applied to the first name(s). Give the name of a catalog instance (e.g. \"dlpx-core:FirstName\"). If omitted, the first names are preserved unmasked.",
+      "lastNameAlgorithmRef": "Algorithm applied to the surname. Give the name of a catalog instance (e.g. \"dlpx-core:LastName\"). If omitted, the surname is preserved unmasked.",
+      "lastNameSeparators": "Strings that separate the surname from the first name(s), in addition to the default space. E.g. [\"-\"] to read \"Mary-Smith\" as first name \"Mary\" and surname \"Smith\". Useful for hyphenated names and other delimiters.",
+      "maxLengthOfMaskedName": "Maximum length of the masked full name, in characters. If the result exceeds it, the algorithm truncates or rejects. Useful when the column has a size limit.",
+      "maxNumberFirstNames": "Maximum number of first names to mask. If the input has more names than this, the extras are preserved unmasked. E.g. \"John Peter Charles Smith\" with maxNumberFirstNames=1 → only \"John\" is masked, \"Peter Charles\" is preserved."
+    },
+    "labels": {
+      "lastNameAtTheEnd": "Surname comes last",
+      "ifSingleWordConsiderAsLastName": "Single word = treat as surname",
+      "firstNameAlgorithmRef": "Algorithm for the first name(s)",
+      "lastNameAlgorithmRef": "Algorithm for the surname",
+      "lastNameSeparators": "Extra surname separators",
+      "maxLengthOfMaskedName": "Maximum masked name length",
+      "maxNumberFirstNames": "Maximum first names to mask"
+    }
+  },
+  "FinancialIdBr": {
+    "description": "Masks Brazilian CPF (11 digits) and CNPJ (14 digits) numbers, generating synthetic values with valid check digits. The type is detected automatically from the digit count.",
+    "inputFormat": "CPF with or without formatting: \"123.456.789-09\" or \"12345678909\". CNPJ with or without formatting: \"12.345.678/0001-90\" or \"12345678000190\".",
+    "params": {
+      "maskInvalidInput": "What to do when the incoming CPF/CNPJ is invalid (wrong check digits or wrong length). false = raise an error and stop (default). true = mask it anyway, ignoring the invalidity.",
+      "cmNumericRef": "Digit-substitution algorithm used internally to scramble the CPF/CNPJ digits. If unset, the built-in numeric Character Mapping is used. Give the name of a catalog algorithm instance (e.g. \"dlpx-core:CM_Digits\"). Leave empty for the default.",
+      "fallbackAlgorithm": "Algorithm applied when the input value is recognized as neither CPF nor CNPJ (e.g. the field is blank or holds text outside the format). If unset, the algorithm raises an error. Give the name of a catalog algorithm instance to handle those cases gracefully."
+    },
+    "labels": {
+      "maskInvalidInput": "Mask even when the CPF/CNPJ is invalid",
+      "cmNumericRef": "Digit-substitution algorithm (Character Mapping)",
+      "fallbackAlgorithm": "Fallback algorithm (unrecognized format)"
+    }
+  },
+  "IBAN": {
+    "description": "Masks an IBAN number while preserving the country code and the check digits.",
+    "inputFormat": "IBAN in the standard format. E.g. \"GB29NWBK60161331926819\"",
+    "params": {
+      "validateInput": "Required. Validates the IBAN before masking.",
+      "numCharsToMask": "Required. Number of characters to mask."
+    },
+    "labels": {
+      "validateInput": "Validate the IBAN before masking",
+      "numCharsToMask": "Number of characters to mask"
+    }
+  },
+  "Checkdigit": {
+    "description": "Masks the digits of a number that carries a check digit, recomputing the check digit afterwards so the result stays valid. Works for any scheme based on a weighted sum plus modulus (national IDs, barcodes, EAN, and so on).",
+    "inputFormat": "Numeric string with no punctuation or spaces. Its length must include the check digit at the configured position. E.g. \"12345678901\", \"7891000315507\" (EAN-13), \"123456789012\".",
+    "params": {
+      "weightList": "Required. Weights applied to each digit in the weighted sum. One weight per digit that takes part in the calculation (in reading order or right-to-left, per calculateChecksumRightToLeft). E.g. EAN-13 uses [1,3,1,3,1,3,1,3,1,3,1,3].",
+      "modulusNumber": "Required. Divisor used for the modulus of the weighted sum. The check digit is normally (modulus − remainder) % modulus. E.g. EAN-13 uses 10, CNPJ uses 11.",
+      "checkDigitIndex": "Required. Position of the check digit in the string, counting from index 0 (from the left). E.g. for a 13-digit code whose check digit is last, use 12.",
+      "calculateChecksumRightToLeft": "Required. Direction in which the weightList weights are applied to the digits. true = right to left. false = left to right (the EAN/UPC convention).",
+      "numDigitsForCheckdigitCalculation": "Required. How many digits take part in the weighted sum (excluding the check digit itself). Must equal the length of weightList. E.g. EAN-13 has 12 data digits → use 12.",
+      "swapModulusForZeroRemainder": "When the remainder is zero, use modulusNumber itself as the check digit instead of zero. Some standards adopt this rule. false = the check digit will be 0 when the remainder is 0.",
+      "checksumCalculationType": "Checksum calculation algorithm. STANDARD = plain weighted sum modulo N (default). TFN = the Australian Tax File Number variant with its own calculation logic.",
+      "numericAlgorithm": "Masking algorithm applied to the digits that are not the check digit. Give the name of a catalog instance (e.g. \"dlpx-core:CM_Digits\"). If omitted, the built-in numeric Character Mapping is used.",
+      "alphaNumericAlgorithm": "Masking algorithm used when the input contains letters as well as digits (alphanumeric). Applied to the non-numeric characters before the check digit is recomputed. If omitted and the input has letters, it may raise an error depending on characterHandling.",
+      "fallbackAlgorithm": "Algorithm applied when the input is invalid and invalidInputHandling = FALLBACK_MASK. It receives the whole original value. If omitted and an invalid input hits FALLBACK_MASK, the behavior is undefined.",
+      "preserveRegex": "Regular expression identifying parts of the string to leave unmasked (e.g. fixed prefixes). Matching passages are kept intact; the algorithm masks only the rest.",
+      "inputHandlingConfig": "Settings for how the input is handled before masking.",
+      "inputHandlingConfig.characterHandling": "How to handle non-numeric characters in the input. NUMERIC_ONLY = accepts 0-9 only and rejects everything else. STANDARD = letters are treated as their normal ASCII values. ASCII_VALUE_MINUS_48 = uses (asciiValue − 48) for letters, useful in some standards that interleave letters and digits.",
+      "inputHandlingConfig.invalidInputHandling": "What to do when the input is invalid (wrong length, unexpected characters). ERROR = raises an exception (default). FALLBACK_MASK = delegates to fallbackAlgorithm instead of failing.",
+      "inputHandlingConfig.shortInputHandling": "What to do when the input has fewer digits than expected. FALLBACK = delegates to fallbackAlgorithm. PAD_LEFT = pads with padCharacter on the left. PAD_RIGHT = pads with padCharacter on the right.",
+      "inputHandlingConfig.padCharacter": "Character used to pad short inputs when shortInputHandling = PAD_LEFT or PAD_RIGHT. Usually \"0\".",
+      "inputHandlingConfig.trimWhitespace": "If true, strips spaces and tabs from both ends of the input before processing. Useful when the data comes padded from the database."
+    },
+    "labels": {
+      "weightList": "Weight list (one per data digit)",
+      "modulusNumber": "Modulus (weighted-sum divisor)",
+      "checkDigitIndex": "Check digit index (0-based)",
+      "calculateChecksumRightToLeft": "Apply weights right to left",
+      "numDigitsForCheckdigitCalculation": "Digits in the calculation (= weightList length)",
+      "swapModulusForZeroRemainder": "Use the modulus when the remainder is zero",
+      "checksumCalculationType": "Checksum calculation type",
+      "numericAlgorithm": "Algorithm for numeric digits",
+      "alphaNumericAlgorithm": "Algorithm for alphanumeric characters",
+      "fallbackAlgorithm": "Fallback algorithm (invalid input)",
+      "preserveRegex": "Regex for parts to preserve",
+      "inputHandlingConfig": "Input handling",
+      "inputHandlingConfig.characterHandling": "Handling of non-numeric characters",
+      "inputHandlingConfig.invalidInputHandling": "Action for invalid input",
+      "inputHandlingConfig.shortInputHandling": "Action for short input",
+      "inputHandlingConfig.padCharacter": "Padding character",
+      "inputHandlingConfig.trimWhitespace": "Trim surrounding whitespace"
+    }
+  },
+  "Tokenization": {
+    "description": "Replaces the value with a token using AES (Format-Preserving Encryption). The token has the same length and character types as the original (digits stay digits, letters stay letters). It is reversible: with the same key and configuration the original value can be recovered — use the \"Detokenize\" button for that.",
+    "inputFormat": "Alphanumeric string with a fixed format, such as a credit card number (16 digits) or a national ID. Characters outside the tokenizable set (symbols, spaces) trigger the configured fallback.",
+    "params": {
+      "fallback": "What to do when the value holds characters that cannot be tokenized (e.g. \"@\", \"-\", spaces). NONE raises an error; CHARACTER_MAPPING replaces those characters with a generic mask and carries on.",
+      "ivLength": "Size of the AES initialization vector in bytes (default: 8). Larger values add randomness to the token but leave less room for the data.",
+      "cmCharacterGroups": "Only relevant when fallback = CHARACTER_MAPPING. Defines which characters are interchangeable in the fallback — e.g. [\"0123456789\", \"abcdefghijklmnopqrstuvwxyz\"] creates two separate groups. If empty, the Character Mapping defaults are used.",
+      "cmMinMaskedPositions": "Only relevant when fallback = CHARACTER_MAPPING. Minimum number of positions the fallback must mask, even when few characters are non-tokenizable. Keeps tokens with a single substituted character from being trivially reversible."
+    },
+    "labels": {
+      "fallback": "Fallback action for non-tokenizable characters",
+      "ivLength": "Initialization vector size (bytes)",
+      "cmCharacterGroups": "Fallback character groups (Character Mapping)",
+      "cmMinMaskedPositions": "Minimum positions masked by the fallback"
+    }
+  },
+  "MultiColumnAddress": {
+    "description": "Masks address fields spread across several columns, generating coherent synthetic addresses. ⚠️ Requires an address lookup file — not testable in the standalone runner without it. The algorithm fails to initialize when the file is not configured.",
+    "inputFormat": "String holding an address field. Requires a lookupFile configured with an address database in the Delphix-specific format. It does not work with an empty config."
+  },
+  "MultiColumnCondition": {
+    "description": "Applies different masking algorithms to several columns depending on the value of a conditional column (\"key\"). E.g. if GENDER=\"F\", apply FirstName to string1; if GENDER=\"M\", apply a different algorithm. Each condition defines which algorithms to use for the string, numeric, date and binary columns.",
+    "inputFormat": "A simulated database row with named columns. Required column: \"key\" (the conditional column’s value). Optional columns: \"string1\"…\"string10\", \"numeric1\"…\"numeric3\", \"date1\"…\"date3\".",
+    "params": {
+      "conditions": "Array of conditions. Each one defines: key (the values that activate it) and the algorithms to apply per slot (string1..10, numeric1..3, date1..3, binary1..3). For example key=[\"F\"] + string1={name:\"dlpx-core:FirstName\"} masks the string1 column with female names when key=\"F\".",
+      "conditions.key": "Values of the conditional column that activate this condition. The comparison honors keyCaseSensitive. E.g. [\"F\", \"Female\"] activates for \"F\" or \"Female\".",
+      "conditions.string1": "Algorithm applied to the row’s \"string1\" column when this condition fires. Give the name of a catalog instance. E.g. {name: \"dlpx-core:FirstName\"}.",
+      "conditions.string2": "Algorithm applied to the \"string2\" column when this condition fires.",
+      "conditions.numeric1": "Algorithm applied to the \"numeric1\" column (BigDecimal) when this condition fires.",
+      "conditions.date1": "Algorithm applied to the \"date1\" column (LocalDateTime) when this condition fires.",
+      "conditions.binary1": "Algorithm applied to the \"binary1\" column (ByteBuffer) when this condition fires.",
+      "fallbackAlgo": "Algorithm applied to the string columns when no condition matches the \"key\" value. If unset, the value is preserved unmasked.",
+      "fallbackKey": "Default value used as the key when the \"key\" column is null or missing.",
+      "keyCaseSensitive": "If true, comparing the \"key\" value against the conditions.key lists is case-sensitive. Default: false.",
+      "filterLength": "Maximum length of the \"key\" value used in the comparison. If the value is longer, only the first filterLength characters are used.",
+      "filterDirection": "Which end to count filterLength from: LEFT (from the start) or RIGHT (from the end)."
+    },
+    "labels": {
+      "conditions": "Conditions",
+      "conditions.key": "Conditional column values",
+      "conditions.string1": "Algorithm for column string1",
+      "conditions.string2": "Algorithm for column string2",
+      "conditions.numeric1": "Algorithm for column numeric1",
+      "conditions.date1": "Algorithm for column date1",
+      "conditions.binary1": "Algorithm for column binary1",
+      "fallbackAlgo": "Fallback algorithm (no matching condition)",
+      "fallbackKey": "Default key when \"key\" is null",
+      "keyCaseSensitive": "Case-sensitive key comparison",
+      "filterLength": "Filter the first N characters of the key",
+      "filterDirection": "Filter direction (LEFT / RIGHT)"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "delphix-masking-helper",
+  "version": "1.0.0",
+  "description": "Understand, test and build Delphix masking algorithms \u2014 locally, without a Masking Engine",
+  "main": "server.js",
+  "scripts": {
+    "start": "npm run build --prefix frontend && node server.js",
+    "dev": "concurrently -k -n SERVER,VITE -c cyan,magenta \"node --watch server.js\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix frontend"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.122.0",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  },
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adelbs/delphix-masking-helper.git"
+  }
+}
