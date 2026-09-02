@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm run build --prefix frontend && node server.js",
     "dev": "concurrently -k -n SERVER,VITE -c cyan,magenta \"node --watch server.js\" \"npm run dev --prefix frontend\"",
-    "build": "npm run build --prefix frontend"
+    "build": "npm run build --prefix frontend",
+    "check": "cd frontend && npx tsc -b && npx eslint src && cd .. && npm run build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",

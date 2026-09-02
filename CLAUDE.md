@@ -141,7 +141,15 @@ escolha do algoritmo.
 ## CI
 
 `.github/workflows/checks.yml` roda em todo push para `main` e nas tags `v*`: tipos, build e
-lint, os três bloqueantes. Com um mantenedor commitando direto na `main`, é o que a revisão de
+lint, os três bloqueantes.
+
+**Antes de dar push, rode `npm run check`** — são as mesmas três verificações, localmente.
+
+O que ele **não** cobre é a quarta que o CI faz: o `npm ci` exige `package.json` e
+`package-lock.json` em sincronia, e falha inteiro se não estiverem. Foi o que quebrou o primeiro
+push: o `frontend/package-lock.json` estava parado desde o commit inicial. **Depois de mexer em
+qualquer `package.json`, rode `npm install` no diretório correspondente e commite o lock junto.**
+O `npm ci` não atualiza lock — ele exige que já esteja certo, que é justamente o ponto dele. Com um mantenedor commitando direto na `main`, é o que a revisão de
 PR faria — e na tag ele funciona como portão, para um commit quebrado não virar release.
 
 O `javac` do runner só roda se houver JARs em `lib/`; no CI não há, e ele pula com aviso.
