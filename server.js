@@ -87,6 +87,9 @@ function runJava(request) {
     const cp = buildClasspath();
     const proc = spawn('java', [
       `-Dplugin.jar=${pluginJar}`,
+      // Where the runner looks for a lookup file whose configuration names one held by a
+      // Masking Engine — an imported algorithm carries the reference, never the contents.
+      `-Dfiles.dir=${path.resolve(__dirname, readConfig().filesDir)}`,
       '-cp', cp,
       'AlgorithmRunner'
     ]);
@@ -395,10 +398,12 @@ app.get('/api/delphix/algorithms', async (req, res) => {
     const seen = db.prepare(
       'SELECT delphix_name FROM saved_tests WHERE delphix_origin = ?').all(origin)
       .map((r) => r.delphix_name);
+    const local = localFileNames();
     res.json(list.map((a) => ({
       ...a,
       supported: Boolean(a.className) && known.has(a.className),
       alreadyImported: seen.includes(a.algorithmName),
+      missingFiles: missingEngineFiles(a.config, local),
     })));
   } catch (err) {
     res.status(502).json({ error: err.message });
@@ -417,7 +422,8 @@ app.post('/api/delphix/import', async (req, res) => {
     const list = await runJava({ command: 'list' });
     const display = Object.fromEntries(list.map((a) => [a.className, a.displayName]));
 
-    const imported = [], skipped = [];
+    const imported = [], skipped = [], needsFiles = [];
+    const local = localFileNames();
     const insert = db.prepare(`
       INSERT INTO saved_tests (name, algorithm, display_name, config, input, key_value, output,
                                delphix_name, delphix_origin)
@@ -443,8 +449,13 @@ app.post('/api/delphix/import', async (req, res) => {
       if (existing) update.run(name, a.className, display[a.className], cfgJson, name, origin);
       else insert.run(name, a.className, display[a.className], cfgJson, MASKING_KEY, name, origin);
       imported.push(name);
+      // Imported all the same: the row is correct and exporting it back works. It just cannot
+      // be *run* until the files it references exist here, and saying so now is kinder than
+      // letting the first mask fail on a reference the user never chose.
+      const files = missingEngineFiles(a.config ?? {}, local);
+      if (files.length) needsFiles.push({ name, files });
     }
-    res.json({ imported, skipped });
+    res.json({ imported, skipped, needsFiles });
   } catch (err) {
     res.status(502).json({ error: err.message });
   }
@@ -487,11 +498,40 @@ app.post('/api/delphix/export/:id', async (req, res) => {
     });
     db.prepare(`UPDATE saved_tests SET delphix_name = ?, delphix_origin = ?,
                 updated_at = datetime('now') WHERE id = ?`).run(out.name, origin, row.id);
-    res.json({ mode: out.mode, name: out.name, engine: origin, renamed: Boolean(out.renamed) || renamedLocally });
+    // Reported, not refused: a file:// path can be perfectly valid on the engine's own host,
+    // and only whoever administers it knows. What is worth saying is that a path picked from
+    // this machine's files folder will not be there — the engine stores its uploads under an
+    // address of its own, so an imported algorithm that lost its reference masks nothing.
+    res.json({
+      mode: out.mode, name: out.name, engine: origin,
+      renamed: Boolean(out.renamed) || renamedLocally,
+      localFiles: delphix.localFileUris(config),
+    });
   } catch (err) {
     res.status(502).json({ error: err.message });
   }
 });
+
+/** The names currently in filesDir — what an imported algorithm's file references can resolve to. */
+function localFileNames() {
+  const dir = path.resolve(__dirname, readConfig().filesDir);
+  if (!fs.existsSync(dir)) return new Set();
+  return new Set(fs.readdirSync(dir).filter((f) => !f.startsWith('.')));
+}
+
+/**
+ * The engine-held files this configuration needs and filesDir does not have.
+ *
+ * An algorithm imported from an engine references its uploaded files by an address only the
+ * engine can resolve, so the import brings down a configuration that cannot run until a copy
+ * of each file exists locally. Reporting it at import time beats letting the first mask fail.
+ *
+ * `local` is passed in by callers that check a whole list, so one engine listing reads the
+ * directory once instead of once per algorithm.
+ */
+function missingEngineFiles(config, local = localFileNames()) {
+  return delphix.engineFileNames(config).filter((name) => !local.has(name));
+}
 
 // File management
 app.get('/api/files', (req, res) => {

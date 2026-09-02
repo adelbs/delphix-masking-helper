@@ -167,10 +167,17 @@ export const api = {
       algorithmName: string; frameworkName: string | null; className: string | null;
       description: string; config: Record<string, unknown>;
       supported: boolean; alreadyImported: boolean;
+      /** Lookup files the engine holds and this machine does not — the algorithm imports fine
+       *  but cannot run until a copy of each exists in the files folder. */
+      missingFiles: string[];
     }>>('/api/delphix/algorithms'),
 
   delphixImport: (names: string[]) =>
-    request<{ imported: string[]; skipped: Array<{ name: string; reason: string; framework?: string }> }>(
+    request<{
+      imported: string[];
+      skipped: Array<{ name: string; reason: string; framework?: string }>;
+      needsFiles: Array<{ name: string; files: string[] }>;
+    }>(
       '/api/delphix/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -178,7 +185,12 @@ export const api = {
       }),
 
   delphixExport: (id: number, name?: string) =>
-    request<{ mode: 'created' | 'updated'; name: string; engine: string; renamed: boolean }>(
+    request<{
+      mode: 'created' | 'updated'; name: string; engine: string; renamed: boolean;
+      /** file:// references that were sent as they are — paths on this machine, which the
+       *  engine has no way to open. */
+      localFiles: string[];
+    }>(
       `/api/delphix/export/${id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

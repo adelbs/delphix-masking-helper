@@ -184,9 +184,27 @@ and press **Test connection**; it answers before anything is saved.
 built on a framework this tool cannot run locally is shown but not selectable, so you never end up
 with a saved algorithm that cannot be tested.
 
+**Lookup files.** A file uploaded to the engine stays in the engine's file store: an algorithm
+carries only a reference to it (`delphix-file://upload/…/NAMES.txt`), and importing brings the
+reference down, never the contents. The import dialog says which files an algorithm reads that this
+machine does not have, and the algorithm imports either way — it just cannot run until a copy exists.
+Add one under **Files**, keeping the engine's file name, and the imported algorithm runs unchanged.
+
+Any list with the right shape is enough to see the algorithm work. To reproduce what the engine
+produces, the file has to match it line for line: an algorithm that picks a substitute by hashing
+the input selects by position, so a different list is a different result.
+
 **Exporting.** Each saved algorithm has a **Send to Delphix** button. One that came from the engine
 is updated there; one you built here is created. The tool remembers where each algorithm came
 from, so exporting twice never leaves a duplicate behind.
+
+**Round trip.** Testing an imported algorithm with a local file does not change what goes back
+to the engine: the reference is stored as the engine wrote it, and the local copy is only resolved
+when the algorithm runs here. Adjust any parameter, send it back, and the engine keeps reading its
+own file. The one way to break that is to pick another file in the configuration form — that
+replaces the reference. The form shows an engine-held file as *name (on the engine)* so it is never
+mistaken for an empty field, and exporting a configuration that points at a path on this machine
+warns that the engine has no such path.
 
 **Naming.** On the engine an algorithm's name is its identity and cannot be changed, so the tool
 follows the same rule: names are not editable. To work under a different name, use **Duplicate**

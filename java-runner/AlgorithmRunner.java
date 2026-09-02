@@ -25,6 +25,11 @@ public class AlgorithmRunner {
     static String PLUGIN_JAR_PATH = System.getProperty("plugin.jar",
         "../lib/delphix-algorithm-plugin-2026.3.0-SNAPSHOT.jar");
 
+    // Where the tool keeps its lookup and mapping files. A configuration imported from a
+    // Masking Engine points at the engine's own file store, whose contents stay there; this
+    // is the directory searched for a local copy. server.js passes its configured filesDir.
+    static String FILES_DIR = System.getProperty("files.dir", "../test-files");
+
     // Built-in component catalog: name → uninitialized component (lazy setup)
     static Map<String, MaskingComponent> BUILTIN_CATALOG = null;
 
@@ -594,6 +599,67 @@ public class AlgorithmRunner {
         return n;
     }
 
+    /**
+     * A file reference the tool understands but cannot satisfy, carrying a message written for
+     * the person running the algorithm rather than for a log.
+     */
+    static class MissingFileException extends RuntimeException {
+        MissingFileException(String message) { super(message); }
+    }
+
+    /**
+     * The local file a FileReference points at.
+     *
+     * Configurations written here carry a "file://" URI or a plain path. Configurations
+     * imported from a Masking Engine carry the engine's own reference instead —
+     * "delphix-file://upload/<id>/<name>.txt" — because an uploaded file lives in the engine's
+     * file store and only the reference to it travels with the algorithm. Nothing local
+     * answers to that scheme, so the reference is resolved by file name against FILES_DIR:
+     * drop a copy of the list there and the imported algorithm runs unchanged.
+     */
+    static java.io.File resolveInputFile(String uriStr) throws Exception {
+        if (uriStr.startsWith("file://")) {
+            // Strip "file://" and decode percent-encoded chars (e.g. %20 → space).
+            // This handles both pre-encoded URIs and URIs with raw spaces.
+            String decoded = java.net.URLDecoder.decode(
+                uriStr.substring("file://".length()), "UTF-8");
+            return new java.io.File(decoded);
+        }
+
+        java.net.URI uri;
+        try {
+            uri = new java.net.URI(uriStr);
+        } catch (java.net.URISyntaxException e) {
+            return new java.io.File(uriStr);        // a plain path, not a URI at all
+        }
+        if (uri.getScheme() == null) return new java.io.File(uriStr);
+        if ("file".equals(uri.getScheme())) return new java.io.File(uri);
+
+        return engineFile(uriStr, uri);
+    }
+
+    /** The local stand-in for a file the Masking Engine holds, or a message saying it is absent. */
+    static java.io.File engineFile(String uriStr, java.net.URI uri) {
+        String path = uri.getPath();
+        if (path == null || path.isEmpty()) path = uri.getSchemeSpecificPart();
+        String name = path == null ? "" : path.substring(path.lastIndexOf('/') + 1);
+        if (name.isEmpty()) {
+            throw new MissingFileException(
+                "the reference '" + uriStr + "' names no file this tool can look for locally.");
+        }
+
+        java.io.File local = new java.io.File(FILES_DIR, name);
+        if (!local.isFile()) {
+            throw new MissingFileException(
+                "this algorithm reads '" + name + "' from a file stored on the Masking Engine. Only the "
+                + "reference to it travels with the configuration, not its contents, so put a copy of the "
+                + "file in " + new java.io.File(FILES_DIR).getAbsolutePath() + " under that exact name. "
+                + "Beware that the substitute values follow from the file: an algorithm that picks a line "
+                + "by hash needs the engine's file line for line to reproduce what the engine produces.");
+        }
+        return local;
+    }
+
     static ComponentService buildService(String keyString, ObjectMapper mapper,
             Map<String, MaskingAlgorithm<?>> registry) {
         return buildService(keyString, mapper, registry, Collections.emptyMap());
@@ -769,17 +835,11 @@ public class AlgorithmRunner {
                             }
                         };
                     }
-                    java.io.File file;
-                    if (uriStr.startsWith("file://")) {
-                        // Strip "file://" and decode percent-encoded chars (e.g. %20 → space).
-                        // This handles both pre-encoded URIs and URIs with raw spaces.
-                        String decoded = java.net.URLDecoder.decode(
-                            uriStr.substring("file://".length()), "UTF-8");
-                        file = new java.io.File(decoded);
-                    } else {
-                        file = new java.io.File(new java.net.URI(uriStr));
-                    }
-                    return new FileInputStream(file);
+                    return new FileInputStream(resolveInputFile(uriStr));
+                } catch (MissingFileException e) {
+                    // Already phrased for whoever is looking at the screen — wrapping it again
+                    // would bury the explanation under a stack of Java plumbing.
+                    throw e;
                 } catch (Exception e) {
                     throw new RuntimeException(
                         "Cannot open file '" + ref.getValue() + "': " + e.getMessage(), e);

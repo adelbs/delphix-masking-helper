@@ -187,6 +187,13 @@ function EngineImport({ onClose, onImported }: { onClose: () => void; onImported
       const out = await api.delphixImport([...picked])
       toast.success(msg('saved.importDone', { n: out.imported.length }))
       if (out.skipped.length) toast.warning(msg('saved.importSkipped', { n: out.skipped.length }))
+      // The rows are saved either way; this is about what they still need before they can run.
+      if (out.needsFiles?.length) {
+        const files = [...new Set(out.needsFiles.flatMap(r => r.files))]
+        toast.warning(msg('saved.importNeedsFilesDone', {
+          n: out.needsFiles.length, files: files.join(', '),
+        }))
+      }
       onImported()
       onClose()
     } catch (e) {
@@ -195,6 +202,12 @@ function EngineImport({ onClose, onImported }: { onClose: () => void; onImported
   }
 
   const importable = (rows ?? []).filter(r => r.supported)
+  const allPicked = importable.length > 0 && importable.every(r => picked.has(r.algorithmName))
+
+  // Only the importable rows: the others cannot be selected one by one either, and putting
+  // them in would leave the box looking unchecked however many times it is clicked.
+  const toggleAll = () =>
+    setPicked(allPicked ? new Set() : new Set(importable.map(r => r.algorithmName)))
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -216,6 +229,15 @@ function EngineImport({ onClose, onImported }: { onClose: () => void; onImported
           {rows && importable.length === 0 && !error && (
             <p className="text-sm text-slate-500">{msg('saved.importNone')}</p>
           )}
+          {rows && importable.length > 0 && (
+            <label className="flex items-center gap-3 pb-2.5 mb-1 border-b border-slate-200 cursor-pointer">
+              <input type="checkbox" checked={allPicked} onChange={toggleAll}
+                     ref={el => { if (el) el.indeterminate = picked.size > 0 && !allPicked }} />
+              <span className="text-sm font-medium text-slate-600">
+                {msg('saved.importSelectAll', { n: importable.length })}
+              </span>
+            </label>
+          )}
           {rows?.map(r => (
             <label key={r.algorithmName}
                    className={cn('flex items-start gap-3 py-2.5 border-b border-slate-100 last:border-0',
@@ -231,6 +253,13 @@ function EngineImport({ onClose, onImported }: { onClose: () => void; onImported
                 )}
                 {r.alreadyImported && (
                   <span className="text-xs text-slate-400">{msg('saved.importAlready')}</span>
+                )}
+                {r.supported && r.missingFiles?.length > 0 && (
+                  <span className="block text-xs text-amber-700">
+                    {msg('saved.importNeedsFiles', {
+                      n: r.missingFiles.length, files: r.missingFiles.join(', '),
+                    })}
+                  </span>
                 )}
               </span>
             </label>
@@ -324,6 +353,13 @@ function TestCard({ test: t, onEdit, onDelete, onSave, onDuplicated }: {
       // The engine rejects a changed algorithmName on update, so a local rename cannot travel.
       // Saying so beats leaving the user to notice the old name in the toast.
       if (out.renamed) toast.warning(msg('saved.exportRenamed', { name: out.name }))
+      // Sent, not blocked: the path could be a real one on the engine's host, and only whoever
+      // runs it knows. One picked from this machine's files folder will not be.
+      if (out.localFiles?.length) {
+        toast.warning(msg('saved.exportLocalFiles', {
+          n: out.localFiles.length, files: out.localFiles.join(', '),
+        }))
+      }
     } catch (e) {
       const err = e as Error & { code?: string }
       toast.error(err.code === 'not-configured'

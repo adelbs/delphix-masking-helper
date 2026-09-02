@@ -246,6 +246,69 @@ async function listAlgorithms(cfg) {
   });
 }
 
+// Schemes the runner resolves by itself: a path on this machine, and the plugin's own
+// jar entries. Anything else is held by the engine.
+const LOCAL_FILE_SCHEMES = new Set(['file', 'jar']);
+
+/**
+ * The file name inside a reference the runner cannot resolve on its own, or null.
+ *
+ * A file uploaded to an engine stays in the engine's file store, and the algorithm carries
+ * only a reference to it — "delphix-file://upload/<id>/<name>.txt". Importing brings the
+ * reference down; the contents never move.
+ */
+function engineFileName(value) {
+  const m = /^([a-z][a-z0-9+.-]*):\/\/(\S*)$/i.exec(String(value).trim());
+  if (!m || LOCAL_FILE_SCHEMES.has(m[1].toLowerCase())) return null;
+  const path = m[2].split(/[?#]/)[0];
+  const name = path.slice(path.lastIndexOf('/') + 1);
+  if (!name) return null;
+  try {
+    return decodeURIComponent(name);
+  } catch {
+    return name;   // a stray % in the name — take it literally rather than losing the file
+  }
+}
+
+/**
+ * Every string in a configuration, at any depth.
+ *
+ * Walked rather than read off known fields: file references appear at different depths
+ * depending on the framework, and a sub-algorithm can carry one of its own.
+ */
+function configStrings(config) {
+  const out = [];
+  (function walk(node) {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== 'object') return;
+    for (const value of Object.values(node)) {
+      if (typeof value === 'string') out.push(value);
+      else walk(value);
+    }
+  })(config);
+  return out;
+}
+
+/** Every engine-held file an algorithm configuration expects to read. */
+function engineFileNames(config) {
+  const names = new Set();
+  for (const value of configStrings(config)) {
+    const name = engineFileName(value);
+    if (name) names.add(name);
+  }
+  return [...names];
+}
+
+/**
+ * File references pointing at this machine's disk — meaningless once the algorithm is on an
+ * engine, which has no such path. Worth saying out loud when exporting: the engine accepts the
+ * configuration and then fails to mask, which is a slow way to find out.
+ */
+function localFileUris(config) {
+  return [...new Set(
+    configStrings(config).filter((value) => /^file:\/\//i.test(value.trim())))];
+}
+
 const getAlgorithm = (cfg, name) =>
   auth(cfg, 'GET', `/algorithms/${encodeURIComponent(name)}`);
 
@@ -301,4 +364,5 @@ module.exports = {
   DEFAULTS, settings, isConfigured, apiRoot, probe,
   frameworks, coreFrameworkId, listAlgorithms, getAlgorithm, saveAlgorithm,
   frameworkNameFor, classNameFor, FRAMEWORK_BY_CLASS,
+  engineFileName, engineFileNames, localFileUris,
 };

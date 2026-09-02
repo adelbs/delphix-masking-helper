@@ -184,9 +184,28 @@ e senha — e clique em **Testar conexão**; ele responde antes de você salvar 
 estiver sobre um framework que a ferramenta não consegue executar aparece, mas não é selecionável
 — assim você nunca fica com um algoritmo salvo que não dá para testar.
 
+**Arquivos de lookup.** Um arquivo enviado para a instância fica no armazenamento dela: o
+algoritmo carrega só uma referência (`delphix-file://upload/…/NOMES.txt`), e importar traz a
+referência, nunca o conteúdo. A janela de importação diz quais arquivos o algoritmo lê e esta
+máquina não tem, e o algoritmo é importado do mesmo jeito — só não roda enquanto não houver uma
+cópia. Adicione uma em **Arquivos**, mantendo o nome do arquivo da instância, e o algoritmo
+importado roda sem nenhuma alteração.
+
+Qualquer lista com o formato certo já serve para ver o algoritmo funcionando. Para reproduzir o que
+a instância produz, o arquivo precisa bater linha a linha: um algoritmo que escolhe o substituto
+pelo hash da entrada seleciona por posição, então lista diferente é resultado diferente.
+
 **Exportar.** Cada algoritmo salvo tem o botão **Enviar ao Delphix**. O que veio da instância é
 atualizado lá; o que você construiu aqui é criado. A ferramenta lembra de onde cada algoritmo veio,
 então exportar duas vezes nunca deixa uma duplicata.
+
+**Ida e volta.** Testar um algoritmo importado com um arquivo local não muda o que volta para a
+instância: a referência fica guardada como a instância escreveu, e a cópia local só é resolvida na
+hora de executar aqui. Ajuste qualquer parâmetro, mande de volta, e a instância continua lendo o
+arquivo dela. O único jeito de quebrar isso é escolher outro arquivo no formulário de configuração
+— isso substitui a referência. O formulário mostra um arquivo da instância como *nome (na
+instância)*, para que nunca seja confundido com campo vazio, e exportar uma configuração que aponta
+para um caminho desta máquina avisa que a instância não tem esse caminho.
 
 **Nomes.** Na instância o nome do algoritmo é a identidade dele e não pode ser alterado, então a
 ferramenta segue a mesma regra: nomes não são editáveis. Para trabalhar com outro nome, use

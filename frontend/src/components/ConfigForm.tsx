@@ -552,6 +552,14 @@ interface FilePickerProps {
   onChange: (val: unknown) => void
 }
 
+/** The file name inside a URI, for naming a reference the local list has no option for. */
+function uriFileName(uri: string): string {
+  const path = uri.split(/[?#]/)[0]
+  const name = path.slice(path.lastIndexOf('/') + 1)
+  if (!name) return uri
+  try { return decodeURIComponent(name) } catch { return name }
+}
+
 function FilePickerField({ value, onChange }: FilePickerProps) {
   const { t, tx } = useT()
   const [files, setFiles] = useState<ServerFile[]>([])
@@ -580,11 +588,19 @@ function FilePickerField({ value, onChange }: FilePickerProps) {
     onChange(uri ? { uri } : null)
   }
 
+  // A reference no local file answers to — an algorithm imported from an engine points at the
+  // engine's file store, which nothing here can list. Without an option of its own the select
+  // would render with nothing selected, the field would read as empty, and the natural fix
+  // (pick a file) would quietly overwrite the reference the engine needs.
+  const orphanUri = !loading && selectedUri && !files.some(f => f.uri === selectedUri)
+    ? selectedUri : null
+  const onEngine = orphanUri !== null && !/^file:/i.test(orphanUri)
+
   if (loading) {
     return <select disabled className={inputCls}><option>{t('form.loadingFiles')}</option></select>
   }
 
-  if (files.length === 0) {
+  if (files.length === 0 && !orphanUri) {
     return (
       <div className="space-y-1">
         <select disabled className={inputCls}><option>{t('form.noServerFiles')}</option></select>
@@ -596,16 +612,28 @@ function FilePickerField({ value, onChange }: FilePickerProps) {
   }
 
   return (
-    <select
-      value={selectedUri}
-      onChange={e => handleChange(e.target.value)}
-      className={inputCls}
-    >
-      <option value="">{t('form.noFile')}</option>
-      {files.map(f => (
-        <option key={f.uri} value={f.uri}>{f.name}</option>
-      ))}
-    </select>
+    <div className="space-y-1">
+      <select
+        value={selectedUri}
+        onChange={e => handleChange(e.target.value)}
+        className={inputCls}
+      >
+        <option value="">{t('form.noFile')}</option>
+        {orphanUri && (
+          <option value={orphanUri}>
+            {t(onEngine ? 'form.fileOnEngine' : 'form.fileMissing', { name: uriFileName(orphanUri) })}
+          </option>
+        )}
+        {files.map(f => (
+          <option key={f.uri} value={f.uri}>{f.name}</option>
+        ))}
+      </select>
+      {orphanUri && (
+        <p className="text-xs text-amber-700">
+          {t(onEngine ? 'form.fileOnEngineHint' : 'form.fileMissingHint')}
+        </p>
+      )}
+    </div>
   )
 }
 

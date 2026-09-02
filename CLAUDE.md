@@ -277,6 +277,44 @@ tolera as duas formas, como o frontend já fazia.
 atualiza no lugar quando a linha veio *daquela* instância — o mesmo nome em outra instância é
 outro algoritmo. Migração por `ALTER TABLE`, sem recriar a tabela.
 
+**Arquivos ficam na instância; só a referência viaja.** Um arquivo enviado ao engine (lookup,
+mapping) vive no file store dele, e o algoritmo guarda `delphix-file://upload/<id>/<nome>.txt`.
+Importar traz a referência, nunca o conteúdo — foi o que produzia o `URI scheme is not "file"`
+na primeira execução de um algoritmo importado.
+
+O runner resolve isso em `resolveInputFile` (`AlgorithmRunner.java`): `file://` e caminho puro
+como antes, `jar://file/` para os recursos embutidos no plugin, e **qualquer outro esquema pelo
+nome do arquivo dentro de `FILES_DIR`** (`-Dfiles.dir`, que o `server.js` preenche com o
+`filesDir` configurado). Não achando, sobe uma `MissingFileException` cuja mensagem diz o nome
+esperado, a pasta, e que o resultado depende do arquivo — o plugin envolve essa mensagem, então
+ela é o que aparece na tela.
+
+O aviso também é dado **antes**: `delphix.engineFileNames()` varre a config importada atrás de
+referências que o runner não resolve sozinho (qualquer esquema que não seja `file`/`jar`, em
+qualquer profundidade, porque um sub-algoritmo pode ter a sua), e `missingEngineFiles()` no
+`server.js` cruza com o conteúdo de `filesDir`. `GET /api/delphix/algorithms` devolve
+`missingFiles` por linha e `POST /api/delphix/import` devolve `needsFiles`. A importação **não**
+é bloqueada por isso: a linha está correta e exportar de volta funciona; o que falta é só para
+executar aqui.
+
+**A referência sobrevive ao round trip — menos por um caminho.** A config guardada nunca é
+reescrita: o `PUT /api/tests/:id` só altera os campos que chegam, e a exportação manda
+`parseStoredConfig(row.config)` inteiro. Então importar → testar com um txt local → ajustar
+parâmetros → exportar devolve a referência `delphix-file://` intacta, e a instância continua
+lendo o arquivo dela.
+
+O que quebrava isso era o `FilePickerField` (`ConfigForm.tsx`): as opções do `<select>` são os
+arquivos locais, nenhuma casa com o URI da instância, e um select controlado sem opção
+correspondente renderiza **sem seleção** — o campo parecia vazio, e o reflexo de preenchê-lo
+trocava a referência por um `file:///Users/…` que na instância não existe. Agora um URI fora da
+lista vira opção própria, rotulada `form.fileOnEngine` (esquema não-`file`) ou `form.fileMissing`
+(`file://` fora de `filesDir`), já selecionada, com aviso em âmbar embaixo. Trocar continua
+possível — só deixou de ser acidente.
+
+A exportação avisa, mas não recusa: `localFileUris()` no `delphix.js` acha os `file://` da config
+e o endpoint devolve `localFiles`, que a UI mostra como toast. Recusar seria errado — um caminho
+pode ser válido no host da instância, e só quem administra sabe.
+
 Instâncias com plugin mais antigo não têm todos os frameworks (a de laboratório não tem Phone,
 Shuffle, Redact Input, Repeat First Digit, Null Secure Lookup nem os Date Shift Discrete/
 Variable). Exportar para elas falha com mensagem explicando; importar marca o algoritmo como
@@ -435,7 +473,9 @@ Duas linhas não são reproduzíveis e precisam de cuidado ao serem regeradas:
 
 ## Limitações do runner standalone
 
-- `FileReference` suportado via URI `file:///caminho/absoluto` (requer `commons-codec-1.18.0.jar` em `lib/`)
+- `FileReference` suportado via URI `file:///caminho/absoluto` (requer `commons-codec-1.18.0.jar` em `lib/`).
+  Referência de arquivo guardado numa instância (`delphix-file://…`) resolve pelo nome dentro de
+  `filesDir` — ver "Arquivos ficam na instância" na seção de integração
 - `MappingSetReference` não suportado (algoritmo Mapping requer banco)
 - `EmbeddedGeneratorReference` não suportado
 - `MaskValueMetadata` retorna null

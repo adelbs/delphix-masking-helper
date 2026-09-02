@@ -186,9 +186,29 @@ y contraseña — y pulsa **Probar conexión**; responde antes de que guardes na
 Lo que esté sobre un framework que la herramienta no puede ejecutar aparece, pero no es
 seleccionable, así nunca acabas con un algoritmo guardado que no se puede probar.
 
+**Archivos de lookup.** Un archivo subido a la instancia se queda en el almacenamiento de ella:
+el algoritmo lleva solo una referencia (`delphix-file://upload/…/NOMBRES.txt`), e importar trae la
+referencia, nunca el contenido. La ventana de importación indica qué archivos lee el algoritmo y
+esta máquina no tiene, y el algoritmo se importa igualmente — solo que no se ejecuta mientras no
+haya una copia. Agregue una en **Archivos**, conservando el nombre del archivo de la instancia, y
+el algoritmo importado se ejecuta sin ningún cambio.
+
+Cualquier lista con el formato correcto basta para ver el algoritmo funcionando. Para reproducir lo
+que produce la instancia, el archivo tiene que coincidir línea por línea: un algoritmo que elige el
+sustituto por el hash de la entrada selecciona por posición, así que una lista distinta es un
+resultado distinto.
+
 **Exportar.** Cada algoritmo guardado tiene el botón **Enviar a Delphix**. El que vino de la
 instancia se actualiza allí; el que construiste aquí se crea. La herramienta recuerda de dónde vino
 cada algoritmo, así que exportar dos veces nunca deja un duplicado.
+
+**Ida y vuelta.** Probar un algoritmo importado con un archivo local no cambia lo que vuelve a la
+instancia: la referencia se guarda como la instancia la escribió, y la copia local solo se resuelve
+al ejecutar aquí. Ajuste cualquier parámetro, envíelo de vuelta, y la instancia sigue leyendo su
+propio archivo. La única forma de romperlo es elegir otro archivo en el formulario de configuración
+— eso reemplaza la referencia. El formulario muestra un archivo de la instancia como *nombre (en la
+instancia)*, para que nunca se confunda con un campo vacío, y exportar una configuración que apunta
+a una ruta de esta máquina avisa que la instancia no tiene esa ruta.
 
 **Nombres.** En la instancia el nombre del algoritmo es su identidad y no puede cambiarse, así que
 la herramienta sigue la misma regla: los nombres no son editables. Para trabajar con otro nombre,
