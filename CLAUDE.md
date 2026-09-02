@@ -146,10 +146,28 @@ lint, os três bloqueantes.
 **Antes de dar push, rode `npm run check`** — são as mesmas três verificações, localmente.
 
 O que ele **não** cobre é a quarta que o CI faz: o `npm ci` exige `package.json` e
-`package-lock.json` em sincronia, e falha inteiro se não estiverem. Foi o que quebrou o primeiro
-push: o `frontend/package-lock.json` estava parado desde o commit inicial. **Depois de mexer em
-qualquer `package.json`, rode `npm install` no diretório correspondente e commite o lock junto.**
-O `npm ci` não atualiza lock — ele exige que já esteja certo, que é justamente o ponto dele. Com um mantenedor commitando direto na `main`, é o que a revisão de
+`package-lock.json` em sincronia, e falha inteiro se não estiverem. O `npm ci` não atualiza lock —
+ele exige que já esteja certo, que é justamente o ponto dele.
+
+**Ao regenerar o lock do frontend, gere para a plataforma do CI:**
+
+```bash
+rm frontend/package-lock.json
+npm install --prefix frontend --package-lock-only --os=linux --cpu=x64
+```
+
+Sem `--os`/`--cpu`, o npm no macOS descarta as dependências opcionais que só o Linux usa (as
+variantes `@rolldown/binding-*` e a árvore `@emnapi` do fallback WASM do Vite). O lock passa
+localmente e quebra o CI com `Missing: … from lock file`. Foi o que derrubou dois pushes
+seguidos: o primeiro por lock desatualizado, o segundo por lock gerado só para macOS.
+
+Evite `--package-lock-only` sozinho para *criar* o lock do zero: ele resolve a seco e já produziu
+uma árvore de opcionais incompleta (o `@napi-rs/wasm-runtime` presente sem as dependências dele).
+Combinado com `--os`/`--cpu` sobre um lock apagado, funciona.
+
+O workflow roda em **Node 24**, o mesmo do desenvolvimento — não o piso declarado de 22. Este job
+compila e checa tipos, nunca executa o `server.js`, então a versão ali só decide qual npm lê o
+lock, e majors diferentes escrevendo e lendo o mesmo arquivo é atrito à toa. Com um mantenedor commitando direto na `main`, é o que a revisão de
 PR faria — e na tag ele funciona como portão, para um commit quebrado não virar release.
 
 O `javac` do runner só roda se houver JARs em `lib/`; no CI não há, e ele pula com aviso.

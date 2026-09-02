@@ -17,8 +17,11 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          # Matches the floor the app needs: node:sqlite arrived in 22.
-          node-version: '22'
+          # Matches the maintainer's Node, not the declared floor of 22. This job builds and
+          # typechecks — it never runs server.js — so the version here only decides which npm
+          # reads package-lock.json, and a different npm major than the one that wrote the lock
+          # is a needless source of `npm ci` disagreements.
+          node-version: '24'
           cache: npm
           cache-dependency-path: |
             package-lock.json
