@@ -151,14 +151,12 @@ type Condition = Record<string, unknown>
 
 function ConditionArrayField({ value, onChange }: { value: unknown; onChange: (v: unknown) => void }) {
   const { t } = useT()
-  const [items, setItems] = useState<Condition[]>(Array.isArray(value) ? (value as Condition[]) : [])
+  // Derived from the prop rather than mirrored into state: the parent owns the value and every
+  // edit goes through onChange, so a local copy could only ever drift from it.
+  const items: Condition[] = Array.isArray(value) ? (value as Condition[]) : []
   const [expanded, setExpanded] = useState<number[]>([])
 
-  useEffect(() => {
-    setItems(Array.isArray(value) ? (value as Condition[]) : [])
-  }, [value])
-
-  const update = (next: Condition[]) => { setItems(next); onChange(next) }
+  const update = (next: Condition[]) => onChange(next)
 
   const addCondition = () => {
     const idx = items.length
@@ -361,14 +359,10 @@ function AddSlotButton({ activeSlots, onAdd }: { activeSlots: string[]; onAdd: (
 function ArrayField({ schema, value, onChange }: FieldProps) {
   const { t } = useT()
   const itemSchema = schema.items ?? {}
-  const [items, setItems] = useState<unknown[]>(Array.isArray(value) ? value : [])
-
-  useEffect(() => {
-    setItems(Array.isArray(value) ? value : [])
-  }, [value])
+  // Derived, not mirrored — see ConditionArrayField.
+  const items: unknown[] = Array.isArray(value) ? value : []
 
   const update = (newItems: unknown[]) => {
-    setItems(newItems)
     onChange(newItems)
   }
 
@@ -459,7 +453,16 @@ function ObjectField({ schema, value, onChange }: FieldProps) {
   }
 
   // Generic object → JSON textarea
-  const [raw, setRaw] = useState(JSON.stringify(value, null, 2) || '{}')
+  return <JsonObjectField value={value} onChange={onChange} />
+}
+
+/**
+ * Free-form object edited as JSON. Its own component because the draft state must live behind
+ * an unconditional hook: inline in ObjectField the useState sat after two early returns, so the
+ * hook ran only for some schemas and React's hook order changed with the field's shape.
+ */
+function JsonObjectField({ value, onChange }: { value: unknown; onChange: (v: unknown) => void }) {
+  const [raw, setRaw] = useState(() => JSON.stringify(value, null, 2) || '{}')
   return (
     <textarea
       value={raw}
@@ -639,17 +642,14 @@ function FilePickerField({ value, onChange }: FilePickerProps) {
 
 function AlgorithmRefField({ value, onChange }: { value: unknown; onChange: (val: unknown) => void }) {
   const { t } = useT()
-  const current = value as { name?: string } | null | undefined
-  const [nameInput, setNameInput] = useState(current?.name ?? '')
+  // The field is fully controlled by the prop: every keystroke emits, so the parent's value is
+  // always what the user typed. Keeping a second copy in state only created a chance to desync.
+  const nameInput = (value as { name?: string } | null | undefined)?.name ?? ''
   const [tests, setTests] = useState<SavedTest[]>([])
 
   useEffect(() => {
     api.getTests().then(setTests).catch(() => {})
   }, [])
-
-  useEffect(() => {
-    setNameInput((value as { name?: string } | null | undefined)?.name ?? '')
-  }, [value])
 
   const emit = (name: string) => onChange(name ? { name } : null)
 
@@ -660,7 +660,7 @@ function AlgorithmRefField({ value, onChange }: { value: unknown; onChange: (val
       {tests.length > 0 && (
         <select
           value={matched ? nameInput : ''}
-          onChange={e => { setNameInput(e.target.value); emit(e.target.value) }}
+          onChange={e => emit(e.target.value)}
           className={inputCls}
         >
           <option value="">{t('form.chooseSaved')}</option>
@@ -675,7 +675,7 @@ function AlgorithmRefField({ value, onChange }: { value: unknown; onChange: (val
         type="text"
         placeholder={t('form.algoNamePlaceholder')}
         value={nameInput}
-        onChange={e => { setNameInput(e.target.value); emit(e.target.value) }}
+        onChange={e => emit(e.target.value)}
         className={inputCls}
       />
       {matched && (

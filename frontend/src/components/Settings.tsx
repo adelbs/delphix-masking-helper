@@ -67,8 +67,6 @@ function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar'>) {
   const [localDir, setLocalDir] = useState(filesDir)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => { setLocalDir(filesDir) }, [filesDir])
-
   const save = async () => {
     setSaving(true)
     try {
@@ -124,7 +122,8 @@ function AiTab() {
   const { t } = useT()
   const [cfg, setCfg] = useState<Record<string, string | boolean>>({})
   const [status, setStatus] = useState<AiStatus | null>(null)
-  const [checking, setChecking] = useState(false)
+  // Starts true: the first status probe is already in flight when the tab mounts.
+  const [checking, setChecking] = useState(true)
   const [saving, setSaving] = useState(false)
 
   const load = () => { api.getConfig().then(c => setCfg(c as unknown as Record<string, string | boolean>)).catch(() => {}) }
@@ -133,7 +132,11 @@ function AiTab() {
     api.getAiStatus().then(setStatus).catch(() => setStatus(null)).finally(() => setChecking(false))
   }
 
-  useEffect(() => { load(); check() }, [])
+  // Inlined rather than calling check(), which raises the flag that already starts true.
+  useEffect(() => {
+    load()
+    api.getAiStatus().then(setStatus).catch(() => setStatus(null)).finally(() => setChecking(false))
+  }, [])
 
   const provider = (cfg.aiProvider as ProviderId) || 'ollama'
   const meta = PROVIDERS.find(p => p.id === provider) ?? PROVIDERS[0]
@@ -280,8 +283,11 @@ function FilesTab() {
       .finally(() => setLoading(false))
   }
 
-  // Runs once on mount; `load` closes over `t` but the file list is locale-independent.
-  useEffect(() => { load() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Runs once on mount. Inlined for the same reason as elsewhere: `load` raises a flag that
+  // already starts true. It closes over `t`, but the file list is locale-independent.
+  useEffect(() => {
+    api.getFiles().then(setFiles).catch(() => {}).finally(() => setLoading(false))
+  }, [])
 
   const startEdit = async (file: ServerFile) => {
     try {

@@ -98,6 +98,60 @@ el mismo mensaje en lugar de fallar en silencio. Para apuntar a un plugin fuera 
 
 Consulta [`lib/README.md`](lib/README.md) para saber para qué sirve cada jar.
 
+## Instalación
+
+**macOS / Linux**
+
+```bash
+curl -fsSL https://adelbs.github.io/delphix-masking-helper/install.sh | bash
+```
+
+**Windows** (PowerShell)
+
+```powershell
+irm https://adelbs.github.io/delphix-masking-helper/install.ps1 | iex
+```
+
+¿Prefieres leerlo antes de ejecutarlo? Es lo mismo en dos pasos:
+
+```bash
+curl -fsSL https://adelbs.github.io/delphix-masking-helper/install.sh -o install.sh
+less install.sh && bash install.sh
+```
+
+El script pregunta dónde instalar, comprueba que Node, Java y git estén presentes — nunca los
+instala, solo avisa de lo que falta —, clona el proyecto, lo compila y deja el comando
+`dlpx-helper` en tu PATH.
+
+| | |
+|---|---|
+| `dlpx-helper` | arranca y abre el navegador |
+| `dlpx-helper stop` | lo detiene |
+| `dlpx-helper status` | ¿está funcionando? |
+| `dlpx-helper logs` | sigue el log |
+| `dlpx-helper update` | trae la última versión y recompila |
+| `dlpx-helper uninstall` | lo elimina (pregunta antes) |
+
+Volver a ejecutar el script en una máquina que ya lo tiene ofrece **actualizar** o **eliminar**.
+Actualizar nunca toca `db/`, donde viven tus algoritmos guardados y tu configuración. Desinstalar
+borra todo, por eso avisa antes — exporta desde **Pruebas/Algoritmos Guardados → Exportar** si
+quieres conservar algo.
+
+### O hazlo a mano
+
+El script no hace nada que no puedas hacer tú:
+
+```bash
+git clone https://github.com/adelbs/delphix-masking-helper.git
+cd delphix-masking-helper
+npm install && npm install --prefix frontend
+npm run build
+npm start          # http://localhost:3000
+```
+
+De cualquier forma, el último paso es el mismo y solo tú puedes darlo: copiar los jars de tu
+Masking Devkit a `lib/`. La app lista exactamente cuáles al abrirla.
+
 ## Requisitos
 
 - Node.js 22+ (usa `node:sqlite` nativo)

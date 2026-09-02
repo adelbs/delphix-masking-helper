@@ -78,21 +78,15 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
     api.getTests().then(setSavedTests).catch(() => {})
   }, [])
 
-  // Resets the workspace when a different algorithm is picked. Deliberately not
-  // keyed on the locale: switching language must not discard work in progress.
-  useEffect(() => {
-    setOutput(null)
-    setBatchResults([])
-    setMaskMode('MASK')
-    setConfig(initialConfig ?? {})
-    setRawJson(JSON.stringify(initialConfig ?? {}, null, 2))
-    setInput(initialInput ?? '')
-    setBatchRows(meta?.example?.batchRows ?? [''])
-  }, [algo.className]) // eslint-disable-line react-hooks/exhaustive-deps
+  // No reset effect here on purpose. App.tsx keys this component by algo.className and unmounts
+  // it whenever the view leaves the tester, so every arrival is a fresh mount and the useState
+  // initialisers above already carry initialConfig/initialInput. The effect that used to re-apply
+  // them ran only on mount, where it set the values they had just been initialised with.
 
-  // Re-fetched on a locale change so the field labels and hints follow the language.
+  // Re-fetched on a locale change so the field labels and hints follow the language. The flag
+  // starts true and is only ever cleared: re-raising it here would blank a schema that is
+  // already on screen just to re-label it.
   useEffect(() => {
-    setSchemaLoading(true)
     api.getSchema(algo.className)
       .then((data) => {
         const enriched = enrichSchema(data.schema, algo.className, locale)
@@ -148,7 +142,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
   const loadExample = async () => {
     if (!meta?.example) return
     const { config: exCfg, input: exInput, sampleFiles, columns: exColumns, batchRows: exRows } = meta.example
-    let cfg = structuredClone(exCfg) as Record<string, unknown>
+    const cfg = structuredClone(exCfg) as Record<string, unknown>
 
     if (sampleFiles && Object.keys(sampleFiles).length > 0) {
       try {

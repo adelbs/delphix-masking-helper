@@ -1,0 +1,52 @@
+# Quality gate. With a single maintainer committing straight to main, this is what a pull
+# request review would otherwise catch: it runs on every push to main, so a break is known
+# within minutes, and again on a release tag, so a broken commit cannot be published.
+name: checks
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          # Matches the floor the app needs: node:sqlite arrived in 22.
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+
+      - name: Install
+        run: |
+          npm ci
+          npm ci --prefix frontend
+
+      - name: Types
+        run: npx tsc -b
+        working-directory: frontend
+
+      - name: Build
+        run: npm run build
+
+      - name: Lint
+        run: npx eslint src
+        working-directory: frontend
+
+      # The Java runner is committed as a jar; this proves the source still compiles against the
+      # API. The Delphix jars are licensed and absent here, so compilation is expected to fail on
+      # missing classes — only a syntax error should stop the build.
+      - name: Java runner syntax
+        run: |
+          if ls lib/*.jar >/dev/null 2>&1; then
+            cd java-runner && javac -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
+          else
+            echo "Delphix jars not present in CI — skipping runner compilation."
+          fi

@@ -45,6 +45,11 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  /** Whether the Delphix libraries are present; the app is unusable without them. */
+  getSetup: () =>
+    request<{ ready: boolean; missing: string[]; libDir: string; required: number; found: number }>(
+      '/api/setup'),
+
   getAlgorithms: () =>
     request<Algorithm[]>('/api/algorithms'),
 

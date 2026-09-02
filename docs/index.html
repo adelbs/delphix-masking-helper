@@ -29,8 +29,9 @@
   <p class="tagline">Build, test and maintain Delphix masking algorithms — on your own machine.</p>
   <p class="lede">Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.</p>
   <div class="cta">
-    <a class="btn btn-primary" href="https://github.com/adelbs/delphix-masking-helper">View on GitHub</a>
+    <a class="btn btn-primary" href="#install">Install it</a>
     <a class="btn btn-ghost" href="algorithms.html">Browse the algorithms</a>
+    <a class="btn btn-ghost" href="https://github.com/adelbs/delphix-masking-helper">View on GitHub</a>
   </div>
   <figure class="shot">
     <img src="demo.gif" alt="The assistant building an algorithm, an algorithm being tested, and algorithms being synced with a Delphix engine" loading="lazy" width="1200">
@@ -70,6 +71,35 @@
   </div>
 </div></section>
 
+<section id="install"><div class="wrap narrow">
+  <h2 class="sec">Install it</h2>
+  <p class="sec-lede">One command. It asks where to put things, checks that Node, Java and git are on your machine — it never installs them, it only tells you what is missing — and leaves you a <code>dlpx-helper</code> command to start and stop the app.</p>
+
+  <div class="cmds">
+    <div class="cmd">
+      <div class="cmd-head">
+        <span class="cmd-os">macOS and Linux</span>
+        <button class="copy" type="button" data-copied="Copied">Copy</button>
+      </div>
+      <pre><code>curl -fsSL https://adelbs.github.io/delphix-masking-helper/install.sh | bash</code></pre>
+    </div>
+    <div class="cmd">
+      <div class="cmd-head">
+        <span class="cmd-os">Windows</span>
+        <button class="copy" type="button" data-copied="Copied">Copy</button>
+      </div>
+      <pre><code>irm https://adelbs.github.io/delphix-masking-helper/install.ps1 | iex</code></pre>
+    </div>
+  </div>
+
+  <p class="note-line">Rather read it before running it? Download the same script, open it, then run it — the page for your system shows both ways.</p>
+
+  <h3 class="sub-h">Then one step only you can do</h3>
+  <p class="sec-lede" style="margin-bottom:14px">Copy the jars from your Masking Devkit (SDK) into the <code>lib</code> folder it created. The app opens on a screen listing exactly which files it needs and where they go.</p>
+  <p class="sec-lede" style="margin-bottom:14px">Once installed: <code>dlpx-helper</code> starts it and opens the browser, <code>dlpx-helper stop</code> stops it, <code>dlpx-helper update</code> brings the latest version. Updating never touches your saved algorithms.</p>
+  <p><a href="https://github.com/adelbs/delphix-masking-helper#install">Full instructions, including the manual steps →</a></p>
+</div></section>
+
 <section class="alt"><div class="wrap narrow">
   <h2 class="sec">Connected to your engine</h2>
   <p class="sec-lede" style="margin-bottom:0">Point the tool at a Masking Engine and its algorithms are yours to work on: pull one down, change it, run it against real values until it does what you need, and send it back. The engine gets an update, not a second copy — the tool remembers where each algorithm came from. Anything you build from scratch goes up as a new algorithm.</p>
@@ -107,5 +137,54 @@
   </div>
   <p class="lic">Mozilla Public License 2.0. An independent open source project, not affiliated with or endorsed by Delphix; Delphix product libraries are not distributed with it, and an active Delphix licence is required to use it. Trademarks belong to their respective owners.</p>
 </div></footer>
+<script>
+(function () {
+  // Two ways to copy, because the modern one is not always available: it needs a secure
+  // context and the user's permission, and it rejects silently when denied. Falling back to
+  // the old execCommand, and finally to selecting the text, means the button always does
+  // something the visitor can act on.
+  function copy(text, el) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var okay = false;
+      try { okay = document.execCommand('copy'); } catch (e) { okay = false; }
+      document.body.removeChild(ta);
+      okay ? resolve() : reject();
+    });
+  }
+
+  function selectText(el) {
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var code = b.closest('.cmd').querySelector('code');
+      var was = b.textContent;
+      copy(code.textContent, code).then(function () {
+        b.textContent = b.dataset.copied;
+        b.classList.add('done');
+        setTimeout(function () { b.textContent = was; b.classList.remove('done'); }, 1600);
+      }).catch(function () {
+        // Nothing could be written: leave the command selected so it can be copied by hand.
+        selectText(code);
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>

@@ -29,8 +29,9 @@
   <p class="tagline">Construa, teste e mantenha algoritmos de mascaramento do Delphix — na sua própria máquina.</p>
   <p class="lede">Descubra qual framework de mascaramento serve para o seu dado, experimente com valores reais, construa uma configuração pronta para usar e publique direto na sua instância — sem criar Rule Set nem depender de um masking job.</p>
   <div class="cta">
-    <a class="btn btn-primary" href="https://github.com/adelbs/delphix-masking-helper">Ver no GitHub</a>
+    <a class="btn btn-primary" href="#install">Instalar</a>
     <a class="btn btn-ghost" href="algorithms.pt-BR.html">Conhecer os algoritmos</a>
+    <a class="btn btn-ghost" href="https://github.com/adelbs/delphix-masking-helper">Ver no GitHub</a>
   </div>
   <figure class="shot">
     <img src="demo.gif" alt="O assistente construindo um algoritmo, um algoritmo sendo testado, e algoritmos sendo sincronizados com uma instância Delphix" loading="lazy" width="1200">
@@ -70,6 +71,35 @@
   </div>
 </div></section>
 
+<section id="install"><div class="wrap narrow">
+  <h2 class="sec">Instalar</h2>
+  <p class="sec-lede">Um comando. Ele pergunta onde colocar as coisas, confere se Node, Java e git estão na sua máquina — nunca os instala, apenas avisa o que falta — e deixa um comando <code>dlpx-helper</code> para subir e derrubar o app.</p>
+
+  <div class="cmds">
+    <div class="cmd">
+      <div class="cmd-head">
+        <span class="cmd-os">macOS e Linux</span>
+        <button class="copy" type="button" data-copied="Copiado">Copiar</button>
+      </div>
+      <pre><code>curl -fsSL https://adelbs.github.io/delphix-masking-helper/install.sh | bash</code></pre>
+    </div>
+    <div class="cmd">
+      <div class="cmd-head">
+        <span class="cmd-os">Windows</span>
+        <button class="copy" type="button" data-copied="Copiado">Copiar</button>
+      </div>
+      <pre><code>irm https://adelbs.github.io/delphix-masking-helper/install.ps1 | iex</code></pre>
+    </div>
+  </div>
+
+  <p class="note-line">Prefere ler antes de executar? Baixe o mesmo script, abra e depois rode — a página do seu sistema mostra as duas formas.</p>
+
+  <h3 class="sub-h">Depois, um passo que só você pode dar</h3>
+  <p class="sec-lede" style="margin-bottom:14px">Copie os jars do seu Masking Devkit (SDK) para a pasta <code>lib</code> que ele criou. O app abre numa tela listando exatamente quais arquivos faltam e onde vão.</p>
+  <p class="sec-lede" style="margin-bottom:14px">Depois de instalado: <code>dlpx-helper</code> sobe e abre o navegador, <code>dlpx-helper stop</code> derruba, <code>dlpx-helper update</code> traz a versão mais nova. Atualizar nunca mexe nos seus algoritmos salvos.</p>
+  <p><a href="https://github.com/adelbs/delphix-masking-helper#install">Instruções completas, incluindo os passos manuais →</a></p>
+</div></section>
+
 <section class="alt"><div class="wrap narrow">
   <h2 class="sec">Conectado à sua instância</h2>
   <p class="sec-lede" style="margin-bottom:0">Aponte a ferramenta para um Masking Engine e os algoritmos dele passam a estar ao seu alcance: traga um para cá, altere, rode com valores reais até fazer o que você precisa, e devolva. A instância recebe uma atualização, não uma segunda cópia — a ferramenta lembra de onde cada algoritmo veio. O que você criar do zero sobe como algoritmo novo.</p>
@@ -107,5 +137,54 @@
   </div>
   <p class="lic">Mozilla Public License 2.0. Projeto open source independente, sem relação com a Delphix nem endosso dela; as bibliotecas do produto Delphix não são distribuídas junto, e é preciso licença Delphix ativa para usar. As marcas pertencem a seus respectivos donos.</p>
 </div></footer>
+<script>
+(function () {
+  // Two ways to copy, because the modern one is not always available: it needs a secure
+  // context and the user's permission, and it rejects silently when denied. Falling back to
+  // the old execCommand, and finally to selecting the text, means the button always does
+  // something the visitor can act on.
+  function copy(text, el) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var okay = false;
+      try { okay = document.execCommand('copy'); } catch (e) { okay = false; }
+      document.body.removeChild(ta);
+      okay ? resolve() : reject();
+    });
+  }
+
+  function selectText(el) {
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var code = b.closest('.cmd').querySelector('code');
+      var was = b.textContent;
+      copy(code.textContent, code).then(function () {
+        b.textContent = b.dataset.copied;
+        b.classList.add('done');
+        setTimeout(function () { b.textContent = was; b.classList.remove('done'); }, 1600);
+      }).catch(function () {
+        // Nothing could be written: leave the command selected so it can be copied by hand.
+        selectText(code);
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>

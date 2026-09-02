@@ -138,6 +138,39 @@ O catálogo ocupa ~12k tokens de contexto — folgado para Claude e Gemini, aper
 locais pequenos. Se um modelo do Ollama vier com contexto de 8k, ele trunca o catálogo e erra a
 escolha do algoritmo.
 
+## CI
+
+`.github/workflows/checks.yml` roda em todo push para `main` e nas tags `v*`: tipos, build e
+lint, os três bloqueantes. Com um mantenedor commitando direto na `main`, é o que a revisão de
+PR faria — e na tag ele funciona como portão, para um commit quebrado não virar release.
+
+O `javac` do runner só roda se houver JARs em `lib/`; no CI não há, e ele pula com aviso.
+
+**Estado derivado, não espelhado.** Vários campos do formulário guardavam uma cópia do prop em
+`useState` e a ressincronizavam num `useEffect`. Isso é o que a regra `react-hooks/
+set-state-in-effect` acusa, e a cópia só podia divergir: o pai é dono do valor e toda edição
+passa por `onChange`. `ArrayField`, `ConditionArrayField` e `AlgorithmRefField` agora derivam do
+prop direto. Em `TestCard`, a `key` inclui `updated_at`, então uma linha que volta alterada do
+servidor remonta com o valor novo — que era o que o efeito fazia à mão.
+
+Buscas de montagem que só levantavam um flag já inicializado em `true` foram embutidas no efeito;
+o `load()` continua existindo para os refreshes explícitos, onde o spinner é desejado.
+
+## Primeiro uso sem os JARs
+
+Sem as bibliotecas do Delphix nada funciona — não há lista de algoritmos, nem execução, nem
+catálogo para o assistente. `GET /api/setup` diz o que falta (`missingJars()`), e o `App.tsx`
+renderiza `SetupNeeded.tsx` no lugar do app inteiro em vez de deixar a barra lateral vazia sem
+explicação, que era o comportamento anterior: o `getAlgorithms()` engolia o erro e o usuário novo
+não recebia pista nenhuma.
+
+A tela diz **o que falta, onde colocar e como obter**, com o caminho absoluto de `lib/` copiável
+e a lista dos prefixos ausentes. O botão de reverificar chama `/api/setup` de novo e entra no app
+sem recarregar a página.
+
+Se o `/api/setup` em si falhar, o app renderiza normalmente: um servidor que não responde é outro
+problema, e prender o usuário numa tela de setup que não é a causa só atrapalha.
+
 ## Chave de mascaramento
 
 `MASKING_KEY`, no topo do `server.js`, é uma constante do projeto — não é configuração. Não sai no
@@ -402,6 +435,37 @@ casava com a pergunta do próprio usuário e encerrava a cena na hora.
 A gravação cria um algoritmo local (o que o assistente constrói) e importa um da instância.
 Limpe-os depois, ou o GIF seguinte mostra "já importado".
 
+## Instalador (`install.sh` / `install.ps1`)
+
+Os canônicos ficam na **raiz** — é essa cópia que o launcher re-executa no `dlpx-helper update`.
+O `docs/build-site.mjs` os copia para `docs/` a cada build, porque o Pages só serve aquela pasta
+e é de lá que sai a URL do one-liner.
+
+Eles instalam, atualizam e desinstalam. Node, Java e git são **verificados, nunca instalados**:
+o script não mexe na toolchain da máquina. Os JARs do Delphix ele não tem como baixar — quem
+explica isso é a tela de primeiro uso do app.
+
+O launcher `dlpx-helper` é **gerado** pelo instalador (precisa saber o diretório) e reescrito a
+cada update.
+
+**Três armadilhas que já custaram caro aqui:**
+
+1. **Heredoc sem aspas executa o conteúdo.** A primeira versão gerava o launcher com
+   `<<LAUNCHER_EOF`, e as crases dos comentários viraram substituição de comando — o `npm start`
+   rodou durante a geração e a saída do build foi parar dentro do arquivo. Agora o corpo vem de
+   um heredoc **com aspas** e só o `APP_DIR` é injetado antes dele.
+2. **`npm start` não pode ser o processo do PID.** O npm é pai de um shell que é pai do node, e
+   o PID gravado era o do npm: parar deixava o servidor segurando a porta. O launcher roda
+   `node server.js` direto, o que também evita recompilar o frontend a cada start.
+3. **`curl | bash` deixa o stdin ocupado pelo script.** Prompts leem de `/dev/tty`, e a detecção
+   testa **abrir** o dispositivo, não só permissão — ele pode existir e recusar abertura.
+
+Sem terminal, o script usa os defaults e a desinstalação **recusa**: apagar sem confirmação
+explícita não acontece.
+
+`DLPX_REPO_URL` sobrescreve a origem do clone — serve para fork e para testar a partir de um
+checkout local.
+
 ## Site (GitHub Pages)
 
 O site vive em `docs/`, que é a pasta que o GitHub Pages serve quando configurado como *deploy
@@ -439,8 +503,15 @@ com um Masking Engine. A sincronização tem seção própria na landing, porque
 ferramenta cobrir a vida inteira de um algoritmo em vez de só a criação. Ao mexer no texto, os três
 idiomas ficam lado a lado em `docs/site-content.mjs` com as mesmas chaves.
 
-Pendência: as orientações de download e instalação entram nas landings quando houver a primeira
-release. Ainda não há seção para isso; a CTA hoje aponta para o repositório.
+A landing tem a seção `#install` com o one-liner de cada sistema e um botão de copiar. O CTA
+primário do hero aponta para ela. Os comandos ficam **empilhados**, não lado a lado: são longos e
+duas colunas os cortavam no meio da URL. O botão de copiar fica na linha do rótulo, nunca por
+cima do código.
+
+O botão tem dois caminhos e um último recurso — `navigator.clipboard`, depois `execCommand` e,
+se nada funcionar, ele **seleciona o comando** para a pessoa copiar à mão. A API moderna exige
+contexto seguro e permissão, e rejeita em silêncio quando negada; sem fallback, o botão não
+faria nada e não diria nada.
 
 ## Editar o guia dos algoritmos
 

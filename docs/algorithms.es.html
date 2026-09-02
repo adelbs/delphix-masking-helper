@@ -995,5 +995,54 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
   </div>
   <p class="lic">Mozilla Public License 2.0. Proyecto open source independiente, sin relación con Delphix ni respaldo suyo; las bibliotecas del producto Delphix no se distribuyen con él, y se requiere una licencia Delphix activa para usarlo. Las marcas pertenecen a sus respectivos dueños.</p>
 </div></footer>
+<script>
+(function () {
+  // Two ways to copy, because the modern one is not always available: it needs a secure
+  // context and the user's permission, and it rejects silently when denied. Falling back to
+  // the old execCommand, and finally to selecting the text, means the button always does
+  // something the visitor can act on.
+  function copy(text, el) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var okay = false;
+      try { okay = document.execCommand('copy'); } catch (e) { okay = false; }
+      document.body.removeChild(ta);
+      okay ? resolve() : reject();
+    });
+  }
+
+  function selectText(el) {
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var code = b.closest('.cmd').querySelector('code');
+      var was = b.textContent;
+      copy(code.textContent, code).then(function () {
+        b.textContent = b.dataset.copied;
+        b.classList.add('done');
+        setTimeout(function () { b.textContent = was; b.classList.remove('done'); }, 1600);
+      }).catch(function () {
+        // Nothing could be written: leave the command selected so it can be copied by hand.
+        selectText(code);
+      });
+    });
+  });
+})();
+</script>
 </body>
 </html>

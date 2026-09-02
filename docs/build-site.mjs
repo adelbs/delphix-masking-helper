@@ -14,11 +14,11 @@
  *   node docs/build-site.mjs
  */
 
-import { readFileSync, writeFileSync, statSync } from 'node:fs'
+import { readFileSync, writeFileSync, statSync, copyFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { LOCALES, parseGuide, parseParts, parseOutline } from './guide-parser.mjs'
-import { T, PAGES, LANG_NAMES, LANG_ABBR, REPO } from './site-content.mjs'
+import { T, PAGES, LANG_NAMES, LANG_ABBR, REPO, SITE } from './site-content.mjs'
 
 const DOCS = path.dirname(fileURLToPath(import.meta.url))
 const pdfName = (l) => `delphix-algorithms-guide.${l}.pdf`
@@ -73,6 +73,58 @@ function topbar(locale, page, t) {
 </div></header>`
 }
 
+/** Copy buttons for the install commands. Inline and tiny — the site ships no JavaScript
+ *  otherwise, and a command you must retype by hand is a command you get wrong. */
+const COPY_SCRIPT = `<script>
+(function () {
+  // Two ways to copy, because the modern one is not always available: it needs a secure
+  // context and the user's permission, and it rejects silently when denied. Falling back to
+  // the old execCommand, and finally to selecting the text, means the button always does
+  // something the visitor can act on.
+  function copy(text, el) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var okay = false;
+      try { okay = document.execCommand('copy'); } catch (e) { okay = false; }
+      document.body.removeChild(ta);
+      okay ? resolve() : reject();
+    });
+  }
+
+  function selectText(el) {
+    var r = document.createRange();
+    r.selectNodeContents(el);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(r);
+  }
+
+  document.querySelectorAll('.copy').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var code = b.closest('.cmd').querySelector('code');
+      var was = b.textContent;
+      copy(code.textContent, code).then(function () {
+        b.textContent = b.dataset.copied;
+        b.classList.add('done');
+        setTimeout(function () { b.textContent = was; b.classList.remove('done'); }, 1600);
+      }).catch(function () {
+        // Nothing could be written: leave the command selected so it can be copied by hand.
+        selectText(code);
+      });
+    });
+  });
+})();
+</script>`
+
 function footer(locale, t) {
   return `<footer><div class="wrap">
   <div class="rows">
@@ -80,6 +132,7 @@ function footer(locale, t) {
   </div>
   <p class="lic">${esc(t.footerLicense)}</p>
 </div></footer>
+${COPY_SCRIPT}
 </body>
 </html>`
 }
@@ -110,8 +163,9 @@ ${topbar(locale, 'home', t)}
   <p class="tagline">${esc(t.tagline)}</p>
   <p class="lede">${esc(t.lede)}</p>
   <div class="cta">
-    <a class="btn btn-primary" href="${REPO}">${esc(t.ctaRepo)}</a>
+    <a class="btn btn-primary" href="#install">${esc(t.ctaInstall)}</a>
     <a class="btn btn-ghost" href="${PAGES[locale].algos}">${esc(t.ctaAlgos)}</a>
+    <a class="btn btn-ghost" href="${REPO}">${esc(t.ctaRepo)}</a>
   </div>
   <figure class="shot">
     <img src="demo.gif" alt="${esc(t.demoAlt)}" loading="lazy" width="1200">
@@ -129,6 +183,35 @@ ${topbar(locale, 'home', t)}
   <h2 class="sec">${esc(t.featuresTitle)}</h2>
   <div class="cards">${cards}
   </div>
+</div></section>
+
+<section id="install"><div class="wrap narrow">
+  <h2 class="sec">${esc(t.installTitle)}</h2>
+  <p class="sec-lede">${raw(t.installLede)}</p>
+
+  <div class="cmds">
+    <div class="cmd">
+      <div class="cmd-head">
+        <span class="cmd-os">${esc(t.installMac)}</span>
+        <button class="copy" type="button" data-copied="${esc(t.installCopied)}">${esc(t.installCopy)}</button>
+      </div>
+      <pre><code>curl -fsSL ${SITE}/install.sh | bash</code></pre>
+    </div>
+    <div class="cmd">
+      <div class="cmd-head">
+        <span class="cmd-os">${esc(t.installWin)}</span>
+        <button class="copy" type="button" data-copied="${esc(t.installCopied)}">${esc(t.installCopy)}</button>
+      </div>
+      <pre><code>irm ${SITE}/install.ps1 | iex</code></pre>
+    </div>
+  </div>
+
+  <p class="note-line">${esc(t.installReadFirst)}</p>
+
+  <h3 class="sub-h">${esc(t.installAfterTitle)}</h3>
+  <p class="sec-lede" style="margin-bottom:14px">${raw(t.installAfter)}</p>
+  <p class="sec-lede" style="margin-bottom:14px">${raw(t.installCmds)}</p>
+  <p><a href="${REPO}#install">${esc(t.installManual)} →</a></p>
 </div></section>
 
 <section class="alt"><div class="wrap narrow">
@@ -228,6 +311,14 @@ ${footer(locale, t)}`
 }
 
 // ── run ──────────────────────────────────────────────────────────────────────
+
+// The installers live at the repository root — that is the copy the launcher re-runs for
+// `dlpx-helper update`. They are copied here so the one-liner on the site can fetch them from
+// the Pages URL, which only serves docs/.
+for (const script of ['install.sh', 'install.ps1']) {
+  copyFileSync(path.join(DOCS, '..', script), path.join(DOCS, script))
+  console.log(`  copied ${script}`)
+}
 
 let n = 0
 for (const locale of LOCALES) {

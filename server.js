@@ -345,6 +345,22 @@ app.post('/api/chat', async (req, res) => {
   res.end();
 });
 
+/**
+ * Whether the Delphix libraries are in place. Without them nothing in the app works — no
+ * algorithm list, no masking, no assistant — so the UI blocks on this rather than rendering an
+ * empty sidebar and leaving the user to guess.
+ */
+app.get('/api/setup', (req, res) => {
+  const missing = missingJars();
+  res.json({
+    ready: missing.length === 0,
+    missing,
+    libDir: LIB_DIR,
+    required: REQUIRED_JARS.length,
+    found: listJars().length,
+  });
+});
+
 // ── Delphix engine ────────────────────────────────────────────────────────────
 
 /** Tolerates rows saved before and after the double-serialisation fix, like the frontend does. */

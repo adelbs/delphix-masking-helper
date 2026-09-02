@@ -7,6 +7,7 @@ import { WelcomeScreen } from '@/components/WelcomeScreen'
 import { AlgoTester } from '@/components/AlgoTester'
 import { SavedTests } from '@/components/SavedTests'
 import { Settings } from '@/components/Settings'
+import { SetupNeeded } from '@/components/SetupNeeded'
 import { isLocalePref, readStoredPref, resolveLocale, storePref } from '@/lib/i18n'
 import { I18nProvider } from '@/lib/i18n/I18nProvider'
 import type { Algorithm, LocalePref, View } from '@/types'
@@ -26,9 +27,19 @@ export default function App() {
   // Seeded from localStorage so the first paint is already in the right language;
   // the server config is the source of truth and overrides it once it arrives.
   const [localePref, setLocalePref] = useState<LocalePref>(readStoredPref)
+  // null while unknown; the app is unusable without the Delphix libraries, so it renders the
+  // setup screen instead of an empty sidebar with no explanation.
+  const [setup, setSetup] = useState<{ ready: boolean; missing: string[]; libDir: string } | null>(null)
+
+  const checkSetup = () =>
+    api.getSetup()
+      .then(s => { setSetup(s); if (s.ready) api.getAlgorithms().catch(() => []).then(setAlgorithms) })
+      // A server that cannot answer at all is a different problem; let the app render and fail
+      // where the user acts, rather than trapping them behind a setup screen that is not the cause.
+      .catch(() => setSetup({ ready: true, missing: [], libDir: '' }))
 
   useEffect(() => {
-    api.getAlgorithms().catch(() => []).then(setAlgorithms)
+    checkSetup()
     api.getConfig().then(cfg => {
       setFilesDir(cfg.filesDir)
       if (isLocalePref(cfg.locale)) {
@@ -70,6 +81,15 @@ export default function App() {
     onGoHome: showHome,
     localePref,
     onLocaleChange: changeLocale,
+  }
+
+  if (setup && !setup.ready) {
+    return (
+      <I18nProvider locale={resolveLocale(localePref)}>
+        <Toaster position="bottom-right" richColors />
+        <SetupNeeded missing={setup.missing} libDir={setup.libDir} onRetry={checkSetup} />
+      </I18nProvider>
+    )
   }
 
   return (

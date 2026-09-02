@@ -138,6 +138,34 @@ section.alt .card { background: var(--paper); }
 .notice p:last-child { margin-bottom: 0; }
 .notice strong { color: #402505; font-weight: 650; }
 
+/* install commands — stacked, not side by side: these lines are long, and two columns cut them
+   mid-URL. The copy button sits in the label row so it never covers the command. */
+/* minmax(0,…): a plain 1fr is floored by the command's min-content width, which pushed the
+   whole page into horizontal scroll on narrow screens. */
+.cmds { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin: 26px 0 18px; }
+
+.cmd-head { display: flex; align-items: center; gap: 12px; margin-bottom: 7px; }
+.cmd-os {
+  font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 700;
+}
+.cmd pre {
+  margin: 0; background: var(--night); color: #d7e3ee; border-radius: 10px;
+  padding: 14px 16px; overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13.5px; line-height: 1.5;
+}
+.cmd code { white-space: pre; }
+.cmd .copy {
+  margin-left: auto;
+  border: 1px solid var(--rule); background: var(--paper);
+  color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 600;
+  padding: 4px 11px; border-radius: 7px; cursor: pointer;
+}
+.cmd .copy:hover { border-color: var(--accent-2); color: var(--accent); }
+.cmd .copy.done { background: #eaf2ee; border-color: #2c5f4a; color: #2c5f4a; }
+
+.sub-h { font-size: 18px; letter-spacing: -.01em; margin: 34px 0 8px; }
+
 /* downloads */
 .dl { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
 .dl a {

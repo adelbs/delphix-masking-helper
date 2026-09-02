@@ -40,7 +40,11 @@ export function SavedTests({ algorithms, onEdit, onToggleSidebar }: Props) {
     }
   }
 
-  useEffect(() => { load() }, [])
+  // The mount fetch is inlined because `load` raises the loading flag first, and it already
+  // starts true — `load` stays for the explicit refreshes, where the spinner is wanted.
+  useEffect(() => {
+    api.getTests().then(setTests).catch(() => {}).finally(() => setLoading(false))
+  }, [])
 
   const filtered = tests.filter((t) =>
     query === '' ||
@@ -143,7 +147,10 @@ export function SavedTests({ algorithms, onEdit, onToggleSidebar }: Props) {
           <div className="space-y-3">
             {filtered.map((t) => (
               <TestCard
-                key={t.id}
+                // Keyed by content, not just id: when a row comes back from the server changed,
+                // the card remounts and its draft restarts from the new value. That is what the
+                // effect mirroring t.input into state used to do.
+                key={`${t.id}:${t.updated_at}`}
                 test={t}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
@@ -170,10 +177,12 @@ function EngineImport({ onClose, onImported }: { onClose: () => void; onImported
   const [picked, setPicked] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState(false)
 
+  // Runs once when the dialog opens. `msg` is only read to word one error, and the dialog is
+  // never open across a language change, so it is deliberately not a dependency.
   useEffect(() => {
     api.delphixAlgorithms().then(setRows).catch((e: Error & { code?: string }) =>
       setError(e.code === 'not-configured' ? msg('saved.engineNotSet') : e.message))
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggle = (name: string) => setPicked(prev => {
     const next = new Set(prev)
@@ -373,11 +382,6 @@ function TestCard({ test: t, onEdit, onDelete, onSave, onDuplicated }: {
   const [executing, setExecuting] = useState(false)
   const [execResult, setExecResult] = useState<{ value: string; ok: boolean } | null>(null)
 
-  useEffect(() => {
-    setInputDraft(t.input)
-    setExecResult(null)
-  }, [t.input])
-
   const dirty = inputDraft !== t.input
 
   const handleSave = async () => {
@@ -414,12 +418,12 @@ function TestCard({ test: t, onEdit, onDelete, onSave, onDuplicated }: {
     }
   }
 
-  let configPreview = ''
-  try {
-    const parsed = parseConfig(t.config)
-    const keys = Object.keys(parsed)
-    configPreview = keys.length === 0 ? '{}' : `{ ${keys.slice(0, 3).join(', ')}${keys.length > 3 ? ', …' : ''} }`
-  } catch { configPreview = t.config }
+  const configPreview = (() => {
+    try {
+      const keys = Object.keys(parseConfig(t.config))
+      return keys.length === 0 ? '{}' : `{ ${keys.slice(0, 3).join(', ')}${keys.length > 3 ? ', …' : ''} }`
+    } catch { return t.config }
+  })()
 
   return (
     <div className={cn(

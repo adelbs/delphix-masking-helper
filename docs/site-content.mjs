@@ -7,6 +7,8 @@
  */
 
 export const REPO = 'https://github.com/adelbs/delphix-masking-helper'
+/** Where the site is served from — the installers are fetched from here. */
+export const SITE = 'https://adelbs.github.io/delphix-masking-helper'
 
 export const LANG_NAMES = { 'en': 'English', 'pt-BR': 'Português', 'es': 'Español' }
 export const LANG_ABBR  = { 'en': 'EN', 'pt-BR': 'PT', 'es': 'ES' }
@@ -31,6 +33,18 @@ export const T = {
     noticeTitle: 'An independent project — and what you need to use it',
     noticeIndependent: '<strong>No affiliation with Delphix.</strong> This is an independent open source project. It is not built, endorsed, reviewed or supported by Delphix or its owners, and nothing here is an official product. Delphix and the product names used on this site are trademarks of their respective owners.',
     noticeLicense: '<strong>An active Delphix licence is required.</strong> The masking algorithms live in Delphix product libraries, which this project does not distribute and cannot replace. To run the tool you must already be entitled to those libraries and able to obtain the Masking Devkit (SDK) from Delphix — normally through an active licence and your account team.',
+    ctaInstall: 'Install it',
+    installTitle: 'Install it',
+    installLede: 'One command. It asks where to put things, checks that Node, Java and git are on your machine — it never installs them, it only tells you what is missing — and leaves you a <code>dlpx-helper</code> command to start and stop the app.',
+    installMac: 'macOS and Linux',
+    installWin: 'Windows',
+    installCopy: 'Copy',
+    installCopied: 'Copied',
+    installReadFirst: 'Rather read it before running it? Download the same script, open it, then run it — the page for your system shows both ways.',
+    installAfterTitle: 'Then one step only you can do',
+    installAfter: 'Copy the jars from your Masking Devkit (SDK) into the <code>lib</code> folder it created. The app opens on a screen listing exactly which files it needs and where they go.',
+    installCmds: 'Once installed: <code>dlpx-helper</code> starts it and opens the browser, <code>dlpx-helper stop</code> stops it, <code>dlpx-helper update</code> brings the latest version. Updating never touches your saved algorithms.',
+    installManual: 'Full instructions, including the manual steps',
     featuresTitle: 'Everything an algorithm needs, in one place',
     features: [
       { h: 'Understand', p: 'Each of the 31 masking frameworks explained in plain language: what it does, what it expects as input, and what every parameter changes. No more guessing from a parameter name.' },
@@ -74,6 +88,18 @@ export const T = {
     noticeTitle: 'Um projeto independente — e o que você precisa para usar',
     noticeIndependent: '<strong>Sem qualquer relação com a Delphix.</strong> Este é um projeto open source independente. Não é feito, endossado, revisado nem suportado pela Delphix ou por seus detentores, e nada aqui é produto oficial. Delphix e os nomes de produto citados neste site são marcas de seus respectivos donos.',
     noticeLicense: '<strong>É necessária uma licença Delphix ativa.</strong> Os algoritmos de mascaramento vivem em bibliotecas do produto Delphix, que este projeto não distribui e não substitui. Para rodar a ferramenta você já precisa ter direito a essas bibliotecas e conseguir o Masking Devkit (SDK) com a Delphix — normalmente por meio de uma licença ativa e do seu time de conta.',
+    ctaInstall: 'Instalar',
+    installTitle: 'Instalar',
+    installLede: 'Um comando. Ele pergunta onde colocar as coisas, confere se Node, Java e git estão na sua máquina — nunca os instala, apenas avisa o que falta — e deixa um comando <code>dlpx-helper</code> para subir e derrubar o app.',
+    installMac: 'macOS e Linux',
+    installWin: 'Windows',
+    installCopy: 'Copiar',
+    installCopied: 'Copiado',
+    installReadFirst: 'Prefere ler antes de executar? Baixe o mesmo script, abra e depois rode — a página do seu sistema mostra as duas formas.',
+    installAfterTitle: 'Depois, um passo que só você pode dar',
+    installAfter: 'Copie os jars do seu Masking Devkit (SDK) para a pasta <code>lib</code> que ele criou. O app abre numa tela listando exatamente quais arquivos faltam e onde vão.',
+    installCmds: 'Depois de instalado: <code>dlpx-helper</code> sobe e abre o navegador, <code>dlpx-helper stop</code> derruba, <code>dlpx-helper update</code> traz a versão mais nova. Atualizar nunca mexe nos seus algoritmos salvos.',
+    installManual: 'Instruções completas, incluindo os passos manuais',
     featuresTitle: 'Tudo que um algoritmo precisa, num lugar só',
     features: [
       { h: 'Entender', p: 'Cada um dos 31 frameworks de mascaramento explicado em linguagem clara: o que faz, o que espera como entrada e o que cada parâmetro muda. Chega de deduzir pelo nome do campo.' },
@@ -117,6 +143,18 @@ export const T = {
     noticeTitle: 'Un proyecto independiente — y lo que necesitas para usarlo',
     noticeIndependent: '<strong>Sin ninguna relación con Delphix.</strong> Este es un proyecto open source independiente. No está hecho, respaldado, revisado ni soportado por Delphix ni por sus titulares, y nada aquí es un producto oficial. Delphix y los nombres de producto usados en este sitio son marcas de sus respectivos dueños.',
     noticeLicense: '<strong>Se requiere una licencia Delphix activa.</strong> Los algoritmos de enmascaramiento viven en bibliotecas del producto Delphix, que este proyecto no distribuye ni sustituye. Para ejecutar la herramienta ya debes tener derecho a esas bibliotecas y poder obtener el Masking Devkit (SDK) de Delphix — normalmente mediante una licencia activa y tu equipo de cuenta.',
+    ctaInstall: 'Instalar',
+    installTitle: 'Instalar',
+    installLede: 'Un comando. Pregunta dónde poner las cosas, comprueba que Node, Java y git estén en tu máquina — nunca los instala, solo avisa de lo que falta — y deja un comando <code>dlpx-helper</code> para arrancar y detener la app.',
+    installMac: 'macOS y Linux',
+    installWin: 'Windows',
+    installCopy: 'Copiar',
+    installCopied: 'Copiado',
+    installReadFirst: '¿Prefieres leerlo antes de ejecutarlo? Descarga el mismo script, ábrelo y luego ejecútalo — la página de tu sistema muestra las dos formas.',
+    installAfterTitle: 'Después, un paso que solo tú puedes dar',
+    installAfter: 'Copia los jars de tu Masking Devkit (SDK) a la carpeta <code>lib</code> que creó. La app abre en una pantalla que lista exactamente qué archivos faltan y dónde van.',
+    installCmds: 'Una vez instalado: <code>dlpx-helper</code> arranca y abre el navegador, <code>dlpx-helper stop</code> lo detiene, <code>dlpx-helper update</code> trae la última versión. Actualizar nunca toca tus algoritmos guardados.',
+    installManual: 'Instrucciones completas, incluidos los pasos manuales',
     featuresTitle: 'Todo lo que un algoritmo necesita, en un solo lugar',
     features: [
       { h: 'Entender', p: 'Cada uno de los 31 frameworks de enmascaramiento explicado en lenguaje claro: qué hace, qué espera como entrada y qué cambia cada parámetro. Se acabó deducir por el nombre del campo.' },
