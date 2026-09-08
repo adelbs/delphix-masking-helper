@@ -507,7 +507,37 @@ Sem terminal, o script usa os defaults e a desinstalação **recusa**: apagar se
 explícita não acontece.
 
 `DLPX_REPO_URL` sobrescreve a origem do clone — serve para fork e para testar a partir de um
-checkout local.
+checkout local. `DLPX_REF` sobrescreve **o que** é instalado (uma tag ou um branch).
+
+### O instalador segue a última release, não a `main`
+
+`resolve_ref` / `Resolve-Ref` pergunta ao remoto qual a tag `vX.Y.Z` mais nova e o clone é
+`--depth 1 --branch <tag>`, detached. Cortar uma release não exige tocar no script.
+
+A resolução é por `git ls-remote`, **não** pela API de releases do GitHub. O git já é dependência
+obrigatória; a API traria parsing de JSON sem `jq`, limite de 60 req/h por IP sem autenticação, e
+amarraria o script ao GitHub — justamente o que o `DLPX_REPO_URL` existe para não fazer.
+
+Só `vMAJOR.MINOR.PATCH` conta, então `v2.0.0-rc1` nunca é servido a quem roda o one-liner. No
+shell a ordenação é por campo numérico (`sort -t. -k1,1n -k2,2n -k3,3n`) porque `sort -V` é
+exclusivo do GNU; no PowerShell é o cast para `[version]`. É o que faz `v1.10.0` ganhar de
+`v1.9.0` — comparação textual erraria.
+
+**Três coisas que precisam continuar valendo:**
+
+1. **Sem tag, não recusar.** Um fork que nunca lançou e um checkout local de teste não têm tag
+   alguma. Os dois scripts caem no branch padrão com aviso, em vez de abortar.
+2. **O update move entre tags, e o clone continua raso.** É `fetch --depth 1` da tag específica
+   mais `checkout --detach`, não `pull --ff-only` — que não funciona em HEAD destacado. O
+   `git rev-parse --verify` entre os dois é o que separa "a tag já estava aqui" (ok) de "a tag
+   não existe no remoto" (fatal).
+3. **Instalações antigas migram sozinhas, em dois passos.** `dlpx-helper update` roda o
+   `install.sh` *da própria instalação*. Quem instalou antes disto está num branch: o primeiro
+   update ainda usa o script velho e traz o novo junto; o segundo já pina na release. Verificado
+   em cenário com a `main` à frente da tag — o update puxa a instalação de volta para a release.
+
+No PowerShell, `"refs/tags/$($ref):refs/tags/$($ref)"` precisa das chaves: dois-pontos logo
+depois de um nome de variável é qualificador de drive.
 
 ## Site (GitHub Pages)
 

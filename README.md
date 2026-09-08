@@ -120,7 +120,7 @@ less install.sh && bash install.sh
 ```
 
 The script asks where to install, checks that Node, Java and git are present — it never installs
-them, it only tells you what is missing — clones the project, builds it, and puts a `dlpx-helper`
+them, it only tells you what is missing — clones the newest release, builds it, and puts a `dlpx-helper`
 command on your PATH.
 
 | | |
@@ -129,8 +129,14 @@ command on your PATH.
 | `dlpx-helper stop` | stop it |
 | `dlpx-helper status` | is it running? |
 | `dlpx-helper logs` | follow the log |
-| `dlpx-helper update` | pull the latest version and rebuild |
+| `dlpx-helper update` | move to the newest release and rebuild |
 | `dlpx-helper uninstall` | remove it (asks first) |
+
+**Installs are pinned to a release, not to the tip of `main`.** The script asks the remote for the
+newest `vX.Y.Z` tag and checks that out, so a commit pushed after the last release never reaches
+you; pre-release tags such as `v2.0.0-rc1` are skipped too. Set `DLPX_REF` to override it —
+`DLPX_REF=v1.0.0` pins an older release, and a branch name follows that branch instead. If the
+repository has no release tags at all, the script falls back to the default branch and says so.
 
 Running the script again on a machine that already has it offers **update** or **remove**.
 Updating never touches `db/`, where your saved algorithms and settings live. Uninstalling deletes

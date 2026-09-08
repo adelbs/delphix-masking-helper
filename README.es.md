@@ -120,7 +120,7 @@ less install.sh && bash install.sh
 ```
 
 El script pregunta dónde instalar, comprueba que Node, Java y git estén presentes — nunca los
-instala, solo avisa de lo que falta —, clona el proyecto, lo compila y deja el comando
+instala, solo avisa de lo que falta —, clona la release más nueva, la compila y deja el comando
 `dlpx-helper` en tu PATH.
 
 | | |
@@ -129,8 +129,15 @@ instala, solo avisa de lo que falta —, clona el proyecto, lo compila y deja el
 | `dlpx-helper stop` | lo detiene |
 | `dlpx-helper status` | ¿está funcionando? |
 | `dlpx-helper logs` | sigue el log |
-| `dlpx-helper update` | trae la última versión y recompila |
+| `dlpx-helper update` | pasa a la release más nueva y recompila |
 | `dlpx-helper uninstall` | lo elimina (pregunta antes) |
+
+**La instalación queda fijada a una release, no a la punta de `main`.** El script le pregunta al
+remoto cuál es la etiqueta `vX.Y.Z` más nueva y hace checkout de ella, así que un commit enviado
+después de la última release nunca te llega; las etiquetas de prelanzamiento como `v2.0.0-rc1`
+también se omiten. Para sobrescribirlo usa `DLPX_REF` — `DLPX_REF=v1.0.0` fija una release
+anterior, y un nombre de rama hace que siga esa rama. Si el repositorio no tiene ninguna etiqueta
+de release, el script recurre a la rama por defecto y lo avisa.
 
 Volver a ejecutar el script en una máquina que ya lo tiene ofrece **actualizar** o **eliminar**.
 Actualizar nunca toca `db/`, donde viven tus algoritmos guardados y tu configuración. Desinstalar

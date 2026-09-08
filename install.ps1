@@ -16,6 +16,8 @@
 $ErrorActionPreference = 'Stop'
 
 $RepoUrl    = if ($env:DLPX_REPO_URL) { $env:DLPX_REPO_URL } else { 'https://github.com/adelbs/delphix-masking-helper.git' }
+# Pins the install to one ref. Empty means "the newest release", resolved from the remote.
+$DlpxRef    = if ($env:DLPX_REF) { $env:DLPX_REF } else { '' }
 $DefaultDir = Join-Path $HOME 'delphix-masking-helper'
 $BinDir     = Join-Path $env:LOCALAPPDATA 'Programs\bin'
 $Launcher   = Join-Path $BinDir 'dlpx-helper.cmd'
@@ -33,6 +35,29 @@ function Ask {
     $a = Read-Host $Prompt
     if ([string]::IsNullOrWhiteSpace($a)) { return $Default }
     return $a
+}
+
+# The newest release tag, read straight from the remote - so cutting a release needs no edit
+# here. Deliberately git and not the GitHub releases API: git is already a hard requirement, it
+# keeps working for forks and non-GitHub remotes that DLPX_REPO_URL points at, and it has no
+# unauthenticated rate limit to trip over. Only vMAJOR.MINOR.PATCH counts, so a pre-release tag
+# (v2.0.0-rc1) is never picked up by someone running the plain one-liner.
+function Get-LatestRef {
+    try {
+        $tags = @(git ls-remote --tags --refs $RepoUrl 2>$null |
+            ForEach-Object { ($_ -split '\s+')[1] -replace '^refs/tags/', '' } |
+            Where-Object { $_ -match '^v\d+\.\d+\.\d+$' })
+    } catch { return '' }
+    if (-not $tags) { return '' }
+    # [version] sorts by field, which is what makes v1.10.0 newer than v1.9.0.
+    return ($tags | Sort-Object { [version]$_.Substring(1) } | Select-Object -Last 1)
+}
+
+# Empty output means "no release to track" - a fork that has never tagged, or an unreachable
+# remote. Callers fall back to the default branch rather than refusing to install.
+function Resolve-Ref {
+    if ($DlpxRef) { return $DlpxRef }
+    return Get-LatestRef
 }
 
 function Confirm {
@@ -214,8 +239,18 @@ function Invoke-Install {
     }
 
     Step "Downloading"
-    git clone --quiet --depth 1 $RepoUrl $dir
-    Ok "Cloned into $dir"
+    $ref = Resolve-Ref
+    if ($ref) {
+        # A release is checked out detached by definition; git's advice about that is noise here.
+        git -c advice.detachedHead=false clone --quiet --depth 1 --branch $ref $RepoUrl $dir
+        if ($LASTEXITCODE -ne 0) { Die "Could not clone $ref from $RepoUrl." }
+        Ok "Cloned $ref into $dir"
+    } else {
+        # No tag to track: better a working install off the default branch than none at all.
+        git clone --quiet --depth 1 $RepoUrl $dir
+        if ($LASTEXITCODE -ne 0) { Die "Could not clone $RepoUrl." }
+        Warn "No release tag found - installed the default branch instead."
+    }
 
     Invoke-Build $dir
     Write-Launcher $dir
@@ -231,10 +266,29 @@ function Invoke-Update {
 
     Step "Updating $Dir"
     $before = (git -C $Dir rev-parse --short HEAD)
-    git -C $Dir pull --quiet --ff-only
-    if ($LASTEXITCODE -ne 0) { Die "Could not fast-forward - the install has local changes." }
+    $ref = Resolve-Ref
+
+    if ($ref) {
+        # Fetching the one tag keeps the clone shallow. It is allowed to fail - an install that
+        # already has the tag is still fine to move onto, and only a missing ref is fatal.
+        # $($ref) and not $ref: a colon straight after a variable name is a drive qualifier.
+        git -C $Dir fetch --quiet --depth 1 origin "refs/tags/$($ref):refs/tags/$($ref)" 2>$null
+        git -C $Dir rev-parse -q --verify "refs/tags/$ref" > $null 2>&1
+        if ($LASTEXITCODE -ne 0) { Die "Could not fetch $ref from $RepoUrl." }
+        # --detach because a release is a point, not a branch to accumulate commits on. Installs
+        # made before this script tracked releases sit on the default branch; this is what moves
+        # them across, and from then on every update is release to release.
+        git -C $Dir -c advice.detachedHead=false checkout --quiet --detach $ref
+        if ($LASTEXITCODE -ne 0) { Die "Could not switch to $ref - the install has local changes." }
+    } else {
+        Warn "No release tag found - following the default branch."
+        git -C $Dir pull --quiet --ff-only
+        if ($LASTEXITCODE -ne 0) { Die "Could not fast-forward - the install has local changes." }
+    }
+
     $after = (git -C $Dir rev-parse --short HEAD)
-    if ($before -eq $after) { Ok "Already up to date ($after)." } else { Ok "Updated $before -> $after" }
+    $suffix = if ($ref) { " ($ref)" } else { '' }
+    if ($before -eq $after) { Ok "Already up to date$suffix." } else { Ok "Updated $before -> $after$suffix" }
 
     Invoke-Build $Dir
     Write-Launcher $Dir

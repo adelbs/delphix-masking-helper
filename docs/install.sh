@@ -18,6 +18,8 @@ set -euo pipefail
 
 # Overridable so a fork — or a local checkout during testing — can be installed from.
 REPO_URL="${DLPX_REPO_URL:-https://github.com/adelbs/delphix-masking-helper.git}"
+# Pins the install to one ref. Empty means "the newest release", resolved from the remote.
+DLPX_REF="${DLPX_REF:-}"
 DEFAULT_DIR="$HOME/delphix-masking-helper"
 BIN_DIR="$HOME/.local/bin"
 LAUNCHER="$BIN_DIR/dlpx-helper"
@@ -88,6 +90,29 @@ check_prereqs() {
   if [ "$missing" -ne 0 ]; then
     die "Install what is missing above, then run this again. Nothing was changed."
   fi
+}
+
+# ── which version to install ─────────────────────────────────────────────────
+
+# The newest release tag, read straight from the remote — so cutting a release needs no edit
+# here. Deliberately git and not the GitHub releases API: git is already a hard requirement,
+# it keeps working for forks and non-GitHub remotes that DLPX_REPO_URL points at, and it has
+# no unauthenticated rate limit to trip over.
+#
+# Only vMAJOR.MINOR.PATCH counts, so a pre-release tag (v2.0.0-rc1) is never picked up by
+# someone running the plain one-liner. The sort is by numeric field rather than `sort -V`,
+# which is GNU-only: field order is what makes v1.10.0 newer than v1.9.0.
+latest_ref() {
+  git ls-remote --tags --refs "$REPO_URL" 2>/dev/null \
+    | awk '{print $2}' | sed 's#refs/tags/##' \
+    | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' \
+    | sed 's/^v//' | sort -t. -k1,1n -k2,2n -k3,3n | tail -1 | sed 's/^/v/' || true
+}
+
+# Empty output means "no release to track" — a fork that has never tagged, or an unreachable
+# remote. Callers fall back to the default branch rather than refusing to install.
+resolve_ref() {
+  if [ -n "$DLPX_REF" ]; then printf '%s\n' "$DLPX_REF"; else latest_ref; fi
 }
 
 # ── launcher ─────────────────────────────────────────────────────────────────
@@ -200,8 +225,16 @@ do_install() {
   [ -e "$dir" ] && [ -n "$(ls -A "$dir" 2>/dev/null)" ] && die "$dir exists and is not empty."
 
   step "Downloading"
-  git clone --quiet --depth 1 "$REPO_URL" "$dir"
-  ok "Cloned into $dir"
+  local ref; ref=$(resolve_ref)
+  if [ -n "$ref" ]; then
+    # A release is checked out detached by definition; git's advice about that is noise here.
+    git -c advice.detachedHead=false clone --quiet --depth 1 --branch "$ref" "$REPO_URL" "$dir"
+    ok "Cloned $ref into $dir"
+  else
+    # No tag to track: better a working install off the default branch than none at all.
+    git clone --quiet --depth 1 "$REPO_URL" "$dir"
+    warn "No release tag found — installed the default branch instead."
+  fi
 
   build "$dir"
   write_launcher "$dir"
@@ -231,10 +264,27 @@ do_update() {
 
   step "Updating $dir"
   local before; before=$(git -C "$dir" rev-parse --short HEAD)
-  git -C "$dir" pull --quiet --ff-only || die "Could not fast-forward — the install has local changes."
+  local ref; ref=$(resolve_ref)
+
+  if [ -n "$ref" ]; then
+    # Fetching the one tag keeps the clone shallow. It is allowed to fail — an install that
+    # already has the tag is still fine to move onto, and only a genuinely missing ref is fatal.
+    git -C "$dir" fetch --quiet --depth 1 origin "refs/tags/$ref:refs/tags/$ref" 2>/dev/null || true
+    git -C "$dir" rev-parse -q --verify "refs/tags/$ref" >/dev/null 2>&1 \
+      || die "Could not fetch $ref from $REPO_URL."
+    # --detach because a release is a point, not a branch to accumulate commits on. Installs
+    # made before this script tracked releases sit on the default branch; this is what moves
+    # them across, and from then on every update is release to release.
+    git -C "$dir" -c advice.detachedHead=false checkout --quiet --detach "$ref" \
+      || die "Could not switch to $ref — the install has local changes."
+  else
+    warn "No release tag found — following the default branch."
+    git -C "$dir" pull --quiet --ff-only || die "Could not fast-forward — the install has local changes."
+  fi
+
   local after; after=$(git -C "$dir" rev-parse --short HEAD)
-  if [ "$before" = "$after" ]; then ok "Already up to date ($after)."
-  else ok "Updated $before → $after"; fi
+  if [ "$before" = "$after" ]; then ok "Already up to date${ref:+ ($ref)}."
+  else ok "Updated $before → $after${ref:+ ($ref)}"; fi
 
   build "$dir"
   write_launcher "$dir"
