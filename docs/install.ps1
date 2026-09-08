@@ -68,33 +68,65 @@ function Confirm {
 
 # ── prerequisites ────────────────────────────────────────────────────────────
 
+# Runs a tool only to read its version back. $ErrorActionPreference goes back to Continue for
+# the length of this function because both ways this can fail are answers, not accidents: the
+# tool is absent, or it is on PATH and cannot start - a stale Oracle javapath stub outliving
+# the JRE it pointed at is the usual one. Under the script's Stop, either aborts the install
+# with a raw .NET error instead of being reported as a missing prerequisite.
+function Get-ToolVersion {
+    param($Exe, $VersionArg)
+    $ErrorActionPreference = 'Continue'
+    try { return (& $Exe $VersionArg 2>&1 | Out-String) } catch { return '' }
+}
+
+# Absent and broken get different advice because the fix is different: install it, or clear
+# the PATH entry that claims it is already there.
+function Show-Missing {
+    param($Exe, $What, $Hint)
+    if (Get-Command $Exe -ErrorAction SilentlyContinue) {
+        Warn "$Exe is on your PATH but will not run - the entry points at something that is no longer installed."
+        Say  "        Remove that entry from your PATH, then install $What."
+    } else {
+        Warn "$What is not installed."
+    }
+    Say "        $Hint"
+}
+
 function Test-Prereqs {
     Step "Checking what is already on this machine"
     $missing = $false
 
-    $node = Get-Command node -ErrorAction SilentlyContinue
-    if ($node) {
-        $v = [int]((node -v) -replace '^v','' -split '\.')[0]
-        if ($v -ge $NodeMin) { Ok "Node $(node -v)" }
-        else { Warn "Node $(node -v) is too old - $NodeMin or newer is required."; Say "        winget install OpenJS.NodeJS.LTS"; $missing = $true }
+    # winget is absent before Windows 10 21H1 and on Windows Server, hence the plain URL too.
+    $nodeHint = 'winget install OpenJS.NodeJS.LTS   (or nodejs.org/en/download)'
+    $javaHint = 'winget install EclipseAdoptium.Temurin.21.JDK   (or adoptium.net)'
+    $gitHint  = 'winget install Git.Git   (or git-scm.com/downloads)'
+
+    $nodeOut = Get-ToolVersion node '-v'
+    if ($nodeOut -match 'v(\d+)\.') {
+        $v = [int]$Matches[1]
+        if ($v -ge $NodeMin) { Ok "Node $($nodeOut.Trim())" }
+        else { Warn "Node $($nodeOut.Trim()) is too old - $NodeMin or newer is required."; Say "        $nodeHint"; $missing = $true }
     } else {
-        Warn "Node is not installed ($NodeMin or newer)."; Say "        winget install OpenJS.NodeJS.LTS"; $missing = $true
+        Show-Missing node "Node $NodeMin or newer" $nodeHint; $missing = $true
     }
 
-    $java = Get-Command java -ErrorAction SilentlyContinue
-    if ($java) {
-        $line = (java -version 2>&1 | Select-Object -First 1)
-        if ($line -match '"(\d+)') {
-            $jv = [int]$Matches[1]
-            if ($jv -ge $JavaMin) { Ok "Java $jv" }
-            else { Warn "Java $jv is too old - $JavaMin or newer is required."; Say "        winget install EclipseAdoptium.Temurin.21.JDK"; $missing = $true }
-        } else { Warn "Could not read the Java version."; $missing = $true }
+    # Java 8 and older report 1.8.0_x, so the major number is the second field there and the
+    # first one from 9 on. Both are below the floor, but "Java 8 is too old" is a sentence and
+    # "Java 1 is too old" is a riddle.
+    $javaOut = Get-ToolVersion java '-version'
+    $jv = 0
+    if ($javaOut -match '"(\d+)\.(\d+)') { $jv = if ([int]$Matches[1] -eq 1) { [int]$Matches[2] } else { [int]$Matches[1] } }
+    elseif ($javaOut -match '"(\d+)')     { $jv = [int]$Matches[1] }
+    if ($jv -gt 0) {
+        if ($jv -ge $JavaMin) { Ok "Java $jv" }
+        else { Warn "Java $jv is too old - $JavaMin or newer is required."; Say "        $javaHint"; $missing = $true }
     } else {
-        Warn "Java is not installed ($JavaMin or newer)."; Say "        winget install EclipseAdoptium.Temurin.21.JDK"; $missing = $true
+        Show-Missing java "Java $JavaMin or newer" $javaHint; $missing = $true
     }
 
-    if (Get-Command git -ErrorAction SilentlyContinue) { Ok "git $((git --version) -split ' ' | Select-Object -Last 1)" }
-    else { Warn "git is not installed."; Say "        winget install Git.Git"; $missing = $true }
+    $gitOut = Get-ToolVersion git '--version'
+    if ($gitOut -match 'git version (\S+)') { Ok "git $($Matches[1])" }
+    else { Show-Missing git 'git' $gitHint; $missing = $true }
 
     if ($missing) { Die "Install what is missing above, then run this again. Nothing was changed." }
 }

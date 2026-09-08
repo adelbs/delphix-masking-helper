@@ -106,10 +106,19 @@ Consulta [`lib/README.md`](lib/README.md) para saber para qué sirve cada jar.
 curl -fsSL https://adelbs.github.io/delphix-masking-helper/install.sh | bash
 ```
 
-**Windows** (PowerShell)
+**Windows** — en PowerShell, no en el Símbolo del sistema: `irm` es un comando de PowerShell, y
+`cmd.exe` responde `'irm' is not recognized`.
 
 ```powershell
 irm https://adelbs.github.io/delphix-masking-helper/install.ps1 | iex
+```
+
+Si falla con `Could not create SSL/TLS secure channel`, PowerShell está negociando TLS 1.0, que
+GitHub ya no acepta — Windows antiguos, Server 2016 entre ellos. Ejecuta esto primero, en la
+misma ventana, y luego la línea de arriba:
+
+```powershell
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 ```
 
 ¿Prefieres leerlo antes de ejecutarlo? Es lo mismo en dos pasos:
