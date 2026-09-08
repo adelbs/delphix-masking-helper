@@ -46,10 +46,12 @@ jobs:
       # The Java runner is committed as a jar; this proves the source still compiles against the
       # API. The Delphix jars are licensed and absent here, so compilation is expected to fail on
       # missing classes — only a syntax error should stop the build.
+      # --release 11 mirrors how the committed jar must be built: it is never rebuilt on the
+      # user's machine, so its bytecode has to match the Java floor the installers check for.
       - name: Java runner syntax
         run: |
           if ls lib/*.jar >/dev/null 2>&1; then
-            cd java-runner && javac -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
+            cd java-runner && javac --release 11 -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
           else
             echo "Delphix jars not present in CI — skipping runner compilation."
           fi

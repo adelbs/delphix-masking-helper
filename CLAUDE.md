@@ -99,8 +99,25 @@ Necessário apenas ao modificar `AlgorithmRunner.java`:
 
 ```bash
 cd java-runner
-javac -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
+javac --release 11 -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
 jar cfe AlgorithmRunner.jar AlgorithmRunner *.class
+```
+
+**O `--release 11` não é opcional.** O jar é *commitado* e nada o recompila na máquina de quem
+instala: o `npm start` só roda `node server.js`, e o `javac` do CI pula por não haver JARs lá.
+O bytecode gerado aqui é exatamente o que todo usuário executa, e precisa casar com o piso
+declarado nos pré-requisitos e nos instaladores (`JAVA_MIN=11` / `$JavaMin = 11`).
+
+Sem a flag, o `javac` mira a JDK de quem compilou. Foi o que aconteceu: o jar publicado saiu em
+class file 69 (Java 25) e estourava `UnsupportedClassVersionError` em qualquer runtime abaixo
+disso — logo depois de o instalador ter aprovado a máquina com um "Java 11 ✓". O erro aparece só
+na primeira operação de algoritmo, longe da causa.
+
+Compilar contra os JARs do Delphix não atrapalha o alvo 11: eles são bytecode Java 8. Para
+conferir o que saiu:
+
+```bash
+unzip -p AlgorithmRunner.jar AlgorithmRunner.class | od -An -tu1 -j6 -N2   # 55 = Java 11
 ```
 
 ## Assistente de IA

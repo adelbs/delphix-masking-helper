@@ -301,9 +301,15 @@ Si modificas `AlgorithmRunner.java`:
 
 ```bash
 cd java-runner
-javac -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
+javac --release 11 -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
 jar cfe AlgorithmRunner.jar AlgorithmRunner *.class
 ```
+
+El `--release 11` importa: el jar se versiona y nada lo recompila en la máquina que instala la
+herramienta, así que este bytecode es el que ejecuta todo usuario. Sin la bandera, `javac` apunta
+a la JDK que tengas, y quien esté en un Java más antiguo choca con `UnsupportedClassVersionError`
+en su primera operación de enmascaramiento. Java 11 es el piso que prometen los requisitos
+previos y los instaladores.
 
 ## Licencia
 

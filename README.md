@@ -295,9 +295,14 @@ If you modify `AlgorithmRunner.java`:
 
 ```bash
 cd java-runner
-javac -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
+javac --release 11 -cp "$(ls ../lib/*.jar | tr '\n' ':')" AlgorithmRunner.java
 jar cfe AlgorithmRunner.jar AlgorithmRunner *.class
 ```
+
+`--release 11` matters: the jar is committed and nothing rebuilds it on the machine that installs
+the tool, so this bytecode is what every user runs. Without the flag `javac` targets whatever JDK
+you happen to have, and anyone on an older Java hits `UnsupportedClassVersionError` on their first
+masking operation. Java 11 is the floor the prerequisites and the installers promise.
 
 ## License
 
