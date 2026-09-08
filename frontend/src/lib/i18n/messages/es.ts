@@ -19,6 +19,7 @@ export const es: Messages = {
   'sidebar.home': 'Inicio',
   'sidebar.search': 'Filtrar algoritmos…',
   'sidebar.noResults': 'Ningún algoritmo encontrado',
+  'sidebar.loadFailed': 'No se pudo cargar la lista de algoritmos.',
   'sidebar.savedTests': 'Pruebas/Algoritmos Guardados',
   'sidebar.settings': 'Configuración',
   'sidebar.language': 'Idioma de la interfaz',

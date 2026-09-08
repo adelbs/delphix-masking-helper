@@ -20,6 +20,10 @@ interface TesterState {
 
 export default function App() {
   const [algorithms, setAlgorithms] = useState<Algorithm[]>([])
+  // The jars can all be in lib/ and the list still fail — a Java that will not start, a
+  // classpath the platform reads differently. Swallowing that left an empty sidebar with
+  // nothing to act on, so the reason is kept and shown where the list should have been.
+  const [algoError, setAlgoError] = useState<string | null>(null)
   const [view, setView] = useState<View>('welcome')
   const [tester, setTester] = useState<TesterState | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -33,7 +37,14 @@ export default function App() {
 
   const checkSetup = () =>
     api.getSetup()
-      .then(s => { setSetup(s); if (s.ready) api.getAlgorithms().catch(() => []).then(setAlgorithms) })
+      .then(s => {
+        setSetup(s)
+        if (s.ready) {
+          api.getAlgorithms()
+            .then(list => { setAlgorithms(list); setAlgoError(null) })
+            .catch((err: Error) => { setAlgorithms([]); setAlgoError(err.message) })
+        }
+      })
       // A server that cannot answer at all is a different problem; let the app render and fail
       // where the user acts, rather than trapping them behind a setup screen that is not the cause.
       .catch(() => setSetup({ ready: true, missing: [], libDir: '' }))
@@ -74,6 +85,7 @@ export default function App() {
 
   const sidebarProps = {
     algorithms,
+    loadError: algoError,
     activeClassName: view === 'tester' ? (tester?.algo.className ?? null) : null,
     onSelect: (algo: Algorithm) => selectAlgo(algo),
     onShowSaved: showSaved,

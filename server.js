@@ -74,7 +74,10 @@ const SETUP_HINT =
 
 function buildClasspath() {
   const jars = listJars().map(f => path.join(LIB_DIR, f));
-  return [RUNNER_JAR, ...jars].join(':');
+  // path.delimiter, never a literal ':' — Windows separates classpath entries with ';' and
+  // reads a ':' joined path as one bogus entry, so every command fails with the runner class
+  // not found.
+  return [RUNNER_JAR, ...jars].join(path.delimiter);
 }
 
 // ── Java runner ───────────────────────────────────────────────────────────────

@@ -20,6 +20,7 @@ export const en = {
   'sidebar.home': 'Home',
   'sidebar.search': 'Filter algorithms…',
   'sidebar.noResults': 'No algorithm found',
+  'sidebar.loadFailed': 'The algorithm list could not be loaded.',
   'sidebar.savedTests': 'Saved Tests/Algorithms',
   'sidebar.settings': 'Settings',
   'sidebar.language': 'Interface language',

@@ -19,6 +19,7 @@ export const ptBR: Messages = {
   'sidebar.home': 'Início',
   'sidebar.search': 'Filtrar algoritmos…',
   'sidebar.noResults': 'Nenhum algoritmo encontrado',
+  'sidebar.loadFailed': 'Não foi possível carregar a lista de algoritmos.',
   'sidebar.savedTests': 'Testes/Algoritmos Salvos',
   'sidebar.settings': 'Configurações',
   'sidebar.language': 'Idioma da interface',

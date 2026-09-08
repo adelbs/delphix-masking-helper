@@ -8,6 +8,8 @@ import type { Algorithm, LocalePref } from '@/types'
 
 interface Props {
   algorithms: Algorithm[]
+  /** Why the list is empty, when it is empty because the server could not produce it. */
+  loadError: string | null
   activeClassName: string | null
   onSelect: (algo: Algorithm) => void
   onShowSaved: () => void
@@ -18,7 +20,7 @@ interface Props {
   onClose?: () => void
 }
 
-export function Sidebar({ algorithms, activeClassName, onSelect, onShowSaved, onOpenSettings, onGoHome, localePref, onLocaleChange, onClose }: Props) {
+export function Sidebar({ algorithms, loadError, activeClassName, onSelect, onShowSaved, onOpenSettings, onGoHome, localePref, onLocaleChange, onClose }: Props) {
   const { t } = useT()
   const [query, setQuery] = useState('')
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(
@@ -78,7 +80,12 @@ export function Sidebar({ algorithms, activeClassName, onSelect, onShowSaved, on
 
       {/* Algorithm list */}
       <nav className="flex-1 overflow-auto px-2 py-1">
-        {filtered.length === 0 ? (
+        {loadError ? (
+          <div className="mx-1 my-4 px-3 py-2 rounded-lg bg-red-950 border border-red-900 text-xs text-red-200">
+            <p className="font-medium">{t('sidebar.loadFailed')}</p>
+            <p className="mt-1 text-red-300 break-words">{loadError}</p>
+          </div>
+        ) : filtered.length === 0 ? (
           <p className="text-slate-500 text-xs text-center py-6">{t('sidebar.noResults')}</p>
         ) : query !== '' ? (
           /* Flat list when searching */
