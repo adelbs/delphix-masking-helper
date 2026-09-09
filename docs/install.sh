@@ -248,8 +248,11 @@ build() {
   # --omit=dev at the root: its devDependencies are the maintainer's tools (the demo recorder
   # pulls puppeteer-core, tens of megabytes) and none are needed to build or run the app.
   # The frontend keeps its dev dependencies — vite and typescript are what build it.
-  ( cd "$dir" && npm install --silent --no-audit --no-fund --omit=dev )
-  ( cd "$dir" && npm install --silent --no-audit --no-fund --prefix frontend )
+  # --no-save: the install directory is a checkout, not a development tree. Some npm versions
+  # rewrite package-lock.json on a plain install, which leaves a modified tracked file behind
+  # and blocks the next update from moving the working tree.
+  ( cd "$dir" && npm install --silent --no-audit --no-fund --no-save --omit=dev )
+  ( cd "$dir" && npm install --silent --no-audit --no-fund --no-save --prefix frontend )
   ok "Dependencies installed"
 
   step "Building"

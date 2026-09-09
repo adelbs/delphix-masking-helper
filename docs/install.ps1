@@ -28,7 +28,10 @@ function Say  { param($m) Write-Host $m }
 function Step { param($m) Write-Host ""; Write-Host "==> $m" -ForegroundColor White }
 function Ok   { param($m) Write-Host "  [ok] $m" -ForegroundColor Green }
 function Warn { param($m) Write-Host "  [!] $m" -ForegroundColor Yellow }
-function Die  { param($m) Write-Host ""; Write-Host "error: $m" -ForegroundColor Red; exit 1 }
+# Never `exit`: piped through `iex`, this script runs in the caller's own session, so exiting
+# closes their PowerShell window - the message goes with it and there is nothing left to read.
+# The entry point at the bottom catches this and stops just as firmly.
+function Die  { param($m) Write-Host ""; Write-Host "error: $m" -ForegroundColor Red; throw 'DlpxHalt' }
 
 function Ask {
     param($Prompt, $Default = '')
@@ -247,8 +250,11 @@ function Invoke-Build {
     # --omit=dev at the root: its devDependencies are the maintainer's tools (the demo recorder
     # pulls puppeteer-core) and none are needed to build or run the app. The frontend keeps its
     # dev dependencies - vite and typescript are what build it.
-    npm install --silent --no-audit --no-fund --omit=dev
-    npm install --silent --no-audit --no-fund --prefix frontend
+    # --no-save: the install directory is a checkout, not a development tree. Some npm versions
+    # rewrite package-lock.json on a plain install, which leaves a modified tracked file behind
+    # and blocks the next update from moving the working tree.
+    npm install --silent --no-audit --no-fund --no-save --omit=dev
+    npm install --silent --no-audit --no-fund --no-save --prefix frontend
     Ok "Dependencies installed"
     Step "Building"
     npm run build --silent
@@ -297,6 +303,24 @@ function Invoke-Update {
     if (-not (Test-Path (Join-Path $Dir '.git'))) { Die "No install found. Run without -Update to install." }
 
     Step "Updating $Dir"
+
+    # git refuses to move a working tree that has edits in it, and the message it gives back
+    # is one line with no names in it. Ask first, list them, and let the answer decide - an
+    # edit made to get past a bug is worth discarding, one that is someone's work is not.
+    # Only tracked files are touched: db/ is ignored, so saved algorithms and settings are
+    # not part of this either way.
+    $dirty = @(git -C $Dir status --porcelain --untracked-files=no)
+    if ($dirty) {
+        Warn "This install has local changes to files the update needs to replace:"
+        $dirty | ForEach-Object { Say "        $_" }
+        if (-not (Confirm "  Discard them and update?")) {
+            Die "Nothing was changed. Copy anything you want to keep out of $Dir first."
+        }
+        git -C $Dir checkout --quiet -- .
+        if ($LASTEXITCODE -ne 0) { Die "Could not discard the local changes in $Dir." }
+        Ok "Local changes discarded."
+    }
+
     $before = (git -C $Dir rev-parse --short HEAD)
     $ref = Resolve-Ref
 
@@ -311,11 +335,11 @@ function Invoke-Update {
         # made before this script tracked releases sit on the default branch; this is what moves
         # them across, and from then on every update is release to release.
         git -C $Dir -c advice.detachedHead=false checkout --quiet --detach $ref
-        if ($LASTEXITCODE -ne 0) { Die "Could not switch to $ref - the install has local changes." }
+        if ($LASTEXITCODE -ne 0) { Die "Could not switch $Dir to $ref." }
     } else {
         Warn "No release tag found - following the default branch."
         git -C $Dir pull --quiet --ff-only
-        if ($LASTEXITCODE -ne 0) { Die "Could not fast-forward - the install has local changes." }
+        if ($LASTEXITCODE -ne 0) { Die "Could not fast-forward $Dir onto the default branch." }
     }
 
     $after = (git -C $Dir rev-parse --short HEAD)
@@ -369,21 +393,39 @@ function Show-Finish {
 
 # A param() block would have to be the first statement in the file, before the functions, so
 # the two flags are read from $args instead.
-if ($args -contains '-Update')    { Invoke-Update; exit }
-if ($args -contains '-Uninstall') { Invoke-Uninstall; exit }
+function Invoke-Entry {
+    if ($args -contains '-Update')    { Invoke-Update; return }
+    if ($args -contains '-Uninstall') { Invoke-Uninstall; return }
 
-Say "Delphix Masking Helper"
-Say "An independent open source project. Requires an active Delphix licence."
-$existing = Get-InstallDir
-if ((Test-Path (Join-Path $existing '.git')) -and (Test-Path $Launcher)) {
-    Say ""
-    Say "  An install was found at $existing."
-    $choice = Ask "  [u]pdate, [r]emove, or [q]uit? [u]" 'u'
-    switch -Regex ($choice) {
-        '^[uU]' { Invoke-Update }
-        '^[rR]' { Invoke-Uninstall }
-        default { Say "  Nothing was changed." }
+    Say "Delphix Masking Helper"
+    Say "An independent open source project. Requires an active Delphix licence."
+    $existing = Get-InstallDir
+    if ((Test-Path (Join-Path $existing '.git')) -and (Test-Path $Launcher)) {
+        Say ""
+        Say "  An install was found at $existing."
+        $choice = Ask "  [u]pdate, [r]emove, or [q]uit? [u]" 'u'
+        switch -Regex ($choice) {
+            '^[uU]' { Invoke-Update }
+            '^[rR]' { Invoke-Uninstall }
+            default { Say "  Nothing was changed." }
+        }
+    } else {
+        Invoke-Install
     }
-} else {
-    Invoke-Install
+}
+
+# Everything that stops the script arrives here. Run from a file - which is how the launcher
+# re-runs it for `dlpx-helper update` - it still ends with a non-zero exit code; run through
+# `iex`, the session is the user's own window and it is left standing, with the reason on
+# screen. $PSCommandPath is empty in the second case and is what tells them apart.
+try {
+    Invoke-Entry @args
+} catch {
+    # Die has already said what went wrong; anything else arrives here unannounced.
+    if ("$($_.FullyQualifiedErrorId)" -ne 'DlpxHalt') {
+        Write-Host ""
+        Write-Host "error: $($_.Exception.Message)" -ForegroundColor Red
+    }
+    if ($PSCommandPath) { exit 1 }
+    return
 }
