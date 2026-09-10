@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Send, Square, Sparkles, BookmarkCheck, AlertTriangle, Settings2, Trash2 } from 'lucide-react'
+import { Send, Square, Sparkles, BookmarkCheck, AlertTriangle, Settings2, Trash2, Loader2 } from 'lucide-react'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
@@ -31,6 +31,14 @@ export function Chat({ onShowSaved, onOpenSettings }: Props) {
   }, [])
 
   useEffect(() => { refreshStatus() }, [refreshStatus])
+
+  // While the model is loading there is nothing to react to but time: poll until it is in.
+  const warming = status?.warm?.state === 'warming'
+  useEffect(() => {
+    if (!warming) return
+    const id = setInterval(refreshStatus, 5000)
+    return () => clearInterval(id)
+  }, [warming, refreshStatus])
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }) }, [turns, busy])
 
   const send = async (text: string) => {
@@ -77,6 +85,31 @@ export function Chat({ onShowSaved, onOpenSettings }: Props) {
 
   return (
     <div className="flex flex-col h-full min-h-0">
+      {status?.provider === 'ollama' && (
+        <div className="flex items-start gap-2 mx-auto w-full max-w-3xl mb-3 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
+          <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <span className="font-medium">{t('chat.localLimits')}</span>{' '}
+            {t('chat.localLimitsHint')}
+          </div>
+          <button onClick={onOpenSettings} className="flex items-center gap-1 flex-shrink-0 font-medium hover:underline">
+            <Settings2 size={12} /> {t('chat.configure')}
+          </button>
+        </div>
+      )}
+
+      {warming && (
+        <div className="flex items-start gap-2 mx-auto w-full max-w-3xl mb-3 px-3 py-2 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-800">
+          <Loader2 size={14} className="flex-shrink-0 mt-0.5 animate-spin" />
+          <div className="flex-1">
+            <span className="font-medium">
+              {t('chat.warming', { model: status?.warm?.model ?? '', seconds: String(status?.warm?.elapsedSec ?? 0) })}
+            </span>{' '}
+            {t('chat.warmingHint')}
+          </div>
+        </div>
+      )}
+
       {status && !status.ok && (
         <div className="flex items-start gap-2 mx-auto w-full max-w-3xl mb-3 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
           <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />

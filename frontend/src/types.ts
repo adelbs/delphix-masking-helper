@@ -69,6 +69,14 @@ export interface AiStatus {
   ok: boolean
   error?: string
   models?: string[]
+  /** The startup read of the catalog into a local model — minutes of silence, with a name. */
+  warm?: {
+    state: 'idle' | 'warming' | 'ready' | 'failed'
+    model: string | null
+    elapsedSec: number | null
+    seconds: number | null
+    error: string | null
+  }
 }
 
 export interface ChatMessage {

@@ -8,6 +8,8 @@
 // endpoint that ships with a Copilot/GitHub account, authenticated with a PAT.
 
 const fs = require('fs');
+const http = require('node:http');
+const https = require('node:https');
 const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 
@@ -18,7 +20,18 @@ const KNOWLEDGE_PATH = path.join(__dirname, 'frontend', 'src', 'lib', 'algo-know
 const PROVIDERS = {
   // numCtx matters: Ollama defaults to a small context (4096 on this hardware) regardless of
   // what the model supports, and the algorithm catalog alone is ~12k tokens.
-  ollama:    { label: 'Ollama (local)',      model: 'llama3.1',      baseUrl: 'http://localhost:11434', needsKey: false, numCtx: 16384 },
+  //
+  // keepAlive matters for the same reason from the other end: Ollama unloads an idle model
+  // after 5 minutes and the cached prompt prefix goes with it. On a CPU-only machine that
+  // prefix is worth minutes - measured at 248s for an 11.9k-token catalog against llama3.2:3b
+  // on an i9-9880H - so a pause in the conversation would cost that again. An hour holds the
+  // model through a working session; set ai.ollama.keepAlive to '5m' to get Ollama's own
+  // default back, or to '0' to unload immediately after each answer.
+  //
+  // temperature 0 because picking an algorithm is not a creative task: there is one right
+  // answer and Ollama's own default of 0.8 samples away from it. Measured on llama3.2:3b with
+  // these four cases, dropping to 0 moved two answers from the wrong algorithm to the right one.
+  ollama:    { label: 'Ollama (local)',      model: 'llama3.1',      baseUrl: 'http://localhost:11434', needsKey: false, numCtx: 16384, keepAlive: '1h', temperature: 0 },
   anthropic: { label: 'Claude / Anthropic',  model: 'claude-opus-5', baseUrl: '',                       needsKey: true  },
   gemini:    { label: 'Google Gemini',       model: 'gemini-2.5-pro', baseUrl: 'https://generativelanguage.googleapis.com', needsKey: true },
   copilot:   { label: 'GitHub Models (Copilot)', model: 'gpt-4o',    baseUrl: 'https://models.github.ai/inference', needsKey: true },
@@ -30,6 +43,15 @@ for (const [id, p] of Object.entries(PROVIDERS)) {
   DEFAULTS[`ai.${id}.baseUrl`] = p.baseUrl;
   if (p.needsKey) DEFAULTS[`ai.${id}.apiKey`] = '';
   if (p.numCtx) DEFAULTS[`ai.${id}.numCtx`] = String(p.numCtx);
+  if (p.keepAlive) DEFAULTS[`ai.${id}.keepAlive`] = p.keepAlive;
+  if (p.temperature != null) DEFAULTS[`ai.${id}.temperature`] = String(p.temperature);
+}
+
+/** Reads a numeric setting that is allowed to be 0. */
+function numberOr(value, fallback) {
+  if (value === undefined || value === null || value === '') return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
 }
 
 function providerSettings(config, provider) {
@@ -40,6 +62,9 @@ function providerSettings(config, provider) {
     baseUrl: (config[`ai.${id}.baseUrl`] || PROVIDERS[id].baseUrl).replace(/\/+$/, ''),
     apiKey: config[`ai.${id}.apiKey`] || '',
     numCtx: Number(config[`ai.${id}.numCtx`]) || PROVIDERS[id].numCtx,
+    keepAlive: config[`ai.${id}.keepAlive`] || PROVIDERS[id].keepAlive,
+    // Not `||`: the useful value here is 0, which would fall through to the default.
+    temperature: numberOr(config[`ai.${id}.temperature`], PROVIDERS[id].temperature),
   };
 }
 
@@ -107,16 +132,42 @@ function buildCatalog(runJava) {
 const SAVE_TAG_OPEN = '<save-algorithm>';
 const SAVE_TAG_CLOSE = '</save-algorithm>';
 
-function buildSystemPrompt(catalog) {
-  return `You are the built-in assistant of the Delphix Masking Helper, a local tool for
-understanding, testing and building masking algorithms from the Delphix masking plugin.
-
-You help with two things:
+/**
+ * `canSave` decides whether the assistant is taught to emit a save block at all.
+ *
+ * It is off for a local model, and that is a measured decision rather than a cautious one. Across
+ * twelve answers from llama3.2:3b and llama3.1:8b, neither ever answered "no algorithm does this"
+ * — not even with a rule in this prompt saying so in as many words, and not on the two questions
+ * where that was the only correct answer. What they produced instead was a configuration that
+ * runs and does not solve the problem, which the runner accepts and the user discovers much
+ * later. Claude, given this same prompt, declined both. A model that cannot say no should not be
+ * handed the button that writes to the user's saved algorithms; explaining and recommending is
+ * what these models do well, and that is what they are asked for here.
+ */
+function buildSystemPrompt(catalog, { canSave = true } = {}) {
+  const purpose = canSave
+    ? `You help with two things:
 1. Explaining how an algorithm works, what its parameters do, and which one fits a situation.
 2. Building a ready-to-use algorithm configuration when the user describes a masking problem.
 
 The user usually does NOT know which algorithm (framework) to use — that is your job. Read the
-situation they describe, pick the right algorithm from the catalog below, and configure it.
+situation they describe, pick the right algorithm from the catalog below, and configure it.`
+    : `Your job is to explain and to recommend:
+1. Explaining how an algorithm works, what its parameters do, and which one fits a situation.
+2. Naming the algorithm that fits a masking problem, and spelling out the parameter values it
+   needs, so the user can fill the form themselves.
+
+The user usually does NOT know which algorithm (framework) to use — that is your job. Read the
+situation they describe and name the right one from the catalog below.
+
+You do NOT create or save algorithms in this configuration. Never emit a save block or claim you
+have saved anything. Give the parameters as a short list of name and value, and say which screen
+to open: the user picks the algorithm in the sidebar and fills the form there.`;
+
+  return `You are the built-in assistant of the Delphix Masking Helper, a local tool for
+understanding, testing and building masking algorithms from the Delphix masking plugin.
+
+${purpose}
 
 # Rules
 
@@ -126,7 +177,7 @@ situation they describe, pick the right algorithm from the catalog below, and co
 - Keep answers concise and practical. Answer in the same language the user writes in.
 - When the user asks a conceptual question, just answer it — do not create an algorithm.
 
-# Creating an algorithm
+${canSave ? `# Creating an algorithm
 
 When the user asks you to create/build/configure an algorithm, end your reply with a block:
 
@@ -134,10 +185,16 @@ ${SAVE_TAG_OPEN}
 {"name": "short-descriptive-name", "className": "algorithm.plugin....", "config": { ... }, "testInput": "a representative sample value"}
 ${SAVE_TAG_CLOSE}
 
-The tool will validate that configuration by actually running the algorithm on "testInput" and,
-if it works, save it under "Saved Tests/Algorithms". Emit at most one block per reply. Before the
-block, explain in one short paragraph which algorithm you chose and why. Do not show the block
-contents again as a code fence — the tool renders it for the user.
+The tool validates that configuration by actually running the algorithm on "testInput" and, if it
+works, saves it under "Saved Tests/Algorithms". "testInput" is mandatory and must be a realistic
+value for the column being masked — without one there is nothing to validate and the block is
+rejected. Emit at most one block per reply. Before the block, explain in one short paragraph which
+algorithm you chose and why. Do not show the block contents again as a code fence — the tool
+renders it for the user.` : `# Recommending a configuration
+
+Answer with the algorithm's name, then its parameters as a short list of name and value, then one
+sentence on why. Mention a realistic sample value the user can paste into the tester to check the
+result. Do not wrap the answer in a block of any kind.`}
 
 ## Worked examples of the mapping from problem to configuration
 
@@ -158,8 +215,16 @@ Problem: "shift dates but keep the ordering of events."
 Choice: Date Shift — the shift is deterministic per key, which preserves chronology.
 
 Problem: "hide the middle of an account number but keep the last 4 digits."
-Choice: Character Mapping with preserveRanges, or Payment Card when it is a card number
-(it also keeps the Luhn check digit valid).
+Choice: Character Mapping with preserveRanges:
+  {"characterGroups": ["0123456789"], "preserveRanges": [{"start": 1, "length": 4, "direction": "REVERSE"}]}
+
+Problem: "mask a phone number but keep the first 2 digits (the area code)."
+Choice: Character Mapping with preserveRanges counting from the front. direction FORWARD counts
+from the start of the value, REVERSE from its end; start is 1-based:
+  {"characterGroups": ["0123456789"], "preserveRanges": [{"start": 1, "length": 2, "direction": "FORWARD"}]}
+Not the Phone algorithm: it generates a whole new number and has no parameter that preserves any
+part of the original. And preserveLeadingZeros does not do this either — it only protects a run
+of zeros at the front, not an arbitrary prefix.
 
 # Known constraints not expressed in the schemas
 
@@ -172,6 +237,25 @@ Choice: Character Mapping with preserveRanges, or Payment Card when it is a card
 - Character Replacement: a rule uses filteredCharacters OR the input/output pair, never both.
 - Omit any optional parameter you have no reason to set. A minimal configuration that runs beats
   a thorough one that fails validation.
+- Payment Card is for payment card numbers only — it preserves the BIN and keeps the Luhn check
+  digit valid. Never reach for it for phone numbers, national IDs or generic digit strings.
+- Date Shift moves a date by a range of some unit. No range guarantees the year survives: a shift
+  of days or months can cross a year boundary, and unit YEARS changes the year by definition.
+  Nothing in this catalog masks the month and day while guaranteeing the year is untouched.
+- Every algorithm masks the one value it is given. Only the Multi-Column ones see other columns,
+  and even they receive named slots, not arbitrary column values. An algorithm cannot build its
+  output by combining other columns of the row.
+
+# When nothing fits
+
+Not every request has an answer in this catalog. When none of the algorithms does what the user
+asked, say so plainly, name the closest one, and state exactly what it does not do.${canSave
+  ? ` Do NOT emit a\n${SAVE_TAG_OPEN} block in that case, and`
+  : ' Do'} do not stretch an algorithm to look like an answer.
+
+The tool validates a configuration by running it — so a wrong algorithm that happens to execute
+is saved as if it were right. That failure is worse than an honest "the plugin does not do this",
+because the user finds out much later. Saying no is a good answer here.
 
 # Algorithm catalog
 
@@ -239,11 +323,49 @@ async function post(url, body, headers, signal) {
   return res;
 }
 
+// Node's global fetch drops a request that has produced no bytes after 300 seconds
+// (UND_ERR_HEADERS_TIMEOUT), and the deadline is not configurable from a plain fetch call.
+// A local model earns that silence honestly: the catalog is ~12k tokens, and a CPU-only
+// Ollama takes minutes to read it before it can emit a first token - measured at 248s here,
+// close enough to the ceiling that the first question of the day died on it. node:http sets
+// no such deadline, so the local provider gets its own transport. The hosted providers keep
+// fetch: they answer in seconds, and their SDKs and redirects are not worth reimplementing.
+function postUntimed(url, body, headers, signal) {
+  return new Promise((resolve, reject) => {
+    const payload = JSON.stringify(body);
+    const lib = url.startsWith('https:') ? https : http;
+    const req = lib.request(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(payload),
+        ...headers,
+      },
+      signal,
+    }, (res) => {
+      if (res.statusCode < 200 || res.statusCode >= 300) {
+        let detail = '';
+        res.setEncoding('utf8');
+        res.on('data', (c) => { detail += c; });
+        res.on('end', () => reject(new Error(
+          `${res.statusCode} ${res.statusMessage}${detail ? ` — ${detail.slice(0, 300)}` : ''}`)));
+        return;
+      }
+      // Shaped like a fetch Response so readLines reads either the same way: an
+      // IncomingMessage is an async iterable of Buffers, a fetch body one of Uint8Arrays.
+      resolve({ body: res });
+    });
+    req.on('error', reject);
+    req.end(payload);
+  });
+}
+
 async function streamOllama({ cfg, system, messages, onDelta, signal }) {
-  const res = await post(`${cfg.baseUrl}/api/chat`, {
+  const res = await postUntimed(`${cfg.baseUrl}/api/chat`, {
     model: cfg.model,
     stream: true,
-    options: { num_ctx: cfg.numCtx },
+    keep_alive: cfg.keepAlive,
+    options: { num_ctx: cfg.numCtx, temperature: cfg.temperature },
     messages: [{ role: 'system', content: system }, ...messages],
   }, {}, signal);
   let full = '';
@@ -313,6 +435,93 @@ async function streamChat(opts) {
   return fn(opts);
 }
 
+/**
+ * Reads the system prompt into Ollama's prefix cache so the first real question does not
+ * have to. Nothing about the answer matters - num_predict: 1 stops the generation as soon
+ * as the prompt is in - and every later request repeats this exact prefix, so Ollama skips
+ * straight past it. Local provider only: the hosted ones have nothing to warm.
+ */
+async function warmOllama({ cfg, system, signal }) {
+  const started = Date.now();
+  const res = await postUntimed(`${cfg.baseUrl}/api/chat`, {
+    model: cfg.model,
+    stream: false,
+    keep_alive: cfg.keepAlive,
+    options: { num_ctx: cfg.numCtx, num_predict: 1 },
+    messages: [{ role: 'system', content: system }, { role: 'user', content: 'ready?' }],
+  }, {}, signal);
+  let raw = '';
+  await readLines(res, (line) => { raw += line; });
+  let promptTokens = null;
+  try { promptTokens = JSON.parse(raw).prompt_eval_count ?? null; } catch { /* timing only */ }
+  return { ms: Date.now() - started, promptTokens };
+}
+
+/**
+ * The plugin's schemas come from Jackson, which writes draft-3: "required" is a boolean on each
+ * property. Constrained decoding wants the modern shape - "required" as an array on the object -
+ * so this rewrites it, drops Jackson's "id", and closes the object so nothing can be invented.
+ */
+function toStandardSchema(node) {
+  if (!node || typeof node !== 'object') return node;
+  if (Array.isArray(node)) return node.map(toStandardSchema);
+  const out = {};
+  for (const [k, v] of Object.entries(node)) {
+    if (k === 'id' || k === 'required') continue;
+    out[k] = toStandardSchema(v);
+  }
+  if (out.type === 'object' && out.properties) {
+    const required = Object.entries(node.properties)
+      .filter(([, prop]) => prop && prop.required === true)
+      .map(([name]) => name);
+    if (required.length) out.required = required;
+    out.additionalProperties = false;
+  }
+  return out;
+}
+
+/**
+ * Second attempt at a configuration the runner rejected, with the algorithm's real schema as a
+ * grammar rather than as advice. Ollama's `format` constrains generation to the schema, so the
+ * result cannot invent a key, misspell one, or use an enum value that does not exist - the
+ * failures that dominated a local model's output. It cannot make a value *right*: a group of
+ * "phone_number" where "0123456789" was meant satisfies "array of string" perfectly. So this
+ * narrows the model's job to choosing values, and the runner still has the last word.
+ *
+ * Local provider only. The hosted models emit valid JSON on their own, and each has its own
+ * structured-output mechanism that has nothing to do with this one.
+ */
+async function repairConfig({ cfg, schema, algorithm, request, badConfig, error, signal }) {
+  if (cfg.id !== 'ollama') return null;
+  const res = await postUntimed(`${cfg.baseUrl}/api/chat`, {
+    model: cfg.model,
+    stream: false,
+    keep_alive: cfg.keepAlive,
+    format: toStandardSchema(schema),
+    options: { num_ctx: cfg.numCtx, temperature: 0 },
+    messages: [
+      { role: 'system', content:
+        `You configure the Delphix masking algorithm "${algorithm}". Reply with the `
+        + 'configuration JSON and nothing else.\n\n'
+        + 'preserveRanges marks parts of the value to leave unmasked: "start" is 1-based, '
+        + 'direction FORWARD counts from the front of the value and REVERSE from its end.\n'
+        + 'A character group is the set of interchangeable characters themselves — '
+        + '"0123456789" for digits — never a description of the field.' },
+      { role: 'user', content:
+        `What the user asked for: ${request}\n\n`
+        + `This configuration was rejected by the algorithm:\n${JSON.stringify(badConfig)}\n\n`
+        + `The error was: ${error}\n\nProduce a corrected configuration.` },
+    ],
+  }, {}, signal);
+  let raw = '';
+  await readLines(res, (line) => { raw += line; });
+  try {
+    return JSON.parse(JSON.parse(raw).message.content);
+  } catch {
+    return null;   // a repair that does not parse is simply no repair
+  }
+}
+
 /** Cheap reachability probe so the UI can tell "not configured" from "provider down". */
 async function probe(cfg) {
   if (cfg.id === 'ollama') {
@@ -331,5 +540,5 @@ async function probe(cfg) {
 
 module.exports = {
   PROVIDERS, DEFAULTS, providerSettings, buildCatalog, buildSystemPrompt,
-  extractSaveBlock, streamChat, probe,
+  extractSaveBlock, streamChat, probe, warmOllama, repairConfig, toStandardSchema,
 };

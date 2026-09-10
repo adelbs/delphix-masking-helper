@@ -207,6 +207,37 @@ function AiTab() {
           />
         </div>
 
+        {provider === 'ollama' && (
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                {t('settings.ai.numCtx')}
+              </label>
+              <input
+                type="number"
+                min={2048}
+                step={1024}
+                value={get('numCtx')}
+                onChange={e => set(`ai.${provider}.numCtx`, e.target.value)}
+                className={fieldCls}
+              />
+              <p className="text-xs text-slate-400 mt-1">{t('settings.ai.numCtxHint')}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                {t('settings.ai.keepAlive')}
+              </label>
+              <input
+                type="text"
+                value={get('keepAlive')}
+                onChange={e => set(`ai.${provider}.keepAlive`, e.target.value)}
+                className={fieldCls}
+              />
+              <p className="text-xs text-slate-400 mt-1">{t('settings.ai.keepAliveHint')}</p>
+            </div>
+          </div>
+        )}
+
         {meta.needsKey && (
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">

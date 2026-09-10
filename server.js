@@ -252,8 +252,14 @@ app.put('/api/config', (req, res) => {
     patch[k] = v;
   }
   const updated = { ...current, ...patch };
+  const warmKeys = ['aiProvider', 'ai.ollama.model', 'ai.ollama.baseUrl', 'ai.ollama.numCtx'];
+  // keepAlive is deliberately not here: it changes how long the model lingers, not the prompt.
+  const rewarm = warmKeys.some((k) => k in patch && patch[k] !== current[k]);
   writeConfig(updated);
   ensureDir(path.resolve(__dirname, updated.filesDir));
+  // A model the user just switched to is cold, and the wait is the same minutes it is at
+  // startup. Start it now so the chat's indicator has something true to show.
+  if (rewarm) buildCatalogCached().then(warmProvider, () => {});
   res.json(publicConfig(readConfig()));
 });
 
@@ -262,16 +268,91 @@ app.put('/api/config', (req, res) => {
 // The catalog needs one JVM fork per algorithm, so it is built once and reused.
 // Warmed in the background at startup so the first chat message isn't slow.
 const buildCatalogCached = () => ai.buildCatalog(runJava);
+
+// Local models are not given the algorithm-writing button — see buildSystemPrompt. This lives in
+// one place because the warm-up and the chat must build a byte-identical prompt: a prefix that
+// differs by one character is a cache miss, and a cache miss here costs minutes.
+const canSaveWith = (cfg) => cfg.id !== 'ollama';
+const systemFor = (cfg, catalog) => ai.buildSystemPrompt(catalog, { canSave: canSaveWith(cfg) });
 buildCatalogCached().then(
-  (c) => console.log(`AI: algorithm catalog ready (${(c.length / 1024).toFixed(0)} KB)`),
+  (c) => {
+    console.log(`AI: algorithm catalog ready (${(c.length / 1024).toFixed(0)} KB)`);
+    warmProvider(c);
+  },
   (err) => console.warn(`AI: could not build the algorithm catalog — ${err.message}`)
 );
+
+// What the warm-up is doing right now, so the UI can say so. Minutes of silence before the
+// first answer look exactly like a hung app, and the user has no way to tell the difference
+// from the outside - this is what lets the chat say "loading the model", not "…".
+const warmth = {
+  state: 'idle', model: null, startedAt: null, ms: null, promptTokens: null, error: null,
+  // What is being warmed, not just which model: num_ctx and the endpoint decide the cache as
+  // much as the name does, so a change to either has to start over. Kept with the controller
+  // that cancels the run it belongs to.
+  key: null, controller: null,
+};
+
+/** Everything that invalidates Ollama's cached prefix, as one comparable string. */
+const warmKeyOf = (cfg) => `${cfg.baseUrl}|${cfg.model}|${cfg.numCtx}`;
+
+/**
+ * Reads the system prompt into a local model before anyone asks a question. On a machine
+ * without a GPU that pass costs minutes - the catalog is ~12k tokens - and it is paid once
+ * per loaded model rather than once per question, so paying it here means the first question
+ * is answered at the same speed as the tenth. Best effort by design: Ollama may not be
+ * running, and that is the status card's job to report, not a reason to hold up the server.
+ */
+function warmProvider(catalog) {
+  const cfg = ai.providerSettings(readConfig(), readConfig().aiProvider);
+  if (cfg.id !== 'ollama') {
+    Object.assign(warmth, { state: 'idle', model: null, startedAt: null, error: null });
+    return;
+  }
+  const key = warmKeyOf(cfg);
+  if (warmth.state === 'warming' && warmth.key === key) return;
+  // A warm-up already running for different settings is now heating the wrong thing, and it
+  // would hold a core for minutes doing it. Drop it.
+  if (warmth.state === 'warming') warmth.controller?.abort();
+  const controller = new AbortController();
+  Object.assign(warmth, {
+    state: 'warming', model: cfg.model, startedAt: Date.now(), ms: null, promptTokens: null,
+    error: null, key, controller,
+  });
+  console.log(`AI: warming ${cfg.model} …`);
+  ai.warmOllama({ cfg, system: systemFor(cfg, catalog), signal: controller.signal }).then(
+    ({ ms, promptTokens }) => {
+      if (warmth.key !== key) return;   // superseded by a newer warm-up
+      Object.assign(warmth, { state: 'ready', ms, promptTokens });
+      console.log(`AI: ${cfg.model} warm in ${(ms / 1000).toFixed(1)}s`
+        + `${promptTokens ? ` (${promptTokens} prompt tokens cached)` : ''}`);
+    },
+    (err) => {
+      if (warmth.key !== key) return;   // cancelled on purpose, or superseded
+      Object.assign(warmth, { state: 'failed', error: err.message });
+      console.warn(`AI: could not warm ${cfg.model} — ${err.message}`);
+    }
+  );
+}
+
+/** The warm-up as the UI needs it: state, which model, and how long it has been going. */
+function warmStatus() {
+  return {
+    state: warmth.state,
+    model: warmth.model,
+    elapsedSec: warmth.state === 'warming' && warmth.startedAt
+      ? Math.round((Date.now() - warmth.startedAt) / 1000)
+      : null,
+    seconds: warmth.ms != null ? Math.round(warmth.ms / 1000) : null,
+    error: warmth.error,
+  };
+}
 
 app.get('/api/ai/status', async (req, res) => {
   const config = readConfig();
   const cfg = ai.providerSettings(config, config.aiProvider);
   const status = await ai.probe(cfg);
-  res.json({ provider: cfg.id, model: cfg.model, baseUrl: cfg.baseUrl, ...status });
+  res.json({ provider: cfg.id, model: cfg.model, baseUrl: cfg.baseUrl, ...status, warm: warmStatus() });
 });
 
 /** Runs the algorithm the model proposed; only a configuration that actually masks gets saved. */
@@ -285,7 +366,14 @@ async function validateAndSave(spec) {
     || list.find((a) => a.className.split('.').pop() === String(className).split('.').pop());
   if (!algo) return { error: `Unknown algorithm: ${className}` };
 
-  const input = testInput ?? '';
+  // Without a value to mask there is no validation: every algorithm "runs" on an empty string,
+  // so a configuration that solves nothing would be saved as if the runner had approved it.
+  // A model that omits testInput has skipped the only step that can tell right from plausible.
+  const input = typeof testInput === 'string' ? testInput.trim() : '';
+  if (!input) {
+    return { error: 'The algorithm block has no testInput, so the configuration could not be '
+      + 'validated. Ask the assistant again, requesting a sample value to test with.' };
+  }
   let result;
   try {
     result = await runJava({ command: 'mask', algorithm: algo.className, config: config || {}, input, key: MASKING_KEY });
@@ -308,6 +396,29 @@ async function validateAndSave(spec) {
   };
 }
 
+/**
+ * Asks the model for the configuration again, this time with the algorithm's schema constraining
+ * what it is able to emit. Returns a new spec, or null when there is nothing better to try.
+ */
+async function repairSpec(spec, error, messages, cfg, signal) {
+  const list = await runJava({ command: 'list' });
+  const algo = list.find((a) => a.className === spec.className);
+  if (!algo) return null;   // an unknown className is not a configuration problem
+  let schema;
+  try {
+    ({ schema } = await runJava({ command: 'schema', algorithm: algo.className }));
+  } catch {
+    return null;
+  }
+  const lastUser = [...messages].reverse().find((m) => m.role === 'user');
+  const config = await ai.repairConfig({
+    cfg, schema, algorithm: algo.displayName,
+    request: lastUser ? lastUser.content : '',
+    badConfig: spec.config || {}, error, signal,
+  });
+  return config ? { ...spec, config } : null;
+}
+
 app.post('/api/chat', async (req, res) => {
   const config = readConfig();
   const cfg = ai.providerSettings(config, config.aiProvider);
@@ -328,7 +439,7 @@ app.post('/api/chat', async (req, res) => {
     const catalog = await buildCatalogCached();
     const full = await ai.streamChat({
       cfg,
-      system: ai.buildSystemPrompt(catalog),
+      system: systemFor(cfg, catalog),
       messages: messages.map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content ?? '') })),
       onDelta: (delta) => send('delta', { delta }),
       signal: controller.signal,
@@ -337,8 +448,23 @@ app.post('/api/chat', async (req, res) => {
     const { spec, text, parseError } = ai.extractSaveBlock(full);
     if (text !== full) send('replace', { text });
     if (parseError) send('warn', { message: 'The assistant emitted an algorithm block that was not valid JSON.' });
-    if (spec) {
-      const outcome = await validateAndSave(spec);
+    if (spec && !canSaveWith(cfg)) {
+      // The prompt never taught it this, but a model that emits the block anyway must not reach
+      // the database. The text has already had the block stripped out of it by extractSaveBlock.
+      send('warn', { message: 'This assistant recommends a configuration but does not create it. '
+        + 'Pick the algorithm in the sidebar and fill in the values it gave you.' });
+    } else if (spec) {
+      let outcome = await validateAndSave(spec);
+      // One retry, and only for a local model: the runner's rejection plus the algorithm's own
+      // schema as a decoding grammar is a far better brief than the catalog was. Costs nothing
+      // when the first configuration already runs.
+      if (outcome.error && cfg.id === 'ollama') {
+        const repaired = await repairSpec(spec, outcome.error, messages, cfg, controller.signal);
+        if (repaired) {
+          send('warn', { message: 'The first configuration did not run; retried it against the algorithm schema.' });
+          outcome = await validateAndSave(repaired);
+        }
+      }
       send(outcome.error ? 'save-error' : 'saved', outcome.error ? { message: outcome.error } : outcome.saved);
     }
     send('done', {});
