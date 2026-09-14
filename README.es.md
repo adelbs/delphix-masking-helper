@@ -49,6 +49,9 @@ Cada framework abre con dos pestañas: **Probar** y **Documentación**. La pesta
 muestra la sección de ese framework en la guía de referencia, en el idioma de la interfaz — el
 mismo contenido de los PDF de abajo, leído de la misma fuente, así que nunca divergen.
 
+La pantalla de classifiers tiene la misma pestaña **Documentación**: abre con cómo el profiling
+decide un dominio, seguida de la sección del framework de classifier en cuestión.
+
 El directorio [`docs/`](docs/) contiene una guía de referencia de los 31 frameworks del plugin, en tres idiomas:
 
 | Idioma | Archivo |
@@ -57,7 +60,7 @@ El directorio [`docs/`](docs/) contiene una guía de referencia de los 31 framew
 | English | [`docs/delphix-frameworks-guide.en.pdf`](docs/delphix-frameworks-guide.en.pdf) |
 | Português (BR) | [`docs/delphix-frameworks-guide.pt-BR.pdf`](docs/delphix-frameworks-guide.pt-BR.pdf) |
 
-Para cada framework la guía explica qué hace, ejemplos de entrada → salida y la descripción de todos los parámetros de configuración. Los frameworks se agrupan según las mismas categorías de la barra lateral de la UI. Incluye además tres apéndices: conceptos transversales (determinismo, papel de la clave, frameworks que pueden no enmascarar nada), el catálogo de los 59 algoritmos `dlpx-core:` incorporadas en el plugin y las limitaciones del runner standalone.
+Para cada framework la guía explica qué hace, ejemplos de entrada → salida y la descripción de todos los parámetros de configuración. Los frameworks se agrupan según las mismas categorías de la barra lateral de la UI. La Parte 10 trata el descubrimiento de dato sensible: cómo se decide un dominio, y los frameworks de classifier `PATH`, `TYPE`, `REGEX` y `LIST`. Incluye además tres apéndices: conceptos transversales (determinismo, papel de la clave, frameworks que pueden no enmascarar nada), el catálogo de los 59 algoritmos `dlpx-core:` incorporadas en el plugin y las limitaciones del runner standalone.
 
 Todos los pares entrada → salida se generaron ejecutando los frameworks en `AlgorithmRunner` — no son ilustrativos.
 
@@ -174,8 +177,8 @@ de release, el script recurre a la rama por defecto y lo avisa.
 
 Volver a ejecutar el script en una máquina que ya lo tiene ofrece **actualizar** o **eliminar**.
 Actualizar nunca toca `db/`, donde viven tus algoritmos guardados y tu configuración. Desinstalar
-borra todo, por eso avisa antes — exporta desde la barra lateral (**Algoritmos → ⋯ → Exportar**) si
-quieres conservar algo.
+borra todo, por eso avisa antes — copia la carpeta `db/` a otro sitio si quieres conservar lo que
+hay en ella.
 
 ### O hazlo a mano
 
@@ -319,6 +322,23 @@ instancia rechaza un classifier cuyo dominio no tiene, así que el dominio va an
 máquina lo tiene — junto con sus algoritmos — y los archivos de valores de un classifier LIST se
 suben cuando la instancia no los tiene. Importar hace lo mismo en sentido inverso: el classifier
 viene con su dominio, los algoritmos de ese dominio y sus archivos de valores.
+
+### Profile sets
+
+Un profile set es lo que un job de profiling ejecuta de verdad: los classifiers que debe probar y
+el **umbral de asignación** — la confianza que un dominio debe alcanzar para que el job se lo
+asigne. La sección **Profile Sets** de la barra lateral los lista con su tamaño y su umbral; crea
+uno en *Profile Sets → ⋯ → Nuevo profile set*, o trae los de la instancia con *Importar de Delphix*.
+
+El editor elige los miembros entre los classifiers guardados aquí, filtrando por nombre o dominio.
+No hay nada que probar en un set: quien decide el dominio son los classifiers, y se configuran y se
+prueban en su propio editor.
+
+Todo aquello en lo que un set se apoya viaja con él. Importar uno trae los classifiers que nombra
+y, a través de ellos, sus dominios, los algoritmos de esos dominios y los archivos de valores.
+**Enviar a Delphix** hace lo inverso: cada miembro va primero, y el set se crea o actualiza
+nombrándolos por los ids que devolvió la instancia — un set solo puede referenciar classifiers que
+la instancia ya tiene.
 
 **Importar.** *Algoritmos → ⋯ → Importar de Delphix*, en la barra lateral, lista lo que tiene la instancia.
 Lo que esté sobre un framework que la herramienta no puede ejecutar aparece, pero no es

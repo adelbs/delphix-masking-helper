@@ -249,6 +249,27 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+  CREATE TABLE IF NOT EXISTS profile_sets (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    -- Unique here and on the engine; like a classifier, the engine renames it in place and
+    -- identifies it by delphix_id.
+    name        TEXT NOT NULL UNIQUE,
+    description TEXT NOT NULL DEFAULT '',
+    -- The confidence a domain must reach, 1-100, for a profiling job to assign it. The engine
+    -- falls back to its own asdd/DefaultAssignmentThreshold when a set carries none.
+    assignment_threshold INTEGER NOT NULL DEFAULT 80,
+    delphix_id     INTEGER,
+    delphix_origin TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+  -- Which classifiers a set runs. The engine holds the same thing as classifierIds[]; here it is
+  -- a table so deleting a classifier cannot leave an id behind that points at nothing.
+  CREATE TABLE IF NOT EXISTS profile_set_classifiers (
+    profile_set_id INTEGER NOT NULL,
+    classifier_id  INTEGER NOT NULL,
+    PRIMARY KEY (profile_set_id, classifier_id)
+  );
   CREATE TABLE IF NOT EXISTS saved_algorithms (
     id        INTEGER PRIMARY KEY AUTOINCREMENT,
     name      TEXT NOT NULL,
@@ -690,12 +711,8 @@ app.post('/api/delphix/import', async (req, res) => {
   }
   const names = Array.isArray(req.body.names) ? req.body.names.map(String) : [];
   if (!names.length) return res.status(400).json({ error: 'names[] is required' });
-  try {
-    const out = await importFromEngine(cfg, { algorithms: names });
-    res.json(importReply(out, 'algorithms', out.algorithms.filter((name) => names.includes(name))));
-  } catch (err) {
-    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
-  }
+  await streamImport(res, cfg, { algorithms: names }, 'algorithms',
+    (out) => out.algorithms.filter((name) => names.includes(name)));
 });
 
 /**
@@ -819,9 +836,21 @@ const canDownloadLookup = (a) =>
  * file. What cannot come is reported rather than lost: a framework this tool cannot run, a name
  * the engine does not have, a file the engine offers no way to download.
  */
-async function importFromEngine(cfg, { algorithms = [], domains = [], classifiers = [] }) {
+async function importFromEngine(cfg, { algorithms = [], domains = [], classifiers = [], profileSets = [], onProgress = null }) {
   const origin = delphix.apiRoot(cfg.baseUrl);
-  const out = { classifiers: [], domains: [], algorithms: [], skipped: [], downloaded: [], needsFiles: [] };
+  const out = { profileSets: [], classifiers: [], domains: [], algorithms: [], skipped: [], downloaded: [], needsFiles: [] };
+
+  // Progress, for the dialog to show. The work is discovered as it goes — a classifier drags its
+  // domain, a domain its algorithms — so the total is never known up front: it is always what is
+  // finished plus what is still queued, and it grows. `step` is called as an item is taken up,
+  // whatever becomes of it, so the count reaches the total even when items are skipped.
+  let done = 0;
+  const step = (kind, name, queued) => {
+    done += 1;
+    if (onProgress) onProgress({ kind, name, done, total: done + queued });
+  };
+  if (onProgress) onProgress({ kind: 'reading', name: null, done: 0, total: 0 });
+
   const [remoteAlgorithms, remoteDomains, runnable] = await Promise.all([
     delphix.listAlgorithms(cfg), delphix.listDomains(cfg), runJava({ command: 'list' }),
   ]);
@@ -857,13 +886,55 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
 
   const pendingDomains = new Set(domains);
   const pendingAlgorithms = algorithms.map((name) => ({ name, asked: true }));
+  const pendingClassifiers = new Set(classifiers.map(Number));
+  // Which engine classifier ids each imported set holds. Resolved to local rows only after the
+  // classifiers themselves are in, because that is when they have local ids to point at.
+  const memberships = [];
 
-  if (classifiers.length) {
+  if (profileSets.length) {
+    const sets = await delphix.listProfileSets(cfg);
+    const wanted = new Set(profileSets.map(Number));
+    const picked = sets.filter((s) => wanted.has(Number(s.profileSetId)));
+    for (const [i, s] of picked.entries()) {
+      step('profileSet', s.profileSetName, (picked.length - 1 - i)
+        + pendingClassifiers.size + pendingDomains.size + pendingAlgorithms.length);
+      const threshold = Number(s.assignmentThreshold) || THRESHOLD_DEFAULT;
+      // By the engine id first, since a set renamed there is still the one that was imported.
+      const existing = db.prepare('SELECT id FROM profile_sets WHERE delphix_id = ? AND delphix_origin = ?').get(s.profileSetId, origin)
+        ?? db.prepare('SELECT id FROM profile_sets WHERE name = ?').get(s.profileSetName);
+      let localId;
+      try {
+        if (existing) {
+          db.prepare(`
+            UPDATE profile_sets SET name = ?, description = ?, assignment_threshold = ?,
+                   delphix_id = ?, delphix_origin = ?, updated_at = datetime('now')
+            WHERE id = ?
+          `).run(s.profileSetName, s.description ?? '', threshold, s.profileSetId, origin, existing.id);
+          localId = existing.id;
+        } else {
+          localId = db.prepare(`
+            INSERT INTO profile_sets (name, description, assignment_threshold, delphix_id, delphix_origin)
+            VALUES (?, ?, ?, ?, ?)
+          `).run(s.profileSetName, s.description ?? '', threshold, s.profileSetId, origin).lastInsertRowid;
+        }
+      } catch {
+        // Renamed on the engine onto a name another local set holds.
+        out.skipped.push({ kind: 'profileSet', name: s.profileSetName, reason: 'name-taken' });
+        continue;
+      }
+      const members = (s.classifierIds ?? []).map(Number);
+      for (const id of members) pendingClassifiers.add(id);
+      memberships.push({ localId, members });
+      out.profileSets.push(s.profileSetName);
+    }
+  }
+
+  if (pendingClassifiers.size) {
     const [list, frameworks] = await Promise.all([delphix.listClassifiers(cfg), delphix.classifierFrameworks(cfg)]);
     const frameworkOf = Object.fromEntries(Object.entries(frameworks).map(([name, id]) => [id, name]));
-    const wanted = new Set(classifiers.map(Number));
-    for (const c of list) {
-      if (!wanted.has(Number(c.classifierId))) continue;
+    const picked = list.filter((c) => pendingClassifiers.has(Number(c.classifierId)));
+    for (const [i, c] of picked.entries()) {
+      step('classifier', c.classifierName, (picked.length - 1 - i) + pendingDomains.size + pendingAlgorithms.length);
       const framework = frameworkOf[c.frameworkId];
       if (!classifierKit.isFramework(framework)) {
         out.skipped.push({ kind: 'classifier', name: c.classifierName, reason: 'unsupported-framework' });
@@ -897,7 +968,20 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
     }
   }
 
-  for (const name of pendingDomains) {
+  // The sets can only be filled in now: a member is an engine id, and the row it names here has
+  // just been created or updated. An id the engine holds but this machine could not take (an
+  // unsupported framework) is simply not in the set — and is already named in `skipped`.
+  const localByEngineId = new Map(
+    db.prepare('SELECT id, delphix_id FROM classifiers WHERE delphix_origin = ? AND delphix_id IS NOT NULL')
+      .all(origin).map((r) => [Number(r.delphix_id), r.id])
+  );
+  for (const { localId, members } of memberships) {
+    setMembers(localId, members.map((id) => localByEngineId.get(id)).filter((id) => id != null));
+  }
+
+  const domainQueue = [...pendingDomains];
+  for (const [i, name] of domainQueue.entries()) {
+    step('domain', name, (domainQueue.length - 1 - i) + pendingAlgorithms.length);
     const d = domainByName.get(name);
     if (!d) { out.skipped.push({ kind: 'domain', name, reason: 'not-found' }); continue; }
     if (db.prepare('SELECT id FROM domains WHERE name = ?').get(name)) {
@@ -921,6 +1005,7 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
     const { name, asked } = pendingAlgorithms.shift();
     if (seen.has(name)) continue;
     seen.add(name);
+    step('algorithm', name, pendingAlgorithms.length);
     const a = algorithmByName.get(name);
     if (!a) { out.skipped.push({ kind: 'algorithm', name, reason: 'not-found' }); continue; }
     // A plugin instance reached through a reference is already here, in this tool's plugin.
@@ -962,11 +1047,42 @@ function importReply(out, kind, imported) {
   const along = (list, own) => (kind === own ? list.filter((name) => !imported.includes(name)) : list);
   return {
     imported,
-    related: { domains: along(out.domains, 'domains'), algorithms: along(out.algorithms, 'algorithms') },
+    related: {
+      domains: along(out.domains, 'domains'),
+      algorithms: along(out.algorithms, 'algorithms'),
+      classifiers: along(out.classifiers, 'classifiers'),
+    },
     skipped: out.skipped,
     downloaded: out.downloaded,
     needsFiles: out.needsFiles,
   };
+}
+
+/**
+ * Runs an import as server-sent events.
+ *
+ * Bringing everything down takes a while — the engine is listed, then each item is read, and a
+ * lookup file may be downloaded along the way — and a plain POST leaves the dialog with nothing
+ * to show for it. So each item announces itself as it is taken up, and the reply the dialog used
+ * to receive as JSON arrives as the final `done` event.
+ *
+ * A failure has to travel the same way: by the time the first item is read the status code is
+ * long gone, so it is sent as an `error` event instead. Only a refusal raised before any of this
+ * — no engine configured — is still a plain JSON 400.
+ */
+async function streamImport(res, cfg, selection, kind, pickImported) {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+  const send = (event, data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  try {
+    const out = await importFromEngine(cfg, { ...selection, onProgress: (p) => send('progress', p) });
+    send('done', importReply(out, kind, pickImported(out)));
+  } catch (err) {
+    send('error', { message: err.message });
+  }
+  res.end();
 }
 
 /**
@@ -1395,31 +1511,6 @@ app.delete('/api/algorithms/:id', (req, res) => {
   res.json({ ok: true });
 });
 
-// Export all algorithms
-app.get('/api/algorithms/export', (req, res) => {
-  const rows = db.prepare('SELECT * FROM saved_algorithms ORDER BY id').all();
-  res.setHeader('Content-Disposition', 'attachment; filename="delphix-algorithms.json"');
-  res.json(rows);
-});
-
-// Import algorithms
-app.post('/api/algorithms/import', (req, res) => {
-  const rows = req.body;
-  if (!Array.isArray(rows)) return res.status(400).json({ error: 'Expected array' });
-  const stmt = db.prepare(`
-    INSERT INTO saved_algorithms (name, framework, display_name, config, input, key_value, output)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `);
-  let count = 0;
-  for (const r of rows) {
-    try {
-      stmt.run(r.name, r.framework ?? r.algorithm, r.display_name, r.config, r.input, MASKING_KEY, r.output);
-      count++;
-    } catch {}
-  }
-  res.json({ imported: count });
-});
-
 // ── Domains ───────────────────────────────────────────────────────────────────
 //
 // A domain is a name plus two algorithm references, which is the whole of the engine's own
@@ -1489,12 +1580,7 @@ app.post('/api/delphix/domains/import', async (req, res) => {
     return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
   }
   const names = Array.isArray(req.body.names) ? req.body.names.map(String) : [];
-  try {
-    const out = await importFromEngine(cfg, { domains: names });
-    res.json(importReply(out, 'domains', out.domains));
-  } catch (err) {
-    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
-  }
+  await streamImport(res, cfg, { domains: names }, 'domains', (out) => out.domains);
 });
 
 /**
@@ -1733,6 +1819,9 @@ app.put('/api/classifiers/:id', (req, res) => {
 });
 
 app.delete('/api/classifiers/:id', (req, res) => {
+  // The membership goes with it: a profile set holding a dangling id would send that id to the
+  // engine, which answers 404 for a classifier nobody can name any more.
+  db.prepare('DELETE FROM profile_set_classifiers WHERE classifier_id = ?').run(req.params.id);
   db.prepare('DELETE FROM classifiers WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
 });
@@ -1799,6 +1888,106 @@ app.post('/api/classifiers/test', (req, res) => {
   }
 });
 
+// ── Profile sets ──────────────────────────────────────────────────────────────
+//
+// A profile set is what a profiling job runs: the classifiers it should try, and the confidence a
+// domain has to reach before the job assigns it. Everything else about profiling — how a
+// classifier scores, how the scores of a domain combine — belongs to the classifiers, where it is
+// configured and tested. So a set is a register: which ones, and how sure is sure enough.
+
+const THRESHOLD_DEFAULT = 80;
+
+/** A set with the classifiers it holds, ordered the way the sidebar and the editor show them. */
+function profileSetRow(r) {
+  if (!r) return null;
+  const members = db.prepare(`
+    SELECT c.* FROM profile_set_classifiers m
+      JOIN classifiers c ON c.id = m.classifier_id
+     WHERE m.profile_set_id = ?
+     ORDER BY c.name COLLATE NOCASE
+  `).all(r.id);
+  return {
+    ...r,
+    classifier_ids: members.map((c) => c.id),
+    // Enough of each member for the list to read without a second request.
+    classifiers: members.map((c) => ({ id: c.id, name: c.name, framework: c.framework, domain_name: c.domain_name })),
+  };
+}
+
+function profileSetNameProblem(name, exceptId = null) {
+  if (!name) return { code: 'name-required', error: 'Give the profile set a name.' };
+  if (name.length > 100) return { code: 'name-too-long', error: 'Profile set names are limited to 100 characters.' };
+  const clash = db.prepare('SELECT id FROM profile_sets WHERE name = ?').get(name);
+  if (clash && clash.id !== exceptId) return { code: 'name-taken', error: `Another profile set is already called "${name}".`, status: 409 };
+  return null;
+}
+
+/** 1-100, as the engine requires. Anything else is refused rather than quietly clamped. */
+function thresholdProblem(value) {
+  const n = Number(value);
+  if (!Number.isInteger(n) || n < 1 || n > 100) {
+    return { code: 'threshold-invalid', error: 'The assignment threshold is a whole number from 1 to 100.' };
+  }
+  return null;
+}
+
+/** Replaces a set's membership, keeping only ids that name a classifier held here. */
+function setMembers(profileSetId, ids) {
+  const known = new Set(db.prepare('SELECT id FROM classifiers').all().map((r) => r.id));
+  const wanted = [...new Set((Array.isArray(ids) ? ids : []).map(Number))].filter((id) => known.has(id));
+  db.prepare('DELETE FROM profile_set_classifiers WHERE profile_set_id = ?').run(profileSetId);
+  const add = db.prepare('INSERT OR IGNORE INTO profile_set_classifiers (profile_set_id, classifier_id) VALUES (?, ?)');
+  for (const id of wanted) add.run(profileSetId, id);
+  return wanted;
+}
+
+app.get('/api/profile-sets', (req, res) => {
+  res.json(db.prepare('SELECT * FROM profile_sets ORDER BY name COLLATE NOCASE').all().map(profileSetRow));
+});
+
+app.post('/api/profile-sets', (req, res) => {
+  const name = String(req.body.name ?? '').trim();
+  const threshold = req.body.threshold ?? THRESHOLD_DEFAULT;
+
+  const nameProblem = profileSetNameProblem(name);
+  if (nameProblem) return res.status(nameProblem.status ?? 400).json(nameProblem);
+  const bad = thresholdProblem(threshold);
+  if (bad) return res.status(400).json(bad);
+
+  const info = db.prepare(`
+    INSERT INTO profile_sets (name, description, assignment_threshold) VALUES (?, ?, ?)
+  `).run(name, String(req.body.description ?? ''), Number(threshold));
+  setMembers(info.lastInsertRowid, req.body.classifierIds);
+  res.status(201).json(profileSetRow(db.prepare('SELECT * FROM profile_sets WHERE id = ?').get(info.lastInsertRowid)));
+});
+
+app.put('/api/profile-sets/:id', (req, res) => {
+  const current = db.prepare('SELECT * FROM profile_sets WHERE id = ?').get(req.params.id);
+  if (!current) return res.status(404).json({ error: 'Profile set not found' });
+
+  const name = req.body.name === undefined ? current.name : String(req.body.name).trim();
+  const description = req.body.description === undefined ? current.description : String(req.body.description);
+  const threshold = req.body.threshold === undefined ? current.assignment_threshold : req.body.threshold;
+
+  const nameProblem = profileSetNameProblem(name, current.id);
+  if (nameProblem) return res.status(nameProblem.status ?? 400).json(nameProblem);
+  const bad = thresholdProblem(threshold);
+  if (bad) return res.status(400).json(bad);
+
+  db.prepare(`
+    UPDATE profile_sets SET name = ?, description = ?, assignment_threshold = ?, updated_at = datetime('now')
+    WHERE id = ?
+  `).run(name, description, Number(threshold), current.id);
+  if (req.body.classifierIds !== undefined) setMembers(current.id, req.body.classifierIds);
+  res.json(profileSetRow(db.prepare('SELECT * FROM profile_sets WHERE id = ?').get(current.id)));
+});
+
+app.delete('/api/profile-sets/:id', (req, res) => {
+  db.prepare('DELETE FROM profile_set_classifiers WHERE profile_set_id = ?').run(req.params.id);
+  db.prepare('DELETE FROM profile_sets WHERE id = ?').run(req.params.id);
+  res.json({ ok: true });
+});
+
 /** The engine's classifiers, with what importing each would mean here. */
 app.get('/api/delphix/classifiers', async (req, res) => {
   const cfg = delphixCfg();
@@ -1845,12 +2034,7 @@ app.post('/api/delphix/classifiers/import', async (req, res) => {
     return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
   }
   const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
-  try {
-    const out = await importFromEngine(cfg, { classifiers: ids });
-    res.json(importReply(out, 'classifiers', out.classifiers));
-  } catch (err) {
-    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
-  }
+  await streamImport(res, cfg, { classifiers: ids }, 'classifiers', (out) => out.classifiers);
 });
 
 /**
@@ -1862,6 +2046,45 @@ app.post('/api/delphix/classifiers/import', async (req, res) => {
  * uploaded when the engine could not open them otherwise. Limitations do not stop the push:
  * Delphix accepts what this tool merely cannot test.
  */
+/**
+ * Pushes one classifier, after its domain.
+ *
+ * Returns what `delphix.saveClassifier` returned plus the domain that went ahead of it, if one
+ * did. Shared with the profile set export, which has to send every member before it can name them.
+ */
+async function pushClassifierRow(ctx, row) {
+  const config = parseStoredConfig(row.config);
+  let domain = null;
+  const domainRow = db.prepare('SELECT * FROM domains WHERE name = ?').get(row.domain_name);
+  if (domainRow) {
+    domain = await pushDomainRow(ctx, domainRow);
+  } else {
+    const exists = await delphix.getDomain(ctx.cfg, row.domain_name).then(() => true).catch((err) => {
+      if (err.status === 404) return false;
+      throw err;
+    });
+    if (!exists) {
+      const err = new Error(`Neither this machine nor the engine has a domain called "${row.domain_name}".`);
+      err.code = 'domain-missing';
+      err.domain = row.domain_name;
+      throw err;
+    }
+  }
+
+  const out = await delphix.saveClassifier(ctx.cfg, {
+    name: row.name,
+    framework: row.framework,
+    domain: row.domain_name,
+    config,
+    description: row.description,
+    existingId: row.delphix_origin === ctx.origin ? row.delphix_id : null,
+    prepareConfig: (current) => engineReadyFiles(ctx, config, current),
+  });
+  db.prepare(`UPDATE classifiers SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
+    .run(out.id, ctx.origin, row.id);
+  return { ...out, domain: domain && { mode: domain.mode, name: domain.name } };
+}
+
 app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
@@ -1869,47 +2092,132 @@ app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
   }
   const row = db.prepare('SELECT * FROM classifiers WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Classifier not found' });
-  const config = parseStoredConfig(row.config);
-  const { errors } = classifierKit.reviewClassifier(row.framework, config);
+  const { errors } = classifierKit.reviewClassifier(row.framework, parseStoredConfig(row.config));
   if (errors.length) return res.status(400).json(configRefusal('invalid-config', errors));
 
-  const origin = delphix.apiRoot(cfg.baseUrl);
   try {
     const ctx = exportContext(cfg);
-    let domain = null;
-    const domainRow = db.prepare('SELECT * FROM domains WHERE name = ?').get(row.domain_name);
-    if (domainRow) {
-      domain = await pushDomainRow(ctx, domainRow);
-    } else {
-      const exists = await delphix.getDomain(cfg, row.domain_name).then(() => true).catch((err) => {
-        if (err.status === 404) return false;
-        throw err;
-      });
-      if (!exists) {
-        return res.status(400).json({
-          code: 'domain-missing', domain: row.domain_name,
-          error: `Neither this machine nor the engine has a domain called "${row.domain_name}".`,
-        });
-      }
-    }
-
-    const out = await delphix.saveClassifier(cfg, {
-      name: row.name,
-      framework: row.framework,
-      domain: row.domain_name,
-      config,
-      description: row.description,
-      existingId: row.delphix_origin === origin ? row.delphix_id : null,
-      prepareConfig: (current) => engineReadyFiles(ctx, config, current),
-    });
-    db.prepare(`UPDATE classifiers SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
-      .run(out.id, origin, row.id);
+    const out = await pushClassifierRow(ctx, row);
     res.json({
-      mode: out.mode, name: out.name, engine: origin,
-      domain: domain && { mode: domain.mode, name: domain.name },
+      mode: out.mode, name: out.name, engine: ctx.origin, domain: out.domain,
       sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded,
     });
   } catch (err) {
+    if (err.code === 'domain-missing') {
+      return res.status(400).json({ code: err.code, domain: err.domain, error: err.message });
+    }
+    exportFailure(res, err);
+  }
+});
+
+// ── Profile sets on the engine ────────────────────────────────────────────────
+
+/** The engine's profile sets, with what importing each would mean here. */
+app.get('/api/delphix/profile-sets', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+  }
+  try {
+    const [sets, classifiers, frameworks] = await Promise.all([
+      delphix.listProfileSets(cfg), delphix.listClassifiers(cfg), delphix.classifierFrameworks(cfg),
+    ]);
+    const nameOf = Object.fromEntries(Object.entries(frameworks).map(([name, id]) => [id, name]));
+    const supported = new Set(classifiers
+      .filter((c) => classifierKit.isFramework(nameOf[c.frameworkId]))
+      .map((c) => Number(c.classifierId)));
+
+    const origin = delphix.apiRoot(cfg.baseUrl);
+    const rows = db.prepare('SELECT name, delphix_id, delphix_origin FROM profile_sets').all();
+    const seenIds = new Set(rows.filter((r) => r.delphix_origin === origin && r.delphix_id != null).map((r) => Number(r.delphix_id)));
+    const seenNames = new Set(rows.map((r) => r.name));
+
+    res.json(sets.map((s) => {
+      const members = (s.classifierIds ?? []).map(Number);
+      return {
+        profileSetId: s.profileSetId,
+        profileSetName: s.profileSetName,
+        description: s.description ?? '',
+        assignmentThreshold: Number(s.assignmentThreshold) || null,
+        createdBy: s.createdBy ?? null,
+        classifiers: members.length,
+        // Members built on a framework this tool cannot run come down as part of the set, but
+        // cannot be tested here — worth saying before the import, not after.
+        untestable: members.filter((id) => !supported.has(id)).length,
+        alreadyImported: seenIds.has(Number(s.profileSetId)) || seenNames.has(s.profileSetName),
+      };
+    }).sort((a, b) => a.profileSetName.localeCompare(b.profileSetName)));
+  } catch (err) {
+    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
+  }
+});
+
+/**
+ * Copies the chosen sets down with the classifiers they name — and so, through them, the domains
+ * those classifiers vote for, those domains' algorithms, and the list files. A set is nothing but
+ * a selection, so importing one without its members would import nothing at all.
+ */
+app.post('/api/delphix/profile-sets/import', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+  }
+  const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
+  await streamImport(res, cfg, { profileSets: ids }, 'profileSets', (out) => out.profileSets);
+});
+
+/** Sends the set after every classifier in it, and names them there by the ids it gets back. */
+app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+  }
+  const row = db.prepare('SELECT * FROM profile_sets WHERE id = ?').get(req.params.id);
+  if (!row) return res.status(404).json({ error: 'Profile set not found' });
+  const members = db.prepare(`
+    SELECT c.* FROM profile_set_classifiers m
+      JOIN classifiers c ON c.id = m.classifier_id
+     WHERE m.profile_set_id = ? ORDER BY c.name COLLATE NOCASE
+  `).all(row.id);
+  if (!members.length) {
+    return res.status(400).json({ code: 'no-members', error: 'A profile set with no classifier has nothing to send.' });
+  }
+
+  try {
+    const ctx = exportContext(cfg);
+    // Every member first: the engine stores classifierIds, so a set can only be posted once each
+    // of them has an id there. A member that fails stops the push — posting the set without it
+    // would silently create a set that profiles for less than it was built to.
+    const classifierIds = [];
+    const sent = [];
+    for (const member of members) {
+      const out = await pushClassifierRow(ctx, member);
+      if (out.id == null) {
+        throw new Error(`The engine accepted "${member.name}" but returned no id, so the set cannot name it.`);
+      }
+      classifierIds.push(out.id);
+      sent.push({ name: out.name, mode: out.mode });
+    }
+
+    const out = await delphix.saveProfileSet(cfg, {
+      name: row.name,
+      description: row.description,
+      threshold: row.assignment_threshold,
+      classifierIds,
+      existingId: row.delphix_origin === ctx.origin ? row.delphix_id : null,
+    });
+    db.prepare(`UPDATE profile_sets SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
+      .run(out.id, ctx.origin, row.id);
+
+    res.json({
+      mode: out.mode, name: out.name, engine: ctx.origin,
+      classifiers: sent,
+      sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded,
+    });
+  } catch (err) {
+    if (err.code === 'domain-missing') {
+      return res.status(400).json({ code: err.code, domain: err.domain, error: err.message });
+    }
     exportFailure(res, err);
   }
 });

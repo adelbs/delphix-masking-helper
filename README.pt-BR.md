@@ -48,6 +48,9 @@ Cada framework abre com duas abas: **Testar** e **Documentação**. A aba de doc
 seção daquele framework no guia de referência, no idioma da interface — o mesmo conteúdo dos PDFs
 abaixo, lido da mesma fonte, então os dois nunca divergem.
 
+A tela de classifiers tem a mesma aba **Documentação**: ela abre com como o profiling decide um
+domínio, seguida da seção do framework de classifier em questão.
+
 O diretório [`docs/`](docs/) contém um guia de referência dos 31 frameworks do plugin, em três idiomas:
 
 | Idioma | Arquivo |
@@ -56,7 +59,7 @@ O diretório [`docs/`](docs/) contém um guia de referência dos 31 frameworks d
 | English | [`docs/delphix-frameworks-guide.en.pdf`](docs/delphix-frameworks-guide.en.pdf) |
 | Español | [`docs/delphix-frameworks-guide.es.pdf`](docs/delphix-frameworks-guide.es.pdf) |
 
-Para cada framework o guia traz o que ele faz, exemplos de entrada → saída, e a explicação de todos os parâmetros de configuração. Os frameworks são agrupados pelas mesmas categorias da barra lateral da UI. Há ainda três apêndices: conceitos transversais (determinismo, papel da chave, frameworks que podem não mascarar nada), o catálogo dos 59 algoritmos `dlpx-core:` embutidos no plugin, e as limitações do runner standalone.
+Para cada framework o guia traz o que ele faz, exemplos de entrada → saída, e a explicação de todos os parâmetros de configuração. Os frameworks são agrupados pelas mesmas categorias da barra lateral da UI. A Parte 10 trata da descoberta de dado sensível: como um domínio é decidido, e os frameworks de classifier `PATH`, `TYPE`, `REGEX` e `LIST`. Há ainda três apêndices: conceitos transversais (determinismo, papel da chave, frameworks que podem não mascarar nada), o catálogo dos 59 algoritmos `dlpx-core:` embutidos no plugin, e as limitações do runner standalone.
 
 Todos os pares entrada → saída foram gerados executando os frameworks no `AlgorithmRunner` — não são ilustrativos.
 
@@ -173,8 +176,8 @@ branch padrão e avisa.
 
 Rodar o script de novo numa máquina que já tem instalação oferece **atualizar** ou **remover**.
 Atualizar nunca toca em `db/`, onde ficam seus algoritmos salvos e configurações. Desinstalar
-apaga tudo, por isso avisa antes — exporte pela barra lateral (**Algoritmos → ⋯ → Exportar**) se quiser
-guardar algo.
+apaga tudo, por isso avisa antes — copie a pasta `db/` para outro lugar se quiser guardar o que
+está nela.
 
 ### Ou faça na mão
 
@@ -313,6 +316,22 @@ classifier cujo domínio ela não tem, então o domínio vai antes quando esta m
 com os algoritmos dele — e os arquivos de valores de um classifier LIST são enviados quando a
 instância não os tem. Importar faz o mesmo no sentido inverso: o classifier vem com o domínio, os
 algoritmos desse domínio e os arquivos de valores.
+
+### Profile sets
+
+Um profile set é o que um job de profiling de fato roda: os classifiers que ele deve tentar e o
+**limiar de atribuição** — a confiança que um domínio precisa alcançar para o job atribuí-lo. A
+sessão **Profile Sets** da barra lateral os lista com o tamanho e o limiar; crie um em *Profile
+Sets → ⋯ → Novo profile set*, ou traga os da instância com *Importar do Delphix*.
+
+O editor escolhe os membros entre os classifiers guardados aqui, filtrando por nome ou domínio. Não
+há o que testar num set: quem decide o domínio são os classifiers, e eles são configurados e
+testados no editor deles.
+
+Tudo em que um set se apoia viaja junto com ele. Importar um traz os classifiers que ele nomeia e,
+através deles, os domínios, os algoritmos desses domínios e os arquivos de valores. **Enviar ao
+Delphix** faz o inverso: cada membro vai primeiro, e o set é então criado ou atualizado nomeando-os
+pelos ids que a instância devolveu — um set só pode referenciar classifiers que a instância já tem.
 
 **Importar.** *Algoritmos → ⋯ → Importar do Delphix*, na barra lateral, lista o que a instância tem. O que
 estiver sobre um framework que a ferramenta não consegue executar aparece, mas não é selecionável

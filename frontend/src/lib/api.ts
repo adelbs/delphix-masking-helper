@@ -1,9 +1,10 @@
 import type {
   Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage, Classifier, ClassifierCatalog,
   ClassifierFrameworkName, ClassifierIssue, ClassifierReview, ClassifierTestField, ClassifierTestResult,
+  ProfileSet,
   BuiltinReferences, Domain, EngineReferences, Framework, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
-import type { EngineExportResult, EngineImportResult } from '@/lib/engine-sync'
+import type { EngineExportResult, EngineImportResult, ImportProgress } from '@/lib/engine-sync'
 
 const json = (body: unknown): RequestInit => ({
   headers: { 'Content-Type': 'application/json' },
@@ -53,6 +54,74 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
     throw err
   }
   return data as T
+}
+
+/**
+ * Reads a server-sent event stream to its end, handing each frame to `handle`.
+ *
+ * Shared by the chat and the imports: both answer with `event:` + `data:` frames, and both need
+ * the reply to arrive in pieces rather than at the end.
+ */
+async function readEvents(body: ReadableStream<Uint8Array>, handle: (event: string, payload: any) => void) { // eslint-disable-line @typescript-eslint/no-explicit-any
+  const reader = body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+  let event = ''
+
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+    let nl: number
+    // SSE frames are separated by blank lines; each frame is `event:` + `data:`.
+    while ((nl = buffer.indexOf('\n')) !== -1) {
+      const line = buffer.slice(0, nl).replace(/\r$/, '')
+      buffer = buffer.slice(nl + 1)
+      if (line.startsWith('event:')) { event = line.slice(6).trim(); continue }
+      if (!line.startsWith('data:')) continue
+      handle(event, JSON.parse(line.slice(5).trim()))
+    }
+  }
+}
+
+/**
+ * POSTs a selection to an import endpoint and follows it as it goes.
+ *
+ * The result is the same reply a plain POST used to return; what is new is that `onProgress`
+ * hears about each item on the way, so the dialog can show a bar instead of freezing. A refusal
+ * raised before the stream begins — no engine configured — still arrives as JSON, and is thrown
+ * the way every other request throws it.
+ */
+async function streamImport(
+  url: string,
+  body: unknown,
+  onProgress: (p: ImportProgress) => void,
+): Promise<EngineImportResult> {
+  let res: Response
+  try {
+    res = await fetch(url, { method: 'POST', ...json(body) })
+  } catch {
+    throw new Error(`Cannot reach ${location.host}. Is the app still running?`)
+  }
+
+  if (!res.body || !res.headers.get('content-type')?.includes('text/event-stream')) {
+    const data = await res.json().catch(() => ({})) as { error?: string; code?: string }
+    const err = new Error(data.error ?? `The server returned HTTP ${res.status}.`) as Error & { code?: string }
+    if (data.code) err.code = data.code
+    throw err
+  }
+
+  let result: EngineImportResult | null = null
+  let failure: string | null = null
+  await readEvents(res.body, (event, payload) => {
+    if (event === 'progress') onProgress(payload as ImportProgress)
+    if (event === 'done') result = payload as EngineImportResult
+    if (event === 'error') failure = payload.message as string
+  })
+  if (failure) throw new Error(failure)
+  // The stream ended without either event: the server died, or something cut the connection.
+  if (!result) throw new Error('The import stopped before it finished.')
+  return result
 }
 
 export const api = {
@@ -110,16 +179,6 @@ export const api = {
 
   deleteAlgorithm: (id: number) =>
     request<{ ok: boolean }>(`/api/algorithms/${id}`, { method: 'DELETE' }),
-
-  exportAlgorithms: () =>
-    request<Algorithm[]>('/api/algorithms/export'),
-
-  importAlgorithms: (rows: unknown[]) =>
-    request<{ imported: number }>('/api/algorithms/import', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(rows),
-    }),
 
   getConfig: () =>
     request<AppConfig>('/api/config'),
@@ -200,13 +259,9 @@ export const api = {
       createdBy: string | null; alreadyImported: boolean;
     }>>('/api/delphix/domains'),
 
-  /** Brings the domains down with the algorithms they name. */
-  delphixImportDomains: (names: string[]) =>
-    request<EngineImportResult>('/api/delphix/domains/import', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ names }),
-    }),
+  /** Brings the domains down with the algorithms they name, reporting each item on the way. */
+  delphixImportDomains: (names: string[], onProgress: (p: ImportProgress) => void) =>
+    streamImport('/api/delphix/domains/import', { names }, onProgress),
 
   /** Sends the domain and, first, the algorithms (and their files) it names that this machine holds. */
   delphixExportDomain: (id: number) =>
@@ -245,6 +300,40 @@ export const api = {
   }) =>
     request<ClassifierTestResult>('/api/classifiers/test', { method: 'POST', ...json(body) }),
 
+  // ── Profile sets ───────────────────────────────────────────────────────────
+
+  getProfileSets: () =>
+    request<ProfileSet[]>('/api/profile-sets'),
+
+  createProfileSet: (body: { name: string; description?: string; threshold: number; classifierIds: number[] }) =>
+    request<ProfileSet>('/api/profile-sets', { method: 'POST', ...json(body) }),
+
+  updateProfileSet: (id: number, patch: { name?: string; description?: string; threshold?: number; classifierIds?: number[] }) =>
+    request<ProfileSet>(`/api/profile-sets/${id}`, { method: 'PUT', ...json(patch) }),
+
+  deleteProfileSet: (id: number) =>
+    request<{ ok: boolean }>(`/api/profile-sets/${id}`, { method: 'DELETE' }),
+
+  delphixProfileSets: () =>
+    request<Array<{
+      profileSetId: number; profileSetName: string; description: string;
+      assignmentThreshold: number | null; createdBy: string | null;
+      /** How many classifiers the set holds, and how many of those this tool cannot evaluate. */
+      classifiers: number; untestable: number;
+      alreadyImported: boolean;
+    }>>('/api/delphix/profile-sets'),
+
+  /** Brings the sets down with the classifiers they name — and what those classifiers lean on. */
+  delphixImportProfileSets: (ids: number[], onProgress: (p: ImportProgress) => void) =>
+    streamImport('/api/delphix/profile-sets/import', { ids }, onProgress),
+
+  /** Sends every classifier in the set, then the set itself naming them by their engine ids. */
+  delphixExportProfileSet: (id: number) =>
+    request<{
+      mode: 'created' | 'updated'; name: string; engine: string;
+      classifiers: Array<{ name: string; mode: 'created' | 'updated' }>;
+    } & EngineExportResult>(`/api/delphix/profile-sets/export/${id}`, { method: 'POST' }),
+
   delphixClassifiers: () =>
     request<Array<{
       classifierId: number; classifierName: string; framework: ClassifierFrameworkName | null;
@@ -256,8 +345,8 @@ export const api = {
     }>>('/api/delphix/classifiers'),
 
   /** Brings the classifiers down with their domains, those domains' algorithms, and their list files. */
-  delphixImportClassifiers: (ids: number[]) =>
-    request<EngineImportResult>('/api/delphix/classifiers/import', { method: 'POST', ...json({ ids }) }),
+  delphixImportClassifiers: (ids: number[], onProgress: (p: ImportProgress) => void) =>
+    streamImport('/api/delphix/classifiers/import', { ids }, onProgress),
 
   /** Sends the classifier and, first, its domain (with the domain's algorithms) and its list files. */
   delphixExportClassifier: (id: number) =>
@@ -300,13 +389,8 @@ export const api = {
     }>>('/api/delphix/algorithms'),
 
   /** Brings the algorithms down with the algorithms and files they reference. */
-  delphixImport: (names: string[]) =>
-    request<EngineImportResult>(
-      '/api/delphix/import', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ names }),
-      }),
+  delphixImport: (names: string[], onProgress: (p: ImportProgress) => void) =>
+    streamImport('/api/delphix/import', { names }, onProgress),
 
   /** Sends the algorithm after the algorithms it references, uploading the files the engine lacks. */
   delphixExport: (id: number, name?: string) =>
@@ -332,33 +416,16 @@ export const api = {
     })
     if (!res.body) throw new Error('No response body')
 
-    const reader = res.body.getReader()
-    const decoder = new TextDecoder()
-    let buffer = ''
-    let event = ''
-
-    for (;;) {
-      const { done, value } = await reader.read()
-      if (done) break
-      buffer += decoder.decode(value, { stream: true })
-      let nl: number
-      // SSE frames are separated by blank lines; each frame is `event:` + `data:`.
-      while ((nl = buffer.indexOf('\n')) !== -1) {
-        const line = buffer.slice(0, nl).replace(/\r$/, '')
-        buffer = buffer.slice(nl + 1)
-        if (line.startsWith('event:')) { event = line.slice(6).trim(); continue }
-        if (!line.startsWith('data:')) continue
-        const payload = JSON.parse(line.slice(5).trim())
-        switch (event) {
-          case 'delta': handlers.onDelta(payload.delta); break
-          case 'replace': handlers.onReplace(payload.text); break
-          case 'saved': handlers.onSaved(payload); break
-          case 'save-error': handlers.onSaveError(payload.message); break
-          case 'warn': handlers.onSaveError(payload.message); break
-          case 'error': handlers.onError(payload.message); break
-        }
+    await readEvents(res.body, (event, payload) => {
+      switch (event) {
+        case 'delta': handlers.onDelta(payload.delta); break
+        case 'replace': handlers.onReplace(payload.text); break
+        case 'saved': handlers.onSaved(payload); break
+        case 'save-error': handlers.onSaveError(payload.message); break
+        case 'warn': handlers.onSaveError(payload.message); break
+        case 'error': handlers.onError(payload.message); break
       }
-    }
+    })
   },
 
   ensureSampleFile: (name: string) =>

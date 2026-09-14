@@ -1,22 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Search, ShieldCheck, X, Settings, ChevronDown, ChevronRight,
-  MoreHorizontal, Download, Upload, Server, Plus,
+  MoreHorizontal, Server, Plus,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { getFrameworkGroup, GROUP_ORDER } from '@/lib/framework-metadata'
 import { useAlgorithms, refreshAlgorithms } from '@/lib/algorithms'
 import { useDomains, refreshDomains, domainGroup } from '@/lib/domains'
 import { useClassifiers, refreshClassifiers } from '@/lib/classifiers'
+import { useProfileSets, refreshProfileSets } from '@/lib/profile-sets'
 import { LocaleFlags } from '@/components/LocaleFlags'
 import { EngineImport } from '@/components/EngineImport'
 import { DomainImport } from '@/components/DomainImport'
 import { ClassifierImport } from '@/components/ClassifierImport'
+import { ProfileSetImport } from '@/components/ProfileSetImport'
 import { useVersion } from '@/lib/version'
-import type { Algorithm, Classifier, Domain, Framework, LocalePref } from '@/types'
+import type { Algorithm, Classifier, Domain, Framework, LocalePref, ProfileSet } from '@/types'
 
 /**
  * The five macro sections. Those not built yet are announced and disabled — the shape of the
@@ -25,7 +26,7 @@ import type { Algorithm, Classifier, Domain, Framework, LocalePref } from '@/typ
  */
 const SECTIONS = ['frameworks', 'algorithms', 'domains', 'classifiers', 'profileSets'] as const
 type SectionId = (typeof SECTIONS)[number]
-const BUILT: SectionId[] = ['frameworks', 'algorithms', 'domains', 'classifiers']
+const BUILT: SectionId[] = ['frameworks', 'algorithms', 'domains', 'classifiers', 'profileSets']
 
 /** Open/closed state for both levels, remembered across reloads. */
 const PREF_KEY = 'dlpx.sidebar.open'
@@ -50,12 +51,16 @@ interface Props {
   activeAlgorithmId: number | null
   activeDomainId: number | null
   activeClassifierId: number | null
+  activeProfileSetId: number | null
   onSelectFramework: (framework: Framework) => void
   onSelectAlgorithm: (algorithm: Algorithm, framework: Framework) => void
+  onNewAlgorithm: () => void
   onSelectDomain: (domain: Domain) => void
   onNewDomain: () => void
   onSelectClassifier: (classifier: Classifier) => void
   onNewClassifier: () => void
+  onSelectProfileSet: (profileSet: ProfileSet) => void
+  onNewProfileSet: () => void
   onOpenSettings: () => void
   onGoHome: () => void
   localePref: LocalePref
@@ -65,18 +70,22 @@ interface Props {
 
 export function Sidebar({
   frameworks, loadError, activeClassName, activeAlgorithmId, activeDomainId, activeClassifierId,
-  onSelectFramework, onSelectAlgorithm, onSelectDomain, onNewDomain, onSelectClassifier, onNewClassifier,
+  activeProfileSetId,
+  onSelectFramework, onSelectAlgorithm, onNewAlgorithm, onSelectDomain, onNewDomain, onSelectClassifier, onNewClassifier,
+  onSelectProfileSet, onNewProfileSet,
   onOpenSettings, onGoHome, localePref, onLocaleChange, onClose,
 }: Props) {
   const { t } = useT()
   const { algorithms } = useAlgorithms()
   const { domains } = useDomains()
   const { classifiers } = useClassifiers()
+  const { profileSets } = useProfileSets()
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState<OpenState>(readOpen)
   const [engineOpen, setEngineOpen] = useState(false)
   const [domainImportOpen, setDomainImportOpen] = useState(false)
   const [classifierImportOpen, setClassifierImportOpen] = useState(false)
+  const [profileSetImportOpen, setProfileSetImportOpen] = useState(false)
 
   useEffect(() => {
     try { localStorage.setItem(PREF_KEY, JSON.stringify(open)) } catch { /* not worth failing over */ }
@@ -113,6 +122,20 @@ export function Sidebar({
     return next
   })
 
+  /**
+   * "New algorithm" has nothing to create yet, unlike a new domain or classifier: an algorithm
+   * *is* a framework you configured and named, so the only honest first step is choosing the
+   * framework. The sidebar clears itself out of the way — every section and every category shut,
+   * Frameworks open on its nine categories — and the panel says what to do with it.
+   */
+  const startNewAlgorithm = () => {
+    // A filter still in the box would hide most of what there is to choose from.
+    setQuery('')
+    // Replaces the whole map rather than merging: every other key goes missing, which is closed.
+    setOpen(() => ({ 'section:frameworks': true }))
+    onNewAlgorithm()
+  }
+
   /** An algorithm whose framework is missing from the plugin cannot be opened — say so here
    *  rather than letting the panel mount against nothing. */
   const openAlgorithm = (algorithm: Algorithm) => {
@@ -132,10 +155,16 @@ export function Sidebar({
   const matchClassifier = (c: Classifier) =>
     c.name.toLowerCase().includes(q) || c.domain_name.toLowerCase().includes(q)
 
+  // A set is found by its own name or by a classifier in it — which is how someone asks "which
+  // set runs this classifier?" without opening each one.
+  const matchProfileSet = (s: ProfileSet) =>
+    s.name.toLowerCase().includes(q) || s.classifiers.some(c => c.name.toLowerCase().includes(q))
+
   const shownFrameworks = q ? frameworks.filter(matchFramework) : frameworks
   const shownAlgorithms = q ? algorithms.filter(matchAlgorithm) : algorithms
   const shownDomains = q ? domains.filter(matchDomain) : domains
   const shownClassifiers = q ? classifiers.filter(matchClassifier) : classifiers
+  const shownProfileSets = q ? profileSets.filter(matchProfileSet) : profileSets
 
   return (
     <div className="flex flex-col h-full bg-slate-900">
@@ -179,7 +208,8 @@ export function Sidebar({
           const count = id === 'frameworks' ? shownFrameworks.length
             : id === 'algorithms' ? shownAlgorithms.length
             : id === 'domains' ? shownDomains.length
-            : id === 'classifiers' ? shownClassifiers.length : 0
+            : id === 'classifiers' ? shownClassifiers.length
+            : id === 'profileSets' ? shownProfileSets.length : 0
           if (q && built && count === 0) return null
 
           return (
@@ -198,7 +228,13 @@ export function Sidebar({
                 onToggle={() => toggleSection(id)}
                 actions={
                   id === 'algorithms' && built ? (
-                    <BulkActions onImportFromEngine={() => setEngineOpen(true)} />
+                    <CreateImportActions
+                      title={t('saved.actions')}
+                      newLabel={t('saved.new')}
+                      importLabel={t('saved.importFromEngine')}
+                      onImportFromEngine={() => setEngineOpen(true)}
+                      onNew={startNewAlgorithm}
+                    />
                   ) : id === 'domains' && built ? (
                     <CreateImportActions
                       title={t('domain.actions')}
@@ -214,6 +250,14 @@ export function Sidebar({
                       importLabel={t('classifier.importFromEngine')}
                       onImportFromEngine={() => setClassifierImportOpen(true)}
                       onNew={onNewClassifier}
+                    />
+                  ) : id === 'profileSets' && built ? (
+                    <CreateImportActions
+                      title={t('profileSet.actions')}
+                      newLabel={t('profileSet.new')}
+                      importLabel={t('profileSet.importFromEngine')}
+                      onImportFromEngine={() => setProfileSetImportOpen(true)}
+                      onNew={onNewProfileSet}
                     />
                   ) : null
                 }
@@ -264,6 +308,14 @@ export function Sidebar({
                   onSelect={onSelectClassifier}
                 />
               )}
+
+              {isOpen && id === 'profileSets' && (
+                <ProfileSetList
+                  profileSets={shownProfileSets}
+                  activeId={activeProfileSetId}
+                  onSelect={onSelectProfileSet}
+                />
+              )}
             </div>
           )
         })}
@@ -295,7 +347,42 @@ export function Sidebar({
           onImported={() => { refreshClassifiers(); refreshDomains() }}
         />
       )}
+
+      {profileSetImportOpen && (
+        <ProfileSetImport
+          onClose={() => setProfileSetImportOpen(false)}
+          // A set drags its classifiers down, and those drag their domains and algorithms.
+          onImported={() => { refreshProfileSets(); refreshClassifiers(); refreshDomains(); refreshAlgorithms() }}
+        />
+      )}
     </div>
+  )
+}
+
+/**
+ * The profile sets. Flat, unlike the other three: a set is not of a kind, and a name plus how
+ * many classifiers it runs is the whole of what there is to say in a list.
+ */
+function ProfileSetList({ profileSets, activeId, onSelect }: {
+  profileSets: ProfileSet[]
+  activeId: number | null
+  onSelect: (s: ProfileSet) => void
+}) {
+  const { t } = useT()
+
+  if (profileSets.length === 0) {
+    return <p className="text-slate-400 text-xs px-3 py-3">{t('profileSet.empty')}</p>
+  }
+  return (
+    <>{profileSets.map(s => (
+      <ItemButton
+        key={s.id}
+        label={s.name}
+        hint={`${t('profileSet.count', { n: s.classifier_ids.length })} · ${s.assignment_threshold}%`}
+        active={activeId === s.id}
+        onClick={() => onSelect(s)}
+      />
+    ))}</>
   )
 }
 
@@ -339,103 +426,6 @@ function SectionHeader({ id, open, disabled, count, onToggle, actions }: {
         )}
       </button>
       {actions}
-    </div>
-  )
-}
-
-/** Export, import and pull-from-engine: they act on the whole collection, so they hang off the
- *  section rather than off any one algorithm. */
-function BulkActions({ onImportFromEngine }: { onImportFromEngine: () => void }) {
-  const { t } = useT()
-  // Anchored on open and drawn fixed, not absolute. The menu hangs off a section header that
-  // lives inside the scrolling list: positioned inside it, the panel scrolls with the content
-  // and can end up past the visible edge or off the top entirely. Fixed keeps it on screen, and
-  // any scroll closes it rather than leaving it stranded away from its button.
-  const [at, setAt] = useState<{ top: number; right: number } | null>(null)
-  const open = at !== null
-  const box = useRef<HTMLDivElement>(null)
-
-  const show = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (open) { setAt(null); return }
-    const r = e.currentTarget.getBoundingClientRect()
-    setAt({ top: r.bottom + 4, right: Math.max(8, window.innerWidth - r.right) })
-  }
-  const close = () => setAt(null)
-
-  useEffect(() => {
-    if (!open) return
-    const away = (e: MouseEvent) => {
-      if (box.current && !box.current.contains(e.target as Node)) close()
-    }
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
-    document.addEventListener('mousedown', away)
-    document.addEventListener('keydown', esc)
-    window.addEventListener('resize', close)
-    // Capture phase: the list that scrolls is an ancestor, and scroll does not bubble.
-    document.addEventListener('scroll', close, true)
-    return () => {
-      document.removeEventListener('mousedown', away)
-      document.removeEventListener('keydown', esc)
-      window.removeEventListener('resize', close)
-      document.removeEventListener('scroll', close, true)
-    }
-  }, [open])
-
-  const exportAll = async () => {
-    close()
-    try {
-      const data = await api.exportAlgorithms()
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-      const a = document.createElement('a')
-      a.href = URL.createObjectURL(blob)
-      a.download = 'delphix-algorithms.json'
-      a.click()
-      URL.revokeObjectURL(a.href)
-    } catch {
-      toast.error(t('tester.unknownError'))
-    }
-  }
-
-  const importFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    e.target.value = ''
-    if (!file) return
-    close()
-    try {
-      const result = await api.importAlgorithms(JSON.parse(await file.text()))
-      toast.success(t('saved.imported', { n: result.imported }))
-      await refreshAlgorithms()
-    } catch {
-      toast.error(t('saved.importError'))
-    }
-  }
-
-  return (
-    <div ref={box}>
-      <button
-        onClick={show}
-        title={t('sidebar.bulkActions')}
-        className="p-1 mr-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded transition-colors"
-      >
-        <MoreHorizontal size={14} />
-      </button>
-      {at && (
-        <div
-          style={{ top: at.top, right: at.right }}
-          className="fixed z-50 w-52 rounded-lg border border-slate-700 bg-slate-800 py-1 shadow-xl"
-        >
-          <button onClick={() => { close(); onImportFromEngine() }} className={menuItem}>
-            <Server size={13} /> {t('saved.importFromEngine')}
-          </button>
-          <label className={cn(menuItem, 'cursor-pointer')}>
-            <Upload size={13} /> {t('saved.import')}
-            <input type="file" accept=".json" className="hidden" onChange={importFile} />
-          </label>
-          <button onClick={exportAll} className={menuItem}>
-            <Download size={13} /> {t('saved.export')}
-          </button>
-        </div>
-      )}
     </div>
   )
 }
@@ -520,8 +510,8 @@ function AlgorithmList({ algorithms, flat, open, onToggleGroup, activeId, onSele
   )
 }
 
-/** Create one, or pull the engine's down — domains and classifiers. Same shape as the
- *  algorithms' bulk menu. */
+/** Create one, or pull the engine's down. The same menu on all three populated sections — what
+ *  "create" means differs (an algorithm starts by choosing a framework), the shape does not. */
 function CreateImportActions({ title, newLabel, importLabel, onImportFromEngine, onNew }: {
   title: string
   newLabel: string

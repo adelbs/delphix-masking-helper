@@ -658,11 +658,64 @@ async function saveClassifier(cfg, { name, framework, domain, config, descriptio
   return { mode: 'created', id: result?.classifierId ?? null, name, result };
 }
 
+// ── Profile sets ──────────────────────────────────────────────────────────────
+//
+// A profile set is what a profiling job actually runs: a named selection of classifiers and the
+// confidence a domain has to reach before the job assigns it. It holds `classifierIds`, so a set
+// means nothing without the classifiers it names — which is why importing one brings them along.
+
+/** Every profile set on the engine, page by page like the classifiers. */
+async function listProfileSets(cfg) {
+  const out = [];
+  for (let page = 1; ; page++) {
+    const data = await auth(cfg, 'GET', `/profile-sets?page_size=500&page_number=${page}`);
+    const list = data?.responseList ?? [];
+    out.push(...list);
+    const total = data?._pageInfo?.total ?? out.length;
+    if (list.length === 0 || out.length >= total) break;
+  }
+  return out;
+}
+
+const getProfileSet = (cfg, id) => auth(cfg, 'GET', `/profile-sets/${encodeURIComponent(id)}`);
+
+/**
+ * Creates or updates a profile set.
+ *
+ * Identity is the id, as with a classifier: the engine renames a set in place. Without a known
+ * id, a set of the same name is updated rather than answered with 409.
+ */
+async function saveProfileSet(cfg, { name, description, threshold, classifierIds, existingId }) {
+  const payload = {
+    profileSetName: name,
+    classifierIds: classifierIds.map(Number),
+    ...(description ? { description } : {}),
+    ...(threshold ? { assignmentThreshold: Number(threshold) } : {}),
+  };
+
+  let current = null;
+  if (existingId != null) {
+    current = await getProfileSet(cfg, existingId).catch((err) => {
+      if (err.status === 404) return null;   // deleted on the engine since — create it again
+      throw err;
+    });
+  }
+  if (!current) current = (await listProfileSets(cfg)).find((s) => s.profileSetName === name) ?? null;
+
+  if (current) {
+    const result = await auth(cfg, 'PUT', `/profile-sets/${current.profileSetId}`, payload);
+    return { mode: 'updated', id: current.profileSetId, name, result };
+  }
+  const result = await auth(cfg, 'POST', '/profile-sets', payload);
+  return { mode: 'created', id: result?.profileSetId ?? null, name, result };
+}
+
 module.exports = {
   DEFAULTS, settings, isConfigured, apiRoot, probe,
   frameworks, coreFrameworkId, listAlgorithms, getAlgorithm, saveAlgorithm,
   listDomains, getDomain, saveDomain, deleteDomain,
   classifierFrameworks, listClassifiers, getClassifier, saveClassifier,
+  listProfileSets, getProfileSet, saveProfileSet,
   frameworkNameFor, classNameFor, FRAMEWORK_BY_CLASS,
   engineFileName, engineFileNames, configStrings,
   waitForTask, uploadFile, uploadedFiles, classifierFiles, lookupFile, readZip,

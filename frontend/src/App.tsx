@@ -7,12 +7,13 @@ import { WelcomeScreen } from '@/components/WelcomeScreen'
 import { FrameworkTester } from '@/components/FrameworkTester'
 import { DomainEditor } from '@/components/DomainEditor'
 import { ClassifierEditor } from '@/components/ClassifierEditor'
+import { ProfileSetEditor } from '@/components/ProfileSetEditor'
 import { Settings } from '@/components/Settings'
 import { SetupNeeded } from '@/components/SetupNeeded'
 import { isLocalePref, readStoredPref, resolveLocale, storePref } from '@/lib/i18n'
 import { I18nProvider } from '@/lib/i18n/I18nProvider'
 import { parseConfig, refreshAlgorithms } from '@/lib/algorithms'
-import type { Algorithm, Classifier, Domain, Framework, LocalePref, View } from '@/types'
+import type { Algorithm, Classifier, Domain, Framework, LocalePref, ProfileSet, View } from '@/types'
 
 interface TesterState {
   framework: Framework
@@ -34,7 +35,12 @@ export default function App() {
   const [domain, setDomain] = useState<Domain | null>(null)
   // Same convention: null with view 'classifier' means creating one.
   const [classifier, setClassifier] = useState<Classifier | null>(null)
+  // And again for the profile sets.
+  const [profileSet, setProfileSet] = useState<ProfileSet | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  // Set by "New algorithm": the home screen then says to pick a framework, which the sidebar
+  // has just opened. Cleared on the next trip home, so the hint does not outlive the errand.
+  const [pickFramework, setPickFramework] = useState(false)
   const [filesDir, setFilesDir] = useState('')
   // Seeded from localStorage so the first paint is already in the right language;
   // the server config is the source of truth and overrides it once it arrives.
@@ -87,6 +93,19 @@ export default function App() {
   }
 
   /**
+   * "New algorithm" from the sidebar. There is nothing to create yet — an algorithm is a
+   * configured framework — so this puts the home screen up with the hint on, and leaves the
+   * drawer open on a narrow screen, where the frameworks the sidebar just opened are the very
+   * thing to pick from.
+   */
+  const newAlgorithm = () => {
+    setTester(null); setDomain(null); setClassifier(null); setProfileSet(null)
+    setView('welcome')
+    setPickFramework(true)
+    setSidebarOpen(true)
+  }
+
+  /**
    * Opens a saved algorithm in the same panel, with its configuration loaded.
    *
    * The framework arrives resolved: the sidebar looks it up, because App sits above
@@ -131,8 +150,22 @@ export default function App() {
     setSidebarOpen(false)
   }
 
+  const selectProfileSet = (s: ProfileSet) => {
+    setProfileSet(s)
+    setView('profileSet')
+    setSidebarOpen(false)
+  }
+
+  const newProfileSet = () => {
+    setProfileSet(null)
+    setView('profileSet')
+    setSidebarOpen(false)
+  }
+
   const showHome = () => {
-    setView('welcome'); setTester(null); setDomain(null); setClassifier(null); setSidebarOpen(false)
+    setView('welcome'); setTester(null); setDomain(null); setClassifier(null); setProfileSet(null)
+    setSidebarOpen(false)
+    setPickFramework(false)
   }
   const showSettings = () => { setView('settings'); setSidebarOpen(false) }
   const toggleSidebar = () => setSidebarOpen(v => !v)
@@ -147,12 +180,16 @@ export default function App() {
     activeAlgorithmId: onTester ? (tester?.algorithm?.id ?? null) : null,
     activeDomainId: view === 'domain' ? (domain?.id ?? null) : null,
     activeClassifierId: view === 'classifier' ? (classifier?.id ?? null) : null,
+    activeProfileSetId: view === 'profileSet' ? (profileSet?.id ?? null) : null,
     onSelectFramework: selectFramework,
     onSelectAlgorithm: selectAlgorithm,
+    onNewAlgorithm: newAlgorithm,
     onSelectDomain: selectDomain,
     onNewDomain: newDomain,
     onSelectClassifier: selectClassifier,
     onNewClassifier: newClassifier,
+    onSelectProfileSet: selectProfileSet,
+    onNewProfileSet: newProfileSet,
     onOpenSettings: showSettings,
     onGoHome: showHome,
     localePref,
@@ -194,6 +231,8 @@ export default function App() {
               onOpenSidebar={() => setSidebarOpen(true)}
               onOpenAlgorithm={openAlgorithmById}
               onOpenSettings={showSettings}
+              pickFramework={pickFramework}
+              onDismissPick={() => setPickFramework(false)}
             />
           )}
           {view === 'tester' && tester && (
@@ -228,6 +267,15 @@ export default function App() {
               onToggleSidebar={toggleSidebar}
               onDeleted={showHome}
               onCreated={selectClassifier}
+            />
+          )}
+          {view === 'profileSet' && (
+            <ProfileSetEditor
+              key={profileSet ? `profileSet:${profileSet.id}` : 'profileSet:new'}
+              profileSet={profileSet}
+              onToggleSidebar={toggleSidebar}
+              onDeleted={showHome}
+              onCreated={selectProfileSet}
             />
           )}
           {view === 'settings' && (

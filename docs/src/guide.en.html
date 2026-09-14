@@ -12,7 +12,7 @@
   <div class="cover-rule"></div>
   <div class="cover-eyebrow">Delphix Masking · Technical reference</div>
   <h1>Masking Frameworks Guide</h1>
-  <div class="cover-sub">How each framework transforms data, with which parameters, and what to expect in the output.</div>
+  <div class="cover-sub">How each framework transforms data, with which parameters, and what to expect in the output — and how the classifiers that find the sensitive data in the first place decide a domain.</div>
   <div class="cover-spacer"></div>
   <div class="cover-facts">
     <div><span class="cover-fact-n">31</span><span class="cover-fact-l">Frameworks</span></div>
@@ -28,7 +28,7 @@
 <!-- ══════════ TOC ══════════ -->
 <div class="toc">
   <h1 class="doc-title">Contents</h1>
-  <p class="doc-lede">A <b>framework</b> is a masking technique the plugin provides; configuring one produces an <b>algorithm</b>, which is what you name and reuse. Frameworks are grouped here using the same categories shown in the Masking Helper sidebar. Every input&nbsp;→&nbsp;output pair in this guide was produced by actually running the framework — none of them are illustrative.</p>
+  <p class="doc-lede">A <b>framework</b> is a masking technique the plugin provides; configuring one produces an <b>algorithm</b>, which is what you name and reuse. Frameworks are grouped here using the same categories shown in the Masking Helper sidebar. Part 10 turns to the other half of the work: the <b>classifiers</b> the profiler uses to decide which fields hold sensitive data at all. Every input&nbsp;→&nbsp;output pair in this guide was produced by actually running the framework — none of them are illustrative.</p>
 
   <div class="toc-part">Part 1 · Personal Data</div>
   <div class="toc-row"><span class="toc-num">1.1</span><span class="toc-name">Email</span><span class="toc-cls">email.Email</span></div>
@@ -78,6 +78,13 @@
   <div class="toc-part">Part 9 · Other</div>
   <div class="toc-row"><span class="toc-num">9.1</span><span class="toc-name">Check Digit</span><span class="toc-cls">checkdigit.Checkdigit</span></div>
   <div class="toc-row"><span class="toc-num">9.2</span><span class="toc-name">Tokenization</span><span class="toc-cls">tokenization.Tokenization</span></div>
+
+  <div class="toc-part">Part 10 · Classifiers</div>
+  <div class="toc-row"><span class="toc-num">10.1</span><span class="toc-name">How a domain is decided</span><span class="toc-cls">Profiling</span></div>
+  <div class="toc-row"><span class="toc-num">10.2</span><span class="toc-name">PATH — the field name</span><span class="toc-cls">PATH</span></div>
+  <div class="toc-row"><span class="toc-num">10.3</span><span class="toc-name">TYPE — the column type</span><span class="toc-cls">TYPE</span></div>
+  <div class="toc-row"><span class="toc-num">10.4</span><span class="toc-name">REGEX — the shape of the values</span><span class="toc-cls">REGEX</span></div>
+  <div class="toc-row"><span class="toc-num">10.5</span><span class="toc-name">LIST — known values</span><span class="toc-cls">LIST</span></div>
 
   <div class="toc-part">Appendices</div>
   <div class="toc-row"><span class="toc-num">A</span><span class="toc-name">Cross-cutting concepts: determinism, key, references</span></div>
@@ -1043,6 +1050,178 @@ The first pattern only matches values containing <code>@</code>; everything else
     <div class="note"><b>The token does not preserve the format.</b> Despite being described as <i>format-preserving</i>, the observed result is a Base64 string longer than the input — <code>4111111111111111</code> (16 characters) became 32. Size the target column with room to spare, or the job will fail on truncation.</div>
 
     <div class="note tip"><b>The key is the secret.</b> Anyone holding the key can reverse any token. Treat it with the same rigor as a production key: out of the code, out of the repository, with controlled rotation — and remember that rotating invalidates every token already issued.</div>
+  </div>
+</div>
+
+<!-- ══════════ PART 10 ══════════ -->
+<div class="part">
+  <div class="part-n">Part 10</div>
+  <h2>Classifiers</h2>
+  <p class="part-lede">Masking answers <em>how</em> a field is hidden. Before that comes <em>which</em> fields need hiding, and that is what classifiers decide: they read a column — its name, its type, a sample of its values — and vote for a sensitive data domain. Four frameworks, weighed against each other, one confidence per domain.</p>
+</div>
+
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">10.1</span><h3>How a domain is decided</h3></div>
+  <div class="framework-tags"><span class="framework-cls">Profiling</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">A classifier is a name, a <strong>domain</strong> it votes for, a <strong>framework</strong>, and that framework's configuration. Several classifiers usually serve one domain — one recognizing the column name, another the values inside it — and profiling is the arithmetic that turns their separate opinions into a single confidence per domain, then assigns the strongest one.</p>
+
+    <div class="label">Two kinds of evidence</div>
+    <div class="fmt"><strong>Metadata</strong> — <span class="inline">PATH</span> and <span class="inline">TYPE</span> read what the catalog says about the column: its name, the table or file holding it, its type and declared length. They need no data at all.<br><strong>Values</strong> — <span class="inline">REGEX</span> and <span class="inline">LIST</span> read a sample of what the column actually contains. Without a sample, they have nothing to say.</div>
+
+    <div class="label">Every result is a number between −1 and 1</div>
+    <p class="framework-desc">A classifier that fits returns its <strong>match strength</strong>; one that does not returns its <strong>reject strength</strong>, negated. So a positive result argues for the domain, a negative one against it, and zero is an abstention. The Masking Engine shows the same numbers as percentages, from −100 to 100.</p>
+    <div class="fmt">The two ends are absolute. A result of <strong>1</strong> confirms the domain outright — no value classifier is even run. A result of <strong>−1</strong> rules it out — the domain's remaining classifiers are dropped from the field.</div>
+
+    <div class="label">From many classifiers to one confidence</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">Prepare</div><div class="p-desc">Classifiers identical in name, domain and configuration count once. A domain with more than one <code>TYPE</code> classifier has them <strong>merged into a single one</strong> before anything runs: the allowed types are united, the smallest minimum length is kept, and every other setting — maximum length, SQL type, auto-increment, strengths — returns to its default.</div></div>
+      <div class="p-row"><div class="p-name">Evidence</div><div class="p-desc">Each classifier scores the field. Per domain, only <strong>two results survive</strong>: the strongest from metadata and the strongest from values — strongest meaning furthest from zero, so a firm rejection outranks a weak match.</div></div>
+      <div class="p-row"><div class="p-name">Settle</div><div class="p-desc">The two become one. Pointing the same way, the stronger is reinforced by the weaker: <code>a + (1 − |a|) × b</code> — evidence accumulates but never passes 1. Pointing opposite ways, they are added, so they cancel. A result too close to zero is ignored, and the other one stands alone.</div></div>
+      <div class="p-row"><div class="p-name">Decide</div><div class="p-desc">Domains are ranked by confidence. The first is assigned if it reaches the profile set's <strong>assignment threshold</strong>; the engine's default threshold is 1%, so in practice any positive confidence assigns the domain.</div></div>
+    </div>
+
+    <div class="label">A worked example</div>
+    <div class="fmt">Column <span class="inline">CUSTOMER_EMAIL</span> in <span class="inline">CUSTOMERS</span>, <span class="inline">VARCHAR(120)</span>, sampled as <span class="inline">ana.silva@acme.com</span>, <span class="inline">j.doe@example.org</span>, <span class="inline">contact@shop.co.uk</span>, <span class="inline">not an email</span>. Domain <span class="inline">EMAIL</span> has two classifiers: a <span class="inline">PATH</span> looking for <code>email</code> at strength 0.5, and a <span class="inline">REGEX</span> for an address at strength 1 with reject strength 1.</div>
+    <table class="xf">
+      <tr><th class="c-in">Evidence</th><th class="c-ar"></th><th class="c-out">Result</th></tr>
+      <tr><td class="c-in">PATH · the name contains <code>email</code></td><td class="c-ar">→</td><td class="c-out">0.5</td></tr>
+      <tr><td class="c-in">REGEX · 3 values of 4 match: (1 + 1 + 1 − 1) ÷ 4</td><td class="c-ar">→</td><td class="c-out">0.5</td></tr>
+      <tr><td class="c-in">Settled · 0.5 + (1 − 0.5) × 0.5</td><td class="c-ar">→</td><td class="c-out">0.75 — assigned to EMAIL at 75%</td></tr>
+    </table>
+    <div class="fmt" style="border:none;padding-left:0;font-size:8.1pt;">Neither classifier was sure on its own; together they are. Had the <span class="inline">PATH</span> instead rejected the name at strength 0.4, the two would disagree and be added: −0.4 + 0.8 = 0.4, a much weaker 40%.</div>
+
+    <div class="note tip"><b>Where this runs.</b> The Masking Helper reproduces this arithmetic locally, so a classifier can be tried on a field you describe before it ever reaches an engine — no profiling job, no connection. What it cannot reproduce is the sampling: the engine chooses the values itself, and the confidence follows from whatever it drew.</div>
+  </div>
+</div>
+
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">10.2</span><h3>PATH</h3></div>
+  <div class="framework-tags"><span class="framework-cls">PATH</span><span class="tag tag-det">Reads metadata</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Recognizes a field by its <strong>name</strong>, and optionally by the name of the table or file holding it. It is the cheapest classifier there is — no data is read — and usually the first line of a domain: <code>EMAIL</code>, <code>CUSTOMER_EMAIL</code> and <code>email_address</code> all give themselves away before anyone looks inside them.</p>
+
+    <div class="label">How it matches</div>
+    <div class="fmt">A classifier holds a list of paths. They are tried <strong>from the strongest down</strong>, and the first one that fits gives its match strength — the rest are not consulted. None fitting gives the reject strength, negated. A path with a parent value fits only when the table or file name matches too; an empty parent value, or a field with no parent, leaves that check out.</div>
+
+    <div class="label">Field name → Result</div>
+    <table class="xf">
+      <tr><th class="c-in">Paths: <code>document_number</code> at 0.9, <code>doc</code> at 0.3</th><th class="c-ar"></th><th class="c-out">Result</th></tr>
+      <tr><td class="c-in">DOCUMENT_NUMBER</td><td class="c-ar">→</td><td class="c-out">0.9 — the strongest path is tried first</td></tr>
+      <tr><td class="c-in">DOC_TYPE</td><td class="c-ar">→</td><td class="c-out">0.3 — only the weaker path fits</td></tr>
+      <tr><td class="c-in">CREATED_AT</td><td class="c-ar">→</td><td class="c-out"><span class="err">−reject strength</span></td></tr>
+    </table>
+
+    <div class="label">Parameters</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">paths <span class="req">*</span></div><div class="p-desc">The names to look for, each with its own strength and matching rules.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchType <span class="req">*</span></div><div class="p-desc"><strong>EXACT</strong> — the text is compared as written. <strong>REGEX</strong> — it is read as a Java regular expression.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> fieldValue <span class="req">*</span></div><div class="p-desc">The column or field name sought. With <code>EXACT</code> and partial matching on, <code>email</code> also fits <code>CUSTOMER_EMAIL</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> parentValue</div><div class="p-desc">Narrows the path to one table or file, compared the same way as the field name. Empty accepts any parent.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">What this path is worth when it fits, from 0 to 1. Default <code>0.5</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> caseSensitive</div><div class="p-desc">Off by default, so <code>EMAIL</code> and <code>email</code> are the same name.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> allowPartialMatch</div><div class="p-desc">On by default: the name only has to contain the value, or the pattern be found somewhere in it. Off demands the whole name — no <code>^</code> or <code>$</code> needed.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">How strongly a name matching no path counts <em>against</em> the domain, from 0 to 1. Default <code>0</code> — the classifier simply has no opinion, which is usually right: a column called <code>FIELD_17</code> may still hold emails.</div></div>
+    </div>
+
+    <div class="note"><b>Names are a convention, not a guarantee.</b> A high match strength on a generic word — <code>name</code>, <code>id</code>, <code>number</code> — assigns domains to columns that merely sound alike. Keep generic paths weak and let a value classifier confirm them.</div>
+  </div>
+</div>
+
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">10.3</span><h3>TYPE</h3></div>
+  <div class="framework-tags"><span class="framework-cls">TYPE</span><span class="tag tag-det">Reads metadata</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">A <strong>gate on the column's type</strong> and declared length. It is the one framework designed to say no: by default an accepted type scores 0 and a rejected one scores −1, so <code>TYPE</code> never carries a domain on its own — it removes the fields that could not possibly belong to it. A date column is not an email address, whatever it is called.</p>
+
+    <div class="label">How it matches</div>
+    <div class="fmt">The allowed types are checked for one that covers the column: an exact SQL type code first, when any entry names one, then the column's family — <code>String</code>, <code>Number</code>, <code>Date</code> or <code>Binary</code>. A covering type is then held to its length limits. Anything not covered, a length outside the limits, or an auto-increment column when those are not accepted, is a rejection.</div>
+
+    <div class="label">Column → Result</div>
+    <table class="xf">
+      <tr><th class="c-in">Allowed: <code>String</code>, minimum length 6</th><th class="c-ar"></th><th class="c-out">Result</th></tr>
+      <tr><td class="c-in">EMAIL VARCHAR(120)</td><td class="c-ar">→</td><td class="c-out">0 — accepted, and deliberately neutral</td></tr>
+      <tr><td class="c-in">AGE INTEGER</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — the domain is ruled out</span></td></tr>
+      <tr><td class="c-in">UF CHAR(2)</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — shorter than the minimum</span></td></tr>
+    </table>
+
+    <div class="label">Parameters</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">allowedTypes <span class="req">*</span></div><div class="p-desc">The kinds of column the domain accepts — at most one entry per type.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> typeName <span class="req">*</span></div><div class="p-desc"><strong>String</strong>, <strong>Number</strong>, <strong>Date</strong> and <strong>Binary</strong> are families of SQL types; <strong>JavaSqlType</strong> names one exact type through <code>sqlType</code>. <code>TIMESTAMP</code> and <code>BOOLEAN</code> belong to no family, so only an exact code reaches them.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> minimumLength / maximumLength</div><div class="p-desc">Rejects columns declared shorter or longer than this. <code>0</code> means no limit, and a column of unknown length is not measured.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> sqlType</div><div class="p-desc">The JDBC type code (<code>java.sql.Types</code>) accepted when <code>typeName</code> is <code>JavaSqlType</code> — 12 for <code>VARCHAR</code>, 4 for <code>INTEGER</code>, 91 for <code>DATE</code>.</div></div>
+      <div class="p-row"><div class="p-name">matchAutoIncrementingColumn</div><div class="p-desc">Columns the database fills by itself — <code>IDENTITY</code>, <code>SERIAL</code>, <code>AUTO_INCREMENT</code> — are technical keys far more often than personal data. Off by default, which rejects them whatever their type.</div></div>
+      <div class="p-row"><div class="p-name">matchStrength / rejectStrength</div><div class="p-desc">Default <code>0</code> and <code>1</code>. Delphix marks both experimental, and the defaults encode the intent: a type can rule a domain out, never in.</div></div>
+    </div>
+
+    <div class="note"><b>Rejection is contagious.</b> At the default reject strength of 1, a <code>TYPE</code> that refuses the column ends the domain for that field — its <code>REGEX</code> and <code>LIST</code> classifiers are not run at all, however well the values would have matched. That is the point, and also the trap: one type left out of the allowed list silently costs the domain every field of that type.</div>
+  </div>
+</div>
+
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">10.4</span><h3>REGEX</h3></div>
+  <div class="framework-tags"><span class="framework-cls">REGEX</span><span class="tag tag-rev">Reads values</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Recognizes a domain by the <strong>shape of the values</strong> themselves. Each sampled value is cleaned, tested against a chain of patterns, and optionally confirmed by a <strong>check digit</strong> — which is what separates a real payment card or tax ID from any number of the right length.</p>
+
+    <div class="label">How it matches</div>
+    <div class="fmt">Per value: the pattern's clean-up expression strips what it matches, the pattern is then tested against what remains, and the check digit, if any, must pass. Patterns are tried <strong>from the strongest down</strong>, and the first to accept the value gives its strength. A pattern that matches but fails the check hands the value to the next pattern rather than claiming it. A value no pattern accepts scores the reject strength, negated.<br>The classifier's confidence is the <strong>average across the sample</strong> — so it degrades gracefully: a column where most values fit and a few do not still argues for the domain.</div>
+
+    <div class="label">Sampled value → Score</div>
+    <table class="xf">
+      <tr><th class="c-in">Pattern <code>\d{16}</code>, Luhn check, clean-up <code>[ -]</code>, reject 1</th><th class="c-ar"></th><th class="c-out">Score</th></tr>
+      <tr><td class="c-in">4111 1111 1111 1111</td><td class="c-ar">→</td><td class="c-out">1</td></tr>
+      <tr><td class="c-in">4111-1111-1111-1112</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — right shape, check digit fails</span></td></tr>
+      <tr><td class="c-in">5500 0000 0000 0004</td><td class="c-ar">→</td><td class="c-out">1</td></tr>
+      <tr><td class="c-in">Confidence · (1 − 1 + 1) ÷ 3</td><td class="c-ar">→</td><td class="c-out">0.33</td></tr>
+    </table>
+
+    <div class="label">Parameters</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">dataPatterns <span class="req">*</span></div><div class="p-desc">The patterns, each with its own strength, clean-up and check digit.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> regex <span class="req">*</span></div><div class="p-desc">Java syntax, tested after clean-up. The scope is set by <code>allowPartialMatch</code>, so anchors are not needed.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> dataCleanRegex</div><div class="p-desc">Everything this pattern matches is removed before testing — <code>[ -.]</code> turns <code>123.456.789-09</code> into <code>12345678909</code>. Always case sensitive.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> checksumType</div><div class="p-desc">A check the cleaned value must also pass: <strong>LUHN</strong> (payment cards), <strong>MOD97</strong> (IBAN), <strong>MOD11_NHS</strong>, <strong>MOD11_TFN</strong>, <strong>MOD10_ABA</strong>, or <strong>NONE</strong>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">What a value matching this pattern scores, from 0 to 1. Default <code>1</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> caseSensitive / allowPartialMatch</div><div class="p-desc">Whether letters must match in case, and whether the pattern may be found anywhere in the value or must cover it entirely.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> note</div><div class="p-desc">Free text for whoever maintains the classifier. Not used in matching — and worth writing, because a regular expression six months old explains nothing.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">What a value matching no pattern scores, as a negative, from 0 to 1. Default <code>1</code>.</div></div>
+    </div>
+
+    <div class="note tip"><b>Partial matching is the usual mistake.</b> Left on, <code>\d{9}</code> is found inside any longer number, and a column of order ids starts looking like tax IDs. When the pattern describes the whole value, turn partial matching off.</div>
+  </div>
+</div>
+
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">10.5</span><h3>LIST</h3></div>
+  <div class="framework-tags"><span class="framework-cls">LIST</span><span class="tag tag-rev">Reads values</span><span class="tag tag-file">Needs a file</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Recognizes values by <strong>looking them up in files of known values</strong> — first names, cities, countries, job titles. It is the answer for data with no shape to match: nothing in <code>Ana</code> or <code>Recife</code> tells a pattern what it is, but a list of names and a list of cities do.</p>
+
+    <div class="label">How it matches</div>
+    <div class="fmt">Each list is a text file, one value per line, compared ignoring case but otherwise exactly as written — spaces included. A value found scores that list's strength, the heaviest list winning when several hold it; a value found nowhere scores the reject strength, negated. The classifier's confidence is the <strong>average across the sample</strong>.<br>With <strong>value splitting</strong> on, each word of a value is looked up on its own and the value scores the strengths found divided by its number of words — how a full-name list handles <code>Ana Ribeiro</code> without needing every surname.</div>
+
+    <div class="label">Sampled value → Score</div>
+    <table class="xf">
+      <tr><th class="c-in">List of first names at strength 1, reject 0.5</th><th class="c-ar"></th><th class="c-out">Score</th></tr>
+      <tr><td class="c-in">Ana</td><td class="c-ar">→</td><td class="c-out">1</td></tr>
+      <tr><td class="c-in">JOHN</td><td class="c-ar">→</td><td class="c-out">1 — case is ignored</td></tr>
+      <tr><td class="c-in">Zebedee</td><td class="c-ar">→</td><td class="c-out"><span class="err">−0.5</span></td></tr>
+      <tr><td class="c-in">Ana Ribeiro · split into words, 1 of 2 found</td><td class="c-ar">→</td><td class="c-out">0.5</td></tr>
+    </table>
+
+    <div class="label">Parameters</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">valueLists <span class="req">*</span></div><div class="p-desc">The files of known values, each with its own strength.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> file <span class="req">*</span></div><div class="p-desc">The address of the list. Delphix reads <code>delphix-file://</code>, <code>file://</code>, <code>http(s)://</code> and <code>jar://file/</code>; in the Masking Helper the file is managed under <em>Settings → Files</em> and travels with the classifier.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">What a value found in this list scores, from 0 to 1. Default <code>1</code>.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">What a value found in no list scores, as a negative. Default <code>0.5</code> — deliberately softer than <code>REGEX</code>, because a list is never complete.</div></div>
+      <div class="p-row"><div class="p-name">tokenizeInput</div><div class="p-desc">Splits each value into words before looking it up. For full names, addresses, free-text columns.</div></div>
+      <div class="p-row"><div class="p-name">tokenizationDelimiter</div><div class="p-desc">The characters separating words — each character counts on its own. Default a single space.</div></div>
+    </div>
+
+    <div class="note"><b>A list is a promise about coverage.</b> Reject strength is what a miss costs, so a short list punishes every value it happens not to contain. Broad lists earn a firm reject strength; a list of the fifty most common names does not.</div>
   </div>
 </div>
 

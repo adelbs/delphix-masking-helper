@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   PanelLeftOpen, Save, Trash2, CloudUpload, Loader2, Radar, Plus, X, Play, AlertTriangle,
+  BookOpen, SlidersHorizontal,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
@@ -14,6 +15,9 @@ import { refreshAlgorithms } from '@/lib/algorithms'
 import { domainOptions, forgetEngineReferences, useEngineReferences } from '@/lib/references'
 import { announceExport } from '@/lib/engine-sync'
 import { FilePickerField } from '@/components/ConfigForm'
+import { FrameworkDoc } from '@/components/FrameworkDoc'
+import { FieldForm } from '@/components/FieldForm'
+import { useFieldForm } from '@/lib/field-form'
 import { ReferencePicker } from '@/components/ReferencePicker'
 import type {
   Classifier, ClassifierCatalog, ClassifierDomainScore, ClassifierField, ClassifierFrameworkName,
@@ -21,9 +25,7 @@ import type {
 } from '@/types'
 
 const FRAMEWORKS: ClassifierFrameworkName[] = ['PATH', 'TYPE', 'REGEX', 'LIST']
-const FAMILY_ORDER = ['text', 'number', 'date', 'timestamp', 'binary', 'boolean', 'other']
 const UNBOUNDED = 2147483647
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 type Row = Record<string, unknown>
 
 /** Message keys built from engine names (frameworks, settings, option values). */
@@ -62,6 +64,7 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
   const [config, setConfig] = useState<Row | null>(classifier?.config ?? null)
   const [busy, setBusy] = useState(false)
   const [sending, setSending] = useState(false)
+  const [tab, setTab] = useState<'config' | 'doc'>('config')
 
   const effective = config ?? (catalog ? defaultConfig(catalog, framework) : null)
   const spec = catalog?.frameworks[framework]
@@ -198,6 +201,36 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
         )}
       </div>
 
+      {/* Tabs */}
+      <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white flex-shrink-0">
+        {([
+          { id: 'config', label: t('classifier.tabConfig'), Icon: SlidersHorizontal },
+          { id: 'doc', label: t('tester.tabDoc'), Icon: BookOpen },
+        ] as const).map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            onClick={() => setTab(id)}
+            aria-current={tab === id}
+            className={cn(
+              'flex items-center gap-1.5 px-3 py-2 text-sm font-medium border-b-2 -mb-px transition-colors',
+              tab === id
+                ? 'border-blue-600 text-blue-700'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            )}
+          >
+            <Icon size={14} />
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {tab === 'doc' ? (
+        /* How profiling settles a domain, then the framework this classifier is built on. */
+        <div className="flex-1 overflow-auto p-5 bg-slate-50 space-y-5">
+          <FrameworkDoc className="Profiling" />
+          <FrameworkDoc className={framework} />
+        </div>
+      ) : (
       <div className="flex-1 overflow-auto p-5 bg-slate-50">
         <div className="grid gap-5 xl:grid-cols-2 items-start">
           <div className="space-y-5 min-w-0">
@@ -306,6 +339,7 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
           />
         </div>
       </div>
+      )}
     </div>
   )
 }
@@ -552,12 +586,7 @@ function TestPanel({ catalog, classifier }: {
   classifier: { id?: number; name: string; framework: ClassifierFrameworkName; domain: string; config: Row } | null
 }) {
   const { t } = useT()
-  const [fieldName, setFieldName] = useState('')
-  const [parent, setParent] = useState('')
-  const [sqlType, setSqlType] = useState(12)
-  const [length, setLength] = useState('')
-  const [autoIncrement, setAutoIncrement] = useState(false)
-  const [values, setValues] = useState('')
+  const form = useFieldForm()
   const [threshold, setThreshold] = useState(1)
   const [result, setResult] = useState<ClassifierTestResult | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -568,18 +597,7 @@ function TestPanel({ catalog, classifier }: {
     setBusy(true)
     setError(null)
     try {
-      const out = await api.testClassifier({
-        classifier,
-        field: {
-          name: fieldName,
-          parent: parent || undefined,
-          sqlType,
-          length: length === '' ? null : Number(length),
-          autoIncrement,
-          values: values.trim() === '' ? [] : values.split(/\r?\n/),
-        },
-        threshold,
-      })
+      const out = await api.testClassifier({ classifier, field: form.field, threshold })
       setResult(out)
     } catch (e) {
       const err = e as Error & { code?: string; files?: string[] }
@@ -592,13 +610,6 @@ function TestPanel({ catalog, classifier }: {
     } finally { setBusy(false) }
   }
 
-  const sqlTypes = [...(catalog?.sqlTypes ?? [])].sort((a, b) => a.name.localeCompare(b.name))
-  // Grouped by family in the order people reach for them; any family the server adds goes last.
-  const families = [
-    ...FAMILY_ORDER.filter(f => sqlTypes.some(s => s.family === f)),
-    ...[...new Set(sqlTypes.map(s => s.family))].filter(f => !FAMILY_ORDER.includes(f)),
-  ]
-
   return (
     <div className={cn(cardCls, 'xl:sticky xl:top-0')}>
       <div>
@@ -606,61 +617,7 @@ function TestPanel({ catalog, classifier }: {
         <p className={helpCls}>{t('classifier.testHint')}</p>
       </div>
 
-      <div className="rounded-lg bg-slate-50 border border-slate-100 px-3 py-2">
-        <p className="text-xs font-semibold text-slate-600">{t('classifier.columnSection')}</p>
-        <p className="text-xs text-slate-500 mt-0.5">{t('classifier.columnSectionHint')}</p>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div>
-          <label className={labelCls}>{t('classifier.fieldName')}</label>
-          <input type="text" value={fieldName} onChange={e => setFieldName(e.target.value)}
-                 placeholder={t('classifier.fieldNamePlaceholder')} className={cn(fieldCls, 'font-mono')} />
-          <p className={helpCls}>{t('classifier.fieldNameHint')}</p>
-        </div>
-        <div>
-          <label className={labelCls}>{t('classifier.parent')}</label>
-          <input type="text" value={parent} onChange={e => setParent(e.target.value)}
-                 placeholder={t('classifier.parentPlaceholder')} className={cn(fieldCls, 'font-mono')} />
-          <p className={helpCls}>{t('classifier.parentHint')}</p>
-        </div>
-        <div>
-          <label className={labelCls}>{t('classifier.sqlType')}</label>
-          <select value={sqlType} onChange={e => setSqlType(Number(e.target.value))} disabled={!sqlTypes.length} className={fieldCls}>
-            {!sqlTypes.length && <option value={sqlType}>{t('classifier.loadingCatalog')}</option>}
-            {families.map(family => (
-              <optgroup key={family} label={capitalize(t(k(`classifier.family.${family}`)))}>
-                {sqlTypes.filter(s => s.family === family).map(s => (
-                  <option key={s.code} value={s.code}>{s.name} ({s.code})</option>
-                ))}
-              </optgroup>
-            ))}
-          </select>
-          <p className={helpCls}>{t('classifier.sqlTypeHint')}</p>
-        </div>
-        <div>
-          <label className={labelCls}>{t('classifier.length')}</label>
-          <input type="number" min={0} value={length} onChange={e => setLength(e.target.value)}
-                 placeholder={t('classifier.lengthPlaceholder')} className={fieldCls} />
-          <p className={helpCls}>{t('classifier.lengthHint')}</p>
-        </div>
-      </div>
-
-      <label className="flex items-start gap-2.5 cursor-pointer">
-        <input type="checkbox" className="mt-0.5" checked={autoIncrement} onChange={e => setAutoIncrement(e.target.checked)} />
-        <span className="min-w-0">
-          <span className="block text-sm font-medium text-slate-700">{t('classifier.autoIncrement')}</span>
-          <span className={cn(helpCls, 'block')}>{t('classifier.autoIncrementHint')}</span>
-        </span>
-      </label>
-
-      <div>
-        <label className={labelCls}>{t('classifier.values')}</label>
-        <textarea rows={6} value={values} onChange={e => setValues(e.target.value)}
-                  placeholder={t('classifier.valuesPlaceholder')} spellCheck={false}
-                  className={cn(fieldCls, 'font-mono')} />
-        <p className={helpCls}>{t('classifier.valuesHint')}</p>
-      </div>
+      <FieldForm form={form} catalog={catalog} />
 
       <div>
         <label className={labelCls}>{t('classifier.threshold')}</label>

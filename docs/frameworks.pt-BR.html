@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Referência dos frameworks — Delphix Masking Helper</title>
-<meta name="description" content="Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade.">
+<meta name="description" content="Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade. A Parte 10 cobre os classifiers que o profiler usa para encontrar o dado sensível.">
 <meta property="og:title" content="Referência dos frameworks — Delphix Masking Helper">
-<meta property="og:description" content="Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade.">
+<meta property="og:description" content="Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade. A Parte 10 cobre os classifiers que o profiler usa para encontrar o dado sensível.">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="site.css">
@@ -26,7 +26,7 @@
 
 <div class="frameworks-head"><div class="wrap">
   <h1>Referência dos frameworks</h1>
-  <p>Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade.</p>
+  <p>Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade. A Parte 10 cobre os classifiers que o profiler usa para encontrar o dado sensível.</p>
 </div></div>
 
 <div class="wrap"><div class="frameworks-layout">
@@ -72,6 +72,12 @@
   <div class="grp">Outros</div>
   <a href="#checkdigit">Check Digit</a>
   <a href="#tokenization">Tokenization</a>
+  <div class="grp">Classifiers</div>
+  <a href="#profiling">Como um domínio é decidido</a>
+  <a href="#path">PATH</a>
+  <a href="#type">TYPE</a>
+  <a href="#regex">REGEX</a>
+  <a href="#list">LIST</a>
   </aside>
   <main>
 <div class="part-head">
@@ -985,6 +991,171 @@ O primeiro padrão só casa com valores que tenham <code>@</code>; todo o resto 
     <div class="note"><b>O token não preserva o formato.</b> Apesar de ser descrito como <i>format-preserving</i>, o resultado observado é uma string Base64 mais longa que a entrada — <code>4111111111111111</code> (16 caracteres) virou 32. Dimensione a coluna de destino com folga, ou o job falhará por truncamento.</div>
 
     <div class="note tip"><b>A chave é o segredo.</b> Quem tiver a chave reverte qualquer token. Trate-a com o mesmo rigor de uma chave de produção: fora do código, fora do repositório, com rotação controlada — e lembre que rotacionar invalida todos os tokens já emitidos.</div></div>
+</article>
+<div class="part-head">
+  <div class="lbl">Parte 10</div>
+  <h2>Classifiers</h2>
+  <p>O mascaramento responde <em>como</em> um campo é escondido. Antes disso vem <em>quais</em> campos precisam ser escondidos, e é isso que os classifiers decidem: eles leem uma coluna — o nome, o tipo, uma amostra dos valores — e votam num domínio de dado sensível. Quatro frameworks, pesados uns contra os outros, uma confiança por domínio.</p>
+</div>
+<article class="framework-card" id="profiling">
+  <header>
+    <div class="hd"><span class="num">10.1</span><h3>Como um domínio é decidido</h3></div>
+    <div class="meta"><span class="cls">Profiling</span></div>
+  </header>
+  <div class="gd"><p class="framework-desc">Um classifier é um nome, um <strong>domínio</strong> em que ele vota, um <strong>framework</strong> e a configuração desse framework. Normalmente vários classifiers servem a um mesmo domínio — um reconhece o nome da coluna, outro os valores dentro dela — e o profiling é a aritmética que transforma essas opiniões separadas numa única confiança por domínio, e atribui a mais forte.</p>
+
+    <div class="label">Dois tipos de evidência</div>
+    <div class="fmt"><strong>Metadado</strong> — <span class="inline">PATH</span> e <span class="inline">TYPE</span> leem o que o catálogo diz sobre a coluna: o nome, a tabela ou o arquivo que a contém, o tipo e o tamanho declarado. Não precisam de dado nenhum.<br><strong>Valores</strong> — <span class="inline">REGEX</span> e <span class="inline">LIST</span> leem uma amostra do que a coluna realmente contém. Sem amostra, não têm o que dizer.</div>
+
+    <div class="label">Todo resultado é um número entre −1 e 1</div>
+    <p class="framework-desc">Um classifier que casa devolve a sua <strong>força de correspondência</strong>; um que não casa devolve a <strong>força de rejeição</strong>, negativa. Um resultado positivo argumenta a favor do domínio, um negativo contra, e zero é abstenção. O Masking Engine mostra os mesmos números em percentual, de −100 a 100.</p>
+    <div class="fmt">Os dois extremos são absolutos. Um resultado <strong>1</strong> confirma o domínio de imediato — nenhum classifier de valores chega a rodar. Um resultado <strong>−1</strong> elimina o domínio — os demais classifiers dele são descartados para aquele campo.</div>
+
+    <div class="label">De vários classifiers a uma confiança</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">Preparar</div><div class="p-desc">Classifiers idênticos em nome, domínio e configuração contam uma vez só. Um domínio com mais de um classifier <code>TYPE</code> tem todos eles <strong>fundidos num só</strong> antes de qualquer coisa rodar: os tipos permitidos são unidos, fica o menor tamanho mínimo, e todo o resto — tamanho máximo, tipo SQL, auto-incremento, forças — volta ao padrão.</div></div>
+      <div class="p-row"><div class="p-name">Evidência</div><div class="p-desc">Cada classifier pontua o campo. Por domínio, só <strong>dois resultados sobrevivem</strong>: o mais forte vindo de metadado e o mais forte vindo de valores — mais forte no sentido de mais distante de zero, então uma rejeição firme vence uma correspondência fraca.</div></div>
+      <div class="p-row"><div class="p-name">Combinar</div><div class="p-desc">Os dois viram um. Apontando para o mesmo lado, o mais forte é reforçado pelo mais fraco: <code>a + (1 − |a|) × b</code> — a evidência se acumula mas nunca passa de 1. Apontando para lados opostos, são somados, e portanto se anulam. Um resultado perto demais de zero é ignorado, e o outro fica sozinho.</div></div>
+      <div class="p-row"><div class="p-name">Decidir</div><div class="p-desc">Os domínios são ordenados por confiança. O primeiro é atribuído se alcançar o <strong>limiar de atribuição</strong> do profile set; o padrão do engine é 1%, então na prática qualquer confiança positiva atribui o domínio.</div></div>
+    </div>
+
+    <div class="label">Um exemplo completo</div>
+    <div class="fmt">Coluna <span class="inline">EMAIL_CLIENTE</span> em <span class="inline">CLIENTES</span>, <span class="inline">VARCHAR(120)</span>, amostrada como <span class="inline">ana.silva@acme.com</span>, <span class="inline">j.doe@example.org</span>, <span class="inline">contact@shop.co.uk</span>, <span class="inline">nao e um email</span>. O domínio <span class="inline">EMAIL</span> tem dois classifiers: um <span class="inline">PATH</span> procurando <code>email</code> com força 0,5, e um <span class="inline">REGEX</span> de endereço com força 1 e rejeição 1.</div>
+    <table class="xf">
+      <tr><th class="c-in">Evidência</th><th class="c-ar"></th><th class="c-out">Resultado</th></tr>
+      <tr><td class="c-in">PATH · o nome contém <code>email</code></td><td class="c-ar">→</td><td class="c-out">0,5</td></tr>
+      <tr><td class="c-in">REGEX · 3 valores de 4 casam: (1 + 1 + 1 − 1) ÷ 4</td><td class="c-ar">→</td><td class="c-out">0,5</td></tr>
+      <tr><td class="c-in">Combinado · 0,5 + (1 − 0,5) × 0,5</td><td class="c-ar">→</td><td class="c-out">0,75 — atribuído a EMAIL com 75%</td></tr>
+    </table>
+    <div class="fmt">Nenhum dos dois tinha certeza sozinho; juntos, têm. Se o <span class="inline">PATH</span> tivesse rejeitado o nome com força 0,4, os dois discordariam e seriam somados: −0,4 + 0,8 = 0,4, uns bem mais frágeis 40%.</div>
+
+    <div class="note tip"><b>Onde isso roda.</b> O Masking Helper reproduz essa aritmética localmente, então um classifier pode ser experimentado num campo que você descreve antes de chegar a qualquer engine — sem job de profiling, sem conexão. O que ele não reproduz é a amostragem: o engine escolhe os valores sozinho, e a confiança sai do que ele tiver sorteado.</div></div>
+</article>
+<article class="framework-card" id="path">
+  <header>
+    <div class="hd"><span class="num">10.2</span><h3>PATH</h3></div>
+    <div class="meta"><span class="cls">PATH</span><span class="tg tg-det">Lê metadado</span></div>
+  </header>
+  <div class="gd"><p class="framework-desc">Reconhece um campo pelo <strong>nome</strong>, e opcionalmente pelo nome da tabela ou do arquivo que o contém. É o classifier mais barato que existe — nenhum dado é lido — e em geral a primeira linha de um domínio: <code>EMAIL</code>, <code>EMAIL_CLIENTE</code> e <code>endereco_email</code> se entregam antes de alguém olhar o que têm dentro.</p>
+
+    <div class="label">Como ele casa</div>
+    <div class="fmt">Um classifier guarda uma lista de caminhos. Eles são tentados <strong>do mais forte para o mais fraco</strong>, e o primeiro que serve dá a sua força de correspondência — os demais não são consultados. Nenhum servindo, vale a força de rejeição, negativa. Um caminho com nome de pai só serve quando a tabela ou o arquivo também casa; um nome de pai vazio, ou um campo sem pai, deixa essa checagem de fora.</div>
+
+    <div class="label">Nome do campo → Resultado</div>
+    <table class="xf">
+      <tr><th class="c-in">Caminhos: <code>numero_documento</code> com 0,9, <code>doc</code> com 0,3</th><th class="c-ar"></th><th class="c-out">Resultado</th></tr>
+      <tr><td class="c-in">NUMERO_DOCUMENTO</td><td class="c-ar">→</td><td class="c-out">0,9 — o caminho mais forte é tentado antes</td></tr>
+      <tr><td class="c-in">TIPO_DOC</td><td class="c-ar">→</td><td class="c-out">0,3 — só o caminho mais fraco serve</td></tr>
+      <tr><td class="c-in">CRIADO_EM</td><td class="c-ar">→</td><td class="c-out"><span class="err">−força de rejeição</span></td></tr>
+    </table>
+
+    <div class="label">Parâmetros</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">paths <span class="req">*</span></div><div class="p-desc">Os nomes a procurar, cada um com a sua força e as suas regras de comparação.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchType <span class="req">*</span></div><div class="p-desc"><strong>EXACT</strong> — o texto é comparado como está escrito. <strong>REGEX</strong> — é lido como expressão regular Java.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> fieldValue <span class="req">*</span></div><div class="p-desc">O nome de coluna ou campo procurado. Com <code>EXACT</code> e correspondência parcial ligada, <code>email</code> também serve para <code>EMAIL_CLIENTE</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> parentValue</div><div class="p-desc">Restringe o caminho a uma tabela ou arquivo, comparado do mesmo jeito que o nome do campo. Vazio aceita qualquer pai.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">Quanto esse caminho vale quando serve, de 0 a 1. Padrão <code>0.5</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> caseSensitive</div><div class="p-desc">Desligado por padrão, então <code>EMAIL</code> e <code>email</code> são o mesmo nome.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> allowPartialMatch</div><div class="p-desc">Ligado por padrão: o nome só precisa conter o valor, ou o padrão ser encontrado em algum ponto dele. Desligado exige o nome inteiro — sem precisar de <code>^</code> nem <code>$</code>.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">Quanto um nome que não casa com caminho nenhum pesa <em>contra</em> o domínio, de 0 a 1. Padrão <code>0</code> — o classifier simplesmente não opina, o que costuma estar certo: uma coluna chamada <code>CAMPO_17</code> ainda pode guardar e-mails.</div></div>
+    </div>
+
+    <div class="note"><b>Nome é convenção, não garantia.</b> Uma força alta numa palavra genérica — <code>nome</code>, <code>id</code>, <code>numero</code> — atribui domínio a colunas que apenas soam parecidas. Deixe os caminhos genéricos fracos e peça a um classifier de valores que os confirme.</div></div>
+</article>
+<article class="framework-card" id="type">
+  <header>
+    <div class="hd"><span class="num">10.3</span><h3>TYPE</h3></div>
+    <div class="meta"><span class="cls">TYPE</span><span class="tg tg-det">Lê metadado</span></div>
+  </header>
+  <div class="gd"><p class="framework-desc">Uma <strong>porteira no tipo da coluna</strong> e no tamanho declarado. É o único framework feito para dizer não: por padrão um tipo aceito pontua 0 e um tipo recusado pontua −1, de modo que o <code>TYPE</code> nunca sustenta um domínio sozinho — ele remove os campos que não poderiam pertencer a ele. Uma coluna de data não é um endereço de e-mail, chame-se ela como se chamar.</p>
+
+    <div class="label">Como ele casa</div>
+    <div class="fmt">Os tipos permitidos são percorridos em busca de um que cubra a coluna: primeiro um código SQL exato, quando alguma entrada nomeia um, depois a família da coluna — <code>String</code>, <code>Number</code>, <code>Date</code> ou <code>Binary</code>. O tipo que cobre é então confrontado com os limites de tamanho. O que não é coberto, um tamanho fora dos limites, ou uma coluna auto-incremento quando elas não são aceitas, é rejeição.</div>
+
+    <div class="label">Coluna → Resultado</div>
+    <table class="xf">
+      <tr><th class="c-in">Permitido: <code>String</code>, tamanho mínimo 6</th><th class="c-ar"></th><th class="c-out">Resultado</th></tr>
+      <tr><td class="c-in">EMAIL VARCHAR(120)</td><td class="c-ar">→</td><td class="c-out">0 — aceito, e neutro de propósito</td></tr>
+      <tr><td class="c-in">IDADE INTEGER</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — o domínio é eliminado</span></td></tr>
+      <tr><td class="c-in">UF CHAR(2)</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — menor que o mínimo</span></td></tr>
+    </table>
+
+    <div class="label">Parâmetros</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">allowedTypes <span class="req">*</span></div><div class="p-desc">Os tipos de coluna que o domínio aceita — no máximo uma entrada por tipo.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> typeName <span class="req">*</span></div><div class="p-desc"><strong>String</strong>, <strong>Number</strong>, <strong>Date</strong> e <strong>Binary</strong> são famílias de tipos SQL; <strong>JavaSqlType</strong> nomeia um tipo exato através de <code>sqlType</code>. <code>TIMESTAMP</code> e <code>BOOLEAN</code> não pertencem a família nenhuma, então só um código exato os alcança.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> minimumLength / maximumLength</div><div class="p-desc">Rejeita colunas declaradas menores ou maiores que isso. <code>0</code> significa sem limite, e uma coluna de tamanho desconhecido não é medida.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> sqlType</div><div class="p-desc">O código de tipo JDBC (<code>java.sql.Types</code>) aceito quando <code>typeName</code> é <code>JavaSqlType</code> — 12 para <code>VARCHAR</code>, 4 para <code>INTEGER</code>, 91 para <code>DATE</code>.</div></div>
+      <div class="p-row"><div class="p-name">matchAutoIncrementingColumn</div><div class="p-desc">Colunas que o banco preenche sozinho — <code>IDENTITY</code>, <code>SERIAL</code>, <code>AUTO_INCREMENT</code> — são chave técnica muito mais vezes do que dado pessoal. Desligado por padrão, o que as rejeita seja qual for o tipo.</div></div>
+      <div class="p-row"><div class="p-name">matchStrength / rejectStrength</div><div class="p-desc">Padrão <code>0</code> e <code>1</code>. A Delphix marca os dois como experimentais, e os padrões dizem a intenção: um tipo pode eliminar um domínio, nunca confirmá-lo.</div></div>
+    </div>
+
+    <div class="note"><b>Rejeição é contagiosa.</b> Com a força de rejeição padrão 1, um <code>TYPE</code> que recusa a coluna encerra o domínio para aquele campo — os classifiers <code>REGEX</code> e <code>LIST</code> dele não rodam, por melhor que os valores fossem casar. É esse o objetivo, e é também a armadilha: um tipo esquecido na lista de permitidos custa ao domínio, em silêncio, todos os campos daquele tipo.</div></div>
+</article>
+<article class="framework-card" id="regex">
+  <header>
+    <div class="hd"><span class="num">10.4</span><h3>REGEX</h3></div>
+    <div class="meta"><span class="cls">REGEX</span><span class="tg tg-rev">Lê valores</span></div>
+  </header>
+  <div class="gd"><p class="framework-desc">Reconhece um domínio pelo <strong>formato dos valores</strong>. Cada valor da amostra é limpo, testado contra uma cadeia de padrões e, opcionalmente, confirmado por um <strong>dígito verificador</strong> — que é o que separa um cartão ou um documento de verdade de um número qualquer do tamanho certo.</p>
+
+    <div class="label">Como ele casa</div>
+    <div class="fmt">Por valor: a expressão de limpeza do padrão remove o que ela casa, o padrão é testado contra o que sobrou, e o dígito verificador, se houver, precisa passar. Os padrões são tentados <strong>do mais forte para o mais fraco</strong>, e o primeiro que aceita o valor dá a sua força. Um padrão que casa mas falha na verificação passa o valor ao próximo em vez de reivindicá-lo. Um valor que nenhum padrão aceita pontua a força de rejeição, negativa.<br>A confiança do classifier é a <strong>média da amostra</strong> — então ela degrada com elegância: uma coluna em que a maioria dos valores serve e alguns não ainda argumenta pelo domínio.</div>
+
+    <div class="label">Valor da amostra → Pontuação</div>
+    <table class="xf">
+      <tr><th class="c-in">Padrão <code>\d{16}</code>, verificação Luhn, limpeza <code>[ -]</code>, rejeição 1</th><th class="c-ar"></th><th class="c-out">Pontuação</th></tr>
+      <tr><td class="c-in">4111 1111 1111 1111</td><td class="c-ar">→</td><td class="c-out">1</td></tr>
+      <tr><td class="c-in">4111-1111-1111-1112</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — formato certo, dígito verificador falha</span></td></tr>
+      <tr><td class="c-in">5500 0000 0000 0004</td><td class="c-ar">→</td><td class="c-out">1</td></tr>
+      <tr><td class="c-in">Confiança · (1 − 1 + 1) ÷ 3</td><td class="c-ar">→</td><td class="c-out">0,33</td></tr>
+    </table>
+
+    <div class="label">Parâmetros</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">dataPatterns <span class="req">*</span></div><div class="p-desc">Os padrões, cada um com a sua força, a sua limpeza e o seu dígito verificador.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> regex <span class="req">*</span></div><div class="p-desc">Sintaxe Java, testada depois da limpeza. O escopo vem de <code>allowPartialMatch</code>, então âncoras não são necessárias.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> dataCleanRegex</div><div class="p-desc">Tudo o que esse padrão casa é removido antes do teste — <code>[ -.]</code> transforma <code>123.456.789-09</code> em <code>12345678909</code>. Sempre sensível a maiúsculas.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> checksumType</div><div class="p-desc">Uma verificação que o valor limpo também precisa passar: <strong>LUHN</strong> (cartões), <strong>MOD97</strong> (IBAN), <strong>MOD11_NHS</strong>, <strong>MOD11_TFN</strong>, <strong>MOD10_ABA</strong>, ou <strong>NONE</strong>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">Quanto pontua um valor que casa com esse padrão, de 0 a 1. Padrão <code>1</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> caseSensitive / allowPartialMatch</div><div class="p-desc">Se as letras precisam casar em maiúsculas e minúsculas, e se o padrão pode ser encontrado em qualquer ponto do valor ou precisa cobri-lo inteiro.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> note</div><div class="p-desc">Texto livre para quem mantém o classifier. Não entra na comparação — e vale escrever, porque uma expressão regular de seis meses atrás não explica nada.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">Quanto pontua, em negativo, um valor que não casa com padrão nenhum, de 0 a 1. Padrão <code>1</code>.</div></div>
+    </div>
+
+    <div class="note tip"><b>Correspondência parcial é o erro clássico.</b> Ligada, <code>\d{9}</code> é encontrada dentro de qualquer número mais longo, e uma coluna de código de pedido começa a parecer CPF. Quando o padrão descreve o valor inteiro, desligue a correspondência parcial.</div></div>
+</article>
+<article class="framework-card" id="list">
+  <header>
+    <div class="hd"><span class="num">10.5</span><h3>LIST</h3></div>
+    <div class="meta"><span class="cls">LIST</span><span class="tg tg-rev">Lê valores</span><span class="tg tg-file">Precisa de arquivo</span></div>
+  </header>
+  <div class="gd"><p class="framework-desc">Reconhece valores <strong>procurando-os em arquivos de valores conhecidos</strong> — nomes, cidades, países, cargos. É a resposta para dado que não tem formato a casar: nada em <code>Ana</code> ou <code>Recife</code> diz a um padrão o que aquilo é, mas uma lista de nomes e uma lista de cidades dizem.</p>
+
+    <div class="label">Como ele casa</div>
+    <div class="fmt">Cada lista é um arquivo de texto, um valor por linha, comparado ignorando maiúsculas mas quanto ao resto exatamente como está escrito — espaços incluídos. Um valor encontrado pontua a força daquela lista, vencendo a mais pesada quando várias o contêm; um valor que não está em lugar nenhum pontua a força de rejeição, negativa. A confiança do classifier é a <strong>média da amostra</strong>.<br>Com a <strong>quebra em palavras</strong> ligada, cada palavra do valor é procurada sozinha e o valor pontua as forças encontradas divididas pelo seu número de palavras — é assim que uma lista de nomes dá conta de <code>Ana Ribeiro</code> sem precisar de todos os sobrenomes.</div>
+
+    <div class="label">Valor da amostra → Pontuação</div>
+    <table class="xf">
+      <tr><th class="c-in">Lista de nomes com força 1, rejeição 0,5</th><th class="c-ar"></th><th class="c-out">Pontuação</th></tr>
+      <tr><td class="c-in">Ana</td><td class="c-ar">→</td><td class="c-out">1</td></tr>
+      <tr><td class="c-in">JOÃO</td><td class="c-ar">→</td><td class="c-out">1 — maiúsculas são ignoradas</td></tr>
+      <tr><td class="c-in">Zebedeu</td><td class="c-ar">→</td><td class="c-out"><span class="err">−0,5</span></td></tr>
+      <tr><td class="c-in">Ana Ribeiro · quebrado em palavras, 1 de 2 encontrada</td><td class="c-ar">→</td><td class="c-out">0,5</td></tr>
+    </table>
+
+    <div class="label">Parâmetros</div>
+    <div class="params">
+      <div class="p-row"><div class="p-name">valueLists <span class="req">*</span></div><div class="p-desc">Os arquivos de valores conhecidos, cada um com a sua força.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> file <span class="req">*</span></div><div class="p-desc">O endereço da lista. A Delphix lê <code>delphix-file://</code>, <code>file://</code>, <code>http(s)://</code> e <code>jar://file/</code>; no Masking Helper o arquivo é gerenciado em <em>Configurações → Arquivos</em> e viaja junto com o classifier.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">Quanto pontua um valor encontrado nessa lista, de 0 a 1. Padrão <code>1</code>.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">Quanto pontua, em negativo, um valor que não está em lista nenhuma. Padrão <code>0.5</code> — de propósito mais suave que o do <code>REGEX</code>, porque lista nenhuma é completa.</div></div>
+      <div class="p-row"><div class="p-name">tokenizeInput</div><div class="p-desc">Quebra cada valor em palavras antes de procurar. Para nomes completos, endereços, colunas de texto livre.</div></div>
+      <div class="p-row"><div class="p-name">tokenizationDelimiter</div><div class="p-desc">Os caracteres que separam palavras — cada caractere conta sozinho. Padrão um espaço.</div></div>
+    </div>
+
+    <div class="note"><b>Uma lista é uma promessa de cobertura.</b> A força de rejeição é o que custa não encontrar, então uma lista curta pune todo valor que ela por acaso não contém. Listas amplas merecem rejeição firme; uma lista dos cinquenta nomes mais comuns, não.</div></div>
 </article>
   </main>
 </div></div>

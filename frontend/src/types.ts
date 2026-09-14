@@ -45,7 +45,7 @@ export interface MaskResult {
   error?: string
 }
 
-export type View = 'welcome' | 'tester' | 'domain' | 'classifier' | 'settings'
+export type View = 'welcome' | 'tester' | 'domain' | 'classifier' | 'profileSet' | 'settings'
 
 export interface ServerFile {
   name: string
@@ -84,6 +84,30 @@ export interface Classifier {
   description: string
   config: Record<string, unknown>
   /** classifierId on the engine it came from or was sent to. */
+  delphix_id: number | null
+  delphix_origin: string | null
+  created_at: string
+  updated_at: string
+}
+
+/**
+ * A profile set: the classifiers a profiling job should try, and how sure it has to be.
+ *
+ * It carries no logic of its own — a classifier scores, a domain's classifiers combine, and both
+ * of those belong to the classifiers. A set adds the two things a job needs on top: which ones to
+ * run, and the confidence a domain must reach before the job assigns it.
+ */
+export interface ProfileSet {
+  id: number
+  name: string
+  description: string
+  /** 1-100. The engine calls it assignmentThreshold. */
+  assignment_threshold: number
+  /** The classifiers it holds, by local id. */
+  classifier_ids: number[]
+  /** Enough of each member to list the set without a second request. */
+  classifiers: Array<{ id: number; name: string; framework: ClassifierFrameworkName; domain_name: string }>
+  /** profileSetId on the engine it came from or was sent to. */
   delphix_id: number | null
   delphix_origin: string | null
   created_at: string

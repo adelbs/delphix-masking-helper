@@ -15,12 +15,24 @@ export interface EngineSkipped {
 export interface EngineImportResult {
   imported: string[]
   /** Brought along because something imported references them. */
-  related: { domains: string[]; algorithms: string[] }
+  related: { domains: string[]; algorithms: string[]; classifiers: string[] }
   skipped: EngineSkipped[]
   /** Files written into the files folder. */
   downloaded: string[]
   /** Files still to be copied by hand — the engine offers no download for them. */
   needsFiles: Array<{ name: string; files: string[] }>
+}
+
+/**
+ * Where an import has got to. The total is what is finished plus what is still queued, so it
+ * grows as the import discovers what the picked objects reference — see `importFromEngine`.
+ */
+export interface ImportProgress {
+  kind: 'reading' | 'classifier' | 'domain' | 'algorithm'
+  /** The item being taken up; null while the engine is still being listed. */
+  name: string | null
+  done: number
+  total: number
 }
 
 /** What a push sent ahead of the object itself. */
@@ -35,6 +47,7 @@ const listed = (names: string[]) => ({ n: names.length, names: names.join(', ') 
 
 /** Tells what came along with an import, and what could not come. */
 export function announceImport(t: Translate, out: EngineImportResult) {
+  if (out.related.classifiers.length) toast.success(t('sync.importedClassifiers', listed(out.related.classifiers)))
   if (out.related.domains.length) toast.success(t('sync.importedDomains', listed(out.related.domains)))
   if (out.related.algorithms.length) toast.success(t('sync.importedAlgorithms', listed(out.related.algorithms)))
   if (out.downloaded.length) {

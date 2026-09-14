@@ -68,7 +68,7 @@ export const T = {
     assistantNote: 'It runs against a local model by default, so nothing leaves your machine.',
 
     guideTitle: 'The framework reference',
-    guideP: 'Every framework documented in full — behaviour, input format, worked input → output examples and every configuration parameter. Each example was produced by actually running the framework, never estimated.',
+    guideP: 'Every framework documented in full — behaviour, input format, worked input → output examples and every configuration parameter — plus the classifiers behind sensitive data discovery. Each example was produced by actually running the framework, never estimated.',
     guideCta: 'Read it online',
     pdfTitle: 'Or take it with you',
     pdfP: 'The same reference as a printable PDF, one per language.',
@@ -76,7 +76,7 @@ export const T = {
 
 
     frameworksTitle: 'Framework reference',
-    frameworksLede: 'All 31 masking frameworks in the Delphix plugin. Configure one and you get an algorithm. Every input → output pair on this page came from actually running the framework.',
+    frameworksLede: 'All 31 masking frameworks in the Delphix plugin. Configure one and you get an algorithm. Every input → output pair on this page came from actually running the framework. Part 10 covers the classifiers the profiler uses to find the sensitive data in the first place.',
     backHome: 'Home',
     onThisPage: 'On this page',
     footerRepo: 'Source and technical documentation on GitHub',
@@ -123,7 +123,7 @@ export const T = {
     assistantNote: 'Por padrão roda com um modelo local, então nada sai da sua máquina.',
 
     guideTitle: 'A referência dos frameworks',
-    guideP: 'Todos os frameworks documentados por inteiro — comportamento, formato de entrada, exemplos de entrada → saída e cada parâmetro de configuração. Cada exemplo foi produzido executando o framework de verdade, nunca estimado.',
+    guideP: 'Todos os frameworks documentados por inteiro — comportamento, formato de entrada, exemplos de entrada → saída e cada parâmetro de configuração — e mais os classifiers por trás da descoberta de dado sensível. Cada exemplo foi produzido executando o framework de verdade, nunca estimado.',
     guideCta: 'Ler online',
     pdfTitle: 'Ou leve com você',
     pdfP: 'A mesma referência em PDF pronto para imprimir, um por idioma.',
@@ -131,7 +131,7 @@ export const T = {
 
 
     frameworksTitle: 'Referência dos frameworks',
-    frameworksLede: 'Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade.',
+    frameworksLede: 'Os 31 frameworks de mascaramento do plugin Delphix. Configure um e você tem um algoritmo. Cada par entrada → saída desta página veio de executar o framework de verdade. A Parte 10 cobre os classifiers que o profiler usa para encontrar o dado sensível.',
     backHome: 'Início',
     onThisPage: 'Nesta página',
     footerRepo: 'Código e documentação técnica no GitHub',
@@ -178,7 +178,7 @@ export const T = {
     assistantNote: 'Por defecto funciona con un modelo local, así que nada sale de tu máquina.',
 
     guideTitle: 'La referencia de los frameworks',
-    guideP: 'Todos los frameworks documentados por completo — comportamiento, formato de entrada, ejemplos de entrada → salida y cada parámetro de configuración. Cada ejemplo se produjo ejecutando el framework de verdad, nunca estimado.',
+    guideP: 'Todos los frameworks documentados por completo — comportamiento, formato de entrada, ejemplos de entrada → salida y cada parámetro de configuración — y además los classifiers detrás del descubrimiento de dato sensible. Cada ejemplo se produjo ejecutando el framework de verdad, nunca estimado.',
     guideCta: 'Leer en línea',
     pdfTitle: 'O llévatela contigo',
     pdfP: 'La misma referencia en PDF listo para imprimir, uno por idioma.',
@@ -186,7 +186,7 @@ export const T = {
 
 
     frameworksTitle: 'Referencia de los frameworks',
-    frameworksLede: 'Los 31 frameworks de enmascaramiento del plugin de Delphix. Configura uno y tienes un algoritmo. Cada par entrada → salida de esta página vino de ejecutar el framework de verdad.',
+    frameworksLede: 'Los 31 frameworks de enmascaramiento del plugin de Delphix. Configura uno y tienes un algoritmo. Cada par entrada → salida de esta página vino de ejecutar el framework de verdad. La Parte 10 cubre los classifiers que el profiler usa para encontrar el dato sensible.',
     backHome: 'Inicio',
     onThisPage: 'En esta página',
     footerRepo: 'Código y documentación técnica en GitHub',

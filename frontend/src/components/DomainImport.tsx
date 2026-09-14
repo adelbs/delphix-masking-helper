@@ -5,6 +5,8 @@ import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { announceImport } from '@/lib/engine-sync'
+import { ImportProgressBar } from '@/components/ImportProgressBar'
+import { useImportProgress } from '@/lib/import-progress'
 
 /**
  * Lists the engine's domains and copies the chosen ones down.
@@ -20,6 +22,7 @@ export function DomainImport({ onClose, onImported }: { onClose: () => void; onI
   const [error, setError] = useState<string | null>(null)
   const [picked, setPicked] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState(false)
+  const { progress, report, clear } = useImportProgress()
 
   useEffect(() => {
     api.delphixDomains().then(setRows).catch((e: Error & { code?: string }) =>
@@ -38,15 +41,16 @@ export function DomainImport({ onClose, onImported }: { onClose: () => void; onI
 
   const run = async () => {
     setBusy(true)
+    clear()
     try {
-      const out = await api.delphixImportDomains([...picked])
+      const out = await api.delphixImportDomains([...picked], report)
       toast.success(t('domain.importDone', { n: out.imported.length }))
       announceImport(t, out)
       onImported()
       onClose()
     } catch (e) {
       toast.error((e as Error).message)
-    } finally { setBusy(false) }
+    } finally { setBusy(false); clear() }
   }
 
   return (
@@ -98,11 +102,13 @@ export function DomainImport({ onClose, onImported }: { onClose: () => void; onI
           ))}
         </div>
 
-        <div className="px-5 py-4 border-t border-slate-200">
+        <div className="px-5 py-4 border-t border-slate-200 space-y-3">
           <button onClick={run} disabled={busy || picked.size === 0}
-                  className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
+            {busy && <Loader2 size={14} className="animate-spin" />}
             {t('saved.importSelected', { n: picked.size })}
           </button>
+          {progress && <ImportProgressBar progress={progress} />}
         </div>
       </div>
     </div>

@@ -14,9 +14,13 @@ const TAG_STYLE: Record<string, string> = {
 }
 
 /**
- * The Documentation tab. The content is the framework's section from the reference guide
- * in docs/src/ — the very same source the PDFs are generated from, so the two cannot
- * disagree. The HTML is project content read at build time, never user input.
+ * The Documentation tab. The content is one section of the reference guide in docs/src/ — the
+ * very same source the PDFs are generated from, so the two cannot disagree. The HTML is project
+ * content read at build time, never user input.
+ *
+ * Sections are keyed by the identifier the guide prints under the title: a masking framework's
+ * class name, or — for the classifier screen — a classifier framework (PATH, TYPE, REGEX, LIST)
+ * and `Profiling`, the section on how a domain is decided.
  */
 export function FrameworkDoc({ className }: { className: string }) {
   const { t, locale } = useT()

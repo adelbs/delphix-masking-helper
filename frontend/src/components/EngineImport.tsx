@@ -5,6 +5,8 @@ import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { announceImport } from '@/lib/engine-sync'
+import { ImportProgressBar } from '@/components/ImportProgressBar'
+import { useImportProgress } from '@/lib/import-progress'
 
 /** Lists what the configured engine has and imports the chosen algorithms. */
 export function EngineImport({ onClose, onImported }: { onClose: () => void; onImported: () => void }) {
@@ -13,6 +15,7 @@ export function EngineImport({ onClose, onImported }: { onClose: () => void; onI
   const [error, setError] = useState<string | null>(null)
   const [picked, setPicked] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState(false)
+  const { progress, report, clear } = useImportProgress()
 
   // Runs once when the dialog opens. `msg` is only read to word one error, and the dialog is
   // never open across a language change, so it is deliberately not a dependency.
@@ -29,8 +32,9 @@ export function EngineImport({ onClose, onImported }: { onClose: () => void; onI
 
   const run = async () => {
     setBusy(true)
+    clear()
     try {
-      const out = await api.delphixImport([...picked])
+      const out = await api.delphixImport([...picked], report)
       toast.success(msg('saved.importDone', { n: out.imported.length }))
       // The rows are saved either way; this is what came with them and what they still lack.
       announceImport(msg, out)
@@ -38,7 +42,7 @@ export function EngineImport({ onClose, onImported }: { onClose: () => void; onI
       onClose()
     } catch (e) {
       toast.error((e as Error).message)
-    } finally { setBusy(false) }
+    } finally { setBusy(false); clear() }
   }
 
   const importable = (rows ?? []).filter(r => r.supported)
@@ -111,11 +115,13 @@ export function EngineImport({ onClose, onImported }: { onClose: () => void; onI
           ))}
         </div>
 
-        <div className="px-5 py-4 border-t border-slate-200">
+        <div className="px-5 py-4 border-t border-slate-200 space-y-3">
           <button onClick={run} disabled={busy || picked.size === 0}
-                  className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors">
+            {busy && <Loader2 size={14} className="animate-spin" />}
             {msg('saved.importSelected', { n: picked.size })}
           </button>
+          {progress && <ImportProgressBar progress={progress} />}
         </div>
       </div>
     </div>
