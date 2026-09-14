@@ -372,6 +372,13 @@ through them their domains, those domains' algorithms and the value files. **Sen
 does the reverse: every member is sent first, and the set is then created or updated naming them
 by the ids the engine gave back — a set can only reference classifiers the engine already holds.
 
+**Pre-configured profile sets.** *Settings → Profile Sets* lists profile sets that ship with the
+tool, each with a PDF of its documentation and everything it needs. **Load** creates the set, its
+classifiers, domains, algorithms and files in one go. Loading again never duplicates anything: the
+button becomes **Reset**, which puts every item back the way it ships and discards the changes made
+to it. If a name the set uses already belongs to something that did not come from it, the tool
+lists what would be replaced and asks first. The format is described in `presets/README.md`.
+
 **Importing.** There is no per-object import: connecting the integration brings the whole engine
 down, and **Refresh from Delphix** brings it down again. An algorithm built on a framework this
 tool cannot run is not copied — you never end up with a saved algorithm that cannot be tested — and

@@ -480,7 +480,7 @@ public class AlgorithmRunner {
         java.util.Collection<MaskingComponent> defaults = component.getDefaultInstances();
         if (defaults != null) {
             for (MaskingComponent sub : defaults) {
-                boolean wasSetup = setupRecursive(sub, service, registry, inProgress);
+                boolean wasSetup = setupRecursive(sub, named(service, sub.getName()), registry, inProgress);
                 // Only register sub-algorithms that were actually set up; skipped (cycle)
                 // instances have null crypto and would cause NPE when called during mask().
                 if (wasSetup && sub instanceof MaskingAlgorithm) {
@@ -714,6 +714,36 @@ public class AlgorithmRunner {
         return buildService(keyString, mapper, registry, Collections.emptyMap());
     }
 
+    /**
+     * The same service under another instance name.
+     *
+     * On a Masking Engine every algorithm is set up with its own instance name. Plugin components
+     * keep state across instances keyed on it — a Secure Lookup's list, a Character Mapping's
+     * tables — so setting every algorithm up under one name made the second Secure Lookup of a
+     * Regex Decompose or a String Algorithm Chain return values from the first one's file.
+     */
+    static ComponentService named(ComponentService base, String instanceName) {
+        if (instanceName == null || instanceName.isEmpty()) return base;
+        return new ComponentService() {
+            @Override public String getInstanceName() { return instanceName; }
+            @Override public InputStream openInputFile(com.delphix.masking.api.plugin.referenceType.FileReference ref) { return base.openInputFile(ref); }
+            @Override public java.sql.Connection openJdbcConnection(com.delphix.masking.api.plugin.referenceType.JdbcReference ref) { return base.openJdbcConnection(ref); }
+            @Override public java.sql.Connection openMappingConnection(com.delphix.masking.api.plugin.referenceType.MappingSetReference ref) { return base.openMappingConnection(ref); }
+            @Override public <U> MaskingAlgorithm<U> getAlgorithmByName(AlgorithmInstanceReference ref, MaskingAlgorithm.MaskingType type) { return base.getAlgorithmByName(ref, type); }
+            @Override public <U> MaskingAlgorithm<U> getAlgorithmByName(AlgorithmInstanceReference ref, MaskingAlgorithm.MaskingType type, MaskValueMetadata meta) { return base.getAlgorithmByName(ref, type, meta); }
+            @Override public MaskingAlgorithm.MaskingType getMaskingTypeForInstanceReference(AlgorithmInstanceReference ref) { return base.getMaskingTypeForInstanceReference(ref); }
+            @Override public CryptoService getCryptoService(KeyReference ref) { return base.getCryptoService(ref); }
+            @Override public ExpressionEvaluator createJaninoExpressionEvaluator() { return base.createJaninoExpressionEvaluator(); }
+            @Override public void cookJaninoExpression(ExpressionEvaluator ev, String expr) throws Exception { base.cookJaninoExpression(ev, expr); }
+            @Override public LogService getLogService() { return base.getLogService(); }
+            @Override public MaskValueMetadata getMaskValueMetadata() { return base.getMaskValueMetadata(); }
+            @Override public com.delphix.masking.api.driverSupport.jobInfo.JobInfo getJobInfo() { return base.getJobInfo(); }
+            @Override public java.sql.Connection getTargetConnection() { return base.getTargetConnection(); }
+            @Override public com.delphix.masking.api.driverSupport.taskInfo.SingleOperationTaskInfo getSingleOperationTaskInfo() { return base.getSingleOperationTaskInfo(); }
+            @Override public <U> com.delphix.masking.api.plugin.GeneratorAlgorithm<U> createEmbeddedGenerator(com.delphix.masking.api.plugin.referenceType.EmbeddedGeneratorReference ref, MaskingAlgorithm.MaskingType type) { return base.createEmbeddedGenerator(ref, type); }
+        };
+    }
+
     static ComponentService buildService(String keyString, ObjectMapper mapper,
             Map<String, MaskingAlgorithm<?>> registry, Map<String, JsonNode> extraAlgos) {
         byte[] rawKey = keyString.getBytes(StandardCharsets.UTF_8);
@@ -780,7 +810,7 @@ public class AlgorithmRunner {
                             MaskingComponent comp = catalog.get(refName);
                             if (comp == null) comp = catalog.get(shortName);
                             if (comp != null) {
-                                setupRecursive(comp, this, registry);
+                                setupRecursive(comp, named(this, shortName), registry);
                                 alg = (MaskingAlgorithm<?>) comp;
                                 registry.put(shortName, alg);
                             }
@@ -807,7 +837,7 @@ public class AlgorithmRunner {
                                         ComponentConfigurator.applyConfiguration(comp, extraCfg);
                                     }
                                 }
-                                setupRecursive(comp, this, registry);
+                                setupRecursive(comp, named(this, refName), registry);
                                 alg = (MaskingAlgorithm<?>) comp;
                                 registry.put(refName, alg);
                                 if (!shortName.equals(refName)) registry.put(shortName, alg);

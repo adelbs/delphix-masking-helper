@@ -1,0 +1,497 @@
+{
+  "title": "Chile — Ley 21.719",
+  "subtitle": "Descoberta e mascaramento de dados pessoais chilenos: identificadores diretos, quase-identificadores e os dados sensíveis do artigo 2 — situação socioeconômica incluída.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais de um banco de dados chileno e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "A Ley 21.719 não se aplica a dados anonimizados. Por isso o set não para nos identificadores diretos: ele também generaliza os quase-identificadores que reidentificam pessoas em combinação e cobre todas as categorias sensíveis do artigo 2. Os domínios estão organizados nas mesmas camadas:",
+        { "list": [
+          "**Identificadores diretos** — RUT, nomes, contato, documentos, contas, dispositivos, veículos, texto livre.",
+          "**Quase-identificadores** — data de nascimento, idade, sexo, comuna, código postal, ocupação, empregador e atributos semelhantes.",
+          "**Dados sensíveis** — origem étnica, saúde, biometria, vida sexual, orientação e identidade de gênero, crenças, filiação política, sindical e gremial.",
+          "**Situação socioeconômica** — tramo FONASA e ISAPRE, Registro Social de Hogares, benefícios do Estado, dívida comercial, renda, fundo de pensão, moradia, financiamento estudantil.",
+          "**Antecedentes penais** — condenações e números de processos judiciais."
+        ] },
+        "Tudo de que o set precisa viaja com ele: carregá-lo cria os domínios, classifiers, algoritmos e arquivos de lookup, e enviá-lo a um Masking Engine envia todos eles."
+      ]
+    },
+    {
+      "title": "A Ley 21.719 em resumo",
+      "body": [
+        "A Ley 21.719 regula a proteção e o tratamento de dados pessoais e cria a Agencia de Protección de Datos Personales. O artigo 2 define como **sensíveis** os dados que revelam origem étnica ou racial, filiação política, sindical ou gremial, situação socioeconômica, convicções ideológicas ou filosóficas, crenças religiosas, saúde e perfil biológico humano, dados biométricos, e vida sexual, orientação sexual e identidade de gênero.",
+        "Situação socioeconômica é uma categoria do direito chileno: dados comuns em outros países — um tramo FONASA, uma ISAPRE, um percentil do Registro Social de Hogares, um registro no DICOM — são sensíveis no Chile, e modelos feitos para o GDPR não os cobrem.",
+        "A lei entra em vigor em 1º de dezembro de 2026. Em 31 de agosto de 2026 o Governo enviou ao Senado um projeto (Boletín 18.623-07) que adiaria a data para 1º de dezembro de 2027; verifique a tramitação. A data não muda este set.",
+        { "note": "Este documento descreve controles técnicos. Se uma cópia dos dados conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não só do profile set." }
+      ]
+    },
+    {
+      "title": "Como usar o set",
+      "body": [
+        { "list": [
+          "**Carregar** — *Configurações → Profile Sets → Carregar*. Carregar de novo reseta todos os objetos do set para como vêm.",
+          "**Enviar ao Delphix** — pelo profile set, ou com *Enviar tudo ao Delphix*. Domínios, algoritmos e arquivos vão antes.",
+          "**Perfilar** — rode um job de profiling com o set e revise os domínios atribuídos antes de mascarar.",
+          "**Mascarar** — rode o job de mascaramento. Use a mesma chave do engine em todos os ambientes, para que os valores mascarados sejam consistentes entre sistemas."
+        ] },
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem significado (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível.",
+        { "tip": "Antes de mascarar, faça o inventário das colunas binárias (BLOB, imagens, PDF). Os algoritmos deste set trabalham com texto, números e datas: uma cédula escaneada guardada num BLOB continua com o RUT legível. Reporte essas colunas como risco residual." }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": ["Dados que identificam uma pessoa sozinhos. Mascará-los é necessário, mas não basta: as partes seguintes importam tanto quanto."],
+      "domains": ["CL_L1_RUT", "CL_L1_RUT_CUERPO", "CL_L1_RUT_DV", "CL_L1_NOMBRE", "CL_L1_APELLIDO", "CL_L1_NOMBRE_COMPLETO", "CL_L1_EMAIL", "CL_L1_TELEFONO", "CL_L1_DIRECCION", "CL_L1_DIRECCION_COMPLEMENTO", "CL_L1_NUMERO_DOCUMENTO", "CL_L1_PASAPORTE", "CL_L1_DOCUMENTO_EXTRANJERO", "CL_L1_CUENTA_BANCARIA", "CL_L1_TARJETA", "CL_L1_IP", "CL_L1_DISPOSITIVO", "CL_L1_PATENTE", "CL_L1_VEHICULO_ID", "CL_L1_NUMERO_CONTRATO", "CL_L1_USUARIO_RRSS", "CL_L1_CREDENCIAL", "CL_L1_GEOLOCALIZACION", "CL_L1_TEXTO_LIBRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": ["Dados que sozinhos não identificam ninguém, mas em combinação sim: data de nascimento, sexo e comuna isolam a maioria das pessoas, e o Chile tem muitas comunas de poucos milhares de habitantes. Esses atributos são generalizados ou deslocados em vez de substituídos, e os dados mantêm seu valor analítico."],
+      "domains": ["CL_L2_FECHA_NACIMIENTO", "CL_L2_ANIO_NACIMIENTO", "CL_L2_EDAD", "CL_L2_FECHA_EVENTO", "CL_L2_SEXO", "CL_L2_COMUNA", "CL_L2_CODIGO_COMUNA", "CL_L2_CODIGO_POSTAL", "CL_L2_NACIONALIDAD", "CL_L2_ESTADO_CIVIL", "CL_L2_OCUPACION", "CL_L2_EMPLEADOR", "CL_L2_NIVEL_EDUCACIONAL", "CL_L2_ESTABLECIMIENTO_EDUCACIONAL", "CL_L2_CARGAS_FAMILIARES"]
+    },
+    {
+      "id": "L3",
+      "title": "Dados sensíveis",
+      "intro": ["As categorias do artigo 2 letra g: origem étnica, saúde e perfil biológico humano, biometria, vida sexual, orientação sexual e identidade de gênero, convicções religiosas e ideológicas, filiação política, sindical e gremial. Um valor categórico é trocado por outro da mesma categoria, e a coluna mantém um conteúdo realista; onde os valores não compartilham vocabulário, eles são suprimidos."],
+      "domains": ["CL_L3_ETNIA", "CL_L3_SALUD_DIAGNOSTICO", "CL_L3_SALUD_MEDICAMENTO", "CL_L3_SALUD_IDENTIFICADOR", "CL_L3_SALUD_TEXTO_CLINICO", "CL_L3_SALUD_RESULTADO_EXAMEN", "CL_L3_SALUD_GRUPO_SANGUINEO", "CL_L3_SALUD_DISCAPACIDAD", "CL_L3_SALUD_SEXUAL_REPRODUCTIVA", "CL_L3_SALUD_MENTAL_ADICCIONES", "CL_L3_BIOMETRICO", "CL_L3_PERFIL_GENETICO", "CL_L3_ORIENTACION_SEXUAL", "CL_L3_IDENTIDAD_GENERO", "CL_L3_VIDA_SEXUAL", "CL_L3_RELIGION", "CL_L3_CONVICCION_IDEOLOGICA", "CL_L3_AFILIACION_POLITICA", "CL_L3_AFILIACION_SINDICAL", "CL_L3_AFILIACION_GREMIAL"]
+    },
+    {
+      "id": "SOCIOEC",
+      "title": "Situação socioeconômica",
+      "intro": ["Sensível pela lei chilena, ao contrário do GDPR e da maioria das leis estrangeiras. Tramos e categorias são trocados dentro da própria notação; valores monetários são mapeados para uma faixa plausível, sem relação com o valor real."],
+      "domains": ["CL_L3_SOCIOEC_PREVISION_SALUD", "CL_L3_SOCIOEC_PLAN_SALUD", "CL_L3_SOCIOEC_RSH", "CL_L3_SOCIOEC_NIVEL", "CL_L3_SOCIOEC_BENEFICIO_SOCIAL", "CL_L3_SOCIOEC_MOROSIDAD", "CL_L3_SOCIOEC_MONTO_DEUDA", "CL_L3_SOCIOEC_INGRESOS", "CL_L3_SOCIOEC_PREVISION_AFP", "CL_L3_SOCIOEC_SALDO_PREVISIONAL", "CL_L3_SOCIOEC_VIVIENDA", "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes penais",
+      "intro": ["Dados sobre infrações penais, condenações e processos judiciais, tratados com o mesmo cuidado que os dados sensíveis."],
+      "domains": ["CL_L3_PENAL_ANTECEDENTES", "CL_L3_PENAL_CAUSA"]
+    }
+  ],
+  "domains": {
+    "CL_L1_RUT": {
+      "title": "RUT / RUN",
+      "what": "O número de identificação nacional da pessoa (RUN) e o número tributário de pessoa ou empresa (RUT), com o dígito verificador: `12.345.678-5`, `12345678-5`, `9075310K`. O identificador central de qualquer banco de dados chileno.",
+      "masking": "O corpo é mascarado e o dígito verificador recalculado, então todo RUT mascarado é válido — inclusive com `K` — e mantém o formato. O mapeamento é um para um: um RUT usado como chave não colide com outro. Texto que não é RUT é mascarado caractere a caractere. Veja *O dígito verificador do RUT*."
+    },
+    "CL_L1_RUT_CUERPO": {
+      "title": "RUT sem dígito verificador",
+      "what": "O corpo do RUT guardado sozinho, em geral como número, com o dígito verificador em outra coluna.",
+      "masking": "Os dígitos são mapeados exatamente como o corpo de um RUT completo, então a pessoa mantém o mesmo corpo mascarado esteja o RUT inteiro ou dividido."
+    },
+    "CL_L1_RUT_DV": {
+      "title": "Dígito verificador do RUT",
+      "what": "O dígito verificador (`0` a `9` ou `K`) guardado em coluna própria.",
+      "masking": "Trocado por um dígito verificador escolhido por hash. A coluna não enxerga o corpo, então o par corpo + dígito deixa de ser válido; onde a aplicação o valida, mascare o RUT concatenado."
+    },
+    "CL_L1_NOMBRE": {
+      "title": "Nomes",
+      "what": "Primeiro e demais nomes (`NOMBRES`, `PRIMER_NOMBRE`), incluindo o nome social da Ley 21.120.",
+      "masking": "Cada palavra é trocada por um nome chileno, mantendo as maiúsculas. Acentos não mudam a escolha, então `José` e `JOSE` são mascarados igual."
+    },
+    "CL_L1_APELLIDO": {
+      "title": "Sobrenomes",
+      "what": "Sobrenomes paterno e materno, juntos ou em colunas separadas.",
+      "masking": "Cada palavra é trocada por um sobrenome chileno — a lista inclui sobrenomes mapuche, aymara e rapa nui."
+    },
+    "CL_L1_NOMBRE_COMPLETO": {
+      "title": "Nome completo",
+      "what": "O nome inteiro de uma pessoa numa coluna: titulares, pacientes, clientes, contatos de emergência, representantes legais.",
+      "masking": "Segue a ordem chilena — nomes, depois sobrenome paterno e materno — e `Juan Carlos Pérez González` recebe dois nomes e dois sobrenomes. A forma `APELLIDOS, NOMBRES` também é reconhecida; valores de seis palavras ou mais são mascarados caractere a caractere."
+    },
+    "CL_L1_EMAIL": {
+      "title": "E-mail",
+      "what": "Endereços de e-mail pessoais e de trabalho.",
+      "masking": "Nome e domínio são mapeados caractere a caractere, e endereços distintos continuam distintos; o domínio de topo vira `.test`, reservado para testes: um endereço mascarado nunca recebe mensagens."
+    },
+    "CL_L1_TELEFONO": {
+      "title": "Telefone",
+      "what": "Números móveis e fixos nos formatos usuais: `+56 9 8765 4321`, `987654321`, `(2) 2345 6789`.",
+      "masking": "O código do país, o `9` do celular e o código de área ficam; os dígitos do assinante são mascarados. O número mantém o formato e continua parecendo chileno."
+    },
+    "CL_L1_DIRECCION": {
+      "title": "Endereço",
+      "what": "Rua, número e apartamento escritos numa coluna.",
+      "masking": "Trocado por um endereço chileno fictício de uma lista de 3.000, montada com nomes de ruas comuns no Chile, números e apartamentos."
+    },
+    "CL_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento do endereço",
+      "what": "Número de apartamento, bloco, torre, casa ou lote guardado à parte da rua.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo: dígitos por dígitos, letras por letras."
+    },
+    "CL_L1_NUMERO_DOCUMENTO": {
+      "title": "Número de documento da cédula",
+      "what": "O número de documento da cédula de identidade — diferente do RUN, muitas vezes esquecido, e suficiente sozinho para identificar a cédula e o titular.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo, mantendo o formato."
+    },
+    "CL_L1_PASAPORTE": {
+      "title": "Passaporte",
+      "what": "Números de passaporte chilenos e estrangeiros.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo, mantendo o formato."
+    },
+    "CL_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Documentos de identidade estrangeiros",
+      "what": "DNI, cédulas estrangeiras, números de visto e de permissão de residência.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo, mantendo o formato."
+    },
+    "CL_L1_CUENTA_BANCARIA": {
+      "title": "Conta bancária",
+      "what": "Números de conta corrente, conta vista (inclusive CuentaRUT) e poupança.",
+      "masking": "Dígitos são mapeados por dígitos, mantendo tamanho e separadores."
+    },
+    "CL_L1_TARJETA": {
+      "title": "Cartão de pagamento",
+      "what": "Números de cartão de crédito e débito, com ou sem espaços.",
+      "masking": "Trocado por outro número que ainda passa na verificação de Luhn. Valores sem forma de cartão ficam como estão."
+    },
+    "CL_L1_IP": {
+      "title": "Endereço IP",
+      "what": "Endereços IPv4 e IPv6 — dados pessoais quando se referem a uma pessoa.",
+      "masking": "Cada octeto IPv4 é mapeado para um valor de 1 a 254, e o endereço continua válido; os dígitos hexadecimais do IPv6 são mapeados por hexadecimais."
+    },
+    "CL_L1_DISPOSITIVO": {
+      "title": "Identificadores de dispositivo",
+      "what": "IMEI, endereço MAC, identificadores de dispositivo e de publicidade, de cookie e de sessão.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo; letras hexadecimais continuam hexadecimais, e um MAC continua bem formado."
+    },
+    "CL_L1_PATENTE": {
+      "title": "Placa de veículo",
+      "what": "A Placa Patente Única nos seus formatos: `BBBB·10` desde 2007, `AA·1000` antes disso, e placas de moto.",
+      "masking": "Consoantes viram consoantes e dígitos viram dígitos, então a placa mascarada só usa as letras que as placas chilenas permitem."
+    },
+    "CL_L1_VEHICULO_ID": {
+      "title": "Números de chassi e motor",
+      "what": "VIN, números de chassi e de motor, que levam ao proprietário pelo registro de veículos.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo, mantendo o formato."
+    },
+    "CL_L1_NUMERO_CONTRATO": {
+      "title": "Números de contrato e apólice",
+      "what": "Números de contrato, apólice de seguro, operação de crédito, sócio e cliente que apontam para uma pessoa.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo. O mesmo número é mascarado igual em todas as tabelas e sistemas, e as relações entre eles se mantêm."
+    },
+    "CL_L1_USUARIO_RRSS": {
+      "title": "Usuários e perfis sociais",
+      "what": "Logins, apelidos e perfis de redes sociais.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo."
+    },
+    "CL_L1_CREDENCIAL": {
+      "title": "Senhas e segredos",
+      "what": "Senhas, hashes de senha, PINs, tokens, chaves de API e respostas de segurança — que nem deveriam estar numa cópia não produtiva.",
+      "masking": "Cada caractere é trocado por `X`."
+    },
+    "CL_L1_GEOLOCALIZACION": {
+      "title": "Geolocalização",
+      "what": "Latitude, longitude e pares de coordenadas.",
+      "masking": "A parte inteira e a primeira casa decimal ficam — cerca de 11 km — e as demais casas são mascaradas: o lugar é generalizado, não levado para outra região."
+    },
+    "CL_L1_TEXTO_LIBRE": {
+      "title": "Texto livre",
+      "what": "Observações, comentários e descrições em que as pessoas escrevem RUTs, e-mails, telefones e nomes. Encontrado pelo nome da coluna ou pelos identificadores dentro do texto.",
+      "masking": "RUTs, e-mails, telefones escritos sem espaços, placas, números de cartão e endereços IP viram `[DATO]`; nomes e sobrenomes das listas viram `[NOMBRE]`. O resto do texto continua legível."
+    },
+    "CL_L2_FECHA_NACIMIENTO": {
+      "title": "Data de nascimento",
+      "what": "O quase-identificador mais importante: com sexo e comuna, reidentifica boa parte da população.",
+      "masking": "Deslocada em até 60 dias: o bastante para romper o vínculo com a pessoa, pouco o bastante para que idades e anos escolares quase não mudem."
+    },
+    "CL_L2_ANIO_NACIMIENTO": {
+      "title": "Ano de nascimento",
+      "what": "O ano de nascimento guardado sozinho, em geral como número.",
+      "masking": "A década fica e o último dígito é mascarado: `1985` vira um ano da década de 1980."
+    },
+    "CL_L2_EDAD": {
+      "title": "Idade",
+      "what": "Idade em anos.",
+      "masking": "A dezena fica e a unidade é mascarada — 37 vira uma idade entre 30 e 39. Idades de 100 ou mais viram 90: idades extremas identificam sozinhas."
+    },
+    "CL_L2_FECHA_EVENTO": {
+      "title": "Datas de eventos pessoais",
+      "what": "Datas de óbito, casamento, contratação, demissão, internação e alta, diagnóstico, parto ou detenção.",
+      "masking": "Deslocadas em até 30 dias."
+    },
+    "CL_L2_SEXO": {
+      "title": "Sexo",
+      "what": "Sexo ou gênero registrado, como letra ou palavra.",
+      "masking": "Trocado dentro do próprio vocabulário — F/M, H/M, Femenino/Masculino, Mujer/Hombre — e a coluna mantém seus valores. Valores fora desses vocabulários ficam."
+    },
+    "CL_L2_COMUNA": {
+      "title": "Comuna",
+      "what": "O Chile tem 346 comunas, muitas com poucos milhares de habitantes: uma comuna pequena e uma data de nascimento podem apontar para uma pessoa.",
+      "masking": "Comunas com menos de 20.000 habitantes (Censo 2024) viram a comuna mais populosa da sua província — ou da região, quando essa também é pequena. Comunas maiores ficam. O resultado continua sendo uma comuna real. Nomes escritos sem acento ou sem ñ são reconhecidos; outras grafias passam sem mudança."
+    },
+    "CL_L2_CODIGO_COMUNA": {
+      "title": "Código da comuna",
+      "what": "O Código Único Territorial (CUT) da comuna, com ou sem o zero à esquerda.",
+      "masking": "Generalizado exatamente como o nome da comuna."
+    },
+    "CL_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": "Sete dígitos: os três primeiros identificam a comuna, os quatro últimos a frente de quadra.",
+      "masking": "A parte da comuna fica e a parte da quadra vira `0000`."
+    },
+    "CL_L2_NACIONALIDAD": {
+      "title": "Nacionalidade",
+      "what": "Nacionalidade ou país de nascimento — identificadores onde poucos estrangeiros vivem numa comuna.",
+      "masking": "Trocada por uma das nacionalidades mais presentes no Chile."
+    },
+    "CL_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": "Estado civil, incluindo o acuerdo de unión civil.",
+      "masking": "Trocado pela lista de estados civis."
+    },
+    "CL_L2_OCUPACION": {
+      "title": "Ocupação e cargo",
+      "what": "Cargos e profissões. Um cargo raro — `Gerente Regional Aysén` — é único numa empresa.",
+      "masking": "Trocado por uma ocupação genérica."
+    },
+    "CL_L2_EMPLEADOR": {
+      "title": "Empregador",
+      "what": "A empresa ou instituição onde a pessoa trabalha.",
+      "masking": "Trocado por um empregador fictício."
+    },
+    "CL_L2_NIVEL_EDUCACIONAL": {
+      "title": "Escolaridade",
+      "what": "Nível educacional e anos de estudo.",
+      "masking": "Trocado pela lista de níveis educacionais."
+    },
+    "CL_L2_ESTABLECIMIENTO_EDUCACIONAL": {
+      "title": "Escola ou universidade",
+      "what": "A escola, instituto ou universidade que a pessoa frequenta ou frequentou.",
+      "masking": "Trocado por um estabelecimento fictício."
+    },
+    "CL_L2_CARGAS_FAMILIARES": {
+      "title": "Dependentes",
+      "what": "Número de dependentes, filhos ou integrantes do domicílio. Famílias grandes são raras, e por isso identificam.",
+      "masking": "Limitado a 5."
+    },
+    "CL_L3_ETNIA": {
+      "title": "Povos originários e origem étnica",
+      "what": "Pertencer a um dos povos reconhecidos pela Ley 19.253 — Mapuche, Aymara, Rapa Nui, Lickanantay, Quechua, Colla, Diaguita, Chango, Kawésqar, Yagán, Selk'nam — ou ao povo tribal afrodescendente chileno.",
+      "masking": "Trocado por outro valor da lista; flags sim/não continuam flags e códigos numéricos recebem outros dígitos."
+    },
+    "CL_L3_SALUD_DIAGNOSTICO": {
+      "title": "Diagnósticos",
+      "what": "Diagnósticos, códigos CIE-10, patologias GES, condições crônicas, alergias, causas de licença médica ou de óbito.",
+      "masking": "Códigos CIE-10 viram outros códigos comuns no mesmo formato; descrições viram diagnósticos genéricos."
+    },
+    "CL_L3_SALUD_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": "Medicamentos e tratamentos prescritos. Um medicamento revela a doença: antirretrovirais, antidepressivos, antipsicóticos.",
+      "masking": "Trocado por um medicamento comum."
+    },
+    "CL_L3_SALUD_IDENTIFICADOR": {
+      "title": "Números de registro clínico",
+      "what": "Números de ficha clínica, prontuário, episódio, atendimento, licença médica e biópsia.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo; o mesmo número de registro é mascarado igual em todas as tabelas."
+    },
+    "CL_L3_SALUD_TEXTO_CLINICO": {
+      "title": "Notas clínicas",
+      "what": "Anamnese, evoluções, resumos de alta e relatórios médicos, em que nomes e identificadores aparecem dentro do texto.",
+      "masking": "A mesma redação do texto livre: identificadores viram `[DATO]` e nomes `[NOMBRE]`, e o conteúdo clínico continua legível."
+    },
+    "CL_L3_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultados de exames",
+      "what": "Resultados de laboratório e de imagem, testes de HIV e COVID, carga viral, glicemia, pressão arterial, índice de massa corporal.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo: números continuam números e palavras viram outras letras."
+    },
+    "CL_L3_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": "Grupo sanguíneo ABO e fator Rh.",
+      "masking": "Trocado por um grupo sanguíneo."
+    },
+    "CL_L3_SALUD_DISCAPACIDAD": {
+      "title": "Deficiência",
+      "what": "Tipo e grau de deficiência, credencial de deficiência, pensões por invalidez, necessidades educativas especiais.",
+      "masking": "Trocado pela lista de tipos de deficiência; flags continuam flags."
+    },
+    "CL_L3_SALUD_SEXUAL_REPRODUCTIVA": {
+      "title": "Saúde sexual e reprodutiva",
+      "what": "Gravidez, interrupção voluntária da gravidez, contracepção, fertilidade, infecções sexualmente transmissíveis.",
+      "masking": "Suprimido para `Sin información`; flags e códigos numéricos mantêm o formato."
+    },
+    "CL_L3_SALUD_MENTAL_ADICCIONES": {
+      "title": "Saúde mental e dependências",
+      "what": "Condições psiquiátricas e psicológicas, risco de suicídio, uso de álcool e drogas, tratamento no SENDA.",
+      "masking": "Suprimido para `Sin información`; flags e códigos numéricos mantêm o formato."
+    },
+    "CL_L3_BIOMETRICO": {
+      "title": "Dados biométricos",
+      "what": "Templates de impressão digital e de rosto, íris, voz, assinaturas digitalizadas — quando guardados como texto (hash, base64).",
+      "masking": "Cada caractere é trocado por `X`. Colunas binárias estão fora do alcance destes algoritmos; veja *Limites*."
+    },
+    "CL_L3_PERFIL_GENETICO": {
+      "title": "Perfil genético",
+      "what": "DNA, genótipos, marcadores genéticos e mutações: o perfil biológico humano da lei.",
+      "masking": "Cada caractere é trocado por `X`."
+    },
+    "CL_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientação sexual",
+      "what": "Orientação sexual declarada.",
+      "masking": "Trocada pela lista de orientações; flags continuam flags."
+    },
+    "CL_L3_IDENTIDAD_GENERO": {
+      "title": "Identidade de gênero",
+      "what": "Identidade de gênero, retificação de sexo registral pela Ley 21.120, pronomes.",
+      "masking": "Trocada pela lista de identidades de gênero; flags continuam flags."
+    },
+    "CL_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": "Vida e comportamento sexual.",
+      "masking": "Suprimido para `Sin información`; flags e códigos numéricos mantêm o formato."
+    },
+    "CL_L3_RELIGION": {
+      "title": "Religião",
+      "what": "Religião, credo ou igreja.",
+      "masking": "Trocada por uma das categorias do Censo 2024."
+    },
+    "CL_L3_CONVICCION_IDEOLOGICA": {
+      "title": "Convicções ideológicas",
+      "what": "Ideologia, posição política e convicções filosóficas.",
+      "masking": "Trocadas por uma lista de posições políticas."
+    },
+    "CL_L3_AFILIACION_POLITICA": {
+      "title": "Filiação política",
+      "what": "Filiação partidária, militância e coalizão política.",
+      "masking": "Trocada por um partido legalmente constituído (Servel) ou `Independiente`."
+    },
+    "CL_L3_AFILIACION_SINDICAL": {
+      "title": "Filiação sindical",
+      "what": "Filiação a sindicato, contribuição sindical e cargo de dirigente.",
+      "masking": "Suprimida para `Sin información`; flags e valores mantêm o formato."
+    },
+    "CL_L3_AFILIACION_GREMIAL": {
+      "title": "Filiação gremial",
+      "what": "Filiação a colégios profissionais e associações gremiais.",
+      "masking": "Suprimida para `Sin información`; flags e códigos numéricos mantêm o formato."
+    },
+    "CL_L3_SOCIOEC_PREVISION_SALUD": {
+      "title": "Previsão de saúde e tramo FONASA",
+      "what": "O tramo FONASA (A a D) revela a renda diretamente; a ISAPRE revela a capacidade de pagamento.",
+      "masking": "A letra do tramo vira outra letra de tramo, também em `FONASA B`; uma instituição nomeada vira outra da lista de tramos FONASA, ISAPREs, Capredena e Dipreca."
+    },
+    "CL_L3_SOCIOEC_PLAN_SALUD": {
+      "title": "Plano de saúde",
+      "what": "Códigos de plano de ISAPRE, preços e cotizações pactuadas.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo."
+    },
+    "CL_L3_SOCIOEC_RSH": {
+      "title": "Registro Social de Hogares",
+      "what": "A qualificação socioeconômica do domicílio (tramos de 40% a 100%) e as antigas pontuações da Ficha de Protección Social e da CAS.",
+      "masking": "O tramo vira outro tramo na mesma notação: `40%`, `Tramo 40%`, `70`."
+    },
+    "CL_L3_SOCIOEC_NIVEL": {
+      "title": "Grupo socioeconômico",
+      "what": "Grupos socioeconômicos (ABC1, C2, C3, D, E), quintis e decis de renda.",
+      "masking": "Um grupo vira outro grupo; um número vira um quintil de 1 a 5."
+    },
+    "CL_L3_SOCIOEC_BENEFICIO_SOCIAL": {
+      "title": "Benefícios do Estado",
+      "what": "Receber a Pensión Garantizada Universal, o Subsidio Único Familiar, o Bono de Invierno, o Ingreso Ético Familiar, o Bolsillo Familiar Electrónico e outros benefícios.",
+      "masking": "Trocado pela lista de benefícios; flags continuam flags e valores mantêm o formato dos dígitos."
+    },
+    "CL_L3_SOCIOEC_MOROSIDAD": {
+      "title": "Dívida e situação de crédito",
+      "what": "Registros no DICOM e no Boletín Comercial, atrasos, scores de crédito, protestos, processos de insolvência.",
+      "masking": "Situações são trocadas por uma lista; scores e flags mantêm o formato."
+    },
+    "CL_L3_SOCIOEC_MONTO_DEUDA": {
+      "title": "Valores de dívida",
+      "what": "Dívidas, atrasos e saldos devedores.",
+      "masking": "Mapeados para um valor entre $10.000 e $50.000.000."
+    },
+    "CL_L3_SOCIOEC_INGRESOS": {
+      "title": "Renda e salário",
+      "what": "Salários, renda tributável, renda do domicílio e per capita, patrimônio.",
+      "masking": "Mapeados para um valor entre $450.000 e $8.000.000: plausível e sem relação com o valor real."
+    },
+    "CL_L3_SOCIOEC_PREVISION_AFP": {
+      "title": "Fundo de pensão",
+      "what": "AFP, IPS, Capredena e Dipreca.",
+      "masking": "Trocado pela lista de instituições previdenciárias."
+    },
+    "CL_L3_SOCIOEC_SALDO_PREVISIONAL": {
+      "title": "Saldos previdenciários",
+      "what": "Saldos de conta individual, cotizações, poupança voluntária (APV) e valores de pensão.",
+      "masking": "Mapeados para um valor entre $100.000 e $250.000.000."
+    },
+    "CL_L3_SOCIOEC_VIVIENDA": {
+      "title": "Situação de moradia",
+      "what": "Posse da moradia, allegados, superlotação, acampamentos e subsídios habitacionais.",
+      "masking": "Trocada pela lista de situações de moradia."
+    },
+    "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS": {
+      "title": "Financiamento estudantil",
+      "what": "Gratuidad, bolsas, o Crédito con Aval del Estado e o Fondo Solidario.",
+      "masking": "Trocado pela lista de financiamentos estudantis."
+    },
+    "CL_L3_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes penais",
+      "what": "Condenações, delitos, antecedentes, inabilitações, medidas cautelares, violência intrafamiliar.",
+      "masking": "Trocados por uma situação genérica (`Sin antecedentes`, `Con antecedentes`); flags mantêm o formato."
+    },
+    "CL_L3_PENAL_CAUSA": {
+      "title": "Números de processo judicial",
+      "what": "Números RIT e RUC de processos, boletins de ocorrência e denúncias.",
+      "masking": "Os caracteres são mapeados dentro do seu tipo, mantendo o formato."
+    }
+  },
+  "closing": [
+    {
+      "title": "O dígito verificador do RUT",
+      "body": [
+        "O dígito verificador do RUT é calculado módulo 11 com pesos de 2 a 7 a partir da direita, e o resultado 10 é escrito `K`. O framework Check Digit escreve 10 como `0`, então mascarar um RUT só com ele deixa cerca de um resultado em cada onze inválido.",
+        "O algoritmo `CL_RUT` faz duas passadas:",
+        { "list": [
+          "A primeira mascara o corpo e escreve, no lugar do dígito verificador, um dígito auxiliar calculado com todos os pesos dobrados módulo 11. Esse dígito é `9` exatamente quando o dígito verificador real é `K`.",
+          "A segunda escreve `K` onde o dígito auxiliar é `9`; nos demais casos recalcula o dígito verificador real sem tocar no corpo."
+        ] },
+        "Todo RUT mascarado é válido, o `K` aparece na proporção natural e o mapeamento continua um para um — um RUT usado como chave não colide. Corpos de 6, 7 e 8 dígitos mantêm o formato, com ou sem pontos e hífen, com `k` maiúsculo ou minúsculo."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        { "list": [
+          "**Colunas binárias** — cédulas escaneadas, imagens de impressão digital, PDFs clínicos guardados em BLOB — não podem ser mascaradas por estes algoritmos. Faça o inventário e reporte-as como risco residual.",
+          "**Um RUT dividido em duas colunas** mantém o corpo mascarado consistente, mas a coluna do dígito verificador não enxerga o corpo, e o par deixa de ser válido.",
+          "**Comunas** grafadas de um jeito que a lista não conhece passam sem mudança. Nomes com e sem acentos e ñ são reconhecidos.",
+          "**Texto livre** é redigido palavra a palavra: um telefone escrito com espaços (`+56 9 8765 4321`) não é encontrado ali, e um nome que também é palavra comum (`Rosa`, `Paz`) é redigido onde quer que apareça.",
+          "**Menores de idade** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam o 18º aniversário, mas algumas cruzam. Onde isso importa, divida a regra por faixa etária com o Multi-Column Condition.",
+          "**Endereços** são trocados como uma linha inteira. Rua, número e comuna guardados em colunas separadas são mascarados independentemente uns dos outros."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "O set é gerado e conferido por dois scripts guardados com ele no repositório:",
+        { "list": [
+          "`build.mjs` gera o set a partir das definições e das listas mantidas à mão.",
+          "`verify.mjs` revisa a configuração de cada classifier, perfila 129 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — e mascara 184 valores de amostra e 204 placeholders como `S/I`, incluindo 60 RUTs aleatórios conferidos quanto ao dígito verificador."
+        ] },
+        "Na última geração, todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        { "list": [
+          "Ley 21.719 — Biblioteca del Congreso Nacional de Chile.",
+          "Projeto de adiamento da vigência, Boletín 18.623-07 (31 de agosto de 2026).",
+          "Comunas, províncias, regiões e população do Censo 2024 — Wikipedia, *Anexo:Comunas de Chile*.",
+          "Sobrenomes mais registrados, 2014–2023 — Servicio de Registro Civil e Identificación.",
+          "Partidos políticos legalmente constituídos — Servicio Electoral (Servel).",
+          "Administradoras de fundos de pensão — Superintendencia de Pensiones. ISAPREs — Superintendencia de Salud.",
+          "Tramos do Registro Social de Hogares — Ministerio de Desarrollo Social y Familia.",
+          "Povos indígenas — Ley 19.253 e suas alterações; povo tribal afrodescendente chileno — Ley 21.151.",
+          "Formatos de placa — Registro Civil. Numeração telefônica — Subsecretaría de Telecomunicaciones.",
+          "Categorias de religião — Instituto Nacional de Estadísticas, Censo 2024."
+        ] }
+      ]
+    }
+  ]
+}

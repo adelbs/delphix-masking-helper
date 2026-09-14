@@ -375,6 +375,13 @@ através deles, os domínios, os algoritmos desses domínios e os arquivos de va
 Delphix** faz o inverso: cada membro vai primeiro, e o set é então criado ou atualizado nomeando-os
 pelos ids que a instância devolveu — um set só pode referenciar classifiers que a instância já tem.
 
+**Profile sets pré-configurados.** *Configurações → Profile Sets* lista profile sets que já vêm com
+a ferramenta, cada um com a documentação em PDF e tudo de que precisa. **Carregar** cria de uma vez
+o set, os classifiers, os domínios, os algoritmos e os arquivos. Carregar de novo não duplica nada:
+o botão vira **Resetar**, que devolve cada item ao estado original e descarta as alterações feitas
+nele. Se um nome usado pelo set já pertence a algo que não veio dele, a ferramenta lista o que seria
+substituído e pergunta antes. O formato está em `presets/README.md`.
+
 **Importar.** Não há importação por objeto: conectar a integração traz o engine inteiro, e
 **Atualizar do Delphix** traz de novo. Um algoritmo sobre um framework que a ferramenta não
 consegue executar não é copiado — assim você nunca fica com um algoritmo salvo que não dá para

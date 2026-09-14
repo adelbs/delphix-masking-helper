@@ -114,6 +114,32 @@ export interface ProfileSet {
   updated_at: string
 }
 
+/**
+ * A profile set shipped with the tool, together with everything it leans on — its classifiers,
+ * their domains, those domains' algorithms and the files they read. Loaded from Settings.
+ */
+export interface ProfileSetPreset {
+  id: string
+  version: number | null
+  /** By locale; `en` is always present. */
+  name: Partial<Record<Locale, string>>
+  summary: Partial<Record<Locale, string>>
+  profileSet: { name: string; threshold: number }
+  counts: { classifiers: number; domains: number; algorithms: number; files: number }
+  /** The locales it has a documentation PDF in. */
+  docs: Locale[]
+  /** When it was last loaded here, and which version; null if never. */
+  loaded: { version: number; loaded_at: string } | null
+  /** Why it cannot be loaded; empty when it can. */
+  problems: string[]
+}
+
+/** Something already here that loading a preset would overwrite or remove. */
+export interface PresetConflict {
+  kind: 'algorithm' | 'domain' | 'classifier' | 'profileSet' | 'file'
+  name: string
+}
+
 /** One setting of a framework, as the configuration form renders it. */
 export interface ClassifierField {
   key: string

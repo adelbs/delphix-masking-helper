@@ -381,6 +381,13 @@ y, a través de ellos, sus dominios, los algoritmos de esos dominios y los archi
 nombrándolos por los ids que devolvió la instancia — un set solo puede referenciar classifiers que
 la instancia ya tiene.
 
+**Profile sets preconfigurados.** *Configuración → Profile Sets* lista profile sets que vienen con
+la herramienta, cada uno con su documentación en PDF y todo lo que necesita. **Cargar** crea de una
+vez el set, sus classifiers, dominios, algoritmos y archivos. Cargarlo de nuevo no duplica nada: el
+botón pasa a ser **Restablecer**, que devuelve cada elemento a su estado original y descarta los
+cambios que se le hayan hecho. Si un nombre que usa el set ya pertenece a algo que no vino de él, la
+herramienta lista lo que se reemplazaría y pregunta antes. El formato está en `presets/README.md`.
+
 **Importar.** No hay importación por objeto: conectar la integración trae el engine entero, y
 **Actualizar desde Delphix** lo trae de nuevo. Un algoritmo sobre un framework que la herramienta
 no puede ejecutar no se copia — así nunca acabas con un algoritmo guardado que no se puede probar —

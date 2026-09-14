@@ -2130,6 +2130,406 @@ app.delete('/api/delphix/integration', (req, res) => {
   res.json({ ok: true, engine: origin, removed });
 });
 
+// ── Pre-configured profile sets ───────────────────────────────────────────────
+//
+// A preset is a profile set shipped with the tool together with everything it leans on: the
+// classifiers it runs, their domains, those domains' algorithms and the files any of them read.
+// Each lives in presets/<id>/ — the format is described in presets/README.md.
+//
+// Loading writes all of it in one transaction, and tags every row with the preset it came from.
+// That tag is what makes loading twice a reset rather than a second copy: the rows are found
+// again — a classifier or set even after being renamed here — and put back the way they ship.
+
+const PRESETS_DIR = path.join(__dirname, 'presets');
+const PRESET_LOCALES = ['en', 'pt-BR', 'es'];
+/** How a preset's configuration names one of its own files; rewritten to a path here on load. */
+const PRESET_FILE_SCHEME = 'preset-file://';
+
+const PRESET_TABLES = {
+  algorithm: 'saved_algorithms',
+  domain: 'domains',
+  classifier: 'classifiers',
+  profileSet: 'profile_sets',
+};
+
+for (const table of Object.values(PRESET_TABLES)) {
+  for (const col of ['preset_id', 'preset_item']) {
+    const has = db.prepare(`SELECT COUNT(*) AS n FROM pragma_table_info('${table}') WHERE name = ?`).get(col);
+    if (!has.n) db.exec(`ALTER TABLE ${table} ADD COLUMN ${col} TEXT`);
+  }
+}
+db.exec(`
+  CREATE TABLE IF NOT EXISTS preset_loads (
+    preset_id TEXT PRIMARY KEY,
+    version   INTEGER NOT NULL,
+    loaded_at TEXT NOT NULL DEFAULT (datetime('now'))
+  )
+`);
+
+/** Every string in a configuration, passed through `fn`. */
+function mapStrings(value, fn) {
+  if (typeof value === 'string') return fn(value);
+  if (Array.isArray(value)) return value.map((v) => mapStrings(v, fn));
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, mapStrings(v, fn)]));
+  }
+  return value;
+}
+
+const presetFileName = (s) => (s.startsWith(PRESET_FILE_SCHEME) ? s.slice(PRESET_FILE_SCHEME.length) : null);
+
+function presetFileRefs(config) {
+  const names = [];
+  mapStrings(config ?? {}, (s) => { const name = presetFileName(s); if (name) names.push(name); return s; });
+  return names;
+}
+
+/** The configuration as it is stored here: each `preset-file://` pointing at the copy in filesDir. */
+const resolvePresetFiles = (config, dir) => mapStrings(config ?? {}, (s) => {
+  const name = presetFileName(s);
+  return name ? pathToFileURL(path.join(dir, name)).href : s;
+});
+
+const listOf = (value) => (Array.isArray(value) ? value : []);
+
+function readPreset(id) {
+  const dir = path.join(PRESETS_DIR, id);
+  let manifest = null;
+  let unreadable = null;
+  try {
+    manifest = JSON.parse(fs.readFileSync(path.join(dir, 'preset.json'), 'utf8'));
+  } catch (err) {
+    unreadable = `preset.json: ${err.message}`;
+  }
+  const preset = {
+    id,
+    dir,
+    version: manifest?.version ?? null,
+    name: manifest?.name ?? {},
+    summary: manifest?.summary ?? {},
+    profileSet: manifest?.profileSet ?? {},
+    classifiers: listOf(manifest?.classifiers),
+    domains: listOf(manifest?.domains),
+    algorithms: listOf(manifest?.algorithms),
+    files: listOf(manifest?.files),
+    docs: PRESET_LOCALES.filter((locale) => fs.existsSync(path.join(dir, `doc.${locale}.pdf`))),
+  };
+  preset.problems = manifest ? presetProblems(preset) : [unreadable];
+  return preset;
+}
+
+function readPresets() {
+  if (!fs.existsSync(PRESETS_DIR)) return [];
+  return fs.readdirSync(PRESETS_DIR, { withFileTypes: true })
+    // A folder starting with _ holds tooling shared by the presets (the documentation builder).
+    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.') && !entry.name.startsWith('_'))
+    .map((entry) => readPreset(entry.name))
+    .sort((a, b) => a.id.localeCompare(b.id));
+}
+
+/**
+ * What stops a preset from loading. Checked when listing, so a broken one says why on screen
+ * instead of failing halfway through a load. The framework classes of the algorithms are the one
+ * thing left to the load itself: only the plugin knows them, and asking costs a JVM.
+ */
+function presetProblems(p) {
+  const out = [];
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(p.id)) out.push(`The folder name "${p.id}" is not a valid id: use lower-case letters, digits and hyphens.`);
+  if (!Number.isInteger(p.version) || p.version < 1) out.push('version must be a whole number from 1 up.');
+  if (!p.name.en) out.push('name.en is required.');
+
+  const names = (kind, list) => {
+    const seen = new Set();
+    for (const item of list) {
+      const name = typeof item?.name === 'string' ? item.name.trim() : '';
+      if (!name || name.length > 100) out.push(`Every ${kind} needs a name of up to 100 characters.`);
+      else if (seen.has(name)) out.push(`Two ${kind}s are called "${name}".`);
+      seen.add(name);
+    }
+    return seen;
+  };
+  const classifierNames = names('classifier', p.classifiers);
+  const domainNames = names('domain', p.domains);
+  names('algorithm', p.algorithms);
+
+  const set = p.profileSet;
+  if (typeof set.name !== 'string' || !set.name.trim() || set.name.length > 100) out.push('profileSet.name is required, up to 100 characters.');
+  if (thresholdProblem(set.threshold ?? THRESHOLD_DEFAULT)) out.push('profileSet.threshold must be a whole number from 1 to 100.');
+  const members = listOf(set.classifiers);
+  if (!members.length) out.push('profileSet.classifiers must name at least one classifier.');
+  for (const name of members) {
+    if (!classifierNames.has(name)) out.push(`profileSet.classifiers names "${name}", which is not among the classifiers.`);
+  }
+
+  for (const file of p.files) {
+    if (typeof file !== 'string' || !file || path.basename(file) !== file) out.push(`files: "${file}" must be a plain file name.`);
+    else if (!fs.existsSync(path.join(p.dir, 'files', file))) out.push(`files: ${file} is not in the files/ folder.`);
+  }
+  const declared = new Set(p.files);
+  const undeclared = (kind, item) => {
+    for (const ref of presetFileRefs(item.config)) {
+      if (!declared.has(ref)) out.push(`${kind} "${item.name}" reads ${ref}, which files does not list.`);
+    }
+  };
+
+  for (const c of p.classifiers) {
+    if (!classifierKit.isFramework(c.framework)) { out.push(`classifier "${c.name}": "${c.framework}" is not a classifier framework.`); continue; }
+    // Everything the set leans on ships with it, the same rule the engine sync follows.
+    if (!domainNames.has(c.domain)) out.push(`classifier "${c.name}" votes for "${c.domain}", which is not among the domains.`);
+    undeclared('classifier', c);
+    const { errors } = classifierKit.reviewClassifier(c.framework, resolvePresetFiles(c.config, filesDirPath()));
+    for (const e of errors) out.push(`classifier "${c.name}": ${e.message}`);
+  }
+  for (const a of p.algorithms) {
+    if (typeof a.framework !== 'string' || !a.framework) out.push(`algorithm "${a.name}" has no framework.`);
+    undeclared('algorithm', a);
+  }
+  return out;
+}
+
+/** What the settings tab lists. */
+function presetListing(p) {
+  return {
+    id: p.id,
+    version: p.version,
+    name: p.name,
+    summary: p.summary,
+    profileSet: { name: p.profileSet.name ?? '', threshold: p.profileSet.threshold ?? THRESHOLD_DEFAULT },
+    counts: {
+      classifiers: p.classifiers.length,
+      domains: p.domains.length,
+      algorithms: p.algorithms.length,
+      files: p.files.length,
+    },
+    docs: p.docs,
+    loaded: db.prepare('SELECT version, loaded_at FROM preset_loads WHERE preset_id = ?').get(p.id) ?? null,
+    problems: p.problems,
+  };
+}
+
+/**
+ * Where each item of a preset goes, and what is in the way.
+ *
+ * The row a load writes is the one tagged with this preset and item — found even if a classifier
+ * or set was renamed here — or else the one holding the name. Anything holding the name that is
+ * not that row, or a row holding it that did not come from this preset, is a conflict: loading
+ * would overwrite or remove something the user made, so it is refused unless confirmed.
+ */
+function planPreset(p) {
+  const plan = { targets: new Map(), clashes: [], conflicts: [] };
+  const items = [
+    ...p.algorithms.map((item) => ['algorithm', item]),
+    ...p.domains.map((item) => ['domain', item]),
+    ...p.classifiers.map((item) => ['classifier', item]),
+    ['profileSet', p.profileSet],
+  ];
+  for (const [kind, item] of items) {
+    const table = PRESET_TABLES[kind];
+    const name = item.name.trim();
+    const tagged = db.prepare(`SELECT * FROM ${table} WHERE preset_id = ? AND preset_item = ?`).get(p.id, name);
+    const holders = db.prepare(`SELECT * FROM ${table} WHERE name = ?`).all(name);
+    const target = tagged ?? holders[0] ?? null;
+    plan.targets.set(`${kind}:${name}`, target);
+    if (target && target.preset_id !== p.id) plan.conflicts.push({ kind, name });
+    for (const row of holders.filter((r) => r.id !== target?.id)) {
+      plan.clashes.push({ kind, row });
+      plan.conflicts.push({ kind, name });
+    }
+  }
+
+  // A file is only in the way the first time: after that, resetting means overwriting it.
+  const loadedBefore = db.prepare('SELECT 1 FROM preset_loads WHERE preset_id = ?').get(p.id);
+  if (!loadedBefore) {
+    for (const file of p.files) {
+      const dest = path.join(filesDirPath(), file);
+      if (fs.existsSync(dest) && !fs.readFileSync(dest).equals(fs.readFileSync(path.join(p.dir, 'files', file)))) {
+        plan.conflicts.push({ kind: 'file', name: file });
+      }
+    }
+  }
+  plan.loadedBefore = Boolean(loadedBefore);
+  return plan;
+}
+
+function removePresetClash(kind, id) {
+  if (kind === 'classifier') db.prepare('DELETE FROM profile_set_classifiers WHERE classifier_id = ?').run(id);
+  if (kind === 'profileSet') db.prepare('DELETE FROM profile_set_classifiers WHERE profile_set_id = ?').run(id);
+  db.prepare(`DELETE FROM ${PRESET_TABLES[kind]} WHERE id = ?`).run(id);
+}
+
+/**
+ * Writes a planned preset. The engine link of a row it lands on is kept, so sending the set to
+ * Delphix after a reset updates what is there instead of creating a copy.
+ */
+function applyPreset(p, plan, displayName) {
+  const dir = filesDirPath();
+  const target = (kind, name) => plan.targets.get(`${kind}:${name.trim()}`);
+  const classifierIds = new Map();
+  let setId;
+
+  db.exec('BEGIN');
+  try {
+    for (const { kind, row } of plan.clashes) removePresetClash(kind, row.id);
+
+    for (const a of p.algorithms) {
+      const name = a.name.trim();
+      const config = JSON.stringify(resolvePresetFiles(a.config, dir));
+      const row = target('algorithm', name);
+      if (row) {
+        db.prepare(`
+          UPDATE saved_algorithms SET name = ?, framework = ?, display_name = ?, config = ?, input = ?, output = NULL,
+            preset_id = ?, preset_item = ?, updated_at = datetime('now')
+          WHERE id = ?
+        `).run(name, a.framework, displayName.get(a.framework), config, String(a.input ?? ''), p.id, name, row.id);
+      } else {
+        db.prepare(`
+          INSERT INTO saved_algorithms (name, framework, display_name, config, input, key_value, output, preset_id, preset_item)
+          VALUES (?, ?, ?, ?, ?, ?, NULL, ?, ?)
+        `).run(name, a.framework, displayName.get(a.framework), config, String(a.input ?? ''), MASKING_KEY, p.id, name);
+      }
+    }
+
+    for (const d of p.domains) {
+      const name = d.name.trim();
+      const row = target('domain', name);
+      const algorithm = String(d.algorithm ?? '');
+      const tokenization = String(d.tokenization ?? '');
+      if (row) {
+        db.prepare(`
+          UPDATE domains SET default_algorithm = ?, default_tokenization = ?, preset_id = ?, preset_item = ?, updated_at = datetime('now')
+          WHERE id = ?
+        `).run(algorithm, tokenization, p.id, name, row.id);
+      } else {
+        db.prepare(`
+          INSERT INTO domains (name, default_algorithm, default_tokenization, preset_id, preset_item) VALUES (?, ?, ?, ?, ?)
+        `).run(name, algorithm, tokenization, p.id, name);
+      }
+    }
+
+    for (const c of p.classifiers) {
+      const name = c.name.trim();
+      const row = target('classifier', name);
+      const config = JSON.stringify(resolvePresetFiles(c.config, dir));
+      if (row) {
+        // The engine will not change a classifier's framework, so a row that had another one is
+        // no longer the engine's classifier: it loses the link, and sending it creates a new one.
+        const keepLink = row.framework === c.framework;
+        db.prepare(`
+          UPDATE classifiers SET name = ?, framework = ?, domain_name = ?, description = ?, config = ?,
+            delphix_id = ?, delphix_origin = ?, preset_id = ?, preset_item = ?, updated_at = datetime('now')
+          WHERE id = ?
+        `).run(name, c.framework, c.domain, String(c.description ?? ''), config,
+          keepLink ? row.delphix_id : null, keepLink ? row.delphix_origin : null, p.id, name, row.id);
+        classifierIds.set(name, row.id);
+      } else {
+        const info = db.prepare(`
+          INSERT INTO classifiers (name, framework, domain_name, description, config, preset_id, preset_item)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(name, c.framework, c.domain, String(c.description ?? ''), config, p.id, name);
+        classifierIds.set(name, Number(info.lastInsertRowid));
+      }
+    }
+
+    const set = p.profileSet;
+    const setName = set.name.trim();
+    const setRow = target('profileSet', setName);
+    const threshold = Number(set.threshold ?? THRESHOLD_DEFAULT);
+    let setId;
+    if (setRow) {
+      db.prepare(`
+        UPDATE profile_sets SET name = ?, description = ?, assignment_threshold = ?, preset_id = ?, preset_item = ?, updated_at = datetime('now')
+        WHERE id = ?
+      `).run(setName, String(set.description ?? ''), threshold, p.id, setName, setRow.id);
+      setId = setRow.id;
+    } else {
+      setId = Number(db.prepare(`
+        INSERT INTO profile_sets (name, description, assignment_threshold, preset_id, preset_item) VALUES (?, ?, ?, ?, ?)
+      `).run(setName, String(set.description ?? ''), threshold, p.id, setName).lastInsertRowid);
+    }
+    setMembers(setId, listOf(set.classifiers).map((name) => classifierIds.get(name.trim())));
+
+    // Rows an older version of the preset shipped and this one does not: left alone, but no longer
+    // counted as the preset's, so a later reset does not pretend to own them.
+    const shipped = {
+      algorithm: p.algorithms.map((a) => a.name.trim()),
+      domain: p.domains.map((d) => d.name.trim()),
+      classifier: p.classifiers.map((c) => c.name.trim()),
+      profileSet: [setName],
+    };
+    for (const [kind, table] of Object.entries(PRESET_TABLES)) {
+      db.prepare(`
+        UPDATE ${table} SET preset_id = NULL, preset_item = NULL
+        WHERE preset_id = ? AND preset_item NOT IN (SELECT value FROM json_each(?))
+      `).run(p.id, JSON.stringify(shipped[kind]));
+    }
+
+    db.prepare(`
+      INSERT INTO preset_loads (preset_id, version, loaded_at) VALUES (?, ?, datetime('now'))
+      ON CONFLICT(preset_id) DO UPDATE SET version = excluded.version, loaded_at = excluded.loaded_at
+    `).run(p.id, p.version);
+    db.exec('COMMIT');
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+
+  ensureDir(dir);
+  for (const file of p.files) fs.copyFileSync(path.join(p.dir, 'files', file), path.join(dir, file));
+  return { mode: plan.loadedBefore ? 'reset' : 'loaded', profileSetId: setId, files: p.files };
+}
+
+app.get('/api/presets', (req, res) => {
+  res.json(readPresets().map(presetListing));
+});
+
+/** The documentation PDF, in the requested language when there is one, else English, else any. */
+app.get('/api/presets/:id/doc', (req, res) => {
+  const p = readPresets().find((x) => x.id === req.params.id);
+  if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
+  const locale = [req.query.locale, 'en', ...p.docs].find((l) => p.docs.includes(l));
+  if (!locale) return res.status(404).json({ code: 'no-doc', error: 'This profile set has no documentation yet.' });
+  res.download(path.join(p.dir, `doc.${locale}.pdf`), `${p.id}.${locale}.pdf`);
+});
+
+/**
+ * Creates the preset — or, when it was loaded before, puts every row back the way it ships.
+ * Answers 409 with `conflicts` when that would overwrite something that did not come from it;
+ * sending `overwrite: true` is the confirmation.
+ */
+app.post('/api/presets/:id/load', async (req, res) => {
+  const p = readPresets().find((x) => x.id === req.params.id);
+  if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
+  if (p.problems.length) {
+    return res.status(400).json({ code: 'preset-invalid', problems: p.problems, error: p.problems.join(' ') });
+  }
+
+  let displayName;
+  try {
+    displayName = new Map((await runJava({ command: 'list' })).map((a) => [a.className, a.displayName]));
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+  const unknown = p.algorithms.filter((a) => !displayName.has(a.framework));
+  if (unknown.length) {
+    const problems = unknown.map((a) => `algorithm "${a.name}": the plugin has no framework ${a.framework}.`);
+    return res.status(400).json({ code: 'preset-invalid', problems, error: problems.join(' ') });
+  }
+
+  const plan = planPreset(p);
+  if (plan.conflicts.length && req.body?.overwrite !== true) {
+    return res.status(409).json({
+      code: 'preset-conflict',
+      conflicts: plan.conflicts,
+      error: `Already on this machine, and not from this profile set: ${plan.conflicts.map((c) => c.name).join(', ')}.`,
+    });
+  }
+  try {
+    res.json(applyPreset(p, plan, displayName));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST, 'index.html'));

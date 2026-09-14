@@ -1,0 +1,5972 @@
+{
+  "version": 1,
+  "name": {
+    "en": "Chile — Law 21.719 (personal data protection)",
+    "pt-BR": "Chile — Lei 21.719 (proteção de dados pessoais)",
+    "es": "Chile — Ley 21.719 (protección de datos personales)"
+  },
+  "summary": {
+    "en": "Discovers and masks Chilean personal data in three layers: direct identifiers (RUT with a valid check digit, names, contact, documents), quasi-identifiers (birth date, comuna, age) and the sensitive categories of article 2, including socioeconomic situation.",
+    "pt-BR": "Descobre e mascara dados pessoais chilenos em três camadas: identificadores diretos (RUT com dígito verificador válido, nomes, contato, documentos), quase-identificadores (data de nascimento, comuna, idade) e as categorias sensíveis do artigo 2, incluindo situação socioeconômica.",
+    "es": "Descubre y enmascara datos personales chilenos en tres capas: identificadores directos (RUT con dígito verificador válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, comuna, edad) y las categorías sensibles del artículo 2, incluida la situación socioeconómica."
+  },
+  "profileSet": {
+    "name": "CL - Ley 21.719 - Datos personales",
+    "description": "Identificadores directos, cuasi-identificadores y datos sensibles (art. 2 g) de la Ley 21.719.",
+    "threshold": 60,
+    "classifiers": [
+      "CL_L1_RUT - Path",
+      "CL_L1_RUT - Type",
+      "CL_L1_RUT - Regex",
+      "CL_L1_RUT_CUERPO - Path",
+      "CL_L1_RUT_CUERPO - Type",
+      "CL_L1_RUT_CUERPO - Regex",
+      "CL_L1_RUT_DV - Path",
+      "CL_L1_RUT_DV - Type",
+      "CL_L1_RUT_DV - Regex",
+      "CL_L1_NOMBRE - Path",
+      "CL_L1_NOMBRE - List",
+      "CL_L1_APELLIDO - Path",
+      "CL_L1_APELLIDO - List",
+      "CL_L1_NOMBRE_COMPLETO - Path",
+      "CL_L1_NOMBRE_COMPLETO - List",
+      "CL_L1_EMAIL - Path",
+      "CL_L1_EMAIL - Type",
+      "CL_L1_EMAIL - Regex",
+      "CL_L1_TELEFONO - Path",
+      "CL_L1_TELEFONO - Regex",
+      "CL_L1_DIRECCION - Path",
+      "CL_L1_DIRECCION - Type",
+      "CL_L1_DIRECCION - Regex",
+      "CL_L1_DIRECCION_COMPLEMENTO - Path",
+      "CL_L1_NUMERO_DOCUMENTO - Path",
+      "CL_L1_NUMERO_DOCUMENTO - Regex",
+      "CL_L1_PASAPORTE - Path",
+      "CL_L1_PASAPORTE - Regex",
+      "CL_L1_DOCUMENTO_EXTRANJERO - Path",
+      "CL_L1_CUENTA_BANCARIA - Path",
+      "CL_L1_TARJETA - Path",
+      "CL_L1_TARJETA - Regex",
+      "CL_L1_IP - Path",
+      "CL_L1_IP - Regex",
+      "CL_L1_DISPOSITIVO - Path",
+      "CL_L1_DISPOSITIVO - Regex",
+      "CL_L1_PATENTE - Path",
+      "CL_L1_PATENTE - Regex",
+      "CL_L1_VEHICULO_ID - Path",
+      "CL_L1_VEHICULO_ID - Regex",
+      "CL_L1_NUMERO_CONTRATO - Path",
+      "CL_L1_USUARIO_RRSS - Path",
+      "CL_L1_CREDENCIAL - Path",
+      "CL_L1_GEOLOCALIZACION - Path",
+      "CL_L1_GEOLOCALIZACION - Regex",
+      "CL_L1_TEXTO_LIBRE - Path",
+      "CL_L1_TEXTO_LIBRE - Type",
+      "CL_L1_TEXTO_LIBRE - Regex",
+      "CL_L2_FECHA_NACIMIENTO - Path",
+      "CL_L2_FECHA_NACIMIENTO - Type",
+      "CL_L2_ANIO_NACIMIENTO - Path",
+      "CL_L2_ANIO_NACIMIENTO - Type",
+      "CL_L2_EDAD - Path",
+      "CL_L2_EDAD - Type",
+      "CL_L2_FECHA_EVENTO - Path",
+      "CL_L2_FECHA_EVENTO - Type",
+      "CL_L2_SEXO - Path",
+      "CL_L2_SEXO - List",
+      "CL_L2_COMUNA - Path",
+      "CL_L2_COMUNA - List",
+      "CL_L2_CODIGO_COMUNA - Path",
+      "CL_L2_CODIGO_COMUNA - Type",
+      "CL_L2_CODIGO_COMUNA - List",
+      "CL_L2_CODIGO_POSTAL - Path",
+      "CL_L2_CODIGO_POSTAL - Regex",
+      "CL_L2_NACIONALIDAD - Path",
+      "CL_L2_NACIONALIDAD - List",
+      "CL_L2_ESTADO_CIVIL - Path",
+      "CL_L2_ESTADO_CIVIL - List",
+      "CL_L2_OCUPACION - Path",
+      "CL_L2_EMPLEADOR - Path",
+      "CL_L2_NIVEL_EDUCACIONAL - Path",
+      "CL_L2_NIVEL_EDUCACIONAL - List",
+      "CL_L2_ESTABLECIMIENTO_EDUCACIONAL - Path",
+      "CL_L2_CARGAS_FAMILIARES - Path",
+      "CL_L2_CARGAS_FAMILIARES - Type",
+      "CL_L3_ETNIA - Path",
+      "CL_L3_ETNIA - List",
+      "CL_L3_SALUD_DIAGNOSTICO - Path",
+      "CL_L3_SALUD_DIAGNOSTICO - Regex",
+      "CL_L3_SALUD_MEDICAMENTO - Path",
+      "CL_L3_SALUD_MEDICAMENTO - List",
+      "CL_L3_SALUD_IDENTIFICADOR - Path",
+      "CL_L3_SALUD_TEXTO_CLINICO - Path",
+      "CL_L3_SALUD_TEXTO_CLINICO - Type",
+      "CL_L3_SALUD_RESULTADO_EXAMEN - Path",
+      "CL_L3_SALUD_GRUPO_SANGUINEO - Path",
+      "CL_L3_SALUD_GRUPO_SANGUINEO - List",
+      "CL_L3_SALUD_DISCAPACIDAD - Path",
+      "CL_L3_SALUD_DISCAPACIDAD - List",
+      "CL_L3_SALUD_SEXUAL_REPRODUCTIVA - Path",
+      "CL_L3_SALUD_MENTAL_ADICCIONES - Path",
+      "CL_L3_BIOMETRICO - Path",
+      "CL_L3_BIOMETRICO - Type",
+      "CL_L3_PERFIL_GENETICO - Path",
+      "CL_L3_ORIENTACION_SEXUAL - Path",
+      "CL_L3_ORIENTACION_SEXUAL - List",
+      "CL_L3_IDENTIDAD_GENERO - Path",
+      "CL_L3_IDENTIDAD_GENERO - List",
+      "CL_L3_VIDA_SEXUAL - Path",
+      "CL_L3_RELIGION - Path",
+      "CL_L3_RELIGION - List",
+      "CL_L3_CONVICCION_IDEOLOGICA - Path",
+      "CL_L3_CONVICCION_IDEOLOGICA - List",
+      "CL_L3_AFILIACION_POLITICA - Path",
+      "CL_L3_AFILIACION_POLITICA - List",
+      "CL_L3_AFILIACION_SINDICAL - Path",
+      "CL_L3_AFILIACION_GREMIAL - Path",
+      "CL_L3_SOCIOEC_PREVISION_SALUD - Path",
+      "CL_L3_SOCIOEC_PREVISION_SALUD - List",
+      "CL_L3_SOCIOEC_PLAN_SALUD - Path",
+      "CL_L3_SOCIOEC_RSH - Path",
+      "CL_L3_SOCIOEC_NIVEL - Path",
+      "CL_L3_SOCIOEC_NIVEL - List",
+      "CL_L3_SOCIOEC_BENEFICIO_SOCIAL - Path",
+      "CL_L3_SOCIOEC_BENEFICIO_SOCIAL - List",
+      "CL_L3_SOCIOEC_MOROSIDAD - Path",
+      "CL_L3_SOCIOEC_MONTO_DEUDA - Path",
+      "CL_L3_SOCIOEC_MONTO_DEUDA - Type",
+      "CL_L3_SOCIOEC_INGRESOS - Path",
+      "CL_L3_SOCIOEC_INGRESOS - Type",
+      "CL_L3_SOCIOEC_PREVISION_AFP - Path",
+      "CL_L3_SOCIOEC_PREVISION_AFP - List",
+      "CL_L3_SOCIOEC_SALDO_PREVISIONAL - Path",
+      "CL_L3_SOCIOEC_SALDO_PREVISIONAL - Type",
+      "CL_L3_SOCIOEC_VIVIENDA - Path",
+      "CL_L3_SOCIOEC_VIVIENDA - List",
+      "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS - Path",
+      "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS - List",
+      "CL_L3_PENAL_ANTECEDENTES - Path",
+      "CL_L3_PENAL_CAUSA - Path",
+      "CL_L3_PENAL_CAUSA - Regex"
+    ]
+  },
+  "classifiers": [
+    {
+      "name": "CL_L1_RUT - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_RUT",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:rut|run|r_u_t|rol_?unico_?(tributario|nacional)?|n(ro|um|umero)?_?rut|rut_?(cli|pac|emp|afil|benef|tit|prov|func|trab|usu|pers|cte|contr|deud|aval|repr|alum|est|pro|med|cond|prop|aseg)[a-z]*|rutcli[a-z]*|rutpac[a-z]*|tax_?id|id_?tributario)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_RUT - Type",
+      "framework": "TYPE",
+      "domain": "CL_L1_RUT",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 7
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L1_RUT - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_RUT",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\d{1,2}\\.\\d{3}\\.\\d{3}-[\\dkK]",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "\\d{7,8}-[\\dkK]",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "\\d{6,8}[kK]",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "\\d{3}\\.\\d{3}-[\\dkK]",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.2
+      }
+    },
+    {
+      "name": "CL_L1_RUT_CUERPO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_RUT_CUERPO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:rut_?(num|nro|numero|cuerpo|sin_?dv|sdv|base|n)|n(ro|um)?_?rut_?sin_?dv|rutnum|rut_?sin_?digito)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:rut|run)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_RUT_CUERPO - Type",
+      "framework": "TYPE",
+      "domain": "CL_L1_RUT_CUERPO",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "minimumLength": 5,
+            "maximumLength": 10
+          },
+          {
+            "typeName": "String",
+            "minimumLength": 5,
+            "maximumLength": 10
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L1_RUT_CUERPO - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_RUT_CUERPO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\d{1,2}\\.?\\d{3}\\.?\\d{3}",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_RUT_DV - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_RUT_DV",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:dv|d_v|digito_?verificador|dig_?verif(icador)?|dig_?ver|dv_?(rut|run)|(rut|run)_?dv|dvrut|rutdv|check_?digit)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_RUT_DV - Type",
+      "framework": "TYPE",
+      "domain": "CL_L1_RUT_DV",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "maximumLength": 2
+          },
+          {
+            "typeName": "Number",
+            "maximumLength": 2
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L1_RUT_DV - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_RUT_DV",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[\\dkK]",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_NOMBRE - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_NOMBRE",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:primer_?nombre|segundo_?nombre|nombres?_?pila|nombre_?social|first_?name|given_?names?|fname|name_?first|middle_?name|nombre[12]|nombres(?!_?(producto|prod|articulo|item|empresa|emp|compania|razon|fantasia|archivo|arch|file|calle|via|comuna|region|provincia|ciudad|pais|banco|sucursal|plan|campana|proyecto|servicio|equipo|tabla|columna|campo|usuario|user|host|servidor|dominio|marca|modelo|categoria|tipo|estado|colegio|establecimiento|institucion|isapre|afp|curso|carrera|asignatura|documento|doc|centro|unidad|area|depto|departamento|cargo|sistema|app|aplicacion|grupo|lista|reporte|informe|proceso|evento|tarea|perfil|rol|clase|objeto|cuenta|medicamento|farmaco|diagnostico|examen|programa|beneficio|partido|sindicato|religion|etnia|pueblo|lugar|local|tienda|bodega|proveedor|convenio|contrato|poliza|seguro|org|organizacion|entidad|parametro|variable|metodo|funcion|indice|job|script|cola|recurso|red|equipo|dispositivo|plantilla|template|imagen|foto|pagina|sitio|modulo|menu|opcion|accion|permiso|cliente|cli|paciente|pac|trabajador|trab|funcionario|func|alumno|estudiante|afiliado|beneficiario|titular|madre|padre|tutor|apoderado|conyuge|pareja|medico|doctor|profesional|responsable|contacto|emergencia|aval|codeudor|deudor|remitente|destinatario|receptor|firmante|testigo|representante|propietario|arrendatario|asegurado|contratante|victima|denunciante|imputado|socio|donante|heredero|causante|persona|pers|conductor|chofer|vendedor|ejecutivo|agente|empleado|colaborador|completos?|y_?apellidos?|apellidos?)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nombre(?!_?(producto|prod|articulo|item|empresa|emp|compania|razon|fantasia|archivo|arch|file|calle|via|comuna|region|provincia|ciudad|pais|banco|sucursal|plan|campana|proyecto|servicio|equipo|tabla|columna|campo|usuario|user|host|servidor|dominio|marca|modelo|categoria|tipo|estado|colegio|establecimiento|institucion|isapre|afp|curso|carrera|asignatura|documento|doc|centro|unidad|area|depto|departamento|cargo|sistema|app|aplicacion|grupo|lista|reporte|informe|proceso|evento|tarea|perfil|rol|clase|objeto|cuenta|medicamento|farmaco|diagnostico|examen|programa|beneficio|partido|sindicato|religion|etnia|pueblo|lugar|local|tienda|bodega|proveedor|convenio|contrato|poliza|seguro|org|organizacion|entidad|parametro|variable|metodo|funcion|indice|job|script|cola|recurso|red|equipo|dispositivo|plantilla|template|imagen|foto|pagina|sitio|modulo|menu|opcion|accion|permiso|cliente|cli|paciente|pac|trabajador|trab|funcionario|func|alumno|estudiante|afiliado|beneficiario|titular|madre|padre|tutor|apoderado|conyuge|pareja|medico|doctor|profesional|responsable|contacto|emergencia|aval|codeudor|deudor|remitente|destinatario|receptor|firmante|testigo|representante|propietario|arrendatario|asegurado|contratante|victima|denunciante|imputado|socio|donante|heredero|causante|persona|pers|conductor|chofer|vendedor|ejecutivo|agente|empleado|colaborador|completo|compl|full|y_?apellidos?|apellidos?))|nomb?(?!_?(producto|prod|articulo|item|empresa|emp|compania|razon|fantasia|archivo|arch|file|calle|via|comuna|region|provincia|ciudad|pais|banco|sucursal|plan|campana|proyecto|servicio|equipo|tabla|columna|campo|usuario|user|host|servidor|dominio|marca|modelo|categoria|tipo|estado|colegio|establecimiento|institucion|isapre|afp|curso|carrera|asignatura|documento|doc|centro|unidad|area|depto|departamento|cargo|sistema|app|aplicacion|grupo|lista|reporte|informe|proceso|evento|tarea|perfil|rol|clase|objeto|cuenta|medicamento|farmaco|diagnostico|examen|programa|beneficio|partido|sindicato|religion|etnia|pueblo|lugar|local|tienda|bodega|proveedor|convenio|contrato|poliza|seguro|org|organizacion|entidad|parametro|variable|metodo|funcion|indice|job|script|cola|recurso|red|equipo|dispositivo|plantilla|template|imagen|foto|pagina|sitio|modulo|menu|opcion|accion|permiso|completo))|name(?!_?(producto|prod|articulo|item|empresa|emp|compania|razon|fantasia|archivo|arch|file|calle|via|comuna|region|provincia|ciudad|pais|banco|sucursal|plan|campana|proyecto|servicio|equipo|tabla|columna|campo|usuario|user|host|servidor|dominio|marca|modelo|categoria|tipo|estado|colegio|establecimiento|institucion|isapre|afp|curso|carrera|asignatura|documento|doc|centro|unidad|area|depto|departamento|cargo|sistema|app|aplicacion|grupo|lista|reporte|informe|proceso|evento|tarea|perfil|rol|clase|objeto|cuenta|medicamento|farmaco|diagnostico|examen|programa|beneficio|partido|sindicato|religion|etnia|pueblo|lugar|local|tienda|bodega|proveedor|convenio|contrato|poliza|seguro|org|organizacion|entidad|parametro|variable|metodo|funcion|indice|job|script|cola|recurso|red|equipo|dispositivo|plantilla|template|imagen|foto|pagina|sitio|modulo|menu|opcion|accion|permiso)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_NOMBRE - List",
+      "framework": "LIST",
+      "domain": "CL_L1_NOMBRE",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-nombres.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L1_APELLIDO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_APELLIDO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:apellidos?|apellido_?(paterno|materno|pat|mat|uno|dos|[12])|ape_?(pat|mat|paterno|materno|[12])|apepat|apemat|appat|apmat|ap_?(pat|mat|paterno|materno)|a_?paterno|a_?materno|paterno|materno|last_?name|surname|lname|family_?name|second_?last_?name|mother_?last_?name)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_APELLIDO - List",
+      "framework": "LIST",
+      "domain": "CL_L1_APELLIDO",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-apellidos.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L1_NOMBRE_COMPLETO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_NOMBRE_COMPLETO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nombre_?(completo|compl|full)|nombres?_?y_?apellidos?|nombres?_?apellidos?|nombreapellido|nom_?completo|nomcompleto|nombrecompleto|full_?name|fullname|person_?name|customer_?name|employee_?name|patient_?name|nombre_?(cliente|cli|paciente|pac|trabajador|trab|funcionario|func|alumno|estudiante|afiliado|beneficiario|titular|madre|padre|tutor|apoderado|conyuge|pareja|medico|doctor|profesional|responsable|contacto|emergencia|aval|codeudor|deudor|remitente|destinatario|receptor|firmante|testigo|representante|propietario|arrendatario|asegurado|contratante|victima|denunciante|imputado|socio|donante|heredero|causante|persona|pers|conductor|chofer|vendedor|ejecutivo|agente|empleado|colaborador))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:titular|beneficiario|contacto_?emergencia|conyuge|apoderado|tutor_?legal|representante_?legal|paciente|victima|asegurado|contratante|razon_?social_?persona)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nombre(?!_?(producto|prod|articulo|item|empresa|emp|compania|razon|fantasia|archivo|arch|file|calle|via|comuna|region|provincia|ciudad|pais|banco|sucursal|plan|campana|proyecto|servicio|equipo|tabla|columna|campo|usuario|user|host|servidor|dominio|marca|modelo|categoria|tipo|estado|colegio|establecimiento|institucion|isapre|afp|curso|carrera|asignatura|documento|doc|centro|unidad|area|depto|departamento|cargo|sistema|app|aplicacion|grupo|lista|reporte|informe|proceso|evento|tarea|perfil|rol|clase|objeto|cuenta|medicamento|farmaco|diagnostico|examen|programa|beneficio|partido|sindicato|religion|etnia|pueblo|lugar|local|tienda|bodega|proveedor|convenio|contrato|poliza|seguro|org|organizacion|entidad|parametro|variable|metodo|funcion|indice|job|script|cola|recurso|red|equipo|dispositivo|plantilla|template|imagen|foto|pagina|sitio|modulo|menu|opcion|accion|permiso|cliente|cli|paciente|pac|trabajador|trab|funcionario|func|alumno|estudiante|afiliado|beneficiario|titular|madre|padre|tutor|apoderado|conyuge|pareja|medico|doctor|profesional|responsable|contacto|emergencia|aval|codeudor|deudor|remitente|destinatario|receptor|firmante|testigo|representante|propietario|arrendatario|asegurado|contratante|victima|denunciante|imputado|socio|donante|heredero|causante|persona|pers|conductor|chofer|vendedor|ejecutivo|agente|empleado|colaborador|completo|compl|full|y_?apellidos?|apellidos?))|name(?!_?(producto|prod|articulo|item|empresa|emp|compania|razon|fantasia|archivo|arch|file|calle|via|comuna|region|provincia|ciudad|pais|banco|sucursal|plan|campana|proyecto|servicio|equipo|tabla|columna|campo|usuario|user|host|servidor|dominio|marca|modelo|categoria|tipo|estado|colegio|establecimiento|institucion|isapre|afp|curso|carrera|asignatura|documento|doc|centro|unidad|area|depto|departamento|cargo|sistema|app|aplicacion|grupo|lista|reporte|informe|proceso|evento|tarea|perfil|rol|clase|objeto|cuenta|medicamento|farmaco|diagnostico|examen|programa|beneficio|partido|sindicato|religion|etnia|pueblo|lugar|local|tienda|bodega|proveedor|convenio|contrato|poliza|seguro|org|organizacion|entidad|parametro|variable|metodo|funcion|indice|job|script|cola|recurso|red|equipo|dispositivo|plantilla|template|imagen|foto|pagina|sitio|modulo|menu|opcion|accion|permiso)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_NOMBRE_COMPLETO - List",
+      "framework": "LIST",
+      "domain": "CL_L1_NOMBRE_COMPLETO",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-nombres.txt",
+            "matchStrength": 0.6
+          },
+          {
+            "file": "preset-file://cl-detectar-apellidos.txt",
+            "matchStrength": 0.6
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L1_EMAIL - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_EMAIL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:e_?mail[a-z0-9_]*|mail[a-z0-9_]*|correo(_?electronico)?[a-z0-9_]*|casilla(_?electronica)?|email_?address)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_EMAIL - Type",
+      "framework": "TYPE",
+      "domain": "CL_L1_EMAIL",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 5
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L1_EMAIL - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_EMAIL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.2
+      }
+    },
+    {
+      "name": "CL_L1_TELEFONO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_TELEFONO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:tel|telefono[a-z0-9_]*|tel[eé]fono|fono[a-z0-9_]*|celular[a-z0-9_]*|cel|movil|m[oó]vil|whatsapp|wsp|fax|phone[a-z0-9_]*|mobile|cellphone|n(ro|um)_?tel(efono)?|telef|tlf|tfno|anexo)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_TELEFONO - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_TELEFONO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "(\\+?56[\\s\\-]?)?9[\\s\\-]?\\d{4}[\\s\\-]?\\d{4}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "(\\+?56[\\s\\-]?)?\\(?(2|[3-7]\\d)\\)?[\\s\\-]?\\d{3,4}[\\s\\-]?\\d{4}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "\\+?\\d[\\d\\s()\\-]{7,15}",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_DIRECCION - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_DIRECCION",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle|avenida|pasaje|address|street|addr|dir_?(particular|comercial|laboral|envio|despacho|facturacion|cliente|paciente|trabajo)|residencia|villa|poblacion|lugar_?residencia|home_?address)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_DIRECCION - Type",
+      "framework": "TYPE",
+      "domain": "CL_L1_DIRECCION",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L1_DIRECCION - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_DIRECCION",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "(?i)(av(enida)?\\.?|calle|pasaje|psje\\.?|pje\\.?|camino|diagonal|villa|poblaci[oó]n|block)\\s+.+\\d+.*",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[A-Za-zÁÉÍÓÚÑáéíóúñ'.\\s]{4,}\\s#?\\d{1,5}(\\s*,?\\s*(depto|dpto|dep|of|oficina|casa|block)\\.?\\s*\\w+)?",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.2
+      }
+    },
+    {
+      "name": "CL_L1_DIRECCION_COMPLEMENTO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_DIRECCION_COMPLEMENTO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:depto|dpto|n(ro|um)_?depto|block|torre|casa_?(num|nro)|n(ro|um|umero)_?casa|n(ro|um|umero)_?domicilio|numeracion|n(ro|um|umero)_?calle|house_?number|apartment|apt|unit_?number|lote|sitio|parcela|manzana)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.7,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_NUMERO_DOCUMENTO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_NUMERO_DOCUMENTO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:(n(ro|um|umero)?_?)?serie_?(ci|cedula|carnet|documento|identidad)?|serie_?ci|n(ro|um|umero)_?serie|folio_?(ci|cedula|carnet)|n(ro|um|umero)_?(de_?)?documento_?(identidad|ci|cedula)|n(ro|um|umero)_?(cedula|carnet|ci)|document_?number)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:n(ro|um|umero)_?(de_?)?(documento|doc)|documento_?identidad|cedula|carnet)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_NUMERO_DOCUMENTO - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_NUMERO_DOCUMENTO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\d{3}\\.\\d{3}\\.\\d{3}",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[A-Za-z]\\d{9}",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_PASAPORTE - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_PASAPORTE",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:pasaporte[a-z_]*|passport[a-z_]*|n(ro|um|umero)_?pasaporte|pasap)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_PASAPORTE - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_PASAPORTE",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-Za-z]{1,2}\\d{6,9}",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_DOCUMENTO_EXTRANJERO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_DOCUMENTO_EXTRANJERO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:dni|doc_?extranjero|documento_?extranjero|id_?extranjero|cedula_?extranjera|n(ro|um|umero)_?identificacion|identificacion_?extranjera|ci_?extranjera|nie|n(ro|um)_?visa|permiso_?residencia|residencia_?definitiva|id_?nacional|national_?id)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_CUENTA_BANCARIA - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_CUENTA_BANCARIA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:cuenta_?(corriente|vista|rut|bancaria|banco|ahorro|deposito|abono|pago|destino|origen|cte)|cta_?(cte|corriente|vista|bancaria|banco|ahorro)|ctacte|n(ro|um|umero)?_?cuenta(_?(banco|bancaria|corriente|vista))?|account_?(number|no|num|nbr)|bank_?account)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_TARJETA - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_TARJETA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:tarjeta(_?(credito|debito|cred|deb|num|nro|numero))?|n(ro|um|umero)_?tarjeta|pan|card_?(number|no|num)|credit_?card|cc_?(number|num)|tdc|tc_?num)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_TARJETA - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_TARJETA",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\d{13,19}",
+            "matchStrength": 0.9,
+            "checksumType": "LUHN",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "[\\s\\-]"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_IP - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_IP",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ip|ip_?(address|addr|origen|destino|cliente|usuario|remota|publica|privada|acceso|conexion|login)|direccion_?ip|dir_?ip|ipv[46]|remote_?addr|client_?ip|host_?ip)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_IP - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_IP",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_DISPOSITIVO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_DISPOSITIVO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:imei|imsi|iccid|mac|mac_?address|direccion_?mac|device_?id|id_?dispositivo|dispositivo_?id|uuid_?dispositivo|advertising_?id|idfa|gaid|cookie(_?id)?|session_?id|id_?sesion|fingerprint_?dispositivo|serial_?equipo|n(ro|um)_?serie_?equipo)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_DISPOSITIVO - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_DISPOSITIVO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "\\d{15}",
+            "matchStrength": 0.8,
+            "checksumType": "LUHN",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_PATENTE - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_PATENTE",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:patente(_?(vehiculo|auto|unica|nro|num))?|placa(_?patente)?|ppu|matricula_?(vehiculo|auto)|license_?plate|plate(_?number)?|n(ro|um)_?patente)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_PATENTE - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_PATENTE",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[BCDFGHJKLPRSTVWXYZ]{4}[\\s·.\\-]?\\d{2}",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[A-Z]{2}[\\s·.\\-]?\\d{2}[\\s·.\\-]?\\d{2}",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[BCDFGHJKLPRSTVWXYZ]{3}[\\s·.\\-]?\\d{2}",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[BCDFGHJKLPRSTVWXYZ]{4,5}[\\s·.\\-]?\\d",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_VEHICULO_ID - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_VEHICULO_ID",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:vin|chasis|n(ro|um|umero)_?chasis|n(ro|um|umero)_?motor|serie_?motor|vin_?number)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_VEHICULO_ID - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_VEHICULO_ID",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-HJ-NPR-Z0-9]{17}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_NUMERO_CONTRATO - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_NUMERO_CONTRATO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:contrato|n(ro|um|umero)_?contrato|p[oó]liza|n(ro|um|umero)_?poliza|n(ro|um)_?operacion|operacion_?credito|n(ro|um)_?credito|n(ro|um|umero)_?socio|n(ro|um|umero)_?cliente|cod(igo)?_?cliente|n(ro|um|umero)_?afiliado|folio_?(contrato|poliza|credito)|n(ro|um)_?siniestro|n(ro|um)_?beneficiario|n(ro|um)_?matricula|matricula_?alumno|n(ro|um)_?carnet_?(socio|afiliado))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.7,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_USUARIO_RRSS - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_USUARIO_RRSS",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:usuario|username|user_?name|login|nick(name)?|alias|cuenta_?usuario|usr|facebook|instagram|twitter|tiktok|linkedin|red_?social|perfil_?(facebook|instagram|twitter|linkedin)|skype|telegram|handle)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.7,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_CREDENCIAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_CREDENCIAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:password|passwd|pwd|pass|contrasen[aã]|contraseña|clave(?!_?(producto|articulo|sucursal|interna|tipo|registro|primaria|foranea|elector))[a-z_]*|pin|hash_?password|password_?hash|secret|token_?acceso|access_?token|refresh_?token|api_?key|otp|respuesta_?secreta|pregunta_?secreta)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_GEOLOCALIZACION - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_GEOLOCALIZACION",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:lat|latitud|latitude|lon|lng|longitude|coordenadas?|coord_?[xy]|geo_?(lat|lon|lng|loc|localizacion|posicion)|geolocalizacion|ubicacion_?gps|gps|posicion_?gps)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:longitud|long)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_GEOLOCALIZACION - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_GEOLOCALIZACION",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "-?\\d{1,2}\\.\\d{3,}\\s*,\\s*-?\\d{1,3}\\.\\d{3,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "-(1[7-9]|[2-5]\\d)\\.\\d{3,}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "-(6[6-9]|7\\d|8[01]|109)\\.\\d{3,}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L1_TEXTO_LIBRE - Path",
+      "framework": "PATH",
+      "domain": "CL_L1_TEXTO_LIBRE",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:observaciones?|obs|comentarios?|glosa|notas?|detalle|descripcion_?(caso|reclamo|incidente|solicitud|problema|atencion)|texto_?libre|mensaje|reclamo|consulta_?texto|motivo_?(texto|detalle)|narrativa|relato|resumen_?caso|remarks|comments?|notes?|free_?text|memo)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L1_TEXTO_LIBRE - Type",
+      "framework": "TYPE",
+      "domain": "CL_L1_TEXTO_LIBRE",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 30
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L1_TEXTO_LIBRE - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L1_TEXTO_LIBRE",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\d{1,2}\\.\\d{3}\\.\\d{3}-[\\dkK]",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": true,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": true,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "(\\+?56\\s?)?9\\s?\\d{4}\\s?\\d{4}",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": true,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_FECHA_NACIMIENTO - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_FECHA_NACIMIENTO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:fecha_?(de_?)?nac(imiento)?|fec_?nac(imiento)?|f_?nac(imiento|im)?|fnac|fechanac(imiento)?|fecnac|nacimiento|fch_?nac|dob|birth_?date|date_?of_?birth|birthdate|birthday|cumplea(n|ñ)os)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_FECHA_NACIMIENTO - Type",
+      "framework": "TYPE",
+      "domain": "CL_L2_FECHA_NACIMIENTO",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Date"
+          },
+          {
+            "typeName": "JavaSqlType",
+            "sqlType": 93
+          },
+          {
+            "typeName": "String",
+            "minimumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L2_ANIO_NACIMIENTO - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_ANIO_NACIMIENTO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:an(i)?o_?nac(imiento)?|año_?nac(imiento)?|birth_?year|year_?of_?birth|ano_?nacim)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_ANIO_NACIMIENTO - Type",
+      "framework": "TYPE",
+      "domain": "CL_L2_ANIO_NACIMIENTO",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 4
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 4
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L2_EDAD - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_EDAD",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:edad(_?(actual|paciente|cliente|afiliado|beneficiario|ingreso|anos|años))?|age|anos_?edad|rango_?etario|edad_?en_?anos)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_EDAD - Type",
+      "framework": "TYPE",
+      "domain": "CL_L2_EDAD",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 6
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L2_FECHA_EVENTO - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_FECHA_EVENTO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:fecha_?(de_?)?(defuncion|fallecimiento|muerte|matrimonio|casamiento|divorcio|ingreso_?(laboral|empresa|trabajo)|contratacion|contrato|egreso|despido|desvinculacion|renuncia|jubilacion|pension|licencia|hospitalizacion|alta_?medica|diagnostico|atencion|consulta|parto|embarazo|detencion|condena|vacunacion|cirugia|examen)|fec_?(defuncion|ingreso_?laboral|egreso|contrato|alta|atencion|diagnostico)|death_?date|hire_?date|termination_?date|date_?of_?death|admission_?date|discharge_?date)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_FECHA_EVENTO - Type",
+      "framework": "TYPE",
+      "domain": "CL_L2_FECHA_EVENTO",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Date"
+          },
+          {
+            "typeName": "JavaSqlType",
+            "sqlType": 93
+          },
+          {
+            "typeName": "String",
+            "minimumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L2_SEXO - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_SEXO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:sexo(_?(biologico|registral|paciente|cliente))?|sex|g[eé]nero(?!_?(identidad|social|autopercibido))|gender|cod_?sexo)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_SEXO - List",
+      "framework": "LIST",
+      "domain": "CL_L2_SEXO",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-sexo.txt",
+            "matchStrength": 0.5
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.5,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L2_COMUNA - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_COMUNA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:comuna[a-z_]*|nom(bre)?_?comuna|municipio|municipalidad|localidad)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ciudad[a-z_]*|city|town)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_COMUNA - List",
+      "framework": "LIST",
+      "domain": "CL_L2_COMUNA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-comunas.txt",
+            "matchStrength": 0.9
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L2_CODIGO_COMUNA - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_CODIGO_COMUNA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:cod(igo)?_?comuna|id_?comuna|cut(_?comuna)?|comuna_?(cod|codigo|id|cut)|cod_?com)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_CODIGO_COMUNA - Type",
+      "framework": "TYPE",
+      "domain": "CL_L2_CODIGO_COMUNA",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 6
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L2_CODIGO_COMUNA - List",
+      "framework": "LIST",
+      "domain": "CL_L2_CODIGO_COMUNA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-codigo-comuna.txt",
+            "matchStrength": 0.5
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L2_CODIGO_POSTAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_CODIGO_POSTAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:cod(igo)?_?postal|cp|zip(_?code)?|postal_?code|codpostal|c_?postal)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_CODIGO_POSTAL - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L2_CODIGO_POSTAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\d{7}",
+            "matchStrength": 0.2,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L2_NACIONALIDAD - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_NACIONALIDAD",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nacionalidad|nationality|pais_?(de_?)?(nacimiento|origen)|ciudadania|citizenship|country_?of_?birth)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_NACIONALIDAD - List",
+      "framework": "LIST",
+      "domain": "CL_L2_NACIONALIDAD",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-nacionalidades.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L2_ESTADO_CIVIL - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_ESTADO_CIVIL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:estado_?civil|est_?civil|ecivil|marital_?status|civil_?status|situacion_?conyugal)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_ESTADO_CIVIL - List",
+      "framework": "LIST",
+      "domain": "CL_L2_ESTADO_CIVIL",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-estado-civil.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L2_OCUPACION - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_OCUPACION",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:cargo(?!_?(fijo|variable|monto|adicional|servicio|tarifa|valor|cuenta|extra))|ocupaci[oó]n|profesi[oó]n|oficio|puesto(_?trabajo)?|job_?title|occupation|actividad_?laboral|titulo_?profesional)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_EMPLEADOR - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_EMPLEADOR",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:empleador|nombre_?empleador|razon_?social_?empleador|empresa_?(empleadora|trabajo|laboral)|lugar_?(de_?)?trabajo|employer|institucion_?laboral)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_NIVEL_EDUCACIONAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_NIVEL_EDUCACIONAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nivel_?educa(cional|tivo)|escolaridad|nivel_?estudios|education_?level|grado_?academico|anos_?escolaridad)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_NIVEL_EDUCACIONAL - List",
+      "framework": "LIST",
+      "domain": "CL_L2_NIVEL_EDUCACIONAL",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-nivel-educacional.txt",
+            "matchStrength": 0.6
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L2_ESTABLECIMIENTO_EDUCACIONAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_ESTABLECIMIENTO_EDUCACIONAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:colegio|liceo|escuela|establecimiento_?(educacional|estudio|escolar)|nombre_?(colegio|escuela|liceo)|universidad|casa_?de_?estudios|school(_?name)?|jardin_?infantil|sala_?cuna)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.75,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_CARGAS_FAMILIARES - Path",
+      "framework": "PATH",
+      "domain": "CL_L2_CARGAS_FAMILIARES",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:cargas?_?familiares?|n(ro|um)?_?cargas|cantidad_?cargas|n(ro|um|umero)?_?hijos|cant_?hijos|hijos|integrantes_?(grupo_?)?(familiar|hogar)|n(ro|um)_?integrantes|tamano_?hogar|personas_?(en_?)?hogar)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L2_CARGAS_FAMILIARES - Type",
+      "framework": "TYPE",
+      "domain": "CL_L2_CARGAS_FAMILIARES",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 4
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 4
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L3_ETNIA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_ETNIA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:etnia|[eé]tnico|origen_?[eé]tnico|pueblo_?(originario|ind[ií]gena|orig)|pertenencia_?(etnica|indigena|pueblo)|calidad_?indigena|ind[ií]gena|raza|race|ethnicity|ethnic_?group|ascendencia|afrodescendiente|comunidad_?indigena)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_ETNIA - List",
+      "framework": "LIST",
+      "domain": "CL_L3_ETNIA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-pueblos.txt",
+            "matchStrength": 0.9
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_DIAGNOSTICO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_DIAGNOSTICO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:diagn[oó]stico[a-z_]*|diag|dx|cie_?10|cod(igo)?_?cie|cie|icd_?10|icd|patolog[ií]a[a-z_]*|enfermedad(es)?[a-z_]*|morbilidad|condicion_?(medica|salud|cronica)|problema_?salud|ges|hipotesis_?diagnostica|causa_?(licencia|muerte|defuncion|hospitalizacion|consulta)|motivo_?(consulta|hospitalizacion|licencia)|comorbilidad(es)?|antecedentes_?(medicos|morbidos|m[oó]rbidos|clinicos)|alergias?|condicion_?preexistente|preexistencias?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_DIAGNOSTICO - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L3_SALUD_DIAGNOSTICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-TV-Za-tv-z]\\d{2}(\\.\\d{1,2}|\\d)?",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_MEDICAMENTO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_MEDICAMENTO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:medicamentos?|f[aá]rmacos?|principio_?activo|prescripci[oó]n|receta(_?medica)?|tratamiento(_?farmacologico)?|medication|drug(_?name)?|posologia)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_MEDICAMENTO - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SALUD_MEDICAMENTO",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-medicamentos.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_IDENTIFICADOR - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_IDENTIFICADOR",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ficha_?clinica|n(ro|um|umero)_?ficha|historia_?clinica|n(ro|um)_?historia|nhc|n(ro|um)_?episodio|n(ro|um)_?atencion|folio_?(atencion|urgencia|licencia|receta)|licencia_?medica|n(ro|um)_?licencia|folio_?lm|n(ro|um)_?interconsulta|n(ro|um)_?dau|n(ro|um|umero)_?biopsia|medical_?record_?number|mrn)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ficha|hc|episodio)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_TEXTO_CLINICO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_TEXTO_CLINICO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:anamnesis|evoluci[oó]n(_?(medica|clinica))?|epicrisis|indicaciones(_?medicas)?|examen_?fisico|notas?_?clinicas?|informe_?(medico|clinico|alta)|resumen_?(alta|clinico)|observacion(es)?_?(medica|clinica)s?|hallazgos|interconsulta|historia_?enfermedad|plan_?tratamiento|clinical_?notes?|progress_?notes?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_TEXTO_CLINICO - Type",
+      "framework": "TYPE",
+      "domain": "CL_L3_SALUD_TEXTO_CLINICO",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 30
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_RESULTADO_EXAMEN - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_RESULTADO_EXAMEN",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:resultado_?(examen|laboratorio|lab|test|pcr|antigeno|biopsia|imagen|vih|hiv|covid)|ex[aá]menes?_?(resultado|laboratorio)|vih|hiv|carga_?viral|cd4|glicemia|hemoglobina(_?glicosilada)?|colesterol|presion_?arterial|imc|test_?(covid|embarazo|vih|drogas)|lab_?result)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:resultado|examen)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_GRUPO_SANGUINEO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_GRUPO_SANGUINEO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:grupo_?sangu[ií]neo|grupo_?sang|tipo_?(de_?)?sangre|tipo_?sanguineo|factor_?rh|rh|blood_?type|blood_?group)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_GRUPO_SANGUINEO - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SALUD_GRUPO_SANGUINEO",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-grupo-sanguineo.txt",
+            "matchStrength": 0.9
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_DISCAPACIDAD - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_DISCAPACIDAD",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:discapacidad[a-z_]*|grado_?discapacidad|credencial_?discapacidad|invalidez|porcentaje_?invalidez|rnd|registro_?nacional_?discapacidad|disability|dependencia_?(severa|moderada|funcional)|necesidades_?educativas_?especiales|nee|pension_?invalidez)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_DISCAPACIDAD - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SALUD_DISCAPACIDAD",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-discapacidad.txt",
+            "matchStrength": 0.6
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_SEXUAL_REPRODUCTIVA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_SEXUAL_REPRODUCTIVA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:embarazo|embarazada|gestaci[oó]n|semanas_?gestacion|edad_?gestacional|fecha_?ultima_?regla|fur|aborto|ive|interrupcion_?(voluntaria_?)?(del_?)?embarazo|anticonceptivos?|metodo_?anticonceptivo|fertilidad|infertilidad|reproduccion_?asistida|paridad|gestas|partos|cesarea|its|ets|infeccion_?transmision_?sexual|pregnan[a-z]*|contracepti[a-z]*)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SALUD_MENTAL_ADICCIONES - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SALUD_MENTAL_ADICCIONES",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:salud_?mental|psiquiatri[a-z]*|psicologi[a-z]*|trastorno[a-z_]*|depresi[oó]n|ansiedad|suicid[a-z]*|autolesi[oó]n|adicci[oó]n(es)?|consumo_?(de_?)?(drogas|alcohol|sustancias)|alcoholismo|drogadiccion|dependencia_?(alcohol|drogas)|senda|tratamiento_?(adicciones|drogas|alcohol)|mental_?health|substance_?(use|abuse))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_BIOMETRICO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_BIOMETRICO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:huella(_?(dactilar|digital))?|dactilar|biometri[a-z_]*|template_?(facial|biometrico|huella)|rostro|reconocimiento_?facial|facial_?(template|id)|iris|retina|voz_?(huella|biometrica)|firma_?(digitalizada|biometrica|manuscrita)|fingerprint|face_?(id|template|encoding)|palm_?print)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_BIOMETRICO - Type",
+      "framework": "TYPE",
+      "domain": "CL_L3_BIOMETRICO",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L3_PERFIL_GENETICO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_PERFIL_GENETICO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:adn|dna|genoma|genotipo|genetic[a-z_]*|gen[eé]tica|secuencia_?genetica|marcador_?genetico|perfil_?(genetico|biologico)|mutacion(_?genetica)?|snp|brca|haplotipo|cariotipo)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_ORIENTACION_SEXUAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_ORIENTACION_SEXUAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:orientaci[oó]n_?sexual|sexual_?orientation|orient_?sexual)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_ORIENTACION_SEXUAL - List",
+      "framework": "LIST",
+      "domain": "CL_L3_ORIENTACION_SEXUAL",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-orientacion-sexual.txt",
+            "matchStrength": 0.8
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_IDENTIDAD_GENERO - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_IDENTIDAD_GENERO",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:identidad_?(de_?)?g[eé]nero|gender_?identity|g[eé]nero_?(identidad|social|autopercibido)|transg[eé]nero|transexual|cambio_?(de_?)?sexo_?registral|rectificacion_?(de_?)?sexo|pronombres?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_IDENTIDAD_GENERO - List",
+      "framework": "LIST",
+      "domain": "CL_L3_IDENTIDAD_GENERO",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-identidad-genero.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_VIDA_SEXUAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_VIDA_SEXUAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:vida_?sexual|conducta_?sexual|actividad_?sexual|parejas?_?sexuales?|practicas_?sexuales|sexual_?(activity|behavior|history)|historia_?sexual|comportamiento_?sexual)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_RELIGION - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_RELIGION",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:religi[oó]n[a-z_]*|credo|confesion_?religiosa|culto|iglesia|creencia_?religiosa|religious_?affiliation|denominacion_?religiosa|comunidad_?religiosa)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_RELIGION - List",
+      "framework": "LIST",
+      "domain": "CL_L3_RELIGION",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-religiones.txt",
+            "matchStrength": 0.9
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_CONVICCION_IDEOLOGICA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_CONVICCION_IDEOLOGICA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ideolog[ií]a|convicci[oó]n(es)?(_?(ideologica|filosofica|politica)s?)?|posicion_?politica|postura_?politica|tendencia_?politica|orientacion_?politica|pensamiento_?politico|creencias?|filosofia_?de_?vida|political_?(view|orientation|opinion))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_CONVICCION_IDEOLOGICA - List",
+      "framework": "LIST",
+      "domain": "CL_L3_CONVICCION_IDEOLOGICA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-ideologias.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_AFILIACION_POLITICA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_AFILIACION_POLITICA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:partido(_?pol[ií]tico)?|militancia|militante|afiliaci[oó]n_?(politica|partidaria|partido)|afiliado_?partido|political_?party|party_?affiliation|coalici[oó]n|sector_?politico)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_AFILIACION_POLITICA - List",
+      "framework": "LIST",
+      "domain": "CL_L3_AFILIACION_POLITICA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-partidos.txt",
+            "matchStrength": 0.8
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_AFILIACION_SINDICAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_AFILIACION_SINDICAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:sindicato[a-z_]*|sindical|sindicalizado|afiliaci[oó]n_?sindical|socio_?sindicato|cuota_?sindical|dirigente_?sindical|federacion_?sindical|union_?member(ship)?|trade_?union|negociacion_?colectiva)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_AFILIACION_GREMIAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_AFILIACION_GREMIAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:gremio|gremial|asociacion_?gremial|colegio_?profesional|afiliacion_?gremial|colegiatura|n(ro|um)_?colegiatura|colegio_?de_?(medicos|abogados|profesores|ingenieros|enfermeras|psicologos|arquitectos|contadores)|professional_?association|asociacion_?(de_?)?funcionarios)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PREVISION_SALUD - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_PREVISION_SALUD",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:tramo_?fonasa|fonasa|grupo_?fonasa|tramo_?salud|previsi[oó]n_?(de_?)?salud|isapre|institucion_?(de_?)?salud_?previsional|sistema_?(de_?)?salud|seguro_?salud|health_?insurance|capredena|dipreca)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:previsi[oó]n)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PREVISION_SALUD - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SOCIOEC_PREVISION_SALUD",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-prevision-salud.txt",
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://cl-detectar-tramo-fonasa.txt",
+            "matchStrength": 0.3
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PLAN_SALUD - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_PLAN_SALUD",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:plan_?(isapre|salud|de_?salud)|cod(igo)?_?plan_?(isapre|salud)?|precio_?plan|valor_?plan|cotizacion_?(pactada|salud|isapre|adicional)|uf_?plan|excedente_?cotizacion|cotizacion_?7)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_RSH - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_RSH",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:rsh|registro_?social_?(de_?)?hogares|calificaci[oó]n_?socioecon[oó]mica|cse|tramo_?(rsh|socioeconomico|cse|registro_?social)|percentil_?(rsh|socioeconomico|vulnerabilidad)|ficha_?proteccion_?social|fps|puntaje_?(fps|ficha|cas|rsh)|ficha_?cas|indice_?vulnerabilidad|ivm|vulnerabilidad(_?social)?|situacion_?socioeconomica)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_NIVEL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_NIVEL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nse|gse|grupo_?socioeconomico|estrato_?socioeconomico|nivel_?socioeconomico|quintil(_?(de_?)?ingresos?)?|decil(_?(de_?)?ingresos?)?|clase_?social)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_NIVEL - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SOCIOEC_NIVEL",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-gse.txt",
+            "matchStrength": 0.5
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_BENEFICIO_SOCIAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_BENEFICIO_SOCIAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:beneficio(s|_?social|_?estatal)?|beneficiario_?(programa|beneficio|subsidio|bono|pgu|pbs|suf)|programa_?(social|estatal|gobierno)|subsidio(?!_?(habitacional|arriendo|vivienda|ds))[a-z_]*|bono(?!_?(produccion|desempeno|anual|gestion|termino|vacaciones|trabajador|colacion|movilizacion))[a-z_]*|pgu|pbs|aps|suf|ife|ief|ingreso_?etico_?familiar|chile_?solidario|seguridades_?(y_?)?oportunidades|aporte_?familiar_?permanente|bolsillo_?familiar|asignacion_?familiar|pension_?(basica|garantizada|asistencial|solidaria)|pasis|chile_?cuida|chile_?crece|bono_?invierno|junaeb|pae)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_BENEFICIO_SOCIAL - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SOCIOEC_BENEFICIO_SOCIAL",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-beneficios.txt",
+            "matchStrength": 0.8
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_MOROSIDAD - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_MOROSIDAD",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:dicom|boletin_?comercial|morosidad|moroso|morosa|deuda_?morosa|protestos?|deudor_?moroso|score_?(crediticio|credito|riesgo|equifax|dicom)|puntaje_?(crediticio|riesgo|credito)|clasificacion_?(de_?)?(riesgo|crediticia|deudor)|riesgo_?crediticio|equifax|sinacofi|transunion|informe_?comercial|cartera_?vencida|castigo|dias_?(de_?)?mora|tramo_?mora|estado_?(deuda|credito|crediticio|morosidad)|credit_?score|delinquen[a-z]*|repactacion|renegociacion|quiebra|insolvencia|liquidacion_?voluntaria|reorganizacion_?(de_?)?deudor)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_MONTO_DEUDA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_MONTO_DEUDA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:monto_?(deuda|moroso|mora|adeudado|castigado|protestado|vencido)|deuda(_?(total|vigente|vencida|consolidada))?|saldo_?(deuda|adeudado|insoluto|moroso|vencido)|total_?adeudado|monto_?protesto|debt(_?amount)?|outstanding_?balance)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_MONTO_DEUDA - Type",
+      "framework": "TYPE",
+      "domain": "CL_L3_SOCIOEC_MONTO_DEUDA",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_INGRESOS - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_INGRESOS",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:sueldo[a-z_]*|salario[a-z_]*|remuneraci[oó]n[a-z_]*|renta(_?(imponible|liquida|bruta|mensual|anual|promedio|declarada|familiar|hogar|per_?capita))?|ingreso_?(mensual|liquido|bruto|familiar|hogar|per_?capita|total|promedio|declarado|autonomo|laboral)|ingresos(_?[a-z]+)?|haberes|liquido_?a_?pagar|imponible|total_?haberes|salary|wage|income|gross_?pay|net_?pay|patrimonio|avaluo_?fiscal|capacidad_?(de_?)?pago|gastos_?mensuales)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_INGRESOS - Type",
+      "framework": "TYPE",
+      "domain": "CL_L3_SOCIOEC_INGRESOS",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PREVISION_AFP - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_PREVISION_AFP",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:afp|nombre_?afp|cod(igo)?_?afp|administradora_?(de_?)?fondos(_?de_?pensiones)?|institucion_?previsional|prevision_?social|entidad_?previsional|ips|inp|caja_?(de_?)?prevision|regimen_?previsional|sistema_?previsional|pension_?fund)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PREVISION_AFP - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SOCIOEC_PREVISION_AFP",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-afp.txt",
+            "matchStrength": 0.9
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_SALDO_PREVISIONAL - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_SALDO_PREVISIONAL",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:saldo_?(afp|cuenta_?individual|cotizaciones|previsional|obligatorio|apv|cuenta_?2|fondo)|fondo_?(de_?)?(pensiones|previsional)|cotizaci[oó]n(es)?_?(afp|previsional|obligatoria|pension)|monto_?pension|pension_?(monto|mensual|autofinanciada)|apv|apvc|cuenta_?2|bono_?reconocimiento|renta_?vitalicia|retiro_?programado|pension_?amount|retirement_?balance)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_SALDO_PREVISIONAL - Type",
+      "framework": "TYPE",
+      "domain": "CL_L3_SOCIOEC_SALDO_PREVISIONAL",
+      "description": "Descarta columnas cuyo tipo no puede contener este dato.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_VIVIENDA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_VIVIENDA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:tipo_?vivienda|tenencia_?(de_?)?(la_?)?vivienda|situacion_?(habitacional|vivienda)|vivienda_?(propia|arrendada|cedida)|allegad[oa]s?|allegamiento|hacinamiento|campamento|toma_?terreno|subsidio_?(habitacional|ds1|ds49|ds19|arriendo|vivienda)|ds_?49|ds_?1|comite_?vivienda|deficit_?habitacional|material_?vivienda|housing_?(type|tenure|status)|dividendo_?hipotecario)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_VIVIENDA - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SOCIOEC_VIVIENDA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-vivienda.txt",
+            "matchStrength": 0.6
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:beca[a-z_]*|gratuidad|credito_?(cae|aval_?del_?estado|universitario|fscu|corfo)|cae|fscu|fuas|beneficio_?estudiantil|arancel_?(diferenciado|referencia)|tne|beneficio_?(mineduc|arancel)|scholarship|student_?loan|financiamiento_?(de_?)?estudios|deuda_?(cae|universitaria))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS - List",
+      "framework": "LIST",
+      "domain": "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://cl-detectar-financiamiento-estudios.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "CL_L3_PENAL_ANTECEDENTES - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_PENAL_ANTECEDENTES",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:antecedentes(?!_?(medicos|morbidos|m[oó]rbidos|familiares|clinicos|academicos|laborales|comerciales|generales))(_?(penales|judiciales|policiales|criminales))?|certificado_?antecedentes|condenas?|condenad[oa]|delitos?|tipo_?delito|prontuario|reincidente|reincidencia|imputad[oa]|formalizad[oa]|sentencia(_?condenatoria)?|pena|privacion_?(de_?)?libertad|libertad_?condicional|inhabilidad(es)?|registro_?(de_?)?inhabilidades|inhabilitad[oa]|criminal_?record|conviction|offen[cs]e|detenid[oa]|detencion|orden_?(de_?)?detencion|medida_?cautelar|violencia_?intrafamiliar|vif|causa_?penal)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_PENAL_CAUSA - Path",
+      "framework": "PATH",
+      "domain": "CL_L3_PENAL_CAUSA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas chilenos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:rol_?causa|rit|ruc|rol_?(tribunal|judicial)|n(ro|um|umero)_?causa|causa_?rol|rol_?unico_?(de_?)?causa|parte_?policial|n(ro|um)_?parte|folio_?(parte|denuncia)|n(ro|um|umero)_?denuncia|expediente(_?(judicial|penal))?|case_?number)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "CL_L3_PENAL_CAUSA - Regex",
+      "framework": "REGEX",
+      "domain": "CL_L3_PENAL_CAUSA",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-Za-z]{1,3}-\\d{1,6}-\\d{4}",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          },
+          {
+            "regex": "\\d{10}-[\\dkK]",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": ""
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    }
+  ],
+  "domains": [
+    {
+      "name": "CL_L1_RUT",
+      "algorithm": "CL_RUT"
+    },
+    {
+      "name": "CL_L1_RUT_CUERPO",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_RUT_DV",
+      "algorithm": "CL_RUT_DV"
+    },
+    {
+      "name": "CL_L1_NOMBRE",
+      "algorithm": "CL_NOMBRES"
+    },
+    {
+      "name": "CL_L1_APELLIDO",
+      "algorithm": "CL_APELLIDOS"
+    },
+    {
+      "name": "CL_L1_NOMBRE_COMPLETO",
+      "algorithm": "CL_NOMBRE_COMPLETO"
+    },
+    {
+      "name": "CL_L1_EMAIL",
+      "algorithm": "CL_EMAIL"
+    },
+    {
+      "name": "CL_L1_TELEFONO",
+      "algorithm": "CL_TELEFONO"
+    },
+    {
+      "name": "CL_L1_DIRECCION",
+      "algorithm": "CL_DIRECCION"
+    },
+    {
+      "name": "CL_L1_DIRECCION_COMPLEMENTO",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_NUMERO_DOCUMENTO",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_PASAPORTE",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_DOCUMENTO_EXTRANJERO",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_CUENTA_BANCARIA",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_TARJETA",
+      "algorithm": "CL_TARJETA"
+    },
+    {
+      "name": "CL_L1_IP",
+      "algorithm": "CL_IP"
+    },
+    {
+      "name": "CL_L1_DISPOSITIVO",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_PATENTE",
+      "algorithm": "CL_PATENTE"
+    },
+    {
+      "name": "CL_L1_VEHICULO_ID",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_NUMERO_CONTRATO",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_USUARIO_RRSS",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L1_CREDENCIAL",
+      "algorithm": "CL_REDACTAR"
+    },
+    {
+      "name": "CL_L1_GEOLOCALIZACION",
+      "algorithm": "CL_COORDENADA"
+    },
+    {
+      "name": "CL_L1_TEXTO_LIBRE",
+      "algorithm": "CL_TEXTO_LIBRE"
+    },
+    {
+      "name": "CL_L2_FECHA_NACIMIENTO",
+      "algorithm": "CL_FECHA_NACIMIENTO"
+    },
+    {
+      "name": "CL_L2_ANIO_NACIMIENTO",
+      "algorithm": "CL_ANIO"
+    },
+    {
+      "name": "CL_L2_EDAD",
+      "algorithm": "CL_EDAD"
+    },
+    {
+      "name": "CL_L2_FECHA_EVENTO",
+      "algorithm": "CL_FECHA_EVENTO"
+    },
+    {
+      "name": "CL_L2_SEXO",
+      "algorithm": "CL_SEXO"
+    },
+    {
+      "name": "CL_L2_COMUNA",
+      "algorithm": "CL_COMUNA"
+    },
+    {
+      "name": "CL_L2_CODIGO_COMUNA",
+      "algorithm": "CL_CODIGO_COMUNA"
+    },
+    {
+      "name": "CL_L2_CODIGO_POSTAL",
+      "algorithm": "CL_CODIGO_POSTAL"
+    },
+    {
+      "name": "CL_L2_NACIONALIDAD",
+      "algorithm": "CL_NACIONALIDAD"
+    },
+    {
+      "name": "CL_L2_ESTADO_CIVIL",
+      "algorithm": "CL_ESTADO_CIVIL"
+    },
+    {
+      "name": "CL_L2_OCUPACION",
+      "algorithm": "CL_OCUPACION"
+    },
+    {
+      "name": "CL_L2_EMPLEADOR",
+      "algorithm": "CL_EMPLEADOR"
+    },
+    {
+      "name": "CL_L2_NIVEL_EDUCACIONAL",
+      "algorithm": "CL_NIVEL_EDUCACIONAL"
+    },
+    {
+      "name": "CL_L2_ESTABLECIMIENTO_EDUCACIONAL",
+      "algorithm": "CL_ESTABLECIMIENTO"
+    },
+    {
+      "name": "CL_L2_CARGAS_FAMILIARES",
+      "algorithm": "CL_CANTIDAD_ACOTADA"
+    },
+    {
+      "name": "CL_L3_ETNIA",
+      "algorithm": "CL_PUEBLO_ORIGINARIO"
+    },
+    {
+      "name": "CL_L3_SALUD_DIAGNOSTICO",
+      "algorithm": "CL_DIAGNOSTICO"
+    },
+    {
+      "name": "CL_L3_SALUD_MEDICAMENTO",
+      "algorithm": "CL_MEDICAMENTO"
+    },
+    {
+      "name": "CL_L3_SALUD_IDENTIFICADOR",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L3_SALUD_TEXTO_CLINICO",
+      "algorithm": "CL_TEXTO_LIBRE"
+    },
+    {
+      "name": "CL_L3_SALUD_RESULTADO_EXAMEN",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L3_SALUD_GRUPO_SANGUINEO",
+      "algorithm": "CL_GRUPO_SANGUINEO"
+    },
+    {
+      "name": "CL_L3_SALUD_DISCAPACIDAD",
+      "algorithm": "CL_DISCAPACIDAD"
+    },
+    {
+      "name": "CL_L3_SALUD_SEXUAL_REPRODUCTIVA",
+      "algorithm": "CL_CATEGORIA_SUPRIMIDA"
+    },
+    {
+      "name": "CL_L3_SALUD_MENTAL_ADICCIONES",
+      "algorithm": "CL_CATEGORIA_SUPRIMIDA"
+    },
+    {
+      "name": "CL_L3_BIOMETRICO",
+      "algorithm": "CL_REDACTAR"
+    },
+    {
+      "name": "CL_L3_PERFIL_GENETICO",
+      "algorithm": "CL_REDACTAR"
+    },
+    {
+      "name": "CL_L3_ORIENTACION_SEXUAL",
+      "algorithm": "CL_ORIENTACION_SEXUAL"
+    },
+    {
+      "name": "CL_L3_IDENTIDAD_GENERO",
+      "algorithm": "CL_IDENTIDAD_GENERO"
+    },
+    {
+      "name": "CL_L3_VIDA_SEXUAL",
+      "algorithm": "CL_CATEGORIA_SUPRIMIDA"
+    },
+    {
+      "name": "CL_L3_RELIGION",
+      "algorithm": "CL_RELIGION"
+    },
+    {
+      "name": "CL_L3_CONVICCION_IDEOLOGICA",
+      "algorithm": "CL_IDEOLOGIA"
+    },
+    {
+      "name": "CL_L3_AFILIACION_POLITICA",
+      "algorithm": "CL_PARTIDO_POLITICO"
+    },
+    {
+      "name": "CL_L3_AFILIACION_SINDICAL",
+      "algorithm": "CL_CATEGORIA_SUPRIMIDA"
+    },
+    {
+      "name": "CL_L3_AFILIACION_GREMIAL",
+      "algorithm": "CL_CATEGORIA_SUPRIMIDA"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PREVISION_SALUD",
+      "algorithm": "CL_PREVISION_SALUD"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PLAN_SALUD",
+      "algorithm": "CL_CM_ALFANUM"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_RSH",
+      "algorithm": "CL_RSH"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_NIVEL",
+      "algorithm": "CL_NIVEL_SOCIOECONOMICO"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_BENEFICIO_SOCIAL",
+      "algorithm": "CL_BENEFICIO_SOCIAL"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_MOROSIDAD",
+      "algorithm": "CL_MOROSIDAD"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_MONTO_DEUDA",
+      "algorithm": "CL_MONTO_DEUDA"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_INGRESOS",
+      "algorithm": "CL_MONTO_INGRESO"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_PREVISION_AFP",
+      "algorithm": "CL_AFP"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_SALDO_PREVISIONAL",
+      "algorithm": "CL_MONTO_PREVISIONAL"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_VIVIENDA",
+      "algorithm": "CL_VIVIENDA"
+    },
+    {
+      "name": "CL_L3_SOCIOEC_FINANCIAMIENTO_ESTUDIOS",
+      "algorithm": "CL_FINANCIAMIENTO_ESTUDIOS"
+    },
+    {
+      "name": "CL_L3_PENAL_ANTECEDENTES",
+      "algorithm": "CL_ANTECEDENTES"
+    },
+    {
+      "name": "CL_L3_PENAL_CAUSA",
+      "algorithm": "CL_CM_ALFANUM"
+    }
+  ],
+  "algorithms": [
+    {
+      "name": "CL_CM_ALFANUM",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789",
+          "abcdef",
+          "ABCDEF",
+          "ghijklmnñopqrstuvwxyz",
+          "GHIJKLMNÑOPQRSTUVWXYZ",
+          "áéíóúü",
+          "ÁÉÍÓÚÜ"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "A12.345.678-Ñ"
+    },
+    {
+      "name": "CL_SIN_CAMBIO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(.*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      }
+    },
+    {
+      "name": "CL_REDACTAR",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(.+)",
+            "actions": [
+              {
+                "type": "REDACT",
+                "redactCharacter": "X"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "secreto123"
+    },
+    {
+      "name": "CL_SUPRIMIR",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-sin-informacion.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Depresión mayor"
+    },
+    {
+      "name": "CL_BANDERA_SI_NO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-bandera-si-no.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_BANDERA_TRUE_FALSE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-bandera-true-false.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_BANDERA_S_N",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-bandera-s-n.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_BANDERA_Y_N",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-bandera-y-n.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_BANDERA_0_1",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-bandera-0-1.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_BANDERA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA_SI_NO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(true|false)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA_TRUE_FALSE"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)([sn])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA_S_N"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(y)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA_Y_N"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "([01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA_0_1"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "S"
+    },
+    {
+      "name": "CL_CATEGORIA_SUPRIMIDA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_SUPRIMIR"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Trastorno depresivo"
+    },
+    {
+      "name": "CL_RUT_CUERPO_8",
+      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "config": {
+        "weightList": [
+          4,
+          6,
+          8,
+          10,
+          1,
+          3,
+          4,
+          6
+        ],
+        "modulusNumber": 11,
+        "checkDigitIndex": 8,
+        "calculateChecksumRightToLeft": true,
+        "numDigitsForCheckdigitCalculation": 8,
+        "numericAlgorithm": {
+          "name": "CL_CM_ALFANUM"
+        },
+        "preserveRegex": "[.\\-]",
+        "inputHandlingConfig": {
+          "characterHandling": "STANDARD",
+          "invalidInputHandling": "ERROR",
+          "shortInputHandling": "FALLBACK",
+          "padCharacter": "0",
+          "trimWhitespace": true
+        }
+      }
+    },
+    {
+      "name": "CL_RUT_DV_8",
+      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "config": {
+        "weightList": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          2,
+          3
+        ],
+        "modulusNumber": 11,
+        "checkDigitIndex": 8,
+        "calculateChecksumRightToLeft": true,
+        "numDigitsForCheckdigitCalculation": 8,
+        "numericAlgorithm": {
+          "name": "CL_SIN_CAMBIO"
+        },
+        "preserveRegex": "[.\\-]",
+        "inputHandlingConfig": {
+          "characterHandling": "STANDARD",
+          "invalidInputHandling": "ERROR",
+          "shortInputHandling": "FALLBACK",
+          "padCharacter": "0",
+          "trimWhitespace": true
+        }
+      }
+    },
+    {
+      "name": "CL_RUT_CUERPO_7",
+      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "config": {
+        "weightList": [
+          4,
+          6,
+          8,
+          10,
+          1,
+          3,
+          4
+        ],
+        "modulusNumber": 11,
+        "checkDigitIndex": 7,
+        "calculateChecksumRightToLeft": true,
+        "numDigitsForCheckdigitCalculation": 7,
+        "numericAlgorithm": {
+          "name": "CL_CM_ALFANUM"
+        },
+        "preserveRegex": "[.\\-]",
+        "inputHandlingConfig": {
+          "characterHandling": "STANDARD",
+          "invalidInputHandling": "ERROR",
+          "shortInputHandling": "FALLBACK",
+          "padCharacter": "0",
+          "trimWhitespace": true
+        }
+      }
+    },
+    {
+      "name": "CL_RUT_DV_7",
+      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "config": {
+        "weightList": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          2
+        ],
+        "modulusNumber": 11,
+        "checkDigitIndex": 7,
+        "calculateChecksumRightToLeft": true,
+        "numDigitsForCheckdigitCalculation": 7,
+        "numericAlgorithm": {
+          "name": "CL_SIN_CAMBIO"
+        },
+        "preserveRegex": "[.\\-]",
+        "inputHandlingConfig": {
+          "characterHandling": "STANDARD",
+          "invalidInputHandling": "ERROR",
+          "shortInputHandling": "FALLBACK",
+          "padCharacter": "0",
+          "trimWhitespace": true
+        }
+      }
+    },
+    {
+      "name": "CL_RUT_CUERPO_6",
+      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "config": {
+        "weightList": [
+          4,
+          6,
+          8,
+          10,
+          1,
+          3
+        ],
+        "modulusNumber": 11,
+        "checkDigitIndex": 6,
+        "calculateChecksumRightToLeft": true,
+        "numDigitsForCheckdigitCalculation": 6,
+        "numericAlgorithm": {
+          "name": "CL_CM_ALFANUM"
+        },
+        "preserveRegex": "[.\\-]",
+        "inputHandlingConfig": {
+          "characterHandling": "STANDARD",
+          "invalidInputHandling": "ERROR",
+          "shortInputHandling": "FALLBACK",
+          "padCharacter": "0",
+          "trimWhitespace": true
+        }
+      }
+    },
+    {
+      "name": "CL_RUT_DV_6",
+      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "config": {
+        "weightList": [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "modulusNumber": 11,
+        "checkDigitIndex": 6,
+        "calculateChecksumRightToLeft": true,
+        "numDigitsForCheckdigitCalculation": 6,
+        "numericAlgorithm": {
+          "name": "CL_SIN_CAMBIO"
+        },
+        "preserveRegex": "[.\\-]",
+        "inputHandlingConfig": {
+          "characterHandling": "STANDARD",
+          "invalidInputHandling": "ERROR",
+          "shortInputHandling": "FALLBACK",
+          "padCharacter": "0",
+          "trimWhitespace": true
+        }
+      }
+    },
+    {
+      "name": "CL_RUT_PASO_1",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{2}\\.?\\d{3}\\.?\\d{3}-?[0-9kK])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RUT_CUERPO_8"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d\\.?\\d{3}\\.?\\d{3}-?[0-9kK])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RUT_CUERPO_7"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{3}\\.?\\d{3}-?[0-9kK])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RUT_CUERPO_6"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      }
+    },
+    {
+      "name": "CL_RUT_PASO_2",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{2}\\.?\\d{3}\\.?\\d{3}-?)(9)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "K"
+              }
+            ]
+          },
+          {
+            "regex": "(\\d\\.?\\d{3}\\.?\\d{3}-?)(9)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "K"
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{3}\\.?\\d{3}-?)(9)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "K"
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{2}\\.?\\d{3}\\.?\\d{3}-?[0-9])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RUT_DV_8"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d\\.?\\d{3}\\.?\\d{3}-?[0-9])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RUT_DV_7"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{3}\\.?\\d{3}-?[0-9])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RUT_DV_6"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      }
+    },
+    {
+      "name": "CL_RUT",
+      "framework": "algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain",
+      "config": {
+        "algorithmReferences": [
+          {
+            "name": "CL_RUT_PASO_1"
+          },
+          {
+            "name": "CL_RUT_PASO_2"
+          }
+        ]
+      },
+      "input": "12.345.678-5"
+    },
+    {
+      "name": "CL_RUT_DV",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-digito-verificador.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "K"
+    },
+    {
+      "name": "CL_NOMBRES",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Juan Carlos"
+    },
+    {
+      "name": "CL_NOMBRE_PILA",
+      "framework": "algorithm.plugin.name.Name",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-nombres.txt"
+        },
+        "maskedValueCase": "PRESERVE_INPUT",
+        "filterAccent": true,
+        "inputCaseSensitive": false
+      },
+      "input": "María"
+    },
+    {
+      "name": "CL_APELLIDOS",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Pérez González"
+    },
+    {
+      "name": "CL_APELLIDO",
+      "framework": "algorithm.plugin.name.Name",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-apellidos.txt"
+        },
+        "maskedValueCase": "PRESERVE_INPUT",
+        "filterAccent": true,
+        "inputCaseSensitive": false
+      },
+      "input": "Muñoz"
+    },
+    {
+      "name": "CL_NOMBRE_COMPLETO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([^,]+),\\s*(.+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDOS"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRES"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_NOMBRE_PILA"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_APELLIDO"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Juan Carlos Pérez González"
+    },
+    {
+      "name": "CL_EMAIL",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([^@\\s]+)@([^@\\s]+)\\.([A-Za-z]{2,24})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              },
+              {
+                "type": "REDACT",
+                "redactString": "test"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "juan.perez@gmail.com"
+    },
+    {
+      "name": "CL_TELEFONO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\+?56[\\s\\-]?)?(\\(?9\\)?[\\s\\-]?)(\\d{4})([\\s\\-]?)(\\d{4})",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\+?56[\\s\\-]?)?(\\(?(?:2|[3-7]\\d)\\)?[\\s\\-]?)(\\d{3,4})([\\s\\-]?)(\\d{4})",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "+56 9 8765 4321"
+    },
+    {
+      "name": "CL_DIRECCION",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-direcciones.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Av. Providencia 1234, depto 502"
+    },
+    {
+      "name": "CL_TARJETA_LUHN",
+      "framework": "algorithm.plugin.characterMapping.PaymentCard",
+      "config": {
+        "minMaskedPositions": 6,
+        "preserve": 0
+      }
+    },
+    {
+      "name": "CL_TARJETA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_TARJETA_LUHN"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "4111 1111 1111 1111"
+    },
+    {
+      "name": "CL_OCTETO",
+      "framework": "algorithm.plugin.characterMapping.NumericMapping",
+      "config": {
+        "minValue": 1,
+        "maxValue": 254
+      }
+    },
+    {
+      "name": "CL_IP",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_OCTETO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_OCTETO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_OCTETO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_OCTETO"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "200.27.1.10"
+    },
+    {
+      "name": "CL_PATENTE",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "BCDFGHJKLPRSTVWXYZ",
+          "AEIMNOQU",
+          "bcdfghjklprstvwxyz",
+          "aeimnoqu",
+          "0123456789"
+        ],
+        "caseSensitive": true
+      },
+      "input": "BBCD-12"
+    },
+    {
+      "name": "CL_COORDENADA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(-?\\d{1,3}\\.\\d)(\\d+)\\s*,\\s*(-?\\d{1,3}\\.\\d)(\\d+)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(-?\\d{1,3}\\.\\d)(\\d+)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "-33.448891"
+    },
+    {
+      "name": "CL_TEXTO_LIBRE",
+      "framework": "algorithm.plugin.freeTextRedaction.FreeTextRedaction",
+      "config": {
+        "regularExpressions": [
+          {
+            "patternString": "\\d{1,2}\\.\\d{3}\\.\\d{3}-[\\dkK]"
+          },
+          {
+            "patternString": "\\d{7,8}-[\\dkK]"
+          },
+          {
+            "patternString": "[\\w.+\\-]+@[\\w\\-]+(\\.[\\w\\-]+)+"
+          },
+          {
+            "patternString": "\\+?56\\d{9}"
+          },
+          {
+            "patternString": "(?<!\\d)9\\d{8}(?!\\d)"
+          },
+          {
+            "patternString": "(?<![A-Za-z])[BCDFGHJKLPRSTVWXYZ]{4}-?\\d{2}(?!\\d)"
+          },
+          {
+            "patternString": "(?<!\\d)\\d{13,19}(?!\\d)"
+          },
+          {
+            "patternString": "(?<!\\d)(\\d{1,3}\\.){3}\\d{1,3}(?!\\d)"
+          }
+        ],
+        "regExRedactValue": "[DATO]",
+        "lookupFile": {
+          "uri": "preset-file://cl-texto-nombres.txt"
+        },
+        "lookupFileRedactValue": "[NOMBRE]",
+        "isDenyList": true
+      },
+      "input": "Paciente Soto, RUT 12.345.678-5, correo p.soto@gmail.com"
+    },
+    {
+      "name": "CL_FECHA_NACIMIENTO",
+      "framework": "algorithm.plugin.dateAlgorithms.DateShift",
+      "config": {
+        "minRange": -60,
+        "maxRange": 60,
+        "unit": "DAYS",
+        "roll": false
+      },
+      "input": "1985-07-20"
+    },
+    {
+      "name": "CL_FECHA_EVENTO",
+      "framework": "algorithm.plugin.dateAlgorithms.DateShift",
+      "config": {
+        "minRange": -30,
+        "maxRange": 30,
+        "unit": "DAYS",
+        "roll": false
+      },
+      "input": "2021-03-15"
+    },
+    {
+      "name": "CL_ANIO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{3})(\\d)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "1985"
+    },
+    {
+      "name": "CL_EDAD",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{3,})",
+            "actions": [
+              {
+                "type": "REDACT",
+                "redactString": "90"
+              }
+            ]
+          },
+          {
+            "regex": "([1-9])(\\d)(\\.\\d+)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "([1-9])(\\d)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "37"
+    },
+    {
+      "name": "CL_SEXO_PALABRA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-sexo-palabra.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_SEXO_MUJER_HOMBRE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-sexo-mujer-hombre.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_SEXO_INGLES",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-sexo-ingles.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_SEXO_F_M",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-sexo-f-m.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_SEXO_H_M",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-sexo-h-m.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_SEXO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(femenino|masculino)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_SEXO_PALABRA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(mujer|hombre)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_SEXO_MUJER_HOMBRE"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(female|male)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_SEXO_INGLES"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)([fm])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_SEXO_F_M"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(h)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_SEXO_H_M"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "F"
+    },
+    {
+      "name": "CL_COMUNA",
+      "framework": "algorithm.plugin.dataCleansing.DataCleansing",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-comuna-generalizada.txt"
+        },
+        "delimiter": ",",
+        "caseSensitive": false,
+        "trimWhitespace": true
+      },
+      "input": "Torres del Paine"
+    },
+    {
+      "name": "CL_CODIGO_COMUNA",
+      "framework": "algorithm.plugin.dataCleansing.DataCleansing",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-codigo-comuna-generalizado.txt"
+        },
+        "delimiter": ",",
+        "caseSensitive": false,
+        "trimWhitespace": true
+      },
+      "input": "12301"
+    },
+    {
+      "name": "CL_CODIGO_POSTAL",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{3})-?(\\d{4})",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "0000"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_CM_ALFANUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "8320123"
+    },
+    {
+      "name": "CL_NACIONALIDAD",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-nacionalidades.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Peruana"
+    },
+    {
+      "name": "CL_ESTADO_CIVIL",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-estado-civil.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Casada"
+    },
+    {
+      "name": "CL_OCUPACION",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-ocupaciones.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Gerente Regional Aysén"
+    },
+    {
+      "name": "CL_EMPLEADOR",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-empleadores.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Codelco"
+    },
+    {
+      "name": "CL_NIVEL_EDUCACIONAL",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-nivel-educacional.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Media completa"
+    },
+    {
+      "name": "CL_ESTABLECIMIENTO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-establecimientos.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Liceo Bicentenario de Excelencia"
+    },
+    {
+      "name": "CL_CANTIDAD_ACOTADA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([0-5])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(\\d+)",
+            "actions": [
+              {
+                "type": "REDACT",
+                "redactString": "5"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "9"
+    },
+    {
+      "name": "CL_PUEBLO_ORIGINARIO_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-pueblos.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_PUEBLO_ORIGINARIO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_PUEBLO_ORIGINARIO_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Mapuche-Huilliche"
+    },
+    {
+      "name": "CL_CIE10_DECIMAL",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-cie10-decimal.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_CIE10",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-cie10.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_DIAGNOSTICO_TEXTO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-diagnosticos.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_DIAGNOSTICO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([A-TV-Za-tv-z]\\d{2}\\.\\d{1,2})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CIE10_DECIMAL"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "([A-TV-Za-tv-z]\\d{2,3})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CIE10"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_DIAGNOSTICO_TEXTO"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "F32.9"
+    },
+    {
+      "name": "CL_MEDICAMENTO_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-medicamentos.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_MEDICAMENTO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_MEDICAMENTO_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Sertralina 50 mg"
+    },
+    {
+      "name": "CL_GRUPO_SANGUINEO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-grupo-sanguineo.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "O+"
+    },
+    {
+      "name": "CL_DISCAPACIDAD_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-discapacidad.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_DISCAPACIDAD",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_DISCAPACIDAD_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Psíquica severa"
+    },
+    {
+      "name": "CL_ORIENTACION_SEXUAL_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-orientacion-sexual.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_ORIENTACION_SEXUAL",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_ORIENTACION_SEXUAL_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Bisexual"
+    },
+    {
+      "name": "CL_IDENTIDAD_GENERO_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-identidad-genero.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_IDENTIDAD_GENERO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_IDENTIDAD_GENERO_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Hombre trans"
+    },
+    {
+      "name": "CL_RELIGION_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-religiones.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_RELIGION",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_RELIGION_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Evangélica"
+    },
+    {
+      "name": "CL_IDEOLOGIA_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-ideologias.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_IDEOLOGIA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_IDEOLOGIA_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Centroderecha"
+    },
+    {
+      "name": "CL_PARTIDO_POLITICO_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-partidos.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_PARTIDO_POLITICO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_PARTIDO_POLITICO_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Renovación Nacional"
+    },
+    {
+      "name": "CL_TRAMO_FONASA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-tramo-fonasa.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_PREVISION_SALUD_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-prevision-salud.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_PREVISION_SALUD",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([A-Da-d])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_TRAMO_FONASA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(fonasa\\s*[\\-:]?\\s*(?:tramo\\s*)?)([A-D])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_TRAMO_FONASA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_PREVISION_SALUD_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "FONASA B"
+    },
+    {
+      "name": "CL_RSH_TRAMO_NUMERO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-rsh-tramo-numero.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_RSH_TRAMO_TEXTO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-rsh-tramo-texto.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_RSH",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{1,3})(\\s*%)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RSH_TRAMO_NUMERO"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(tramo\\s*)(\\d{1,3})(.*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RSH_TRAMO_NUMERO"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,3})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_RSH_TRAMO_NUMERO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_RSH_TRAMO_TEXTO"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Tramo 40%"
+    },
+    {
+      "name": "CL_QUINTIL",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-quintil.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_GSE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-gse.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_NIVEL_SOCIOECONOMICO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\d{1,2})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_QUINTIL"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_GSE"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "C2"
+    },
+    {
+      "name": "CL_BENEFICIO_SOCIAL_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-beneficios-sociales.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_BENEFICIO_SOCIAL",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_BENEFICIO_SOCIAL_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "PGU"
+    },
+    {
+      "name": "CL_MOROSIDAD_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-estado-crediticio.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_MOROSIDAD",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_MOROSIDAD_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Moroso DICOM"
+    },
+    {
+      "name": "CL_MONTO_DEUDA",
+      "framework": "algorithm.plugin.characterMapping.NumericMapping",
+      "config": {
+        "minValue": 10000,
+        "maxValue": 50000000
+      },
+      "input": "1250000"
+    },
+    {
+      "name": "CL_MONTO_INGRESO",
+      "framework": "algorithm.plugin.characterMapping.NumericMapping",
+      "config": {
+        "minValue": 450000,
+        "maxValue": 8000000
+      },
+      "input": "985000"
+    },
+    {
+      "name": "CL_AFP_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-afp.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_AFP",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_AFP_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "AFP Modelo"
+    },
+    {
+      "name": "CL_MONTO_PREVISIONAL",
+      "framework": "algorithm.plugin.characterMapping.NumericMapping",
+      "config": {
+        "minValue": 100000,
+        "maxValue": 250000000
+      },
+      "input": "38500000"
+    },
+    {
+      "name": "CL_VIVIENDA_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-vivienda.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_VIVIENDA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_VIVIENDA_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Allegado"
+    },
+    {
+      "name": "CL_FINANCIAMIENTO_ESTUDIOS_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-financiamiento-estudios.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_FINANCIAMIENTO_ESTUDIOS",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_FINANCIAMIENTO_ESTUDIOS_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "CAE"
+    },
+    {
+      "name": "CL_ANTECEDENTES_LISTA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://cl-antecedentes.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      }
+    },
+    {
+      "name": "CL_ANTECEDENTES",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(s[ií]|no|true|false|[sny01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_BANDERA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\d{1,6})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CL_CM_ALFANUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "CL_ANTECEDENTES_LISTA"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Condenado por robo"
+    }
+  ],
+  "files": [
+    "cl-afp.txt",
+    "cl-antecedentes.txt",
+    "cl-apellidos.txt",
+    "cl-bandera-0-1.txt",
+    "cl-bandera-s-n.txt",
+    "cl-bandera-si-no.txt",
+    "cl-bandera-true-false.txt",
+    "cl-bandera-y-n.txt",
+    "cl-beneficios-sociales.txt",
+    "cl-cie10-decimal.txt",
+    "cl-cie10.txt",
+    "cl-codigo-comuna-generalizado.txt",
+    "cl-comuna-generalizada.txt",
+    "cl-detectar-afp.txt",
+    "cl-detectar-apellidos.txt",
+    "cl-detectar-beneficios.txt",
+    "cl-detectar-codigo-comuna.txt",
+    "cl-detectar-comunas.txt",
+    "cl-detectar-discapacidad.txt",
+    "cl-detectar-estado-civil.txt",
+    "cl-detectar-financiamiento-estudios.txt",
+    "cl-detectar-grupo-sanguineo.txt",
+    "cl-detectar-gse.txt",
+    "cl-detectar-identidad-genero.txt",
+    "cl-detectar-ideologias.txt",
+    "cl-detectar-medicamentos.txt",
+    "cl-detectar-nacionalidades.txt",
+    "cl-detectar-nivel-educacional.txt",
+    "cl-detectar-nombres.txt",
+    "cl-detectar-orientacion-sexual.txt",
+    "cl-detectar-partidos.txt",
+    "cl-detectar-prevision-salud.txt",
+    "cl-detectar-pueblos.txt",
+    "cl-detectar-religiones.txt",
+    "cl-detectar-sexo.txt",
+    "cl-detectar-tramo-fonasa.txt",
+    "cl-detectar-vivienda.txt",
+    "cl-diagnosticos.txt",
+    "cl-digito-verificador.txt",
+    "cl-direcciones.txt",
+    "cl-discapacidad.txt",
+    "cl-empleadores.txt",
+    "cl-establecimientos.txt",
+    "cl-estado-civil.txt",
+    "cl-estado-crediticio.txt",
+    "cl-financiamiento-estudios.txt",
+    "cl-grupo-sanguineo.txt",
+    "cl-gse.txt",
+    "cl-identidad-genero.txt",
+    "cl-ideologias.txt",
+    "cl-medicamentos.txt",
+    "cl-nacionalidades.txt",
+    "cl-nivel-educacional.txt",
+    "cl-nombres.txt",
+    "cl-ocupaciones.txt",
+    "cl-orientacion-sexual.txt",
+    "cl-partidos.txt",
+    "cl-prevision-salud.txt",
+    "cl-pueblos.txt",
+    "cl-quintil.txt",
+    "cl-religiones.txt",
+    "cl-rsh-tramo-numero.txt",
+    "cl-rsh-tramo-texto.txt",
+    "cl-sexo-f-m.txt",
+    "cl-sexo-h-m.txt",
+    "cl-sexo-ingles.txt",
+    "cl-sexo-mujer-hombre.txt",
+    "cl-sexo-palabra.txt",
+    "cl-sin-informacion.txt",
+    "cl-texto-nombres.txt",
+    "cl-tramo-fonasa.txt",
+    "cl-vivienda.txt"
+  ]
+}

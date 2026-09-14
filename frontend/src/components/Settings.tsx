@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw, CheckCircle2,
-  AlertTriangle, CloudUpload, Lock, Loader2,
+  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
@@ -11,7 +11,7 @@ import { useVersion } from '@/lib/version'
 import { announceImport, refreshAfterImport } from '@/lib/engine-sync'
 import { ImportProgressBar } from '@/components/ImportProgressBar'
 import { useImportProgress } from '@/lib/import-progress'
-import type { AiStatus, ServerFile } from '@/types'
+import type { AiStatus, Locale, PresetConflict, ProfileSetPreset, ServerFile } from '@/types'
 
 interface Props {
   filesDir: string
@@ -19,7 +19,7 @@ interface Props {
   onToggleSidebar: () => void
 }
 
-type Tab = 'general' | 'ai' | 'delphix' | 'files'
+type Tab = 'general' | 'ai' | 'delphix' | 'profileSets' | 'files'
 
 export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
   const { t } = useT()
@@ -34,13 +34,13 @@ export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
         <h2 className="text-sm font-semibold text-slate-800">{t('settings.title')}</h2>
       </div>
 
-      <div className="flex gap-1 px-5 pt-4 flex-shrink-0 border-b border-slate-200 bg-white">
-        {(['general', 'ai', 'delphix', 'files'] as Tab[]).map(id => (
+      <div className="flex gap-1 px-5 pt-4 flex-shrink-0 border-b border-slate-200 bg-white overflow-x-auto">
+        {(['general', 'ai', 'delphix', 'profileSets', 'files'] as Tab[]).map(id => (
           <button
             key={id}
             onClick={() => setTab(id)}
             className={cn(
-              'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors',
+              'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap flex-shrink-0',
               tab === id
                 ? 'border-blue-600 text-blue-600'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
@@ -60,6 +60,9 @@ export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
         )}
         {tab === 'delphix' && (
           <DelphixTab />
+        )}
+        {tab === 'profileSets' && (
+          <PresetsTab />
         )}
         {tab === 'files' && (
           <FilesTab />
@@ -346,6 +349,147 @@ function AiTab() {
         >
           <RefreshCw size={12} className={cn(checking && 'animate-spin')} /> {t('settings.ai.recheck')}
         </button>
+      </div>
+    </div>
+  )
+}
+
+/** SQLite's datetime('now') is UTC without a zone marker. */
+const formatLoadedAt = (value: string, locale: Locale) =>
+  new Date(`${value.replace(' ', 'T')}Z`).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' })
+
+/**
+ * Profile sets shipped with the tool.
+ *
+ * Loading one writes the set and everything it leans on. Loading it again is a reset, not a copy:
+ * the server finds the same rows and puts them back the way they ship. What stands in the way —
+ * something of the user's under a name the preset uses — comes back as conflicts to confirm.
+ */
+function PresetsTab() {
+  const { t, locale } = useT()
+  const [presets, setPresets] = useState<ProfileSetPreset[] | null>(null)
+  const [failed, setFailed] = useState(false)
+  const [busy, setBusy] = useState<string | null>(null)
+
+  useEffect(() => {
+    api.getPresets().then(setPresets).catch(() => { setFailed(true); setPresets([]) })
+  }, [])
+
+  const text = (byLocale: Partial<Record<Locale, string>>) => byLocale[locale] ?? byLocale.en ?? ''
+
+  const run = async (preset: ProfileSetPreset, overwrite: boolean): Promise<void> => {
+    const name = text(preset.name)
+    try {
+      const out = await api.loadPreset(preset.id, overwrite)
+      toast.success(t(out.mode === 'reset' ? 'presets.resetDone' : 'presets.loaded', { name }))
+      await refreshAfterImport()
+      setPresets(await api.getPresets())
+    } catch (e) {
+      const err = e as Error & { code?: string; conflicts?: PresetConflict[] }
+      if (err.code === 'preset-conflict' && err.conflicts) {
+        const names = err.conflicts.map(c => `${c.name} (${t(`presets.kind.${c.kind}`)})`).join(', ')
+        if (confirm(t('presets.conflictConfirm', { name, names }))) return run(preset, true)
+        return
+      }
+      toast.error(err.message)
+    }
+  }
+
+  const load = async (preset: ProfileSetPreset) => {
+    if (preset.loaded && !confirm(t('presets.resetConfirm', { name: text(preset.name) }))) return
+    setBusy(preset.id)
+    try { await run(preset, false) } finally { setBusy(null) }
+  }
+
+  return (
+    <div className="max-w-2xl space-y-4">
+      <p className="text-sm text-slate-500">{t('presets.intro')}</p>
+
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+        {presets === null ? (
+          <div className="flex items-center gap-2 p-4 text-sm text-slate-400">
+            <div className="w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-500 animate-spin" />
+            {t('presets.loading')}
+          </div>
+        ) : failed ? (
+          <p className="p-6 text-sm text-amber-700 text-center">{t('presets.listError')}</p>
+        ) : presets.length === 0 ? (
+          <p className="p-6 text-sm text-slate-400 text-center italic">{t('presets.empty')}</p>
+        ) : (
+          <ul className="divide-y divide-slate-100">
+            {presets.map(preset => {
+              const summary = text(preset.summary)
+              const blocked = preset.problems.length > 0
+              const working = busy === preset.id
+              return (
+                <li key={preset.id} className="flex flex-col sm:flex-row sm:items-start gap-3 px-4 py-3.5">
+                  <Layers size={16} className="hidden sm:block text-slate-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-800">{text(preset.name)}</p>
+                    {summary && <p className="text-xs text-slate-500 mt-0.5">{summary}</p>}
+                    <p className="text-xs text-slate-400 mt-1">
+                      {t('presets.counts', {
+                        classifiers: preset.counts.classifiers,
+                        domains: preset.counts.domains,
+                        algorithms: preset.counts.algorithms,
+                        threshold: preset.profileSet.threshold,
+                      })}
+                    </p>
+                    {preset.loaded && (
+                      <p className="flex items-center gap-1 text-xs text-emerald-700 mt-1">
+                        <CheckCircle2 size={12} />
+                        {t('presets.loadedAt', { date: formatLoadedAt(preset.loaded.loaded_at, locale) })}
+                      </p>
+                    )}
+                    {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
+                      <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version })}</p>
+                    )}
+                    {blocked && (
+                      <div className="mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                        <p className="font-medium">{t('presets.invalid')}</p>
+                        <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                          {preset.problems.map((problem, i) => <li key={i}>{problem}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {preset.docs.length > 0 ? (
+                      <a
+                        href={api.presetDocUrl(preset.id, locale)}
+                        download
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors"
+                      >
+                        <FileDown size={13} /> {t('presets.doc')}
+                      </a>
+                    ) : (
+                      <span
+                        title={t('presets.noDoc')}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 border border-slate-100 rounded-lg cursor-not-allowed"
+                      >
+                        <FileDown size={13} /> {t('presets.doc')}
+                      </span>
+                    )}
+                    <button
+                      onClick={() => load(preset)}
+                      disabled={blocked || busy !== null}
+                      className={cn(
+                        'flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-60',
+                        preset.loaded
+                          ? 'text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100'
+                          : 'text-white bg-blue-600 hover:bg-blue-700'
+                      )}
+                    >
+                      {working ? <Loader2 size={13} className="animate-spin" /> : preset.loaded ? <RotateCcw size={13} /> : <Download size={13} />}
+                      {working ? t('presets.working') : preset.loaded ? t('presets.reset') : t('presets.load')}
+                    </button>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        )}
       </div>
     </div>
   )

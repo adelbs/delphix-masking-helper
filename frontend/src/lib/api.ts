@@ -1,7 +1,7 @@
 import type {
   Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage, Classifier, ClassifierCatalog,
   ClassifierFrameworkName, ClassifierReview, ClassifierTestField, ClassifierTestResult,
-  ProfileSet,
+  ProfileSet, ProfileSetPreset,
   BuiltinReferences, Domain, EngineReferences, Framework, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
 import type { EngineExportResult, EngineImportResult, ImportProgress, SyncExportResult } from '@/lib/engine-sync'
@@ -44,13 +44,15 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 
   const { error, code } = data as { error?: unknown; code?: unknown }
   if (!res.ok && typeof error === 'string') {
-    const err = new Error(error) as Error & { code?: string; issues?: unknown[]; files?: unknown[] }
+    const err = new Error(error) as Error & { code?: string; issues?: unknown[]; files?: unknown[]; conflicts?: unknown[] }
     // Some failures are states the UI can word better in the user's own language.
     if (typeof code === 'string') err.code = code
     // A refused configuration comes with its problems, so the form can point at each one.
-    const { issues, files } = data as { issues?: unknown; files?: unknown }
+    const { issues, files, conflicts } = data as { issues?: unknown; files?: unknown; conflicts?: unknown }
     if (Array.isArray(issues)) err.issues = issues
     if (Array.isArray(files)) err.files = files
+    // A refused preset load names what it would overwrite, for the user to confirm.
+    if (Array.isArray(conflicts)) err.conflicts = conflicts
     throw err
   }
   return data as T
@@ -308,6 +310,20 @@ export const api = {
       mode: 'created' | 'updated'; name: string; engine: string;
       classifiers: Array<{ name: string; mode: 'created' | 'updated' }>;
     } & EngineExportResult>(`/api/delphix/profile-sets/export/${id}`, { method: 'POST' }),
+  // ── Pre-configured profile sets ────────────────────────────────────────────
+
+  getPresets: () =>
+    request<ProfileSetPreset[]>('/api/presets'),
+
+  /** Creates the preset, or resets it when loaded before. A 409 carries `conflicts`; `overwrite` confirms them. */
+  loadPreset: (id: string, overwrite = false) =>
+    request<{ mode: 'loaded' | 'reset'; profileSetId: number; files: string[] }>(
+      `/api/presets/${encodeURIComponent(id)}/load`, { method: 'POST', ...json({ overwrite }) }),
+
+  /** A link rather than a request: the browser downloads the PDF itself. */
+  presetDocUrl: (id: string, locale: string) =>
+    `/api/presets/${encodeURIComponent(id)}/doc?locale=${encodeURIComponent(locale)}`,
+
   /** Sends the classifier and, first, its domain (with the domain's algorithms) and its list files. */
   delphixExportClassifier: (id: number) =>
     request<{
