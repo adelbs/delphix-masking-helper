@@ -1,9 +1,9 @@
-import type { AlgoText } from './algo-metadata'
+import type { FrameworkText } from './framework-metadata'
 
 /** Textos en español de cada algoritmo. Las claves coinciden con METADATA en
- *  algo-metadata.ts; las claves de params/labels deben coincidir exactamente con
+ *  framework-metadata.ts; las claves de params/labels deben coincidir exactamente con
  *  las entradas pt-BR, porque son rutas con puntos dentro del JSON Schema. */
-export const ALGO_TEXT_ES: Record<string, AlgoText> = {
+export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
   CharacterMapping: {
     example: { input: 'Juan Pérez123', key: 'clave-secreta' },
     description: 'Asigna a cada carácter de la entrada un sustituto dentro de los grupos de caracteres configurados. Determinista: la misma entrada+clave siempre produce la misma salida. Ideal para enmascarar texto alfanumérico conservando su longitud.',

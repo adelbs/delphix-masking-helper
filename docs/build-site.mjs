@@ -5,9 +5,12 @@
  *   docs/index.html            landing (English, the site root)
  *   docs/index.pt-BR.html      landing (Portuguese)
  *   docs/index.es.html         landing (Spanish)
- *   docs/algorithms*.html      the algorithm reference, one page per language
+ *   docs/frameworks*.html      the framework reference, one page per language
  *
- * The algorithm content is read from docs/src/guide.<locale>.html — the same source the PDFs
+ * Plus a redirect stub at each page's former algorithms*.html address, so links already
+ * shared keep working after the rename to Delphix's own vocabulary.
+ *
+ * The framework content is read from docs/src/guide.<locale>.html — the same source the PDFs
  * are built from and the same one the app's Documentation tab uses — so the site cannot drift
  * from either. Copy lives in docs/site-content.mjs.
  *
@@ -18,10 +21,10 @@ import { readFileSync, writeFileSync, statSync, copyFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { LOCALES, parseGuide, parseParts, parseOutline } from './guide-parser.mjs'
-import { T, PAGES, LANG_NAMES, LANG_ABBR, REPO, SITE } from './site-content.mjs'
+import { T, PAGES, LEGACY_REDIRECTS, LANG_NAMES, LANG_ABBR, REPO, SITE } from './site-content.mjs'
 
 const DOCS = path.dirname(fileURLToPath(import.meta.url))
-const pdfName = (l) => `delphix-algorithms-guide.${l}.pdf`
+const pdfName = (l) => `delphix-frameworks-guide.${l}.pdf`
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 /** Guide headings are already HTML-escaped in the source; do not double-escape them. */
@@ -66,7 +69,7 @@ function topbar(locale, page, t) {
   return `<header class="topbar"><div class="wrap">
   <a class="brand" href="${PAGES[locale].home}">${LOGO}<span>${esc(t.title)}</span></a>
   <nav>
-    <a href="${PAGES[locale].algos}">${esc(t.algosTitle)}</a>
+    <a href="${PAGES[locale].frameworks}">${esc(t.frameworksTitle)}</a>
     <a href="${REPO}">GitHub</a>
     <span class="langs">${langs}</span>
   </nav>
@@ -164,7 +167,7 @@ ${topbar(locale, 'home', t)}
   <p class="lede">${esc(t.lede)}</p>
   <div class="cta">
     <a class="btn btn-primary" href="#install">${esc(t.ctaInstall)}</a>
-    <a class="btn btn-ghost" href="${PAGES[locale].algos}">${esc(t.ctaAlgos)}</a>
+    <a class="btn btn-ghost" href="${PAGES[locale].frameworks}">${esc(t.ctaFrameworks)}</a>
     <a class="btn btn-ghost" href="${REPO}">${esc(t.ctaRepo)}</a>
   </div>
   <figure class="shot">
@@ -230,7 +233,7 @@ ${topbar(locale, 'home', t)}
     <div class="card">
       <h3>${esc(t.guideTitle)}</h3>
       <p>${esc(t.guideP)}</p>
-      <p style="margin-top:16px"><a class="btn btn-primary" href="${PAGES[locale].algos}">${esc(t.guideCta)}</a></p>
+      <p style="margin-top:16px"><a class="btn btn-primary" href="${PAGES[locale].frameworks}">${esc(t.guideCta)}</a></p>
     </div>
   </div>
 </div></section>
@@ -246,9 +249,9 @@ ${topbar(locale, 'home', t)}
 ${footer(locale, t)}`
 }
 
-// ── algorithms ───────────────────────────────────────────────────────────────
+// ── frameworks ───────────────────────────────────────────────────────────────
 
-function algorithms(locale) {
+function frameworks(locale) {
   const t = T[locale]
   const html = readFileSync(path.join(DOCS, 'src', `guide.${locale}.html`), 'utf8')
   const guide = parseGuide(html)
@@ -282,7 +285,7 @@ function algorithms(locale) {
     const tags = e.tags.map(tg =>
       `<span class="tg tg-${tg.kind.replace('tag-', '')}">${raw(tg.label)}</span>`).join('')
     body += `
-<article class="algo-card" id="${slug(className)}">
+<article class="framework-card" id="${slug(className)}">
   <header>
     <div class="hd"><span class="num">${raw(e.number)}</span><h3>${raw(e.title)}</h3></div>
     <div class="meta"><span class="cls">${esc(e.className)}</span>${tags}</div>
@@ -291,15 +294,15 @@ function algorithms(locale) {
 </article>`
   }
 
-  return `${head(locale, 'algos', `${t.algosTitle} — ${t.title}`, t.algosLede)}
-${topbar(locale, 'algos', t)}
+  return `${head(locale, 'frameworks', `${t.frameworksTitle} — ${t.title}`, t.frameworksLede)}
+${topbar(locale, 'frameworks', t)}
 
-<div class="algos-head"><div class="wrap">
-  <h1>${esc(t.algosTitle)}</h1>
-  <p>${esc(t.algosLede)}</p>
+<div class="frameworks-head"><div class="wrap">
+  <h1>${esc(t.frameworksTitle)}</h1>
+  <p>${esc(t.frameworksLede)}</p>
 </div></div>
 
-<div class="wrap"><div class="algos-layout">
+<div class="wrap"><div class="frameworks-layout">
   <aside class="toc">
     <div class="t">${esc(t.onThisPage)}</div>${toc}
   </aside>
@@ -323,7 +326,26 @@ for (const script of ['install.sh', 'install.ps1']) {
 let n = 0
 for (const locale of LOCALES) {
   writeFileSync(path.join(DOCS, PAGES[locale].home), landing(locale)); n++
-  writeFileSync(path.join(DOCS, PAGES[locale].algos), algorithms(locale)); n++
-  console.log(`  ${locale}: ${PAGES[locale].home}, ${PAGES[locale].algos}`)
+  writeFileSync(path.join(DOCS, PAGES[locale].frameworks), frameworks(locale)); n++
+  console.log(`  ${locale}: ${PAGES[locale].home}, ${PAGES[locale].frameworks}`)
+}
+
+// The reference used to be served at algorithms*.html. A link someone already shared should
+// not 404 because the project adopted Delphix's wording, so each old address becomes a stub
+// that redirects — meta refresh for the browser, canonical for search engines.
+for (const [from, to] of Object.entries(LEGACY_REDIRECTS)) {
+  writeFileSync(path.join(DOCS, from), `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved to ${to}</title>
+<link rel="canonical" href="${SITE}/${to}">
+<meta http-equiv="refresh" content="0; url=${to}">
+</head>
+<body>
+<p>This page is now <a href="${to}">${to}</a>.</p>
+</body>
+</html>
+`); n++
 }
 console.log(`${n} pages written to docs/`)

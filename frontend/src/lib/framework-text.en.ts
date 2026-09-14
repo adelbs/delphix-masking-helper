@@ -1,13 +1,13 @@
-import type { AlgoExample, AlgoText } from './algo-metadata'
-import knowledge from './algo-knowledge.en.json'
+import type { FrameworkExample, FrameworkText } from './framework-metadata'
+import knowledge from './framework-knowledge.en.json'
 
 /** English prose for each algorithm, shared with the server: the AI assistant builds its
  *  system prompt from the same JSON, so the chat and the UI describe algorithms identically.
  *  Param/label keys are dot-paths into the JSON Schema and must match the pt-BR entries. */
-const TEXT: Record<string, AlgoText> = knowledge
+const TEXT: Record<string, FrameworkText> = knowledge
 
 /** Localized examples. Only the fields that differ from the pt-BR base are listed. */
-const EXAMPLES: Record<string, Partial<AlgoExample>> = {
+const EXAMPLES: Record<string, Partial<FrameworkExample>> = {
   CharacterMapping: {"input":"John Smith123","key":"secret-key"},
   NumericMapping: {"key":"numeric-key"},
   PaymentCard: {"key":"card-key"},
@@ -39,7 +39,7 @@ const EXAMPLES: Record<string, Partial<AlgoExample>> = {
   MultiColumnCondition: {"columns":[{"name":"key","type":"STRING","value":"F"},{"name":"string1","type":"STRING","value":"Mary"}]},
 }
 
-export const ALGO_TEXT_EN: Record<string, AlgoText> = Object.fromEntries(
+export const FRAMEWORK_TEXT_EN: Record<string, FrameworkText> = Object.fromEntries(
   Object.entries(TEXT).map(([name, text]) => [
     name,
     EXAMPLES[name] ? { ...text, example: EXAMPLES[name] } : text,

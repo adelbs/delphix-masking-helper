@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Regenerates everything derived from the algorithm guide in docs/src/:
+# Regenerates everything derived from the framework guide in docs/src/:
 # the PDFs, and the GitHub Pages site.
 #
 # Usage:  ./docs/build.sh            # builds all languages
@@ -30,7 +30,7 @@ fi
 
 for lang in "${LANGS[@]}"; do
   src="$SRC_DIR/guide.$lang.html"
-  out="$DOCS_DIR/delphix-algorithms-guide.$lang.pdf"
+  out="$DOCS_DIR/delphix-frameworks-guide.$lang.pdf"
 
   if [[ ! -f "$src" ]]; then
     echo "error: no source for '$lang' (expected $src)" >&2

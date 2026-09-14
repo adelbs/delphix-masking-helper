@@ -1,7 +1,7 @@
 {
   "name": "delphix-masking-helper",
-  "version": "1.0.0",
-  "description": "Understand, test and build Delphix masking algorithms — locally, without a Masking Engine",
+  "version": "1.0.3",
+  "description": "Understand and test the Delphix masking frameworks, and build algorithms from them — locally, without a Masking Engine",
   "main": "server.js",
   "scripts": {
     "start": "npm run build --prefix frontend && node server.js",

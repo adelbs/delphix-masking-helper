@@ -192,15 +192,37 @@ function Stop-App {
     Write-Host 'Stopped.'
 }
 
+# Reads the tag out of the checkout, the same way the server does. No network call: this
+# answers "what do I have", not "is there something newer".
+# try/catch, not just $LASTEXITCODE: the launcher runs under ErrorActionPreference Stop, where
+# a missing git or node is a terminating CommandNotFoundException, not an exit code. Reporting
+# the version must never be what takes the launcher down.
+function Get-AppVersion {
+    $v = $null
+    try {
+        $v = & git -C $AppDir describe --tags --always --dirty 2>$null
+        if ($LASTEXITCODE -ne 0) { $v = $null }
+    } catch { $v = $null }
+    if (-not $v) {
+        try {
+            $pkg = (Join-Path $AppDir 'package.json') -replace '\\', '/'
+            $v = & node -p "require('$pkg').version" 2>$null
+            if ($LASTEXITCODE -ne 0) { $v = $null }
+        } catch { $v = $null }
+    }
+    if ($v) { "$v".Trim() } else { 'unknown' }
+}
+
 switch ($Action) {
     'start'     { Start-App }
     'stop'      { Stop-App }
     'restart'   { Stop-App; Start-App }
     'status'    { if (Get-Running) { Write-Host "Running at $Url" } else { Write-Host 'Not running.' } }
+    'version'   { Write-Host (Get-AppVersion) }
     'logs'      { Get-Content $LogFile -Tail 40 -Wait }
     'update'    { powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AppDir 'install.ps1') -Update }
     'uninstall' { powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $AppDir 'install.ps1') -Uninstall }
-    default     { Write-Host 'usage: dlpx-helper [start|stop|restart|status|logs|update|uninstall]'; exit 2 }
+    default     { Write-Host 'usage: dlpx-helper [start|stop|restart|status|version|logs|update|uninstall]'; exit 2 }
 }
 '@
     # Placeholder rather than interpolation: the body is a literal here-string so nothing inside
@@ -364,7 +386,7 @@ function Invoke-Uninstall {
     Say "  They live in $Dir\db\ and cannot be recovered afterwards."
     Say ""
     Say "  If you want to keep them, stop now and use Export in the app"
-    Say "  (Saved Tests/Algorithms -> Export) to save them to a file first."
+    Say "  (sidebar -> Algorithms -> ... -> Export) to save them to a file first."
     Say ""
     if (-not (Confirm "  Delete $Dir and the dlpx-helper command?")) { Say "  Nothing was removed."; return }
 
@@ -381,7 +403,7 @@ function Show-Finish {
     Say ""
     Say "  Start it with:  dlpx-helper"
     Say ""
-    Say "  One step left: the masking algorithms come from Delphix product files that"
+    Say "  One step left: the masking frameworks come from Delphix product files that"
     Say "  cannot be distributed. Copy the jars from your Masking Devkit (SDK) into:"
     Say ""
     Say "      $Dir\lib\"

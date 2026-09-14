@@ -1,4 +1,4 @@
-// AI assistant: builds the algorithm knowledge base and talks to the configured provider.
+// AI assistant: builds the framework knowledge base and talks to the configured provider.
 //
 // Providers are pluggable; every one exposes the same streaming contract:
 //   stream({ cfg, system, messages, onDelta, signal }) -> Promise<string>   (full text)
@@ -13,13 +13,13 @@ const https = require('node:https');
 const path = require('path');
 const Anthropic = require('@anthropic-ai/sdk');
 
-const KNOWLEDGE_PATH = path.join(__dirname, 'frontend', 'src', 'lib', 'algo-knowledge.en.json');
+const KNOWLEDGE_PATH = path.join(__dirname, 'frontend', 'src', 'lib', 'framework-knowledge.en.json');
 
 // ── Provider defaults ─────────────────────────────────────────────────────────
 
 const PROVIDERS = {
   // numCtx matters: Ollama defaults to a small context (4096 on this hardware) regardless of
-  // what the model supports, and the algorithm catalog alone is ~12k tokens.
+  // what the model supports, and the framework catalog alone is ~12k tokens.
   //
   // keepAlive matters for the same reason from the other end: Ollama unloads an idle model
   // after 5 minutes and the cached prompt prefix goes with it. On a CPU-only machine that
@@ -28,9 +28,9 @@ const PROVIDERS = {
   // model through a working session; set ai.ollama.keepAlive to '5m' to get Ollama's own
   // default back, or to '0' to unload immediately after each answer.
   //
-  // temperature 0 because picking an algorithm is not a creative task: there is one right
+  // temperature 0 because picking a framework is not a creative task: there is one right
   // answer and Ollama's own default of 0.8 samples away from it. Measured on llama3.2:3b with
-  // these four cases, dropping to 0 moved two answers from the wrong algorithm to the right one.
+  // these four cases, dropping to 0 moved two answers from the wrong framework to the right one.
   ollama:    { label: 'Ollama (local)',      model: 'llama3.1',      baseUrl: 'http://localhost:11434', needsKey: false, numCtx: 16384, keepAlive: '1h', temperature: 0 },
   anthropic: { label: 'Claude / Anthropic',  model: 'claude-opus-5', baseUrl: '',                       needsKey: true  },
   gemini:    { label: 'Google Gemini',       model: 'gemini-2.5-pro', baseUrl: 'https://generativelanguage.googleapis.com', needsKey: true },
@@ -68,7 +68,7 @@ function providerSettings(config, provider) {
   };
 }
 
-// ── Algorithm catalog ─────────────────────────────────────────────────────────
+// ── Framework catalog ─────────────────────────────────────────────────────────
 
 /** Flattens a JSON Schema into dot-path lines matching the knowledge `params` keys. */
 function flattenSchema(schema, prefix = '', depth = 0, out = []) {
@@ -94,22 +94,22 @@ function flattenSchema(schema, prefix = '', depth = 0, out = []) {
 
 let catalogPromise = null;
 
-/** Builds (once) a compact text catalog of every algorithm: prose + real schema. */
+/** Builds (once) a compact text catalog of every framework: prose + real schema. */
 function buildCatalog(runJava) {
   if (catalogPromise) return catalogPromise;
   catalogPromise = (async () => {
     const knowledge = JSON.parse(fs.readFileSync(KNOWLEDGE_PATH, 'utf8'));
     const list = await runJava({ command: 'list' });
-    const entries = await Promise.all(list.map(async (algo) => {
-      const simple = algo.className.split('.').pop();
+    const entries = await Promise.all(list.map(async (fw) => {
+      const simple = fw.className.split('.').pop();
       const know = knowledge[simple] || {};
       let schema = null;
       try {
-        const res = await runJava({ command: 'schema', algorithm: algo.className });
+        const res = await runJava({ command: 'schema', framework: fw.className });
         schema = res.schema;
-      } catch { /* an algorithm without a readable schema still gets its prose */ }
+      } catch { /* a framework without a readable schema still gets its prose */ }
 
-      const lines = [`## ${algo.displayName}`, `className: ${algo.className}`];
+      const lines = [`## ${fw.displayName}`, `className: ${fw.className}`];
       if (know.description) lines.push(`What it does: ${know.description}`);
       if (know.inputFormat) lines.push(`Input: ${know.inputFormat}`);
       const params = flattenSchema(schema);
@@ -136,7 +136,7 @@ const SAVE_TAG_CLOSE = '</save-algorithm>';
  * `canSave` decides whether the assistant is taught to emit a save block at all.
  *
  * It is off for a local model, and that is a measured decision rather than a cautious one. Across
- * twelve answers from llama3.2:3b and llama3.1:8b, neither ever answered "no algorithm does this"
+ * twelve answers from llama3.2:3b and llama3.1:8b, neither ever answered "no framework does this"
  * — not even with a rule in this prompt saying so in as many words, and not on the two questions
  * where that was the only correct answer. What they produced instead was a configuration that
  * runs and does not solve the problem, which the runner accepts and the user discovers much
@@ -147,31 +147,40 @@ const SAVE_TAG_CLOSE = '</save-algorithm>';
 function buildSystemPrompt(catalog, { canSave = true } = {}) {
   const purpose = canSave
     ? `You help with two things:
-1. Explaining how an algorithm works, what its parameters do, and which one fits a situation.
-2. Building a ready-to-use algorithm configuration when the user describes a masking problem.
+1. Explaining how a masking framework works, what its parameters do, and which one fits a
+   situation.
+2. Building a ready-to-use algorithm — a framework plus a configuration — when the user describes
+   a masking problem.
 
-The user usually does NOT know which algorithm (framework) to use — that is your job. Read the
-situation they describe, pick the right algorithm from the catalog below, and configure it.`
+The user usually does NOT know which framework to use — that is your job. Read the situation they
+describe, pick the right framework from the catalog below, and configure it into an algorithm.`
     : `Your job is to explain and to recommend:
-1. Explaining how an algorithm works, what its parameters do, and which one fits a situation.
-2. Naming the algorithm that fits a masking problem, and spelling out the parameter values it
+1. Explaining how a masking framework works, what its parameters do, and which one fits a
+   situation.
+2. Naming the framework that fits a masking problem, and spelling out the parameter values it
    needs, so the user can fill the form themselves.
 
-The user usually does NOT know which algorithm (framework) to use — that is your job. Read the
-situation they describe and name the right one from the catalog below.
+The user usually does NOT know which framework to use — that is your job. Read the situation they
+describe and name the right one from the catalog below.
 
 You do NOT create or save algorithms in this configuration. Never emit a save block or claim you
 have saved anything. Give the parameters as a short list of name and value, and say which screen
-to open: the user picks the algorithm in the sidebar and fills the form there.`;
+to open: the user picks the framework in the sidebar and fills the form there.`;
 
   return `You are the built-in assistant of the Delphix Masking Helper, a local tool for
-understanding, testing and building masking algorithms from the Delphix masking plugin.
+understanding and testing the masking frameworks of the Delphix masking plugin, and for building
+configured algorithms out of them.
+
+Delphix terminology, which you must use: a **framework** is a masking technique the plugin
+provides (Secure Lookup, Character Mapping, Date Shift…). Configuring one produces an
+**algorithm** — a named, ready-to-use instance. The catalog below lists frameworks; what you
+build and save is an algorithm.
 
 ${purpose}
 
 # Rules
 
-- Only ever use algorithms and parameters that appear in the catalog. Never invent a parameter
+- Only ever use frameworks and parameters that appear in the catalog. Never invent a parameter
   name, an enum value, or a className.
 - Parameters marked "required" must be present in the configuration.
 - Keep answers concise and practical. Answer in the same language the user writes in.
@@ -179,20 +188,21 @@ ${purpose}
 
 ${canSave ? `# Creating an algorithm
 
-When the user asks you to create/build/configure an algorithm, end your reply with a block:
+When the user asks you to create/build/configure an algorithm, end your reply with a block naming
+the framework and its configuration:
 
 ${SAVE_TAG_OPEN}
 {"name": "short-descriptive-name", "className": "algorithm.plugin....", "config": { ... }, "testInput": "a representative sample value"}
 ${SAVE_TAG_CLOSE}
 
 The tool validates that configuration by actually running the algorithm on "testInput" and, if it
-works, saves it under "Saved Tests/Algorithms". "testInput" is mandatory and must be a realistic
+works, saves it under the sidebar's **Algorithms** section. "testInput" is mandatory and must be a realistic
 value for the column being masked — without one there is nothing to validate and the block is
 rejected. Emit at most one block per reply. Before the block, explain in one short paragraph which
-algorithm you chose and why. Do not show the block contents again as a code fence — the tool
+framework you chose and why. Do not show the block contents again as a code fence — the tool
 renders it for the user.` : `# Recommending a configuration
 
-Answer with the algorithm's name, then its parameters as a short list of name and value, then one
+Answer with the framework's name, then its parameters as a short list of name and value, then one
 sentence on why. Mention a realistic sample value the user can paste into the tester to check the
 result. Do not wrap the answer in a block of any kind.`}
 
@@ -222,7 +232,7 @@ Problem: "mask a phone number but keep the first 2 digits (the area code)."
 Choice: Character Mapping with preserveRanges counting from the front. direction FORWARD counts
 from the start of the value, REVERSE from its end; start is 1-based:
   {"characterGroups": ["0123456789"], "preserveRanges": [{"start": 1, "length": 2, "direction": "FORWARD"}]}
-Not the Phone algorithm: it generates a whole new number and has no parameter that preserves any
+Not the Phone framework: it generates a whole new number and has no parameter that preserves any
 part of the original. And preserveLeadingZeros does not do this either — it only protects a run
 of zeros at the front, not an arbitrary prefix.
 
@@ -242,22 +252,22 @@ of zeros at the front, not an arbitrary prefix.
 - Date Shift moves a date by a range of some unit. No range guarantees the year survives: a shift
   of days or months can cross a year boundary, and unit YEARS changes the year by definition.
   Nothing in this catalog masks the month and day while guaranteeing the year is untouched.
-- Every algorithm masks the one value it is given. Only the Multi-Column ones see other columns,
+- Every framework masks the one value it is given. Only the Multi-Column ones see other columns,
   and even they receive named slots, not arbitrary column values. An algorithm cannot build its
   output by combining other columns of the row.
 
 # When nothing fits
 
-Not every request has an answer in this catalog. When none of the algorithms does what the user
+Not every request has an answer in this catalog. When none of the frameworks does what the user
 asked, say so plainly, name the closest one, and state exactly what it does not do.${canSave
   ? ` Do NOT emit a\n${SAVE_TAG_OPEN} block in that case, and`
-  : ' Do'} do not stretch an algorithm to look like an answer.
+  : ' Do'} do not stretch a framework to look like an answer.
 
-The tool validates a configuration by running it — so a wrong algorithm that happens to execute
+The tool validates a configuration by running it — so a wrong framework that happens to execute
 is saved as if it were right. That failure is worse than an honest "the plugin does not do this",
 because the user finds out much later. Saying no is a good answer here.
 
-# Algorithm catalog
+# Framework catalog
 
 ${catalog}`;
 }
@@ -481,7 +491,7 @@ function toStandardSchema(node) {
 }
 
 /**
- * Second attempt at a configuration the runner rejected, with the algorithm's real schema as a
+ * Second attempt at a configuration the runner rejected, with the framework's real schema as a
  * grammar rather than as advice. Ollama's `format` constrains generation to the schema, so the
  * result cannot invent a key, misspell one, or use an enum value that does not exist - the
  * failures that dominated a local model's output. It cannot make a value *right*: a group of
@@ -491,7 +501,7 @@ function toStandardSchema(node) {
  * Local provider only. The hosted models emit valid JSON on their own, and each has its own
  * structured-output mechanism that has nothing to do with this one.
  */
-async function repairConfig({ cfg, schema, algorithm, request, badConfig, error, signal }) {
+async function repairConfig({ cfg, schema, framework, request, badConfig, error, signal }) {
   if (cfg.id !== 'ollama') return null;
   const res = await postUntimed(`${cfg.baseUrl}/api/chat`, {
     model: cfg.model,
@@ -501,7 +511,7 @@ async function repairConfig({ cfg, schema, algorithm, request, badConfig, error,
     options: { num_ctx: cfg.numCtx, temperature: 0 },
     messages: [
       { role: 'system', content:
-        `You configure the Delphix masking algorithm "${algorithm}". Reply with the `
+        `You configure the Delphix masking framework "${framework}". Reply with the `
         + 'configuration JSON and nothing else.\n\n'
         + 'preserveRanges marks parts of the value to leave unmasked: "start" is 1-based, '
         + 'direction FORWARD counts from the front of the value and REVERSE from its end.\n'
@@ -509,7 +519,7 @@ async function repairConfig({ cfg, schema, algorithm, request, badConfig, error,
         + '"0123456789" for digits — never a description of the field.' },
       { role: 'user', content:
         `What the user asked for: ${request}\n\n`
-        + `This configuration was rejected by the algorithm:\n${JSON.stringify(badConfig)}\n\n`
+        + `This configuration was rejected by the framework:\n${JSON.stringify(badConfig)}\n\n`
         + `The error was: ${error}\n\nProduce a corrected configuration.` },
     ],
   }, {}, signal);

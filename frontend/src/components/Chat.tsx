@@ -1,23 +1,24 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { Send, Square, Sparkles, BookmarkCheck, AlertTriangle, Settings2, Trash2, Loader2 } from 'lucide-react'
 import { api } from '@/lib/api'
+import { refreshAlgorithms } from '@/lib/algorithms'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
-import type { AiStatus, ChatMessage, SavedAlgorithm } from '@/types'
+import type { AiStatus, ChatMessage, AssistantAlgorithm } from '@/types'
 
 interface Props {
-  onShowSaved: () => void
+  onOpenAlgorithm: (id: number) => void
   onOpenSettings: () => void
 }
 
 /** One turn in the transcript, plus whatever the assistant produced alongside the text. */
 interface Turn extends ChatMessage {
-  saved?: SavedAlgorithm
+  saved?: AssistantAlgorithm
   notice?: string
   failed?: boolean
 }
 
-export function Chat({ onShowSaved, onOpenSettings }: Props) {
+export function Chat({ onOpenAlgorithm, onOpenSettings }: Props) {
   const { t } = useT()
   const [turns, setTurns] = useState<Turn[]>([])
   const [draft, setDraft] = useState('')
@@ -64,7 +65,12 @@ export function Chat({ onShowSaved, onOpenSettings }: Props) {
       await api.streamChat(history, {
         onDelta: (delta) => patchLast(prev => ({ content: prev.content + delta })),
         onReplace: (final) => patchLast({ content: final }),
-        onSaved: (saved) => patchLast({ saved }),
+        onSaved: (saved) => {
+          patchLast({ saved })
+          // The assistant writes straight to the database, so the sidebar only learns about
+          // the new algorithm if someone tells it.
+          void refreshAlgorithms()
+        },
         onSaveError: (notice) => patchLast({ notice }),
         onError: (notice) => patchLast({ notice, failed: true }),
       }, controller.signal)
@@ -140,7 +146,7 @@ export function Chat({ onShowSaved, onOpenSettings }: Props) {
             </div>
           ) : (
             turns.map((turn, i) => (
-              <Bubble key={i} turn={turn} streaming={busy && i === turns.length - 1} onShowSaved={onShowSaved} />
+              <Bubble key={i} turn={turn} streaming={busy && i === turns.length - 1} onOpenAlgorithm={onOpenAlgorithm} />
             ))
           )}
           <div ref={bottomRef} />
@@ -185,7 +191,7 @@ export function Chat({ onShowSaved, onOpenSettings }: Props) {
   )
 }
 
-function Bubble({ turn, streaming, onShowSaved }: { turn: Turn; streaming: boolean; onShowSaved: () => void }) {
+function Bubble({ turn, streaming, onOpenAlgorithm }: { turn: Turn; streaming: boolean; onOpenAlgorithm: (id: number) => void }) {
   const { t } = useT()
 
   if (turn.role === 'user') {
@@ -228,7 +234,7 @@ function Bubble({ turn, streaming, onShowSaved }: { turn: Turn; streaming: boole
                 <span className="font-semibold text-green-700">{turn.saved.output}</span>
               </p>
             )}
-            <button onClick={onShowSaved} className="mt-2 text-xs font-medium text-green-800 hover:underline">
+            <button onClick={() => onOpenAlgorithm(turn.saved!.id)} className="mt-2 text-xs font-medium text-green-800 hover:underline">
               {t('chat.savedOpen')}
             </button>
           </div>

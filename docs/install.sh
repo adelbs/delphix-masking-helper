@@ -181,15 +181,26 @@ stop() {
   echo "Stopped."
 }
 
+# Reads the tag out of the checkout, the same way the server does. No network call: this
+# answers "what do I have", not "is there something newer".
+version() {
+  v=$(git -C "$APP_DIR" describe --tags --always --dirty 2>/dev/null || true)
+  if [ -z "$v" ]; then
+    v=$(node -p "require('$APP_DIR/package.json').version" 2>/dev/null || true)
+  fi
+  [ -n "$v" ] && echo "$v" || echo "unknown"
+}
+
 case "${1:-start}" in
   start|"")  start ;;
   stop)      stop ;;
   restart)   stop; start ;;
   status)    running && echo "Running at $URL" || echo "Not running." ;;
+  version|--version|-v) version ;;
   logs)      tail -f "$LOG" ;;
   update)    bash "$APP_DIR/install.sh" --update ;;
   uninstall) bash "$APP_DIR/install.sh" --uninstall ;;
-  *) echo "usage: dlpx-helper [start|stop|restart|status|logs|update|uninstall]" >&2; exit 2 ;;
+  *) echo "usage: dlpx-helper [start|stop|restart|status|version|logs|update|uninstall]" >&2; exit 2 ;;
 esac
 LAUNCHER_EOF
   } > "$LAUNCHER"
@@ -307,7 +318,7 @@ do_uninstall() {
   say "  ${dim}They live in $dir/db/ and cannot be recovered afterwards.${reset}"
   say ""
   say "  If you want to keep them, stop now and use ${bold}Export${reset} in the app"
-  say "  (Saved Tests/Algorithms → Export) to save them to a file first."
+  say "  (sidebar → Algorithms → ⋯ → Export) to save them to a file first."
   say ""
   confirm "  Delete $dir and the dlpx-helper command?" || { say "  Nothing was removed."; return; }
 
@@ -334,7 +345,7 @@ finish() {
   say ""
   say "  Start it with:  ${bold}dlpx-helper${reset}"
   say ""
-  say "  ${yellow}One step left:${reset} the masking algorithms come from Delphix product files that"
+  say "  ${yellow}One step left:${reset} the masking frameworks come from Delphix product files that"
   say "  cannot be distributed. Copy the jars from your Masking Devkit (SDK) into:"
   say ""
   say "      ${bold}$dir/lib/${reset}"

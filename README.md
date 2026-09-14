@@ -2,13 +2,17 @@
 
 **English** · [Português (BR)](README.pt-BR.md) · [Español](README.es.md)
 
-🌐 **[Website](https://adelbs.github.io/delphix-masking-helper/)** — what it does, and the full algorithm reference, in three languages.
+🌐 **[Website](https://adelbs.github.io/delphix-masking-helper/)** — what it does, and the full framework reference, in three languages.
 
 A local companion for the Delphix masking plugin, covering an algorithm's whole life. It helps you
-**understand** how each masking framework behaves, **test** an algorithm against real values,
-**build** a configured algorithm from a problem described in plain language, and **sync** with a
-Masking Engine — pulling its algorithms down to work on and pushing yours back up. All without
-creating a Rule Set or running a masking job.
+**understand** how each of the 31 masking frameworks behaves, **test** an algorithm against real
+values, **build** a configured algorithm from a problem described in plain language, and **sync**
+with a Masking Engine — pulling its algorithms down to work on and pushing yours back up. All
+without creating a Rule Set or running a masking job.
+
+> **Wording follows Delphix.** A **framework** is a masking technique the plugin provides —
+> Secure Lookup, Character Mapping, Date Shift. Configuring one produces an **algorithm**: named,
+> saved and ready to use. The sidebar lists frameworks; what you save is an algorithm.
 
 > ### Independent project, and it needs an active Delphix licence
 >
@@ -16,7 +20,7 @@ creating a Rule Set or running a masking job.
 > endorsed, reviewed or supported by Delphix or its owners, and nothing here is an official
 > product. Delphix and the product names used here are trademarks of their respective owners.
 >
-> **An active Delphix licence is required.** The masking algorithms live in Delphix product jars,
+> **An active Delphix licence is required.** The masking frameworks live in Delphix product jars,
 > which are licensed and are **not** distributed here — this project neither ships nor replaces
 > them. You must already be entitled to them and able to obtain the Masking Devkit (SDK) from
 > Delphix, normally through an active licence and your account team. Drop fifteen jars into
@@ -35,25 +39,25 @@ is real output from the plugin, and the engine is a real one.</sub>
 
 The Node server exposes a REST API that delegates every operation to `AlgorithmRunner.jar`, which loads and runs the algorithms through reflection. The React frontend is served by Vite in development (with hot-reload) and by Express in production.
 
-## Algorithm guide
+## Framework guide
 
-📖 **[Browse the algorithm reference online](https://adelbs.github.io/delphix-masking-helper/algorithms.html)** — the same content as the PDFs, in three languages.
+📖 **[Browse the framework reference online](https://adelbs.github.io/delphix-masking-helper/frameworks.html)** — the same content as the PDFs, in three languages.
 
-Every algorithm opens with two tabs: **Test** and **Documentation**. The Documentation tab shows
-that algorithm's section of the reference guide, in the interface language — the same content as
+Every framework opens with two tabs: **Test** and **Documentation**. The Documentation tab shows
+that framework's section of the reference guide, in the interface language — the same content as
 the PDFs below, read from the same source, so the two never disagree.
 
-The [`docs/`](docs/) directory holds a reference guide for the plugin's 31 algorithms, in three languages:
+The [`docs/`](docs/) directory holds a reference guide for the plugin's 31 frameworks, in three languages:
 
 | Language | File |
 |---|---|
-| English | [`docs/delphix-algorithms-guide.en.pdf`](docs/delphix-algorithms-guide.en.pdf) |
-| Português (BR) | [`docs/delphix-algorithms-guide.pt-BR.pdf`](docs/delphix-algorithms-guide.pt-BR.pdf) |
-| Español | [`docs/delphix-algorithms-guide.es.pdf`](docs/delphix-algorithms-guide.es.pdf) |
+| English | [`docs/delphix-frameworks-guide.en.pdf`](docs/delphix-frameworks-guide.en.pdf) |
+| Português (BR) | [`docs/delphix-frameworks-guide.pt-BR.pdf`](docs/delphix-frameworks-guide.pt-BR.pdf) |
+| Español | [`docs/delphix-frameworks-guide.es.pdf`](docs/delphix-frameworks-guide.es.pdf) |
 
-For each algorithm the guide covers what it does, input → output examples, and an explanation of every configuration parameter. Algorithms are grouped by the same categories used in the UI sidebar. There are also three appendices: cross-cutting concepts (determinism, the role of the key, algorithms that may not mask anything), the catalog of the 62 `dlpx-core:` instances embedded in the plugin, and the limitations of the standalone runner.
+For each framework the guide covers what it does, input → output examples, and an explanation of every configuration parameter. Frameworks are grouped by the same categories used in the UI sidebar. There are also three appendices: cross-cutting concepts (determinism, the role of the key, frameworks that may not mask anything), the catalog of the 59 `dlpx-core:` algorithms embedded in the plugin, and the limitations of the standalone runner.
 
-Every input → output pair was generated by actually running the algorithms in `AlgorithmRunner` — none of them are illustrative.
+Every input → output pair was generated by actually running the frameworks in `AlgorithmRunner` — none of them are illustrative.
 
 ### Regenerating the PDFs
 
@@ -68,7 +72,7 @@ The build uses headless Chrome and fonts installed on macOS (Iowan Old Style, Se
 
 ## Delphix libraries
 
-The tester runs the real algorithms out of the Delphix masking plugin, so it needs a handful of
+The tester runs the real frameworks out of the Delphix masking plugin, so it needs a handful of
 jars from the Delphix product. **They are not distributed with this repository** — they are
 licensed Delphix files. You supply them yourself, once.
 
@@ -137,9 +141,27 @@ command on your PATH.
 | `dlpx-helper` | start it and open the browser |
 | `dlpx-helper stop` | stop it |
 | `dlpx-helper status` | is it running? |
+| `dlpx-helper version` | which version is installed |
 | `dlpx-helper logs` | follow the log |
 | `dlpx-helper update` | move to the newest release and rebuild |
 | `dlpx-helper uninstall` | remove it (asks first) |
+
+### Which version am I on?
+
+Three places say so, and none of them touches the network:
+
+- the **bottom of the sidebar**, under the language flags;
+- **Settings → General → About**, with the commit and the update command;
+- `dlpx-helper version` in a terminal, plus the line the server prints on startup.
+
+The number comes from the git tag of the checkout, so it is the release you actually have —
+`v1.0.3` on a release, `v1.0.3-5-gabc1234` when the code is ahead of the last tag, and
+`-dirty` appended when the working tree has edits. Without git it falls back to the version
+declared in `package.json`, which may be behind.
+
+**There is no update check.** The tool tells you what you have, never what exists elsewhere;
+`dlpx-helper update` is how you find out, by running it. That keeps the same promise as the
+local-model default — nothing leaves your machine unless you ask.
 
 **Installs are pinned to a release, not to the tip of `main`.** The script asks the remote for the
 newest `vX.Y.Z` tag and checks that out, so a commit pushed after the last release never reaches
@@ -149,7 +171,7 @@ repository has no release tags at all, the script falls back to the default bran
 
 Running the script again on a machine that already has it offers **update** or **remove**.
 Updating never touches `db/`, where your saved algorithms and settings live. Uninstalling deletes
-everything, so it warns first — export from **Saved Tests/Algorithms → Export** if you want to
+everything, so it warns first — export from the sidebar (**Algorithms → ⋯ → Export**) if you want to
 keep anything.
 
 ### Or do it by hand
@@ -194,7 +216,7 @@ npm run build
 
 ## AI assistant
 
-The home screen has a chat that helps you two ways: explaining how an algorithm works and which
+The home screen has a chat that helps you two ways: explaining how a framework works and which
 one fits a situation, and **building a ready-to-use algorithm** from a problem you describe in
 plain language. You do not need to know which framework to use — that is what it works out.
 
@@ -205,14 +227,14 @@ For example:
 > original value.
 
 The assistant picks Character Mapping with `preserveLeadingZeros`, configures it, and saves it
-under **Saved Tests/Algorithms**, ready to run.
+under **Algorithms** in the sidebar, ready to run.
 
 Before saving, the server **actually runs the algorithm** with the configuration the model
 produced. If the runner rejects it — an invented parameter, an invalid combination — nothing is
-saved and the error is shown in the chat. A hallucinated configuration never becomes a saved test.
+saved and the error is shown in the chat. A hallucinated configuration never becomes a saved algorithm.
 
-The assistant knows every one of the 31 algorithms: its system prompt is built from the same
-descriptions the UI shows, plus the real JSON Schema of each algorithm read from the plugin.
+The assistant knows every one of the 31 frameworks: its system prompt is built from the same
+descriptions the UI shows, plus the real JSON Schema of each framework read from the plugin.
 
 ### Configuring it
 
@@ -234,30 +256,74 @@ ollama serve
 ollama pull llama3.1
 ```
 
-API keys are stored in `db/tests.db` and are never sent back to the browser: once saved, the
+API keys are stored in `db/algorithms.db` and are never sent back to the browser: once saved, the
 field shows a mask and you replace the key by typing a new one.
 
 "GitHub Models (Copilot)" is the OpenAI-compatible endpoint that comes with a GitHub account.
 GitHub Copilot itself has no public chat API for third-party applications.
 
-> **On local models.** The algorithm catalog takes about 12k tokens of context. That is
+> **On local models.** The framework catalog takes about 12k tokens of context. That is
 > comfortable for Claude and Gemini, but tight for small local models — one with an 8k window
-> will truncate the catalog and pick the wrong algorithm. Prefer a model with a large context.
+> will truncate the catalog and pick the wrong framework. Prefer a model with a large context.
 
 ## Syncing with a Masking Engine
 
 Point the tool at a Delphix engine under **Settings → Delphix** — address, user and password —
 and press **Test connection**; it answers before anything is saved.
 
-**Importing.** *Saved Tests/Algorithms → Import from Delphix* lists what the engine has. Anything
+### Domains
+
+The sidebar's **Domains** section holds sensitive-data domains — on the engine a domain is a name
+and two algorithm references, and that is exactly what this stores. Create one from *Domains →
+⋯ → New domain*, or pull the engine's down with *Import from Delphix*; each one has a **Send to
+Delphix** button that creates it there, or updates it when the name already exists.
+
+Sending a domain **sends the algorithms it points at first** — the engine refuses a domain whose
+algorithm it does not know. Algorithms the engine already owns, such as the `dlpx-core:` built-ins,
+are left alone: they are read-only there and already correct. If an algorithm cannot be sent, the
+domain is not sent either, and the message names the algorithm.
+
+Domains are grouped by the framework behind the algorithm they point at, using the same
+categories as everything else. Two lookups stand between a domain and its category, and either
+can miss — the algorithm may be a built-in this machine does not have, and not every algorithm on
+an engine is framework-based. Those land under **Other**, which on a stock engine is around a
+fifth of them.
+
+### Classifiers
+
+Classifiers are what profiling uses to decide which domain a column or field belongs to. Each one
+is built on one of four frameworks — **PATH** (the field's name and its table or file), **TYPE**
+(its type and length), **REGEX** and **LIST** (a sample of its values) — and votes for one domain.
+The sidebar's **Classifiers** section lists them by domain; create one from *Classifiers → ⋯ → New
+classifier*, or bring the engine's down with *Import from Delphix*.
+
+The editor explains every parameter of the chosen framework, and its **Test** panel describes a
+field — name, table, SQL type, length, sample values — and shows what profiling would conclude:
+this classifier's own confidence (which path, type, pattern or list decided, value by value), and
+the domain's, weighed together with the other classifiers saved for it, against the profile set's
+threshold. It tests what is on screen, so a change can be tried before it is saved. Nothing runs
+on the engine: the tool evaluates classifiers locally, reading the regular expressions as Java
+does. The few Java constructs it cannot reproduce exactly are reported instead of approximated.
+
+**Send to Delphix** creates the classifier on the engine or updates it; renaming is fine, since
+the engine renames classifiers in place. Whatever a classifier relies on travels with it: the
+engine refuses a classifier whose domain it does not have, so the domain goes first when this
+machine holds it — together with its algorithms — and a LIST classifier's value files are uploaded
+when the engine does not have them. Importing works the same way in reverse: a classifier comes
+down with its domain, that domain's algorithms, and its value files.
+
+**Importing.** *Algorithms → ⋯ → Import from Delphix*, in the sidebar, lists what the engine has. Anything
 built on a framework this tool cannot run locally is shown but not selectable, so you never end up
-with a saved algorithm that cannot be tested.
+with a saved algorithm that cannot be tested. What an algorithm references comes with it — the
+algorithms its configuration names and its lookup file — and importing a domain brings its
+algorithms. The engine's own `dlpx-core:` built-ins are the exception: this tool already has them.
 
 **Lookup files.** A file uploaded to the engine stays in the engine's file store: an algorithm
-carries only a reference to it (`delphix-file://upload/…/NAMES.txt`), and importing brings the
-reference down, never the contents. The import dialog says which files an algorithm reads that this
-machine does not have, and the algorithm imports either way — it just cannot run until a copy exists.
-Add one under **Files**, keeping the engine's file name, and the imported algorithm runs unchanged.
+carries only a reference to it (`delphix-file://upload/…/NAMES.txt`). Importing downloads the file
+into **Files** wherever the engine allows it — a Secure Lookup's lookup file and a LIST classifier's
+value files. For other frameworks the engine offers no download: the import dialog names those
+files, and the algorithm imports either way — add a copy under **Files**, keeping the engine's file
+name, and it runs unchanged.
 
 Any list with the right shape is enough to see the algorithm work. To reproduce what the engine
 produces, the file has to match it line for line: an algorithm that picks a substitute by hashing
@@ -265,15 +331,18 @@ the input selects by position, so a different list is a different result.
 
 **Exporting.** Each saved algorithm has a **Send to Delphix** button. One that came from the engine
 is updated there; one you built here is created. The tool remembers where each algorithm came
-from, so exporting twice never leaves a duplicate behind.
+from, so exporting twice never leaves a duplicate behind. The algorithms it references go first,
+and any file the engine could not open — a path on this machine, or an engine file the engine no
+longer holds for a new algorithm — is uploaded from **Files**, with the configuration sent pointing
+at it. A file missing from this machine stops the send and is named.
 
 **Round trip.** Testing an imported algorithm with a local file does not change what goes back
 to the engine: the reference is stored as the engine wrote it, and the local copy is only resolved
 when the algorithm runs here. Adjust any parameter, send it back, and the engine keeps reading its
 own file. The one way to break that is to pick another file in the configuration form — that
 replaces the reference. The form shows an engine-held file as *name (on the engine)* so it is never
-mistaken for an empty field, and exporting a configuration that points at a path on this machine
-warns that the engine has no such path.
+mistaken for an empty field; a path on this machine picked there is uploaded when the algorithm is
+sent.
 
 **Naming.** On the engine an algorithm's name is its identity and cannot be changed, so the tool
 follows the same rule: names are not editable. To work under a different name, use **Duplicate**
@@ -296,8 +365,8 @@ browser. The choice is stored server-side, so it applies on every browser that o
 
 `AlgorithmRunner.java` is a short-lived Java process (forked per request) that:
 
-1. Reads JSON from stdin with `command`, `algorithm`, `config`, `input`, `key`
-2. Instantiates the algorithm class through reflection
+1. Reads JSON from stdin with `command`, `framework`, `config`, `input`, `key`
+2. Instantiates the framework class through reflection
 3. Applies the configuration via `ComponentConfigurator.applyConfiguration`
 4. Builds a minimal `ComponentService` with a `CryptoService` derived from the key
 5. Calls `setup()` recursively, then `validate()`, then `mask(input)`

@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { PackageOpen, RefreshCw, ExternalLink, Copy, Check } from 'lucide-react'
 import { useT } from '@/lib/i18n'
+import { useVersion } from '@/lib/version'
 import { cn } from '@/lib/utils'
 
 const SDK_DOC = 'https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114'
 
 /**
  * Shown instead of the app when the Delphix libraries are missing. Without them there are no
- * algorithms to list and nothing to run, so an empty sidebar was all the user used to get — no
+ * frameworks to list and nothing to run, so an empty sidebar was all the user used to get — no
  * message, no idea what was wrong. This says what is missing, where it goes and how to get it.
  */
 export function SetupNeeded({ missing, libDir, onRetry }: {
@@ -16,6 +17,7 @@ export function SetupNeeded({ missing, libDir, onRetry }: {
   onRetry: () => Promise<void> | void
 }) {
   const { t, tx } = useT()
+  const version = useVersion()
   const [checking, setChecking] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -102,6 +104,11 @@ export function SetupNeeded({ missing, libDir, onRetry }: {
         </button>
 
         <p className="text-xs text-slate-400 mt-6">{t('setup.independence')}</p>
+        {/* Nothing works on this screen, so it is where an installation problem gets reported
+            from. The version travels with the report only if it is visible here. */}
+        {version?.display && (
+          <p className="text-xs text-slate-400 mt-2 font-mono">{version.display}</p>
+        )}
       </div>
     </div>
   )

@@ -4,11 +4,11 @@ import { Chat } from './Chat'
 
 interface Props {
   onOpenSidebar: () => void
-  onShowSaved: () => void
+  onOpenAlgorithm: (id: number) => void
   onOpenSettings: () => void
 }
 
-export function WelcomeScreen({ onOpenSidebar, onShowSaved, onOpenSettings }: Props) {
+export function WelcomeScreen({ onOpenSidebar, onOpenAlgorithm, onOpenSettings }: Props) {
   const { t } = useT()
   return (
     <div className="flex flex-col h-full min-h-0">
@@ -26,7 +26,7 @@ export function WelcomeScreen({ onOpenSidebar, onShowSaved, onOpenSettings }: Pr
       </div>
 
       <div className="flex-1 min-h-0 p-5">
-        <Chat onShowSaved={onShowSaved} onOpenSettings={onOpenSettings} />
+        <Chat onOpenAlgorithm={onOpenAlgorithm} onOpenSettings={onOpenSettings} />
       </div>
     </div>
   )

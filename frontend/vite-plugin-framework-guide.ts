@@ -5,8 +5,8 @@ import { parseGuide, LOCALES } from '../docs/guide-parser.mjs'
 import type { GuideEntry } from '../docs/guide-parser.mjs'
 
 /**
- * Serves the algorithm guide (docs/src/guide.<locale>.html — the same source the PDFs and the
- * GitHub Pages site are built from) to the app as `virtual:algo-guide/<locale>`, keyed by
+ * Serves the framework guide (docs/src/guide.<locale>.html — the same source the PDFs and the
+ * GitHub Pages site are built from) to the app as `virtual:framework-guide/<locale>`, keyed by
  * className.
  *
  * The parsing lives in docs/guide-parser.mjs so the app, the site generator and the PDFs all
@@ -14,11 +14,11 @@ import type { GuideEntry } from '../docs/guide-parser.mjs'
  * loaded on demand.
  */
 
-const PREFIX = 'virtual:algo-guide/'
+const PREFIX = 'virtual:framework-guide/'
 
 export type { GuideEntry }
 
-export function algoGuide(docsDir: string): Plugin {
+export function frameworkGuide(docsDir: string): Plugin {
   const fileFor = (locale: string) => path.join(docsDir, `guide.${locale}.html`)
 
   const load = (locale: string) => {
@@ -31,7 +31,7 @@ export function algoGuide(docsDir: string): Plugin {
   }
 
   return {
-    name: 'algo-guide',
+    name: 'framework-guide',
     resolveId(id) {
       if (id.startsWith(PREFIX)) return '\0' + id
     },

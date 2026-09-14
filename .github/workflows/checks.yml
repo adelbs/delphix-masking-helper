@@ -43,6 +43,21 @@ jobs:
         run: npx eslint src
         working-directory: frontend
 
+      # The version in the UI comes from the git tag; package.json is only the fallback for a
+      # zip download or an untagged fork. Nothing kept the two in step, and they had already
+      # drifted silently — package.json said 1.0.0 while the newest tag was v1.0.3. On a release
+      # tag, make that disagreement a failed build rather than a wrong number on someone's screen.
+      - name: Version matches tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg=$(node -p "require('./package.json').version")
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::package.json says $pkg but the tag is $GITHUB_REF_NAME — bump package.json before tagging."
+            exit 1
+          fi
+          echo "package.json $pkg matches $GITHUB_REF_NAME"
+
       # The Java runner is committed as a jar; this proves the source still compiles against the
       # API. The Delphix jars are licensed and absent here, so compilation is expected to fail on
       # missing classes — only a syntax error should stop the build.

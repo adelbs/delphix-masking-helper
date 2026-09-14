@@ -1,7 +1,14 @@
 import type {
-  Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage,
-  JsonSchema, MaskResult, SavedTest, ServerFile,
+  Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage, Classifier, ClassifierCatalog,
+  ClassifierFrameworkName, ClassifierIssue, ClassifierReview, ClassifierTestField, ClassifierTestResult,
+  BuiltinReferences, Domain, EngineReferences, Framework, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
+import type { EngineExportResult, EngineImportResult } from '@/lib/engine-sync'
+
+const json = (body: unknown): RequestInit => ({
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(body),
+})
 
 /**
  * Every endpoint behind this helper answers with JSON. When one doesn't — the API server is
@@ -36,72 +43,82 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 
   const { error, code } = data as { error?: unknown; code?: unknown }
   if (!res.ok && typeof error === 'string') {
-    const err = new Error(error) as Error & { code?: string }
+    const err = new Error(error) as Error & { code?: string; issues?: unknown[]; files?: unknown[] }
     // Some failures are states the UI can word better in the user's own language.
     if (typeof code === 'string') err.code = code
+    // A refused configuration comes with its problems, so the form can point at each one.
+    const { issues, files } = data as { issues?: unknown; files?: unknown }
+    if (Array.isArray(issues)) err.issues = issues
+    if (Array.isArray(files)) err.files = files
     throw err
   }
   return data as T
 }
 
 export const api = {
+  /** Which build this is. Read from the git tag on the server, never from the network. */
+  getVersion: () =>
+    request<VersionInfo>('/api/version'),
+
   /** Whether the Delphix libraries are present; the app is unusable without them. */
   getSetup: () =>
     request<{ ready: boolean; missing: string[]; libDir: string; required: number; found: number }>(
       '/api/setup'),
 
-  getAlgorithms: () =>
-    request<Algorithm[]>('/api/algorithms'),
+  /** The masking frameworks the plugin provides. */
+  getFrameworks: () =>
+    request<Framework[]>('/api/frameworks'),
 
   getSchema: (className: string) =>
-    request<{ schema: JsonSchema }>(`/api/algorithms/${encodeURIComponent(className)}/schema`),
+    request<{ schema: JsonSchema }>(`/api/frameworks/${encodeURIComponent(className)}/schema`),
 
-  mask: (payload: { algorithm: string; config: unknown; input: string; mode?: string; additionalAlgorithms?: Array<{ name: string; className: string; config: unknown }> }) =>
+  mask: (payload: { framework: string; config: unknown; input: string; mode?: string; additionalAlgorithms?: Array<{ name: string; className: string; config: unknown }> }) =>
     request<MaskResult>('/api/mask', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     }),
 
-  getTests: (algorithm?: string) => {
-    const qs = algorithm ? `?algorithm=${encodeURIComponent(algorithm)}` : ''
-    return request<SavedTest[]>(`/api/tests${qs}`)
+  /** The saved algorithms, optionally only those built on one framework. */
+  getAlgorithms: (framework?: string) => {
+    const qs = framework ? `?framework=${encodeURIComponent(framework)}` : ''
+    return request<Algorithm[]>(`/api/algorithms${qs}`)
   },
 
-  saveTest: (test: Omit<SavedTest, 'id' | 'created_at' | 'updated_at' | 'key_value'>) =>
-    request<SavedTest>('/api/tests', {
+  saveAlgorithm: (algo: Omit<Algorithm, 'id' | 'created_at' | 'updated_at' | 'key_value'>) =>
+    request<Algorithm>('/api/algorithms', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(test),
+      body: JSON.stringify(algo),
     }),
 
   /** Copies a saved algorithm under a new name. Replaces renaming: on the engine the name is
    *  identity, so a copy is the only thing a new name can mean. */
-  duplicateTest: (id: number, name: string) =>
-    request<SavedTest>(`/api/tests/${id}/duplicate`, {
+  duplicateAlgorithm: (id: number, name: string) =>
+    request<Algorithm>(`/api/algorithms/${id}/duplicate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name }),
     }),
 
-  updateTest: (id: number, patch: { input?: string; config?: string; output?: string }) =>
-    request<SavedTest>(`/api/tests/${id}`, {
+  updateAlgorithm: (id: number, patch: { input?: string; config?: string; output?: string }) =>
+    request<Algorithm>(`/api/algorithms/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(patch),
     }),
 
-  deleteTest: (id: number) =>
-    request<{ ok: boolean }>(`/api/tests/${id}`, { method: 'DELETE' }),
+  deleteAlgorithm: (id: number) =>
+    request<{ ok: boolean }>(`/api/algorithms/${id}`, { method: 'DELETE' }),
 
-  exportTests: () =>
-    request<SavedTest[]>('/api/tests/export'),
+  exportAlgorithms: () =>
+    request<Algorithm[]>('/api/algorithms/export'),
 
-  importTests: (tests: unknown[]) =>
-    request<{ imported: number }>('/api/tests/import', {
+  importAlgorithms: (rows: unknown[]) =>
+    request<{ imported: number }>('/api/algorithms/import', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(tests),
+      body: JSON.stringify(rows),
     }),
 
   getConfig: () =>
@@ -137,7 +154,7 @@ export const api = {
   deleteFile: (name: string) =>
     request<{ ok: boolean }>(`/api/files/${encodeURIComponent(name)}`, { method: 'DELETE' }),
 
-  maskBatch: (payload: { algorithm: string; config: unknown; inputs: string[] }) =>
+  maskBatch: (payload: { framework: string; config: unknown; inputs: string[] }) =>
     request<{ results: Array<{ output?: string; error?: string }> }>('/api/mask-batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -145,7 +162,7 @@ export const api = {
     }),
 
   maskMultiColumn: (payload: {
-    algorithm: string;
+    framework: string;
     config: unknown;
     columns: Array<{ name: string; value: string | null; type: string }>;
   }) =>
@@ -154,6 +171,109 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     }),
+
+  // ── Domains ────────────────────────────────────────────────────────────────
+  getDomains: () =>
+    request<Domain[]>('/api/domains'),
+
+  createDomain: (body: { name: string; defaultAlgorithm?: string; defaultTokenization?: string }) =>
+    request<Domain>('/api/domains', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    }),
+
+  /** The name is identity and is not accepted here, mirroring the engine's own rule. */
+  updateDomain: (id: number, patch: { defaultAlgorithm?: string; defaultTokenization?: string }) =>
+    request<Domain>(`/api/domains/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    }),
+
+  deleteDomain: (id: number) =>
+    request<{ ok: boolean }>(`/api/domains/${id}`, { method: 'DELETE' }),
+
+  delphixDomains: () =>
+    request<Array<{
+      domainName: string; defaultAlgorithmCode: string; defaultTokenizationCode: string;
+      createdBy: string | null; alreadyImported: boolean;
+    }>>('/api/delphix/domains'),
+
+  /** Brings the domains down with the algorithms they name. */
+  delphixImportDomains: (names: string[]) =>
+    request<EngineImportResult>('/api/delphix/domains/import', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ names }),
+    }),
+
+  /** Sends the domain and, first, the algorithms (and their files) it names that this machine holds. */
+  delphixExportDomain: (id: number) =>
+    request<{ mode: 'created' | 'updated'; name: string; engine: string } & EngineExportResult>(
+      `/api/delphix/domains/export/${id}`, { method: 'POST' }),
+
+  // ── Classifiers ────────────────────────────────────────────────────────────
+  /** The frameworks' settings and the SQL types a test column can have. */
+  getClassifierCatalog: () =>
+    request<ClassifierCatalog>('/api/classifier-frameworks'),
+
+  /** What Delphix would refuse, what cannot be tested here, and what is probably a slip. */
+  reviewClassifier: (framework: ClassifierFrameworkName, config: Record<string, unknown>) =>
+    request<ClassifierReview>('/api/classifiers/check', { method: 'POST', ...json({ framework, config }) }),
+
+  getClassifiers: () =>
+    request<Classifier[]>('/api/classifiers'),
+
+  createClassifier: (body: {
+    name: string; framework: ClassifierFrameworkName; domain: string; description?: string; config: Record<string, unknown>
+  }) =>
+    request<Classifier>('/api/classifiers', { method: 'POST', ...json(body) }),
+
+  /** The framework is not accepted: the engine will not change it on an existing classifier. */
+  updateClassifier: (id: number, patch: { name?: string; domain?: string; description?: string; config?: Record<string, unknown> }) =>
+    request<Classifier>(`/api/classifiers/${id}`, { method: 'PUT', ...json(patch) }),
+
+  deleteClassifier: (id: number) =>
+    request<{ ok: boolean }>(`/api/classifiers/${id}`, { method: 'DELETE' }),
+
+  /** Profiles one column with this classifier and the other saved classifiers of its domain. */
+  testClassifier: (body: {
+    classifier: { id?: number; name: string; framework: ClassifierFrameworkName; domain: string; config: Record<string, unknown> }
+    field: ClassifierTestField
+    threshold: number
+  }) =>
+    request<ClassifierTestResult>('/api/classifiers/test', { method: 'POST', ...json(body) }),
+
+  delphixClassifiers: () =>
+    request<Array<{
+      classifierId: number; classifierName: string; framework: ClassifierFrameworkName | null;
+      domainName: string; createdBy: string | null; alreadyImported: boolean;
+      /** Why it cannot be tested here, or would be refused, when that is the case. */
+      issues: ClassifierIssue[];
+      /** List files the engine will hand over with it. */
+      downloadFiles: string[];
+    }>>('/api/delphix/classifiers'),
+
+  /** Brings the classifiers down with their domains, those domains' algorithms, and their list files. */
+  delphixImportClassifiers: (ids: number[]) =>
+    request<EngineImportResult>('/api/delphix/classifiers/import', { method: 'POST', ...json({ ids }) }),
+
+  /** Sends the classifier and, first, its domain (with the domain's algorithms) and its list files. */
+  delphixExportClassifier: (id: number) =>
+    request<{
+      mode: 'created' | 'updated'; name: string; engine: string;
+      domain: { mode: 'created' | 'updated'; name: string } | null;
+    } & EngineExportResult>(`/api/delphix/classifiers/export/${id}`, { method: 'POST' }),
+
+  // ── Reference names ────────────────────────────────────────────────────────
+  /** The plugin's built-in algorithms, named the way a reference names them, and which can tokenize. */
+  getBuiltinAlgorithms: () =>
+    request<BuiltinReferences>('/api/reference/builtins'),
+
+  /** Algorithm and domain names on the configured engine. `refresh` skips the server's cache. */
+  getEngineReferences: (refresh = false) =>
+    request<EngineReferences>(`/api/reference/engine${refresh ? '?refresh=1' : ''}`),
 
   // ── Delphix engine ─────────────────────────────────────────────────────────
   delphixStatus: () =>
@@ -172,30 +292,27 @@ export const api = {
       algorithmName: string; frameworkName: string | null; className: string | null;
       description: string; config: Record<string, unknown>;
       supported: boolean; alreadyImported: boolean;
-      /** Lookup files the engine holds and this machine does not — the algorithm imports fine
-       *  but cannot run until a copy of each exists in the files folder. */
+      /** Files the engine holds and this machine does not, which come down with the import. */
+      downloadFiles: string[];
+      /** Files the engine holds and offers no download for — the algorithm imports fine but
+       *  cannot run until a copy of each exists in the files folder. */
       missingFiles: string[];
     }>>('/api/delphix/algorithms'),
 
+  /** Brings the algorithms down with the algorithms and files they reference. */
   delphixImport: (names: string[]) =>
-    request<{
-      imported: string[];
-      skipped: Array<{ name: string; reason: string; framework?: string }>;
-      needsFiles: Array<{ name: string; files: string[] }>;
-    }>(
+    request<EngineImportResult>(
       '/api/delphix/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ names }),
       }),
 
+  /** Sends the algorithm after the algorithms it references, uploading the files the engine lacks. */
   delphixExport: (id: number, name?: string) =>
     request<{
       mode: 'created' | 'updated'; name: string; engine: string; renamed: boolean;
-      /** file:// references that were sent as they are — paths on this machine, which the
-       *  engine has no way to open. */
-      localFiles: string[];
-    }>(
+    } & EngineExportResult>(
       `/api/delphix/export/${id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

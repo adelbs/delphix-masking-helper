@@ -2,13 +2,19 @@
 
 [English](README.md) · [Português (BR)](README.pt-BR.md) · **Español**
 
-🌐 **[Sitio web](https://adelbs.github.io/delphix-masking-helper/index.es.html)** — qué hace la herramienta, y la referencia completa de los algoritmos, en tres idiomas.
+🌐 **[Sitio web](https://adelbs.github.io/delphix-masking-helper/index.es.html)** — qué hace la herramienta, y la referencia completa de los frameworks, en tres idiomas.
 
 Un compañero local para el plugin de enmascaramiento de Delphix, que cubre la vida entera de un
-algoritmo. Ayuda a **entender** cómo se comporta cada framework, **probar** un algoritmo con
-valores reales, **construir** un algoritmo ya configurado a partir de un problema descrito en
-lenguaje natural y **sincronizar** con un Masking Engine — trayendo sus algoritmos para trabajar y
-devolviendo los tuyos. Todo sin crear un Rule Set ni ejecutar un masking job.
+algoritmo. Ayuda a **entender** cómo se comporta cada uno de los 31 frameworks de enmascaramiento,
+**probar** un algoritmo con valores reales, **construir** un algoritmo ya configurado a partir de
+un problema descrito en lenguaje natural y **sincronizar** con un Masking Engine — trayendo sus
+algoritmos para trabajar y devolviendo los tuyos. Todo sin crear un Rule Set ni ejecutar un
+masking job.
+
+> **La nomenclatura sigue la de Delphix.** Un **framework** es una técnica de enmascaramiento que
+> ofrece el plugin — Secure Lookup, Character Mapping, Date Shift. Configurar uno produce un
+> **algoritmo**: con nombre, guardado y listo para usar. La barra lateral lista frameworks; lo que
+> guardas es un algoritmo.
 
 > ### Proyecto independiente, y requiere licencia Delphix activa
 >
@@ -17,7 +23,7 @@ devolviendo los tuyos. Todo sin crear un Rule Set ni ejecutar un masking job.
 > producto oficial. Delphix y los nombres de producto usados aquí son marcas de sus respectivos
 > dueños.
 >
-> **Se requiere una licencia Delphix activa.** Los algoritmos de enmascaramiento viven en jars
+> **Se requiere una licencia Delphix activa.** Los frameworks de enmascaramiento viven en jars
 > licenciados del producto Delphix, que **no** se distribuyen aquí — este proyecto ni los entrega
 > ni los sustituye. Ya debes tener derecho a ellos y poder obtener el Masking Devkit (SDK) de
 > Delphix, normalmente mediante una licencia activa y tu equipo de cuenta. Coloca quince jars en
@@ -33,27 +39,27 @@ salida real del plugin, y la instancia es real.</sub>
 
 ## Cómo funciona
 
-El servidor Node expone una API REST que delega cada operación en `AlgorithmRunner.jar`, que carga y ejecuta los algoritmos mediante reflection. El frontend React lo sirve Vite en desarrollo (con hot-reload) y Express en producción.
+El servidor Node expone una API REST que delega cada operación en `AlgorithmRunner.jar`, que carga y ejecuta los frameworks mediante reflection. El frontend React lo sirve Vite en desarrollo (con hot-reload) y Express en producción.
 
-## Guía de los algoritmos
+## Guía de los frameworks
 
-📖 **[Leer la referencia de los algoritmos en línea](https://adelbs.github.io/delphix-masking-helper/algorithms.es.html)** — el mismo contenido de los PDF, en tres idiomas.
+📖 **[Leer la referencia de los frameworks en línea](https://adelbs.github.io/delphix-masking-helper/frameworks.es.html)** — el mismo contenido de los PDF, en tres idiomas.
 
-Cada algoritmo abre con dos pestañas: **Probar** y **Documentación**. La pestaña de documentación
-muestra la sección de ese algoritmo en la guía de referencia, en el idioma de la interfaz — el
+Cada framework abre con dos pestañas: **Probar** y **Documentación**. La pestaña de documentación
+muestra la sección de ese framework en la guía de referencia, en el idioma de la interfaz — el
 mismo contenido de los PDF de abajo, leído de la misma fuente, así que nunca divergen.
 
-El directorio [`docs/`](docs/) contiene una guía de referencia de los 31 algoritmos del plugin, en tres idiomas:
+El directorio [`docs/`](docs/) contiene una guía de referencia de los 31 frameworks del plugin, en tres idiomas:
 
 | Idioma | Archivo |
 |---|---|
-| Español | [`docs/delphix-algorithms-guide.es.pdf`](docs/delphix-algorithms-guide.es.pdf) |
-| English | [`docs/delphix-algorithms-guide.en.pdf`](docs/delphix-algorithms-guide.en.pdf) |
-| Português (BR) | [`docs/delphix-algorithms-guide.pt-BR.pdf`](docs/delphix-algorithms-guide.pt-BR.pdf) |
+| Español | [`docs/delphix-frameworks-guide.es.pdf`](docs/delphix-frameworks-guide.es.pdf) |
+| English | [`docs/delphix-frameworks-guide.en.pdf`](docs/delphix-frameworks-guide.en.pdf) |
+| Português (BR) | [`docs/delphix-frameworks-guide.pt-BR.pdf`](docs/delphix-frameworks-guide.pt-BR.pdf) |
 
-Para cada algoritmo la guía explica qué hace, ejemplos de entrada → salida y la descripción de todos los parámetros de configuración. Los algoritmos se agrupan según las mismas categorías de la barra lateral de la UI. Incluye además tres apéndices: conceptos transversales (determinismo, papel de la clave, algoritmos que pueden no enmascarar nada), el catálogo de las 62 instancias `dlpx-core:` incorporadas en el plugin y las limitaciones del runner standalone.
+Para cada framework la guía explica qué hace, ejemplos de entrada → salida y la descripción de todos los parámetros de configuración. Los frameworks se agrupan según las mismas categorías de la barra lateral de la UI. Incluye además tres apéndices: conceptos transversales (determinismo, papel de la clave, frameworks que pueden no enmascarar nada), el catálogo de los 59 algoritmos `dlpx-core:` incorporadas en el plugin y las limitaciones del runner standalone.
 
-Todos los pares entrada → salida se generaron ejecutando los algoritmos en `AlgorithmRunner` — no son ilustrativos.
+Todos los pares entrada → salida se generaron ejecutando los frameworks en `AlgorithmRunner` — no son ilustrativos.
 
 ### Regenerar los PDFs
 
@@ -68,7 +74,7 @@ El build usa Chrome headless y fuentes instaladas en macOS (Iowan Old Style, Ser
 
 ## Bibliotecas de Delphix
 
-El tester ejecuta los algoritmos reales del plugin de enmascaramiento de Delphix, así que
+El tester ejecuta los frameworks reales del plugin de enmascaramiento de Delphix, así que
 necesita algunos jars del producto. **No se distribuyen en este repositorio** — son archivos
 licenciados de Delphix. Los aportas tú, una sola vez.
 
@@ -137,9 +143,27 @@ instala, solo avisa de lo que falta —, clona la release más nueva, la compila
 | `dlpx-helper` | arranca y abre el navegador |
 | `dlpx-helper stop` | lo detiene |
 | `dlpx-helper status` | ¿está funcionando? |
+| `dlpx-helper version` | qué versión está instalada |
 | `dlpx-helper logs` | sigue el log |
 | `dlpx-helper update` | pasa a la release más nueva y recompila |
 | `dlpx-helper uninstall` | lo elimina (pregunta antes) |
+
+### ¿En qué versión estoy?
+
+Tres lugares lo dicen, y ninguno toca la red:
+
+- el **pie de la barra lateral**, debajo de las banderas de idioma;
+- **Configuración → General → Acerca de**, con el commit y el comando de actualización;
+- `dlpx-helper version` en la terminal, más la línea que el servidor imprime al arrancar.
+
+El número viene de la etiqueta git del checkout, así que es la release que realmente tienes —
+`v1.0.3` en una release, `v1.0.3-5-gabc1234` cuando el código va por delante de la última
+etiqueta, y con `-dirty` al final cuando hay cambios sin confirmar. Sin git, recurre a la versión
+declarada en `package.json`, que puede estar atrasada.
+
+**No hay comprobación de actualizaciones.** La herramienta dice lo que tienes, nunca lo que existe
+en otro sitio; `dlpx-helper update` es como te enteras — ejecutándolo. Eso mantiene la misma
+promesa que el modelo local por defecto: nada sale de tu máquina sin que lo pidas.
 
 **La instalación queda fijada a una release, no a la punta de `main`.** El script le pregunta al
 remoto cuál es la etiqueta `vX.Y.Z` más nueva y hace checkout de ella, así que un commit enviado
@@ -150,7 +174,7 @@ de release, el script recurre a la rama por defecto y lo avisa.
 
 Volver a ejecutar el script en una máquina que ya lo tiene ofrece **actualizar** o **eliminar**.
 Actualizar nunca toca `db/`, donde viven tus algoritmos guardados y tu configuración. Desinstalar
-borra todo, por eso avisa antes — exporta desde **Pruebas/Algoritmos Guardados → Exportar** si
+borra todo, por eso avisa antes — exporta desde la barra lateral (**Algoritmos → ⋯ → Exportar**) si
 quieres conservar algo.
 
 ### O hazlo a mano
@@ -207,15 +231,15 @@ Por ejemplo:
 > ceros a la izquierda que el valor original.
 
 El asistente elige Character Mapping con `preserveLeadingZeros`, lo configura y lo guarda en
-**Pruebas/Algoritmos Guardados**, listo para ejecutar.
+**Algoritmos** en la barra lateral, listo para ejecutar.
 
 Antes de guardar, el servidor **ejecuta el algoritmo de verdad** con la configuración que produjo
 el modelo. Si el runner la rechaza — un parámetro inventado, una combinación inválida — no se
-guarda nada y el error aparece en el chat. Una configuración alucinada nunca se convierte en una
-prueba guardada.
+guarda nada y el error aparece en el chat. Una configuración alucinada nunca se convierte en un
+algoritmo guardado.
 
-El asistente conoce los 31 algoritmos: su system prompt se construye con las mismas descripciones
-que muestra la UI, más el JSON Schema real de cada algoritmo leído del plugin.
+El asistente conoce los 31 frameworks: su system prompt se construye con las mismas descripciones
+que muestra la UI, más el JSON Schema real de cada framework leído del plugin.
 
 ### Cómo configurarlo
 
@@ -237,31 +261,79 @@ ollama serve
 ollama pull llama3.1
 ```
 
-Las claves de API se guardan en `db/tests.db` y nunca vuelven al navegador: una vez guardadas, el
+Las claves de API se guardan en `db/algorithms.db` y nunca vuelven al navegador: una vez guardadas, el
 campo muestra una máscara y se reemplaza escribiendo una nueva.
 
 "GitHub Models (Copilot)" es el endpoint compatible con OpenAI que viene con la cuenta de GitHub.
 GitHub Copilot en sí no expone una API de chat para aplicaciones de terceros.
 
-> **Sobre los modelos locales.** El catálogo de algoritmos ocupa unos 12k tokens de contexto. Es
+> **Sobre los modelos locales.** El catálogo de frameworks ocupa unos 12k tokens de contexto. Es
 > holgado para Claude y Gemini, pero justo para modelos locales pequeños — uno con ventana de 8k
-> truncará el catálogo y elegirá mal el algoritmo. Prefiere un modelo con contexto amplio.
+> truncará el catálogo y elegirá mal el framework. Prefiere un modelo con contexto amplio.
 
 ## Sincronizar con un Masking Engine
 
 Apunta la herramienta a una instancia Delphix en **Configuración → Delphix** — dirección, usuario
 y contraseña — y pulsa **Probar conexión**; responde antes de que guardes nada.
 
-**Importar.** *Pruebas/Algoritmos Guardados → Importar de Delphix* lista lo que tiene la instancia.
+### Dominios
+
+La sección **Dominios** de la barra lateral guarda los dominios de datos sensibles — en la
+instancia un dominio es un nombre y dos referencias a algoritmo, y eso es exactamente lo que se
+guarda aquí. Crea uno en *Dominios → ⋯ → Nuevo dominio*, o trae los de la instancia con *Importar
+de Delphix*; cada uno tiene el botón **Enviar a Delphix**, que lo crea allí, o lo actualiza cuando
+el nombre ya existe.
+
+Enviar un dominio **envía antes los algoritmos a los que apunta** — la instancia rechaza un dominio
+cuyo algoritmo no conoce. Los algoritmos que ya son de la instancia, como los integrados
+`dlpx-core:`, no se tocan: allí son de solo lectura y ya están bien. Si un algoritmo no puede
+enviarse, el dominio tampoco se envía, y el mensaje dice qué algoritmo falló.
+
+Los dominios se agrupan por el framework del algoritmo al que apuntan, con las mismas categorías
+que el resto. Entre un dominio y su categoría hay dos búsquedas, y cualquiera puede fallar — el
+algoritmo puede ser un integrado que esta máquina no tiene, y no todo algoritmo de una instancia
+está basado en framework. Esos caen en **Otros**, que en una instancia estándar es cerca de un
+quinto.
+
+### Classifiers
+
+Los classifiers son lo que el profiling usa para decidir a qué dominio pertenece una columna o un
+campo. Cada uno se construye sobre uno de cuatro frameworks — **PATH** (el nombre del campo y de su
+tabla o archivo), **TYPE** (el tipo y la longitud), **REGEX** y **LIST** (una muestra de los
+valores) — y vota por un dominio. La sección **Classifiers** de la barra lateral los lista por
+dominio; crea uno en *Classifiers → ⋯ → Nuevo classifier*, o trae los de la instancia con
+*Importar de Delphix*.
+
+El editor explica cada parámetro del framework elegido, y el panel **Prueba** describe un campo —
+nombre, tabla, tipo SQL, longitud, valores de muestra — y muestra lo que concluiría el profiling:
+la confianza de este classifier (qué ruta, tipo, patrón o lista decidió, valor por valor) y la del
+dominio, sopesado junto con los demás classifiers guardados para él, frente al umbral del profile
+set. Prueba lo que está en pantalla, así que un cambio se puede probar antes de guardarlo. Nada se
+ejecuta en la instancia: la herramienta evalúa los classifiers localmente, leyendo las expresiones
+regulares como las lee Java. Las pocas construcciones de Java que no reproduce con exactitud se
+avisan en lugar de aproximarse.
+
+**Enviar a Delphix** crea el classifier en la instancia o lo actualiza; renombrar no es problema,
+porque la instancia renombra los classifiers en su lugar. Lo que un classifier usa va con él: la
+instancia rechaza un classifier cuyo dominio no tiene, así que el dominio va antes cuando esta
+máquina lo tiene — junto con sus algoritmos — y los archivos de valores de un classifier LIST se
+suben cuando la instancia no los tiene. Importar hace lo mismo en sentido inverso: el classifier
+viene con su dominio, los algoritmos de ese dominio y sus archivos de valores.
+
+**Importar.** *Algoritmos → ⋯ → Importar de Delphix*, en la barra lateral, lista lo que tiene la instancia.
 Lo que esté sobre un framework que la herramienta no puede ejecutar aparece, pero no es
-seleccionable, así nunca acabas con un algoritmo guardado que no se puede probar.
+seleccionable, así nunca acabas con un algoritmo guardado que no se puede probar. Lo que un
+algoritmo referencia viene con él — los algoritmos que nombra su configuración y su archivo de
+lookup — e importar un dominio trae sus algoritmos. La excepción son los built-in `dlpx-core:` de
+la instancia: la herramienta ya los tiene.
 
 **Archivos de lookup.** Un archivo subido a la instancia se queda en el almacenamiento de ella:
-el algoritmo lleva solo una referencia (`delphix-file://upload/…/NOMBRES.txt`), e importar trae la
-referencia, nunca el contenido. La ventana de importación indica qué archivos lee el algoritmo y
-esta máquina no tiene, y el algoritmo se importa igualmente — solo que no se ejecuta mientras no
-haya una copia. Agregue una en **Archivos**, conservando el nombre del archivo de la instancia, y
-el algoritmo importado se ejecuta sin ningún cambio.
+el algoritmo lleva solo una referencia (`delphix-file://upload/…/NOMBRES.txt`). Importar descarga el
+archivo a **Archivos** siempre que la instancia lo permite — el archivo de lookup de un Secure
+Lookup y los archivos de valores de un classifier LIST. Para otros frameworks la instancia no ofrece
+descarga: la ventana de importación indica esos archivos, y el algoritmo se importa igualmente —
+agregue una copia en **Archivos**, conservando el nombre del archivo de la instancia, y se ejecuta
+sin ningún cambio.
 
 Cualquier lista con el formato correcto basta para ver el algoritmo funcionando. Para reproducir lo
 que produce la instancia, el archivo tiene que coincidir línea por línea: un algoritmo que elige el
@@ -270,15 +342,19 @@ resultado distinto.
 
 **Exportar.** Cada algoritmo guardado tiene el botón **Enviar a Delphix**. El que vino de la
 instancia se actualiza allí; el que construiste aquí se crea. La herramienta recuerda de dónde vino
-cada algoritmo, así que exportar dos veces nunca deja un duplicado.
+cada algoritmo, así que exportar dos veces nunca deja un duplicado. Los algoritmos que referencia
+van antes, y cualquier archivo que la instancia no podría abrir — una ruta de esta máquina, o un
+archivo de la instancia que ya no guarda para un algoritmo nuevo — se sube desde **Archivos**, con
+la configuración apuntando a él. Un archivo que falta en esta máquina detiene el envío, y el mensaje
+indica cuál.
 
 **Ida y vuelta.** Probar un algoritmo importado con un archivo local no cambia lo que vuelve a la
 instancia: la referencia se guarda como la instancia la escribió, y la copia local solo se resuelve
 al ejecutar aquí. Ajuste cualquier parámetro, envíelo de vuelta, y la instancia sigue leyendo su
 propio archivo. La única forma de romperlo es elegir otro archivo en el formulario de configuración
 — eso reemplaza la referencia. El formulario muestra un archivo de la instancia como *nombre (en la
-instancia)*, para que nunca se confunda con un campo vacío, y exportar una configuración que apunta
-a una ruta de esta máquina avisa que la instancia no tiene esa ruta.
+instancia)*, para que nunca se confunda con un campo vacío; una ruta de esta máquina elegida allí se
+sube cuando el algoritmo se envía.
 
 **Nombres.** En la instancia el nombre del algoritmo es su identidad y no puede cambiarse, así que
 la herramienta sigue la misma regla: los nombres no son editables. Para trabajar con otro nombre,
@@ -303,8 +379,8 @@ abra la aplicación.
 
 `AlgorithmRunner.java` es un proceso Java de vida corta (un fork por petición) que:
 
-1. Recibe JSON por stdin con `command`, `algorithm`, `config`, `input`, `key`
-2. Instancia la clase del algoritmo mediante reflection
+1. Recibe JSON por stdin con `command`, `framework`, `config`, `input`, `key`
+2. Instancia la clase del framework mediante reflection
 3. Aplica la configuración con `ComponentConfigurator.applyConfiguration`
 4. Construye un `ComponentService` mínimo con un `CryptoService` derivado de la clave
 5. Llama a `setup()` de forma recursiva, luego `validate()` y luego `mask(input)`

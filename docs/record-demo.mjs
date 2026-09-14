@@ -145,10 +145,18 @@ async function sceneTest(page) {
 
 async function sceneSync(page) {
   console.log('  scene 3 — syncing with the engine')
-  await clickText(page, 'aside button', /Saved Tests|Testes\/Algoritmos/i)
-  await sleep(900); await hold(page, 800)
+  // The engine import moved into the sidebar: open the Algorithms section, then its ⋯ menu.
+  await clickText(page, 'aside nav button', /^Algorithms|^Algoritmos/i)
+  await sleep(500); await hold(page, 600)
+  await page.evaluate(() => {
+    const b = document.querySelector('aside button[title]')
+    const more = [...document.querySelectorAll('aside button')]
+      .find(x => x.querySelector('svg[class*="ellipsis"], svg[class*="more-horizontal"]'))
+    ;(more ?? b).click()
+  })
+  await sleep(400); await hold(page, 700)
 
-  await clickText(page, 'main button', /Import from Delphix|Importar do Delphix/i)
+  await clickText(page, 'aside button, aside label', /Import from Delphix|Importar do Delphix/i)
   const listed = await waitFor(page, () =>
     [...document.querySelectorAll('label')].some(l => {
       const i = l.querySelector('input[type=checkbox]'); return i && !i.disabled

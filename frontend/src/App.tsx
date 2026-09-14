@@ -4,28 +4,36 @@ import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { Sidebar } from '@/components/Sidebar'
 import { WelcomeScreen } from '@/components/WelcomeScreen'
-import { AlgoTester } from '@/components/AlgoTester'
-import { SavedTests } from '@/components/SavedTests'
+import { FrameworkTester } from '@/components/FrameworkTester'
+import { DomainEditor } from '@/components/DomainEditor'
+import { ClassifierEditor } from '@/components/ClassifierEditor'
 import { Settings } from '@/components/Settings'
 import { SetupNeeded } from '@/components/SetupNeeded'
 import { isLocalePref, readStoredPref, resolveLocale, storePref } from '@/lib/i18n'
 import { I18nProvider } from '@/lib/i18n/I18nProvider'
-import type { Algorithm, LocalePref, View } from '@/types'
+import { parseConfig, refreshAlgorithms } from '@/lib/algorithms'
+import type { Algorithm, Classifier, Domain, Framework, LocalePref, View } from '@/types'
 
 interface TesterState {
-  algo: Algorithm
+  framework: Framework
+  /** Set when the panel was opened from a saved algorithm rather than from a bare framework. */
+  algorithm: Algorithm | null
   config: Record<string, unknown>
   input: string
 }
 
 export default function App() {
-  const [algorithms, setAlgorithms] = useState<Algorithm[]>([])
+  const [frameworks, setFrameworks] = useState<Framework[]>([])
   // The jars can all be in lib/ and the list still fail — a Java that will not start, a
   // classpath the platform reads differently. Swallowing that left an empty sidebar with
   // nothing to act on, so the reason is kept and shown where the list should have been.
-  const [algoError, setAlgoError] = useState<string | null>(null)
+  const [frameworkError, setFrameworkError] = useState<string | null>(null)
   const [view, setView] = useState<View>('welcome')
   const [tester, setTester] = useState<TesterState | null>(null)
+  // null with view 'domain' means the editor is creating one.
+  const [domain, setDomain] = useState<Domain | null>(null)
+  // Same convention: null with view 'classifier' means creating one.
+  const [classifier, setClassifier] = useState<Classifier | null>(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [filesDir, setFilesDir] = useState('')
   // Seeded from localStorage so the first paint is already in the right language;
@@ -40,9 +48,9 @@ export default function App() {
       .then(s => {
         setSetup(s)
         if (s.ready) {
-          api.getAlgorithms()
-            .then(list => { setAlgorithms(list); setAlgoError(null) })
-            .catch((err: Error) => { setAlgorithms([]); setAlgoError(err.message) })
+          api.getFrameworks()
+            .then(list => { setFrameworks(list); setFrameworkError(null) })
+            .catch((err: Error) => { setFrameworks([]); setFrameworkError(err.message) })
         }
       })
       // A server that cannot answer at all is a different problem; let the app render and fail
@@ -72,23 +80,79 @@ export default function App() {
     api.updateConfig({ locale: pref }).catch(() => {})
   }
 
-  const selectAlgo = (algo: Algorithm, config: Record<string, unknown> = {}, input = '') => {
-    setTester({ algo, config, input })
+  const selectFramework = (framework: Framework) => {
+    setTester({ framework, algorithm: null, config: {}, input: '' })
     setView('tester')
     setSidebarOpen(false)
   }
 
-  const showHome = () => { setView('welcome'); setSidebarOpen(false) }
-  const showSaved = () => { setView('saved'); setSidebarOpen(false) }
+  /**
+   * Opens a saved algorithm in the same panel, with its configuration loaded.
+   *
+   * The framework arrives resolved: the sidebar looks it up, because App sits above
+   * I18nProvider and so cannot word the failure in the user's language.
+   */
+  const selectAlgorithm = (algorithm: Algorithm, framework: Framework) => {
+    setTester({ framework, algorithm, config: parseConfig(algorithm.config), input: algorithm.input })
+    setView('tester')
+    setSidebarOpen(false)
+  }
+
+  /** Opens what the assistant just saved. The list is re-read first: the row was created
+   *  server-side moments ago, so a cached copy would not have it yet. */
+  const openAlgorithmById = async (id: number) => {
+    const rows = await refreshAlgorithms()
+    const algorithm = rows.find(a => a.id === id)
+    const framework = algorithm && frameworks.find(f => f.className === algorithm.framework)
+    if (algorithm && framework) selectAlgorithm(algorithm, framework)
+  }
+
+  const selectDomain = (d: Domain) => {
+    setDomain(d)
+    setView('domain')
+    setSidebarOpen(false)
+  }
+
+  const newDomain = () => {
+    setDomain(null)
+    setView('domain')
+    setSidebarOpen(false)
+  }
+
+  const selectClassifier = (c: Classifier) => {
+    setClassifier(c)
+    setView('classifier')
+    setSidebarOpen(false)
+  }
+
+  const newClassifier = () => {
+    setClassifier(null)
+    setView('classifier')
+    setSidebarOpen(false)
+  }
+
+  const showHome = () => {
+    setView('welcome'); setTester(null); setDomain(null); setClassifier(null); setSidebarOpen(false)
+  }
   const showSettings = () => { setView('settings'); setSidebarOpen(false) }
   const toggleSidebar = () => setSidebarOpen(v => !v)
 
+  const onTester = view === 'tester'
   const sidebarProps = {
-    algorithms,
-    loadError: algoError,
-    activeClassName: view === 'tester' ? (tester?.algo.className ?? null) : null,
-    onSelect: (algo: Algorithm) => selectAlgo(algo),
-    onShowSaved: showSaved,
+    frameworks,
+    loadError: frameworkError,
+    // Only one of the two ever highlights: a bare framework has no algorithm, and an open
+    // algorithm is the more specific answer to "where am I".
+    activeClassName: onTester && !tester?.algorithm ? (tester?.framework.className ?? null) : null,
+    activeAlgorithmId: onTester ? (tester?.algorithm?.id ?? null) : null,
+    activeDomainId: view === 'domain' ? (domain?.id ?? null) : null,
+    activeClassifierId: view === 'classifier' ? (classifier?.id ?? null) : null,
+    onSelectFramework: selectFramework,
+    onSelectAlgorithm: selectAlgorithm,
+    onSelectDomain: selectDomain,
+    onNewDomain: newDomain,
+    onSelectClassifier: selectClassifier,
+    onNewClassifier: newClassifier,
     onOpenSettings: showSettings,
     onGoHome: showHome,
     localePref,
@@ -128,24 +192,42 @@ export default function App() {
           {view === 'welcome' && (
             <WelcomeScreen
               onOpenSidebar={() => setSidebarOpen(true)}
-              onShowSaved={showSaved}
+              onOpenAlgorithm={openAlgorithmById}
               onOpenSettings={showSettings}
             />
           )}
           {view === 'tester' && tester && (
-            <AlgoTester
-              key={tester.algo.className}
-              algo={tester.algo}
+            <FrameworkTester
+              // The algorithm id leads: two algorithms built on the same framework share a
+              // className, and keying by that alone left the second one showing the first's
+              // configuration, because the component never remounted.
+              key={tester.algorithm ? `algo:${tester.algorithm.id}` : `fw:${tester.framework.className}`}
+              framework={tester.framework}
+              algorithm={tester.algorithm}
               initialConfig={tester.config}
               initialInput={tester.input}
               onToggleSidebar={toggleSidebar}
+              onDeleted={showHome}
             />
           )}
-          {view === 'saved' && (
-            <SavedTests
-              algorithms={algorithms}
-              onEdit={(algo, config, input) => selectAlgo(algo, config, input)}
+          {view === 'domain' && (
+            <DomainEditor
+              // Creating and editing are different forms; keying them apart clears the fields
+              // when you go from one domain to another, or from a domain to a new one.
+              key={domain ? `domain:${domain.id}` : 'domain:new'}
+              domain={domain}
               onToggleSidebar={toggleSidebar}
+              onDeleted={showHome}
+              onCreated={selectDomain}
+            />
+          )}
+          {view === 'classifier' && (
+            <ClassifierEditor
+              key={classifier ? `classifier:${classifier.id}` : 'classifier:new'}
+              classifier={classifier}
+              onToggleSidebar={toggleSidebar}
+              onDeleted={showHome}
+              onCreated={selectClassifier}
             />
           )}
           {view === 'settings' && (

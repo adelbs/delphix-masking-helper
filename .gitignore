@@ -32,5 +32,8 @@ Thumbs.db
 *.swp
 *.swo
 
-# Claude Code local settings
+# Claude Code: this repository carries no Claude context or settings. Sessions are opened
+# from the private companion repository, which holds that documentation.
 .claude/
+CLAUDE.md
+CLAUDE.local.md

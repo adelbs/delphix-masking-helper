@@ -1,42 +1,42 @@
 import type { Locale } from '@/types'
-import { ALGO_TEXT_EN } from './algo-text.en'
-import { ALGO_TEXT_ES } from './algo-text.es'
+import { FRAMEWORK_TEXT_EN } from './framework-text.en'
+import { FRAMEWORK_TEXT_ES } from './framework-text.es'
 
 /** The ready-made example loaded by the "Example" button. */
-export interface AlgoExample {
+export interface FrameworkExample {
   config: Record<string, unknown>
   input: string
   key: string
   /** Maps a dot-path inside config (e.g. "lookupFile") to a server-side sample file name.
-   *  When the example is loaded, AlgoTester calls /api/files/ensure-sample for each entry
+   *  When the example is loaded, FrameworkTester calls /api/files/ensure-sample for each entry
    *  and injects the returned URI into config[path].uri automatically. */
   sampleFiles?: Record<string, string>
-  /** Pre-populated columns for multi-column mode algorithms. */
+  /** Pre-populated columns for multi-column frameworks. */
   columns?: Array<{ name: string; type: string; value: string }>
-  /** Pre-populated rows for batch mode algorithms (Shuffle). */
+  /** Pre-populated rows for batch frameworks (Shuffle). */
   batchRows?: string[]
 }
 
-/** The locale-dependent half of an algorithm's metadata. Anything set in `example`
+/** The locale-dependent half of a framework's metadata. Anything set in `example`
  *  overrides the same field of the base example; everything else is inherited. */
-export interface AlgoText {
+export interface FrameworkText {
   description?: string
   inputFormat?: string
   params?: Record<string, string>
   labels?: Record<string, string>
-  example?: Partial<AlgoExample>
+  example?: Partial<FrameworkExample>
 }
 
-export interface AlgoMetadata {
+export interface FrameworkMetadata {
   description?: string
   inputFormat?: string
   params?: Record<string, string>
   labels?: Record<string, string>
-  example?: AlgoExample
-  group?: AlgoGroup
-  /** Algorithm requires batch input (multiple values at once). Shows table UI instead of single textarea. */
+  example?: FrameworkExample
+  group?: FrameworkGroup
+  /** The framework requires batch input (multiple values at once). Shows table UI instead of single textarea. */
   batchMode?: boolean
-  /** Algorithm supports reversible detokenization via REIDENTIFY mode. */
+  /** The framework supports reversible detokenization via REIDENTIFY mode. */
   reversible?: boolean
   /** Algorithm operates on a GenericDataRow (multiple columns) instead of a single value. */
   multiColumnMode?: boolean
@@ -55,9 +55,9 @@ export const GROUP_ORDER = [
   'other',
 ] as const
 
-export type AlgoGroup = (typeof GROUP_ORDER)[number]
+export type FrameworkGroup = (typeof GROUP_ORDER)[number]
 
-const METADATA: Record<string, AlgoMetadata> = {
+const METADATA: Record<string, FrameworkMetadata> = {
   CharacterMapping: {
     group: 'string',
     description: 'Mapeia cada caractere da entrada para um substituto dentro de grupos de caracteres configurados. Determinístico: o mesmo input+chave sempre gera o mesmo output. Ideal para mascarar textos alfanuméricos preservando o comprimento.',
@@ -614,9 +614,9 @@ const METADATA: Record<string, AlgoMetadata> = {
 
 /** Locale-specific prose. pt-BR lives inline in METADATA above and acts as the
  *  fallback, so an entry missing from a translation still renders something. */
-const TEXT_BY_LOCALE: Partial<Record<Locale, Record<string, AlgoText>>> = {
-  'en': ALGO_TEXT_EN,
-  'es': ALGO_TEXT_ES,
+const TEXT_BY_LOCALE: Partial<Record<Locale, Record<string, FrameworkText>>> = {
+  'en': FRAMEWORK_TEXT_EN,
+  'es': FRAMEWORK_TEXT_ES,
 }
 
 /** Resolves `className` to a METADATA key: exact, simple name, or case-insensitive. */
@@ -632,7 +632,7 @@ function resolveKey(className: string): string | null {
   return null
 }
 
-export function getAlgoMetadata(className: string, locale?: Locale): AlgoMetadata | null {
+export function getFrameworkMetadata(className: string, locale?: Locale): FrameworkMetadata | null {
   const key = resolveKey(className)
   if (!key) return null
   const base = METADATA[key]
@@ -643,7 +643,7 @@ export function getAlgoMetadata(className: string, locale?: Locale): AlgoMetadat
   return { ...base, ...text, example }
 }
 
-export function getAlgoGroup(className: string): AlgoGroup {
+export function getFrameworkGroup(className: string): FrameworkGroup {
   const key = resolveKey(className)
   return (key && METADATA[key].group) || 'other'
 }
@@ -651,7 +651,7 @@ export function getAlgoGroup(className: string): AlgoGroup {
 // ── Non-determinism ───────────────────────────────────────────────────────────
 
 /**
- * Which algorithms return a different output for the same input and key on every run.
+ * Which frameworks return a different output for the same input and key on every run.
  * Verified by executing each of the 31 five times; only these three ever varied.
  *
  * Two of them are non-deterministic only under a given configuration, so the check takes
@@ -669,7 +669,7 @@ const NON_DETERMINISTIC: Record<string, (config: Record<string, unknown>) => boo
   SecureLookup: (cfg) => cfg?.hashMethod === 'RANDOMIZE',
 }
 
-/** i18n key explaining why this algorithm is non-deterministic, or null when it is not. */
+/** i18n key explaining why this framework is non-deterministic, or null when it is not. */
 export function nonDeterminismKey(
   className: string,
   config: Record<string, unknown>,

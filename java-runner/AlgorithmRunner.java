@@ -33,39 +33,39 @@ public class AlgorithmRunner {
     // Built-in component catalog: name → uninitialized component (lazy setup)
     static Map<String, MaskingComponent> BUILTIN_CATALOG = null;
 
-    static final LinkedHashMap<String, String> ALGORITHMS = new LinkedHashMap<>();
+    static final LinkedHashMap<String, String> FRAMEWORKS = new LinkedHashMap<>();
     static {
-        ALGORITHMS.put("algorithm.plugin.redact.Redact", "Redact");
-        ALGORITHMS.put("algorithm.plugin.repeatFirstDigit.RepeatFirstDigit", "Repeat First Digit");
-        ALGORITHMS.put("algorithm.plugin.freeTextRedaction.FreeTextRedaction", "Free Text Redaction");
-        ALGORITHMS.put("algorithm.plugin.minMax.MinMaxBigDecimal", "Min/Max BigDecimal");
-        ALGORITHMS.put("algorithm.plugin.minMax.MinMaxLocalDateTime", "Min/Max Date/Time");
-        ALGORITHMS.put("algorithm.plugin.expression.NumericExpression", "Numeric Expression");
-        ALGORITHMS.put("algorithm.plugin.characterReplacement.CharacterReplacement", "Character Replacement");
-        ALGORITHMS.put("algorithm.plugin.characterMapping.CharacterMapping", "Character Mapping");
-        ALGORITHMS.put("algorithm.plugin.characterMapping.NumericMapping", "Numeric Mapping");
-        ALGORITHMS.put("algorithm.plugin.characterMapping.PaymentCard", "Payment Card");
-        ALGORITHMS.put("algorithm.plugin.email.Email", "Email");
-        ALGORITHMS.put("algorithm.plugin.phone.Phone", "Phone");
-        ALGORITHMS.put("algorithm.plugin.name.Name", "Name");
-        ALGORITHMS.put("algorithm.plugin.name.FullName", "Full Name");
-        ALGORITHMS.put("algorithm.plugin.financialId.FinancialIdBr", "Financial ID BR (CPF/CNPJ)");
-        ALGORITHMS.put("algorithm.plugin.iban.IBAN", "IBAN");
-        ALGORITHMS.put("algorithm.plugin.checkdigit.Checkdigit", "Check Digit");
-        ALGORITHMS.put("algorithm.plugin.segmentMapping.SegmentMapping", "Segment Mapping");
-        ALGORITHMS.put("algorithm.plugin.decompose.RegexDecompose", "Regex Decompose");
-        ALGORITHMS.put("algorithm.plugin.secureLookup.SecureLookup", "Secure Lookup");
-        ALGORITHMS.put("algorithm.plugin.nullSecureLookup.NullSecureLookup", "Null-Safe Secure Lookup");
-        ALGORITHMS.put("algorithm.plugin.mapping.Mapping", "Mapping");
-        ALGORITHMS.put("algorithm.plugin.tokenization.Tokenization", "Tokenization");
-        ALGORITHMS.put("algorithm.plugin.shuffle.Shuffle", "Shuffle");
-        ALGORITHMS.put("algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain", "String Algorithm Chain");
-        ALGORITHMS.put("algorithm.plugin.dataCleansing.DataCleansing", "Data Cleansing");
-        ALGORITHMS.put("algorithm.plugin.dateAlgorithms.DateShift", "Date Shift");
-        ALGORITHMS.put("algorithm.plugin.dateAlgorithms.DateShiftDiscrete", "Date Shift Discrete");
-        ALGORITHMS.put("algorithm.plugin.dateAlgorithms.DateReplacement", "Date Replacement");
-        ALGORITHMS.put("algorithm.plugin.address.MultiColumnAddress", "Multi-Column Address");
-        ALGORITHMS.put("algorithm.plugin.conditional.MultiColumnCondition", "Multi-Column Condition");
+        FRAMEWORKS.put("algorithm.plugin.redact.Redact", "Redact");
+        FRAMEWORKS.put("algorithm.plugin.repeatFirstDigit.RepeatFirstDigit", "Repeat First Digit");
+        FRAMEWORKS.put("algorithm.plugin.freeTextRedaction.FreeTextRedaction", "Free Text Redaction");
+        FRAMEWORKS.put("algorithm.plugin.minMax.MinMaxBigDecimal", "Min/Max BigDecimal");
+        FRAMEWORKS.put("algorithm.plugin.minMax.MinMaxLocalDateTime", "Min/Max Date/Time");
+        FRAMEWORKS.put("algorithm.plugin.expression.NumericExpression", "Numeric Expression");
+        FRAMEWORKS.put("algorithm.plugin.characterReplacement.CharacterReplacement", "Character Replacement");
+        FRAMEWORKS.put("algorithm.plugin.characterMapping.CharacterMapping", "Character Mapping");
+        FRAMEWORKS.put("algorithm.plugin.characterMapping.NumericMapping", "Numeric Mapping");
+        FRAMEWORKS.put("algorithm.plugin.characterMapping.PaymentCard", "Payment Card");
+        FRAMEWORKS.put("algorithm.plugin.email.Email", "Email");
+        FRAMEWORKS.put("algorithm.plugin.phone.Phone", "Phone");
+        FRAMEWORKS.put("algorithm.plugin.name.Name", "Name");
+        FRAMEWORKS.put("algorithm.plugin.name.FullName", "Full Name");
+        FRAMEWORKS.put("algorithm.plugin.financialId.FinancialIdBr", "Financial ID BR (CPF/CNPJ)");
+        FRAMEWORKS.put("algorithm.plugin.iban.IBAN", "IBAN");
+        FRAMEWORKS.put("algorithm.plugin.checkdigit.Checkdigit", "Check Digit");
+        FRAMEWORKS.put("algorithm.plugin.segmentMapping.SegmentMapping", "Segment Mapping");
+        FRAMEWORKS.put("algorithm.plugin.decompose.RegexDecompose", "Regex Decompose");
+        FRAMEWORKS.put("algorithm.plugin.secureLookup.SecureLookup", "Secure Lookup");
+        FRAMEWORKS.put("algorithm.plugin.nullSecureLookup.NullSecureLookup", "Null-Safe Secure Lookup");
+        FRAMEWORKS.put("algorithm.plugin.mapping.Mapping", "Mapping");
+        FRAMEWORKS.put("algorithm.plugin.tokenization.Tokenization", "Tokenization");
+        FRAMEWORKS.put("algorithm.plugin.shuffle.Shuffle", "Shuffle");
+        FRAMEWORKS.put("algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain", "String Algorithm Chain");
+        FRAMEWORKS.put("algorithm.plugin.dataCleansing.DataCleansing", "Data Cleansing");
+        FRAMEWORKS.put("algorithm.plugin.dateAlgorithms.DateShift", "Date Shift");
+        FRAMEWORKS.put("algorithm.plugin.dateAlgorithms.DateShiftDiscrete", "Date Shift Discrete");
+        FRAMEWORKS.put("algorithm.plugin.dateAlgorithms.DateReplacement", "Date Replacement");
+        FRAMEWORKS.put("algorithm.plugin.address.MultiColumnAddress", "Multi-Column Address");
+        FRAMEWORKS.put("algorithm.plugin.conditional.MultiColumnCondition", "Multi-Column Condition");
     }
 
     public static void main(String[] args) {
@@ -88,6 +88,7 @@ public class AlgorithmRunner {
 
             switch (command) {
                 case "list":              result = handleList(mapper); break;
+                case "builtins":          result = handleBuiltins(mapper); break;
                 case "schema":            result = handleSchema(mapper, req); break;
                 case "mask":              result = handleMask(mapper, req); break;
                 case "mask_batch":        result = handleMaskBatch(mapper, req); break;
@@ -143,17 +144,65 @@ public class AlgorithmRunner {
 
     static JsonNode handleList(ObjectMapper mapper) {
         ArrayNode arr = mapper.createArrayNode();
-        for (Map.Entry<String, String> e : ALGORITHMS.entrySet()) {
-            ObjectNode algo = mapper.createObjectNode();
-            algo.put("className", e.getKey());
-            algo.put("displayName", e.getValue());
-            arr.add(algo);
+        for (Map.Entry<String, String> e : FRAMEWORKS.entrySet()) {
+            ObjectNode fw = mapper.createObjectNode();
+            fw.put("className", e.getKey());
+            fw.put("displayName", e.getValue());
+            arr.add(fw);
         }
         return arr;
     }
 
+    /**
+     * The plugin's ready-made algorithm instances, for fields that reference one: each with its
+     * framework and whether it can tokenize, plus the frameworks that can — which is how an
+     * algorithm saved from one of them is judged.
+     */
+    static JsonNode handleBuiltins(ObjectMapper mapper) throws Exception {
+        Map<String, MaskingComponent> catalog = getBuiltinCatalog();
+        java.util.List<String> names = new java.util.ArrayList<>(catalog.keySet());
+        names.sort(String.CASE_INSENSITIVE_ORDER);
+
+        ObjectNode result = mapper.createObjectNode();
+        ArrayNode instances = result.putArray("instances");
+        for (String name : names) {
+            Class<?> cls = catalog.get(name).getClass();
+            ObjectNode item = instances.addObject();
+            item.put("name", name);
+            item.put("framework", cls.getName());
+            item.put("tokenization", supportsTokenization(cls));
+        }
+
+        ArrayNode tokenizing = result.putArray("tokenizationFrameworks");
+        for (String className : FRAMEWORKS.keySet()) {
+            try {
+                if (supportsTokenization(instantiate(className).getClass())) tokenizing.add(className);
+            } catch (Exception ignored) {
+                // A framework this plugin build lacks cannot tokenize anything here either.
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Whether an algorithm class tokenizes and re-identifies. The SDK gives setMaskingMode a
+     * default that ignores the mode; a framework that honours TOKENIZE and REIDENTIFY
+     * implements it itself.
+     */
+    static boolean supportsTokenization(Class<?> cls) {
+        for (Class<?> c = cls; c != null && c != Object.class; c = c.getSuperclass()) {
+            try {
+                java.lang.reflect.Method m = c.getDeclaredMethod("setMaskingMode", MaskingAlgorithm.MaskingMode.class);
+                if (!m.isBridge()) return true;
+            } catch (NoSuchMethodException ignored) {
+                // keep looking up the hierarchy
+            }
+        }
+        return false;
+    }
+
     static JsonNode handleSchema(ObjectMapper mapper, JsonNode req) throws Exception {
-        String className = req.get("algorithm").asText();
+        String className = req.get("framework").asText();
         MaskingComponent component = instantiate(className);
         try {
             String schemaText = ComponentConfigurator.generateSchemaText(component);
@@ -168,7 +217,7 @@ public class AlgorithmRunner {
     @SuppressWarnings("unchecked")
     static JsonNode handleMask(ObjectMapper mapper, JsonNode req) {
         try {
-            String className = req.get("algorithm").asText();
+            String className = req.get("framework").asText();
             String input = req.has("input") ? req.get("input").asText() : "";
             String configJson = req.has("config") && !req.get("config").isNull()
                     ? mapper.writeValueAsString(req.get("config")) : "{}";
@@ -185,7 +234,7 @@ public class AlgorithmRunner {
                 ComponentConfigurator.applyConfiguration(component, configJson);
             }
 
-            // Extra algorithms from saved tests — can be referenced by name in sub-algorithm fields
+            // Saved algorithms — can be referenced by name in sub-algorithm fields
             Map<String, JsonNode> extraAlgos = new HashMap<>();
             if (req.has("additionalAlgorithms") && req.get("additionalAlgorithms").isArray()) {
                 for (JsonNode extra : req.get("additionalAlgorithms")) {
@@ -230,7 +279,7 @@ public class AlgorithmRunner {
     @SuppressWarnings("unchecked")
     static JsonNode handleMaskMultiColumn(ObjectMapper mapper, JsonNode req) {
         try {
-            String className = req.get("algorithm").asText();
+            String className = req.get("framework").asText();
             String configJson = req.has("config") && !req.get("config").isNull()
                     ? mapper.writeValueAsString(req.get("config")) : "{}";
             String keyString = req.has("key") ? req.get("key").asText() : DEFAULT_KEY;
@@ -349,7 +398,7 @@ public class AlgorithmRunner {
     @SuppressWarnings("unchecked")
     static JsonNode handleMaskBatch(ObjectMapper mapper, JsonNode req) {
         try {
-            String className = req.get("algorithm").asText();
+            String className = req.get("framework").asText();
             String configJson = req.has("config") && !req.get("config").isNull()
                     ? mapper.writeValueAsString(req.get("config")) : "{}";
             String keyString = req.has("key") ? req.get("key").asText() : DEFAULT_KEY;
@@ -450,7 +499,7 @@ public class AlgorithmRunner {
     @SuppressWarnings("unchecked")
     static String invokeMask(MaskingComponent component, String input) throws Exception {
         // Find the real (non-bridge) mask method to discover the expected parameter type.
-        // Every algorithm in ALGORITHMS declares mask() public on its own class; the extra
+        // Every framework in FRAMEWORKS declares mask() public on its own class; the extra
         // overloads that show up here are the bridges generated for MaskingAlgorithm<T>.
         java.lang.reflect.Method maskMethod = null;
         for (java.lang.reflect.Method m : component.getClass().getMethods()) {
@@ -742,7 +791,7 @@ public class AlgorithmRunner {
                                 + " — " + cause.getClass().getSimpleName() + ": " + cause.getMessage(), e);
                         }
                     }
-                    // Resolve from additionalAlgorithms (saved tests passed by the frontend)
+                    // Resolve from additionalAlgorithms (saved algorithms passed by the frontend)
                     if (alg == null && !extraAlgos.isEmpty()) {
                         JsonNode extra = extraAlgos.get(refName);
                         if (extra == null) extra = extraAlgos.get(shortName);

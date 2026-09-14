@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Masking Algorithms Guide — Delphix</title>
+<title>Masking Frameworks Guide — Delphix</title>
 <link rel="stylesheet" href="guide.css">
 </head>
 <body>
@@ -11,13 +11,13 @@
 <div class="cover">
   <div class="cover-rule"></div>
   <div class="cover-eyebrow">Delphix Masking · Technical reference</div>
-  <h1>Masking Algorithms Guide</h1>
-  <div class="cover-sub">How each algorithm transforms data, with which parameters, and what to expect in the output.</div>
+  <h1>Masking Frameworks Guide</h1>
+  <div class="cover-sub">How each framework transforms data, with which parameters, and what to expect in the output.</div>
   <div class="cover-spacer"></div>
   <div class="cover-facts">
-    <div><span class="cover-fact-n">31</span><span class="cover-fact-l">Algorithms</span></div>
+    <div><span class="cover-fact-n">31</span><span class="cover-fact-l">Frameworks</span></div>
     <div><span class="cover-fact-n">9</span><span class="cover-fact-l">Categories</span></div>
-    <div><span class="cover-fact-n">62</span><span class="cover-fact-l">Built-in instances</span></div>
+    <div><span class="cover-fact-n">59</span><span class="cover-fact-l">Built-in algorithms</span></div>
   </div>
   <div class="cover-meta">
     <span>Plugin <code>delphix-algorithm-plugin 2026.3.0</code></span>
@@ -28,7 +28,7 @@
 <!-- ══════════ TOC ══════════ -->
 <div class="toc">
   <h1 class="doc-title">Contents</h1>
-  <p class="doc-lede">Algorithms are grouped using the same categories shown in the Algorithm Tester sidebar. Every input&nbsp;→&nbsp;output pair in this guide was produced by actually running the algorithm — none of them are illustrative.</p>
+  <p class="doc-lede">A <b>framework</b> is a masking technique the plugin provides; configuring one produces an <b>algorithm</b>, which is what you name and reuse. Frameworks are grouped here using the same categories shown in the Masking Helper sidebar. Every input&nbsp;→&nbsp;output pair in this guide was produced by actually running the framework — none of them are illustrative.</p>
 
   <div class="toc-part">Part 1 · Personal Data</div>
   <div class="toc-row"><span class="toc-num">1.1</span><span class="toc-name">Email</span><span class="toc-cls">email.Email</span></div>
@@ -81,7 +81,7 @@
 
   <div class="toc-part">Appendices</div>
   <div class="toc-row"><span class="toc-num">A</span><span class="toc-name">Cross-cutting concepts: determinism, key, references</span></div>
-  <div class="toc-row"><span class="toc-num">B</span><span class="toc-name">Built-in instance catalog (<code style="font-family:Menlo,monospace;font-size:7.3pt">dlpx-core:</code>)</span></div>
+  <div class="toc-row"><span class="toc-num">B</span><span class="toc-name">Built-in algorithm catalog (<code style="font-family:Menlo,monospace;font-size:7.3pt">dlpx-core:</code>)</span></div>
   <div class="toc-row"><span class="toc-num">C</span><span class="toc-name">Standalone runner limitations</span></div>
 </div>
 
@@ -89,14 +89,14 @@
 <div class="part">
   <div class="part-n">Part 1</div>
   <h2>Personal Data</h2>
-  <p class="part-lede">Algorithms that understand the semantics of the field — email, phone, name, CPF/CNPJ — and generate synthetic substitutes that still look like (and validate as) real data.</p>
+  <p class="part-lede">Frameworks that understand the semantics of the field — email, phone, name, CPF/CNPJ — and generate synthetic substitutes that still look like (and validate as) real data.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">1.1</span><h3>Email</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.email.Email</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Masks an email address by treating each half separately: the part before the <span class="inline">@</span> (the name) and the domain after it. Each half has its own strategy, which lets you fully anonymize the user while keeping the domain — preserving the per-company distribution your reports rely on.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">1.1</span><h3>Email</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.email.Email</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Masks an email address by treating each half separately: the part before the <span class="inline">@</span> (the name) and the domain after it. Each half has its own strategy, which lets you fully anonymize the user while keeping the domain — preserving the per-company distribution your reports rely on.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A valid email address, with <span class="inline">@</span> and a domain. E.g. <span class="inline">john.smith@company.com</span>. Malformed input falls through to <span class="inline">errorHandlingAction</span>.</div>
@@ -121,11 +121,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">1.2</span><h3>Phone</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.phone.Phone</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Generates a synthetic phone number preserving the original formatting exactly: parentheses, spaces, hyphens and digit count all stay in place. Only the digits change — and not all of them: the algorithm tends to preserve prefixes that identify the format (the area code).</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">1.2</span><h3>Phone</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.phone.Phone</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Generates a synthetic phone number preserving the original formatting exactly: parentheses, spaces, hyphens and digit count all stay in place. Only the digits change — and not all of them: the framework tends to preserve prefixes that identify the format (the area code).</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A phone number in any formatting. Punctuation is kept positionally in the output. E.g. <span class="inline">(555) 123-4567</span>, <span class="inline">5551234567</span>.</div>
@@ -144,11 +144,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">1.3</span><h3>Name</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.name.Name</span><span class="tag tag-det">Deterministic</span><span class="tag tag-file">Requires file</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Replaces a simple name — just a first name, or just a surname — with another drawn from a lookup file. The draw is a hash of (value + key), so the same name always maps to the same substitute: "John" will be "Thomas" across every table in the project, which keeps name-based joins working. For compound names use <strong>Full Name</strong> (§1.4).</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">1.3</span><h3>Name</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.name.Name</span><span class="tag tag-det">Deterministic</span><span class="tag tag-file">Requires file</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Replaces a simple name — just a first name, or just a surname — with another drawn from a lookup file. The draw is a hash of (value + key), so the same name always maps to the same substitute: "John" will be "Thomas" across every table in the project, which keeps name-based joins working. For compound names use <strong>Full Name</strong> (§1.4).</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A single word, no separators. E.g. <span class="inline">John</span>, <span class="inline">Smith</span>, <span class="inline">Mary</span>.</div>
@@ -175,11 +175,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">1.4</span><h3>Full Name</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.name.FullName</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Splits a full name into first name(s) and surname, then applies a different algorithm to each part. It is an orchestrator: it masks nothing itself, it only decides where the given name ends and the surname begins, delegating each piece to the algorithm you point it at.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">1.4</span><h3>Full Name</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.name.FullName</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Splits a full name into first name(s) and surname, then applies a different algorithm to each part. It is an orchestrator: it masks nothing itself, it only decides where the given name ends and the surname begins, delegating each piece to the algorithm you point it at.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A full name separated by spaces. E.g. <span class="inline">John Smith</span>, <span class="inline">Mary Anne Johnson</span>.</div>
@@ -205,11 +205,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">1.5</span><h3>Financial ID BR (CPF/CNPJ)</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.financialId.FinancialIdBr</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Masks Brazilian CPF and CNPJ numbers, generating synthetic values that remain <strong>mathematically valid</strong> — the check digits are recalculated. The type is detected automatically from the digit count: 11 is a CPF, 14 is a CNPJ. Input formatting (dots, slash, hyphen) is preserved in the output.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">1.5</span><h3>Financial ID BR (CPF/CNPJ)</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.financialId.FinancialIdBr</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Masks Brazilian CPF and CNPJ numbers, generating synthetic values that remain <strong>mathematically valid</strong> — the check digits are recalculated. The type is detected automatically from the digit count: 11 is a CPF, 14 is a CNPJ. Input formatting (dots, slash, hyphen) is preserved in the output.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A CPF or CNPJ, formatted or not. E.g. <span class="inline">123.456.789-09</span>, <span class="inline">12345678909</span>, <span class="inline">11.222.333/0001-81</span>, <span class="inline">11222333000181</span>.</div>
@@ -240,11 +240,11 @@
   <p class="part-lede">Four distinct strategies for dates: shift while preserving intervals, shift by discrete values, replace outright, or merely clamp to a range.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">2.1</span><h3>Date Shift</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.dateAlgorithms.DateShift</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Shifts the date by an amount drawn from <span class="inline">[minRange, maxRange]</span>. The draw is deterministic by key, so the same date always gets the same shift — which <strong>preserves chronological order</strong> across records. It is the algorithm of choice when analyses depend on intervals ("days between order and delivery").</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">2.1</span><h3>Date Shift</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.dateAlgorithms.DateShift</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Shifts the date by an amount drawn from <span class="inline">[minRange, maxRange]</span>. The draw is deterministic by key, so the same date always gets the same shift — which <strong>preserves chronological order</strong> across records. It is the framework of choice when analyses depend on intervals ("days between order and delivery").</p>
 
     <div class="label">Input format</div>
     <div class="fmt">ISO 8601: <span class="inline">yyyy-MM-dd</span> or <span class="inline">yyyy-MM-ddTHH:mm:ss</span>. The output always includes a time component.</div>
@@ -270,11 +270,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">2.2</span><h3>Date Shift Discrete</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.dateAlgorithms.DateShiftDiscrete</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">A variant of Date Shift where the shift comes not from a continuous range but from a <strong>finite set of allowed values</strong> defined in a configuration file. Useful when the business requires standardized shifts — for instance, only multiples of 7 days, to preserve the day of the week.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">2.2</span><h3>Date Shift Discrete</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.dateAlgorithms.DateShiftDiscrete</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">A variant of Date Shift where the shift comes not from a continuous range but from a <strong>finite set of allowed values</strong> defined in a configuration file. Useful when the business requires standardized shifts — for instance, only multiples of 7 days, to preserve the day of the week.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">ISO 8601: <span class="inline">yyyy-MM-dd</span> or <span class="inline">yyyy-MM-ddTHH:mm:ss</span>.</div>
@@ -290,11 +290,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">2.3</span><h3>Date Replacement</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.dateAlgorithms.DateReplacement</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Discards the original date and draws an <strong>absolute</strong> date within <span class="inline">[minDate, maxDate]</span>. Unlike Date Shift, there is no relationship between input and output beyond determinism — the original chronological order is destroyed. Use it when the date itself is sensitive and no temporal analysis depends on it.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">2.3</span><h3>Date Replacement</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.dateAlgorithms.DateReplacement</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Discards the original date and draws an <strong>absolute</strong> date within <span class="inline">[minDate, maxDate]</span>. Unlike Date Shift, there is no relationship between input and output beyond determinism — the original chronological order is destroyed. Use it when the date itself is sensitive and no temporal analysis depends on it.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">ISO 8601 with time: <span class="inline">yyyy-MM-ddTHH:mm:ss</span>. E.g. <span class="inline">1985-07-20T00:00:00</span>.</div>
@@ -314,11 +314,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">2.4</span><h3>Min/Max Date/Time</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.minMax.MinMaxLocalDateTime</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Not really masking, but <strong>range clamping</strong>: dates inside the range pass through untouched; dates outside are pulled to the nearest bound. The typical use is suppressing outliers that identify individuals — the centenarian customer, the 1900 sentinel date.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">2.4</span><h3>Min/Max Date/Time</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.minMax.MinMaxLocalDateTime</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Not really masking, but <strong>range clamping</strong>: dates inside the range pass through untouched; dates outside are pulled to the nearest bound. The typical use is suppressing outliers that identify individuals — the centenarian customer, the 1900 sentinel date.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">ISO 8601. E.g. <span class="inline">2024-03-15T14:30:00</span>.</div>
@@ -350,11 +350,11 @@
   <p class="part-lede">Transformations over numeric values: deterministic mapping into a range, range clamping, arbitrary Java expressions, and one fixed digit-repetition rule.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">3.1</span><h3>Numeric Mapping</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.characterMapping.NumericMapping</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Maps a number to another one within <span class="inline">[minValue, maxValue]</span>, deterministically. Each source value consistently receives the same destination, which preserves joins and distinct counts — but neither order nor magnitude.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">3.1</span><h3>Numeric Mapping</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.characterMapping.NumericMapping</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Maps a number to another one within <span class="inline">[minValue, maxValue]</span>, deterministically. Each source value consistently receives the same destination, which preserves joins and distinct counts — but neither order nor magnitude.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A positive integer, no punctuation or decimals. E.g. <span class="inline">12345</span>.</div>
@@ -375,11 +375,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">3.2</span><h3>Min/Max BigDecimal</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.minMax.MinMaxBigDecimal</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">The numeric counterpart of Min/Max Date/Time: clamps the value to a range, letting anything already inside pass through untouched. It serves to flatten outliers — very high salaries, extreme negative balances — that on their own identify a person.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">3.2</span><h3>Min/Max BigDecimal</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.minMax.MinMaxBigDecimal</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">The numeric counterpart of Min/Max Date/Time: clamps the value to a range, letting anything already inside pass through untouched. It serves to flatten outliers — very high salaries, extreme negative balances — that on their own identify a person.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A decimal or integer number. E.g. <span class="inline">5000.50</span>, <span class="inline">3.14</span>.</div>
@@ -400,15 +400,15 @@
       <div class="p-row"><div class="p-name">nonConformingDataDefaultValue</div><div class="p-desc">Value returned when the input is not numeric. Empty makes the algorithm raise a non-conforming data error.</div></div>
     </div>
 
-    <div class="note"><b>This does not anonymize.</b> Just like the date Min/Max, values inside the range come out identical. Combine it with another algorithm if the column is sensitive.</div>
+    <div class="note"><b>This does not anonymize.</b> Just like the date Min/Max, values inside the range come out identical. Combine it with another framework if the column is sensitive.</div>
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">3.3</span><h3>Numeric Expression</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.expression.NumericExpression</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">The most open-ended algorithm in the set: it evaluates a <strong>one-line Java expression</strong> over the input value. The expression receives two variables — <span class="inline">input</span> (the value as a <span class="inline">BigDecimal</span>) and <span class="inline">seed</span> (a <span class="inline">long</span> derived from the key, for deterministic masking) — plus any constants you declare.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">3.3</span><h3>Numeric Expression</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.expression.NumericExpression</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">The most open-ended framework in the set: it evaluates a <strong>one-line Java expression</strong> over the input value. The expression receives two variables — <span class="inline">input</span> (the value as a <span class="inline">BigDecimal</span>) and <span class="inline">seed</span> (a <span class="inline">long</span> derived from the key, for deterministic masking) — plus any constants you declare.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">An integer or decimal number. E.g. <span class="inline">1000</span>, <span class="inline">3.14</span>.</div>
@@ -434,11 +434,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">3.4</span><h3>Repeat First Digit</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.repeatFirstDigit.RepeatFirstDigit</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">A fixed rule with no configuration: it takes the <strong>last 4 digits</strong> of the number and replaces them all with the first of those digits, repeated four times. The rest of the number stays intact. This is weak masking, suitable for low-sensitivity fields where you only want to break the exact value.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">3.4</span><h3>Repeat First Digit</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.repeatFirstDigit.RepeatFirstDigit</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">A fixed rule with no configuration: it takes the <strong>last 4 digits</strong> of the number and replaces them all with the first of those digits, repeated four times. The rest of the number stays intact. This is weak masking, suitable for low-sensitivity fields where you only want to break the exact value.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A numeric string of exactly <strong>4, 9, 10 or 14 digits</strong>, without punctuation. Other lengths are rejected.</div>
@@ -460,14 +460,14 @@
 <div class="part">
   <div class="part-n">Part 4</div>
   <h2>String</h2>
-  <p class="part-lede">The general-purpose algorithms for structured text. These are the plugin's most-used tools — and its most configurable.</p>
+  <p class="part-lede">The general-purpose frameworks for structured text. These are the plugin's most-used tools — and its most configurable.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">4.1</span><h3>Character Mapping</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.characterMapping.CharacterMapping</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Swaps each character for another <strong>from the same group</strong>. You define the groups (lowercase letters, uppercase, digits…) and the algorithm guarantees a letter becomes a letter and a digit becomes a digit, preserving length and the "visual shape" of the data. Characters belonging to no group — spaces, accents, punctuation — pass through untouched.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">4.1</span><h3>Character Mapping</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.characterMapping.CharacterMapping</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Swaps each character for another <strong>from the same group</strong>. You define the groups (lowercase letters, uppercase, digits…) and the framework guarantees a letter becomes a letter and a digit becomes a digit, preserving length and the "visual shape" of the data. Characters belonging to no group — spaces, accents, punctuation — pass through untouched.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Any string. E.g. <span class="inline">Renée Smith</span>, <span class="inline">ABC123</span>.</div>
@@ -495,11 +495,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">4.2</span><h3>Character Replacement</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.characterReplacement.CharacterReplacement</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Applies character-by-character substitution rules: each rule declares <em>which</em> characters to detect and <em>what</em> to replace them with. Unlike Character Mapping, the substitution here is fixed (not drawn) — every filtered character becomes the same symbol. It can optionally run after another algorithm, via <span class="inline">stringAlgorithm</span>.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">4.2</span><h3>Character Replacement</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.characterReplacement.CharacterReplacement</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Applies character-by-character substitution rules: each rule declares <em>which</em> characters to detect and <em>what</em> to replace them with. Unlike Character Mapping, the substitution here is fixed (not drawn) — every filtered character becomes the same symbol. It can optionally run after another algorithm, via <span class="inline">stringAlgorithm</span>.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Any string. E.g. <span class="inline">Some example text</span>.</div>
@@ -511,7 +511,7 @@
       <tr><td class="c-in">Mary Johnson</td><td class="c-ar">→</td><td class="c-out">Q*lv T*vb**h</td></tr>
       <tr><td class="c-in">Renée François <span style="color:#7b8592">(filterAccents: INPUT)</span></td><td class="c-ar">→</td><td class="c-out">**n** Fp*ls**n</td></tr>
     </table>
-    <div class="fmt" style="border:none;padding-left:0;font-size:8.1pt;">Rule: vowels → <span class="inline">*</span>. The consonants changed too because the algorithm applies its own masking before the rules. In the third row, <span class="inline">filterAccents: INPUT</span> converted <span class="inline">é</span> and <span class="inline">ç</span> to ASCII before processing.</div>
+    <div class="fmt" style="border:none;padding-left:0;font-size:8.1pt;">Rule: vowels → <span class="inline">*</span>. The consonants changed too because the framework applies its own masking before the rules. In the third row, <span class="inline">filterAccents: INPUT</span> converted <span class="inline">é</span> and <span class="inline">ç</span> to ASCII before processing.</div>
 
     <div class="label">Parameters</div>
     <div class="params">
@@ -529,11 +529,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">4.3</span><h3>Segment Mapping</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.segmentMapping.SegmentMapping</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Splits the string into fixed-length segments and handles each one independently — mask, preserve, or replace with a constant. This is the right algorithm for rigidly formatted documents where different parts carry different meaning: CPF, CNPJ, postal code, barcode, account number with an embedded branch code.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">4.3</span><h3>Segment Mapping</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.segmentMapping.SegmentMapping</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Splits the string into fixed-length segments and handles each one independently — mask, preserve, or replace with a constant. This is the right framework for rigidly formatted documents where different parts carry different meaning: CPF, CNPJ, postal code, barcode, account number with an embedded branch code.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A fixed-format string. With <span class="inline">autoIgnoreCharacters</span> enabled, separators (dots, hyphens, slashes) are detected and repositioned automatically. E.g. <span class="inline">123.456.789-09</span>.</div>
@@ -561,11 +561,11 @@
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">4.4</span><h3>Regex Decompose</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.decompose.RegexDecompose</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">The most flexible algorithm for structured text. You define regex patterns; the first one matching the <strong>entire</strong> string is applied, and each capture group (parentheses) receives an independent action — preserve, drop, redact, or pass through another algorithm. Text <em>between</em> groups is preserved automatically.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">4.4</span><h3>Regex Decompose</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.decompose.RegexDecompose</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">The most flexible framework for structured text. You define regex patterns; the first one matching the <strong>entire</strong> string is applied, and each capture group (parentheses) receives an independent action — preserve, drop, redact, or pass through another algorithm. Text <em>between</em> groups is preserved automatically.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Any string. Patterns are tested in declaration order until one matches. If none match, <span class="inline">fallbackAction</span> applies.</div>
@@ -589,7 +589,7 @@
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> actions.type</div><div class="p-desc"><strong>PRESERVE</strong> — keeps the stretch. <strong>TRUNCATE</strong> — removes it (becomes an empty string). <strong>REDACT</strong> — replaces it with fixed text or a character. <strong>APPLY_ALGORITHM</strong> — passes it through another algorithm.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> actions.redactString</div><div class="p-desc">Fixed text replacing the <em>whole</em> group, regardless of original length. E.g. <code>"***"</code>. Only with <code>REDACT</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> actions.redactCharacter</div><div class="p-desc">A single character replacing <em>each</em> character of the group, preserving length. E.g. <code>"X"</code> turns 9 digits into <code>XXXXXXXXX</code>. Mutually exclusive with <code>redactString</code>.</div></div>
-      <div class="p-row"><div class="p-name"><span class="sub">↳</span> actions.algorithm</div><div class="p-desc">Algorithm instance applied to the group when the type is <code>APPLY_ALGORITHM</code>. Accepts built-in catalog names (appendix B) or tests saved in the Tester.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> actions.algorithm</div><div class="p-desc">Algorithm instance applied to the group when the type is <code>APPLY_ALGORITHM</code>. Accepts built-in algorithm names (appendix B) or algorithms saved in the tester.</div></div>
       <div class="p-row"><div class="p-name">fallbackAction</div><div class="p-desc">Action applied to the whole value when no pattern matches. It has the same four types, with its own <code>redactString</code>, <code>redactCharacter</code> and <code>algorithm</code>.</div></div>
       <div class="p-row"><div class="p-name">trimInput</div><div class="p-desc">Strips whitespace from both ends <em>before</em> attempting to match. The padding is restored in the output (see the third row of the table). Essential for <code>CHAR(n)</code> columns, which arrive right-padded with spaces.</div></div>
       <div class="p-row"><div class="p-name">requireMask</div><div class="p-desc">When enabled, raises an error if no pattern matches, instead of using the fallback. Use it when out-of-format values must be rejected rather than passed along.</div></div>
@@ -609,11 +609,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">4.5</span><h3>String Algorithm Chain</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Chains algorithms in sequence: the output of one becomes the input of the next. It requires at least two. Use it to compose transformations no single algorithm offers — mask then normalize, or apply two layers of substitution.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">4.5</span><h3>String Algorithm Chain</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Chains algorithms in sequence: the output of one becomes the input of the next. It requires at least two. Use it to compose transformations no single framework offers — mask then normalize, or apply two layers of substitution.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A string compatible with the <em>first</em> algorithm in the chain. The rest receive whatever the previous one produced.</div>
@@ -627,18 +627,18 @@ The first pattern only matches values containing <code>@</code>; everything else
 
     <div class="label">Parameters</div>
     <div class="params">
-      <div class="p-row"><div class="p-name">algorithmReferences</div><div class="p-desc">An ordered list of instance references, <strong>minimum 2</strong>. E.g. <code>[{"name":"dlpx-core:FirstName"}, {"name":"dlpx-core:LastName"}]</code>. Names come from the built-in catalog (appendix B) or from tests saved in the Tester.</div></div>
+      <div class="p-row"><div class="p-name">algorithmReferences</div><div class="p-desc">An ordered list of instance references, <strong>minimum 2</strong>. E.g. <code>[{"name":"dlpx-core:FirstName"}, {"name":"dlpx-core:LastName"}]</code>. Names come from the built-in algorithm catalog (appendix B) or from algorithms saved in the tester.</div></div>
     </div>
 
     <div class="note"><b>Order matters, and so does the fit.</b> Each algorithm must accept the format the previous one produced. Chaining a date algorithm after a name algorithm, for instance, fails — the second receives text it cannot parse.</div>
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">4.6</span><h3>Shuffle</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.shuffle.Shuffle</span><span class="tag tag-nondet">⚠ Non-deterministic</span><span class="tag tag-file">Batch mode</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Redistributes values <strong>across</strong> records: each row receives a value that belonged to another. No value is invented — the set stays identical, only the associations change. This perfectly preserves the column's statistical distribution, making it ideal for columns used in aggregations.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">4.6</span><h3>Shuffle</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.shuffle.Shuffle</span><span class="tag tag-nondet">⚠ Non-deterministic</span><span class="tag tag-file">Batch mode</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Redistributes values <strong>across</strong> records: each row receives a value that belonged to another. No value is invented — the set stays identical, only the associations change. This perfectly preserves the column's statistical distribution, making it ideal for columns used in aggregations.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Multiple values at once (batch mode). Each value must be at least <span class="inline">minimumShuffleSize</span> characters long.</div>
@@ -669,11 +669,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   <p class="part-lede">For free-text fields — notes, reports, comments — where the sensitive data is embedded in prose that must stay readable.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">5.1</span><h3>Free Text Redaction</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.freeTextRedaction.FreeTextRedaction</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Scans free text for sensitive entities — by regular expression and/or by a list of terms in a file — and replaces only the matched stretches. Everything else is preserved, keeping the document readable and useful for analysis.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">5.1</span><h3>Free Text Redaction</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.freeTextRedaction.FreeTextRedaction</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Scans free text for sensitive entities — by regular expression and/or by a list of terms in a file — and replaces only the matched stretches. Everything else is preserved, keeping the document readable and useful for analysis.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Free text of any length. E.g. <span class="inline">Contact John by email at john@company.com or on 555-0100.</span></div>
@@ -695,11 +695,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">5.2</span><h3>Redact</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.redact.Redact</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">A simpler, more direct take on redaction: a map of <span class="inline">regex → replacement text</span>. Each map key is a pattern, and the corresponding value is what takes its place. With no regex configured, it returns the input value with no masking at all.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">5.2</span><h3>Redact</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.redact.Redact</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">A simpler, more direct take on redaction: a map of <span class="inline">regex → replacement text</span>. Each map key is a pattern, and the corresponding value is what takes its place. With no regex configured, it returns the input value with no masking at all.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Any string. Stretches matching the regexes are replaced.</div>
@@ -715,7 +715,7 @@ The first pattern only matches values containing <code>@</code>; everything else
       <div class="p-row"><div class="p-name">regexRedact</div><div class="p-desc">A map of <code>{regex → replacement_text}</code>. It allows different markers per data type — <code>[EMAIL]</code>, <code>[CPF]</code>, <code>[PHONE]</code> — in a single configuration.</div></div>
     </div>
 
-    <div class="note"><b>An empty configuration masks nothing.</b> With no regex in <code>regexRedact</code>, the algorithm returns the input untouched and issues <b>no</b> warning. Always confirm the map was filled in.</div>
+    <div class="note"><b>An empty configuration masks nothing.</b> With no regex in <code>regexRedact</code>, the framework returns the input untouched and issues <b>no</b> warning. Always confirm the map was filled in.</div>
   </div>
 </div>
 
@@ -726,11 +726,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   <p class="part-lede">Financial instruments with verifiable structure: cards with a Luhn check digit and IBANs with a country checksum.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">6.1</span><h3>Payment Card</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.characterMapping.PaymentCard</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Masks card numbers while preserving the <strong>BIN</strong> (the leading digits identifying the network and issuer) and, optionally, the trailing digits used in reconciliation. The generated number keeps a <strong>valid Luhn check digit</strong>, so it still passes form and system validation.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">6.1</span><h3>Payment Card</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.characterMapping.PaymentCard</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Masks card numbers while preserving the <strong>BIN</strong> (the leading digits identifying the network and issuer) and, optionally, the trailing digits used in reconciliation. The generated number keeps a <strong>valid Luhn check digit</strong>, so it still passes form and system validation.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A card number with or without spaces/hyphens. E.g. <span class="inline">4111 1111 1111 1111</span>.</div>
@@ -754,11 +754,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">6.2</span><h3>IBAN</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.iban.IBAN</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Masks an IBAN while preserving the country code and recalculating the check digits, so the result remains a structurally valid IBAN. You control how many characters of the national part get shuffled.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">6.2</span><h3>IBAN</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.iban.IBAN</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Masks an IBAN while preserving the country code and recalculating the check digits, so the result remains a structurally valid IBAN. You control how many characters of the national part get shuffled.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">An IBAN in standard format, without spaces. E.g. <span class="inline">GB29NWBK60161331926819</span>.</div>
@@ -783,14 +783,14 @@ The first pattern only matches values containing <code>@</code>; everything else
 <div class="part">
   <div class="part-n">Part 7</div>
   <h2>Lookup &amp; Mapping</h2>
-  <p class="part-lede">Algorithms that substitute values by consulting an external source — a file of substitutes, a lookup table, or a persistent mapping database.</p>
+  <p class="part-lede">Frameworks that substitute values by consulting an external source — a file of substitutes, a lookup table, or a persistent mapping database.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">7.1</span><h3>Secure Lookup</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.secureLookup.SecureLookup</span><span class="tag tag-det">Deterministic</span><span class="tag tag-nondet">⚠ Except with RANDOMIZE</span><span class="tag tag-file">Requires file</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Replaces the value with a line from a lookup file, chosen by hashing (value + key). The same input always selects the same line, which gives referential consistency across tables without needing a mapping database. It is the plugin's most widely used lookup algorithm.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">7.1</span><h3>Secure Lookup</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.secureLookup.SecureLookup</span><span class="tag tag-det">Deterministic</span><span class="tag tag-nondet">⚠ Except with RANDOMIZE</span><span class="tag tag-file">Requires file</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Replaces the value with a line from a lookup file, chosen by hashing (value + key). The same input always selects the same line, which gives referential consistency across tables without needing a mapping database. It is the plugin's most widely used lookup framework.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Any non-null string. The file's contents determine the output domain.</div>
@@ -816,11 +816,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">7.2</span><h3>Null-Safe Secure Lookup</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.nullSecureLookup.NullSecureLookup</span><span class="tag tag-warn">Limited in the runner</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">A variant of Secure Lookup with explicit null handling: null input returns null instead of raising an error. It exposes no parameters — it uses the lookup file embedded in the plugin.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">7.2</span><h3>Null-Safe Secure Lookup</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.nullSecureLookup.NullSecureLookup</span><span class="tag tag-warn">Limited in the runner</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">A variant of Secure Lookup with explicit null handling: null input returns null instead of raising an error. It exposes no parameters — it uses the lookup file embedded in the plugin.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">Any string, or null.</div>
@@ -834,15 +834,15 @@ The first pattern only matches values containing <code>@</code>; everything else
     <div class="label">Parameters</div>
     <p class="p-none">None.</p>
 
-    <div class="note"><b>In the standalone runner it always returns <code>null</code>.</b> The algorithm depends on the Masking Engine context to resolve its embedded lookup file. A <code>null</code> result here is expected and does not indicate a configuration error.</div>
+    <div class="note"><b>In the standalone runner it always returns <code>null</code>.</b> The framework depends on the Masking Engine context to resolve its embedded lookup file. A <code>null</code> result here is expected and does not indicate a configuration error.</div>
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">7.3</span><h3>Data Cleansing</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.dataCleansing.DataCleansing</span><span class="tag tag-file">Requires file</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Substitutes values according to an <strong>explicit</strong> lookup table: you declare exactly which value becomes which. Unlike Secure Lookup, there is no hashing or drawing. In practice it is more a standardization tool than a masking one — normalizing abbreviations, unifying divergent spellings.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">7.3</span><h3>Data Cleansing</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.dataCleansing.DataCleansing</span><span class="tag tag-file">Requires file</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Substitutes values according to an <strong>explicit</strong> lookup table: you declare exactly which value becomes which. Unlike Secure Lookup, there is no hashing or drawing. In practice it is more a standardization tool than a masking one — normalizing abbreviations, unifying divergent spellings.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A string with a match in the file. With no match, the original value passes through <strong>unchanged</strong>.</div>
@@ -868,14 +868,14 @@ The first pattern only matches values containing <code>@</code>; everything else
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">7.4</span><h3>Mapping</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.mapping.Mapping</span><span class="tag tag-warn">Does not work in the runner</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Maintains a persistent one-to-one mapping in a database: each original value receives a unique substitute, stored and reused across every table and every future run. It is the plugin's strongest guarantee of <strong>referential consistency</strong> — and the only one that survives between separate jobs.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">7.4</span><h3>Mapping</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.mapping.Mapping</span><span class="tag tag-warn">Does not work in the runner</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Maintains a persistent one-to-one mapping in a database: each original value receives a unique substitute, stored and reused across every table and every future run. It is the plugin's strongest guarantee of <strong>referential consistency</strong> — and the only one that survives between separate jobs.</p>
 
     <div class="label">Input format</div>
-    <div class="fmt">Any string. The algorithm queries the mapping set and, if the value is new, creates and persists a substitute.</div>
+    <div class="fmt">Any string. The framework queries the mapping set and, if the value is new, creates and persists a substitute.</div>
 
     <div class="label">Input → Output</div>
     <table class="xf">
@@ -897,7 +897,7 @@ The first pattern only matches values containing <code>@</code>; everything else
       <div class="p-row"><div class="p-name">ignoreCharacters</div><div class="p-desc">ASCII codes to strip from the input before the lookup. E.g. <code>45</code> hyphen, <code>46</code> dot — making a CPF with and without formatting point at the same mapping.</div></div>
     </div>
 
-    <div class="note"><b>Unavailable in the Algorithm Tester.</b> The standalone runner has no mapping database; any test returns <code>Mapping set references are not supported</code>. This algorithm can only be validated in the Masking Engine.</div>
+    <div class="note"><b>Unavailable in the Masking Helper.</b> The standalone runner has no mapping database; any run returns <code>Mapping set references are not supported</code>. This framework can only be validated in the Masking Engine.</div>
   </div>
 </div>
 
@@ -905,14 +905,14 @@ The first pattern only matches values containing <code>@</code>; everything else
 <div class="part">
   <div class="part-n">Part 8</div>
   <h2>Multi-Column</h2>
-  <p class="part-lede">Algorithms that receive the whole row rather than a single value — allowing the masking of one column to depend on the contents of another.</p>
+  <p class="part-lede">Frameworks that receive the whole row rather than a single value — allowing the masking of one column to depend on the contents of another.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">8.1</span><h3>Multi-Column Condition</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.conditional.MultiColumnCondition</span><span class="tag tag-det">Deterministic</span><span class="tag tag-file">Multi-column</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Chooses which algorithm to apply to each column <strong>based on the value of a conditional column</strong>. The classic case: if the gender column says "F", mask the name with a list of female names; if "M", with male names — keeping the record internally coherent.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">8.1</span><h3>Multi-Column Condition</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.conditional.MultiColumnCondition</span><span class="tag tag-det">Deterministic</span><span class="tag tag-file">Multi-column</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Chooses which algorithm to apply to each column <strong>based on the value of a conditional column</strong>. The classic case: if the gender column says "F", mask the name with a list of female names; if "M", with male names — keeping the record internally coherent.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A row with named columns. Required: <span class="inline">key</span> (the conditional column). Optional: <span class="inline">string1</span>…<span class="inline">string10</span>, <span class="inline">numeric1</span>…<span class="inline">numeric3</span>, <span class="inline">date1</span>…<span class="inline">date3</span>, <span class="inline">binary1</span>…<span class="inline">binary3</span>.</div>
@@ -939,17 +939,17 @@ The first pattern only matches values containing <code>@</code>; everything else
       <div class="p-row"><div class="p-name">filterDirection</div><div class="p-desc">Where to count <code>filterLength</code> characters from: <code>LEFT</code> (the start) or <code>RIGHT</code> (the end).</div></div>
     </div>
 
-    <div class="note tip"><b>Where the names <code>key</code>, <code>string1</code>… come from.</b> They are <b>fixed slots</b> of the algorithm, not column names from your database. The translation between the real column (<code>GENDER</code>, <code>NAME</code>) and the slot (<code>key</code>, <code>string1</code>) is done in the Masking Engine <b>inventory</b>. In the Algorithm Tester you simulate that mapping by filling in the input table by hand.</div>
+    <div class="note tip"><b>Where the names <code>key</code>, <code>string1</code>… come from.</b> They are <b>fixed slots</b> of the framework, not column names from your database. The translation between the real column (<code>GENDER</code>, <code>NAME</code>) and the slot (<code>key</code>, <code>string1</code>) is done in the Masking Engine <b>inventory</b>. In the Masking Helper you simulate that mapping by filling in the input table by hand.</div>
 
     <div class="note"><b>Columns without an algorithm are not masked.</b> If a condition declares only <code>string1</code>, every other column in the row passes through intact — even if it holds sensitive data. Configure <code>fallbackAlgo</code> or declare each slot explicitly.</div>
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">8.2</span><h3>Multi-Column Address</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.address.MultiColumnAddress</span><span class="tag tag-warn">Requires address file</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Masks address fields spread across several columns — street, number, district, city, state, postal code — generating a synthetic address that is <strong>internally coherent</strong>. Without it, masking each column in isolation would produce impossible combinations (a California street with a New York ZIP code).</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">8.2</span><h3>Multi-Column Address</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.address.MultiColumnAddress</span><span class="tag tag-warn">Requires address file</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Masks address fields spread across several columns — street, number, district, city, state, postal code — generating a synthetic address that is <strong>internally coherent</strong>. Without it, masking each column in isolation would produce impossible combinations (a California street with a New York ZIP code).</p>
 
     <div class="label">Input format</div>
     <div class="fmt">The row's address columns. Requires an address lookup file in Delphix's specific format.</div>
@@ -961,9 +961,9 @@ The first pattern only matches values containing <code>@</code>; everything else
     </table>
 
     <div class="label">Parameters</div>
-    <p class="p-none">Not documented in this guide — the algorithm does not initialize without the address file, which prevents inspecting its schema in the runner.</p>
+    <p class="p-none">Not documented in this guide — the framework does not initialize without the address file, which prevents inspecting its schema in the runner.</p>
 
-    <div class="note"><b>Not testable in the standalone runner.</b> The algorithm fails during initialization without the address lookup file, which does not ship with the plugin. Configure it and validate directly in the Masking Engine.</div>
+    <div class="note"><b>Not testable in the standalone runner.</b> The framework fails during initialization without the address lookup file, which does not ship with the plugin. Configure it and validate directly in the Masking Engine.</div>
   </div>
 </div>
 
@@ -971,14 +971,14 @@ The first pattern only matches values containing <code>@</code>; everything else
 <div class="part">
   <div class="part-n">Part 9</div>
   <h2>Other</h2>
-  <p class="part-lede">Two specialized algorithms: generic check-digit recalculation and reversible tokenization.</p>
+  <p class="part-lede">Two specialized frameworks: generic check-digit recalculation and reversible tokenization.</p>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">9.1</span><h3>Check Digit</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.checkdigit.Checkdigit</span><span class="tag tag-det">Deterministic</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">Masks numbers carrying a check digit and <strong>recalculates that digit</strong> afterwards, so the result still passes validation. It is generic: any weighted-sum-plus-modulus scheme can be described through its parameters — barcode, EAN, payment slip, registration number, state tax ID.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">9.1</span><h3>Check Digit</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.checkdigit.Checkdigit</span><span class="tag tag-det">Deterministic</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">Masks numbers carrying a check digit and <strong>recalculates that digit</strong> afterwards, so the result still passes validation. It is generic: any weighted-sum-plus-modulus scheme can be described through its parameters — barcode, EAN, payment slip, registration number, state tax ID.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">A numeric string without punctuation, including the check digit at the configured position. E.g. <span class="inline">7891000315507</span> (EAN-13).</div>
@@ -1012,11 +1012,11 @@ The first pattern only matches values containing <code>@</code>; everything else
   </div>
 </div>
 
-<div class="algo">
-  <div class="algo-head"><span class="algo-n">9.2</span><h3>Tokenization</h3></div>
-  <div class="algo-tags"><span class="algo-cls">algorithm.plugin.tokenization.Tokenization</span><span class="tag tag-rev">Reversible</span><span class="tag tag-nondet">⚠ Non-deterministic by default</span></div>
-  <div class="algo-body">
-    <p class="algo-desc">The only <strong>reversible</strong> algorithm in the set. It encrypts the value with AES and returns a token; with the same key and configuration, the original value can be recovered (in the Tester, via the <em>Detokenize</em> button — <span class="inline">REIDENTIFY</span> mode). It is the choice when the data must return to its original form somewhere in the pipeline.</p>
+<div class="framework">
+  <div class="framework-head"><span class="framework-n">9.2</span><h3>Tokenization</h3></div>
+  <div class="framework-tags"><span class="framework-cls">algorithm.plugin.tokenization.Tokenization</span><span class="tag tag-rev">Reversible</span><span class="tag tag-nondet">⚠ Non-deterministic by default</span></div>
+  <div class="framework-body">
+    <p class="framework-desc">The only <strong>reversible</strong> framework in the set. It encrypts the value with AES and returns a token; with the same key and configuration, the original value can be recovered (in the tester, via the <em>Detokenize</em> button — <span class="inline">REIDENTIFY</span> mode). It is the choice when the data must return to its original form somewhere in the pipeline.</p>
 
     <div class="label">Input format</div>
     <div class="fmt">An alphanumeric string. Characters outside the tokenizable set — symbols, spaces, hyphens — trigger the <span class="inline">fallback</span>.</div>
@@ -1050,15 +1050,15 @@ The first pattern only matches values containing <code>@</code>; everything else
 <div class="part">
   <div class="part-n">Appendix A</div>
   <h2>Cross-cutting concepts</h2>
-  <p class="part-lede">Behaviors that span several algorithms and tend to cause confusion the first time you meet them.</p>
+  <p class="part-lede">Behaviors that span several frameworks and tend to cause confusion the first time you meet them.</p>
 </div>
 
 <div style="margin-bottom:6mm;">
   <div class="label">Determinism and the role of the key</div>
-  <p style="margin:0 0 3mm;max-width:14.5cm;">Most algorithms are <strong>deterministic</strong>: the same input value, with the same key, always produces the same output. That is what preserves joins — if <span class="inline">John</span> becomes <span class="inline">Thomas</span> in the customers table, it becomes <span class="inline">Thomas</span> in the orders table too.</p>
+  <p style="margin:0 0 3mm;max-width:14.5cm;">Most frameworks are <strong>deterministic</strong>: the same input value, with the same key, always produces the same output. That is what preserves joins — if <span class="inline">John</span> becomes <span class="inline">Thomas</span> in the customers table, it becomes <span class="inline">Thomas</span> in the orders table too.</p>
   <p style="margin:0 0 3mm;max-width:14.5cm;">The key is what makes the result unpredictable to anyone who lacks it. Changing it changes the entire output, as seen in §4.1. Two practical consequences: <strong>the same key must be used across the whole project</strong>, and <strong>changing the key invalidates consistency with already-masked data</strong>.</p>
   <table class="tbl">
-    <tr><th>Behavior</th><th>Algorithms</th></tr>
+    <tr><th>Behavior</th><th>Frameworks</th></tr>
     <tr><td>Deterministic by key</td><td>Character Mapping, Numeric Mapping, Segment Mapping, Payment Card, IBAN, Check Digit, Date Shift, Date Replacement, Secure Lookup, Name, Full Name, Email, Phone, Financial ID BR</td></tr>
     <tr><td><b>⚠ Non-deterministic</b></td><td><b>Shuffle</b> (§4.6) — always; a different permutation on every run. <b>Tokenization</b> (§9.2) — whenever <code>ivLength</code> is above zero, and the default is <code>8</code>; use <code>ivLength: 0</code> for deterministic output. <b>Secure Lookup</b> (§7.1) — only with <code>hashMethod: RANDOMIZE</code>.</td></tr>
     <tr><td>Key-independent</td><td>Min/Max (both), Redact, Free Text Redaction, Data Cleansing, Repeat First Digit, Numeric Expression without <code>seed</code></td></tr>
@@ -1066,10 +1066,10 @@ The first pattern only matches values containing <code>@</code>; everything else
 </div>
 
 <div style="margin-bottom:6mm;">
-  <div class="label">Algorithms that may mask nothing</div>
-  <p style="margin:0 0 2.5mm;max-width:14.5cm;">Several algorithms silently return the original value under certain conditions. None of them issue a warning — verifying is on you.</p>
+  <div class="label">Frameworks that may mask nothing</div>
+  <p style="margin:0 0 2.5mm;max-width:14.5cm;">Several frameworks silently return the original value under certain conditions. None of them issue a warning — verifying is on you.</p>
   <table class="tbl">
-    <tr><th>Algorithm</th><th>When data passes through intact</th></tr>
+    <tr><th>Framework</th><th>When data passes through intact</th></tr>
     <tr><td>Min/Max BigDecimal · Date/Time</td><td>Whenever the value is already inside the range</td></tr>
     <tr><td>Data Cleansing</td><td>Value with no match in the lookup file</td></tr>
     <tr><td>Redact</td><td><code>regexRedact</code> empty, or no pattern matching</td></tr>
@@ -1082,25 +1082,25 @@ The first pattern only matches values containing <code>@</code>; everything else
 
 <div style="margin-bottom:6mm;">
   <div class="label">CHAR(n) columns and invisible padding</div>
-  <p style="margin:0 0 2.5mm;max-width:14.5cm;"><span class="inline">CHAR(n)</span> columns right-pad the value with spaces up to the declared size. An 11-digit CPF in a <span class="inline">CHAR(15)</span> column reaches the algorithm as <span class="inline">"12345678909&nbsp;&nbsp;&nbsp;&nbsp;"</span>. Since <span class="inline">\d</span> does not match a space, regexes that work in the Tester fail in production with messages like <span class="inline">No pattern matched</span> or <span class="inline">did not conform to the expected format</span>.</p>
-  <p style="margin:0;max-width:14.5cm;">The fix is to enable the algorithm's trim option: <span class="inline">trimInput</span> on Regex Decompose, <span class="inline">trimWhitespace</span> on Check Digit and Data Cleansing, <span class="inline">trimWhitespaceFromInput</span> on Secure Lookup. The padding is restored in the output.</p>
+  <p style="margin:0 0 2.5mm;max-width:14.5cm;"><span class="inline">CHAR(n)</span> columns right-pad the value with spaces up to the declared size. An 11-digit CPF in a <span class="inline">CHAR(15)</span> column reaches the framework as <span class="inline">"12345678909&nbsp;&nbsp;&nbsp;&nbsp;"</span>. Since <span class="inline">\d</span> does not match a space, regexes that work in the tester fail in production with messages like <span class="inline">No pattern matched</span> or <span class="inline">did not conform to the expected format</span>.</p>
+  <p style="margin:0;max-width:14.5cm;">The fix is to enable the framework's trim option: <span class="inline">trimInput</span> on Regex Decompose, <span class="inline">trimWhitespace</span> on Check Digit and Data Cleansing, <span class="inline">trimWhitespaceFromInput</span> on Secure Lookup. The padding is restored in the output.</p>
 </div>
 
 <div>
   <div class="label">References between algorithms</div>
-  <p style="margin:0 0 2.5mm;max-width:14.5cm;">Many parameters ask for an "algorithm reference" — <span class="inline">firstNameAlgorithmRef</span>, <span class="inline">actions.algorithm</span>, <span class="inline">numericAlgorithm</span>, <span class="inline">fallbackAlgo</span>. The expected value is <span class="inline">{"name": "&lt;instance&gt;"}</span>, where the instance can be:</p>
-  <p style="margin:0;max-width:14.5cm;">① a name from the built-in catalog, prefixed with <span class="inline">dlpx-core:</span> (appendix B); ② the name of a test saved in the Algorithm Tester itself; ③ in the Masking Engine, any configured algorithm instance. Non-existent names produce <span class="inline">Sub-algorithm not found</span>.</p>
+  <p style="margin:0 0 2.5mm;max-width:14.5cm;">Many parameters ask for an "algorithm reference" — <span class="inline">firstNameAlgorithmRef</span>, <span class="inline">actions.algorithm</span>, <span class="inline">numericAlgorithm</span>, <span class="inline">fallbackAlgo</span>. The expected value is <span class="inline">{"name": "&lt;algorithm&gt;"}</span>, where the algorithm can be:</p>
+  <p style="margin:0;max-width:14.5cm;">① a name from the built-in catalog, prefixed with <span class="inline">dlpx-core:</span> (appendix B); ② the name of an algorithm saved in the Masking Helper itself; ③ in the Masking Engine, any configured algorithm. Non-existent names produce <span class="inline">Sub-algorithm not found</span>.</p>
 </div>
 
 <!-- ══════════ APPENDIX B ══════════ -->
 <div class="part">
   <div class="part-n">Appendix B</div>
-  <h2>Built-in instance catalog</h2>
-  <p class="part-lede">The 62 instances shipped with the plugin, usable in any reference parameter. Prefix them with <code style="font-family:Menlo,monospace;font-size:8.4pt">dlpx-core:</code> — for example <code style="font-family:Menlo,monospace;font-size:8.4pt">dlpx-core:FirstName</code>. Names containing spaces work fine.</p>
+  <h2>Built-in algorithm catalog</h2>
+  <p class="part-lede">The 59 ready-made algorithms shipped with the plugin, usable in any reference parameter. Prefix them with <code style="font-family:Menlo,monospace;font-size:8.4pt">dlpx-core:</code> — for example <code style="font-family:Menlo,monospace;font-size:8.4pt">dlpx-core:FirstName</code>. Names containing spaces work fine.</p>
 </div>
 
 <div class="cat">
-<div>ABARoutingNumber SL</div><div>Age SL</div><div>BR - Financial ID</div><div>BloodType SL</div><div>Brazil CNPJ</div><div>Brazil CPF</div><div>CM Alpha-Numeric</div><div>CM Digits</div><div>CM Numeric</div><div>Countries SL</div><div>Credit Card</div><div>Date Shift Discrete</div><div>Date Shift Fixed</div><div>Date Shift Variable</div><div>Department SL</div><div>Email SL</div><div>Email Unique</div><div>Ethnicity SL</div><div>FirstName</div><div>FullName</div><div>Gender SL</div><div>IBAN</div><div>Japan Corporate Number</div><div>Japan Drivers License</div><div>Japan My Number</div><div>JobTitle SL</div><div>Language SL</div><div>LastName</div><div>Lat_Long Coordinates</div><div>Legacy AccNoLookup</div><div>Legacy AddrLine2Lookup</div><div>Legacy AddrLookup</div><div>Legacy BusinessLegalEntityLookup</div><div>Legacy CommentLookup</div><div>Legacy DrivingLicenseNoLookup</div><div>Legacy DummyHospitalNameLookup</div><div>Legacy EmailLookup</div><div>Legacy FirstNameLookup</div><div>Legacy FullNMLookup</div><div>Legacy LastCommaFirstLookup</div><div>Legacy LastNameLookup</div><div>Legacy RandomValueLookup</div><div>Legacy SchoolNameLookup</div><div>Legacy USStateCodesLookup</div><div>Legacy USStatesLookup</div><div>Legacy UsCitiesLookup</div><div>Legacy UsCountiesLookup</div><div>Legacy WebURLsLookup</div><div>MaritalStatus SL</div><div>MedicalGenericDrug SL</div><div>NationalOrigin SL</div><div>Null Secure Lookup</div><div>Phone US</div><div>Phone Unique</div><div>PoliticalOrientation SL</div><div>Redact Digits-Zero</div><div>ReligiousOrientation SL</div><div>Repeat First Digit</div><div>SexualOrientation SL</div><div>Shuffle</div><div>SwiftCode SL</div><div>TimeRange</div>
+<div>ABARoutingNumber SL</div><div>Age SL</div><div>BR - Financial ID</div><div>BloodType SL</div><div>Brazil CNPJ</div><div>Brazil CPF</div><div>CM Alpha-Numeric</div><div>CM Digits</div><div>CM Numeric</div><div>Countries SL</div><div>Credit Card</div><div>Date Shift Discrete</div><div>Date Shift Fixed</div><div>Date Shift Variable</div><div>Department SL</div><div>Email SL</div><div>Email Unique</div><div>Ethnicity SL</div><div>FirstName</div><div>FullName</div><div>Gender SL</div><div>IBAN</div><div>JobTitle SL</div><div>Language SL</div><div>LastName</div><div>Lat_Long Coordinates</div><div>Legacy AccNoLookup</div><div>Legacy AddrLine2Lookup</div><div>Legacy AddrLookup</div><div>Legacy BusinessLegalEntityLookup</div><div>Legacy CommentLookup</div><div>Legacy DrivingLicenseNoLookup</div><div>Legacy DummyHospitalNameLookup</div><div>Legacy EmailLookup</div><div>Legacy FirstNameLookup</div><div>Legacy FullNMLookup</div><div>Legacy LastCommaFirstLookup</div><div>Legacy LastNameLookup</div><div>Legacy RandomValueLookup</div><div>Legacy SchoolNameLookup</div><div>Legacy USStateCodesLookup</div><div>Legacy USStatesLookup</div><div>Legacy UsCitiesLookup</div><div>Legacy UsCountiesLookup</div><div>Legacy WebURLsLookup</div><div>MaritalStatus SL</div><div>MedicalGenericDrug SL</div><div>NationalOrigin SL</div><div>Null Secure Lookup</div><div>Phone US</div><div>Phone Unique</div><div>PoliticalOrientation SL</div><div>Redact Digits-Zero</div><div>ReligiousOrientation SL</div><div>Repeat First Digit</div><div>SexualOrientation SL</div><div>Shuffle</div><div>SwiftCode SL</div><div>TimeRange</div>
 </div>
 
 <div class="note tip" style="margin-top:6mm;"><b>The <code>SL</code> suffix</b> stands for <i>Secure Lookup</i> — pre-configured instances with themed lookup files embedded (job titles, countries, marital status). They are the fastest way to mask categorical columns without assembling your own file.</div>
@@ -1109,13 +1109,13 @@ The first pattern only matches values containing <code>@</code>; everything else
 <div class="part">
   <div class="part-n">Appendix C</div>
   <h2>Standalone runner limitations</h2>
-  <p class="part-lede">The Algorithm Tester runs algorithms outside the Masking Engine. Some features depend on the Engine's context and do not work locally.</p>
+  <p class="part-lede">The Masking Helper runs the frameworks outside the Masking Engine. Some features depend on the Engine's context and do not work locally.</p>
 </div>
 
 <table class="tbl">
   <tr><th style="width:34%">Feature</th><th>Status</th></tr>
   <tr><td><code>FileReference</code></td><td><strong>Supported.</strong> Use a <code>file:///absolute/path</code> URI. Requires <code>commons-codec</code> in <code>lib/</code>. Files are managed under <em>Settings → Files</em>.</td></tr>
-  <tr><td><code>MappingSetReference</code></td><td><strong>Not supported.</strong> The <em>Mapping</em> algorithm (§7.4) fails with <code>Mapping set references are not supported</code> — it depends on a mapping database.</td></tr>
+  <tr><td><code>MappingSetReference</code></td><td><strong>Not supported.</strong> The <em>Mapping</em> framework (§7.4) fails with <code>Mapping set references are not supported</code> — it depends on a mapping database.</td></tr>
   <tr><td><code>EmbeddedGeneratorReference</code></td><td><strong>Not supported.</strong></td></tr>
   <tr><td><code>MaskValueMetadata</code></td><td>Always returns <code>null</code>.</td></tr>
   <tr><td>Multi-Column Address (§8.2)</td><td>Does not initialize without Delphix's address lookup file.</td></tr>

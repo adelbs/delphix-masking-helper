@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
+import { useVersion } from '@/lib/version'
 import type { AiStatus, ServerFile } from '@/types'
 
 interface Props {
@@ -104,6 +105,55 @@ function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar'>) {
           <Save size={14} />
           {saving ? t('settings.saving') : t('settings.save')}
         </button>
+      </div>
+
+      <AboutCard />
+    </div>
+  )
+}
+
+/**
+ * What build this is, and how to move to a newer one.
+ *
+ * There is no "check for updates" button on purpose: the tool makes no network call the user
+ * did not ask for, which is the same promise the local-model default makes. The update command
+ * is spelled out instead — running it is the check.
+ */
+function AboutCard() {
+  const { t } = useT()
+  const version = useVersion()
+  if (!version?.display) return null
+
+  return (
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+      <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+        {t('settings.about')}
+      </h3>
+
+      <dl className="space-y-1.5 text-sm">
+        <div className="flex items-baseline gap-3">
+          <dt className="text-slate-500 w-20 flex-shrink-0">{t('settings.version')}</dt>
+          <dd className="font-mono text-slate-800 break-all">{version.display}</dd>
+        </div>
+        {version.commit && (
+          <div className="flex items-baseline gap-3">
+            <dt className="text-slate-500 w-20 flex-shrink-0">{t('settings.commit')}</dt>
+            <dd className="font-mono text-slate-800">{version.commit}</dd>
+          </div>
+        )}
+      </dl>
+
+      {version.channel !== 'release' && (
+        <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+          {version.channel === 'dev' ? t('settings.versionDev') : t('settings.versionUnknown')}
+        </p>
+      )}
+
+      <div>
+        <p className="text-xs text-slate-400 mb-1.5">{t('settings.updateHint')}</p>
+        <code className="block text-xs font-mono bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-700">
+          dlpx-helper update
+        </code>
       </div>
     </div>
   )

@@ -20,20 +20,24 @@ src/
 ├── lib/
 │   ├── api.ts                  # Chamadas à API do Express (/api/*), incluindo o chat via SSE
 │   ├── utils.ts                # cn() — merge de classes Tailwind com tailwind-merge
-│   ├── algo-metadata.ts        # Estrutura, exemplos e textos pt-BR por algoritmo
-│   ├── algo-knowledge.en.json  # Textos em inglês — compartilhado com o ai.js do servidor
-│   ├── algo-text.en.ts         # Textos em inglês (lê o JSON acima) + exemplos localizados
-│   ├── algo-text.es.ts         # Textos em espanhol + exemplos localizados
+│   ├── algorithms.ts                # useAlgorithms(): lista salva com cache e subscribers
+│   ├── version.ts                   # useVersion(): qual build está rodando
+│   ├── framework-metadata.ts        # Estrutura, exemplos e textos pt-BR por framework
+│   ├── framework-knowledge.en.json  # Textos em inglês — compartilhado com o ai.js do servidor
+│   ├── framework-text.en.ts         # Textos em inglês (lê o JSON acima) + exemplos localizados
+│   ├── framework-text.es.ts         # Textos em espanhol + exemplos localizados
 │   └── i18n/
 │       ├── index.ts            # Catálogos, detecção de locale, useT()
 │       ├── I18nProvider.tsx    # Provider do contexto
 │       └── messages/           # en.ts (fonte das chaves), pt-BR.ts, es.ts
 └── components/
-    ├── Sidebar.tsx             # Lista de algoritmos com busca; mobile = overlay
+    ├── Sidebar.tsx             # Sessões colapsáveis + busca; mobile = overlay
     ├── WelcomeScreen.tsx       # Home: cabeçalho + chat com a IA
     ├── Chat.tsx                # Chat com a IA (streaming SSE, card de algoritmo salvo)
-    ├── AlgoTester.tsx          # Painel principal: config (form/JSON) + execução + salvar
-    ├── SavedTests.tsx          # Lista de testes salvos com busca, rerun e export/import
+    ├── FrameworkTester.tsx     # Testa um framework, ou edita um algoritmo salvo
+    ├── EngineImport.tsx        # Modal de importação de uma instância Delphix
+    ├── DuplicatePrompt.tsx     # Pede o nome da cópia
+    ├── FrameworkDoc.tsx        # Aba Documentação: a seção do guia daquele framework
     ├── Settings.tsx            # Configurações: abas Geral, IA e Arquivos
     └── ConfigForm.tsx          # Formulário dinâmico gerado a partir do JSON Schema
 ```
@@ -61,17 +65,18 @@ t('form.columnCount', { n: 3 })          // interpola {n}; com "|" escolhe singu
 tx('form.addFilesHint', { path: <b/> })  // interpola nós React
 ```
 
-Os textos dos algoritmos (descrição, formato de entrada, params, labels) ficam separados por
-idioma — veja a seção de i18n no `CLAUDE.md` da raiz.
+Os textos dos frameworks (descrição, formato de entrada, params, labels) ficam separados por
+idioma: `src/lib/framework-metadata.ts` é a base (pt-BR, também o fallback) e cada outro idioma tem
+seu `src/lib/framework-text.<idioma>.ts`. Os 31 frameworks precisam existir em todos.
 
-## Adicionar metadados a um algoritmo
+## Adicionar metadados a um framework
 
-Edite `src/lib/algo-metadata.ts` (base pt-BR, também usada como fallback):
+Edite `src/lib/framework-metadata.ts` (base pt-BR, também usada como fallback):
 
 ```ts
 NomeDaClasse: {
   group: 'string',                       // id do grupo da sidebar
-  description: 'O que o algoritmo faz.',
+  description: 'O que o framework faz.',
   inputFormat: 'Formato esperado do input.',
   params: { nomeDoCampo: 'Ajuda que aparece sob o label no formulário.' },
   labels: { nomeDoCampo: 'Rótulo do campo' },
@@ -95,5 +100,5 @@ versões em inglês e espanhol — as chaves de `params`/`labels` precisam bater
 | `object` com `additionalProperties` | Editor de pares chave/valor |
 | `object` genérico | `<textarea>` JSON |
 | `FileReference` | Seletor dos arquivos do servidor |
-| `AlgorithmInstanceReference` | Seletor de teste salvo + campo livre para nome do catálogo |
+| `AlgorithmInstanceReference` | Seletor de algoritmo salvo + campo livre para nome do catálogo |
 | Array de condições (MultiColumnCondition) | Editor dedicado de condições por slot de coluna |

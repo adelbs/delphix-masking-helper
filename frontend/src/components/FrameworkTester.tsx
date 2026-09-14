@@ -1,13 +1,17 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Play, Code2, Zap, Save, Copy, Check, PanelLeftOpen, Plus, Trash2, RotateCcw, FlaskConical, BookOpen, AlertTriangle } from 'lucide-react'
+import { Play, Code2, Zap, Save, Copy, Check, PanelLeftOpen, Plus, Trash2, RotateCcw, FlaskConical, BookOpen, AlertTriangle, CloudUpload, Loader2, FilePlus2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
-import { getAlgoMetadata, nonDeterminismKey } from '@/lib/algo-metadata'
+import { getFrameworkMetadata, nonDeterminismKey } from '@/lib/framework-metadata'
 import { useT, type I18n } from '@/lib/i18n'
 import { ConfigForm } from './ConfigForm'
-import { AlgoDoc } from './AlgoDoc'
+import { DuplicatePrompt } from './DuplicatePrompt'
+import { useAlgorithms, refreshAlgorithms } from '@/lib/algorithms'
+import { announceExport } from '@/lib/engine-sync'
+import { forgetEngineReferences } from '@/lib/references'
+import { FrameworkDoc } from './FrameworkDoc'
 import { cn } from '@/lib/utils'
-import type { Algorithm, JsonSchema, JsonSchemaProperty, SavedTest } from '@/types'
+import type { Algorithm, Framework, JsonSchema, JsonSchemaProperty } from '@/types'
 
 /** Recursively finds all AlgorithmInstanceReference {name} values in a config object. */
 function collectAlgoRefNames(val: unknown): string[] {
@@ -35,15 +39,19 @@ function parseConfig(raw: string): Record<string, unknown> {
 }
 
 interface Props {
-  algo: Algorithm
+  framework: Framework
+  /** Set when a saved algorithm was opened: the panel edits that row instead of creating one. */
+  algorithm?: Algorithm | null
   initialConfig?: Record<string, unknown>
   initialInput?: string
   onToggleSidebar: () => void
+  /** The open algorithm no longer exists — the caller has to leave this screen. */
+  onDeleted: () => void
 }
 
-export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar }: Props) {
+export function FrameworkTester({ framework, algorithm, initialConfig, initialInput, onToggleSidebar, onDeleted }: Props) {
   const { t, tx, locale } = useT()
-  const meta = getAlgoMetadata(algo.className, locale)
+  const meta = getFrameworkMetadata(framework.className, locale)
   const [tab, setTab] = useState<'test' | 'doc'>('test')
   const [schema, setSchema] = useState<JsonSchema | null>(null)
   const [schemaLoading, setSchemaLoading] = useState(true)
@@ -53,16 +61,21 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
   const [input, setInput] = useState(initialInput ?? '')
   const [output, setOutput] = useState<{ value: string; ok: boolean } | null>(null)
   const [masking, setMasking] = useState(false)
-  const [testName, setTestName] = useState('')
+  const [algoName, setAlgoName] = useState('')
+  // Only shown while editing: "save as new" is the escape hatch from update-in-place.
+  const [savingAsNew, setSavingAsNew] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [duplicating, setDuplicating] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  // Batch mode state (for algorithms like Shuffle)
+  // Batch mode state (for frameworks like Shuffle)
   const [batchRows, setBatchRows] = useState<string[]>(() => meta?.example?.batchRows ?? [''])
   const [batchResults, setBatchResults] = useState<Array<{ output?: string; error?: string } | null>>([])
   const [batchMasking, setBatchMasking] = useState(false)
 
   const [maskMode, setMaskMode] = useState<'MASK' | 'REIDENTIFY'>('MASK')
-  const [savedTests, setSavedTests] = useState<SavedTest[]>([])
+  const { algorithms: savedAlgorithms } = useAlgorithms()
 
   // Multi-column mode state
   const [mcColumns, setMcColumns] = useState<Array<{ name: string; type: string; value: string }>>([
@@ -74,22 +87,20 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
   const [mcMasking, setMcMasking] = useState(false)
   const [mcAddName, setMcAddName] = useState('')
 
-  useEffect(() => {
-    api.getTests().then(setSavedTests).catch(() => {})
-  }, [])
-
-  // No reset effect here on purpose. App.tsx keys this component by algo.className and unmounts
-  // it whenever the view leaves the tester, so every arrival is a fresh mount and the useState
-  // initialisers above already carry initialConfig/initialInput. The effect that used to re-apply
-  // them ran only on mount, where it set the values they had just been initialised with.
+  // No reset effect here on purpose. App.tsx keys this component by the open algorithm's id
+  // (falling back to the class), so picking a different one remounts and the useState
+  // initialisers above already carry initialConfig/initialInput. Keying by class alone was not
+  // enough once the sidebar could switch between two algorithms built on the same framework:
+  // the key never changed, nothing remounted, and the second one opened showing the first's
+  // configuration under the second's name.
 
   // Re-fetched on a locale change so the field labels and hints follow the language. The flag
   // starts true and is only ever cleared: re-raising it here would blank a schema that is
   // already on screen just to re-label it.
   useEffect(() => {
-    api.getSchema(algo.className)
+    api.getSchema(framework.className)
       .then((data) => {
-        const enriched = enrichSchema(data.schema, algo.className, locale)
+        const enriched = enrichSchema(data.schema, framework.className, locale)
         setSchema(enriched)
         // Seed enum fields that are absent from config to their first option,
         // so the displayed dropdown value and the actual config are always in sync.
@@ -106,7 +117,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
       })
       .catch(() => setSchema(null))
       .finally(() => setSchemaLoading(false))
-  }, [algo.className, locale]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [framework.className, locale]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keep raw JSON in sync when config changes (form → raw)
   const handleConfigChange = useCallback((newConfig: Record<string, unknown>) => {
@@ -137,7 +148,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
   }
 
   // Recomputed on every render: editing ivLength or hashMethod flips the warning live.
-  const nonDetKey = nonDeterminismKey(algo.className, getEffectiveConfig())
+  const nonDetKey = nonDeterminismKey(framework.className, getEffectiveConfig())
 
   const loadExample = async () => {
     if (!meta?.example) return
@@ -179,10 +190,10 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
     try {
       const effectiveConfig = getEffectiveConfig()
       const refNames = collectAlgoRefNames(effectiveConfig)
-      const additionalAlgorithms = savedTests
+      const additionalAlgorithms = savedAlgorithms
         .filter(t => refNames.includes(t.name))
-        .map(t => ({ name: t.name, className: t.algorithm, config: parseConfig(t.config) }))
-      const result = await api.mask({ algorithm: algo.className, config: effectiveConfig, input, mode: maskMode, additionalAlgorithms })
+        .map(a => ({ name: a.name, className: a.framework, config: parseConfig(a.config) }))
+      const result = await api.mask({ framework: framework.className, config: effectiveConfig, input, mode: maskMode, additionalAlgorithms })
       if (result.output !== undefined) {
         setOutput({ value: result.output, ok: true })
       } else {
@@ -201,7 +212,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
     setMcError(null)
     try {
       const result = await api.maskMultiColumn({
-        algorithm: algo.className,
+        framework: framework.className,
         config: getEffectiveConfig(),
         columns: mcColumns.map(c => ({ name: c.name, value: c.value || null, type: c.type })),
       })
@@ -223,7 +234,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
     setBatchMasking(true)
     setBatchResults([])
     try {
-      const result = await api.maskBatch({ algorithm: algo.className, config: getEffectiveConfig(), inputs: batchRows })
+      const result = await api.maskBatch({ framework: framework.className, config: getEffectiveConfig(), inputs: batchRows })
       setBatchResults(result.results)
     } catch (e) {
       toast.error((e as Error).message)
@@ -239,21 +250,83 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const saveTest = async () => {
-    if (!testName.trim()) { toast.warning(t('tester.testNameRequired')); return }
+  /** Creates a new algorithm from what is on screen. Always needs a name. */
+  const saveAsNew = async () => {
+    if (!algoName.trim()) { toast.warning(t('tester.algoNameRequired')); return }
     try {
-      await api.saveTest({
-        name: testName.trim(),
-        algorithm: algo.className,
-        display_name: algo.displayName,
+      await api.saveAlgorithm({
+        name: algoName.trim(),
+        framework: framework.className,
+        display_name: framework.displayName,
         config: JSON.stringify(getEffectiveConfig()),
         input,
         output: output?.ok ? output.value : null,
       })
-      toast.success(t('tester.testSaved'))
-      setTestName('')
+      toast.success(t('tester.algoSaved'))
+      setAlgoName('')
+      setSavingAsNew(false)
+      await refreshAlgorithms()
     } catch {
-      toast.error(t('tester.testSaveError'))
+      toast.error(t('tester.algoSaveError'))
+    }
+  }
+
+  /**
+   * Writes back to the algorithm that is open. The name is never sent: on the engine it is
+   * identity and cannot be changed, and the tool follows the same rule — a new name means a
+   * copy, which is what "save as new" and Duplicate are for.
+   */
+  const saveChanges = async () => {
+    if (!algorithm) return
+    setSaving(true)
+    try {
+      await api.updateAlgorithm(algorithm.id, {
+        config: JSON.stringify(getEffectiveConfig()),
+        input,
+        output: output?.ok ? output.value : '',
+      })
+      toast.success(t('tester.algoUpdated'))
+      await refreshAlgorithms()
+    } catch {
+      toast.error(t('tester.algoSaveError'))
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  /** Sends the open algorithm to the configured engine — updating it there when it came from
+   *  that same engine, which is what delphix_origin/delphix_name record. */
+  const sendToEngine = async () => {
+    if (!algorithm) return
+    setSending(true)
+    try {
+      const out = await api.delphixExport(algorithm.id)
+      toast.success(t(out.mode === 'updated' ? 'saved.exportUpdated' : 'saved.exportCreated',
+        { name: out.name }))
+      if (out.renamed) toast.warning(t('saved.exportRenamed', { name: out.name }))
+      announceExport(t, out)
+      forgetEngineReferences()
+      await refreshAlgorithms()
+    } catch (e) {
+      const err = e as Error & { code?: string }
+      toast.error(err.code === 'not-configured'
+        ? t('saved.engineNotSet')
+        : t('saved.exportFailed', { error: err.message }))
+    } finally {
+      setSending(false)
+    }
+  }
+
+  const deleteAlgorithm = async () => {
+    if (!algorithm) return
+    if (!confirm(t('saved.confirmDelete'))) return
+    try {
+      await api.deleteAlgorithm(algorithm.id)
+      toast.success(t('saved.deleted'))
+      await refreshAlgorithms()
+      onDeleted()
+    } catch {
+      toast.error(t('tester.unknownError'))
     }
   }
 
@@ -265,10 +338,60 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
           <PanelLeftOpen size={18} />
         </button>
         <div className="flex-1 min-w-0">
-          <h2 className="text-sm font-semibold text-slate-800 truncate">{algo.displayName}</h2>
-          <p className="text-xs text-slate-400 font-mono truncate">{algo.className}</p>
+          {/* Editing an algorithm, its name leads and the framework becomes the subtitle: the
+              name is what was picked in the sidebar and what the engine knows it by. */}
+          <h2 className="text-sm font-semibold text-slate-800 truncate">
+            {algorithm ? algorithm.name : framework.displayName}
+          </h2>
+          <p className="text-xs text-slate-400 truncate">
+            {algorithm
+              ? <>{framework.displayName} <span className="font-mono">· {framework.className}</span></>
+              : <span className="font-mono">{framework.className}</span>}
+          </p>
         </div>
+
+        {algorithm && (
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <button
+              onClick={() => setDuplicating(v => !v)}
+              title={t('saved.duplicate')}
+              className={headerBtn}
+            >
+              <Copy size={12} /> <span className="hidden lg:inline">{t('saved.duplicate')}</span>
+            </button>
+            <button
+              onClick={sendToEngine}
+              disabled={sending}
+              title={t('saved.exportToEngine')}
+              className={cn(headerBtn, 'text-blue-700 bg-blue-50 hover:bg-blue-100 border-blue-200')}
+            >
+              {sending ? <Loader2 size={12} className="animate-spin" /> : <CloudUpload size={12} />}
+              <span className="hidden lg:inline">{t('saved.exportToEngine')}</span>
+            </button>
+            <button
+              onClick={deleteAlgorithm}
+              title={t('saved.delete')}
+              className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        )}
       </div>
+
+      {duplicating && algorithm && (
+        <div className="px-5 py-3 border-b border-slate-200 bg-white flex-shrink-0">
+          <DuplicatePrompt
+            suggested={`${algorithm.name} (2)`}
+            onCancel={() => setDuplicating(false)}
+            onConfirm={async (name) => {
+              await api.duplicateAlgorithm(algorithm.id, name)
+              setDuplicating(false)
+              await refreshAlgorithms()
+            }}
+          />
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white flex-shrink-0">
@@ -295,7 +418,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
 
       {tab === 'doc' ? (
         <div className="flex-1 overflow-auto p-5 bg-slate-50">
-          <AlgoDoc className={algo.className} />
+          <FrameworkDoc className={framework.className} />
         </div>
       ) : (
       <>
@@ -332,7 +455,9 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
               <span className="text-sm font-semibold text-slate-700">{t('tester.configuration')}</span>
               <div className="flex items-center gap-2">
-                {meta?.example && (
+                {/* A saved algorithm already has its configuration: loading the example would
+                    silently overwrite it, and saving afterwards would keep the example. */}
+                {meta?.example && !algorithm && (
                   <button onClick={loadExample} className={btnSm + ' text-amber-700 bg-amber-50 hover:bg-amber-100 border-amber-200'}>
                     <Zap size={12} /> {t('tester.example')}
                   </button>
@@ -374,7 +499,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
             <div className="flex-1 overflow-auto p-4 flex flex-col gap-4">
 
               {meta?.multiColumnMode ? (
-                /* ── Multi-column mode (GenericDataRow algorithms like MultiColumnCondition) ── */
+                /* ── Multi-column mode (GenericDataRow frameworks like MultiColumnCondition) ── */
                 <>
                   <div>
                     <div className="flex items-center justify-between mb-2">
@@ -515,23 +640,16 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
                     </div>
                   )}
 
-                  {/* Save */}
-                  <div className="flex gap-2 mt-auto pt-2 border-t border-slate-100">
-                    <input
-                      type="text"
-                      value={testName}
-                      onChange={(e) => setTestName(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && saveTest()}
-                      placeholder={t('tester.testNamePlaceholder')}
-                      className={cn(fieldInput, 'flex-1')}
-                    />
-                    <button
-                      onClick={saveTest}
-                      className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors"
-                    >
-                      <Save size={14} />
-                    </button>
-                  </div>
+                  <SaveBar
+                    editing={!!algorithm}
+                    name={algoName}
+                    onName={setAlgoName}
+                    savingAsNew={savingAsNew}
+                    onSavingAsNew={setSavingAsNew}
+                    saving={saving}
+                    onSaveChanges={saveChanges}
+                    onSaveAsNew={saveAsNew}
+                  />
                 </>
               ) : meta?.batchMode ? (
                 /* ── Batch mode (Shuffle) ── */
@@ -619,7 +737,7 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
               ) : (
                 /* ── Single-value mode ── */
                 <>
-                  {/* Mode toggle — only for reversible algorithms */}
+                  {/* Mode toggle — only for reversible frameworks */}
                   {meta?.reversible && (
                     <div className="flex rounded-lg border border-slate-200 overflow-hidden text-sm font-medium">
                       <button
@@ -712,23 +830,16 @@ export function AlgoTester({ algo, initialConfig, initialInput, onToggleSidebar 
                     </div>
                   </div>
 
-                  {/* Save */}
-                  <div className="flex gap-2 mt-auto pt-2 border-t border-slate-100">
-                    <input
-                      type="text"
-                      value={testName}
-                      onChange={(e) => setTestName(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && saveTest()}
-                      placeholder={t('tester.testNamePlaceholder')}
-                      className={cn(fieldInput, 'flex-1')}
-                    />
-                    <button
-                      onClick={saveTest}
-                      className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors"
-                    >
-                      <Save size={14} />
-                    </button>
-                  </div>
+                  <SaveBar
+                    editing={!!algorithm}
+                    name={algoName}
+                    onName={setAlgoName}
+                    savingAsNew={savingAsNew}
+                    onSavingAsNew={setSavingAsNew}
+                    saving={saving}
+                    onSaveChanges={saveChanges}
+                    onSaveAsNew={saveAsNew}
+                  />
                 </>
               )}
 
@@ -772,7 +883,7 @@ function enrichProp(
 }
 
 function enrichSchema(schema: JsonSchema, className: string, locale: I18n['locale']): JsonSchema {
-  const meta = getAlgoMetadata(className, locale)
+  const meta = getFrameworkMetadata(className, locale)
   if (!schema?.properties || (!meta?.params && !meta?.labels)) return schema
   const enriched: JsonSchema = { ...schema, properties: { ...schema.properties } }
 
@@ -789,7 +900,85 @@ function enrichSchema(schema: JsonSchema, className: string, locale: I18n['local
   return enriched
 }
 
-/** Available column slots for GenericDataRow-based algorithms (MultiColumnCondition etc.). */
+const headerBtn = 'flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors disabled:opacity-50'
+
+/**
+ * The save controls, in both layouts the tester has.
+ *
+ * Two shapes, because saving means two different things here. With an algorithm open the
+ * button writes back to it and there is no name field — the name is identity and the engine
+ * refuses to change it, so the tool does not offer to either. Creating a new one is still
+ * reachable, behind "save as new", which is the only path that asks for a name.
+ */
+function SaveBar({ editing, name, onName, savingAsNew, onSavingAsNew, saving, onSaveChanges, onSaveAsNew }: {
+  editing: boolean
+  name: string
+  onName: (v: string) => void
+  savingAsNew: boolean
+  onSavingAsNew: (v: boolean) => void
+  saving: boolean
+  onSaveChanges: () => void
+  onSaveAsNew: () => void
+}) {
+  const { t } = useT()
+
+  if (!editing || savingAsNew) {
+    return (
+      <div className="mt-auto pt-2 border-t border-slate-100 space-y-1.5">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            autoFocus={savingAsNew}
+            value={name}
+            onChange={(e) => onName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') onSaveAsNew()
+              if (e.key === 'Escape' && savingAsNew) onSavingAsNew(false)
+            }}
+            placeholder={t('tester.algoNamePlaceholder')}
+            className={cn(fieldInput, 'flex-1')}
+          />
+          <button
+            onClick={onSaveAsNew}
+            title={t('tester.saveAsNew')}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors"
+          >
+            <Save size={14} />
+          </button>
+        </div>
+        {savingAsNew && (
+          <button
+            onClick={() => onSavingAsNew(false)}
+            className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            {t('tester.cancel')}
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex items-center gap-2 mt-auto pt-2 border-t border-slate-100">
+      <button
+        onClick={onSaveChanges}
+        disabled={saving}
+        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors disabled:opacity-60"
+      >
+        {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+        {saving ? t('tester.saving') : t('tester.saveChanges')}
+      </button>
+      <button
+        onClick={() => onSavingAsNew(true)}
+        className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors"
+      >
+        <FilePlus2 size={14} /> {t('tester.saveAsNew')}
+      </button>
+    </div>
+  )
+}
+
+/** Available column slots for GenericDataRow-based frameworks (MultiColumnCondition etc.). */
 const MC_COL_OPTIONS: Array<{ name: string; type: 'STRING' | 'NUMERIC' | 'DATE' }> = [
   { name: 'key', type: 'STRING' },
   ...Array.from({ length: 10 }, (_, i) => ({ name: `string${i + 1}`, type: 'STRING' as const })),

@@ -1,6 +1,6 @@
 /* Delphix Masking Helper — GitHub Pages.
    Generated pages share this sheet; the algorithm blocks reuse the guide's own class names
-   (.algo-desc, .label, .xf, .p-row, .note…) restyled here for screen. */
+   (.framework-desc, .label, .xf, .p-row, .note…) restyled here for screen. */
 
 :root {
   --ink: #0f1720;
@@ -183,14 +183,14 @@ footer .rows { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: base
 footer .lic { color: #6b8195; font-size: 13px; margin-top: 14px; max-width: 70ch; }
 
 /* ── algorithms page ─────────────────────────────────────────────────────── */
-.algos-head { padding: 54px 0 30px; border-bottom: 1px solid var(--rule); }
-.algos-head h1 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.025em; margin: 0 0 10px; }
-.algos-head p { color: var(--ink-2); max-width: 62ch; margin: 0; }
+.frameworks-head { padding: 54px 0 30px; border-bottom: 1px solid var(--rule); }
+.frameworks-head h1 { font-size: clamp(28px, 4vw, 40px); letter-spacing: -.025em; margin: 0 0 10px; }
+.frameworks-head p { color: var(--ink-2); max-width: 62ch; margin: 0; }
 
 /* minmax(0,…) so the column may shrink below its content: a plain 1fr is floored by the
    widest table inside, which pushes the whole page into horizontal scroll on narrow screens. */
-.algos-layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 46px; align-items: start; padding: 34px 0 70px; }
-@media (max-width: 900px) { .algos-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
+.frameworks-layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 46px; align-items: start; padding: 34px 0 70px; }
+@media (max-width: 900px) { .frameworks-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; } }
 
 .toc { position: sticky; top: 76px; font-size: 14px; max-height: calc(100vh - 100px); overflow-y: auto; }
 /* Stacked above the content on narrow screens, the full 31-entry index would push the first
@@ -214,13 +214,13 @@ footer .lic { color: #6b8195; font-size: 13px; margin-top: 14px; max-width: 70ch
 .part-head h2 { margin: 4px 0 6px; font-size: 25px; letter-spacing: -.02em; }
 .part-head p { margin: 0; color: var(--ink-2); font-size: 15px; max-width: 62ch; }
 
-.algo-card { border: 1px solid var(--rule); border-radius: 13px; padding: 26px 28px; margin-bottom: 20px; scroll-margin-top: 76px; }
-.algo-card > header { border-bottom: 1px solid var(--rule-soft); padding-bottom: 15px; margin-bottom: 18px; }
-.algo-card .hd { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.algo-card .num { font-size: 13px; font-weight: 700; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.algo-card h3 { margin: 0; font-size: 21px; letter-spacing: -.015em; }
-.algo-card .meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 9px; }
-.algo-card .cls { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--ink-3); word-break: break-all; }
+.framework-card { border: 1px solid var(--rule); border-radius: 13px; padding: 26px 28px; margin-bottom: 20px; scroll-margin-top: 76px; }
+.framework-card > header { border-bottom: 1px solid var(--rule-soft); padding-bottom: 15px; margin-bottom: 18px; }
+.framework-card .hd { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.framework-card .num { font-size: 13px; font-weight: 700; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.framework-card h3 { margin: 0; font-size: 21px; letter-spacing: -.015em; }
+.framework-card .meta { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: 9px; }
+.framework-card .cls { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--ink-3); word-break: break-all; }
 
 .tg { font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 5px; white-space: nowrap; }
 .tg-det { background: var(--accent-wash); color: var(--accent); }
@@ -233,8 +233,8 @@ footer .lic { color: #6b8195; font-size: 13px; margin-top: 14px; max-width: 70ch
 .gd { font-size: 15.5px; }
 /* Enum values and parameter names are long unbroken identifiers
    (APPLY_FIRSTNAME_AND_LASTNAME_ALGORITHMS); let them break rather than widen the page. */
-.gd .p-desc, .gd .p-name, .gd .algo-desc, .gd .fmt, .gd .note { overflow-wrap: anywhere; }
-.gd .algo-desc { margin: 0 0 18px; max-width: 66ch; }
+.gd .p-desc, .gd .p-name, .gd .framework-desc, .gd .fmt, .gd .note { overflow-wrap: anywhere; }
+.gd .framework-desc { margin: 0 0 18px; max-width: 66ch; }
 .gd .label { font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-3); font-weight: 700; margin: 24px 0 8px; }
 .gd .label:first-child { margin-top: 0; }
 .gd .fmt { font-size: 14.5px; color: var(--ink-2); border-left: 2px solid var(--rule); padding-left: 13px; margin-bottom: 4px; max-width: 66ch; }

@@ -13,13 +13,23 @@
 //   POST /algorithms          (Algorithm)     -> 201 AsyncTask
 //   PUT  /algorithms/{name}   (Algorithm)     -> 200 AsyncTask
 //   GET  /algorithm/frameworks/               -> {responseList: [AlgorithmFramework]}
+//   GET  /domains?page_size=N                 -> {responseList: [Domain], _pageInfo}
+//   POST /domains             (Domain)        -> 201 Domain          (409 on a name clash)
+//   PUT  /domains/{domainName} (Domain)       -> 200 Domain
+//   DELETE /domains/{domainName}              -> 200
 //
 // An Algorithm on the engine is {algorithmName, algorithmType, frameworkId,
 // algorithmExtension}. `algorithmExtension` is the same configuration object this tool
 // already stores locally, which is what makes import and export a field mapping rather
 // than a translation.
+//
+// A Domain is smaller still: {domainName, defaultAlgorithmCode, defaultTokenizationCode}
+// plus a read-only createdBy. The two codes are algorithmName values — a domain is a name
+// and two references, nothing more. domainName is the identity and travels in the path, so
+// it cannot be renamed, exactly like algorithmName.
 
 const https = require('node:https');
+const zlib = require('node:zlib');
 
 // Generated from the plugin JAR: MaskingComponent.getName() per framework class.
 // These are the frameworkName values the Masking Engine reports in GET /algorithm/frameworks/.
@@ -111,15 +121,24 @@ class DelphixError extends Error {
   }
 }
 
-async function call(cfg, method, path, { token, body } = {}) {
+/**
+ * One request to the engine. JSON both ways by default; `form` sends multipart (an upload) and
+ * `binary` returns the body as a Buffer (a download). Files can be large, so those get longer.
+ */
+async function call(cfg, method, path, { token, body, form, binary } = {}) {
   const url = `${apiRoot(cfg.baseUrl)}${path}`;
   const opts = {
     method,
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    signal: AbortSignal.timeout(30000),
+    headers: { Accept: binary ? '*/*' : 'application/json' },
+    signal: AbortSignal.timeout(form || binary ? 300000 : 30000),
   };
   if (token) opts.headers.Authorization = token;
-  if (body !== undefined) opts.body = JSON.stringify(body);
+  if (form) {
+    opts.body = form;   // fetch writes the multipart boundary into Content-Type itself
+  } else {
+    opts.headers['Content-Type'] = 'application/json';
+    if (body !== undefined) opts.body = JSON.stringify(body);
+  }
   if (cfg.allowSelfSigned && url.startsWith('https:')) {
     opts.agent = new https.Agent({ rejectUnauthorized: false });
   }
@@ -132,7 +151,9 @@ async function call(cfg, method, path, { token, body } = {}) {
       `Could not reach the Delphix engine at ${apiRoot(cfg.baseUrl)} — ${err.message}`, 0);
   }
 
-  const text = await res.text();
+  const raw = Buffer.from(await res.arrayBuffer());
+  if (binary && res.ok) return raw;
+  const text = raw.toString('utf8');
   let data = null;
   if (text) { try { data = JSON.parse(text); } catch { /* non-JSON error page */ } }
 
@@ -170,15 +191,17 @@ async function token(cfg) {
 }
 
 /** Runs an authenticated call, logging in again once if the cached token has expired. */
-async function auth(cfg, method, path, body) {
+async function authCall(cfg, method, path, options = {}) {
   try {
-    return await call(cfg, method, path, { token: await token(cfg), body });
+    return await call(cfg, method, path, { ...options, token: await token(cfg) });
   } catch (err) {
     if (err.status !== 401) throw err;
     cached = { key: null, token: null };
-    return call(cfg, method, path, { token: await login(cfg), body });
+    return call(cfg, method, path, { ...options, token: await login(cfg) });
   }
 }
+
+const auth = (cfg, method, path, body) => authCall(cfg, method, path, { body });
 
 // ── Operations ────────────────────────────────────────────────────────────────
 
@@ -241,9 +264,58 @@ async function listAlgorithms(cfg) {
       className,
       algorithmType: a.algorithmType,
       description: a.description ?? '',
+      // Absent on the instances a plugin installs, which are read-only and come with the plugin.
+      createdBy: a.createdBy ?? null,
+      // What a domain's tokenization algorithm must be: the engine refuses any other.
+      tokenizationSupported: Boolean(a.isTokenizationSupported),
       config: a.algorithmExtension ?? {},
     };
   });
+}
+
+/**
+ * The domains on the engine.
+ *
+ * `defaultAlgorithmCode` is an algorithmName, not an id, so it joins straight onto the
+ * algorithm list — and onto our own saved algorithms, which are keyed by name too.
+ */
+async function listDomains(cfg) {
+  const data = await auth(cfg, 'GET', '/domains?page_size=500');
+  return (data?.responseList ?? []).map((d) => ({
+    domainName: d.domainName,
+    defaultAlgorithmCode: d.defaultAlgorithmCode ?? '',
+    defaultTokenizationCode: d.defaultTokenizationCode ?? '',
+    createdBy: d.createdBy ?? null,
+  }));
+}
+
+async function getDomain(cfg, name) {
+  return auth(cfg, 'GET', `/domains/${encodeURIComponent(name)}`);
+}
+
+/**
+ * Creates the domain, or updates it when the engine already has that name.
+ *
+ * Which of the two is decided by asking, not by remembering: unlike an algorithm, a domain
+ * carries no configuration worth protecting, so a GET is cheap and always right — including
+ * for a domain someone else created on the engine after we imported.
+ */
+async function saveDomain(cfg, { name, defaultAlgorithm, defaultTokenization }) {
+  const payload = {
+    domainName: name,
+    ...(defaultAlgorithm ? { defaultAlgorithmCode: defaultAlgorithm } : {}),
+    ...(defaultTokenization ? { defaultTokenizationCode: defaultTokenization } : {}),
+  };
+  const exists = await getDomain(cfg, name).then(() => true).catch(() => false);
+  if (exists) {
+    const path = `/domains/${encodeURIComponent(name)}`;
+    return { mode: 'updated', name, result: await auth(cfg, 'PUT', path, payload) };
+  }
+  return { mode: 'created', name, result: await auth(cfg, 'POST', '/domains', payload) };
+}
+
+async function deleteDomain(cfg, name) {
+  return auth(cfg, 'DELETE', `/domains/${encodeURIComponent(name)}`);
 }
 
 // Schemes the runner resolves by itself: a path on this machine, and the plugin's own
@@ -299,16 +371,6 @@ function engineFileNames(config) {
   return [...names];
 }
 
-/**
- * File references pointing at this machine's disk — meaningless once the algorithm is on an
- * engine, which has no such path. Worth saying out loud when exporting: the engine accepts the
- * configuration and then fails to mask, which is a slow way to find out.
- */
-function localFileUris(config) {
-  return [...new Set(
-    configStrings(config).filter((value) => /^file:\/\//i.test(value.trim())))];
-}
-
 const getAlgorithm = (cfg, name) =>
   auth(cfg, 'GET', `/algorithms/${encodeURIComponent(name)}`);
 
@@ -354,15 +416,255 @@ async function saveAlgorithm(cfg, { name, className, config, description, existi
     const path = `/algorithms/${encodeURIComponent(existingName)}`;
     // The engine rejects a changed algorithmName on update ("Cannot update 'algorithmName'
     // field"), so the payload always carries the name it already has there.
-    const task = await auth(cfg, 'PUT', path, { ...payload, algorithmName: existingName });
+    const task = await waitForTask(cfg, await auth(cfg, 'PUT', path, { ...payload, algorithmName: existingName }));
     return { mode: 'updated', name: existingName, task, renamed: name !== existingName };
   }
-  return { mode: 'created', name, task: await auth(cfg, 'POST', '/algorithms', payload) };
+  return { mode: 'created', name, task: await waitForTask(cfg, await auth(cfg, 'POST', '/algorithms', payload)) };
+}
+
+// ── Tasks, uploads and downloads ──────────────────────────────────────────────
+
+const FINISHED = new Set(['SUCCEEDED', 'FAILED', 'CANCELLED']);
+
+/**
+ * Waits for an AsyncTask and fails when it did.
+ *
+ * Creating or updating an algorithm answers 200 with a task that can still end in FAILED — a
+ * lookup file the engine cannot find, for one — so the HTTP answer alone is not a success.
+ */
+async function waitForTask(cfg, task, { timeoutMs = 120000 } = {}) {
+  if (!task?.asyncTaskId) return task;
+  const deadline = Date.now() + timeoutMs;
+  let current = task;
+  while (!FINISHED.has(current.status)) {
+    if (Date.now() > deadline) {
+      throw new DelphixError(`The engine is still running ${task.operation ?? 'the task'} (#${task.asyncTaskId}). Check it there before trying again.`, 0);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    current = await auth(cfg, 'GET', `/async-tasks/${task.asyncTaskId}`);
+  }
+  if (current.status !== 'SUCCEEDED') {
+    throw new DelphixError(current.exceptionDetail
+      || `The engine's ${current.operation ?? 'task'} ended as ${current.status.toLowerCase()}.`, 0);
+  }
+  return current;
+}
+
+/** Puts a file in the engine's upload store and returns the address a configuration can name. */
+async function uploadFile(cfg, name, content) {
+  const form = new FormData();
+  form.append('file', new Blob([content]), name);
+  const data = await authCall(cfg, 'POST', '/file-uploads', { form });
+  if (!data?.fileReferenceId) throw new DelphixError(`The engine took "${name}" but gave back no address for it.`, 0);
+  return data.fileReferenceId;
+}
+
+/**
+ * The addresses the engine's upload store can resolve right now.
+ *
+ * A new algorithm or classifier may only name one of these. An existing one keeps whatever it
+ * already names — files uploaded long ago leave the store but stay valid on their owners.
+ */
+async function uploadedFiles(cfg) {
+  const out = new Set();
+  let seen = 0;
+  for (let page = 1; ; page++) {
+    const data = await auth(cfg, 'GET', `/file-uploads?page_size=500&page_number=${page}`);
+    const list = data?.responseList ?? [];
+    seen += list.length;
+    for (const f of list) if (f.fileReferenceId) out.add(f.fileReferenceId);
+    if (list.length === 0 || seen >= (data?._pageInfo?.total ?? seen)) break;
+  }
+  return out;
+}
+
+/** Waits for an export task and fetches what it produced. */
+async function downloadResult(cfg, task) {
+  const done = await waitForTask(cfg, task);
+  // The reference is the download id as the engine wrote it (base64 with its padding); sent as is.
+  return authCall(cfg, 'GET', `/file-downloads/${done.reference}`, { binary: true });
+}
+
+/**
+ * A LIST classifier's files as the engine holds them: `{ reference, content }` per address.
+ *
+ * The engine hands them over as one zip whose entries are named after the upload — the address
+ * `delphix-file://upload/f_<id>/<name>` becomes the entry `f_<id>_<name>` — so an entry is
+ * matched to its address by that upload id.
+ */
+async function classifierFiles(cfg, classifierId, config) {
+  const references = [...new Set(configStrings(config).filter((v) => engineFileName(v)))];
+  if (!references.length) return [];
+  const task = await auth(cfg, 'POST', `/classifiers/${encodeURIComponent(classifierId)}/export-files`);
+  const entries = readZip(await downloadResult(cfg, task));
+  const out = [];
+  for (const reference of references) {
+    const parts = reference.trim().split(/[?#]/)[0].split('/');
+    const uploadId = parts[parts.length - 2];
+    const entry = uploadId && entries.find((e) => e.name.startsWith(`${uploadId}_`));
+    if (entry) out.push({ reference, content: entry.content });
+  }
+  return out;
+}
+
+/** A Secure Lookup algorithm's lookup file, exactly as it was uploaded. */
+async function lookupFile(cfg, algorithmName) {
+  const task = await auth(cfg, 'POST', `/algorithms/${encodeURIComponent(algorithmName)}/export-lookup-values`);
+  return downloadResult(cfg, task);
+}
+
+/**
+ * The files in a zip archive, as `{ name, content }`.
+ *
+ * Read from the central directory, stored or deflated entries only — which is what the engine
+ * writes. Small enough not to be worth a dependency.
+ */
+function readZip(buffer) {
+  const notZip = () => new DelphixError('The engine sent a download that is not a readable zip archive.', 0);
+  let end = -1;
+  for (let i = buffer.length - 22; i >= Math.max(0, buffer.length - 65557); i--) {
+    if (buffer.readUInt32LE(i) === 0x06054b50) { end = i; break; }
+  }
+  if (end < 0) throw notZip();
+  const entries = [];
+  let at = buffer.readUInt32LE(end + 16);
+  for (let n = buffer.readUInt16LE(end + 10); n > 0; n--) {
+    if (at + 46 > buffer.length || buffer.readUInt32LE(at) !== 0x02014b50) throw notZip();
+    const method = buffer.readUInt16LE(at + 10);
+    const size = buffer.readUInt32LE(at + 20);
+    const nameLength = buffer.readUInt16LE(at + 28);
+    const skip = nameLength + buffer.readUInt16LE(at + 30) + buffer.readUInt16LE(at + 32);
+    const header = buffer.readUInt32LE(at + 42);
+    const name = buffer.toString('utf8', at + 46, at + 46 + nameLength);
+    at += 46 + skip;
+    if (name.endsWith('/')) continue;
+    const start = header + 30 + buffer.readUInt16LE(header + 26) + buffer.readUInt16LE(header + 28);
+    const data = buffer.subarray(start, start + size);
+    if (method === 0) entries.push({ name, content: Buffer.from(data) });
+    else if (method === 8) entries.push({ name, content: zlib.inflateRawSync(data) });
+    else throw new DelphixError(`"${name}" in the engine's download is compressed in a way this tool does not read.`, 0);
+  }
+  return entries;
+}
+
+// ── References inside a configuration ─────────────────────────────────────────
+
+/**
+ * Whether a configuration node names another algorithm. The plugin's schemas give every such
+ * field the same shape: `{ name }`, optionally with `algorithmMetadata`.
+ */
+const isAlgorithmReference = (node) =>
+  typeof node?.name === 'string' && node.name.trim() !== ''
+  && Object.keys(node).every((key) => key === 'name' || key === 'algorithmMetadata');
+
+/** Every algorithm a configuration names, at any depth. */
+function algorithmReferenceNames(config) {
+  const names = new Set();
+  (function walk(node) {
+    if (Array.isArray(node)) return node.forEach(walk);
+    if (!node || typeof node !== 'object') return;
+    if (isAlgorithmReference(node)) names.add(node.name.trim());
+    for (const value of Object.values(node)) walk(value);
+  })(config);
+  return [...names];
+}
+
+/**
+ * A copy of a configuration with references swapped: `algorithms` renames what the reference
+ * objects name, `files` replaces file addresses. Values not in either map are left alone.
+ */
+function rewriteConfig(config, { algorithms = {}, files = {} } = {}) {
+  return (function walk(node) {
+    if (typeof node === 'string') return Object.hasOwn(files, node) ? files[node] : node;
+    if (Array.isArray(node)) return node.map(walk);
+    if (!node || typeof node !== 'object') return node;
+    const copy = Object.fromEntries(Object.entries(node).map(([key, value]) => [key, walk(value)]));
+    if (isAlgorithmReference(node) && Object.hasOwn(algorithms, node.name.trim())) copy.name = algorithms[node.name.trim()];
+    return copy;
+  })(config);
+}
+
+// ── Classifiers ───────────────────────────────────────────────────────────────
+
+/**
+ * The classifier frameworks, name → id. Ids belong to an engine, so a classifier's framework
+ * is kept locally by name and resolved against whichever engine it is sent to.
+ */
+async function classifierFrameworks(cfg) {
+  const data = await auth(cfg, 'GET', '/classifiers/frameworks');
+  return Object.fromEntries((data?.responseList ?? []).map((f) => [f.frameworkName, f.frameworkId]));
+}
+
+/** Every classifier on the engine. A stock one holds over three hundred, so it is read page by page. */
+async function listClassifiers(cfg) {
+  const out = [];
+  for (let page = 1; ; page++) {
+    const data = await auth(cfg, 'GET', `/classifiers?page_size=500&page_number=${page}`);
+    const list = data?.responseList ?? [];
+    out.push(...list);
+    const total = data?._pageInfo?.total ?? out.length;
+    if (list.length === 0 || out.length >= total) break;
+  }
+  return out;
+}
+
+const getClassifier = (cfg, id) => auth(cfg, 'GET', `/classifiers/${encodeURIComponent(id)}`);
+
+/**
+ * Creates or updates a classifier.
+ *
+ * Identity is the id, not the name — the engine renames a classifier on PUT — so an update goes
+ * by `existingId`. Without one, a classifier of the same name already on the engine is updated
+ * rather than answered with 409. Either way the framework stays what the engine has: it refuses
+ * to change it ("Cannot update 'frameworkId' field"), and a same-named classifier on another
+ * framework is a different thing that must not be overwritten.
+ */
+async function saveClassifier(cfg, { name, framework, domain, config, description, existingId, prepareConfig }) {
+  const payload = {
+    classifierName: name,
+    domainName: domain,
+    classifierConfiguration: config ?? {},
+    ...(description ? { description } : {}),
+  };
+  const ids = await classifierFrameworks(cfg);
+  const frameworkId = ids[framework];
+  if (frameworkId === undefined) {
+    throw new DelphixError(`This engine has no "${framework}" classifier framework.`, 0);
+  }
+
+  let current = null;
+  if (existingId != null) {
+    current = await getClassifier(cfg, existingId).catch((err) => {
+      if (err.status === 404) return null;   // deleted on the engine since — create it again
+      throw err;
+    });
+  }
+  if (!current) current = (await listClassifiers(cfg)).find((c) => c.classifierName === name) ?? null;
+
+  if (current && current.frameworkId !== frameworkId) {
+    throw new DelphixError(
+      `The engine already has a classifier named "${name}" built on another framework.`, 409);
+  }
+  // The caller settles what the configuration may name only now that it can see what the engine
+  // already has — a file an existing classifier owns stays valid there, a new one's must be uploaded.
+  if (prepareConfig) payload.classifierConfiguration = await prepareConfig(current?.classifierConfiguration ?? null);
+
+  if (current) {
+    const result = await auth(cfg, 'PUT', `/classifiers/${current.classifierId}`,
+      { ...payload, frameworkId: current.frameworkId });
+    return { mode: 'updated', id: current.classifierId, name, result };
+  }
+  const result = await auth(cfg, 'POST', '/classifiers', { ...payload, frameworkId });
+  return { mode: 'created', id: result?.classifierId ?? null, name, result };
 }
 
 module.exports = {
   DEFAULTS, settings, isConfigured, apiRoot, probe,
   frameworks, coreFrameworkId, listAlgorithms, getAlgorithm, saveAlgorithm,
+  listDomains, getDomain, saveDomain, deleteDomain,
+  classifierFrameworks, listClassifiers, getClassifier, saveClassifier,
   frameworkNameFor, classNameFor, FRAMEWORK_BY_CLASS,
-  engineFileName, engineFileNames, localFileUris,
+  engineFileName, engineFileNames, configStrings,
+  waitForTask, uploadFile, uploadedFiles, classifierFiles, lookupFile, readZip,
+  algorithmReferenceNames, rewriteConfig,
 };

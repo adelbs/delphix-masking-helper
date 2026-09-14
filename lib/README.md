@@ -11,7 +11,7 @@ into this directory.
 
 ## What to copy
 
-Fifteen jars, verified as the minimum needed to run every algorithm the tester exposes. Versions
+Fifteen jars, verified as the minimum needed to run every masking framework the tool exposes. Versions
 do not need to match exactly — the server matches by filename prefix, so whatever ships in your
 SDK works.
 

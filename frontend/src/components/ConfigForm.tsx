@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import type { JsonSchema, JsonSchemaProperty, SavedTest, ServerFile } from '@/types'
+import type { JsonSchema, JsonSchemaProperty, ServerFile } from '@/types'
 import { cn, camelToLabel } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { api } from '@/lib/api'
 import { ChevronDown, ChevronRight, Plus, X } from 'lucide-react'
+import { useAlgorithms } from '@/lib/algorithms'
+import { algorithmOptions, useBuiltinAlgorithms, useEngineReferences } from '@/lib/references'
+import { ReferencePicker } from '@/components/ReferencePicker'
 
 const ALGO_REF_URN = 'AlgorithmInstanceReference'
 function isAlgorithmRef(schema: JsonSchemaProperty): boolean {
@@ -563,7 +566,7 @@ function uriFileName(uri: string): string {
   try { return decodeURIComponent(name) } catch { return name }
 }
 
-function FilePickerField({ value, onChange }: FilePickerProps) {
+export function FilePickerField({ value, onChange }: FilePickerProps) {
   const { t, tx } = useT()
   const [files, setFiles] = useState<ServerFile[]>([])
   const [loading, setLoading] = useState(true)
@@ -640,50 +643,29 @@ function FilePickerField({ value, onChange }: FilePickerProps) {
   )
 }
 
+/**
+ * A reference to another algorithm. The configuration is sent to the engine as it is, so a name
+ * the engine knows is valid even when this machine cannot run it; the field says which is which.
+ */
 function AlgorithmRefField({ value, onChange }: { value: unknown; onChange: (val: unknown) => void }) {
   const { t } = useT()
-  // The field is fully controlled by the prop: every keystroke emits, so the parent's value is
-  // always what the user typed. Keeping a second copy in state only created a chance to desync.
-  const nameInput = (value as { name?: string } | null | undefined)?.name ?? ''
-  const [tests, setTests] = useState<SavedTest[]>([])
-
-  useEffect(() => {
-    api.getTests().then(setTests).catch(() => {})
-  }, [])
-
-  const emit = (name: string) => onChange(name ? { name } : null)
-
-  const matched = tests.find(t => t.name === nameInput)
+  // Fully controlled by the prop: every keystroke emits, so the parent always holds what was typed.
+  const name = (value as { name?: string } | null | undefined)?.name ?? ''
+  const { algorithms } = useAlgorithms()
+  const builtins = useBuiltinAlgorithms()
+  const engine = useEngineReferences()
 
   return (
-    <div className="space-y-1.5">
-      {tests.length > 0 && (
-        <select
-          value={matched ? nameInput : ''}
-          onChange={e => emit(e.target.value)}
-          className={inputCls}
-        >
-          <option value="">{t('form.chooseSaved')}</option>
-          {tests.map(t => (
-            <option key={t.id} value={t.name}>
-              {t.name}  ({t.display_name})
-            </option>
-          ))}
-        </select>
-      )}
-      <input
-        type="text"
-        placeholder={t('form.algoNamePlaceholder')}
-        value={nameInput}
-        onChange={e => emit(e.target.value)}
-        className={inputCls}
-      />
-      {matched && (
-        <p className="text-xs text-blue-600">
-          {t('form.usingSavedConfig')}<span className="font-medium">{matched.display_name}</span>
-        </p>
-      )}
-    </div>
+    <ReferencePicker
+      kind="algorithm"
+      value={name}
+      onChange={next => onChange(next ? { name: next } : null)}
+      options={algorithmOptions(algorithms, builtins, engine.algorithms)}
+      engineState={engine.state}
+      placeholder={t('form.algoNamePlaceholder')}
+      className={inputCls}
+      engineNotRunnable
+    />
   )
 }
 
