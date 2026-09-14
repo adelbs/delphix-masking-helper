@@ -274,7 +274,49 @@ GitHub Copilot en sí no expone una API de chat para aplicaciones de terceros.
 > holgado para Claude y Gemini, pero justo para modelos locales pequeños — uno con ventana de 8k
 > truncará el catálogo y elegirá mal el framework. Prefiere un modelo con contexto amplio.
 
+## Encontrar cosas en la barra lateral
+
+Dos filtros, y estrechan juntos. La **caja de texto** alcanza todas las secciones a la vez — un
+nombre se encuentra sin saber en cuál vive — y los resultados salen en lista plana, para que un
+acierto nunca quede escondido tras un encabezado que habría que abrir antes. La **caja de profile
+set** deja solo lo que alcanza un set, seguido hacia fuera como lo sigue la sincronización: sus
+classifiers, los dominios por los que votan, los algoritmos de esos dominios y los frameworks
+detrás de ellos. Elegir un set convierte toda la barra en el conjunto de trabajo de una regla de
+cumplimiento.
+
+El `⋯` de cada sección también elige cómo ordena sus elementos, y la elección se recuerda:
+
+| Sección | Agrupar por |
+|---|---|
+| Frameworks | categoría, o nada |
+| Algoritmos | categoría del framework, dominio, profile set, o nada |
+| Dominios | categoría del framework, profile set, o nada |
+| Classifiers | dominio, framework del algoritmo del dominio, framework del classifier, profile set, o nada |
+
+Agrupar es una vista, no una clasificación. Un elemento puede aparecer bajo más de un encabezado —
+un classifier pertenece a todo profile set que lo ejecuta — y lo que no cae en ninguno queda en
+**Otros**, que es una respuesta de verdad, no un error.
+
 ## Sincronizar con un Masking Engine
+
+**Una instancia, reflejada.** Conectar una instancia en *Configuración → Delphix* trae el engine
+entero de una vez — todos los profile sets, classifiers, dominios y algoritmos — y los campos de la
+conexión quedan bloqueados. No hay nada útil en editar una URL bajo un reflejo de la instancia que
+esa URL ya no nombra, así que cambiar de engine es eliminar la integración y configurar la otra.
+
+Tres botones mantienen el reflejo al día:
+
+- **Actualizar desde Delphix** trae todo de nuevo, actualizando lo que ya está aquí.
+- **Enviar todo a Delphix** empuja en sentido contrario, en orden de dependencia — algoritmos,
+  luego los dominios que los nombran, luego los classifiers que votan por ellos, luego los sets que
+  ejecutan los classifiers. Cada objeto conserva su **Enviar a Delphix** en su editor.
+- **Eliminar integración** olvida la conexión y borra toda fila vinculada a ese engine.
+  "Vinculada" incluye lo que construiste aquí y enviaste allí, y el diálogo lo dice con todas las
+  letras: `delphix_origin` es el único registro del vínculo, y los dos sentidos lo escriben. Los
+  archivos ya descargados siguen en la carpeta de archivos.
+
+Las instancias de plugin del propio engine (`dlpx-core:`) no bajan. Esta herramienta tiene el mismo
+plugin, así que una copia guardada de una de ellas sería una fila que no responde por nada.
 
 Apunta la herramienta a una instancia Delphix en **Configuración → Delphix** — dirección, usuario
 y contraseña — y pulsa **Probar conexión**; responde antes de que guardes nada.
@@ -304,8 +346,7 @@ Los classifiers son lo que el profiling usa para decidir a qué dominio pertenec
 campo. Cada uno se construye sobre uno de cuatro frameworks — **PATH** (el nombre del campo y de su
 tabla o archivo), **TYPE** (el tipo y la longitud), **REGEX** y **LIST** (una muestra de los
 valores) — y vota por un dominio. La sección **Classifiers** de la barra lateral los lista por
-dominio; crea uno en *Classifiers → ⋯ → Nuevo classifier*, o trae los de la instancia con
-*Importar de Delphix*.
+dominio; crea uno en *Classifiers → ⋯ → Nuevo classifier*.
 
 El editor explica cada parámetro del framework elegido, y el panel **Prueba** describe un campo —
 nombre, tabla, tipo SQL, longitud, valores de muestra — y muestra lo que concluiría el profiling:
@@ -328,7 +369,7 @@ viene con su dominio, los algoritmos de ese dominio y sus archivos de valores.
 Un profile set es lo que un job de profiling ejecuta de verdad: los classifiers que debe probar y
 el **umbral de asignación** — la confianza que un dominio debe alcanzar para que el job se lo
 asigne. La sección **Profile Sets** de la barra lateral los lista con su tamaño y su umbral; crea
-uno en *Profile Sets → ⋯ → Nuevo profile set*, o trae los de la instancia con *Importar de Delphix*.
+uno en *Profile Sets → ⋯ → Nuevo profile set*.
 
 El editor elige los miembros entre los classifiers guardados aquí, filtrando por nombre o dominio.
 No hay nada que probar en un set: quien decide el dominio son los classifiers, y se configuran y se
@@ -340,12 +381,12 @@ y, a través de ellos, sus dominios, los algoritmos de esos dominios y los archi
 nombrándolos por los ids que devolvió la instancia — un set solo puede referenciar classifiers que
 la instancia ya tiene.
 
-**Importar.** *Algoritmos → ⋯ → Importar de Delphix*, en la barra lateral, lista lo que tiene la instancia.
-Lo que esté sobre un framework que la herramienta no puede ejecutar aparece, pero no es
-seleccionable, así nunca acabas con un algoritmo guardado que no se puede probar. Lo que un
-algoritmo referencia viene con él — los algoritmos que nombra su configuración y su archivo de
-lookup — e importar un dominio trae sus algoritmos. La excepción son los built-in `dlpx-core:` de
-la instancia: la herramienta ya los tiene.
+**Importar.** No hay importación por objeto: conectar la integración trae el engine entero, y
+**Actualizar desde Delphix** lo trae de nuevo. Un algoritmo sobre un framework que la herramienta
+no puede ejecutar no se copia — así nunca acabas con un algoritmo guardado que no se puede probar —
+y aparece en el resumen de lo que quedó fuera. Lo que un objeto referencia viene con él: los
+algoritmos que nombra una configuración, el archivo de lookup, los algoritmos de un dominio, los
+classifiers de un set.
 
 **Archivos de lookup.** Un archivo subido a la instancia se queda en el almacenamiento de ella:
 el algoritmo lleva solo una referencia (`delphix-file://upload/…/NOMBRES.txt`). Importar descarga el

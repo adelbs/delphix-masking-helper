@@ -54,13 +54,25 @@ export function useDomains(): { domains: Domain[]; loading: boolean; refresh: ()
  * Which sidebar category a domain belongs to: the group of the framework behind the algorithm
  * it points at.
  *
- * Two hops, and either can miss. The domain names an algorithm by name — it may be a built-in
- * the engine has and this machine does not — and even when the algorithm is here, the engine's
- * own algorithms are not all framework-based: on a stock instance roughly a fifth of the
- * domains point at COMPONENT algorithms with no framework at all. Both misses land in `other`,
+ * The name is looked for in two places, and it has to be both. Among the algorithms **saved
+ * here** — and then among the plugin's **built-ins**, which is where most domains actually
+ * point: a stock engine's domains name `dlpx-core:` instances constantly, and those are never
+ * saved rows, because the import skips them on purpose (the plugin here already holds them).
+ * Judging by the saved rows alone put nine domains in ten under `other`.
+ *
+ * What is left over is genuinely unknowable here: an algorithm that exists only on the engine,
+ * or one of its COMPONENT algorithms, which have no framework at all. Those land in `other`,
  * which is a real bucket rather than an error.
  */
-export function domainGroup(domain: Domain, algorithms: Algorithm[]): FrameworkGroup {
-  const algorithm = algorithms.find(a => a.name === domain.default_algorithm)
-  return algorithm ? getFrameworkGroup(algorithm.framework) : 'other'
+export function domainGroup(
+  domain: Domain,
+  algorithms: Algorithm[],
+  builtinFrameworks: Record<string, string> = {},
+): FrameworkGroup {
+  const name = domain.default_algorithm
+  const saved = algorithms.find(a => a.name === name)
+  if (saved) return getFrameworkGroup(saved.framework)
+  // Built-ins are listed under `dlpx-core:<name>`; a domain may spell the reference either way.
+  const builtin = builtinFrameworks[name] ?? builtinFrameworks[`dlpx-core:${name}`]
+  return builtin ? getFrameworkGroup(builtin) : 'other'
 }

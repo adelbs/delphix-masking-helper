@@ -258,6 +258,8 @@ export interface BuiltinReferences {
   tokenization: string[]
   /** Framework classes whose algorithms can — how a saved algorithm is judged. */
   tokenizationFrameworks: string[]
+  /** Built-in name → the framework class behind it, for naming what a reference points at. */
+  frameworkOf: Record<string, string>
 }
 
 /** What build this is, resolved by the server at startup from the git tag. */

@@ -1,10 +1,10 @@
 import type {
   Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage, Classifier, ClassifierCatalog,
-  ClassifierFrameworkName, ClassifierIssue, ClassifierReview, ClassifierTestField, ClassifierTestResult,
+  ClassifierFrameworkName, ClassifierReview, ClassifierTestField, ClassifierTestResult,
   ProfileSet,
   BuiltinReferences, Domain, EngineReferences, Framework, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
-import type { EngineExportResult, EngineImportResult, ImportProgress } from '@/lib/engine-sync'
+import type { EngineExportResult, EngineImportResult, ImportProgress, SyncExportResult } from '@/lib/engine-sync'
 
 const json = (body: unknown): RequestInit => ({
   headers: { 'Content-Type': 'application/json' },
@@ -85,18 +85,18 @@ async function readEvents(body: ReadableStream<Uint8Array>, handle: (event: stri
 }
 
 /**
- * POSTs a selection to an import endpoint and follows it as it goes.
+ * POSTs a long job and follows it as it goes.
  *
- * The result is the same reply a plain POST used to return; what is new is that `onProgress`
- * hears about each item on the way, so the dialog can show a bar instead of freezing. A refusal
- * raised before the stream begins — no engine configured — still arrives as JSON, and is thrown
- * the way every other request throws it.
+ * The result is the reply the job ends with; what the stream adds is that `onProgress` hears
+ * about each item on the way, so the screen can show a bar instead of freezing. A refusal raised
+ * before the stream begins — no engine configured — still arrives as JSON, and is thrown the way
+ * every other request throws it.
  */
-async function streamImport(
+async function streamJob<T>(
   url: string,
   body: unknown,
   onProgress: (p: ImportProgress) => void,
-): Promise<EngineImportResult> {
+): Promise<T> {
   let res: Response
   try {
     res = await fetch(url, { method: 'POST', ...json(body) })
@@ -111,16 +111,16 @@ async function streamImport(
     throw err
   }
 
-  let result: EngineImportResult | null = null
+  let result: T | null = null
   let failure: string | null = null
   await readEvents(res.body, (event, payload) => {
     if (event === 'progress') onProgress(payload as ImportProgress)
-    if (event === 'done') result = payload as EngineImportResult
+    if (event === 'done') result = payload as T
     if (event === 'error') failure = payload.message as string
   })
   if (failure) throw new Error(failure)
   // The stream ended without either event: the server died, or something cut the connection.
-  if (!result) throw new Error('The import stopped before it finished.')
+  if (!result) throw new Error('The job stopped before it finished.')
   return result
 }
 
@@ -252,17 +252,6 @@ export const api = {
 
   deleteDomain: (id: number) =>
     request<{ ok: boolean }>(`/api/domains/${id}`, { method: 'DELETE' }),
-
-  delphixDomains: () =>
-    request<Array<{
-      domainName: string; defaultAlgorithmCode: string; defaultTokenizationCode: string;
-      createdBy: string | null; alreadyImported: boolean;
-    }>>('/api/delphix/domains'),
-
-  /** Brings the domains down with the algorithms they name, reporting each item on the way. */
-  delphixImportDomains: (names: string[], onProgress: (p: ImportProgress) => void) =>
-    streamImport('/api/delphix/domains/import', { names }, onProgress),
-
   /** Sends the domain and, first, the algorithms (and their files) it names that this machine holds. */
   delphixExportDomain: (id: number) =>
     request<{ mode: 'created' | 'updated'; name: string; engine: string } & EngineExportResult>(
@@ -313,41 +302,12 @@ export const api = {
 
   deleteProfileSet: (id: number) =>
     request<{ ok: boolean }>(`/api/profile-sets/${id}`, { method: 'DELETE' }),
-
-  delphixProfileSets: () =>
-    request<Array<{
-      profileSetId: number; profileSetName: string; description: string;
-      assignmentThreshold: number | null; createdBy: string | null;
-      /** How many classifiers the set holds, and how many of those this tool cannot evaluate. */
-      classifiers: number; untestable: number;
-      alreadyImported: boolean;
-    }>>('/api/delphix/profile-sets'),
-
-  /** Brings the sets down with the classifiers they name — and what those classifiers lean on. */
-  delphixImportProfileSets: (ids: number[], onProgress: (p: ImportProgress) => void) =>
-    streamImport('/api/delphix/profile-sets/import', { ids }, onProgress),
-
   /** Sends every classifier in the set, then the set itself naming them by their engine ids. */
   delphixExportProfileSet: (id: number) =>
     request<{
       mode: 'created' | 'updated'; name: string; engine: string;
       classifiers: Array<{ name: string; mode: 'created' | 'updated' }>;
     } & EngineExportResult>(`/api/delphix/profile-sets/export/${id}`, { method: 'POST' }),
-
-  delphixClassifiers: () =>
-    request<Array<{
-      classifierId: number; classifierName: string; framework: ClassifierFrameworkName | null;
-      domainName: string; createdBy: string | null; alreadyImported: boolean;
-      /** Why it cannot be tested here, or would be refused, when that is the case. */
-      issues: ClassifierIssue[];
-      /** List files the engine will hand over with it. */
-      downloadFiles: string[];
-    }>>('/api/delphix/classifiers'),
-
-  /** Brings the classifiers down with their domains, those domains' algorithms, and their list files. */
-  delphixImportClassifiers: (ids: number[], onProgress: (p: ImportProgress) => void) =>
-    streamImport('/api/delphix/classifiers/import', { ids }, onProgress),
-
   /** Sends the classifier and, first, its domain (with the domain's algorithms) and its list files. */
   delphixExportClassifier: (id: number) =>
     request<{
@@ -375,22 +335,20 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     }),
+  // ── The integration as a whole ─────────────────────────────────────────────
 
-  delphixAlgorithms: () =>
-    request<Array<{
-      algorithmName: string; frameworkName: string | null; className: string | null;
-      description: string; config: Record<string, unknown>;
-      supported: boolean; alreadyImported: boolean;
-      /** Files the engine holds and this machine does not, which come down with the import. */
-      downloadFiles: string[];
-      /** Files the engine holds and offers no download for — the algorithm imports fine but
-       *  cannot run until a copy of each exists in the files folder. */
-      missingFiles: string[];
-    }>>('/api/delphix/algorithms'),
+  /** Brings the entire engine down: every profile set, classifier, domain and algorithm on it. */
+  delphixSyncImport: (onProgress: (p: ImportProgress) => void) =>
+    streamJob<EngineImportResult>('/api/delphix/sync/import', {}, onProgress),
 
-  /** Brings the algorithms down with the algorithms and files they reference. */
-  delphixImport: (names: string[], onProgress: (p: ImportProgress) => void) =>
-    streamImport('/api/delphix/import', { names }, onProgress),
+  /** Sends everything held here up, in dependency order. */
+  delphixSyncExport: (onProgress: (p: ImportProgress) => void) =>
+    streamJob<SyncExportResult>('/api/delphix/sync/export', {}, onProgress),
+
+  /** Forgets the connection and deletes every row linked to that engine. */
+  deleteDelphixIntegration: () =>
+    request<{ ok: boolean; engine: string | null; removed: Record<string, number> }>(
+      '/api/delphix/integration', { method: 'DELETE' }),
 
   /** Sends the algorithm after the algorithms it references, uploading the files the engine lacks. */
   delphixExport: (id: number, name?: string) =>

@@ -12,7 +12,7 @@ export interface ReferenceOption {
   detail?: string
 }
 
-const NO_BUILTINS: BuiltinReferences = { algorithms: [], tokenization: [], tokenizationFrameworks: [] }
+const NO_BUILTINS: BuiltinReferences = { algorithms: [], tokenization: [], tokenizationFrameworks: [], frameworkOf: {} }
 
 let builtins: Promise<BuiltinReferences> | null = null
 let engine: Promise<EngineReferences> | null = null

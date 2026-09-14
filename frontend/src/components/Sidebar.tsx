@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Search, ShieldCheck, X, Settings, ChevronDown, ChevronRight,
-  MoreHorizontal, Server, Plus,
+  MoreHorizontal, Server, Plus, Check, Layers,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { useT } from '@/lib/i18n'
-import { getFrameworkGroup, GROUP_ORDER } from '@/lib/framework-metadata'
-import { useAlgorithms, refreshAlgorithms } from '@/lib/algorithms'
-import { useDomains, refreshDomains, domainGroup } from '@/lib/domains'
-import { useClassifiers, refreshClassifiers } from '@/lib/classifiers'
-import { useProfileSets, refreshProfileSets } from '@/lib/profile-sets'
+import { useT, type MessageKey } from '@/lib/i18n'
+import { useAlgorithms } from '@/lib/algorithms'
+import { useDomains } from '@/lib/domains'
+import { useClassifiers } from '@/lib/classifiers'
+import { useProfileSets } from '@/lib/profile-sets'
+import { useBuiltinReferences } from '@/lib/references'
+import {
+  GROUP_MODES, groupAlgorithms, groupClassifiers, groupDomains, groupFrameworks, scopeOfSet,
+  type Bucket, type GroupMode, type GroupableSection, type GroupingData,
+} from '@/lib/grouping'
 import { LocaleFlags } from '@/components/LocaleFlags'
-import { EngineImport } from '@/components/EngineImport'
-import { DomainImport } from '@/components/DomainImport'
-import { ClassifierImport } from '@/components/ClassifierImport'
-import { ProfileSetImport } from '@/components/ProfileSetImport'
 import { useVersion } from '@/lib/version'
 import type { Algorithm, Classifier, Domain, Framework, LocalePref, ProfileSet } from '@/types'
 
@@ -30,8 +30,34 @@ const BUILT: SectionId[] = ['frameworks', 'algorithms', 'domains', 'classifiers'
 
 /** Open/closed state for both levels, remembered across reloads. */
 const PREF_KEY = 'dlpx.sidebar.open'
+/** How each section is grouped, remembered the same way. */
+const GROUP_KEY = 'dlpx.sidebar.groupBy'
 
 type OpenState = Record<string, boolean>
+type GroupingState = Record<GroupableSection, GroupMode>
+
+/** What each section grouped by before there was a choice. */
+const DEFAULT_GROUPING: GroupingState = {
+  frameworks: 'category', algorithms: 'framework', domains: 'framework', classifiers: 'domain',
+}
+
+function readGrouping(): GroupingState {
+  try {
+    const raw = localStorage.getItem(GROUP_KEY)
+    if (raw) {
+      const saved = JSON.parse(raw) as Partial<GroupingState>
+      // Only modes the section still offers: a value from an older build must not strand a
+      // section on a grouping that no longer exists.
+      const out = { ...DEFAULT_GROUPING }
+      for (const section of Object.keys(DEFAULT_GROUPING) as GroupableSection[]) {
+        const mode = saved[section]
+        if (mode && (GROUP_MODES[section] as readonly string[]).includes(mode)) out[section] = mode
+      }
+      return out
+    }
+  } catch { /* private mode, cleared storage, or a value from an older shape */ }
+  return { ...DEFAULT_GROUPING }
+}
 
 function readOpen(): OpenState {
   try {
@@ -80,16 +106,25 @@ export function Sidebar({
   const { domains } = useDomains()
   const { classifiers } = useClassifiers()
   const { profileSets } = useProfileSets()
+  // Which framework each plugin built-in configures. Most domains point at one of those rather
+  // than at a saved algorithm, so without it three of the groupings collapse into "other".
+  const builtins = useBuiltinReferences()
   const [query, setQuery] = useState('')
+  // null is "every profile set" — the filter narrows, it never decides what a section is.
+  const [setFilter, setSetFilter] = useState<number | null>(null)
   const [open, setOpen] = useState<OpenState>(readOpen)
-  const [engineOpen, setEngineOpen] = useState(false)
-  const [domainImportOpen, setDomainImportOpen] = useState(false)
-  const [classifierImportOpen, setClassifierImportOpen] = useState(false)
-  const [profileSetImportOpen, setProfileSetImportOpen] = useState(false)
+  const [grouping, setGrouping] = useState<GroupingState>(readGrouping)
 
   useEffect(() => {
     try { localStorage.setItem(PREF_KEY, JSON.stringify(open)) } catch { /* not worth failing over */ }
   }, [open])
+
+  useEffect(() => {
+    try { localStorage.setItem(GROUP_KEY, JSON.stringify(grouping)) } catch { /* same */ }
+  }, [grouping])
+
+  const regroup = (section: GroupableSection, mode: GroupMode) =>
+    setGrouping(prev => ({ ...prev, [section]: mode }))
 
   /**
    * Groups are an accordion too: opening one closes every other group, in any section. Closing
@@ -160,11 +195,43 @@ export function Sidebar({
   const matchProfileSet = (s: ProfileSet) =>
     s.name.toLowerCase().includes(q) || s.classifiers.some(c => c.name.toLowerCase().includes(q))
 
-  const shownFrameworks = q ? frameworks.filter(matchFramework) : frameworks
-  const shownAlgorithms = q ? algorithms.filter(matchAlgorithm) : algorithms
-  const shownDomains = q ? domains.filter(matchDomain) : domains
-  const shownClassifiers = q ? classifiers.filter(matchClassifier) : classifiers
-  const shownProfileSets = q ? profileSets.filter(matchProfileSet) : profileSets
+  const data: GroupingData = {
+    algorithms, domains, classifiers, profileSets,
+    builtinFrameworks: builtins?.frameworkOf ?? {},
+  }
+
+  /**
+   * The second filter: one profile set, and only what it reaches.
+   *
+   * Followed outwards the way the sync follows it — the set's classifiers, the domains they vote
+   * for, those domains' algorithms, and the frameworks behind them — so picking a set turns the
+   * whole sidebar into the working set for one compliance rule. Null leaves every section alone.
+   */
+  const chosenSet = setFilter === null ? null : profileSets.find(s => s.id === setFilter) ?? null
+  const scope = chosenSet ? scopeOfSet(chosenSet, data) : null
+
+  const filter = <T,>(rows: T[], matches: (row: T) => boolean, inScope: (row: T) => boolean) => {
+    let out = rows
+    if (scope) out = out.filter(inScope)
+    if (q) out = out.filter(matches)
+    return out
+  }
+
+  const shownFrameworks = filter(frameworks, matchFramework, f => scope!.frameworkClasses.has(f.className))
+  const shownAlgorithms = filter(algorithms, matchAlgorithm, a => scope!.algorithmNames.has(a.name))
+  const shownDomains = filter(domains, matchDomain, d => scope!.domainNames.has(d.name))
+  const shownClassifiers = filter(classifiers, matchClassifier, c => scope!.classifierIds.has(c.id))
+  const shownProfileSets = filter(profileSets, matchProfileSet, s => s.id === setFilter)
+
+  // A text search flattens every section: a heading you would have to open first is in the way
+  // of an answer you already asked for by name. The set filter leaves the grouping alone.
+  const flat = q !== ''
+  const buckets = {
+    frameworks: flat ? [] : groupFrameworks(shownFrameworks, grouping.frameworks, t),
+    algorithms: flat ? [] : groupAlgorithms(shownAlgorithms, grouping.algorithms, data, t),
+    domains: flat ? [] : groupDomains(shownDomains, grouping.domains, data, t),
+    classifiers: flat ? [] : groupClassifiers(shownClassifiers, grouping.classifiers, data, t),
+  }
 
   return (
     <div className="flex flex-col h-full bg-slate-900">
@@ -185,9 +252,10 @@ export function Sidebar({
         )}
       </div>
 
-      {/* Search — spans both populated sections, so a name is found without knowing which one
-          it lives in. */}
-      <div className="px-3 pb-2 flex-shrink-0">
+      {/* Two filters, and they narrow together. The text one reaches every section — a name is
+          found without knowing which one it lives in — and the profile set one keeps only what
+          that set reaches, all the way out to the frameworks behind it. */}
+      <div className="px-3 pb-2 flex-shrink-0 space-y-1.5">
         <div className="relative">
           <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
@@ -198,19 +266,40 @@ export function Sidebar({
             className="w-full pl-7 pr-3 py-1.5 text-sm bg-slate-800 text-slate-200 border border-slate-700 rounded-lg placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+        {profileSets.length > 0 && (
+          <div className="relative">
+            <Layers size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+            <select
+              value={setFilter ?? ''}
+              onChange={(e) => setSetFilter(e.target.value === '' ? null : Number(e.target.value))}
+              title={t('sidebar.profileSetFilter')}
+              className={cn(
+                'w-full pl-7 pr-3 py-1.5 text-sm bg-slate-800 border border-slate-700 rounded-lg appearance-none',
+                'focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500',
+                setFilter === null ? 'text-slate-500' : 'text-slate-200'
+              )}
+            >
+              <option value="">{t('sidebar.profileSetAll')}</option>
+              {profileSets.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </div>
+        )}
       </div>
 
       <nav className="flex-1 overflow-auto px-2 py-1">
         {SECTIONS.map((id) => {
           const built = BUILT.includes(id)
-          const isOpen = built && !!open[`section:${id}`]
-          // While searching, a section with no match collapses out of the way on its own.
+          // Filtering opens whatever still has something in it: a section that answers the
+          // filter but stays shut is a count nobody asked for, in place of the answer.
+          const filtering = q !== '' || setFilter !== null
+          const isOpen = built && (filtering ? true : !!open[`section:${id}`])
+          // A section with no match collapses out of the way on its own.
           const count = id === 'frameworks' ? shownFrameworks.length
             : id === 'algorithms' ? shownAlgorithms.length
             : id === 'domains' ? shownDomains.length
             : id === 'classifiers' ? shownClassifiers.length
             : id === 'profileSets' ? shownProfileSets.length : 0
-          if (q && built && count === 0) return null
+          if (filtering && built && count === 0) return null
 
           return (
             // The whole open section — header, categories and items — sits on a lighter panel
@@ -227,36 +316,36 @@ export function Sidebar({
                 count={built ? count : null}
                 onToggle={() => toggleSection(id)}
                 actions={
-                  id === 'algorithms' && built ? (
-                    <CreateImportActions
+                  id === 'frameworks' && built ? (
+                    <SectionMenu
+                      title={t('sidebar.frameworkActions')}
+                      grouping={{ section: 'frameworks', mode: grouping.frameworks, onChange: regroup }}
+                    />
+                  ) : id === 'algorithms' && built ? (
+                    <SectionMenu
                       title={t('saved.actions')}
                       newLabel={t('saved.new')}
-                      importLabel={t('saved.importFromEngine')}
-                      onImportFromEngine={() => setEngineOpen(true)}
                       onNew={startNewAlgorithm}
+                      grouping={{ section: 'algorithms', mode: grouping.algorithms, onChange: regroup }}
                     />
                   ) : id === 'domains' && built ? (
-                    <CreateImportActions
+                    <SectionMenu
                       title={t('domain.actions')}
                       newLabel={t('domain.new')}
-                      importLabel={t('domain.importFromEngine')}
-                      onImportFromEngine={() => setDomainImportOpen(true)}
                       onNew={onNewDomain}
+                      grouping={{ section: 'domains', mode: grouping.domains, onChange: regroup }}
                     />
                   ) : id === 'classifiers' && built ? (
-                    <CreateImportActions
+                    <SectionMenu
                       title={t('classifier.actions')}
                       newLabel={t('classifier.new')}
-                      importLabel={t('classifier.importFromEngine')}
-                      onImportFromEngine={() => setClassifierImportOpen(true)}
                       onNew={onNewClassifier}
+                      grouping={{ section: 'classifiers', mode: grouping.classifiers, onChange: regroup }}
                     />
                   ) : id === 'profileSets' && built ? (
-                    <CreateImportActions
+                    <SectionMenu
                       title={t('profileSet.actions')}
                       newLabel={t('profileSet.new')}
-                      importLabel={t('profileSet.importFromEngine')}
-                      onImportFromEngine={() => setProfileSetImportOpen(true)}
                       onNew={onNewProfileSet}
                     />
                   ) : null
@@ -267,7 +356,8 @@ export function Sidebar({
                 <FrameworkList
                   frameworks={shownFrameworks}
                   loadError={loadError}
-                  flat={q !== ''}
+                  buckets={buckets.frameworks}
+                  mode={grouping.frameworks}
                   open={open}
                   onToggleGroup={toggle}
                   activeClassName={activeClassName}
@@ -278,7 +368,8 @@ export function Sidebar({
               {isOpen && id === 'algorithms' && (
                 <AlgorithmList
                   algorithms={shownAlgorithms}
-                  flat={q !== ''}
+                  buckets={buckets.algorithms}
+                  mode={grouping.algorithms}
                   open={open}
                   onToggleGroup={toggle}
                   activeId={activeAlgorithmId}
@@ -289,8 +380,8 @@ export function Sidebar({
               {isOpen && id === 'domains' && (
                 <DomainList
                   domains={shownDomains}
-                  algorithms={algorithms}
-                  flat={q !== ''}
+                  buckets={buckets.domains}
+                  mode={grouping.domains}
                   open={open}
                   onToggleGroup={toggle}
                   activeId={activeDomainId}
@@ -301,7 +392,8 @@ export function Sidebar({
               {isOpen && id === 'classifiers' && (
                 <ClassifierList
                   classifiers={shownClassifiers}
-                  flat={q !== ''}
+                  buckets={buckets.classifiers}
+                  mode={grouping.classifiers}
                   open={open}
                   onToggleGroup={toggle}
                   activeId={activeClassifierId}
@@ -334,27 +426,6 @@ export function Sidebar({
         <VersionLine />
       </div>
 
-      {engineOpen && (
-        <EngineImport onClose={() => setEngineOpen(false)} onImported={refreshAlgorithms} />
-      )}
-      {domainImportOpen && (
-        <DomainImport onClose={() => setDomainImportOpen(false)} onImported={refreshDomains} />
-      )}
-      {classifierImportOpen && (
-        <ClassifierImport
-          onClose={() => setClassifierImportOpen(false)}
-          // An import can bring the classifiers' domains down with them.
-          onImported={() => { refreshClassifiers(); refreshDomains() }}
-        />
-      )}
-
-      {profileSetImportOpen && (
-        <ProfileSetImport
-          onClose={() => setProfileSetImportOpen(false)}
-          // A set drags its classifiers down, and those drag their domains and algorithms.
-          onImported={() => { refreshProfileSets(); refreshClassifiers(); refreshDomains(); refreshAlgorithms() }}
-        />
-      )}
     </div>
   )
 }
@@ -432,10 +503,37 @@ function SectionHeader({ id, open, disabled, count, onToggle, actions }: {
 
 const menuItem = 'flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs text-slate-300 hover:bg-slate-700 hover:text-white transition-colors'
 
-function FrameworkList({ frameworks, loadError, flat, open, onToggleGroup, activeClassName, onSelect }: {
+/** Items under their headings, or flat when the section is not grouped. */
+function Buckets<T>({ buckets, items, prefix, open, onToggleGroup, upper, render }: {
+  buckets: Bucket<T>[]
+  items: T[]
+  /** Namespaces the open/closed keys, so two sections grouped the same way stay independent. */
+  prefix: string
+  open: OpenState
+  onToggleGroup: (key: string) => void
+  upper?: boolean
+  render: (item: T) => React.ReactNode
+}) {
+  if (!buckets.length) return <>{items.map(render)}</>
+  return (
+    <>{buckets.map(b => (
+      <Group key={b.key} label={b.label} upper={upper} count={b.items.length}
+             open={!!open[`${prefix}:${b.key}`]} onToggle={() => onToggleGroup(`${prefix}:${b.key}`)}>
+        {b.items.map(render)}
+      </Group>
+    ))}</>
+  )
+}
+
+/** Category headings are labels this tool wrote; a domain or a set name is data, shown as spelled. */
+const upperFor = (mode: GroupMode) =>
+  mode === 'category' || mode === 'framework' || mode === 'domainFramework'
+
+function FrameworkList({ frameworks, loadError, buckets, mode, open, onToggleGroup, activeClassName, onSelect }: {
   frameworks: Framework[]
   loadError: string | null
-  flat: boolean
+  buckets: Bucket<Framework>[]
+  mode: GroupMode
   open: OpenState
   onToggleGroup: (key: string) => void
   activeClassName: string | null
@@ -454,30 +552,22 @@ function FrameworkList({ frameworks, loadError, flat, open, onToggleGroup, activ
   if (frameworks.length === 0) {
     return <p className="text-slate-400 text-xs text-center py-4">{t('sidebar.noResults')}</p>
   }
-  if (flat) {
-    return <>{frameworks.map(f => (
-      <ItemButton key={f.className} label={f.displayName}
-                  active={activeClassName === f.className} onClick={() => onSelect(f)} />
-    ))}</>
-  }
-
-  const grouped = groupBy(frameworks, f => getFrameworkGroup(f.className))
   return (
-    <>{GROUP_ORDER.filter(g => grouped[g]?.length).map(group => (
-      <Group key={group} label={t(`group.${group}`)} count={grouped[group].length}
-             open={!!open[`frameworks:${group}`]} onToggle={() => onToggleGroup(`frameworks:${group}`)}>
-        {grouped[group].map(f => (
-          <ItemButton key={f.className} label={f.displayName}
-                      active={activeClassName === f.className} onClick={() => onSelect(f)} />
-        ))}
-      </Group>
-    ))}</>
+    <Buckets
+      buckets={buckets} items={frameworks} prefix={`frameworks:${mode}`}
+      open={open} onToggleGroup={onToggleGroup} upper={upperFor(mode)}
+      render={f => (
+        <ItemButton key={f.className} label={f.displayName}
+                    active={activeClassName === f.className} onClick={() => onSelect(f)} />
+      )}
+    />
   )
 }
 
-function AlgorithmList({ algorithms, flat, open, onToggleGroup, activeId, onSelect }: {
+function AlgorithmList({ algorithms, buckets, mode, open, onToggleGroup, activeId, onSelect }: {
   algorithms: Algorithm[]
-  flat: boolean
+  buckets: Bucket<Algorithm>[]
+  mode: GroupMode
   open: OpenState
   onToggleGroup: (key: string) => void
   activeId: number | null
@@ -488,37 +578,42 @@ function AlgorithmList({ algorithms, flat, open, onToggleGroup, activeId, onSele
   if (algorithms.length === 0) {
     return <p className="text-slate-400 text-xs px-3 py-3">{t('sidebar.algorithmsEmpty')}</p>
   }
-  if (flat) {
-    return <>{algorithms.map(a => (
-      <ItemButton key={a.id} label={a.name} hint={a.display_name}
-                  active={activeId === a.id} onClick={() => onSelect(a)} />
-    ))}</>
-  }
-
-  // The same categories as the frameworks, resolved from the class each algorithm configures.
-  const grouped = groupBy(algorithms, a => getFrameworkGroup(a.framework))
   return (
-    <>{GROUP_ORDER.filter(g => grouped[g]?.length).map(group => (
-      <Group key={group} label={t(`group.${group}`)} count={grouped[group].length}
-             open={!!open[`algorithms:${group}`]} onToggle={() => onToggleGroup(`algorithms:${group}`)}>
-        {grouped[group].map(a => (
-          <ItemButton key={a.id} label={a.name} hint={a.display_name}
-                      active={activeId === a.id} onClick={() => onSelect(a)} />
-        ))}
-      </Group>
-    ))}</>
+    <Buckets
+      buckets={buckets} items={algorithms} prefix={`algorithms:${mode}`}
+      open={open} onToggleGroup={onToggleGroup} upper={upperFor(mode)}
+      render={a => (
+        <ItemButton key={a.id} label={a.name} hint={a.display_name}
+                    active={activeId === a.id} onClick={() => onSelect(a)} />
+      )}
+    />
   )
 }
 
-/** Create one, or pull the engine's down. The same menu on all three populated sections — what
- *  "create" means differs (an algorithm starts by choosing a framework), the shape does not. */
-function CreateImportActions({ title, newLabel, importLabel, onImportFromEngine, onNew }: {
+/**
+ * A section's `⋯`: what it can create or pull down, and how it lays its items out.
+ *
+ * One menu for all five sections, because the shape is the same even where the parts differ —
+ * Frameworks has nothing to create (they come from the plugin) and Profile Sets nothing to group
+ * by, and each simply leaves that half out.
+ */
+function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, grouping }: {
   title: string
-  newLabel: string
-  importLabel: string
-  onImportFromEngine: () => void
-  onNew: () => void
+  newLabel?: string
+  importLabel?: string
+  onImportFromEngine?: () => void
+  onNew?: () => void
+  grouping?: {
+    section: GroupableSection
+    mode: GroupMode
+    onChange: (section: GroupableSection, mode: GroupMode) => void
+  }
 }) {
+  const { t } = useT()
+  // Anchored on open and drawn fixed, not absolute. The menu hangs off a section header that
+  // lives inside the scrolling list: positioned inside it, the panel scrolls with the content
+  // and can end up past the visible edge or off the top entirely. Fixed keeps it on screen, and
+  // any scroll closes it rather than leaving it stranded away from its button.
   const [at, setAt] = useState<{ top: number; right: number } | null>(null)
   const open = at !== null
   const box = useRef<HTMLDivElement>(null)
@@ -539,6 +634,7 @@ function CreateImportActions({ title, newLabel, importLabel, onImportFromEngine,
     document.addEventListener('mousedown', away)
     document.addEventListener('keydown', esc)
     window.addEventListener('resize', close)
+    // Capture phase: the list that scrolls is an ancestor, and scroll does not bubble.
     document.addEventListener('scroll', close, true)
     return () => {
       document.removeEventListener('mousedown', away)
@@ -547,6 +643,9 @@ function CreateImportActions({ title, newLabel, importLabel, onImportFromEngine,
       document.removeEventListener('scroll', close, true)
     }
   }, [open])
+
+  const creates = onNew && newLabel
+  const imports = onImportFromEngine && importLabel
 
   return (
     <div ref={box}>
@@ -560,24 +659,49 @@ function CreateImportActions({ title, newLabel, importLabel, onImportFromEngine,
       {at && (
         <div
           style={{ top: at.top, right: at.right }}
-          className="fixed z-50 w-52 rounded-lg border border-slate-700 bg-slate-800 py-1 shadow-xl"
+          className="fixed z-50 w-56 rounded-lg border border-slate-700 bg-slate-800 py-1 shadow-xl"
         >
-          <button onClick={() => { close(); onNew() }} className={menuItem}>
-            <Plus size={13} /> {newLabel}
-          </button>
-          <button onClick={() => { close(); onImportFromEngine() }} className={menuItem}>
-            <Server size={13} /> {importLabel}
-          </button>
+          {creates && (
+            <button onClick={() => { close(); onNew() }} className={menuItem}>
+              <Plus size={13} /> {newLabel}
+            </button>
+          )}
+          {imports && (
+            <button onClick={() => { close(); onImportFromEngine() }} className={menuItem}>
+              <Server size={13} /> {importLabel}
+            </button>
+          )}
+          {grouping && (
+            <>
+              {(creates || imports) && <div className="my-1 border-t border-slate-700" />}
+              <p className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                {t('sidebar.groupBy')}
+              </p>
+              {GROUP_MODES[grouping.section].map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => { close(); grouping.onChange(grouping.section, mode) }}
+                  aria-current={mode === grouping.mode}
+                  className={cn(menuItem, mode === grouping.mode && 'text-white')}
+                >
+                  {mode === grouping.mode
+                    ? <Check size={13} className="text-blue-400" />
+                    : <span className="w-[13px] flex-shrink-0" />}
+                  {t(`sidebar.group.${mode}` as MessageKey)}
+                </button>
+              ))}
+            </>
+          )}
         </div>
       )}
     </div>
   )
 }
 
-function DomainList({ domains, algorithms, flat, open, onToggleGroup, activeId, onSelect }: {
+function DomainList({ domains, buckets, mode, open, onToggleGroup, activeId, onSelect }: {
   domains: Domain[]
-  algorithms: Algorithm[]
-  flat: boolean
+  buckets: Bucket<Domain>[]
+  mode: GroupMode
   open: OpenState
   onToggleGroup: (key: string) => void
   activeId: number | null
@@ -588,33 +712,22 @@ function DomainList({ domains, algorithms, flat, open, onToggleGroup, activeId, 
   if (domains.length === 0) {
     return <p className="text-slate-400 text-xs px-3 py-3">{t('domain.empty')}</p>
   }
-  if (flat) {
-    return <>{domains.map(d => (
-      <ItemButton key={d.id} label={d.name} hint={d.default_algorithm || t('domain.noAlgorithm')}
-                  active={activeId === d.id} onClick={() => onSelect(d)} />
-    ))}</>
-  }
-
-  // Grouped by the framework behind the algorithm each domain points at — the same categories
-  // the frameworks and the algorithms use. Two hops, and `domainGroup` sends either miss to
-  // `other` rather than inventing a category.
-  const grouped = groupBy(domains, d => domainGroup(d, algorithms))
   return (
-    <>{GROUP_ORDER.filter(g => grouped[g]?.length).map(group => (
-      <Group key={group} label={t(`group.${group}`)} count={grouped[group].length}
-             open={!!open[`domains:${group}`]} onToggle={() => onToggleGroup(`domains:${group}`)}>
-        {grouped[group].map(d => (
-          <ItemButton key={d.id} label={d.name} hint={d.default_algorithm || t('domain.noAlgorithm')}
-                      active={activeId === d.id} onClick={() => onSelect(d)} />
-        ))}
-      </Group>
-    ))}</>
+    <Buckets
+      buckets={buckets} items={domains} prefix={`domains:${mode}`}
+      open={open} onToggleGroup={onToggleGroup} upper={upperFor(mode)}
+      render={d => (
+        <ItemButton key={d.id} label={d.name} hint={d.default_algorithm || t('domain.noAlgorithm')}
+                    active={activeId === d.id} onClick={() => onSelect(d)} />
+      )}
+    />
   )
 }
 
-function ClassifierList({ classifiers, flat, open, onToggleGroup, activeId, onSelect }: {
+function ClassifierList({ classifiers, buckets, mode, open, onToggleGroup, activeId, onSelect }: {
   classifiers: Classifier[]
-  flat: boolean
+  buckets: Bucket<Classifier>[]
+  mode: GroupMode
   open: OpenState
   onToggleGroup: (key: string) => void
   activeId: number | null
@@ -625,32 +738,23 @@ function ClassifierList({ classifiers, flat, open, onToggleGroup, activeId, onSe
   if (classifiers.length === 0) {
     return <p className="text-slate-400 text-xs px-3 py-3">{t('classifier.empty')}</p>
   }
-  const hint = (c: Classifier) => t(`classifier.fw.${c.framework}`)
-  if (flat) {
-    return <>{classifiers.map(c => (
-      <ItemButton key={c.id} label={c.name} hint={`${c.domain_name} · ${hint(c)}`}
-                  active={activeId === c.id} onClick={() => onSelect(c)} />
-    ))}</>
-  }
-
-  // Grouped by domain: a domain is what its classifiers are weighed together for, so that is the
-  // unit a profile run — and the tester — reads them in.
-  const grouped = groupBy(classifiers, c => c.domain_name)
-  const names = Object.keys(grouped).sort((a, b) => a.localeCompare(b))
+  // Grouped by domain the hint would only repeat the heading, so it carries the framework there
+  // and both everywhere else.
+  const hint = (c: Classifier) => mode === 'domain'
+    ? t(`classifier.fw.${c.framework}`)
+    : `${c.domain_name || t('classifier.noDomain')} · ${t(`classifier.fw.${c.framework}`)}`
   return (
-    <>{names.map(domain => (
-      <Group key={domain} label={domain || t('classifier.noDomain')} upper={false} count={grouped[domain].length}
-             open={!!open[`classifiers:${domain}`]} onToggle={() => onToggleGroup(`classifiers:${domain}`)}>
-        {grouped[domain].map(c => (
-          <ItemButton key={c.id} label={c.name} hint={hint(c)}
-                      active={activeId === c.id} onClick={() => onSelect(c)} />
-        ))}
-      </Group>
-    ))}</>
+    <Buckets
+      buckets={buckets} items={classifiers} prefix={`classifiers:${mode}`}
+      open={open} onToggleGroup={onToggleGroup} upper={upperFor(mode)}
+      render={c => (
+        <ItemButton key={c.id} label={c.name} hint={hint(c)}
+                    active={activeId === c.id} onClick={() => onSelect(c)} />
+      )}
+    />
   )
 }
 
-/** `upper` is off for labels that are data — a domain name is shown as the engine spells it. */
 function Group({ label, upper = true, count, open, onToggle, children }: {
   label: string
   upper?: boolean
@@ -705,12 +809,6 @@ function ItemButton({ label, hint, active, onClick }: {
       )}
     </button>
   )
-}
-
-function groupBy<T>(rows: T[], key: (row: T) => string): Record<string, T[]> {
-  const out: Record<string, T[]> = {}
-  for (const row of rows) (out[key(row)] ??= []).push(row)
-  return out
 }
 
 /** The build, under the language flags. Renders nothing at all when there is none to show,

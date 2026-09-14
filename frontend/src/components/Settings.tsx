@@ -1,10 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
-import { PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw, CheckCircle2, AlertTriangle } from 'lucide-react'
+import {
+  PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw, CheckCircle2,
+  AlertTriangle, CloudUpload, Lock, Loader2,
+} from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { useVersion } from '@/lib/version'
+import { announceImport, refreshAfterImport } from '@/lib/engine-sync'
+import { ImportProgressBar } from '@/components/ImportProgressBar'
+import { useImportProgress } from '@/lib/import-progress'
 import type { AiStatus, ServerFile } from '@/types'
 
 interface Props {
@@ -553,7 +559,14 @@ function FilesTab() {
 }
 
 
-/** Connection to a Delphix Continuous Compliance engine, used to import and export algorithms. */
+/**
+ * The connection to one Delphix Continuous Compliance engine.
+ *
+ * An integration, not a set of credentials: configuring it copies the whole engine down at once,
+ * and from then on the fields are locked. There is nothing useful about editing a URL under a
+ * mirror of the instance that URL no longer names — changing engine means dropping this one,
+ * which takes what came with it, and setting up the other.
+ */
 function DelphixTab() {
   const { t } = useT()
   const [baseUrl, setBaseUrl] = useState('')
@@ -565,20 +578,31 @@ function DelphixTab() {
   const [maskedPassword, setMaskedPassword] = useState('')
   // Set when the password comes from an environment variable: the field then has no effect.
   const [passwordEnv, setPasswordEnv] = useState<string | null>(null)
+  /** Whether an engine is stored, which is what locks the fields. Null until the config arrives. */
+  const [linked, setLinked] = useState<boolean | null>(null)
   const [saving, setSaving] = useState(false)
+  const [busy, setBusy] = useState<'import' | 'export' | 'remove' | null>(null)
   const [status, setStatus] = useState<{ configured?: boolean; ok?: boolean; error?: string; apiRoot?: string } | null>(null)
   const [checking, setChecking] = useState(false)
+  const { progress, report, clear } = useImportProgress()
+
+  /** Puts the stored connection on screen. `linked` is what locks the fields. */
+  const apply = (c: Record<string, string>) => {
+    setBaseUrl(c['delphix.baseUrl'] ?? '')
+    setUsername(c['delphix.username'] ?? '')
+    setPassword(c['delphix.password'] ?? '')
+    setMaskedPassword(c['delphix.password'] ?? '')
+    setPasswordEnv(c['delphix.password.fromEnv'] ?? null)
+    setSelfSigned(String(c['delphix.allowSelfSigned']) === 'true')
+    setLinked(Boolean(c['delphix.baseUrl']))
+  }
+
+  const load = () => api.getConfig()
+    .then(cfg => apply(cfg as unknown as Record<string, string>))
+    .catch(() => {})
 
   useEffect(() => {
-    api.getConfig().then(cfg => {
-      const c = cfg as unknown as Record<string, string>
-      setBaseUrl(c['delphix.baseUrl'] ?? '')
-      setUsername(c['delphix.username'] ?? '')
-      setPassword(c['delphix.password'] ?? '')
-      setMaskedPassword(c['delphix.password'] ?? '')
-      setPasswordEnv(c['delphix.password.fromEnv'] ?? null)
-      setSelfSigned(String(c['delphix.allowSelfSigned']) === 'true')
-    }).catch(() => {})
+    api.getConfig().then(cfg => apply(cfg as unknown as Record<string, string>)).catch(() => {})
   }, [])
 
   // Tests what is on screen, so the button works before anything is saved. An untouched
@@ -597,6 +621,26 @@ function DelphixTab() {
     } finally { setChecking(false) }
   }
 
+  /** Brings the engine down. Shared by the first save and the Refresh button. */
+  const pullEverything = async (kind: 'import') => {
+    setBusy(kind)
+    clear()
+    try {
+      const out = await api.delphixSyncImport(report)
+      toast.success(t('settings.dlpxImported', { n: out.imported.length }))
+      announceImport(t, out)
+      await refreshAfterImport()
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally { setBusy(null); clear() }
+  }
+
+  /**
+   * Saves the connection and, if it works, copies the engine down straight away.
+   *
+   * The import is not a separate step someone has to know to take: an integration that is
+   * configured but empty is a screen full of nothing, and the first thing anyone would do next.
+   */
   const save = async () => {
     setSaving(true)
     try {
@@ -606,24 +650,68 @@ function DelphixTab() {
         'delphix.password': password,
         'delphix.allowSelfSigned': String(selfSigned),
       } as unknown as Record<string, string>)
-      const cfg = await api.getConfig() as unknown as Record<string, string>
-      setPassword(cfg['delphix.password'] ?? '')
-      setMaskedPassword(cfg['delphix.password'] ?? '')
+      const probe = await api.delphixTest({ baseUrl, username, password: '', allowSelfSigned: selfSigned })
+      setStatus(probe)
+      if (!probe.ok) { toast.error(t('settings.dlpxFail')); return }
+      await load()
       toast.success(t('settings.saved'))
-      await check()
+      await pullEverything('import')
     } catch { toast.error(t('settings.saveError')) }
     finally { setSaving(false) }
   }
 
+  const sendEverything = async () => {
+    setBusy('export')
+    clear()
+    try {
+      const out = await api.delphixSyncExport(report)
+      const n = out.algorithms.length + out.domains.length + out.classifiers.length + out.profileSets.length
+      toast.success(t('settings.dlpxSent', { n }))
+      if (out.uploaded.length) toast.success(t('sync.uploadedFiles', { n: out.uploaded.length, files: out.uploaded.join(', ') }))
+      if (out.skipped.length) {
+        toast.warning(t('settings.dlpxSentSkipped', { n: out.skipped.length, names: out.skipped.map(s => s.name).join(', ') }))
+      }
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally { setBusy(null); clear() }
+  }
+
+  const removeIntegration = async () => {
+    if (!confirm(t('settings.dlpxRemoveConfirm'))) return
+    setBusy('remove')
+    try {
+      const out = await api.deleteDelphixIntegration()
+      toast.success(t('settings.dlpxRemoved', {
+        sets: out.removed.profileSets, classifiers: out.removed.classifiers,
+        domains: out.removed.domains, algorithms: out.removed.algorithms,
+      }))
+      setStatus(null)
+      await load()
+      await refreshAfterImport()
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally { setBusy(null) }
+  }
+
+  const working = saving || busy !== null
+  const locked = linked === true
+
   return (
     <div className="max-w-lg space-y-5">
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+        {locked && (
+          <p className="flex gap-2 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg p-3">
+            <Lock size={14} className="flex-shrink-0 mt-0.5 text-slate-400" />
+            {t('settings.dlpxLocked')}
+          </p>
+        )}
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {t('settings.dlpxUrl')}
           </label>
           <input type="text" value={baseUrl} onChange={e => setBaseUrl(e.target.value)}
-                 placeholder="masking.example.com" className={fieldCls} />
+                 disabled={locked} placeholder="masking.example.com"
+                 className={cn(fieldCls, locked && 'opacity-60')} />
           <p className="text-xs text-slate-400 mt-1">{t('settings.dlpxUrlHint')}</p>
         </div>
         <div>
@@ -631,39 +719,67 @@ function DelphixTab() {
             {t('settings.dlpxUser')}
           </label>
           <input type="text" value={username} onChange={e => setUsername(e.target.value)}
-                 autoComplete="off" className={fieldCls} />
+                 disabled={locked} autoComplete="off"
+                 className={cn(fieldCls, locked && 'opacity-60')} />
         </div>
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {t('settings.dlpxPassword')}
           </label>
           <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                 autoComplete="new-password" disabled={Boolean(passwordEnv)}
-                 className={cn(fieldCls, passwordEnv && 'opacity-60')} />
+                 autoComplete="new-password" disabled={locked || Boolean(passwordEnv)}
+                 className={cn(fieldCls, (locked || passwordEnv) && 'opacity-60')} />
           <p className="text-xs text-slate-400 mt-1">
             {passwordEnv
               ? t('settings.secretFromEnv', { name: passwordEnv })
               : t('settings.dlpxPasswordHint')}
           </p>
         </div>
-        <label className="flex items-start gap-2 text-sm text-slate-700">
+        <label className={cn('flex items-start gap-2 text-sm text-slate-700', locked && 'opacity-60')}>
           <input type="checkbox" checked={selfSigned} onChange={e => setSelfSigned(e.target.checked)}
-                 className="mt-1" />
+                 disabled={locked} className="mt-1" />
           <span>
             {t('settings.dlpxSelfSigned')}
             <span className="block text-xs text-slate-400">{t('settings.dlpxSelfSignedHint')}</span>
           </span>
         </label>
-        <div className="flex items-center gap-2">
-          <button onClick={save} disabled={saving}
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
-            <Save size={14} />{saving ? t('settings.saving') : t('settings.save')}
-          </button>
-          <button onClick={check} disabled={checking}
-                  className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-60 transition-colors">
-            {checking ? t('settings.dlpxTesting') : t('settings.dlpxTest')}
-          </button>
-        </div>
+
+        {locked ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <button onClick={() => pullEverything('import')} disabled={working}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
+              {busy === 'import' ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
+              {busy === 'import' ? t('settings.dlpxRefreshing') : t('settings.dlpxRefresh')}
+            </button>
+            <button onClick={sendEverything} disabled={working}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 disabled:opacity-60 transition-colors">
+              {busy === 'export' ? <Loader2 size={14} className="animate-spin" /> : <CloudUpload size={14} />}
+              {busy === 'export' ? t('settings.dlpxSendingAll') : t('settings.dlpxSendAll')}
+            </button>
+            <button onClick={check} disabled={working || checking}
+                    className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-60 transition-colors">
+              {checking ? t('settings.dlpxTesting') : t('settings.dlpxTest')}
+            </button>
+            <button onClick={removeIntegration} disabled={working}
+                    className="ml-auto flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-200 rounded-lg hover:bg-red-50 disabled:opacity-60 transition-colors">
+              <Trash2 size={14} />{t('settings.dlpxRemove')}
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <button onClick={save} disabled={working || !baseUrl.trim()}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
+              <Save size={14} />{saving ? t('settings.saving') : t('settings.dlpxConnect')}
+            </button>
+            <button onClick={check} disabled={checking}
+                    className="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-60 transition-colors">
+              {checking ? t('settings.dlpxTesting') : t('settings.dlpxTest')}
+            </button>
+          </div>
+        )}
+
+        {progress && <ImportProgressBar progress={progress} />}
+        {!locked && <p className="text-xs text-slate-400">{t('settings.dlpxConnectHint')}</p>}
       </div>
 
       {status && (

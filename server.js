@@ -669,101 +669,6 @@ app.post('/api/delphix/test', async (req, res) => {
   });
   res.json({ configured: delphix.isConfigured(cfg), ...(await delphix.probe(cfg)) });
 });
-
-/** The algorithms on the engine, flagged with whether this tool can run them locally. */
-app.get('/api/delphix/algorithms', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine is configured.' });
-  }
-  try {
-    const list = await delphix.listAlgorithms(cfg);
-    const origin = delphix.apiRoot(cfg.baseUrl);
-    const known = new Set(
-      (await runJava({ command: 'list' })).map((a) => a.className));
-    // Already imported once? Then importing again overwrites that row rather than duplicating.
-    const seen = db.prepare(
-      'SELECT delphix_name FROM saved_algorithms WHERE delphix_origin = ?').all(origin)
-      .map((r) => r.delphix_name);
-    const local = localFileNames();
-    res.json(list.map((a) => {
-      // A Secure Lookup's file comes down with it; the engine offers no way to fetch anyone else's.
-      const files = missingEngineFiles(a.config, local);
-      const comes = canDownloadLookup(a);
-      return {
-        ...a,
-        supported: Boolean(a.className) && known.has(a.className),
-        alreadyImported: seen.includes(a.algorithmName),
-        downloadFiles: comes ? files : [],
-        missingFiles: comes ? [] : files,
-      };
-    }));
-  } catch (err) {
-    res.status(502).json({ error: err.message });
-  }
-});
-
-/** Copies the named engine algorithms down, with the algorithms and files they reference. */
-app.post('/api/delphix/import', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine is configured.' });
-  }
-  const names = Array.isArray(req.body.names) ? req.body.names.map(String) : [];
-  if (!names.length) return res.status(400).json({ error: 'names[] is required' });
-  await streamImport(res, cfg, { algorithms: names }, 'algorithms',
-    (out) => out.algorithms.filter((name) => names.includes(name)));
-});
-
-/**
- * Pushes one saved algorithm row to the engine and records where it landed.
- *
- * What it references goes first: every algorithm its configuration names that is this machine's
- * to send, and every file the engine could not otherwise open. The configuration that reaches the
- * engine names them as they end up there; the local row keeps its own addresses, which are the
- * ones that run here.
- *
- * Shared with the domain and classifier exports. Returns what `delphix.saveAlgorithm` returned
- * plus `renamedLocally`.
- */
-async function pushAlgorithmRow(ctx, row, { asked = null, description } = {}) {
-  if (ctx.done.has(row.id)) return ctx.done.get(row.id);
-  if (ctx.visiting.has(row.id)) {
-    const err = new Error(`"${row.name}" ends up referencing itself, so there is no order to send it in.`);
-    err.code = 'reference-cycle';
-    throw err;
-  }
-  ctx.visiting.add(row.id);
-  try {
-    const stored = parseStoredConfig(row.config);
-    const linked = row.delphix_origin === ctx.origin ? row.delphix_name : null;
-    const existingName = asked && asked !== linked ? null : linked;
-    const name = asked || linked || String(row.name).trim();
-    const renamedLocally = Boolean(existingName && !asked && String(row.name).trim() !== existingName);
-
-    const renames = {};
-    for (const reference of delphix.algorithmReferenceNames(stored)) {
-      const target = await pushReference(ctx, reference, row.name);
-      if (target !== reference) renames[reference] = target;
-    }
-    const engine = await ctx.engineAlgorithms();
-    const current = existingName ? engine.get(existingName)?.config : null;
-    const config = await engineReadyFiles(ctx, delphix.rewriteConfig(stored, { algorithms: renames }), current);
-
-    const out = await delphix.saveAlgorithm(ctx.cfg, {
-      name, className: row.framework, config, description, existingName,
-    });
-    db.prepare(`UPDATE saved_algorithms SET delphix_name = ?, delphix_origin = ?,
-                updated_at = datetime('now') WHERE id = ?`).run(out.name, ctx.origin, row.id);
-    engine.set(out.name, { algorithmName: out.name, createdBy: ctx.cfg.username, config });
-    const result = { ...out, renamedLocally };
-    ctx.done.set(row.id, result);
-    return result;
-  } finally {
-    ctx.visiting.delete(row.id);
-  }
-}
-
 app.post('/api/delphix/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
@@ -1044,7 +949,10 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
 
 /** One reply for every import: what was asked for, what came along with it, what could not come. */
 function importReply(out, kind, imported) {
-  const along = (list, own) => (kind === own ? list.filter((name) => !imported.includes(name)) : list);
+  // `all` is the whole engine at once: nothing "came along", because everything was asked for.
+  const along = (list, own) => (kind === 'all' || kind === own
+    ? list.filter((name) => !imported.includes(name))
+    : list);
   return {
     imported,
     related: {
@@ -1099,6 +1007,10 @@ function exportContext(cfg) {
     skipped: [],     // referenced names left as they are, and why
     uploaded: [],    // files put in the upload store
     done: new Map(),
+    // Domains and classifiers already sent in this push, by row id. Sending everything means the
+    // same domain is reached by dozens of classifiers; without this each one would PUT it again.
+    domainsDone: new Map(),
+    classifiersDone: new Map(),
     visiting: new Set(),
     uploads: new Map(),
     engineAlgorithms: () => (engineAlgorithms ??= delphix.listAlgorithms(cfg)
@@ -1557,66 +1469,6 @@ app.delete('/api/domains/:id', (req, res) => {
   db.prepare('DELETE FROM domains WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
 });
-
-/** The domains on the engine, flagged with whether this machine already has the name. */
-app.get('/api/delphix/domains', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
-  }
-  try {
-    const list = await delphix.listDomains(cfg);
-    const seen = new Set(db.prepare('SELECT name FROM domains').all().map((r) => r.name));
-    res.json(list.map((d) => ({ ...d, alreadyImported: seen.has(d.domainName) })));
-  } catch (err) {
-    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
-  }
-});
-
-/** Copies the named engine domains down with their algorithms, updating any already held. */
-app.post('/api/delphix/domains/import', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
-  }
-  const names = Array.isArray(req.body.names) ? req.body.names.map(String) : [];
-  await streamImport(res, cfg, { domains: names }, 'domains', (out) => out.domains);
-});
-
-/**
- * Pushes one local domain to the engine, with the algorithms it names.
- *
- * **The algorithms go first, and that is not a nicety.** The engine validates the reference:
- * posting a domain whose `defaultAlgorithmCode` it does not know answers
- * `404 Could not find Algorithm '<name>'`. A domain built on an algorithm that only exists
- * here would simply fail, and the fix — "go and send the algorithm first" — is something the
- * tool can do itself (`pushReference`, which also leaves the engine's read-only plugin
- * instances alone: a stock engine's domains point at those constantly).
- *
- * A failure to send an algorithm stops the whole push. Continuing would post a domain whose
- * reference is missing, which fails anyway — with an error about the domain, pointing away
- * from the algorithm that actually went wrong.
- */
-async function pushDomainRow(ctx, row) {
-  // What the domain will reference is the name the algorithm ends up with *there* — a legacy
-  // row whose local name drifted from its delphix_name would otherwise point at a name the
-  // engine does not have.
-  const reference = {};
-  for (const field of ['default_algorithm', 'default_tokenization']) {
-    const name = String(row[field] ?? '').trim();
-    reference[field] = name ? await pushReference(ctx, name, row.name) : '';
-  }
-
-  const out = await delphix.saveDomain(ctx.cfg, {
-    name: row.name,
-    defaultAlgorithm: reference.default_algorithm,
-    defaultTokenization: reference.default_tokenization,
-  });
-  db.prepare(`UPDATE domains SET delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
-    .run(ctx.origin, row.id);
-  return { mode: out.mode, name: out.name };
-}
-
 app.post('/api/delphix/domains/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
@@ -1658,6 +1510,10 @@ app.get('/api/reference/builtins', async (req, res) => {
           algorithms: offered.map((item) => item.name),
           tokenization: offered.filter((item) => item.tokenization).map((item) => item.name),
           tokenizationFrameworks: Array.isArray(out.tokenizationFrameworks) ? out.tokenizationFrameworks : [],
+          // The framework behind each built-in. A domain names an algorithm and most of them name
+          // one of these, which is never a saved row here — the plugin already holds it — so this
+          // is the only way the sidebar can tell what kind of thing such a domain masks.
+          frameworkOf: Object.fromEntries(offered.map((item) => [item.name, String(item.framework ?? '')])),
         };
       })
       .catch((err) => { builtinReferences = null; throw err; });
@@ -1987,65 +1843,6 @@ app.delete('/api/profile-sets/:id', (req, res) => {
   db.prepare('DELETE FROM profile_sets WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
 });
-
-/** The engine's classifiers, with what importing each would mean here. */
-app.get('/api/delphix/classifiers', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
-  }
-  try {
-    const [list, frameworks] = await Promise.all([delphix.listClassifiers(cfg), delphix.classifierFrameworks(cfg)]);
-    const nameOf = Object.fromEntries(Object.entries(frameworks).map(([name, id]) => [id, name]));
-    // Held here by the engine id — a classifier renamed there is still the one imported — or by name.
-    const rows = db.prepare('SELECT name, delphix_id, delphix_origin FROM classifiers').all();
-    const origin = delphix.apiRoot(cfg.baseUrl);
-    const seenIds = new Set(rows.filter((r) => r.delphix_origin === origin && r.delphix_id != null).map((r) => Number(r.delphix_id)));
-    const seenNames = new Set(rows.map((r) => r.name));
-    const local = localFileNames();
-    res.json(list.map((c) => {
-      const framework = classifierKit.isFramework(nameOf[c.frameworkId]) ? nameOf[c.frameworkId] : null;
-      const config = c.classifierConfiguration ?? {};
-      const review = framework ? classifierKit.reviewClassifier(framework, config) : null;
-      return {
-        classifierId: c.classifierId,
-        classifierName: c.classifierName,
-        framework,
-        domainName: c.domainName ?? '',
-        createdBy: c.createdBy ?? null,
-        alreadyImported: seenIds.has(Number(c.classifierId)) || seenNames.has(c.classifierName),
-        issues: review ? [...review.errors, ...review.limitations] : [],
-        // The lists the engine will hand over with it — none has to be copied by hand.
-        downloadFiles: framework === 'LIST' ? missingEngineFiles(config, local) : [],
-      };
-    }).sort((a, b) => a.classifierName.localeCompare(b.classifierName)));
-  } catch (err) {
-    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
-  }
-});
-
-/**
- * Copies the chosen engine classifiers down with everything they lean on: the domain they vote
- * for, that domain's algorithms, and the list files — updating whatever is already held.
- */
-app.post('/api/delphix/classifiers/import', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
-  }
-  const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
-  await streamImport(res, cfg, { classifiers: ids }, 'classifiers', (out) => out.classifiers);
-});
-
-/**
- * Sends one classifier, after its domain.
- *
- * The engine will not keep a classifier whose domain it lacks, so a domain held here goes first —
- * through the same push as the domain editor, which sends the domain's algorithms before it. A
- * domain held neither here nor there is reported rather than invented. A LIST's files go too,
- * uploaded when the engine could not open them otherwise. Limitations do not stop the push:
- * Delphix accepts what this tool merely cannot test.
- */
 /**
  * Pushes one classifier, after its domain.
  *
@@ -2053,6 +1850,8 @@ app.post('/api/delphix/classifiers/import', async (req, res) => {
  * did. Shared with the profile set export, which has to send every member before it can name them.
  */
 async function pushClassifierRow(ctx, row) {
+  const already = ctx.classifiersDone.get(row.id);
+  if (already) return already;
   const config = parseStoredConfig(row.config);
   let domain = null;
   const domainRow = db.prepare('SELECT * FROM domains WHERE name = ?').get(row.domain_name);
@@ -2082,7 +1881,9 @@ async function pushClassifierRow(ctx, row) {
   });
   db.prepare(`UPDATE classifiers SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
     .run(out.id, ctx.origin, row.id);
-  return { ...out, domain: domain && { mode: domain.mode, name: domain.name } };
+  const result = { ...out, domain: domain && { mode: domain.mode, name: domain.name } };
+  ctx.classifiersDone.set(row.id, result);
+  return result;
 }
 
 app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
@@ -2111,61 +1912,6 @@ app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
 });
 
 // ── Profile sets on the engine ────────────────────────────────────────────────
-
-/** The engine's profile sets, with what importing each would mean here. */
-app.get('/api/delphix/profile-sets', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
-  }
-  try {
-    const [sets, classifiers, frameworks] = await Promise.all([
-      delphix.listProfileSets(cfg), delphix.listClassifiers(cfg), delphix.classifierFrameworks(cfg),
-    ]);
-    const nameOf = Object.fromEntries(Object.entries(frameworks).map(([name, id]) => [id, name]));
-    const supported = new Set(classifiers
-      .filter((c) => classifierKit.isFramework(nameOf[c.frameworkId]))
-      .map((c) => Number(c.classifierId)));
-
-    const origin = delphix.apiRoot(cfg.baseUrl);
-    const rows = db.prepare('SELECT name, delphix_id, delphix_origin FROM profile_sets').all();
-    const seenIds = new Set(rows.filter((r) => r.delphix_origin === origin && r.delphix_id != null).map((r) => Number(r.delphix_id)));
-    const seenNames = new Set(rows.map((r) => r.name));
-
-    res.json(sets.map((s) => {
-      const members = (s.classifierIds ?? []).map(Number);
-      return {
-        profileSetId: s.profileSetId,
-        profileSetName: s.profileSetName,
-        description: s.description ?? '',
-        assignmentThreshold: Number(s.assignmentThreshold) || null,
-        createdBy: s.createdBy ?? null,
-        classifiers: members.length,
-        // Members built on a framework this tool cannot run come down as part of the set, but
-        // cannot be tested here — worth saying before the import, not after.
-        untestable: members.filter((id) => !supported.has(id)).length,
-        alreadyImported: seenIds.has(Number(s.profileSetId)) || seenNames.has(s.profileSetName),
-      };
-    }).sort((a, b) => a.profileSetName.localeCompare(b.profileSetName)));
-  } catch (err) {
-    res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
-  }
-});
-
-/**
- * Copies the chosen sets down with the classifiers they name — and so, through them, the domains
- * those classifiers vote for, those domains' algorithms, and the list files. A set is nothing but
- * a selection, so importing one without its members would import nothing at all.
- */
-app.post('/api/delphix/profile-sets/import', async (req, res) => {
-  const cfg = delphixCfg();
-  if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
-  }
-  const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
-  await streamImport(res, cfg, { profileSets: ids }, 'profileSets', (out) => out.profileSets);
-});
-
 /** Sends the set after every classifier in it, and names them there by the ids it gets back. */
 app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
   const cfg = delphixCfg();
@@ -2220,6 +1966,168 @@ app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
     }
     exportFailure(res, err);
   }
+});
+
+// ── The integration as a whole ────────────────────────────────────────────────
+//
+// One engine, and everything on it. Picking objects one by one was the old shape; what a user
+// actually wants is their instance mirrored here, brought up to date on demand, and put back
+// when they are done. So there are three buttons — bring it all down, send it all up, and drop
+// the integration — and no per-object import anywhere.
+
+/** Copies the whole engine down: every profile set, classifier, domain and algorithm on it. */
+app.post('/api/delphix/sync/import', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+  }
+
+  let selection;
+  try {
+    const [sets, classifiers, domains, algorithms] = await Promise.all([
+      delphix.listProfileSets(cfg), delphix.listClassifiers(cfg),
+      delphix.listDomains(cfg), delphix.listAlgorithms(cfg),
+    ]);
+    selection = {
+      profileSets: sets.map((s) => s.profileSetId),
+      classifiers: classifiers.map((c) => c.classifierId),
+      domains: domains.map((d) => d.domainName),
+      // The engine's own plugin instances are left out. This tool holds the same plugin, so a
+      // saved copy of one would be a row that answers to nothing and cannot be sent back.
+      algorithms: algorithms.filter((a) => a.createdBy).map((a) => a.algorithmName),
+    };
+  } catch (err) {
+    // The listing failed, which is before the stream starts, so this can still be a status code.
+    return res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
+  }
+
+  await streamImport(res, cfg, selection, 'all',
+    (out) => [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms]);
+});
+
+/**
+ * Sends everything held here to the engine.
+ *
+ * In dependency order — algorithms, then the domains that name them, then the classifiers that
+ * vote for those, then the sets that run the classifiers — so nothing is ever posted before what
+ * it references. One export context throughout, which is what keeps a domain reached by three
+ * hundred classifiers from being written three hundred times.
+ *
+ * A failure stops the run and says where it got to. Continuing past one would leave the engine
+ * holding a half-sent picture that looks complete.
+ */
+app.post('/api/delphix/sync/export', async (req, res) => {
+  const cfg = delphixCfg();
+  if (!delphix.isConfigured(cfg)) {
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+  }
+
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
+  const send = (event, data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+
+  const algorithms = db.prepare('SELECT * FROM saved_algorithms ORDER BY name COLLATE NOCASE').all();
+  const domains = db.prepare('SELECT * FROM domains ORDER BY name COLLATE NOCASE').all();
+  const classifiers = db.prepare('SELECT * FROM classifiers ORDER BY name COLLATE NOCASE').all();
+  const sets = db.prepare('SELECT * FROM profile_sets ORDER BY name COLLATE NOCASE').all();
+  const total = algorithms.length + domains.length + classifiers.length + sets.length;
+
+  const ctx = exportContext(cfg);
+  const out = { algorithms: [], domains: [], classifiers: [], profileSets: [], skipped: [] };
+  let done = 0;
+  const step = (kind, name) => { done += 1; send('progress', { kind, name, done, total }); };
+
+  try {
+    for (const row of algorithms) {
+      step('algorithm', row.name);
+      const sent = await pushAlgorithmRow(ctx, row, { description: row.display_name });
+      out.algorithms.push(sent.name);
+    }
+    for (const row of domains) {
+      step('domain', row.name);
+      await pushDomainRow(ctx, row);
+      out.domains.push(row.name);
+    }
+    for (const row of classifiers) {
+      step('classifier', row.name);
+      const { errors } = classifierKit.reviewClassifier(row.framework, parseStoredConfig(row.config));
+      if (errors.length) {
+        // Delphix would refuse it anyway; naming it beats failing the other three hundred.
+        out.skipped.push({ kind: 'classifier', name: row.name, reason: 'invalid-config' });
+        continue;
+      }
+      await pushClassifierRow(ctx, row);
+      out.classifiers.push(row.name);
+    }
+    for (const row of sets) {
+      step('profileSet', row.name);
+      const members = db.prepare(`
+        SELECT c.* FROM profile_set_classifiers m
+          JOIN classifiers c ON c.id = m.classifier_id
+         WHERE m.profile_set_id = ? ORDER BY c.name COLLATE NOCASE
+      `).all(row.id);
+      if (!members.length) {
+        out.skipped.push({ kind: 'profileSet', name: row.name, reason: 'no-members' });
+        continue;
+      }
+      const classifierIds = [];
+      for (const member of members) {
+        const pushed = await pushClassifierRow(ctx, member);
+        if (pushed.id != null) classifierIds.push(pushed.id);
+      }
+      const saved = await delphix.saveProfileSet(cfg, {
+        name: row.name, description: row.description, threshold: row.assignment_threshold,
+        classifierIds, existingId: row.delphix_origin === ctx.origin ? row.delphix_id : null,
+      });
+      db.prepare(`UPDATE profile_sets SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
+        .run(saved.id, ctx.origin, row.id);
+      out.profileSets.push(saved.name);
+    }
+
+    send('done', { ...out, engine: ctx.origin, uploaded: ctx.uploaded, references: ctx.skipped });
+  } catch (err) {
+    send('error', { message: err.message, done, total });
+  }
+  res.end();
+});
+
+/**
+ * Drops the integration: the stored connection, and every row linked to that engine.
+ *
+ * "Linked" is `delphix_origin`, which is the only record there is of where a row came from — and
+ * it is also set on anything *sent* to that engine. So a locally built algorithm that was pushed
+ * once is deleted too. That is said plainly in the dialog rather than worked around, because the
+ * alternative is a second flag that would lie the moment a row is both.
+ *
+ * Downloaded files stay in filesDir. They are addressed by name and may well be a copy someone
+ * put there by hand; deleting a file nobody can get back to punish a forgotten reference is the
+ * wrong trade.
+ */
+app.delete('/api/delphix/integration', (req, res) => {
+  const cfg = delphixCfg();
+  const origin = delphix.isConfigured(cfg) ? delphix.apiRoot(cfg.baseUrl) : null;
+
+  const removed = { profileSets: 0, classifiers: 0, domains: 0, algorithms: 0 };
+  if (origin) {
+    const setIds = db.prepare('SELECT id FROM profile_sets WHERE delphix_origin = ?').all(origin).map((r) => r.id);
+    for (const id of setIds) db.prepare('DELETE FROM profile_set_classifiers WHERE profile_set_id = ?').run(id);
+    removed.profileSets = db.prepare('DELETE FROM profile_sets WHERE delphix_origin = ?').run(origin).changes;
+
+    const classifierIds = db.prepare('SELECT id FROM classifiers WHERE delphix_origin = ?').all(origin).map((r) => r.id);
+    for (const id of classifierIds) db.prepare('DELETE FROM profile_set_classifiers WHERE classifier_id = ?').run(id);
+    removed.classifiers = db.prepare('DELETE FROM classifiers WHERE delphix_origin = ?').run(origin).changes;
+
+    removed.domains = db.prepare('DELETE FROM domains WHERE delphix_origin = ?').run(origin).changes;
+    removed.algorithms = db.prepare('DELETE FROM saved_algorithms WHERE delphix_origin = ?').run(origin).changes;
+    db.prepare('DELETE FROM engine_uploads WHERE origin = ?').run(origin);
+  }
+
+  for (const key of ['delphix.baseUrl', 'delphix.username', 'delphix.password', 'delphix.allowSelfSigned']) {
+    db.prepare('DELETE FROM config WHERE key = ?').run(key);
+  }
+  res.json({ ok: true, engine: origin, removed });
 });
 
 // SPA fallback

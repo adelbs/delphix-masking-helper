@@ -272,7 +272,49 @@ GitHub Copilot em si não expõe API de chat para aplicações de terceiros.
 > folgado para Claude e Gemini, mas apertado para modelos locais pequenos — um com janela de 8k
 > vai truncar o catálogo e errar a escolha do framework. Prefira um modelo com contexto grande.
 
+## Achar as coisas na barra lateral
+
+Dois filtros, e eles estreitam juntos. A **caixa de texto** alcança todas as sessões de uma vez —
+um nome é achado sem precisar saber em qual delas ele mora — e os resultados saem em lista plana,
+para que um acerto nunca fique escondido atrás de um cabeçalho que você teria de abrir antes. A
+**caixa de profile set** deixa só o que um set alcança, seguido para fora do jeito que a
+sincronização segue: os classifiers dele, os domínios em que eles votam, os algoritmos desses
+domínios e os frameworks por trás deles. Escolher um set transforma a barra inteira no conjunto de
+trabalho de uma regra de conformidade.
+
+O `⋯` de cada sessão também escolhe como ela organiza os itens, e a escolha é lembrada:
+
+| Sessão | Agrupar por |
+|---|---|
+| Frameworks | categoria, ou nada |
+| Algoritmos | categoria do framework, domínio, profile set, ou nada |
+| Domínios | categoria do framework, profile set, ou nada |
+| Classifiers | domínio, framework do algoritmo do domínio, framework do classifier, profile set, ou nada |
+
+Agrupar é uma visão, não uma classificação. Um item pode aparecer sob mais de um cabeçalho — um
+classifier pertence a todo profile set que o roda — e o que não cai em nenhum fica em **Outros**,
+que é uma resposta de verdade, não um erro.
+
 ## Sincronizar com um Masking Engine
+
+**Uma instância, espelhada.** Conectar uma instância em *Configurações → Delphix* traz o engine
+inteiro de uma vez — todos os profile sets, classifiers, domínios e algoritmos — e os campos da
+conexão então travam. Não há nada de útil em editar uma URL debaixo de um espelho da instância que
+aquela URL não nomeia mais, então trocar de engine é excluir a integração e configurar a outra.
+
+Três botões mantêm o espelho em dia:
+
+- **Atualizar do Delphix** traz tudo de novo, atualizando o que já está aqui.
+- **Enviar tudo para o Delphix** empurra no sentido contrário, em ordem de dependência —
+  algoritmos, depois os domínios que os nomeiam, depois os classifiers que votam neles, depois os
+  sets que rodam os classifiers. Cada objeto continua com o seu **Enviar ao Delphix** no editor.
+- **Excluir integração** esquece a conexão e apaga toda linha vinculada àquele engine.
+  "Vinculada" inclui o que você criou aqui e enviou para lá, e o diálogo diz isso com todas as
+  letras: `delphix_origin` é o único registro da ligação, e os dois sentidos o gravam. Os arquivos
+  já baixados continuam na pasta de arquivos.
+
+As instâncias de plugin da própria instância (`dlpx-core:`) não descem. Esta ferramenta tem o mesmo
+plugin, então uma cópia salva de uma delas seria uma linha que não responde por nada.
 
 Aponte a ferramenta para uma instância Delphix em **Configurações → Delphix** — endereço, usuário
 e senha — e clique em **Testar conexão**; ele responde antes de você salvar qualquer coisa.
@@ -281,7 +323,7 @@ e senha — e clique em **Testar conexão**; ele responde antes de você salvar 
 
 A sessão **Domínios** da barra lateral guarda os domínios de dado sensível — na instância um
 domínio é um nome e duas referências a algoritmo, e é exatamente isso que fica guardado aqui. Crie
-um em *Domínios → ⋯ → Novo domínio*, ou traga os da instância com *Importar do Delphix*; cada um
+um em *Domínios → ⋯ → Novo domínio*; cada um
 tem o botão **Enviar ao Delphix**, que cria lá, ou atualiza quando o nome já existe.
 
 Enviar um domínio **envia antes os algoritmos para os quais ele aponta** — a instância recusa um
@@ -300,7 +342,7 @@ Classifiers são o que o profiling usa para decidir a que domínio uma coluna ou
 Cada um é construído sobre um de quatro frameworks — **PATH** (o nome do campo e da sua tabela ou
 arquivo), **TYPE** (o tipo e o tamanho), **REGEX** e **LIST** (uma amostra dos valores) — e vota em
 um domínio. A sessão **Classifiers** da barra lateral os lista por domínio; crie um em
-*Classifiers → ⋯ → Novo classifier*, ou traga os da instância com *Importar do Delphix*.
+*Classifiers → ⋯ → Novo classifier*.
 
 O editor explica cada parâmetro do framework escolhido, e o painel **Teste** descreve um campo —
 nome, tabela, tipo SQL, tamanho, valores de amostra — e mostra o que o profiling concluiria: a
@@ -322,7 +364,7 @@ algoritmos desse domínio e os arquivos de valores.
 Um profile set é o que um job de profiling de fato roda: os classifiers que ele deve tentar e o
 **limiar de atribuição** — a confiança que um domínio precisa alcançar para o job atribuí-lo. A
 sessão **Profile Sets** da barra lateral os lista com o tamanho e o limiar; crie um em *Profile
-Sets → ⋯ → Novo profile set*, ou traga os da instância com *Importar do Delphix*.
+Sets → ⋯ → Novo profile set*.
 
 O editor escolhe os membros entre os classifiers guardados aqui, filtrando por nome ou domínio. Não
 há o que testar num set: quem decide o domínio são os classifiers, e eles são configurados e
@@ -333,12 +375,12 @@ através deles, os domínios, os algoritmos desses domínios e os arquivos de va
 Delphix** faz o inverso: cada membro vai primeiro, e o set é então criado ou atualizado nomeando-os
 pelos ids que a instância devolveu — um set só pode referenciar classifiers que a instância já tem.
 
-**Importar.** *Algoritmos → ⋯ → Importar do Delphix*, na barra lateral, lista o que a instância tem. O que
-estiver sobre um framework que a ferramenta não consegue executar aparece, mas não é selecionável
-— assim você nunca fica com um algoritmo salvo que não dá para testar. O que um algoritmo
-referencia vem junto — os algoritmos que a configuração dele nomeia e o arquivo de lookup — e
-importar um domínio traz os algoritmos dele. A exceção são os built-in `dlpx-core:` da instância:
-a ferramenta já os tem.
+**Importar.** Não há importação por objeto: conectar a integração traz o engine inteiro, e
+**Atualizar do Delphix** traz de novo. Um algoritmo sobre um framework que a ferramenta não
+consegue executar não é copiado — assim você nunca fica com um algoritmo salvo que não dá para
+testar — e aparece no resumo do que ficou de fora. O que um objeto referencia vem junto: os
+algoritmos que uma configuração nomeia, o arquivo de lookup, os algoritmos de um domínio, os
+classifiers de um set.
 
 **Arquivos de lookup.** Um arquivo enviado para a instância fica no armazenamento dela: o
 algoritmo carrega só uma referência (`delphix-file://upload/…/NOMES.txt`). Importar baixa o arquivo

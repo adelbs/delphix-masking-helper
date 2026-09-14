@@ -269,7 +269,48 @@ GitHub Copilot itself has no public chat API for third-party applications.
 > comfortable for Claude and Gemini, but tight for small local models — one with an 8k window
 > will truncate the catalog and pick the wrong framework. Prefer a model with a large context.
 
+## Finding things in the sidebar
+
+Two filters, and they narrow together. The **text box** reaches every section at once — a name is
+found without knowing which one it lives in — and results come out flat, so a hit is never hidden
+behind a heading you would have to open first. The **profile set box** keeps only what one set
+reaches, followed outwards the way the sync follows it: its classifiers, the domains they vote
+for, those domains' algorithms, and the frameworks behind them. Picking a set turns the whole
+sidebar into the working set for one compliance rule.
+
+Each section's `⋯` also chooses how it lays its items out, and the choice is remembered:
+
+| Section | Group by |
+|---|---|
+| Frameworks | category, or nothing |
+| Algorithms | framework category, domain, profile set, or nothing |
+| Domains | framework category, profile set, or nothing |
+| Classifiers | domain, framework of the domain's algorithm, classifier framework, profile set, or nothing |
+
+Grouping is a view, not a classification. An item can appear under more than one heading — a
+classifier belongs to every profile set that runs it — and one that falls under none is listed
+under **Other**, which is a real answer rather than an error.
+
 ## Syncing with a Masking Engine
+
+**One engine, mirrored.** Connecting an instance under *Settings → Delphix* copies the whole of it
+down at once — every profile set, classifier, domain and algorithm — and the connection fields
+then lock. There is nothing useful about editing a URL under a mirror of the instance that URL no
+longer names, so changing engine means removing the integration and setting the other one up.
+
+Three buttons keep it in step:
+
+- **Refresh from Delphix** brings everything down again, updating what is already here.
+- **Send everything to Delphix** pushes the other way, in dependency order — algorithms, then the
+  domains that name them, then the classifiers that vote for those, then the sets that run the
+  classifiers. Each object still has its own **Send to Delphix** in its editor.
+- **Remove integration** forgets the connection and deletes every row linked to that engine.
+  "Linked" includes anything you built here and sent to it, which the dialog says plainly:
+  `delphix_origin` is the only record of the connection, and it is set by both directions.
+  Files already downloaded stay in the files folder.
+
+The engine's own plugin instances (`dlpx-core:`) are not copied down. This tool holds the same
+plugin, so a saved copy of one would be a row that answers to nothing.
 
 Point the tool at a Delphix engine under **Settings → Delphix** — address, user and password —
 and press **Test connection**; it answers before anything is saved.
@@ -278,7 +319,7 @@ and press **Test connection**; it answers before anything is saved.
 
 The sidebar's **Domains** section holds sensitive-data domains — on the engine a domain is a name
 and two algorithm references, and that is exactly what this stores. Create one from *Domains →
-⋯ → New domain*, or pull the engine's down with *Import from Delphix*; each one has a **Send to
+⋯ → New domain*; each one has a **Send to
 Delphix** button that creates it there, or updates it when the name already exists.
 
 Sending a domain **sends the algorithms it points at first** — the engine refuses a domain whose
@@ -298,7 +339,7 @@ Classifiers are what profiling uses to decide which domain a column or field bel
 is built on one of four frameworks — **PATH** (the field's name and its table or file), **TYPE**
 (its type and length), **REGEX** and **LIST** (a sample of its values) — and votes for one domain.
 The sidebar's **Classifiers** section lists them by domain; create one from *Classifiers → ⋯ → New
-classifier*, or bring the engine's down with *Import from Delphix*.
+classifier*.
 
 The editor explains every parameter of the chosen framework, and its **Test** panel describes a
 field — name, table, SQL type, length, sample values — and shows what profiling would conclude:
@@ -320,7 +361,7 @@ down with its domain, that domain's algorithms, and its value files.
 A profile set is what a profiling job actually runs: the classifiers it should try, and the
 **assignment threshold** — the confidence a domain has to reach before the job assigns it. The
 sidebar's **Profile Sets** section lists them with their size and threshold; create one from
-*Profile Sets → ⋯ → New profile set*, or bring the engine's down with *Import from Delphix*.
+*Profile Sets → ⋯ → New profile set*.
 
 The editor picks the members from the classifiers held here, filtered by name or domain. There is
 nothing to test in a set: what decides a domain is the classifiers, and they are configured and
@@ -331,11 +372,11 @@ through them their domains, those domains' algorithms and the value files. **Sen
 does the reverse: every member is sent first, and the set is then created or updated naming them
 by the ids the engine gave back — a set can only reference classifiers the engine already holds.
 
-**Importing.** *Algorithms → ⋯ → Import from Delphix*, in the sidebar, lists what the engine has. Anything
-built on a framework this tool cannot run locally is shown but not selectable, so you never end up
-with a saved algorithm that cannot be tested. What an algorithm references comes with it — the
-algorithms its configuration names and its lookup file — and importing a domain brings its
-algorithms. The engine's own `dlpx-core:` built-ins are the exception: this tool already has them.
+**Importing.** There is no per-object import: connecting the integration brings the whole engine
+down, and **Refresh from Delphix** brings it down again. An algorithm built on a framework this
+tool cannot run is not copied — you never end up with a saved algorithm that cannot be tested — and
+is named in the summary instead. What an object references comes with it: the algorithms a
+configuration names, a lookup file, a domain's algorithms, a set's classifiers.
 
 **Lookup files.** A file uploaded to the engine stays in the engine's file store: an algorithm
 carries only a reference to it (`delphix-file://upload/…/NAMES.txt`). Importing downloads the file
