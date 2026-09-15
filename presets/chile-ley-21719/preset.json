@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "name": {
     "en": "Chile — Law 21.719 (personal data protection)",
     "pt-BR": "Chile — Lei 21.719 (proteção de dados pessoais)",
@@ -3169,7 +3169,8 @@
         },
         "trimInput": true,
         "requireMask": false
-      }
+      },
+      "input": "12345678"
     },
     {
       "name": "CL_REDACTAR",
@@ -3221,7 +3222,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Si"
     },
     {
       "name": "CL_BANDERA_TRUE_FALSE",
@@ -3235,7 +3237,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "true"
     },
     {
       "name": "CL_BANDERA_S_N",
@@ -3249,7 +3252,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "S"
     },
     {
       "name": "CL_BANDERA_Y_N",
@@ -3263,7 +3267,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Y"
     },
     {
       "name": "CL_BANDERA_0_1",
@@ -3277,7 +3282,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "0"
     },
     {
       "name": "CL_BANDERA",
@@ -3416,7 +3422,8 @@
           "padCharacter": "0",
           "trimWhitespace": true
         }
-      }
+      },
+      "input": "12.345.678-5"
     },
     {
       "name": "CL_RUT_DV_8",
@@ -3447,7 +3454,8 @@
           "padCharacter": "0",
           "trimWhitespace": true
         }
-      }
+      },
+      "input": "12.345.678-5"
     },
     {
       "name": "CL_RUT_CUERPO_7",
@@ -3477,7 +3485,8 @@
           "padCharacter": "0",
           "trimWhitespace": true
         }
-      }
+      },
+      "input": "7.654.321-6"
     },
     {
       "name": "CL_RUT_DV_7",
@@ -3507,7 +3516,8 @@
           "padCharacter": "0",
           "trimWhitespace": true
         }
-      }
+      },
+      "input": "7.654.321-6"
     },
     {
       "name": "CL_RUT_CUERPO_6",
@@ -3536,7 +3546,8 @@
           "padCharacter": "0",
           "trimWhitespace": true
         }
-      }
+      },
+      "input": "123.456-0"
     },
     {
       "name": "CL_RUT_DV_6",
@@ -3565,7 +3576,8 @@
           "padCharacter": "0",
           "trimWhitespace": true
         }
-      }
+      },
+      "input": "123.456-0"
     },
     {
       "name": "CL_RUT_PASO_1",
@@ -3614,7 +3626,8 @@
         },
         "trimInput": true,
         "requireMask": false
-      }
+      },
+      "input": "12.345.678-5"
     },
     {
       "name": "CL_RUT_PASO_2",
@@ -3696,7 +3709,8 @@
         },
         "trimInput": true,
         "requireMask": false
-      }
+      },
+      "input": "46.916.122-9"
     },
     {
       "name": "CL_RUT",
@@ -4167,7 +4181,8 @@
       "config": {
         "minMaskedPositions": 6,
         "preserve": 0
-      }
+      },
+      "input": "4111111111111111"
     },
     {
       "name": "CL_TARJETA",
@@ -4200,7 +4215,8 @@
       "config": {
         "minValue": 1,
         "maxValue": 254
-      }
+      },
+      "input": "192"
     },
     {
       "name": "CL_IP",
@@ -4480,7 +4496,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Femenino"
     },
     {
       "name": "CL_SEXO_MUJER_HOMBRE",
@@ -4494,7 +4511,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Mujer"
     },
     {
       "name": "CL_SEXO_INGLES",
@@ -4508,7 +4526,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Female"
     },
     {
       "name": "CL_SEXO_F_M",
@@ -4522,7 +4541,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "F"
     },
     {
       "name": "CL_SEXO_H_M",
@@ -4536,7 +4556,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "H"
     },
     {
       "name": "CL_SEXO",
@@ -4795,7 +4816,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Mapuche"
     },
     {
       "name": "CL_PUEBLO_ORIGINARIO",
@@ -4848,7 +4870,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "E11.9"
     },
     {
       "name": "CL_CIE10",
@@ -4862,7 +4885,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "I10"
     },
     {
       "name": "CL_DIAGNOSTICO_TEXTO",
@@ -4876,7 +4900,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Hipertensión arterial esencial"
     },
     {
       "name": "CL_DIAGNOSTICO",
@@ -4940,7 +4965,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Paracetamol"
     },
     {
       "name": "CL_MEDICAMENTO",
@@ -5008,7 +5034,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Física"
     },
     {
       "name": "CL_DISCAPACIDAD",
@@ -5061,7 +5088,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Heterosexual"
     },
     {
       "name": "CL_ORIENTACION_SEXUAL",
@@ -5114,7 +5142,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Mujer"
     },
     {
       "name": "CL_IDENTIDAD_GENERO",
@@ -5167,7 +5196,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Católica"
     },
     {
       "name": "CL_RELIGION",
@@ -5220,7 +5250,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Izquierda"
     },
     {
       "name": "CL_IDEOLOGIA",
@@ -5273,7 +5304,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Partido Demócrata Cristiano"
     },
     {
       "name": "CL_PARTIDO_POLITICO",
@@ -5326,7 +5358,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "A"
     },
     {
       "name": "CL_PREVISION_SALUD_LISTA",
@@ -5340,7 +5373,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "FONASA A"
     },
     {
       "name": "CL_PREVISION_SALUD",
@@ -5407,7 +5441,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "40"
     },
     {
       "name": "CL_RSH_TRAMO_TEXTO",
@@ -5421,7 +5456,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Tramo 40%"
     },
     {
       "name": "CL_RSH",
@@ -5505,7 +5541,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "1"
     },
     {
       "name": "CL_GSE",
@@ -5519,7 +5556,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "ABC1"
     },
     {
       "name": "CL_NIVEL_SOCIOECONOMICO",
@@ -5561,7 +5599,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Pensión Garantizada Universal"
     },
     {
       "name": "CL_BENEFICIO_SOCIAL",
@@ -5614,7 +5653,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Al día"
     },
     {
       "name": "CL_MOROSIDAD",
@@ -5685,7 +5725,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "AFP Capital"
     },
     {
       "name": "CL_AFP",
@@ -5747,7 +5788,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Propia pagada"
     },
     {
       "name": "CL_VIVIENDA",
@@ -5800,7 +5842,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Gratuidad"
     },
     {
       "name": "CL_FINANCIAMIENTO_ESTUDIOS",
@@ -5853,7 +5896,8 @@
         "inputCaseSensitive": false,
         "trimWhitespaceFromInput": true,
         "trimWhitespaceInLookupFile": true
-      }
+      },
+      "input": "Sin antecedentes"
     },
     {
       "name": "CL_ANTECEDENTES",

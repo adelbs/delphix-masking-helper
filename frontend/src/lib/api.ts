@@ -215,7 +215,7 @@ export const api = {
   deleteFile: (name: string) =>
     request<{ ok: boolean }>(`/api/files/${encodeURIComponent(name)}`, { method: 'DELETE' }),
 
-  maskBatch: (payload: { framework: string; config: unknown; inputs: string[] }) =>
+  maskBatch: (payload: { framework: string; config: unknown; inputs: string[]; additionalAlgorithms?: Array<{ name: string; className: string; config: unknown }> }) =>
     request<{ results: Array<{ output?: string; error?: string }> }>('/api/mask-batch', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -226,6 +226,7 @@ export const api = {
     framework: string;
     config: unknown;
     columns: Array<{ name: string; value: string | null; type: string }>;
+    additionalAlgorithms?: Array<{ name: string; className: string; config: unknown }>;
   }) =>
     request<{ columns?: Record<string, string | null>; error?: string; errorType?: string }>('/api/mask-multicolumn', {
       method: 'POST',

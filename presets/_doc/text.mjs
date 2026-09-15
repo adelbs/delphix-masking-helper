@@ -101,6 +101,7 @@ export const TEXT = {
     no: 'no',
     units: { SECONDS: 'seconds', MINUTES: 'minutes', HOURS: 'hours', DAYS: 'days', MONTHS: 'months', YEARS: 'years' },
     action: actionEn,
+    closedSteps: (n) => `It is made of ${n} algorithms that repeat the same step position by position; each one is in Appendix A.`,
     describe: {
       SecureLookup: (c, h) => `Replaces the value with one of the ${h.num(h.lines(c.lookupFile))} values in ${h.file(c.lookupFile)}, chosen by a keyed hash.`,
       NullSecureLookup: () => 'Secure Lookup that keeps empty values empty.',
@@ -201,6 +202,7 @@ export const TEXT = {
     no: 'não',
     units: { SECONDS: 'segundos', MINUTES: 'minutos', HOURS: 'horas', DAYS: 'dias', MONTHS: 'meses', YEARS: 'anos' },
     action: actionPt,
+    closedSteps: (n) => `É formado por ${n} algoritmos que repetem o mesmo passo posição a posição; cada um está no Apêndice A.`,
     describe: {
       SecureLookup: (c, h) => `Troca o valor por um dos ${h.num(h.lines(c.lookupFile))} valores de ${h.file(c.lookupFile)}, escolhido por um hash com chave.`,
       NullSecureLookup: () => 'Secure Lookup que mantém vazios os valores vazios.',
@@ -301,6 +303,7 @@ export const TEXT = {
     no: 'no',
     units: { SECONDS: 'segundos', MINUTES: 'minutos', HOURS: 'horas', DAYS: 'días', MONTHS: 'meses', YEARS: 'años' },
     action: actionEs,
+    closedSteps: (n) => `Está formado por ${n} algoritmos que repiten el mismo paso posición por posición; cada uno está en el Apéndice A.`,
     describe: {
       SecureLookup: (c, h) => `Reemplaza el valor por uno de los ${h.num(h.lines(c.lookupFile))} valores de ${h.file(c.lookupFile)}, elegido por un hash con clave.`,
       NullSecureLookup: () => 'Secure Lookup que deja vacíos los valores vacíos.',

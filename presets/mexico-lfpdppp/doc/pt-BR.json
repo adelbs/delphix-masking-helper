@@ -1,0 +1,570 @@
+{
+  "title": "México — LFPDPPP",
+  "subtitle": "Descoberta e mascaramento de dados pessoais mexicanos: identificadores diretos com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 2 e os dados financeiros e patrimoniais do artigo 7.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais de um banco de dados mexicano e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
+        "Mascarar só nomes e CURPs não chega lá: uma data de nascimento, um sexo e um município pequeno bastam para apontar uma pessoa. O set trabalha nas mesmas camadas em que o risco está:",
+        { "list": [
+          "**Identificadores diretos** — CURP, RFC, NSS, chave de eleitor do INE, nomes, contato, CLABE e cartões, documentos, dispositivos, veículos, texto livre.",
+          "**Quase-identificadores** — data de nascimento, idade, sexo, município, localidade, colônia, código postal, ocupação, empregador, escolaridade.",
+          "**Dados sensíveis** — origem étnica e língua indígena, saúde, informação genética, crenças religiosas, filosóficas e morais, opiniões políticas, preferência sexual e filiação sindical.",
+          "**Dados financeiros e patrimoniais** — birô de crédito, dívidas, renda, patrimônio, poupança de aposentadoria, crédito habitacional, seguridade social, programas sociais, nível socioeconômico, regime fiscal.",
+          "**Antecedentes criminais** — antecedentes e números de processo."
+        ] },
+        "Tudo o que o set precisa viaja com ele: carregá-lo cria os domínios, classifiers, algoritmos e arquivos de lookup, e enviá-lo a um Masking Engine envia todos eles."
+      ]
+    },
+    {
+      "title": "A LFPDPPP em resumo",
+      "body": [
+        "A Ley Federal de Protección de Datos Personales en Posesión de los Particulares foi publicada no Diario Oficial de la Federación em 20 de março de 2025 e entrou em vigor no dia seguinte, revogando a lei de 2010. A última reforma (14 de novembro de 2025) mexeu só nas regras processuais supletivas. O INAI foi extinto: a autoridade agora é a **Secretaría Anticorrupción y Buen Gobierno**. O setor público tem lei própria, a Ley General de Protección de Datos Personales en Posesión de Sujetos Obligados, publicada no mesmo dia.",
+        "O que importa para uma cópia de dados de produção:",
+        { "list": [
+          "**Dado pessoal** é qualquer informação sobre uma pessoa identificada ou identificável — direta ou indiretamente, por qualquer informação (art. 2, V).",
+          "**Dados sensíveis** são os que atingem a esfera mais íntima da pessoa ou cujo uso indevido pode gerar discriminação ou risco grave. A lei cita, como exemplos e não como lista fechada, os dados que podem revelar origem racial ou étnica, estado de saúde presente ou futuro, informação genética, crenças religiosas, filosóficas e morais, opiniões políticas e preferência sexual (art. 2, VI). Exigem consentimento expresso e por escrito, e bases com dados sensíveis só podem ser criadas para finalidades legítimas e concretas (art. 8).",
+          "**Dados financeiros e patrimoniais** exigem consentimento expresso (art. 7).",
+          "**Finalidade.** Os dados só podem ser tratados para as finalidades do aviso de privacidade; outra finalidade exige novo consentimento (art. 11). Desenvolvimento e teste raramente estão entre as finalidades que o cliente aceitou.",
+          "**Disociación** — procedimento depois do qual os dados não podem mais ser associados à pessoa nem, por sua estrutura, conteúdo ou grau de desagregação, identificá-la (art. 2, IX). Dados submetidos a disociación prévia dispensam consentimento (art. 9, III).",
+          "**Segurança.** Medidas administrativas, técnicas e físicas proporcionais à sensibilidade dos dados (art. 18); vulnerações que afetem as pessoas de forma significativa devem ser comunicadas a elas (art. 19); todos os que intervêm guardam confidencialidade (art. 20).",
+          "**Sanções.** Multas de até 320.000 vezes a UMA, que podem dobrar para dados sensíveis (art. 59); prisão de três meses a cinco anos pelos crimes do capítulo XII, em dobro para dados sensíveis (arts. 62 a 64)."
+        ] },
+        "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o aviso de privacidade não cobre, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia dissociada é o caminho que a própria lei oferece: é para isso que o set serve.",
+        "Duas notas sobre as categorias. A lei de 2010 listava a **filiação sindical** como sensível; o texto de 2025 não a cita mais. A lista não é exaustiva e a filiação sindical continua expondo as pessoas a discriminação, então o set a mantém. **Dados biométricos** também não são citados; identificam a pessoa por definição e são tratados aqui como sensíveis.",
+        { "note": "Este documento descreve controles técnicos. Se uma cópia conta como dissociada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não do profile set sozinho." }
+      ]
+    },
+    {
+      "title": "Usando o set",
+      "body": [
+        { "list": [
+          "**Carregar** — *Configurações → Profile Sets → Carregar*. Carregar de novo reseta cada objeto do set para como ele vem.",
+          "**Enviar ao Delphix** — pelo profile set, ou com *Enviar tudo ao Delphix*. Domínios, algoritmos e arquivos vão antes.",
+          "**Perfilar** — rode um job de profiling com o set e revise os domínios atribuídos antes de mascarar.",
+          "**Mascarar** — rode o job de mascaramento. Use a mesma chave do engine em todos os ambientes para manter os valores mascarados consistentes entre sistemas."
+        ] },
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um CURP, um RFC, uma chave de eleitor, uma CLABE, uma placa, um município.",
+        "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas mexicanos (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), nos atributos das notas fiscais CFDI 4.0 (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) e em inglês.",
+        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da credencial do INE: o CURP e a chave de eleitor continuam legíveis na imagem. Reporte essas colunas como risco residual." }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": ["Dados que identificam uma pessoa sozinhos. As chaves nacionais — CURP, RFC, NSS, CLABE — mantêm dígito verificador válido depois de mascaradas, porque as aplicações as validam, e um ambiente de teste em que elas não passam na validação não testa nada."],
+      "domains": ["MX_L1_CURP", "MX_L1_RFC", "MX_L1_NSS", "MX_L1_CLAVE_ELECTOR", "MX_L1_CREDENCIAL_INE", "MX_L1_NOMBRE", "MX_L1_APELLIDO", "MX_L1_NOMBRE_COMPLETO", "MX_L1_EMAIL", "MX_L1_TELEFONO", "MX_L1_DIRECCION", "MX_L1_DIRECCION_COMPLEMENTO", "MX_L1_CLABE", "MX_L1_CUENTA_BANCARIA", "MX_L1_TARJETA", "MX_L1_PASAPORTE", "MX_L1_DOCUMENTO_MIGRATORIO", "MX_L1_CEDULA_PROFESIONAL", "MX_L1_LICENCIA_CONDUCIR", "MX_L1_EFIRMA", "MX_L1_IP", "MX_L1_DISPOSITIVO", "MX_L1_PLACA", "MX_L1_NIV", "MX_L1_NUMERO_CONTRATO", "MX_L1_USUARIO_RRSS", "MX_L1_CREDENCIAL", "MX_L1_GEOLOCALIZACION", "MX_L1_TEXTO_LIBRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": ["Dados que sozinhos não identificam ninguém, mas combinados identificam. O México tem 2.469 municípios, e 1.505 deles tinham menos de 20.000 habitantes em 2020: uma data de nascimento, um sexo e um desses municípios apontam para um punhado de pessoas. Esses atributos são generalizados ou deslocados em vez de substituídos, e os dados mantêm seu valor analítico."],
+      "domains": ["MX_L2_FECHA_NACIMIENTO", "MX_L2_ANIO_NACIMIENTO", "MX_L2_EDAD", "MX_L2_FECHA_EVENTO", "MX_L2_SEXO", "MX_L2_MUNICIPIO", "MX_L2_CLAVE_MUNICIPIO", "MX_L2_LOCALIDAD", "MX_L2_COLONIA", "MX_L2_CODIGO_POSTAL", "MX_L2_NACIONALIDAD", "MX_L2_ESTADO_CIVIL", "MX_L2_OCUPACION", "MX_L2_EMPLEADOR", "MX_L2_ESCOLARIDAD", "MX_L2_ESCUELA", "MX_L2_CCT", "MX_L2_DEPENDIENTES"]
+    },
+    {
+      "id": "L3",
+      "title": "Dados sensíveis",
+      "intro": ["As categorias do artigo 2, fração VI — origem étnica, saúde, informação genética, crenças, opiniões políticas, preferência sexual — junto com identidade de gênero, vida sexual, biometria e filiação sindical. Um valor categórico é trocado por outro da mesma categoria, e a coluna mantém um conteúdo realista; onde os valores não têm vocabulário comum, são suprimidos."],
+      "domains": ["MX_L3_ETNIA", "MX_L3_LENGUA_INDIGENA", "MX_L3_SALUD_DIAGNOSTICO", "MX_L3_SALUD_MEDICAMENTO", "MX_L3_SALUD_IDENTIFICADOR", "MX_L3_SALUD_TEXTO_CLINICO", "MX_L3_SALUD_RESULTADO_EXAMEN", "MX_L3_SALUD_GRUPO_SANGUINEO", "MX_L3_SALUD_DISCAPACIDAD", "MX_L3_SALUD_SEXUAL_REPRODUCTIVA", "MX_L3_SALUD_MENTAL_ADICCIONES", "MX_L3_BIOMETRICO", "MX_L3_INFORMACION_GENETICA", "MX_L3_PREFERENCIA_SEXUAL", "MX_L3_IDENTIDAD_GENERO", "MX_L3_VIDA_SEXUAL", "MX_L3_RELIGION", "MX_L3_CREENCIA_FILOSOFICA_MORAL", "MX_L3_OPINION_POLITICA", "MX_L3_AFILIACION_POLITICA", "MX_L3_AFILIACION_SINDICAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Dados financeiros e patrimoniais",
+      "intro": ["O artigo 7 exige consentimento expresso para dados financeiros e patrimoniais — um regime próprio, entre o dado comum e o sensível, que os modelos baseados na GDPR não têm. Ele vai além da conta bancária: um registro no birô de crédito, um salário diário, um crédito habitacional, um programa social ou um regime fiscal dizem tanto sobre a situação econômica de alguém quanto a renda. As categorias são trocadas dentro da própria notação; os valores são mapeados para uma faixa plausível sem ligação com o valor real."],
+      "domains": ["MX_FIN_BURO_CREDITO", "MX_FIN_MONTO_DEUDA", "MX_FIN_INGRESO_MENSUAL", "MX_FIN_SALARIO_DIARIO", "MX_FIN_PATRIMONIO", "MX_FIN_AFORE", "MX_FIN_SALDO_RETIRO", "MX_FIN_CREDITO_VIVIENDA", "MX_FIN_SEGURIDAD_SOCIAL", "MX_FIN_PROGRAMA_SOCIAL", "MX_FIN_NIVEL_SOCIOECONOMICO", "MX_FIN_VIVIENDA", "MX_FIN_REGIMEN_FISCAL"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes criminais",
+      "intro": ["A LFPDPPP não os cita, mas estão entre os dados que mais levam à discriminação, que é o que o artigo 2 descreve como sensível. Recebem o mesmo cuidado."],
+      "domains": ["MX_PENAL_ANTECEDENTES", "MX_PENAL_CAUSA"]
+    }
+  ],
+  "domains": {
+    "MX_L1_CURP": {
+      "title": "CURP",
+      "what": "A Clave Única de Registro de Población: 18 caracteres formados pelos nomes (4 letras), data de nascimento, sexo, estado de nascimento, três consoantes internas, um diferenciador — dígito para nascidos antes de 2000, letra depois — e um dígito verificador. `HEGA850720MDFRRL04`. É a chave de quase todo registro mexicano, e já é um quase-identificador: carrega data de nascimento, sexo e estado.",
+      "masking": "Letras viram outras letras (vogal por vogal, consoante por consoante), a data de nascimento outra data válida da mesma década, sexo e estado outros valores, as consoantes e o diferenciador outros do mesmo tipo — e o dígito verificador é recalculado, então todo CURP mascarado passa na validação. O mapeamento é um-para-um: um CURP usado como chave não colide. Ver *Dígitos verificadores calculados pelo set*."
+    },
+    "MX_L1_RFC": {
+      "title": "RFC",
+      "what": "O Registro Federal de Contribuyentes: 13 caracteres para pessoa física (4 letras, data de nascimento, diferenciador de 2 caracteres, dígito verificador), 12 para pessoa moral. `HEGA850720ABA`. Aparece em folha de pagamento, fornecedores e notas fiscais CFDI.",
+      "masking": "O mesmo tratamento do CURP, com o dígito verificador módulo 11 do SAT, `A` incluído. O RFC de uma pessoa compartilha os dez primeiros caracteres com o CURP dela, e os dois são mascarados pelos mesmos algoritmos: depois de mascarados, continuam compartilhando. RFCs de empresa também são mascarados — uma coluna mistura os dois, e a data de constituição de uma empresa pequena pode apontar o dono. Um RFC sem diferenciador (10 caracteres) mantém o formato."
+    },
+    "MX_L1_NSS": {
+      "title": "Número de seguridade social (NSS)",
+      "what": "O número do IMSS: 11 dígitos com a subdelegação, ano de inscrição, ano de nascimento, um sequencial e um dígito verificador. Está em toda folha de pagamento e sistema de RH.",
+      "masking": "Trocado por outro NSS que passa na mesma verificação de Luhn — a dos cartões de pagamento, que o framework Payment Card mantém válida. O mapeamento é um-para-um. Escrito com hífens, é mascarado dígito a dígito, sem dígito verificador válido."
+    },
+    "MX_L1_CLAVE_ELECTOR": {
+      "title": "Chave de eleitor do INE",
+      "what": "A clave de elector da credencial do INE: 6 consoantes dos nomes, data de nascimento, número do estado, sexo e um diferenciador de 3 dígitos. `GRHRAL85072009M100`. A credencial do INE é o documento de identidade mais usado no México.",
+      "masking": "Consoantes mapeadas, data de nascimento pelo mesmo algoritmo do CURP (o CURP e a chave de eleitor de uma pessoa mantêm a mesma data mascarada), estado e sexo trocados, diferenciador mapeado. A chave não tem dígito verificador."
+    },
+    "MX_L1_CREDENCIAL_INE": {
+      "title": "Números da credencial do INE",
+      "what": "Os números que identificam o documento físico: OCR (13 dígitos), CIC (9 dígitos), o identificador do cidadão e o número de emissão.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_NOMBRE": {
+      "title": "Nomes próprios",
+      "what": "Primeiro nome e nomes do meio (`NOMBRES`, `PRIMER_NOMBRE`), incluindo nomes compostos como `María Guadalupe` ou `José Luis`.",
+      "masking": "Cada palavra é trocada por um nome mexicano de uma lista de 255, mantendo o número de palavras e a caixa. Mais de três palavras são mascaradas caractere a caractere."
+    },
+    "MX_L1_APELLIDO": {
+      "title": "Sobrenomes",
+      "what": "Sobrenomes paterno e materno, numa coluna ou em duas.",
+      "masking": "Cada palavra é trocada por um dos 337 sobrenomes mais frequentes do México, mantendo o número de palavras e a caixa."
+    },
+    "MX_L1_NOMBRE_COMPLETO": {
+      "title": "Nome completo",
+      "what": "Nomes e os dois sobrenomes numa coluna, na ordem mexicana, ou como `SOBRENOMES, NOMES`. Também o nome de titular, beneficiário, segurado ou receptor da nota fiscal.",
+      "masking": "Nomes viram nomes e sobrenomes viram sobrenomes, pela posição: uma palavra é nome, duas são nome e sobrenome, três são nome e dois sobrenomes, quatro são dois nomes e dois sobrenomes. Uma vírgula separa os sobrenomes dos nomes."
+    },
+    "MX_L1_EMAIL": {
+      "title": "E-mail",
+      "what": "Endereços de e-mail pessoais e de trabalho.",
+      "masking": "Nome e domínio são mapeados caractere a caractere e o domínio de topo vira `.test`, reservado para testes: um endereço mascarado nunca recebe e-mail."
+    },
+    "MX_L1_TELEFONO": {
+      "title": "Telefone",
+      "what": "Fixos e celulares. Desde agosto de 2019 todo número mexicano tem 10 dígitos: código de área de 2 dígitos para Cidade do México, Guadalajara e Monterrey (55, 56, 33, 81), 3 dígitos no resto.",
+      "masking": "Os dígitos do assinante são mascarados; `+52`, o antigo `1` de celular, o código de área e os separadores ficam. Um número sem o formato de número mexicano é mascarado dígito a dígito."
+    },
+    "MX_L1_DIRECCION": {
+      "title": "Endereço",
+      "what": "A linha de rua do endereço: rua, número exterior e interior, ou quadra e lote (`Mz. 12 Lt. 5`).",
+      "masking": "Trocado por um de 3.000 endereços mexicanos fictícios em nomes de rua comuns, com números interiores e quadras e lotes em proporções realistas."
+    },
+    "MX_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento do endereço",
+      "what": "Número exterior e interior, quadra, lote, edifício ou torre em colunas próprias.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_CLABE": {
+      "title": "CLABE",
+      "what": "A chave bancária padronizada de 18 dígitos: banco (3), praça (3), conta (11) e dígito verificador. Usada em toda transferência SPEI e depósito de folha.",
+      "masking": "O código do banco fica, então relatórios por banco continuam fechando; praça e conta são mascaradas e o dígito verificador (pesos 3, 7, 1, módulo 10) é recalculado. Toda CLABE mascarada é válida e o mapeamento é um-para-um."
+    },
+    "MX_L1_CUENTA_BANCARIA": {
+      "title": "Conta bancária",
+      "what": "Números de conta que não são a CLABE: corrente, poupança, folha.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_TARJETA": {
+      "title": "Cartão de pagamento",
+      "what": "Números de cartão de crédito e débito.",
+      "masking": "Trocado por outro número de cartão que ainda passa na verificação de Luhn. Valores sem formato de cartão passam sem mudança em vez de derrubar a linha."
+    },
+    "MX_L1_PASAPORTE": {
+      "title": "Passaporte",
+      "what": "Números de passaporte mexicano e estrangeiro.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_DOCUMENTO_MIGRATORIO": {
+      "title": "Documento migratório",
+      "what": "Cartões de residente temporário e permanente, formas migratórias, vistos e números de identidade estrangeiros.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_CEDULA_PROFESIONAL": {
+      "title": "Cédula profissional",
+      "what": "O número da cédula profesional emitida pela SEP. O registro é público: o número leva direto ao nome da pessoa.",
+      "masking": "Caractere a caractere, mantendo o tamanho."
+    },
+    "MX_L1_LICENCIA_CONDUCIR": {
+      "title": "Carteira de motorista",
+      "what": "Números de licença de condução estaduais e federais.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_EFIRMA": {
+      "title": "Certificado e.firma",
+      "what": "O número de série de 20 dígitos de um certificado e.firma (FIEL) ou de selo digital emitido pelo SAT.",
+      "masking": "Caractere a caractere, mantendo o tamanho."
+    },
+    "MX_L1_IP": {
+      "title": "Endereço IP",
+      "what": "Endereços IPv4 e IPv6 de usuários e dispositivos.",
+      "masking": "Cada octeto IPv4 é mapeado para um número de 1 a 254; um endereço IPv6 é mapeado como hexadecimal."
+    },
+    "MX_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": "IMEI, endereço MAC, identificadores de publicidade e de sessão, números de série de aparelhos.",
+      "masking": "Hexadecimal continua hexadecimal e dígito continua dígito, então o valor mantém o formato."
+    },
+    "MX_L1_PLACA": {
+      "title": "Placa de veículo",
+      "what": "Placas nos formatos da NOM-001-SCT-2-2016 (`URU-197-A`), da Cidade do México (`A-12-BCD`) e de séries antigas.",
+      "masking": "As letras são mapeadas entre as que as placas usam — nunca `I`, `O` ou `Q` — e os dígitos entre dígitos: a placa mascarada continua válida. A série do estado não é preservada."
+    },
+    "MX_L1_NIV": {
+      "title": "Número de identificação veicular",
+      "what": "O NIV (VIN), números de motor e chassi e o registro no REPUVE.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato. O dígito verificador dos VIN norte-americanos não é recalculado."
+    },
+    "MX_L1_NUMERO_CONTRATO": {
+      "title": "Números de contrato e de cliente",
+      "what": "Números de contrato, apólice, crédito, cliente, sócio, empregado e folha — chaves internas que levam a uma pessoa no sistema de origem.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato, então o mesmo número é mascarado igual em todas as tabelas."
+    },
+    "MX_L1_USUARIO_RRSS": {
+      "title": "Usuário e redes sociais",
+      "what": "Usuários, logins, apelidos e perfis de redes sociais.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L1_CREDENCIAL": {
+      "title": "Credenciais",
+      "what": "Senhas e seus hashes, PINs, tokens, chaves de API, a senha CIEC do SAT e perguntas de segurança.",
+      "masking": "Todo caractere vira `X`. Credencial não tem lugar em ambiente de teste."
+    },
+    "MX_L1_GEOLOCALIZACION": {
+      "title": "Geolocalização",
+      "what": "Latitude e longitude de residências, entregas ou dispositivos.",
+      "masking": "A parte inteira e a primeira casa decimal ficam — cerca de 11 km — e o resto é mascarado: o lugar é generalizado, não levado para outra região."
+    },
+    "MX_L1_TEXTO_LIBRE": {
+      "title": "Texto livre",
+      "what": "Observações, comentários, reclamações, referências de endereço e notas em que as pessoas escrevem identificadores no meio da frase.",
+      "masking": "CURPs, RFCs, chaves de eleitor, e-mails, telefones de 10 dígitos, NSS, números de cartão e CLABE, placas e IPs viram `[DATO]`; nomes e sobrenomes das listas viram `[NOMBRE]`."
+    },
+    "MX_L2_FECHA_NACIMIENTO": {
+      "title": "Data de nascimento",
+      "what": "O quase-identificador mais forte: com sexo e município, isola a maioria das pessoas.",
+      "masking": "Deslocada em até 60 dias, do mesmo jeito em todas as tabelas para a mesma data."
+    },
+    "MX_L2_ANIO_NACIMIENTO": {
+      "title": "Ano de nascimento",
+      "what": "O ano de nascimento guardado sozinho.",
+      "masking": "A década fica e o último dígito é mascarado — com o mesmo mapeamento do ano dentro de um CURP, RFC ou chave de eleitor."
+    },
+    "MX_L2_EDAD": {
+      "title": "Idade",
+      "what": "Idade em anos.",
+      "masking": "A dezena fica e a unidade é mascarada (37 → 3x); 100 ou mais vira 90, porque idades muito altas são raras a ponto de identificar."
+    },
+    "MX_L2_FECHA_EVENTO": {
+      "title": "Datas de eventos da vida",
+      "what": "Datas de óbito, casamento, contratação e demissão, inscrição no IMSS, afastamento, internação, diagnóstico, parto, detenção.",
+      "masking": "Deslocadas em até 30 dias."
+    },
+    "MX_L2_SEXO": {
+      "title": "Sexo",
+      "what": "Sexo ou gênero como registrado: `H`/`M`, `F`/`M`, `Hombre`/`Mujer`, `Masculino`/`Femenino`.",
+      "masking": "Trocado dentro do próprio vocabulário. `H`/`M` usa o mesmo lookup do sexo dentro do CURP e da chave de eleitor, e os três continuam consistentes."
+    },
+    "MX_L2_MUNICIPIO": {
+      "title": "Município",
+      "what": "Município ou alcaldía da Cidade do México. 1.505 dos 2.469 municípios tinham menos de 20.000 habitantes no censo de 2020.",
+      "masking": "Um município com menos de 20.000 habitantes vira o município mais próximo do mesmo estado que tem pelo menos 20.000; os maiores ficam. O resultado é um município real e próximo. Nomes sem acento e em maiúsculas são reconhecidos. Um nome compartilhado por vários municípios só é generalizado quando todos são pequenos."
+    },
+    "MX_L2_CLAVE_MUNICIPIO": {
+      "title": "Código do município",
+      "what": "O código geoestatístico do INEGI de 5 dígitos (estado + município), com ou sem o zero à esquerda.",
+      "masking": "Generalizado exatamente como o nome do município, sem a ambiguidade dos homônimos."
+    },
+    "MX_L2_LOCALIDAD": {
+      "title": "Localidade",
+      "what": "Localidade, povoado, ejido, rancho ou comunidade — muitas vezes com poucas centenas de habitantes — e local de nascimento.",
+      "masking": "Trocada pelo nome de um município com mais de 100.000 habitantes: ainda um lugar, não mais o da pessoa."
+    },
+    "MX_L2_COLONIA": {
+      "title": "Colônia",
+      "what": "Colonia, fraccionamiento, bairro ou conjunto habitacional: com o código postal, restringe o endereço a poucas quadras.",
+      "masking": "Trocada por um nome de colônia comum (`Centro`, `Del Valle`, `Las Flores`)."
+    },
+    "MX_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": "Cinco dígitos: os dois primeiros são o estado ou a alcaldía da Cidade do México. Também o domicílio fiscal das notas CFDI.",
+      "masking": "Os três primeiros dígitos ficam e os dois últimos viram `00` (`06760` → `06700`)."
+    },
+    "MX_L2_NACIONALIDAD": {
+      "title": "Nacionalidade",
+      "what": "Nacionalidade ou país de nascimento. Uma nacionalidade estrangeira é rara na maioria das tabelas, e raridade identifica.",
+      "masking": "Trocada por uma nacionalidade de uma lista das mais frequentes no México."
+    },
+    "MX_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": "Solteiro, casado, união livre, separado, divorciado, viúvo.",
+      "masking": "Trocado por outro estado civil."
+    },
+    "MX_L2_OCUPACION": {
+      "title": "Ocupação",
+      "what": "Ocupação, profissão ou cargo. Um cargo raro identifica sozinho.",
+      "masking": "Trocada por uma de 40 ocupações comuns."
+    },
+    "MX_L2_EMPLEADOR": {
+      "title": "Empregador",
+      "what": "Nome do empregador ou local de trabalho.",
+      "masking": "Trocado por uma empresa mexicana fictícia."
+    },
+    "MX_L2_ESCOLARIDAD": {
+      "title": "Escolaridade",
+      "what": "Maior nível de escolaridade, nas categorias do INEGI.",
+      "masking": "Trocado por outro nível da mesma escala."
+    },
+    "MX_L2_ESCUELA": {
+      "title": "Escola",
+      "what": "Nome de escola, colégio ou universidade.",
+      "masking": "Trocado por um nome de escola genérico."
+    },
+    "MX_L2_CCT": {
+      "title": "Código de escola (CCT)",
+      "what": "A Clave de Centro de Trabajo de uma escola: estado, tipo, número e uma letra (`09DPR1234X`).",
+      "masking": "Caractere a caractere, mantendo o formato."
+    },
+    "MX_L2_DEPENDIENTES": {
+      "title": "Dependentes e filhos",
+      "what": "Número de dependentes econômicos, filhos ou integrantes do domicílio.",
+      "masking": "Valores até 5 ficam; maiores viram 5, porque domicílios grandes são raros."
+    },
+    "MX_L3_ETNIA": {
+      "title": "Origem étnica",
+      "what": "Povo indígena, autoidentificação afro-mexicana ou grupo étnico. É a primeira categoria dos dados sensíveis do artigo 2.",
+      "masking": "Um sinalizador sim/não continua sinalizador; um povo vira outro de uma lista dos povos indígenas mais numerosos e do povo afro-mexicano, inclusive povos fora da lista, como `Kumiai`."
+    },
+    "MX_L3_LENGUA_INDIGENA": {
+      "title": "Língua indígena",
+      "what": "Se a pessoa fala uma língua indígena, e qual. Revela a origem étnica tanto quanto a autoidentificação, e o INEGI pergunta isso em todo censo.",
+      "masking": "Um sinalizador continua sinalizador; uma língua vira outra de uma lista das mais faladas."
+    },
+    "MX_L3_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico",
+      "what": "Diagnósticos, códigos CID-10, doenças, alergias e antecedentes patológicos.",
+      "masking": "Um código CID-10 vira um código comum no mesmo formato (`F32.9` → `J45.9`), uma descrição um diagnóstico comum. O mapeamento esconde as condições sensíveis — HIV, saúde mental, dependências — entre as corriqueiras."
+    },
+    "MX_L3_SALUD_MEDICAMENTO": {
+      "title": "Medicamento",
+      "what": "Medicamentos prescritos. Um antirretroviral ou um antipsicótico revela o diagnóstico.",
+      "masking": "Trocado por um medicamento comum."
+    },
+    "MX_L3_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores de prontuário",
+      "what": "Números de prontuário (NOM-004-SSA3-2012), de episódio, receita, leito e certificado de incapacidade.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L3_SALUD_TEXTO_CLINICO": {
+      "title": "Notas clínicas",
+      "what": "Notas médicas, de evolução, de internação e de alta, doença atual, exame físico — texto livre em que aparecem nomes e CURPs.",
+      "masking": "A mesma redação de texto livre dos outros textos: identificadores viram `[DATO]`, nomes `[NOMBRE]`. O conteúdo clínico fica."
+    },
+    "MX_L3_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultados de exame",
+      "what": "Resultados de laboratório e de imagem: HIV, carga viral, glicose, HbA1c, gravidez e antidoping.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "MX_L3_SALUD_GRUPO_SANGUINEO": {
+      "title": "Tipo sanguíneo",
+      "what": "Grupo ABO e fator Rh.",
+      "masking": "Trocado por outro tipo sanguíneo."
+    },
+    "MX_L3_SALUD_DISCAPACIDAD": {
+      "title": "Deficiência",
+      "what": "Tipo ou grau de deficiência, nas categorias do censo de 2020.",
+      "masking": "Um sinalizador continua sinalizador; um tipo vira outra categoria do censo."
+    },
+    "MX_L3_SALUD_SEXUAL_REPRODUCTIVA": {
+      "title": "Saúde sexual e reprodutiva",
+      "what": "Gravidez, idade gestacional, interrupção legal da gravidez, contracepção, fertilidade, infecções sexualmente transmissíveis.",
+      "masking": "Um sinalizador continua sinalizador e um número ganha outros dígitos; o resto vira `Sin información`."
+    },
+    "MX_L3_SALUD_MENTAL_ADICCIONES": {
+      "title": "Saúde mental e dependências",
+      "what": "Atendimento psiquiátrico e psicológico, transtornos, risco de suicídio, uso de substâncias e tratamento.",
+      "masking": "Suprimido para `Sin información`; sinalizadores e códigos mantêm o formato."
+    },
+    "MX_L3_BIOMETRICO": {
+      "title": "Dados biométricos",
+      "what": "Templates de digital e facial, íris, voz e assinaturas digitalizadas guardados como texto.",
+      "masking": "Todo caractere vira `X`. Colunas binárias não podem ser mascaradas pelo set; ver *Limites*."
+    },
+    "MX_L3_INFORMACION_GENETICA": {
+      "title": "Informação genética",
+      "what": "Perfis de DNA, genótipos, mutações, triagem genética e testes de paternidade — citados pelo artigo 2.",
+      "masking": "Todo caractere vira `X`."
+    },
+    "MX_L3_PREFERENCIA_SEXUAL": {
+      "title": "Preferência sexual",
+      "what": "Orientação sexual — *preferencia sexual*, nas palavras da lei.",
+      "masking": "Trocada por outro valor da mesma escala."
+    },
+    "MX_L3_IDENTIDAD_GENERO": {
+      "title": "Identidade de gênero",
+      "what": "Identidade de gênero autopercebida e reconhecimento legal de gênero.",
+      "masking": "Trocada por outro valor da mesma escala."
+    },
+    "MX_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": "Atividade, comportamento e histórico sexual.",
+      "masking": "Suprimida para `Sin información`."
+    },
+    "MX_L3_RELIGION": {
+      "title": "Religião",
+      "what": "Filiação religiosa — as crenças religiosas são citadas pelo artigo 2.",
+      "masking": "Trocada por um grupo de religião do censo de 2020, inclusive igrejas fora da lista, como `Luz del Mundo`."
+    },
+    "MX_L3_CREENCIA_FILOSOFICA_MORAL": {
+      "title": "Crenças filosóficas e morais",
+      "what": "Convicções, objeção de consciência, posições éticas — a formulação do artigo 2 para crenças que não são religiosas.",
+      "masking": "Suprimidas para `Sin información`."
+    },
+    "MX_L3_OPINION_POLITICA": {
+      "title": "Opiniões políticas",
+      "what": "Ideologia, posição política, intenção de voto e preferência eleitoral.",
+      "masking": "Trocada por outra posição da mesma escala."
+    },
+    "MX_L3_AFILIACION_POLITICA": {
+      "title": "Filiação partidária",
+      "what": "Filiação ou simpatia partidária. Uma lista de filiados revela opinião política.",
+      "masking": "Trocada por um dos partidos nacionais registrados em 2026, inclusive os que perderam o registro (`PRD`)."
+    },
+    "MX_L3_AFILIACION_SINDICAL": {
+      "title": "Filiação sindical",
+      "what": "Filiação sindical, contribuição sindical, seção e condição de trabalhador sindicalizado ou de confiança.",
+      "masking": "Um sinalizador continua sinalizador; o resto vira `Sin información`."
+    },
+    "MX_FIN_BURO_CREDITO": {
+      "title": "Registro no birô de crédito",
+      "what": "Dados do Buró de Crédito e do Círculo de Crédito: códigos de comportamento de pagamento (MOP), score, situação de atraso, perdas.",
+      "masking": "Um código MOP vira outro código MOP, um score de 3 dígitos outros dígitos, uma situação outra situação."
+    },
+    "MX_FIN_MONTO_DEUDA": {
+      "title": "Valor da dívida",
+      "what": "Saldo devedor, valor em atraso, limite de crédito, pagamento mínimo.",
+      "masking": "Mapeado para um valor entre 1.000 e 5.000.000."
+    },
+    "MX_FIN_INGRESO_MENSUAL": {
+      "title": "Renda mensal",
+      "what": "Salário, percepções, líquido a receber, renda do domicílio.",
+      "masking": "Mapeada para um valor entre 8.000 e 250.000."
+    },
+    "MX_FIN_SALARIO_DIARIO": {
+      "title": "Salário diário (SDI, SBC)",
+      "what": "O salário diário integrado e o salário base de contribuição usados pelo IMSS — o jeito como as folhas mexicanas guardam a remuneração.",
+      "masking": "Mapeado para um valor entre 280 e 3.000."
+    },
+    "MX_FIN_PATRIMONIO": {
+      "title": "Patrimônio",
+      "what": "Patrimônio líquido, valores cadastrais e de avaliação, investimentos e poupança.",
+      "masking": "Mapeado para um valor entre 200.000 e 30.000.000."
+    },
+    "MX_FIN_AFORE": {
+      "title": "AFORE",
+      "what": "A administradora do fundo de aposentadoria, e o regime de pensão.",
+      "masking": "Trocada por uma das dez AFOREs autorizadas pela CONSAR em 2026."
+    },
+    "MX_FIN_SALDO_RETIRO": {
+      "title": "Poupança de aposentadoria e habitação",
+      "what": "Saldos das subcontas de aposentadoria e habitação, poupança voluntária, valores de pensão.",
+      "masking": "Mapeado para um valor entre 5.000 e 5.000.000."
+    },
+    "MX_FIN_CREDITO_VIVIENDA": {
+      "title": "Crédito habitacional",
+      "what": "Infonavit, Fovissste, Cofinavit ou hipoteca bancária, e avisos de desconto em folha.",
+      "masking": "Trocado por outro tipo de crédito habitacional."
+    },
+    "MX_FIN_SEGURIDAD_SOCIAL": {
+      "title": "Cobertura de seguridade social",
+      "what": "Derechohabiencia: IMSS, ISSSTE, IMSS-Bienestar, Pemex, forças armadas, seguro privado, nenhuma. Revela trabalho formal ou informal.",
+      "masking": "Trocada por outra instituição da mesma lista."
+    },
+    "MX_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programas sociais",
+      "what": "Beneficiários dos Programas para el Bienestar e seus antecessores: pensões, bolsas, Sembrando Vida, Jóvenes Construyendo el Futuro.",
+      "masking": "Um sinalizador continua sinalizador; um programa vira outro programa de 2026."
+    },
+    "MX_FIN_NIVEL_SOCIOECONOMICO": {
+      "title": "Nível socioeconômico",
+      "what": "Nível socioeconômico AMAI (`A/B` a `E`), decil ou quintil de renda, indicadores de marginalização e pobreza.",
+      "masking": "Um nível AMAI vira outro, um quintil outro quintil, um decil outro decil."
+    },
+    "MX_FIN_VIVIENDA": {
+      "title": "Situação da moradia",
+      "what": "Se a moradia é própria, está sendo paga, alugada, emprestada ou em litígio, e suas condições.",
+      "masking": "Trocada por outra situação da escala do censo."
+    },
+    "MX_FIN_REGIMEN_FISCAL": {
+      "title": "Regime fiscal",
+      "what": "O regime fiscal de uma pessoa física no SAT (catálogo `c_RegimenFiscal` da CFDI): salários, aluguel, atividade empresarial, RESICO. Revela a origem da renda.",
+      "masking": "Um código vira outro código de regime de pessoa física, uma descrição outra descrição; `626 - ...` mantém as duas partes."
+    },
+    "MX_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes criminais",
+      "what": "Antecedentes penais, sentenças, delitos, prisão preventiva, mandados de prisão.",
+      "masking": "Um sinalizador continua sinalizador; o resto vira uma situação genérica."
+    },
+    "MX_PENAL_CAUSA": {
+      "title": "Números de processo",
+      "what": "Carpetas de investigación, averiguações prévias, números de causa penal e de recurso (`123/2024`).",
+      "masking": "Caractere a caractere, mantendo o formato."
+    }
+  },
+  "closing": [
+    {
+      "title": "Dígitos verificadores calculados pelo set",
+      "body": [
+        "As aplicações mexicanas validam suas chaves, e uma chave mascarada que falha na validação quebra o teste que ela deveria servir. Duas chaves são cobertas pelos frameworks do próprio plugin: a CLABE pelo Check Digit (pesos 3, 7, 1, módulo 10), e o NSS pelo Payment Card, porque o dígito dele é Luhn — a verificação dos cartões de pagamento. O CURP e o RFC exigem mais:",
+        { "list": [
+          "**CURP** — todo caractere conta, letras incluídas (`0`–`9`, `A`–`N` → 10–23, `Ñ` 24, `O`–`Z` → 25–36), com pesos de 18 a 2, módulo 10. O Check Digit lê letras em base 36, em que `O`–`Z` valem um a menos.",
+          "**RFC** — a tabela do SAT (`&` 24, espaço 37, `Ñ` 38), pesos de 13 a 2, módulo 11, com 10 escrito `A`. Um RFC de empresa conta como se tivesse um espaço na frente. O Check Digit escreve um resultado 10 como `0` e não aceita `&` nem `Ñ`."
+        ] },
+        "Para esses dois o set calcula o dígito verificador ele mesmo. Depois que o corpo é mascarado, uma soma acumulada percorre o valor de dois em dois caracteres: uma tabela de lookup transforma *soma + próximos dois caracteres* em *esses caracteres + nova soma*, e a última tabela escreve o dígito verificador no lugar. Cada tabela lista só o que as suas posições podem conter — dígitos na data, letras nos nomes —, então o CURP leva 8 passos e o RFC 6, cada um um Regex Decompose e um arquivo de Data Cleansing gerado com o set, numa única String Algorithm Chain.",
+        "Todo CURP, RFC e NSS mascarado é válido, e o mapeamento continua um-para-um — uma chave não colide com outra. O custo é pago por valor, por passo, e não por algoritmo configurado. Medido com o plugin fora do engine, num notebook, um CURP é mascarado em cerca de 11 µs, um RFC em cerca de 9 e um NSS em cerca de 3, contra cerca de 2 de um Character Mapping: uns 90.000 CURPs por segundo por thread. Metade do custo do CURP é o corpo — a data e os lookups com chave de sexo e estado; o dígito verificador é a outra metade. A vazão de um engine depende do hardware e da configuração do job."
+      ]
+    },
+    {
+      "title": "Datas dentro das chaves",
+      "body": [
+        "CURP, RFC e a chave de eleitor do INE carregam a data de nascimento como `AAMMDD`. Deixá-la seria deixar na chave o quase-identificador mais forte; mudar os dígitos livremente produziria datas que não existem.",
+        "A década fica e a unidade do ano é mascarada, como numa coluna de ano de nascimento. O mês passa por um mapeamento um-para-um de 1–12, o dia por um de 1–28, 29–30 entre si, e um dia 31 mantém um mês de 31 dias. O resultado é sempre uma data real, e duas datas diferentes nunca viram a mesma.",
+        "O mesmo algoritmo mascara a data nas três chaves, então CURP, RFC e chave de eleitor de uma pessoa continuam concordando entre si. Não concordam com a coluna de data de nascimento, que se desloca em até 60 dias: nenhum algoritmo enxerga duas colunas ao mesmo tempo."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        { "list": [
+          "**Colunas binárias** — fotos da credencial do INE, imagens de digitais, PDFs clínicos em BLOBs — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
+          "**Chaves e as colunas de onde vêm.** As letras de um CURP ou RFC mascarado não vêm mais do nome mascarado, e a data não é a data de nascimento mascarada. Onde a aplicação recalcula o CURP a partir do nome, ele não vai bater.",
+          "**Palavras inconvenientes.** O RENAPO substitui algumas combinações ofensivas de letras no início do CURP; um CURP mascarado pode formar uma. Ainda passa no dígito verificador.",
+          "**Chaves em minúsculas ou formatadas** — um CURP em minúsculas, um NSS com hífens — são mascaradas caractere a caractere, sem dígito verificador válido.",
+          "**Municípios** escritos de um jeito que a lista não conhece passam sem mudança. Um nome compartilhado por um município grande e um pequeno fica como está; o código de 5 dígitos não tem essa ambiguidade. Um código de município de 3 dígitos sem o estado não é generalizado.",
+          "**Texto livre** é redigido palavra por palavra: um telefone escrito com espaços (`55 1234 5678`) não é encontrado ali, e um nome que também é palavra comum (`Luz`, `Paz`, `Rosa`) é redigido onde aparecer.",
+          "**Menores de idade** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam o aniversário de 18 anos, mas algumas cruzam. Onde isso importa, divida a regra por faixa etária com Multi-Column Condition.",
+          "**Endereços** são trocados como uma linha inteira. Rua, colônia, código postal e município em colunas separadas são mascarados de forma independente e deixam de formar um endereço coerente.",
+          "**Placas e VINs** mantêm o formato, mas não a série do estado nem o dígito verificador do VIN."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "O set é gerado e conferido por dois scripts guardados com ele no repositório:",
+        { "list": [
+          "`build.mjs` gera o set, suas tabelas de lookup e suas tabelas de dígito verificador a partir das definições e das listas mantidas à mão.",
+          "`verify.mjs` revisa a configuração de cada classifier, perfila 151 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 26 colunas que não são dado pessoal — e mascara 350 valores de amostra e 228 placeholders como `S/D` pelo app em execução. CURPs, RFCs, NSS e CLABEs aleatórios são conferidos quanto a dígito verificador e data válidos, 150 de cada quanto a colisões, e pares de CURP e RFC da mesma pessoa quanto à concordância."
+        ] },
+        "No último build, todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        { "list": [
+          "Ley Federal de Protección de Datos Personales en Posesión de los Particulares — DOF de 20 de março de 2025, última reforma DOF de 14 de novembro de 2025 (Cámara de Diputados). A lei de 2010, DOF de 5 de julho de 2010, para comparação.",
+          "Estrutura e dígito verificador do CURP — Registro Nacional de Población (RENAPO).",
+          "Dígito verificador do RFC — Servicio de Administración Tributaria (SAT). Catálogo de regimes fiscais `c_RegimenFiscal` — SAT, CFDI 4.0.",
+          "Estrutura do NSS — Instituto Mexicano del Seguro Social (IMSS). CLABE — Banco de México e Asociación de Bancos de México.",
+          "Chave de eleitor — Instituto Nacional Electoral. Partidos políticos nacionais, incluindo o registro do Partido Paz e do Somos México em 1º de julho de 2026 — INE.",
+          "Municípios, códigos geoestatísticos, coordenadas e população — INEGI, Censo de Población y Vivienda 2020. Categorias de religião, deficiência, escolaridade e moradia — o mesmo censo.",
+          "Sobrenomes mais frequentes — registros do INE e do RENAPO. Nomes próprios — INEGI e registros de frequência de nomes.",
+          "Povos indígenas — Instituto Nacional de los Pueblos Indígenas, Catálogo Nacional de Pueblos y Comunidades Indígenas y Afromexicanas (2024).",
+          "AFOREs — Comisión Nacional del Sistema de Ahorro para el Retiro (CONSAR), 2026. Programas sociais — Programas para el Bienestar, Governo do México, 2026.",
+          "Níveis socioeconômicos — Asociación Mexicana de Agencias de Inteligencia de Mercado y Opinión (AMAI).",
+          "Marcação de dez dígitos — Instituto Federal de Telecomunicaciones, 3 de agosto de 2019. Códigos postais — Correos de México (SEPOMEX). Placas — NOM-001-SCT-2-2016."
+        ] }
+      ]
+    }
+  ]
+}

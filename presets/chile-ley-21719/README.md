@@ -147,7 +147,10 @@ The last one regenerates the PDFs; run it after any change to the set or to `doc
 `verify.mjs` reviews every classifier configuration, profiles 129 columns with the whole set at
 its threshold — well named, badly named and 21 columns that are not personal data — and masks
 184 sample values and 204 placeholders through the running app (`DLPX_URL`, default
-`http://localhost:3000`), including 60 random RUTs checked for a valid check digit.
+`http://localhost:3000`) — checking that each masked value comes from the right vocabulary, and 60
+random RUTs for a valid check digit. It also runs each of the 101 algorithms on its own sample
+input, sent only the algorithms it references at any depth, which is what the tester does. Every
+algorithm has a sample input: `build.mjs` refuses to generate one without.
 
 ## Sources
 

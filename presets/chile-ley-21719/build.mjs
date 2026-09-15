@@ -68,7 +68,7 @@ function lookup(name, fileName, values, input, caseMode = 'PRESERVE_INPUT') {
     inputCaseSensitive: false,
     trimWhitespaceFromInput: true,
     trimWhitespaceInLookupFile: true,
-  }, input)
+  }, input ?? values[0])
 }
 
 const domains = []
@@ -171,7 +171,7 @@ algorithm('CL_CM_ALFANUM', 'characterMapping.CharacterMapping', {
   caseSensitive: true,
   minMaskedPositions: 0,
 }, 'A12.345.678-Ñ')
-decompose('CL_SIN_CAMBIO', [['(.*)', keep]], keep)
+decompose('CL_SIN_CAMBIO', [['(.*)', keep]], keep, '12345678')
 decompose('CL_REDACTAR', [['(.+)', { type: 'REDACT', redactCharacter: 'X' }]], keep, 'secreto123')
 lookup('CL_SUPRIMIR', 'cl-sin-informacion.txt', ['Sin información'], 'Depresión mayor', 'PRESERVE_LOOKUP_FILE')
 
@@ -215,17 +215,18 @@ const checkDigit = (digits, weights, numeric) => ({
   numericAlgorithm: use(numeric), preserveRegex: String.raw`[.\-]`,
   inputHandlingConfig: { characterHandling: 'STANDARD', invalidInputHandling: 'ERROR', shortInputHandling: 'FALLBACK', padCharacter: '0', trimWhitespace: true },
 })
+const RUT_SAMPLE = { 8: '12.345.678-5', 7: '7.654.321-6', 6: '123.456-0' }
 for (const n of [8, 7, 6]) {
-  algorithm(`CL_RUT_CUERPO_${n}`, 'checkdigit.Checkdigit', checkDigit(n, DOUBLED, 'CL_CM_ALFANUM'))
-  algorithm(`CL_RUT_DV_${n}`, 'checkdigit.Checkdigit', checkDigit(n, RUT_WEIGHTS, 'CL_SIN_CAMBIO'))
+  algorithm(`CL_RUT_CUERPO_${n}`, 'checkdigit.Checkdigit', checkDigit(n, DOUBLED, 'CL_CM_ALFANUM'), RUT_SAMPLE[n])
+  algorithm(`CL_RUT_DV_${n}`, 'checkdigit.Checkdigit', checkDigit(n, RUT_WEIGHTS, 'CL_SIN_CAMBIO'), RUT_SAMPLE[n])
 }
 decompose('CL_RUT_PASO_1',
   [8, 7, 6].map((n) => [`(${RUT_BODY[n]}-?[0-9kK])`, apply(`CL_RUT_CUERPO_${n}`)]),
-  apply('CL_CM_ALFANUM'))
+  apply('CL_CM_ALFANUM'), '12.345.678-5')
 decompose('CL_RUT_PASO_2', [
   ...[8, 7, 6].map((n) => [`(${RUT_BODY[n]}-?)(9)`, keep, redactAs('K')]),
   ...[8, 7, 6].map((n) => [`(${RUT_BODY[n]}-?[0-9])`, apply(`CL_RUT_DV_${n}`)]),
-], keep)
+], keep, '46.916.122-9')
 algorithm('CL_RUT', 'stringAlgorithmChain.StringAlgorithmChain',
   { algorithmReferences: [use('CL_RUT_PASO_1'), use('CL_RUT_PASO_2')] }, '12.345.678-5')
 lookup('CL_RUT_DV', 'cl-digito-verificador.txt', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'K'], 'K')
@@ -380,14 +381,14 @@ domain('CL_L1_CUENTA_BANCARIA', 'CL_CM_ALFANUM',
   byName(['cuenta_?(corriente|vista|rut|bancaria|banco|ahorro|deposito|abono|pago|destino|origen|cte)|cta_?(cte|corriente|vista|bancaria|banco|ahorro)|ctacte|n(ro|um|umero)?_?cuenta(_?(banco|bancaria|corriente|vista))?|account_?(number|no|num|nbr)|bank_?account', 0.85]))
 
 // Payment Card fails a row that has no digits to mask; only values shaped like a card reach it.
-algorithm('CL_TARJETA_LUHN', 'characterMapping.PaymentCard', { minMaskedPositions: 6, preserve: 0 })
+algorithm('CL_TARJETA_LUHN', 'characterMapping.PaymentCard', { minMaskedPositions: 6, preserve: 0 }, '4111111111111111')
 decompose('CL_TARJETA', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply('CL_TARJETA_LUHN')]], keep, '4111 1111 1111 1111')
 domain('CL_L1_TARJETA', 'CL_TARJETA',
   byName(['tarjeta(_?(credito|debito|cred|deb|num|nro|numero))?|n(ro|um|umero)_?tarjeta|pan|card_?(number|no|num)|credit_?card|cc_?(number|num)|tdc|tc_?num', 0.85]),
   // 0.9, not 1: an IMEI is 15 Luhn-valid digits too, and its own column name should win.
   byPattern([[String.raw`\d{13,19}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
 
-algorithm('CL_OCTETO', 'characterMapping.NumericMapping', { minValue: 1, maxValue: 254 })
+algorithm('CL_OCTETO', 'characterMapping.NumericMapping', { minValue: 1, maxValue: 254 }, '192')
 decompose('CL_IP', [
   [String.raw`(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})`, apply('CL_OCTETO'), apply('CL_OCTETO'), apply('CL_OCTETO'), apply('CL_OCTETO')],
 ], apply('CL_CM_ALFANUM'), '200.27.1.10')
@@ -807,9 +808,13 @@ const orphans = algorithms.filter((a) => {
   return !referenced.includes(`"${a.name}"`)
 })
 if (orphans.length) throw new Error(`algorithms nobody uses: ${orphans.map((a) => a.name).join(', ')}`)
+// The input is what the tester opens an algorithm with. Without one, masking gives back nothing
+// and a building block looks broken.
+const withoutInput = algorithms.filter((a) => a.input === undefined).map((a) => a.name)
+if (withoutInput.length) throw new Error(`algorithms without a sample input: ${withoutInput.join(', ')}`)
 
 const preset = {
-  version: 1,
+  version: 2,
   name: {
     en: 'Chile — Law 21.719 (personal data protection)',
     'pt-BR': 'Chile — Lei 21.719 (proteção de dados pessoais)',

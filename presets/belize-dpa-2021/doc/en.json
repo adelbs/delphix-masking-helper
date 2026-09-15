@@ -1,0 +1,519 @@
+{
+  "title": "Belize — Data Protection Act, 2021",
+  "subtitle": "Discovery and masking of Belizean personal data: identity numbers and names, quasi-identifiers, the sensitive personal data of section 2 — including financial record or position and criminal proceedings — and health records.",
+  "sections": [
+    {
+      "title": "About this profile set",
+      "body": [
+        "This profile set finds the personal data in a Belizean database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
+        "Masking only names and social security numbers does not get there: a birth date, a sex and a village of a few hundred people are enough to point at one person. The set works on the layers where the risk is:",
+        { "list": [
+          "**Direct identifiers** — social security number, TIN, passport, voter ID, driver's licence, immigration permits, civil registry entries, names, contact, accounts and cards, land parcels, devices, vehicles, free text.",
+          "**Quasi-identifiers** — birth date, age, sex, town or village, neighbourhood, nationality, marital status, occupation, employer, education.",
+          "**Sensitive personal data** — the categories of section 2: racial or ethnic origin, political opinions, religious and similar beliefs, membership of a political body, trade union membership, genetic and biometric data, sexual orientation and sexual life — and, beyond the list, gender identity.",
+          "**Health records** — health identifiers, diagnoses, medications, clinical notes, test results, disability, reproductive and mental health.",
+          "**Financial record or position** — credit references, debt, income, assets, pensions, social security benefits, social programmes, poverty and housing tenure. Section 2 makes them sensitive.",
+          "**Criminal record and proceedings** — records, charges, outcomes and case numbers, also sensitive under section 2."
+        ] },
+        "Everything the set needs travels with it: loading it creates the domains, classifiers, algorithms and lookup files, and sending it to a Masking Engine sends all of them."
+      ]
+    },
+    {
+      "title": "The Data Protection Act, 2021 at a glance",
+      "body": [
+        "The Data Protection Act, 2021 — Act No. 45 of 2021 — was assented to on 29 November 2021 and gazetted on 30 November 2021. It regulates the collection, keeping, use and dissemination of personal data and protects the privacy of individuals in relation to it.",
+        "**Commencement.** The Act comes into force on a day appointed by the Minister by Order published in the Gazette, and different days may be appointed for different provisions (s. 97). In the public sources consulted in September 2026 no commencement Order was found, and secondary sources disagree on whether and when the Act took effect. Confirm the status with the Ministry before relying on a date; the design of the set does not depend on it.",
+        "What matters for a copy of production data:",
+        { "list": [
+          "**Personal data** is data which relates to an individual who can be identified from that data, or from that data together with other information which is in the possession of, or is likely to come into the possession of, the data controller (s. 2). Data from which no individual can be identified, even with that other information, is not personal data.",
+          "**Sensitive personal data** is information on a data subject's racial or ethnic origin; political opinions; religious beliefs or other beliefs of a similar nature; membership of a political body; membership of a trade union; genetic data; biometric data; sexual orientation or sexual life; **financial record or position**; criminal record; and proceedings for any offence committed or alleged to have been committed, their disposal or sentence (s. 2). Health is not on the list; genetic and biometric data are, and the Act defines both.",
+          "**Processing of sensitive personal data is prohibited** unless one of the conditions of section 10 applies — consent, employment obligations, vital interests, legal proceedings, public functions, medical purposes under a duty of confidentiality, among others. Data relating to criminal convictions and offences is processed only under the control of an official authority or as an enactment authorises (s. 10(2)).",
+          "**Principles.** Personal data is collected for specified, explicit and legitimate purposes and not further processed in a manner incompatible with them; it is adequate, relevant and limited to what is necessary; kept in identifiable form no longer than necessary; and processed with appropriate security (s. 4). A controller who fails to comply commits an offence punishable by a fine of five hundred thousand dollars, imprisonment for three years, or both (s. 5(7)).",
+          "**Security.** Technical and organisational measures appropriate to the risk, including pseudonymisation and encryption (s. 60), and data protection by design and by default (s. 55).",
+          "**Breaches.** The Commissioner is notified without undue delay and, where feasible, within seventy-two hours (s. 61). Data subjects are told when the breach is likely to result in a high risk — unless the data affected had been rendered unintelligible to anyone not authorised to access it (s. 62).",
+          "**Children.** A child is a person under 16. Processing a child's data is lawful only with the consent of a parent or guardian, or of the child when over thirteen (s. 9).",
+          "**Scope.** Small businesses, with an annual turnover of $3,000,000 or less, are exempt — except those providing health services, credit reporting bodies, reporting entities under the anti-money-laundering law and others listed in section 3(3).",
+          "**Research and statistics.** Processing only for research, statistical or historical purposes is compatible with the original purpose when results are not made available in a form which identifies data subjects (s. 36).",
+          "**Supervision.** The Data Protection Commissioner, a public officer in the Ministry responsible for digital transformation and e-governance who acts independently, administers the Act (s. 68); appeals go to the Data Protection Tribunal (s. 88)."
+        ] },
+        "A test environment with production data is processing for purposes the data was not collected for, and it holds sensitive data — financial and criminal data among them — outside the controls built for it. A copy from which individuals can no longer be identified is not personal data: that is what the set is for.",
+        "The list of sensitive data in section 2 is closed, but the set goes further where the risk is the same: it treats health records, gender identity and the language a person speaks — which reveals Maya, Garifuna or Mennonite origin — with the same care.",
+        { "note": "The definition of personal data counts what the controller holds or is likely to hold. Masking is deterministic for the engine key, so whoever has both the production data and the key can link a masked row back to its source. Keep the key, and access to production, away from the people who use the masked copy. Whether a copy counts as anonymised is a legal assessment of the whole environment, not of the profile set alone." }
+      ]
+    },
+    {
+      "title": "Using the set",
+      "body": [
+        { "list": [
+          "**Load** — *Settings → Profile Sets → Load*. Loading again resets every object of the set to how it ships.",
+          "**Send to Delphix** — from the profile set, or with *Send everything to Delphix*. Domains, algorithms and files go first.",
+          "**Profile** — run a profiling job with the set and review the assigned domains before masking.",
+          "**Mask** — run the masking job. Use the same engine key in every environment so masked values stay consistent across systems."
+        ] },
+        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NAME`, `RESULT`, `CITY` — needs the values to agree. A column with a meaningless name (`FIELD1`, `REMARKS`) is still found when its values have a recognizable shape or vocabulary: a social security number, a Belizean phone number, a plate, a village.",
+        "Column names are recognized in English, in the abbreviations of Belizean systems (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) and in Spanish, which a large part of the country speaks.",
+        { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a scan of the social security card or passport: the number is still readable in the image. Report those columns as residual risk." }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Direct identifiers",
+      "intro": ["Data that identifies a person on its own. Belize has no national identity card for its citizens: the Social Security Board card is the everyday identification, asked for by employers, banks, the credit bureau and public hospitals, so its number is the key of most records. It is masked the same way everywhere, keeping its nine digits."],
+      "domains": ["BZ_L1_SOCIAL_SECURITY_NUMBER", "BZ_L1_TIN", "BZ_L1_PASSPORT", "BZ_L1_VOTER_ID", "BZ_L1_DRIVERS_LICENCE", "BZ_L1_IMMIGRATION_DOCUMENT", "BZ_L1_VITAL_RECORD", "BZ_L1_GIVEN_NAME", "BZ_L1_SURNAME", "BZ_L1_FULL_NAME", "BZ_L1_EMAIL", "BZ_L1_PHONE", "BZ_L1_ADDRESS", "BZ_L1_ADDRESS_DETAIL", "BZ_L1_BANK_ACCOUNT", "BZ_L1_PAYMENT_CARD", "BZ_L1_IP_ADDRESS", "BZ_L1_DEVICE_ID", "BZ_L1_LICENCE_PLATE", "BZ_L1_VIN", "BZ_L1_LAND_PARCEL", "BZ_L1_CONTRACT_NUMBER", "BZ_L1_USERNAME", "BZ_L1_CREDENTIAL", "BZ_L1_GEOLOCATION", "BZ_L1_FREE_TEXT"]
+    },
+    {
+      "id": "L2",
+      "title": "Quasi-identifiers",
+      "intro": ["Data that identifies no one on its own, but does in combination. Belize had 397,483 people in the 2022 census, spread over some two hundred villages and communities; 208 of the 221 places counted had fewer than 5,000 inhabitants, many fewer than 500. A birth date, a sex and one of those villages point at a handful of people. These attributes are generalized or shifted rather than replaced, and the data keeps its analytical value."],
+      "domains": ["BZ_L2_BIRTH_DATE", "BZ_L2_BIRTH_YEAR", "BZ_L2_AGE", "BZ_L2_EVENT_DATE", "BZ_L2_SEX", "BZ_L2_TOWN_VILLAGE", "BZ_L2_NEIGHBOURHOOD", "BZ_L2_NATIONALITY", "BZ_L2_MARITAL_STATUS", "BZ_L2_OCCUPATION", "BZ_L2_EMPLOYER", "BZ_L2_EDUCATION", "BZ_L2_SCHOOL", "BZ_L2_DEPENDANTS"]
+    },
+    {
+      "id": "L3",
+      "title": "Sensitive personal data",
+      "intro": ["The categories of section 2 that are not health, financial or criminal data — which have groups of their own: racial or ethnic origin, political opinions, religious and similar beliefs, membership of a political body, trade union membership, genetic and biometric data, sexual orientation and sexual life — and, beyond the list, the language a person speaks and gender identity. Categorical columns keep their shape: a yes/no flag stays a flag, a numeric code gets other digits and any other value is replaced by one from its category's list. Where the values share no vocabulary, they are suppressed to `Not stated`."],
+      "domains": ["BZ_L3_ETHNICITY", "BZ_L3_LANGUAGE", "BZ_L3_RELIGION", "BZ_L3_BELIEF", "BZ_L3_POLITICAL_OPINION", "BZ_L3_POLITICAL_MEMBERSHIP", "BZ_L3_TRADE_UNION", "BZ_L3_GENETIC", "BZ_L3_BIOMETRIC", "BZ_L3_SEXUAL_ORIENTATION", "BZ_L3_SEXUAL_LIFE", "BZ_L3_GENDER_IDENTITY"]
+    },
+    {
+      "id": "HEALTH",
+      "title": "Health records",
+      "intro": ["Section 2 does not list health among the sensitive data, but the Act gives health records a place of their own: a health record is information on a person's physical or mental condition made by a health care professional (s. 2), medical purposes are a condition of their own for processing sensitive data (s. 10), and a small business providing health services is never exempt (s. 3). A diagnosis, an antiretroviral or a pregnancy exposes a person at least as much as the listed categories, and the set treats them the same way."],
+      "domains": ["BZ_HEALTH_ID", "BZ_HEALTH_DIAGNOSIS", "BZ_HEALTH_MEDICATION", "BZ_HEALTH_CLINICAL_TEXT", "BZ_HEALTH_TEST_RESULT", "BZ_HEALTH_BLOOD_GROUP", "BZ_HEALTH_DISABILITY", "BZ_HEALTH_REPRODUCTIVE", "BZ_HEALTH_MENTAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Financial record or position",
+      "intro": ["What makes the Belizean list unusual: a data subject's **financial record or position** is sensitive personal data (s. 2 (i)), with the same prohibition as religion or ethnic origin. It goes well beyond a bank account — a credit reference from the credit bureau the Central Bank licensed under the Credit Reporting Act, 2023, a loan in arrears, a salary, a social security benefit, a BOOST transfer or a poverty status. A template made for other laws treats most of these as ordinary data. Categories are replaced within their own notation; amounts are mapped into a plausible range unrelated to the real value."],
+      "domains": ["BZ_FIN_CREDIT_REFERENCE", "BZ_FIN_DEBT", "BZ_FIN_INCOME", "BZ_FIN_ASSETS", "BZ_FIN_PENSION", "BZ_FIN_SSB_BENEFIT", "BZ_FIN_SOCIAL_PROGRAMME", "BZ_FIN_POVERTY", "BZ_FIN_HOUSING"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Criminal record and proceedings",
+      "intro": ["Section 2 makes sensitive both a criminal record and any proceedings for an offence committed or alleged — including their disposal and the sentence — so a charge that ended in acquittal is as protected as a conviction. Data on criminal convictions is processed only under the control of an official authority (s. 10(2))."],
+      "domains": ["BZ_PENAL_CRIMINAL_RECORD", "BZ_PENAL_CASE_NUMBER"]
+    }
+  ],
+  "domains": {
+    "BZ_L1_SOCIAL_SECURITY_NUMBER": {
+      "title": "Social security number",
+      "what": "The nine-digit number of the Social Security Board, printed on the card every worker must have from age 14. It is issued in sequence and has no public check digit. Without a national identity card, it is the identifier employers, banks, credit unions, the credit bureau and public hospitals ask for.",
+      "masking": "Each digit is mapped to another digit, keeping the length and any separators (`123-456-789`). The mapping is one-to-one: a social security number used as a key does not collide, and the same number masks the same way in every table."
+    },
+    "BZ_L1_TIN": {
+      "title": "Taxpayer identification number",
+      "what": "The TIN of the Belize Tax Service, used for income tax, GST, customs and excise: six digits and a check digit that is not shown to the taxpayer. Individuals, sole proprietors, partnerships and companies all have one.",
+      "masking": "Digit by digit, keeping the length. A company's TIN cannot be told apart from a person's and is masked too; the mapping is deterministic, so joins with supplier tables still work."
+    },
+    "BZ_L1_PASSPORT": {
+      "title": "Passport",
+      "what": "Belizean and foreign passport numbers.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_VOTER_ID": {
+      "title": "Voter ID",
+      "what": "The ID number and the registration number of the voter identification card of the Elections and Boundaries Department — one of the photo IDs accepted across public services.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_DRIVERS_LICENCE": {
+      "title": "Driver's licence",
+      "what": "The number of the driver's licence issued by the Department of Transport or a town council.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_IMMIGRATION_DOCUMENT": {
+      "title": "Immigration document",
+      "what": "Permanent residence cards, temporary employment (work) permits, visas, nationality and naturalization certificates, refugee and asylum identification, Qualified Retired Persons cards. In a country where 11.5% of the population was born abroad, they are common in employment and banking records.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_VITAL_RECORD": {
+      "title": "Civil registry entry",
+      "what": "Birth, death and marriage certificate or registry entry numbers of the Vital Statistics Unit.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_GIVEN_NAME": {
+      "title": "Given names",
+      "what": "First and middle names (`FIRST_NAME`, `MIDDLE_NAME`), including two given names in one column such as `Maria Isabel`.",
+      "masking": "Each word is replaced by a name from a list of 208 names used in Belize, keeping the number of words and the case. More than three words are masked character by character."
+    },
+    "BZ_L1_SURNAME": {
+      "title": "Surnames",
+      "what": "Surnames and maiden names, one or two per column, and hyphenated surnames: `Gillett`, `Gomez Cal`, `Young-Flowers`.",
+      "masking": "Each surname is replaced by one from a list of 225 surnames frequent in Belize — Mestizo, Creole, Maya, Garifuna and Mennonite, led by Martinez, Garcia, Castillo, Lopez and Williams —, keeping the number of words, the hyphen and the case."
+    },
+    "BZ_L1_FULL_NAME": {
+      "title": "Full name",
+      "what": "Given names and surnames in one column, in the English order used by the civil registry — given name, middle name, surname — with a middle initial or a second surname in Hispanic families, or written as `SURNAME, GIVEN NAMES`. Also the name of an account holder, beneficiary, guardian or next of kin.",
+      "masking": "Given names become given names and surnames become surnames, by position: one word is a given name; two, a given name and a surname; three, two given names and a surname; four, two of each. A middle initial stays an initial (`Kenrick A. Gillett`), and a comma separates surnames from given names."
+    },
+    "BZ_L1_EMAIL": {
+      "title": "E-mail",
+      "what": "Personal and work e-mail addresses.",
+      "masking": "The name and domain are mapped character by character and the top-level domain becomes `.test`, reserved for testing: a masked address never receives mail."
+    },
+    "BZ_L1_PHONE": {
+      "title": "Phone",
+      "what": "Seven-digit numbers, with or without `+501`: mobiles start with 6 (`622-4567`) and landlines with the digit of their district — 2 Belize, 3 Orange Walk, 4 Corozal, 5 Stann Creek, 7 Toledo, 8 Cayo.",
+      "masking": "`+501`, the separators and the first digit — mobile, or the district of a landline — stay; the other six digits are masked. A number not shaped like a Belizean number is masked whole."
+    },
+    "BZ_L1_ADDRESS": {
+      "title": "Address",
+      "what": "The address line as written in Belize, where there are no postal codes: a house number and street, a mile marker on a highway, or a lot in a neighbourhood, followed by the town.",
+      "masking": "It is replaced by one of 3,000 fictitious Belizean addresses — streets of Belize City and the towns, mile markers on the Philip Goldson, George Price, Hummingbird and Southern highways, lots in real neighbourhoods."
+    },
+    "BZ_L1_ADDRESS_DETAIL": {
+      "title": "Address detail",
+      "what": "House, apartment, unit, floor or lot numbers in columns of their own.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_BANK_ACCOUNT": {
+      "title": "Bank account",
+      "what": "Savings, chequing and share account numbers of banks and credit unions.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_PAYMENT_CARD": {
+      "title": "Payment card",
+      "what": "Credit, debit and prepaid card numbers.",
+      "masking": "Replaced by another card number that still passes the Luhn check. Values not shaped like a card pass unchanged instead of failing the row."
+    },
+    "BZ_L1_IP_ADDRESS": {
+      "title": "IP address",
+      "what": "IPv4 and IPv6 addresses of users and devices.",
+      "masking": "Each IPv4 octet is mapped to a number from 1 to 254; an IPv6 address is mapped as hexadecimal."
+    },
+    "BZ_L1_DEVICE_ID": {
+      "title": "Device identifier",
+      "what": "IMEI, MAC address, advertising and session identifiers, handset serial numbers.",
+      "masking": "Hex stays hex and digits stay digits, so the value keeps its format."
+    },
+    "BZ_L1_LICENCE_PLATE": {
+      "title": "Licence plate",
+      "what": "Plates with a district or town code — `BZ`, `CY`, `CZL`, `OW`, `SC`, `TOL`, `BMP`, `SP` — a category letter for motorcycles, taxis and other public service vehicles, and a serial number: `CY C-12345`, `BZ 12345`.",
+      "masking": "The code and the category letter stay, so a Cayo taxi is still a Cayo taxi; the serial digits are masked."
+    },
+    "BZ_L1_VIN": {
+      "title": "Vehicle identification number",
+      "what": "The VIN, and engine and chassis numbers.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_LAND_PARCEL": {
+      "title": "Land parcel",
+      "what": "Registered land is identified by registration section, block and parcel (`Caribbean Shores, Block 16, Parcel 1234`); national land by lease, Minister's Fiat grant or title numbers. The Land Registry leads from a parcel to its proprietor.",
+      "masking": "The block and parcel numbers are masked digit by digit; the words and the registration section stay. Other formats are masked character by character."
+    },
+    "BZ_L1_CONTRACT_NUMBER": {
+      "title": "Contract or customer number",
+      "what": "Contract, policy, loan, mortgage, membership, customer, employee, student or claim numbers, and electricity and water account numbers.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_USERNAME": {
+      "title": "User name or social media",
+      "what": "User names, aliases and social media handles.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_L1_CREDENTIAL": {
+      "title": "Credential",
+      "what": "Passwords, PINs, password hashes, security answers, tokens and API keys.",
+      "masking": "Every character becomes `X`. A credential has no reason to look real in a test environment."
+    },
+    "BZ_L1_GEOLOCATION": {
+      "title": "Geolocation",
+      "what": "Latitude and longitude, together or in separate columns. Belize lies between 15.8° and 18.5° north and 87.4° and 89.3° west.",
+      "masking": "The integer part and first decimal stay — about 11 km — and the rest is masked: the place is generalized, not moved."
+    },
+    "BZ_L1_FREE_TEXT": {
+      "title": "Free text",
+      "what": "Remarks, comments, complaints, case notes and statements where personal data is written without structure.",
+      "masking": "Free Text Redaction: social security numbers, e-mails, phone numbers, card numbers, plates and IPs become `[DATA]`, and the given names and surnames of the lists become `[NAME]`."
+    },
+    "BZ_L2_BIRTH_DATE": {
+      "title": "Birth date",
+      "what": "The birth date, in date, timestamp or text columns.",
+      "masking": "Shifted up to 60 days back or forward: it breaks the link to the person and keeps ages and cohorts almost intact."
+    },
+    "BZ_L2_BIRTH_YEAR": {
+      "title": "Birth year",
+      "what": "The birth year alone.",
+      "masking": "The decade stays and the last digit is mapped: 1985 becomes another year of the eighties."
+    },
+    "BZ_L2_AGE": {
+      "title": "Age",
+      "what": "Ages in years, whole or with decimals.",
+      "masking": "The tens digit stays and the units digit is mapped (37 becomes 3x). From 100 on, 90: extreme ages identify on their own."
+    },
+    "BZ_L2_EVENT_DATE": {
+      "title": "Life event dates",
+      "what": "Dates of death, marriage, divorce, hiring and leaving a job, retirement, admission and discharge, diagnosis, arrest, conviction, naturalization and other personal events.",
+      "masking": "Shifted up to 30 days: less than the birth date, since they are often combined with it."
+    },
+    "BZ_L2_SEX": {
+      "title": "Sex",
+      "what": "Registered sex in any notation: `F`/`M`, `Female`/`Male`, `Woman`/`Man`, and in Spanish.",
+      "masking": "Replaced within its own vocabulary: `F`/`M` stays `F`/`M`."
+    },
+    "BZ_L2_TOWN_VILLAGE": {
+      "title": "Town or village",
+      "what": "The city, town, village or community where a person lives or was born. The 2022 census counted Belize City, Belmopan, seven towns and some two hundred villages and communities; 208 of the 221 places had fewer than 5,000 inhabitants.",
+      "masking": "A place under 5,000 inhabitants becomes the nearest place of its district with at least 5,000; larger ones stay. See *Where people live*."
+    },
+    "BZ_L2_NEIGHBOURHOOD": {
+      "title": "Neighbourhood",
+      "what": "Neighbourhoods, subdivisions, housing schemes and land registration sections within a town: `Lake Independence`, `Port Loyola`, `Salvapan`.",
+      "masking": "Replaced by one of 30 neighbourhoods of Belize City and the towns."
+    },
+    "BZ_L2_NATIONALITY": {
+      "title": "Nationality",
+      "what": "Nationality, citizenship or country of birth. In a Belizean database, an uncommon nationality identifies.",
+      "masking": "Replaced by one of the 16 most common nationalities in Belize — Belizean, and then those of the largest foreign-born groups in the 2022 census: Guatemalan, Salvadoran, Honduran, American and Mexican."
+    },
+    "BZ_L2_MARITAL_STATUS": {
+      "title": "Marital status",
+      "what": "Marital and union status, in the 2022 census categories: never married, married, common-law union, visiting partner, divorced, widowed, legally separated.",
+      "masking": "Replaced by another of the seven categories."
+    },
+    "BZ_L2_OCCUPATION": {
+      "title": "Occupation",
+      "what": "Occupation, profession or job title. A rare title (`Regional Operations Manager, Toledo`) is unique in the database.",
+      "masking": "Replaced by one of 40 common occupations."
+    },
+    "BZ_L2_EMPLOYER": {
+      "title": "Employer",
+      "what": "The name of the employer or workplace. In a small economy, an employer and a job title together often point at one person.",
+      "masking": "Replaced by one of 25 fictitious employers."
+    },
+    "BZ_L2_EDUCATION": {
+      "title": "Education",
+      "what": "The highest level of education, in the terms of the Belizean system: primary to Standard 6, secondary to Form 4, sixth form or junior college, vocational, associate, bachelor's, master's, doctorate.",
+      "masking": "Replaced by another of the 12 levels."
+    },
+    "BZ_L2_SCHOOL": {
+      "title": "School",
+      "what": "The name of the primary or high school, sixth form, junior college or university.",
+      "masking": "Replaced by one of 15 fictitious schools."
+    },
+    "BZ_L2_DEPENDANTS": {
+      "title": "Children and dependants",
+      "what": "Number of children, dependants or household members.",
+      "masking": "Capped at 5: large households are rare, and a rare count identifies."
+    },
+    "BZ_L3_ETHNICITY": {
+      "title": "Ethnic origin",
+      "what": "Ethnic group in the terms of the 2022 census — Mestizo/Hispanic/Latino (51.7%), Creole (25.2%), Maya (Q'eqchi', Mopan, Yucatec; 9.8%), Garifuna (4.0%), East Indian, Mennonite, Chinese and others —, often as a yes/no flag for indigenous status.",
+      "masking": "A flag stays a flag in its vocabulary, a code gets other digits and any other value is replaced by one from the census list."
+    },
+    "BZ_L3_LANGUAGE": {
+      "title": "Language",
+      "what": "The language a person speaks or grew up with: English, Spanish, Kriol, Maya Q'eqchi', Mopan or Yucatec, Garifuna, German (Plautdietsch) and others. Not in the section 2 list, but it reveals ethnic origin as directly as the ethnic group column.",
+      "masking": "Like ethnic origin: flags and codes keep their shape, names are replaced by another language of the census list."
+    },
+    "BZ_L3_RELIGION": {
+      "title": "Religion",
+      "what": "Religion or denomination: Roman Catholic, Pentecostal, Seventh-day Adventist, Anglican, Mennonite, Baptist, Methodist, Nazarene, Jehovah's Witness, Hindu, Muslim, Bahá'í, Rastafarian, none.",
+      "masking": "Flags and codes keep their shape; the value is replaced by another from the list."
+    },
+    "BZ_L3_BELIEF": {
+      "title": "Beliefs of a similar nature",
+      "what": "Philosophical or moral convictions, conscientious objection and other beliefs of a similar nature to religious ones.",
+      "masking": "Suppressed to `Not stated`."
+    },
+    "BZ_L3_POLITICAL_OPINION": {
+      "title": "Political opinion",
+      "what": "Ideology, voting intention, party preference in surveys.",
+      "masking": "Replaced by another position on a generic scale."
+    },
+    "BZ_L3_POLITICAL_MEMBERSHIP": {
+      "title": "Membership of a political body",
+      "what": "The party or political body a person belongs to or supports — a category section 2 names on its own, apart from political opinions.",
+      "masking": "Replaced by one of the parties of the 2025 general election — People's United Party, United Democratic Party, Belize Progressive Party, Belize Justice Movement, People's Democratic Movement, People's National Party — or by independent or no party."
+    },
+    "BZ_L3_TRADE_UNION": {
+      "title": "Trade union membership",
+      "what": "Membership of a trade union or staff association, union dues, bargaining unit: BNTU, PSU, Christian Workers' Union and the other affiliates of the NTUCB.",
+      "masking": "Flags keep their shape; any other value becomes `Not stated`."
+    },
+    "BZ_L3_GENETIC": {
+      "title": "Genetic data",
+      "what": "Genetic profiles, sequences, mutations, karyotypes, paternity tests — in the Act's words, data on inherited or acquired genetic characteristics resulting from the analysis of a biological sample.",
+      "masking": "Every character becomes `X`."
+    },
+    "BZ_L3_BIOMETRIC": {
+      "title": "Biometric data",
+      "what": "Fingerprint, face, iris, palm or voice templates stored as text (hash, base64). The Social Security Board captures fingerprints and photographs when it issues a card.",
+      "masking": "Every character becomes `X`. Binary columns are out of reach: see *Limits*."
+    },
+    "BZ_L3_SEXUAL_ORIENTATION": {
+      "title": "Sexual orientation",
+      "what": "Sexual orientation, which section 2 names explicitly.",
+      "masking": "Flags and codes keep their shape; the value is replaced by another from the list."
+    },
+    "BZ_L3_SEXUAL_LIFE": {
+      "title": "Sexual life",
+      "what": "Sexual activity, behaviour and history.",
+      "masking": "Suppressed to `Not stated`."
+    },
+    "BZ_L3_GENDER_IDENTITY": {
+      "title": "Gender identity",
+      "what": "Gender identity and pronouns. Not in the section 2 list; treated as sensitive because it exposes people to the same discrimination.",
+      "masking": "Flags and codes keep their shape; the value is replaced by another from the list."
+    },
+    "BZ_HEALTH_ID": {
+      "title": "Health identifier",
+      "what": "The number of the Belize Health Information System card required at public health facilities, National Health Insurance numbers, medical record, admission, prescription and sick-leave certificate numbers.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_HEALTH_DIAGNOSIS": {
+      "title": "Diagnosis",
+      "what": "Diagnoses, as ICD-10 codes (`F32.9`, `B20`) or text, and medical history, allergies and chronic conditions.",
+      "masking": "An ICD-10 code is replaced by another common code of the same format, with or without a decimal; text, by a common diagnosis. The real diagnosis does not survive."
+    },
+    "BZ_HEALTH_MEDICATION": {
+      "title": "Medication",
+      "what": "Medications and active ingredients. Some reveal the diagnosis: an antiretroviral, an antipsychotic.",
+      "masking": "Replaced by one of 26 common medications."
+    },
+    "BZ_HEALTH_CLINICAL_TEXT": {
+      "title": "Clinical text",
+      "what": "Progress notes, nursing notes, discharge summaries, triage notes and treatment plans.",
+      "masking": "Free Text Redaction, as for free text: identity numbers, contact details and names are redacted. The clinical content stays; if it must go too, assign the column to a suppression domain."
+    },
+    "BZ_HEALTH_TEST_RESULT": {
+      "title": "Test result",
+      "what": "Laboratory and imaging results: HIV status, viral load, blood sugar, pregnancy or drug tests.",
+      "masking": "Character by character, keeping length and format."
+    },
+    "BZ_HEALTH_BLOOD_GROUP": {
+      "title": "Blood group",
+      "what": "ABO group and Rh factor.",
+      "masking": "Replaced by another of the eight groups."
+    },
+    "BZ_HEALTH_DISABILITY": {
+      "title": "Disability",
+      "what": "Disability or functional limitation, in the domains the 2022 census asks about: seeing, hearing, walking, remembering or concentrating, self-care, communicating.",
+      "masking": "Flags and codes keep their shape; the value is replaced by another from the list."
+    },
+    "BZ_HEALTH_REPRODUCTIVE": {
+      "title": "Sexual and reproductive health",
+      "what": "Pregnancy, weeks of gestation, miscarriages and abortions, contraception, fertility, antenatal care, sexually transmitted infections.",
+      "masking": "Flags keep their shape; any other value becomes `Not stated`."
+    },
+    "BZ_HEALTH_MENTAL": {
+      "title": "Mental health and addiction",
+      "what": "Mental disorders, suicide attempts and self-harm, substance use and rehabilitation.",
+      "masking": "Suppressed to `Not stated`."
+    },
+    "BZ_FIN_CREDIT_REFERENCE": {
+      "title": "Credit reference",
+      "what": "Credit scores and reports, days past due, arrears, loan classification, written-off and non-performing loans. Belize's credit reporting system, run by a bureau the Central Bank licensed under the Credit Reporting Act, 2023, gathers them from banks and credit unions.",
+      "masking": "A score gets other digits, a flag stays a flag and any status is replaced by another credit status."
+    },
+    "BZ_FIN_DEBT": {
+      "title": "Debt amount",
+      "what": "Loan, mortgage and card balances, amounts in arrears, credit limits, instalments.",
+      "masking": "Mapped to an amount between BZ$200 and BZ$1,000,000."
+    },
+    "BZ_FIN_INCOME": {
+      "title": "Salary and income",
+      "what": "Salary and wages, insurable earnings, household income.",
+      "masking": "Mapped to an amount between BZ$700 and BZ$40,000."
+    },
+    "BZ_FIN_ASSETS": {
+      "title": "Assets",
+      "what": "Property and land value, savings and account balances, fixed deposits, investments and credit union shares, net worth.",
+      "masking": "Mapped to an amount between BZ$20,000 and BZ$5,000,000."
+    },
+    "BZ_FIN_PENSION": {
+      "title": "Pension",
+      "what": "Retirement, invalidity and survivors' pension amounts, the non-contributory pension, gratuities and provident fund balances.",
+      "masking": "Mapped to an amount between BZ$100 and BZ$10,000."
+    },
+    "BZ_FIN_SSB_BENEFIT": {
+      "title": "Social security benefit",
+      "what": "The benefit a person claims or receives from the Social Security Board: sickness, maternity allowance or grant, employment injury, invalidity, survivors', retirement, funeral grant, non-contributory pension. Most of them also reveal a health event.",
+      "masking": "Flags and codes keep their shape; the benefit is replaced by another."
+    },
+    "BZ_FIN_SOCIAL_PROGRAMME": {
+      "title": "Social programme",
+      "what": "Beneficiaries of social assistance: BOOST cash transfers and the Food Assistance Programme of the Ministry of Human Development, the non-contributory pension, National Health Insurance. Being a beneficiary reveals poverty, old age or disability.",
+      "masking": "Flags and codes keep their shape; the programme is replaced by another."
+    },
+    "BZ_FIN_POVERTY": {
+      "title": "Poverty and socioeconomic status",
+      "what": "Poverty status (extremely poor, poor, vulnerable), income quintile or decile, means-test scores and vulnerability indexes.",
+      "masking": "A quintile or decile becomes another number of the same range, with its prefix; a status, another from the list."
+    },
+    "BZ_FIN_HOUSING": {
+      "title": "Housing tenure",
+      "what": "Whether the dwelling is owned, mortgaged, rented privately or from the government, rent free, leased or squatted, as the census asks.",
+      "masking": "Flags and codes keep their shape; the tenure is replaced by another from the list."
+    },
+    "BZ_PENAL_CRIMINAL_RECORD": {
+      "title": "Criminal record and proceedings",
+      "what": "Criminal record, police record or clearance, convictions, offences, charges, arrests, remand, bail, verdicts and sentences — the record and the proceedings, whatever their outcome.",
+      "masking": "A flag stays a flag; any other value becomes a generic status: no criminal record, has criminal record, charged, case dismissed, acquitted, convicted or not stated."
+    },
+    "BZ_PENAL_CASE_NUMBER": {
+      "title": "Case number",
+      "what": "Court, indictment, charge sheet, police report and occurrence numbers: `C123/2023`, `456 of 2022`.",
+      "masking": "Character by character, keeping length and format."
+    }
+  },
+  "closing": [
+    {
+      "title": "Where people live: towns and villages",
+      "body": [
+        "With the population by city, town and village of the 2022 Population and Housing Census and the location of each place, the set knows the size, district and position of all 221 places the census counts.",
+        { "list": [
+          "A **town or village** under 5,000 inhabitants becomes the nearest place of the same district with at least 5,000. Thirteen places reach that size: Belize City, San Pedro Town and Ladyville in Belize District; Belmopan, San Ignacio, Santa Elena and Benque Viejo del Carmen in Cayo; Corozal Town; Orange Walk Town and Trial Farm; Dangriga; Punta Gorda and Bella Vista in Toledo.",
+          "The **district** stays: the smallest, Toledo, had 38,944 inhabitants.",
+          "Distance is measured between the places' coordinates. Caye Caulker becomes San Pedro Town, Hopkins becomes Dangriga, Crooked Tree becomes Ladyville.",
+          "Twenty-eight small places share their name with another place — there are four San Antonio and four Santa Cruz. A name is generalized only when every place bearing it is small; then it follows the largest of them, which may lie in another district. Santa Elena in Toledo keeps its name, because the Santa Elena of Cayo is a town, and so does the village of San Pedro in Corozal, because `San Pedro` is how San Pedro Town is written.",
+          "Names are also recognized as they are commonly written: without *Town*, `Benque Viejo`, and the communities the census counts inside another one — `Mango Creek` is Independence, `San Lorenzo` is Orange Walk Town."
+        ] },
+        "The result is always a real place, near the original, and every group of people who end up sharing a name holds at least 5,000 inhabitants. Names that are also given names or surnames, and the district names, are left out of the detection list, so that a surname column is not taken for villages."
+      ]
+    },
+    {
+      "title": "Limits",
+      "body": [
+        { "list": [
+          "**Binary columns** — scans of the social security card or passport, fingerprint images, clinical PDFs in BLOBs — cannot be masked by these algorithms. Inventory them and report them as residual risk.",
+          "**Electoral divisions stay.** The set does not mask the 31 constituencies, whose names identify few people on their own but narrow a village down in combination. Where a column holds them next to a birth date and sex, generalize it to the district.",
+          "**Identity numbers keep no check digit.** The social security number has no public one, and the TIN's is not published, so neither is recomputed; applications that validate a TIN check digit may reject masked values.",
+          "**Company TINs are masked too.** They cannot be told apart from a person's.",
+          "**Passport, permit and licence numbers** have no public format and are masked character by character.",
+          "**Data Cleansing leaves unknown values as they are**: a village spelled in a way the list does not have passes unchanged.",
+          "**Villages sharing a name** across districts are generalized by the largest of them, and may end up in another district than the district column says.",
+          "**Free text** is redacted token by token: a phone written with spaces is not found, and a given name that is also a common word (`Angel`, `Iris`) is redacted wherever it appears.",
+          "**Children** — the Act protects persons under 16. A birth date moves at most 60 days, so few people cross their 16th or 18th birthday, but some do. Where that matters, split the rule by age group with Multi-Column Condition.",
+          "**Addresses** are replaced as a whole line. Street, neighbourhood, village and district in separate columns are masked independently and no longer form a coherent address.",
+          "**Plates and VINs** keep their format, but not the VIN check digit."
+        ] }
+      ]
+    },
+    {
+      "title": "Verification",
+      "body": [
+        "The set is generated and checked by two scripts kept next to it in the repository:",
+        { "list": [
+          "`build.mjs` generates the set and its lookup tables from the definitions and the hand-kept lists.",
+          "`verify.mjs` reviews every classifier configuration and profiles 141 columns with the whole set at its threshold — well named, badly named and 32 that are not personal data. It audits the generalization table for all 221 places. It then masks 145 sample values and 198 placeholders such as `N/A` through the running app, checking each output against its vocabulary, and 150 social security numbers for collisions."
+        ] },
+        "In the last build, every column was assigned as expected and every value was masked as expected."
+      ]
+    },
+    {
+      "title": "Sources",
+      "body": [
+        { "list": [
+          "Data Protection Act, 2021 — Act No. 45 of 2021, National Assembly of Belize, printed by the Government Printer (copy published by the Belize Companies and Corporate Affairs Registry).",
+          "Population by district, city, town and village; ethnic group; languages spoken; religious affiliation; marital and union status; country of birth; dwelling ownership — 2022 Population and Housing Census, Statistical Institute of Belize.",
+          "Coordinates of populated places — GeoNames (CC BY 4.0).",
+          "Social security card and number, benefits — Social Security Board. Taxpayer identification number — Belize Tax Service, in the OECD register of tax identification numbers.",
+          "Voter identification card — Elections and Boundaries Department. Parties of the 2025 general election — Elections and Boundaries Department.",
+          "Credit Reporting System and Credit Reporting Act, 2023 — Central Bank of Belize. BOOST and the Food Assistance Programme — Ministry of Human Development, Families and Indigenous Peoples' Affairs.",
+          "Belize Health Information System card — Ministry of Health and Wellness. Trade unions — National Trade Union Congress of Belize.",
+          "Frequency of surnames and given names — Forebears. Telephone numbering — national numbering plan. Licence plates — Department of Transport."
+        ] }
+      ]
+    }
+  ]
+}

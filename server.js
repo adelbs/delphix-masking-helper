@@ -1290,13 +1290,13 @@ app.get('/api/frameworks/:className/schema', async (req, res) => {
 
 // Execute multi-column masking (for GenericDataRow frameworks like MultiColumnCondition)
 app.post('/api/mask-multicolumn', async (req, res) => {
-  const { framework, config, columns } = req.body;
+  const { framework, config, columns, additionalAlgorithms } = req.body;
   if (!framework || !Array.isArray(columns)) {
     return res.status(400).json({ error: 'framework and columns[] are required' });
   }
   try {
     // A `key` in the request body is ignored on purpose — the key is a constant.
-    const result = await runJava({ command: 'mask_multicolumn', framework, config, columns, key: MASKING_KEY });
+    const result = await runJava({ command: 'mask_multicolumn', framework, config, columns, key: MASKING_KEY, additionalAlgorithms });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -1305,12 +1305,12 @@ app.post('/api/mask-multicolumn', async (req, res) => {
 
 // Execute batch masking (for frameworks like Shuffle that require multiple values)
 app.post('/api/mask-batch', async (req, res) => {
-  const { framework, config, inputs } = req.body;
+  const { framework, config, inputs, additionalAlgorithms } = req.body;
   if (!framework || !Array.isArray(inputs)) {
     return res.status(400).json({ error: 'framework and inputs[] are required' });
   }
   try {
-    const result = await runJava({ command: 'mask_batch', framework, config, inputs, key: MASKING_KEY });
+    const result = await runJava({ command: 'mask_batch', framework, config, inputs, key: MASKING_KEY, additionalAlgorithms });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -408,8 +408,25 @@ async function mask(framework, config, input, additionalAlgorithms) {
 }
 
 async function verifyAlgorithms() {
-  const additional = preset.algorithms.map((a) => ({ name: a.name, className: a.framework, config: resolve(a.config) }))
   const byName = new Map(preset.algorithms.map((a) => [a.name, a]))
+  // Only what an algorithm needs, at any depth — what the tester sends — so a reference the set
+  // lacks fails here rather than in the app.
+  const refNames = (value) => (Array.isArray(value) ? value.flatMap(refNames)
+    : !value || typeof value !== 'object' ? []
+      : typeof value.name === 'string' && Object.keys(value).every((k) => k === 'name' || k === 'algorithmMetadata') ? [value.name]
+        : Object.values(value).flatMap(refNames))
+  const additionalFor = (root) => {
+    const found = new Map()
+    const pending = refNames(byName.get(root).config)
+    while (pending.length) {
+      const name = pending.pop()
+      const a = byName.get(name)
+      if (!a || found.has(name)) continue
+      found.set(name, { name, className: a.framework, config: resolve(a.config) })
+      pending.push(...refNames(a.config))
+    }
+    return [...found.values()]
+  }
   const missing = preset.domains.map((d) => d.name).filter((d) => !MASKING[d])
   if (missing.length) { failures++; console.log(`  ✗ domains with no masking test: ${missing.join(', ')}`) }
 
@@ -420,6 +437,12 @@ async function verifyAlgorithms() {
   for (const d of preset.domains.filter((x) => !TYPED.has(x.name))) {
     for (const input of ['S/I', 'sin dato', '-']) jobs.push({ domain: d, input, placeholder: true })
   }
+  // Every algorithm, building blocks included, on its own sample input — what opening it in the
+  // tester and pressing mask does.
+  for (const a of preset.algorithms) {
+    if (a.input === undefined) { failures++; console.log(`  ✗ ${a.name} has no sample input`) }
+    jobs.push({ domain: { name: a.name, algorithm: a.name }, input: a.input ?? '', placeholder: true })
+  }
   let passed = 0
   let next = 0
   const lines = []
@@ -428,7 +451,7 @@ async function verifyAlgorithms() {
       const { domain, input, placeholder } = jobs[next++]
       const test = MASKING[domain.name]
       const algo = byName.get(domain.algorithm)
-      const out = await mask(algo.framework, resolve(algo.config), input, additional).catch((err) => ({ error: err.message }))
+      const out = await mask(algo.framework, resolve(algo.config), input, additionalFor(domain.algorithm)).catch((err) => ({ error: err.message }))
       const output = out.output
       const problem = output == null ? `error: ${out.error}`
         : placeholder ? null

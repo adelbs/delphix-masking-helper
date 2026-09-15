@@ -1,0 +1,519 @@
+{
+  "title": "Belice — Data Protection Act, 2021",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales de Belice: números de identificación y nombres, cuasi-identificadores, los datos personales sensibles de la sección 2 — incluidos el historial o la situación financiera y los procesos penales — y registros de salud.",
+  "sections": [
+    {
+      "title": "Acerca de este profile set",
+      "body": [
+        "Este profile set encuentra los datos personales en una base de datos de Belice y los enmascara, para que una copia no productiva — de pruebas, desarrollo, capacitación o análisis — deje de identificar a alguien.",
+        "Enmascarar solo nombres y números de seguridad social no alcanza: una fecha de nacimiento, un sexo y una aldea de unos cientos de habitantes bastan para señalar a una persona. El set trabaja en las capas donde está el riesgo:",
+        { "list": [
+          "**Identificadores directos** — número de seguridad social, TIN, pasaporte, credencial de elector, licencia de conducir, permisos migratorios, registros civiles, nombres, contacto, cuentas y tarjetas, parcelas de tierra, dispositivos, vehículos, texto libre.",
+          "**Cuasi-identificadores** — fecha de nacimiento, edad, sexo, ciudad o aldea, barrio, nacionalidad, estado civil, ocupación, empleador, escolaridad.",
+          "**Datos personales sensibles** — las categorías de la sección 2: origen racial o étnico, opiniones políticas, creencias religiosas y similares, afiliación a un organismo político, afiliación sindical, datos genéticos y biométricos, orientación sexual y vida sexual — y, más allá de la lista, identidad de género.",
+          "**Registros de salud** — identificadores de salud, diagnósticos, medicamentos, notas clínicas, resultados de exámenes, discapacidad, salud reproductiva y mental.",
+          "**Historial o situación financiera** — referencias de crédito, deudas, ingresos, patrimonio, pensiones, prestaciones de seguridad social, programas sociales, pobreza y tenencia de la vivienda. La sección 2 los hace sensibles.",
+          "**Antecedentes y procesos penales** — antecedentes, cargos, resultados y números de causa, también sensibles según la sección 2."
+        ] },
+        "Todo lo que el set necesita viaja con él: cargarlo crea los dominios, classifiers, algoritmos y archivos de lookup, y enviarlo a un Masking Engine los envía todos."
+      ]
+    },
+    {
+      "title": "La Data Protection Act, 2021 en resumen",
+      "body": [
+        "La Data Protection Act, 2021 — Act No. 45 of 2021 — fue sancionada el 29 de noviembre de 2021 y publicada en el Gazette el 30 de noviembre de 2021. Regula la recopilación, conservación, uso y difusión de datos personales y protege la privacidad de las personas respecto de ellos.",
+        "**Entrada en vigor.** La ley entra en vigor el día que el Ministro fije mediante una Order publicada en el Gazette, y pueden fijarse días distintos para disposiciones distintas (s. 97). En las fuentes públicas consultadas en septiembre de 2026 no se encontró esa Order, y las fuentes secundarias no coinciden sobre si la ley rige ni desde cuándo. Confirme la situación con el Ministerio antes de depender de una fecha; el diseño del set no depende de ella.",
+        "Lo que importa para una copia de datos de producción:",
+        { "list": [
+          "**Dato personal** es el dato relativo a un individuo que puede ser identificado a partir de ese dato, o de ese dato junto con otra información que está, o probablemente estará, en poder del responsable (s. 2). Un dato a partir del cual ningún individuo puede ser identificado, ni siquiera con esa otra información, no es dato personal.",
+          "**Dato personal sensible** es la información sobre el origen racial o étnico del titular; sus opiniones políticas; creencias religiosas u otras de naturaleza similar; afiliación a un organismo político; afiliación sindical; datos genéticos; datos biométricos; orientación sexual o vida sexual; **historial o situación financiera**; antecedentes penales; y los procesos por cualquier delito cometido o presuntamente cometido, su resolución o la sentencia (s. 2). La salud no está en la lista; los datos genéticos y biométricos sí, y la ley define ambos.",
+          "**El tratamiento de datos personales sensibles está prohibido**, salvo en las condiciones de la sección 10 — consentimiento, obligaciones laborales, intereses vitales, procesos judiciales, funciones públicas, fines médicos bajo deber de confidencialidad, entre otras. Los datos de condenas y delitos solo se tratan bajo el control de una autoridad oficial o según lo autorice una ley (s. 10(2)).",
+          "**Principios.** El dato personal se recopila para fines determinados, explícitos y legítimos y no se trata después de forma incompatible con ellos; es adecuado, pertinente y limitado a lo necesario; se conserva en forma identificable solo el tiempo necesario; y se trata con seguridad adecuada (s. 4). El responsable que incumple comete un delito sancionado con multa de quinientos mil dólares, prisión de tres años, o ambas (s. 5(7)).",
+          "**Seguridad.** Medidas técnicas y organizativas adecuadas al riesgo, incluidas la seudonimización y el cifrado (s. 60), y protección de datos desde el diseño y por defecto (s. 55).",
+          "**Brechas.** Se notifica al Commissioner sin demora indebida y, cuando sea posible, dentro de las setenta y dos horas (s. 61). Se avisa a los titulares cuando la brecha probablemente entrañe un alto riesgo — salvo que los datos afectados fueran ininteligibles para quien no tiene acceso autorizado (s. 62).",
+          "**Niños.** Niño es la persona menor de 16 años. Tratar sus datos solo es lícito con el consentimiento del padre, la madre o el tutor, o del propio niño si tiene más de trece años (s. 9).",
+          "**Alcance.** Las pequeñas empresas, con una facturación anual de hasta $3.000.000, están exentas — salvo las que prestan servicios de salud, los burós de crédito, los sujetos obligados por la ley contra el lavado de dinero y otras listadas en la sección 3(3).",
+          "**Investigación y estadística.** El tratamiento solo con fines de investigación, estadísticos o históricos es compatible con el fin original cuando los resultados no se difunden de forma que identifique a los titulares (s. 36).",
+          "**Supervisión.** El Data Protection Commissioner, funcionario público del Ministerio responsable de la transformación digital y el gobierno electrónico que actúa con independencia, administra la ley (s. 68); las apelaciones van al Data Protection Tribunal (s. 88)."
+        ] },
+        "Un ambiente de pruebas con datos de producción es un tratamiento para fines para los que el dato no fue recopilado, y guarda datos sensibles — financieros y penales entre ellos — fuera de los controles hechos para ellos. Una copia a partir de la cual las personas ya no pueden ser identificadas no es dato personal: para eso existe el set.",
+        "La lista de datos sensibles de la sección 2 es cerrada, pero el set va más allá donde el riesgo es el mismo: trata con el mismo cuidado los registros de salud, la identidad de género y el idioma que habla la persona — que revela origen maya, garífuna o menonita.",
+        { "note": "La definición de dato personal cuenta lo que el responsable tiene o probablemente tendrá. El enmascaramiento es determinista para la clave del engine, así que quien tenga a la vez los datos de producción y la clave puede vincular una fila enmascarada con su origen. Mantenga la clave, y el acceso a producción, lejos de quienes usan la copia enmascarada. Si una copia cuenta como anonimizada es una evaluación jurídica del ambiente completo, no solo del profile set." }
+      ]
+    },
+    {
+      "title": "Cómo usar el set",
+      "body": [
+        { "list": [
+          "**Cargar** — *Configuración → Profile Sets → Cargar*. Cargar de nuevo devuelve cada objeto del set a como viene de fábrica.",
+          "**Enviar a Delphix** — desde el profile set, o con *Enviar todo a Delphix*. Dominios, algoritmos y archivos van primero.",
+          "**Perfilar** — ejecute un job de profiling con el set y revise los dominios asignados antes de enmascarar.",
+          "**Enmascarar** — ejecute el job de enmascaramiento. Use la misma clave del engine en todos los ambientes para que los valores enmascarados sigan siendo consistentes entre sistemas."
+        ] },
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NAME`, `RESULT`, `CITY` — necesita que los valores coincidan. Una columna de nombre sin sentido (`FIELD1`, `REMARKS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocible: un número de seguridad social, un teléfono de Belice, una placa, una aldea.",
+        "Los nombres de columna se reconocen en inglés, en las abreviaturas de los sistemas de Belice (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) y en español, que habla buena parte del país.",
+        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOBs, imágenes, PDFs). Los procesos de alta suelen guardar la imagen de la tarjeta de seguridad social o del pasaporte: el número sigue legible en la imagen. Reporte esas columnas como riesgo residual." }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": ["Datos que identifican a una persona por sí solos. Belice no tiene cédula de identidad nacional para sus ciudadanos: la tarjeta del Social Security Board es la identificación de todos los días, pedida por empleadores, bancos, el buró de crédito y los hospitales públicos, así que su número es la llave de la mayoría de los registros. Se enmascara igual en todas partes, conservando sus nueve dígitos."],
+      "domains": ["BZ_L1_SOCIAL_SECURITY_NUMBER", "BZ_L1_TIN", "BZ_L1_PASSPORT", "BZ_L1_VOTER_ID", "BZ_L1_DRIVERS_LICENCE", "BZ_L1_IMMIGRATION_DOCUMENT", "BZ_L1_VITAL_RECORD", "BZ_L1_GIVEN_NAME", "BZ_L1_SURNAME", "BZ_L1_FULL_NAME", "BZ_L1_EMAIL", "BZ_L1_PHONE", "BZ_L1_ADDRESS", "BZ_L1_ADDRESS_DETAIL", "BZ_L1_BANK_ACCOUNT", "BZ_L1_PAYMENT_CARD", "BZ_L1_IP_ADDRESS", "BZ_L1_DEVICE_ID", "BZ_L1_LICENCE_PLATE", "BZ_L1_VIN", "BZ_L1_LAND_PARCEL", "BZ_L1_CONTRACT_NUMBER", "BZ_L1_USERNAME", "BZ_L1_CREDENTIAL", "BZ_L1_GEOLOCATION", "BZ_L1_FREE_TEXT"]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": ["Datos que no identifican a nadie por sí solos, pero sí en combinación. Belice tenía 397.483 habitantes en el censo de 2022, repartidos en unas doscientas aldeas y comunidades; 208 de los 221 lugares censados tenían menos de 5.000 habitantes, muchos menos de 500. Una fecha de nacimiento, un sexo y una de esas aldeas señalan a un puñado de personas. Estos atributos se generalizan o desplazan en lugar de reemplazarse, y el dato conserva su valor analítico."],
+      "domains": ["BZ_L2_BIRTH_DATE", "BZ_L2_BIRTH_YEAR", "BZ_L2_AGE", "BZ_L2_EVENT_DATE", "BZ_L2_SEX", "BZ_L2_TOWN_VILLAGE", "BZ_L2_NEIGHBOURHOOD", "BZ_L2_NATIONALITY", "BZ_L2_MARITAL_STATUS", "BZ_L2_OCCUPATION", "BZ_L2_EMPLOYER", "BZ_L2_EDUCATION", "BZ_L2_SCHOOL", "BZ_L2_DEPENDANTS"]
+    },
+    {
+      "id": "L3",
+      "title": "Datos personales sensibles",
+      "intro": ["Las categorías de la sección 2 que no son datos de salud, financieros o penales — que tienen grupos propios: origen racial o étnico, opiniones políticas, creencias religiosas y similares, afiliación a un organismo político, afiliación sindical, datos genéticos y biométricos, orientación sexual y vida sexual — y, más allá de la lista, el idioma que habla la persona y la identidad de género. Las columnas categóricas conservan su forma: una bandera sí/no sigue siendo bandera, un código numérico recibe otros dígitos y cualquier otro valor se reemplaza por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Not stated`."],
+      "domains": ["BZ_L3_ETHNICITY", "BZ_L3_LANGUAGE", "BZ_L3_RELIGION", "BZ_L3_BELIEF", "BZ_L3_POLITICAL_OPINION", "BZ_L3_POLITICAL_MEMBERSHIP", "BZ_L3_TRADE_UNION", "BZ_L3_GENETIC", "BZ_L3_BIOMETRIC", "BZ_L3_SEXUAL_ORIENTATION", "BZ_L3_SEXUAL_LIFE", "BZ_L3_GENDER_IDENTITY"]
+    },
+    {
+      "id": "HEALTH",
+      "title": "Registros de salud",
+      "intro": ["La sección 2 no incluye la salud entre los datos sensibles, pero la ley da a los registros de salud un lugar propio: un registro de salud es la información sobre la condición física o mental de una persona hecha por un profesional de la salud (s. 2), los fines médicos son una condición propia para tratar datos sensibles (s. 10), y una pequeña empresa que presta servicios de salud nunca está exenta (s. 3). Un diagnóstico, un antirretroviral o un embarazo exponen a una persona al menos tanto como las categorías listadas, y el set los trata igual."],
+      "domains": ["BZ_HEALTH_ID", "BZ_HEALTH_DIAGNOSIS", "BZ_HEALTH_MEDICATION", "BZ_HEALTH_CLINICAL_TEXT", "BZ_HEALTH_TEST_RESULT", "BZ_HEALTH_BLOOD_GROUP", "BZ_HEALTH_DISABILITY", "BZ_HEALTH_REPRODUCTIVE", "BZ_HEALTH_MENTAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Historial o situación financiera",
+      "intro": ["Lo que hace inusual la lista de Belice: el **historial o la situación financiera** del titular es dato personal sensible (s. 2 (i)), con la misma prohibición que la religión o el origen étnico. Va mucho más allá de una cuenta bancaria — una referencia del buró de crédito que el Banco Central licenció bajo la Credit Reporting Act, 2023, un préstamo en mora, un salario, una prestación de seguridad social, una transferencia de BOOST o una situación de pobreza. Una plantilla hecha para otras leyes trata casi todo esto como dato común. Las categorías se reemplazan dentro de su propia notación; los montos se mapean a un rango plausible sin relación con el valor real."],
+      "domains": ["BZ_FIN_CREDIT_REFERENCE", "BZ_FIN_DEBT", "BZ_FIN_INCOME", "BZ_FIN_ASSETS", "BZ_FIN_PENSION", "BZ_FIN_SSB_BENEFIT", "BZ_FIN_SOCIAL_PROGRAMME", "BZ_FIN_POVERTY", "BZ_FIN_HOUSING"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes y procesos penales",
+      "intro": ["La sección 2 hace sensibles tanto los antecedentes penales como cualquier proceso por un delito cometido o presuntamente cometido — incluidos su resolución y la sentencia —, así que un cargo que terminó en absolución está tan protegido como una condena. Los datos de condenas solo se tratan bajo el control de una autoridad oficial (s. 10(2))."],
+      "domains": ["BZ_PENAL_CRIMINAL_RECORD", "BZ_PENAL_CASE_NUMBER"]
+    }
+  ],
+  "domains": {
+    "BZ_L1_SOCIAL_SECURITY_NUMBER": {
+      "title": "Número de seguridad social",
+      "what": "El número de nueve dígitos del Social Security Board, impreso en la tarjeta que todo trabajador debe tener desde los 14 años. Se emite en secuencia y no tiene dígito verificador público. Sin cédula de identidad nacional, es el identificador que piden empleadores, bancos, cooperativas de crédito, el buró de crédito y los hospitales públicos.",
+      "masking": "Cada dígito se reemplaza por otro dígito, conservando el largo y los separadores (`123-456-789`). El mapeo es uno a uno: un número usado como llave no colisiona, y el mismo número se enmascara igual en todas las tablas."
+    },
+    "BZ_L1_TIN": {
+      "title": "Número de contribuyente (TIN)",
+      "what": "El TIN del Belize Tax Service, usado en el impuesto sobre la renta, el GST, aduanas e impuestos selectivos: seis dígitos y un dígito verificador que no se muestra al contribuyente. Lo tienen personas, comerciantes individuales, sociedades y empresas.",
+      "masking": "Dígito por dígito, conservando el largo. El TIN de una empresa no se distingue del de una persona y también se enmascara; el mapeo es determinista, así que los joins con tablas de proveedores siguen funcionando."
+    },
+    "BZ_L1_PASSPORT": {
+      "title": "Pasaporte",
+      "what": "Números de pasaportes beliceños y extranjeros.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_VOTER_ID": {
+      "title": "Credencial de elector",
+      "what": "El número de identificación y el número de registro de la credencial de elector del Elections and Boundaries Department — uno de los documentos con foto aceptados en los servicios públicos.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_DRIVERS_LICENCE": {
+      "title": "Licencia de conducir",
+      "what": "El número de la licencia de conducir emitida por el Department of Transport o un concejo municipal.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_IMMIGRATION_DOCUMENT": {
+      "title": "Documento migratorio",
+      "what": "Tarjetas de residencia permanente, permisos temporales de trabajo, visas, certificados de nacionalidad y de naturalización, identificación de refugiados y solicitantes de asilo, tarjetas del programa de jubilados calificados. En un país donde el 11,5% de la población nació en el extranjero, son comunes en registros laborales y bancarios.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_VITAL_RECORD": {
+      "title": "Registro civil",
+      "what": "Números de actas o inscripciones de nacimiento, defunción y matrimonio de la Vital Statistics Unit.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_GIVEN_NAME": {
+      "title": "Nombres",
+      "what": "Primer nombre y segundo nombre (`FIRST_NAME`, `MIDDLE_NAME`), incluso dos nombres en la misma columna, como `Maria Isabel`.",
+      "masking": "Cada palabra se reemplaza por un nombre de una lista de 208 nombres usados en Belice, conservando el número de palabras y las mayúsculas. Más de tres palabras se enmascaran carácter por carácter."
+    },
+    "BZ_L1_SURNAME": {
+      "title": "Apellidos",
+      "what": "Apellidos y apellidos de soltera, uno o dos por columna, y apellidos con guion: `Gillett`, `Gomez Cal`, `Young-Flowers`.",
+      "masking": "Cada apellido se reemplaza por uno de una lista de 225 apellidos frecuentes en Belice — mestizos, criollos, mayas, garífunas y menonitas, encabezados por Martinez, Garcia, Castillo, Lopez y Williams —, conservando el número de palabras, el guion y las mayúsculas."
+    },
+    "BZ_L1_FULL_NAME": {
+      "title": "Nombre completo",
+      "what": "Nombres y apellidos en la misma columna, en el orden inglés que usa el registro civil — nombre, segundo nombre, apellido —, con inicial del segundo nombre o, en familias hispanas, segundo apellido, o escritos como `APELLIDO, NOMBRES`. También el nombre del titular de una cuenta, beneficiario, tutor o pariente más cercano.",
+      "masking": "Los nombres se vuelven nombres y los apellidos, apellidos, por posición: una palabra es un nombre; dos, nombre y apellido; tres, dos nombres y un apellido; cuatro, dos de cada uno. Una inicial sigue siendo inicial (`Kenrick A. Gillett`), y una coma separa apellidos de nombres."
+    },
+    "BZ_L1_EMAIL": {
+      "title": "Correo electrónico",
+      "what": "Direcciones de correo personales y laborales.",
+      "masking": "El nombre y el dominio se mapean carácter por carácter y el dominio de nivel superior pasa a `.test`, reservado para pruebas: una dirección enmascarada nunca recibe correo."
+    },
+    "BZ_L1_PHONE": {
+      "title": "Teléfono",
+      "what": "Números de siete dígitos, con o sin `+501`: los celulares empiezan con 6 (`622-4567`) y los fijos con el dígito de su distrito — 2 Belize, 3 Orange Walk, 4 Corozal, 5 Stann Creek, 7 Toledo, 8 Cayo.",
+      "masking": "`+501`, los separadores y el primer dígito — celular, o el distrito de un fijo — se conservan; los otros seis dígitos se enmascaran. Un número sin forma de teléfono beliceño se enmascara entero."
+    },
+    "BZ_L1_ADDRESS": {
+      "title": "Dirección",
+      "what": "La línea de dirección como se escribe en Belice, donde no hay códigos postales: número de casa y calle, un marcador de milla en una carretera, o un lote en un barrio, seguidos de la ciudad.",
+      "masking": "Se reemplaza por una de 3.000 direcciones beliceñas ficticias — calles de Belize City y de las ciudades, marcadores de milla en las carreteras Philip Goldson, George Price, Hummingbird y Southern, lotes en barrios reales."
+    },
+    "BZ_L1_ADDRESS_DETAIL": {
+      "title": "Complemento de dirección",
+      "what": "Números de casa, apartamento, unidad, piso o lote en columnas propias.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_BANK_ACCOUNT": {
+      "title": "Cuenta bancaria",
+      "what": "Números de cuentas de ahorro, corrientes y de aportaciones en bancos y cooperativas de crédito.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_PAYMENT_CARD": {
+      "title": "Tarjeta de pago",
+      "what": "Números de tarjetas de crédito, débito y prepago.",
+      "masking": "Se reemplaza por otro número de tarjeta que sigue pasando la verificación de Luhn. Los valores sin forma de tarjeta pasan sin cambios en lugar de hacer fallar la fila."
+    },
+    "BZ_L1_IP_ADDRESS": {
+      "title": "Dirección IP",
+      "what": "Direcciones IPv4 e IPv6 de usuarios y dispositivos.",
+      "masking": "Cada octeto IPv4 se mapea a un número de 1 a 254; una dirección IPv6 se mapea como hexadecimal."
+    },
+    "BZ_L1_DEVICE_ID": {
+      "title": "Identificador de dispositivo",
+      "what": "IMEI, dirección MAC, identificadores de publicidad y de sesión, números de serie de equipos.",
+      "masking": "El hexadecimal sigue siendo hexadecimal y los dígitos siguen siendo dígitos, así que el valor conserva su formato."
+    },
+    "BZ_L1_LICENCE_PLATE": {
+      "title": "Placa de vehículo",
+      "what": "Placas con código de distrito o ciudad — `BZ`, `CY`, `CZL`, `OW`, `SC`, `TOL`, `BMP`, `SP` —, una letra de categoría para motocicletas, taxis y otros vehículos de servicio público, y un número de serie: `CY C-12345`, `BZ 12345`.",
+      "masking": "El código y la letra de categoría se conservan, así que un taxi de Cayo sigue siendo un taxi de Cayo; los dígitos de serie se enmascaran."
+    },
+    "BZ_L1_VIN": {
+      "title": "Número de identificación vehicular",
+      "what": "El VIN y los números de motor y de chasis.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_LAND_PARCEL": {
+      "title": "Parcela de tierra",
+      "what": "La tierra registrada se identifica por sección de registro, bloque y parcela (`Caribbean Shores, Block 16, Parcel 1234`); la tierra nacional, por números de arrendamiento, de concesión (Minister's Fiat) o de título. El Land Registry lleva de una parcela a su propietario.",
+      "masking": "Los números de bloque y de parcela se enmascaran dígito por dígito; las palabras y la sección de registro se conservan. Otros formatos se enmascaran carácter por carácter."
+    },
+    "BZ_L1_CONTRACT_NUMBER": {
+      "title": "Número de contrato o de cliente",
+      "what": "Números de contrato, póliza, préstamo, hipoteca, socio, cliente, empleado, estudiante o reclamo, y números de cuenta de electricidad y agua.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_USERNAME": {
+      "title": "Usuario o red social",
+      "what": "Nombres de usuario, alias y perfiles de redes sociales.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_L1_CREDENTIAL": {
+      "title": "Credencial",
+      "what": "Contraseñas, PIN, hashes de contraseñas, respuestas de seguridad, tokens y claves de API.",
+      "masking": "Cada carácter pasa a `X`. Una credencial no tiene por qué parecer real en un ambiente de pruebas."
+    },
+    "BZ_L1_GEOLOCATION": {
+      "title": "Geolocalización",
+      "what": "Latitud y longitud, juntas o en columnas separadas. Belice está entre 15,8° y 18,5° norte y 87,4° y 89,3° oeste.",
+      "masking": "La parte entera y el primer decimal se conservan — unos 11 km — y el resto se enmascara: el lugar se generaliza, no se mueve."
+    },
+    "BZ_L1_FREE_TEXT": {
+      "title": "Texto libre",
+      "what": "Observaciones, comentarios, reclamos, notas de caso y declaraciones donde los datos personales aparecen sin estructura.",
+      "masking": "Free Text Redaction: números de seguridad social, correos, teléfonos, números de tarjeta, placas e IP pasan a `[DATA]`, y los nombres y apellidos de las listas a `[NAME]`."
+    },
+    "BZ_L2_BIRTH_DATE": {
+      "title": "Fecha de nacimiento",
+      "what": "La fecha de nacimiento, en columnas de fecha, timestamp o texto.",
+      "masking": "Desplazada hasta 60 días hacia atrás o hacia adelante: rompe el vínculo con la persona y conserva edades y cohortes casi intactas."
+    },
+    "BZ_L2_BIRTH_YEAR": {
+      "title": "Año de nacimiento",
+      "what": "Solo el año de nacimiento.",
+      "masking": "La década se conserva y el último dígito se mapea: 1985 pasa a otro año de los ochenta."
+    },
+    "BZ_L2_AGE": {
+      "title": "Edad",
+      "what": "Edades en años, enteras o con decimales.",
+      "masking": "La decena se conserva y la unidad se mapea (37 pasa a 3x). Desde 100, 90: las edades extremas identifican por sí solas."
+    },
+    "BZ_L2_EVENT_DATE": {
+      "title": "Fechas de eventos de la vida",
+      "what": "Fechas de defunción, matrimonio, divorcio, ingreso y salida de un empleo, jubilación, ingreso y alta hospitalaria, diagnóstico, arresto, condena, naturalización y otros eventos personales.",
+      "masking": "Desplazadas hasta 30 días: menos que la fecha de nacimiento, porque suelen combinarse con ella."
+    },
+    "BZ_L2_SEX": {
+      "title": "Sexo",
+      "what": "Sexo registrado en cualquier notación: `F`/`M`, `Female`/`Male`, `Woman`/`Man`, y en español.",
+      "masking": "Se reemplaza dentro de su propio vocabulario: `F`/`M` sigue siendo `F`/`M`."
+    },
+    "BZ_L2_TOWN_VILLAGE": {
+      "title": "Ciudad o aldea",
+      "what": "La ciudad, pueblo, aldea o comunidad donde la persona vive o nació. El censo de 2022 contó Belize City, Belmopan, siete ciudades y unas doscientas aldeas y comunidades; 208 de los 221 lugares tenían menos de 5.000 habitantes.",
+      "masking": "Un lugar de menos de 5.000 habitantes pasa al lugar más cercano de su distrito con al menos 5.000; los más grandes se conservan. Ver *Dónde vive la gente*."
+    },
+    "BZ_L2_NEIGHBOURHOOD": {
+      "title": "Barrio",
+      "what": "Barrios, urbanizaciones, proyectos de vivienda y secciones de registro de tierras dentro de una ciudad: `Lake Independence`, `Port Loyola`, `Salvapan`.",
+      "masking": "Se reemplaza por uno de 30 barrios de Belize City y de las ciudades."
+    },
+    "BZ_L2_NATIONALITY": {
+      "title": "Nacionalidad",
+      "what": "Nacionalidad, ciudadanía o país de nacimiento. En una base de datos beliceña, una nacionalidad poco común identifica.",
+      "masking": "Se reemplaza por una de las 16 nacionalidades más comunes en Belice — beliceña y, luego, las de los mayores grupos nacidos en el extranjero en el censo de 2022: guatemalteca, salvadoreña, hondureña, estadounidense y mexicana."
+    },
+    "BZ_L2_MARITAL_STATUS": {
+      "title": "Estado civil",
+      "what": "Estado civil y situación de unión, en las categorías del censo de 2022: nunca casado, casado, unión libre, pareja que no convive, divorciado, viudo, separado legalmente.",
+      "masking": "Se reemplaza por otra de las siete categorías."
+    },
+    "BZ_L2_OCCUPATION": {
+      "title": "Ocupación",
+      "what": "Ocupación, profesión o cargo. Un cargo poco común (`Regional Operations Manager, Toledo`) es único en la base.",
+      "masking": "Se reemplaza por una de 40 ocupaciones comunes."
+    },
+    "BZ_L2_EMPLOYER": {
+      "title": "Empleador",
+      "what": "El nombre del empleador o del lugar de trabajo. En una economía pequeña, el empleador y el cargo juntos a menudo señalan a una persona.",
+      "masking": "Se reemplaza por uno de 25 empleadores ficticios."
+    },
+    "BZ_L2_EDUCATION": {
+      "title": "Escolaridad",
+      "what": "El nivel educativo más alto, en los términos del sistema beliceño: primaria hasta Standard 6, secundaria hasta Form 4, sixth form o junior college, técnico, associate, licenciatura, maestría, doctorado.",
+      "masking": "Se reemplaza por otro de los 12 niveles."
+    },
+    "BZ_L2_SCHOOL": {
+      "title": "Escuela",
+      "what": "El nombre de la escuela primaria o secundaria, sixth form, junior college o universidad.",
+      "masking": "Se reemplaza por una de 15 escuelas ficticias."
+    },
+    "BZ_L2_DEPENDANTS": {
+      "title": "Hijos y dependientes",
+      "what": "Número de hijos, dependientes o miembros del hogar.",
+      "masking": "Limitado a 5: los hogares grandes son poco comunes, y un conteo poco común identifica."
+    },
+    "BZ_L3_ETHNICITY": {
+      "title": "Origen étnico",
+      "what": "Grupo étnico en los términos del censo de 2022 — mestizo/hispano/latino (51,7%), criollo (25,2%), maya (Q'eqchi', Mopan, Yucatec; 9,8%), garífuna (4,0%), indio oriental, menonita, chino y otros —, a menudo como bandera sí/no de condición indígena.",
+      "masking": "Una bandera sigue siendo bandera en su vocabulario, un código recibe otros dígitos y cualquier otro valor se reemplaza por uno de la lista del censo."
+    },
+    "BZ_L3_LANGUAGE": {
+      "title": "Idioma",
+      "what": "El idioma que la persona habla o con el que creció: inglés, español, kriol, maya Q'eqchi', Mopan o Yucatec, garífuna, alemán (Plautdietsch) y otros. No está en la lista de la sección 2, pero revela el origen étnico tan directamente como la columna de grupo étnico.",
+      "masking": "Como el origen étnico: banderas y códigos conservan su forma, los nombres se reemplazan por otro idioma de la lista del censo."
+    },
+    "BZ_L3_RELIGION": {
+      "title": "Religión",
+      "what": "Religión o denominación: católica romana, pentecostal, adventista del séptimo día, anglicana, menonita, bautista, metodista, nazarena, testigo de Jehová, hindú, musulmana, bahá'í, rastafari, ninguna.",
+      "masking": "Banderas y códigos conservan su forma; el valor se reemplaza por otro de la lista."
+    },
+    "BZ_L3_BELIEF": {
+      "title": "Creencias de naturaleza similar",
+      "what": "Convicciones filosóficas o morales, objeción de conciencia y otras creencias de naturaleza similar a las religiosas.",
+      "masking": "Suprimido a `Not stated`."
+    },
+    "BZ_L3_POLITICAL_OPINION": {
+      "title": "Opinión política",
+      "what": "Ideología, intención de voto, preferencia partidaria en encuestas.",
+      "masking": "Se reemplaza por otra posición en una escala genérica."
+    },
+    "BZ_L3_POLITICAL_MEMBERSHIP": {
+      "title": "Afiliación a un organismo político",
+      "what": "El partido u organismo político al que la persona pertenece o apoya — una categoría que la sección 2 nombra aparte de las opiniones políticas.",
+      "masking": "Se reemplaza por uno de los partidos de la elección general de 2025 — People's United Party, United Democratic Party, Belize Progressive Party, Belize Justice Movement, People's Democratic Movement, People's National Party — o por independiente o sin partido."
+    },
+    "BZ_L3_TRADE_UNION": {
+      "title": "Afiliación sindical",
+      "what": "Afiliación a un sindicato o asociación de empleados, cuota sindical, unidad de negociación: BNTU, PSU, Christian Workers' Union y los demás afiliados de la NTUCB.",
+      "masking": "Las banderas conservan su forma; cualquier otro valor pasa a `Not stated`."
+    },
+    "BZ_L3_GENETIC": {
+      "title": "Datos genéticos",
+      "what": "Perfiles genéticos, secuencias, mutaciones, cariotipos, pruebas de paternidad — en palabras de la ley, datos sobre características genéticas heredadas o adquiridas que resultan del análisis de una muestra biológica.",
+      "masking": "Cada carácter pasa a `X`."
+    },
+    "BZ_L3_BIOMETRIC": {
+      "title": "Datos biométricos",
+      "what": "Plantillas de huella, rostro, iris, palma o voz guardadas como texto (hash, base64). El Social Security Board toma huellas y fotografías al emitir la tarjeta.",
+      "masking": "Cada carácter pasa a `X`. Las columnas binarias quedan fuera de alcance: ver *Límites*."
+    },
+    "BZ_L3_SEXUAL_ORIENTATION": {
+      "title": "Orientación sexual",
+      "what": "Orientación sexual, que la sección 2 nombra expresamente.",
+      "masking": "Banderas y códigos conservan su forma; el valor se reemplaza por otro de la lista."
+    },
+    "BZ_L3_SEXUAL_LIFE": {
+      "title": "Vida sexual",
+      "what": "Actividad, conducta e historial sexual.",
+      "masking": "Suprimido a `Not stated`."
+    },
+    "BZ_L3_GENDER_IDENTITY": {
+      "title": "Identidad de género",
+      "what": "Identidad de género y pronombres. No está en la lista de la sección 2; se trata como sensible porque expone a las personas a la misma discriminación.",
+      "masking": "Banderas y códigos conservan su forma; el valor se reemplaza por otro de la lista."
+    },
+    "BZ_HEALTH_ID": {
+      "title": "Identificador de salud",
+      "what": "El número de la tarjeta del Belize Health Information System exigida en los centros públicos de salud, números del National Health Insurance, de expediente médico, ingreso, receta y certificado de incapacidad.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_HEALTH_DIAGNOSIS": {
+      "title": "Diagnóstico",
+      "what": "Diagnósticos, como códigos CIE-10 (`F32.9`, `B20`) o texto, y antecedentes médicos, alergias y enfermedades crónicas.",
+      "masking": "Un código CIE-10 se reemplaza por otro código común del mismo formato, con o sin decimal; el texto, por un diagnóstico común. El diagnóstico real no sobrevive."
+    },
+    "BZ_HEALTH_MEDICATION": {
+      "title": "Medicamento",
+      "what": "Medicamentos y principios activos. Algunos revelan el diagnóstico: un antirretroviral, un antipsicótico.",
+      "masking": "Se reemplaza por uno de 26 medicamentos comunes."
+    },
+    "BZ_HEALTH_CLINICAL_TEXT": {
+      "title": "Texto clínico",
+      "what": "Notas de evolución y de enfermería, resúmenes de alta, notas de triaje y planes de tratamiento.",
+      "masking": "Free Text Redaction, como en el texto libre: números de identificación, contactos y nombres se suprimen. El contenido clínico se conserva; si también debe salir, asigne la columna a un dominio de supresión."
+    },
+    "BZ_HEALTH_TEST_RESULT": {
+      "title": "Resultado de examen",
+      "what": "Resultados de laboratorio y de imágenes: estado de VIH, carga viral, glucemia, pruebas de embarazo o toxicológicas.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    },
+    "BZ_HEALTH_BLOOD_GROUP": {
+      "title": "Grupo sanguíneo",
+      "what": "Grupo ABO y factor Rh.",
+      "masking": "Se reemplaza por otro de los ocho grupos."
+    },
+    "BZ_HEALTH_DISABILITY": {
+      "title": "Discapacidad",
+      "what": "Discapacidad o limitación funcional, en los dominios que pregunta el censo de 2022: ver, oír, caminar, recordar o concentrarse, cuidado personal, comunicarse.",
+      "masking": "Banderas y códigos conservan su forma; el valor se reemplaza por otro de la lista."
+    },
+    "BZ_HEALTH_REPRODUCTIVE": {
+      "title": "Salud sexual y reproductiva",
+      "what": "Embarazo, semanas de gestación, abortos espontáneos e inducidos, anticoncepción, fertilidad, control prenatal, infecciones de transmisión sexual.",
+      "masking": "Las banderas conservan su forma; cualquier otro valor pasa a `Not stated`."
+    },
+    "BZ_HEALTH_MENTAL": {
+      "title": "Salud mental y adicciones",
+      "what": "Trastornos mentales, intentos de suicidio y autolesiones, consumo de sustancias y rehabilitación.",
+      "masking": "Suprimido a `Not stated`."
+    },
+    "BZ_FIN_CREDIT_REFERENCE": {
+      "title": "Referencia de crédito",
+      "what": "Puntajes e informes de crédito, días de atraso, mora, clasificación de préstamos, créditos castigados y vencidos. El sistema de información crediticia de Belice, operado por un buró que el Banco Central licenció bajo la Credit Reporting Act, 2023, los reúne de bancos y cooperativas de crédito.",
+      "masking": "Un puntaje recibe otros dígitos, una bandera sigue siendo bandera y cualquier estado se reemplaza por otro estado de crédito."
+    },
+    "BZ_FIN_DEBT": {
+      "title": "Monto de deuda",
+      "what": "Saldos de préstamos, hipotecas y tarjetas, montos en mora, límites de crédito, cuotas.",
+      "masking": "Mapeado a un monto entre BZ$200 y BZ$1.000.000."
+    },
+    "BZ_FIN_INCOME": {
+      "title": "Salario e ingresos",
+      "what": "Salario y jornales, ingresos asegurables, ingreso del hogar.",
+      "masking": "Mapeado a un monto entre BZ$700 y BZ$40.000."
+    },
+    "BZ_FIN_ASSETS": {
+      "title": "Patrimonio",
+      "what": "Valor de inmuebles y terrenos, saldos de ahorro y de cuentas, depósitos a plazo, inversiones y aportaciones en cooperativas, patrimonio neto.",
+      "masking": "Mapeado a un monto entre BZ$20.000 y BZ$5.000.000."
+    },
+    "BZ_FIN_PENSION": {
+      "title": "Pensión",
+      "what": "Montos de pensión de retiro, invalidez y sobrevivencia, la pensión no contributiva, gratificaciones y saldos de fondos de previsión.",
+      "masking": "Mapeado a un monto entre BZ$100 y BZ$10.000."
+    },
+    "BZ_FIN_SSB_BENEFIT": {
+      "title": "Prestación de seguridad social",
+      "what": "La prestación que la persona solicita o recibe del Social Security Board: enfermedad, asignación o subsidio por maternidad, accidente de trabajo, invalidez, sobrevivencia, retiro, auxilio funerario, pensión no contributiva. La mayoría revela también un evento de salud.",
+      "masking": "Banderas y códigos conservan su forma; la prestación se reemplaza por otra."
+    },
+    "BZ_FIN_SOCIAL_PROGRAMME": {
+      "title": "Programa social",
+      "what": "Beneficiarios de asistencia social: las transferencias de BOOST y el Food Assistance Programme del Ministry of Human Development, la pensión no contributiva, el National Health Insurance. Ser beneficiario revela pobreza, vejez o discapacidad.",
+      "masking": "Banderas y códigos conservan su forma; el programa se reemplaza por otro."
+    },
+    "BZ_FIN_POVERTY": {
+      "title": "Pobreza y situación socioeconómica",
+      "what": "Situación de pobreza (pobre extremo, pobre, vulnerable), quintil o decil de ingresos, puntajes de comprobación de medios e índices de vulnerabilidad.",
+      "masking": "Un quintil o decil pasa a otro número del mismo rango, con su prefijo; una situación, a otra de la lista."
+    },
+    "BZ_FIN_HOUSING": {
+      "title": "Tenencia de la vivienda",
+      "what": "Si la vivienda es propia, hipotecada, alquilada a un particular o al gobierno, cedida, arrendada u ocupada, como pregunta el censo.",
+      "masking": "Banderas y códigos conservan su forma; la tenencia se reemplaza por otra de la lista."
+    },
+    "BZ_PENAL_CRIMINAL_RECORD": {
+      "title": "Antecedentes y procesos penales",
+      "what": "Antecedentes penales, certificado policial, condenas, delitos, cargos, arrestos, prisión preventiva, fianza, veredictos y sentencias — los antecedentes y los procesos, cualquiera sea su resultado.",
+      "masking": "Una bandera sigue siendo bandera; cualquier otro valor pasa a un estado genérico: sin antecedentes, con antecedentes, imputado, causa desestimada, absuelto, condenado o sin información."
+    },
+    "BZ_PENAL_CASE_NUMBER": {
+      "title": "Número de causa",
+      "what": "Números de causa judicial, acusación, pliego de cargos, denuncia policial y parte de novedades: `C123/2023`, `456 of 2022`.",
+      "masking": "Carácter por carácter, conservando largo y formato."
+    }
+  },
+  "closing": [
+    {
+      "title": "Dónde vive la gente: ciudades y aldeas",
+      "body": [
+        "Con la población por ciudad y aldea del Population and Housing Census de 2022 y la ubicación de cada lugar, el set conoce el tamaño, el distrito y la posición de los 221 lugares que cuenta el censo.",
+        { "list": [
+          "Una **ciudad o aldea** de menos de 5.000 habitantes pasa al lugar más cercano del mismo distrito con al menos 5.000. Trece lugares alcanzan ese tamaño: Belize City, San Pedro Town y Ladyville en el distrito de Belize; Belmopan, San Ignacio, Santa Elena y Benque Viejo del Carmen en Cayo; Corozal Town; Orange Walk Town y Trial Farm; Dangriga; Punta Gorda y Bella Vista en Toledo.",
+          "El **distrito** se conserva: el más pequeño, Toledo, tenía 38.944 habitantes.",
+          "La distancia se mide entre las coordenadas de los lugares. Caye Caulker pasa a San Pedro Town, Hopkins a Dangriga, Crooked Tree a Ladyville.",
+          "Veintiocho lugares pequeños comparten nombre con otro lugar — hay cuatro San Antonio y cuatro Santa Cruz. Un nombre solo se generaliza cuando todos los lugares que lo llevan son pequeños; entonces sigue al más grande de ellos, que puede estar en otro distrito. Santa Elena, en Toledo, conserva su nombre, porque la Santa Elena de Cayo es una ciudad, y lo mismo la aldea de San Pedro, en Corozal, porque `San Pedro` es como se escribe San Pedro Town.",
+          "Los nombres también se reconocen como suelen escribirse: sin *Town*, `Benque Viejo`, y las comunidades que el censo cuenta dentro de otra — `Mango Creek` es Independence, `San Lorenzo` es Orange Walk Town."
+        ] },
+        "El resultado es siempre un lugar real, cerca del original, y todo grupo de personas que termina compartiendo un nombre suma al menos 5.000 habitantes. Los nombres que también son nombres o apellidos de personas, y los nombres de los distritos, quedan fuera de la lista de detección, para que una columna de apellidos no se tome por aldeas."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        { "list": [
+          "**Columnas binarias** — imágenes de la tarjeta de seguridad social o del pasaporte, imágenes de huellas, PDFs clínicos en BLOBs — no pueden enmascararse con estos algoritmos. Inventaríelas y repórtelas como riesgo residual.",
+          "**Las divisiones electorales se conservan.** El set no enmascara las 31 circunscripciones, cuyos nombres identifican a pocas personas por sí solos pero, en combinación, acotan una aldea. Donde una columna las guarda junto a fecha de nacimiento y sexo, generalícela al distrito.",
+          "**Los números de identificación no conservan dígito verificador.** El número de seguridad social no tiene uno público, y el del TIN no está publicado, así que ninguno se recalcula; las aplicaciones que validan el dígito del TIN pueden rechazar valores enmascarados.",
+          "**Los TIN de empresas también se enmascaran.** No se distinguen de los de personas.",
+          "**Los números de pasaporte, permisos y licencias** no tienen formato público y se enmascaran carácter por carácter.",
+          "**El Data Cleansing deja los valores desconocidos como están**: una aldea escrita de una forma que la lista no tiene pasa sin cambios.",
+          "**Las aldeas con el mismo nombre** en distritos distintos se generalizan según la más grande y pueden terminar en un distrito distinto del que dice la columna de distrito.",
+          "**El texto libre** se suprime token por token: un teléfono escrito con espacios no se encuentra, y un nombre que también es palabra común (`Angel`, `Iris`) se suprime donde aparezca.",
+          "**Niños** — la ley protege a los menores de 16 años. Una fecha de nacimiento se mueve como máximo 60 días, así que pocas personas cruzan su cumpleaños 16 o 18, pero algunas lo hacen. Donde importe, divida la regla por grupo de edad con Multi-Column Condition.",
+          "**Las direcciones** se reemplazan como línea completa. Calle, barrio, aldea y distrito en columnas separadas se enmascaran por separado y dejan de formar una dirección coherente.",
+          "**Las placas y los VIN** conservan su formato, pero no el dígito verificador del VIN."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "El set se genera y se comprueba con dos scripts guardados junto a él en el repositorio:",
+        { "list": [
+          "`build.mjs` genera el set y sus tablas de lookup a partir de las definiciones y las listas mantenidas a mano.",
+          "`verify.mjs` revisa la configuración de cada classifier y perfila 141 columnas con el set completo en su umbral — bien nombradas, mal nombradas y 32 que no son datos personales. Audita la tabla de generalización de los 221 lugares. Luego enmascara 145 valores de muestra y 198 marcadores como `N/A` a través de la aplicación en ejecución, comprobando cada salida contra su vocabulario, y 150 números de seguridad social en busca de colisiones."
+        ] },
+        "En el último build, todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        { "list": [
+          "Data Protection Act, 2021 — Act No. 45 of 2021, National Assembly of Belize, impresa por el Government Printer (copia publicada por el Belize Companies and Corporate Affairs Registry).",
+          "Población por distrito, ciudad y aldea; grupo étnico; idiomas hablados; religión; estado civil y situación de unión; país de nacimiento; tenencia de la vivienda — 2022 Population and Housing Census, Statistical Institute of Belize.",
+          "Coordenadas de los lugares poblados — GeoNames (CC BY 4.0).",
+          "Tarjeta y número de seguridad social, prestaciones — Social Security Board. Número de contribuyente — Belize Tax Service, en el registro de números de identificación tributaria de la OCDE.",
+          "Credencial de elector — Elections and Boundaries Department. Partidos de la elección general de 2025 — Elections and Boundaries Department.",
+          "Credit Reporting System y Credit Reporting Act, 2023 — Central Bank of Belize. BOOST y Food Assistance Programme — Ministry of Human Development, Families and Indigenous Peoples' Affairs.",
+          "Tarjeta del Belize Health Information System — Ministry of Health and Wellness. Sindicatos — National Trade Union Congress of Belize.",
+          "Frecuencia de apellidos y nombres — Forebears. Numeración telefónica — plan nacional de numeración. Placas de vehículos — Department of Transport."
+        ] }
+      ]
+    }
+  ]
+}

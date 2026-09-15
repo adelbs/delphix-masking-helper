@@ -1,0 +1,26 @@
+A+
+A-
+B+
+B-
+AB+
+AB-
+O+
+O-
+0+
+0-
+a pos
+a neg
+b pos
+b neg
+ab pos
+ab neg
+o pos
+o neg
+a positive
+a negative
+b positive
+b negative
+ab positive
+ab negative
+o positive
+o negative

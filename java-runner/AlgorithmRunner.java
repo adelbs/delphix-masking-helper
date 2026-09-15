@@ -235,12 +235,7 @@ public class AlgorithmRunner {
             }
 
             // Saved algorithms — can be referenced by name in sub-algorithm fields
-            Map<String, JsonNode> extraAlgos = new HashMap<>();
-            if (req.has("additionalAlgorithms") && req.get("additionalAlgorithms").isArray()) {
-                for (JsonNode extra : req.get("additionalAlgorithms")) {
-                    if (extra.has("name")) extraAlgos.put(extra.get("name").asText(), extra);
-                }
-            }
+            Map<String, JsonNode> extraAlgos = readExtraAlgorithms(req);
 
             // Registry of already-set-up sub-algorithms (populated lazily on demand)
             Map<String, MaskingAlgorithm<?>> registry = new HashMap<>();
@@ -285,12 +280,7 @@ public class AlgorithmRunner {
             String keyString = req.has("key") ? req.get("key").asText() : DEFAULT_KEY;
             JsonNode columnsNode = req.has("columns") ? req.get("columns") : mapper.createArrayNode();
 
-            Map<String, JsonNode> extraAlgos = new HashMap<>();
-            if (req.has("additionalAlgorithms") && req.get("additionalAlgorithms").isArray()) {
-                for (JsonNode extra : req.get("additionalAlgorithms")) {
-                    if (extra.has("name")) extraAlgos.put(extra.get("name").asText(), extra);
-                }
-            }
+            Map<String, JsonNode> extraAlgos = readExtraAlgorithms(req);
 
             // Build GenericDataRow from user-supplied columns
             Map<String, GenericData> rowMap = new LinkedHashMap<>();
@@ -417,7 +407,7 @@ public class AlgorithmRunner {
                 ComponentConfigurator.applyConfiguration(component, configJson);
             }
             Map<String, MaskingAlgorithm<?>> registry = new HashMap<>();
-            ComponentService service = buildService(keyString, mapper, registry);
+            ComponentService service = buildService(keyString, mapper, registry, readExtraAlgorithms(req));
             setupRecursive(component, service, registry);
             component.validate();
 
@@ -616,6 +606,21 @@ public class AlgorithmRunner {
         if (nativeType == null || nativeType == requestedType) return alg;
         MaskValueMetadataImpl wrapMeta = new MaskValueMetadataImpl().maskingType(requestedType);
         return new TypeAdaptingComponentWrapper(nativeType, requestedType, (MaskingAlgorithm) alg, wrapMeta);
+    }
+
+    /**
+     * Saved algorithms sent with a request, by name, so the algorithm under test can reference
+     * them. Every mask command reads them: without, a Shuffle batch or a Multi-Column Condition
+     * naming a saved algorithm failed with "Sub-algorithm not found".
+     */
+    static Map<String, JsonNode> readExtraAlgorithms(JsonNode req) {
+        Map<String, JsonNode> extraAlgos = new HashMap<>();
+        if (req.has("additionalAlgorithms") && req.get("additionalAlgorithms").isArray()) {
+            for (JsonNode extra : req.get("additionalAlgorithms")) {
+                if (extra.has("name")) extraAlgos.put(extra.get("name").asText(), extra);
+            }
+        }
+        return extraAlgos;
     }
 
     static MaskingComponent instantiate(String className) throws Exception {

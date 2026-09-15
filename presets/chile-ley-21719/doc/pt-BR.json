@@ -471,7 +471,7 @@
         "O set é gerado e conferido por dois scripts guardados com ele no repositório:",
         { "list": [
           "`build.mjs` gera o set a partir das definições e das listas mantidas à mão.",
-          "`verify.mjs` revisa a configuração de cada classifier, perfila 129 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — e mascara 184 valores de amostra e 204 placeholders como `S/I`, incluindo 60 RUTs aleatórios conferidos quanto ao dígito verificador."
+          "`verify.mjs` revisa a configuração de cada classifier, perfila 129 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — mascara 184 valores de amostra e 204 placeholders como `S/I` — conferindo se cada valor mascarado vem do vocabulário certo, e o dígito verificador de 60 RUTs aleatórios — e roda cada um dos 101 algoritmos no seu próprio input de exemplo, recebendo só os algoritmos que referencia, como faz o tester."
         ] },
         "Na última geração, todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado."
       ]

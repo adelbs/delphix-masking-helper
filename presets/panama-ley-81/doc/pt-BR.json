@@ -1,0 +1,543 @@
+{
+  "title": "Panamá — Ley 81 de 2019",
+  "subtitle": "Descoberta e mascaramento de dados pessoais panamenhos: cédula e RUC com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 4, dados econômicos e de crédito e antecedentes criminais.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais de um banco de dados panamenho e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
+        "Mascarar só nomes e cédulas não chega lá: uma data de nascimento, um sexo e um corregimento pequeno bastam para apontar uma pessoa. O set trabalha nas mesmas camadas em que o risco está:",
+        { "list": [
+          "**Identificadores diretos** — cédula, RUC e seu DV, nomes, contato, contas e cartões, passaporte e documentos migratórios, idoneidad, imóveis, dispositivos, veículos, texto livre.",
+          "**Quase-identificadores** — data de nascimento, idade, sexo, distrito, corregimento, barriada, código postal, ocupação, empregador, escolaridade.",
+          "**Dados sensíveis** — origem étnica e língua indígena, saúde, dados biométricos e genéticos, crenças religiosas, filosóficas e morais, opiniões e filiação políticas, filiação sindical, orientação sexual.",
+          "**Dados econômicos e de crédito** — referências da APC, dívidas, salário, patrimônio, pensão, cobertura da seguridade social, programas sociais, pobreza, posse da moradia.",
+          "**Antecedentes criminais** — récord policivo e números de processo."
+        ] },
+        "Tudo o que o set precisa viaja com ele: carregá-lo cria os domínios, classifiers, algoritmos e arquivos de lookup, e enviá-lo a um Masking Engine envia todos eles."
+      ]
+    },
+    {
+      "title": "A Ley 81 de 2019 em resumo",
+      "body": [
+        "A Lei 81 de 26 de março de 2019, sobre Proteção de Dados Pessoais, foi publicada na Gaceta Oficial 28743-A de 29 de março de 2019 e vigora desde 29 de março de 2021, dois anos depois da promulgação (art. 47). É regulamentada pelo Decreto Executivo 285 de 28 de maio de 2021. A autoridade de controle é a **Autoridad Nacional de Transparencia y Acceso a la Información (ANTAI)**, por meio da sua Dirección de Protección de Datos Personales.",
+        "O que importa para uma cópia de dados de produção:",
+        { "list": [
+          "**Dado pessoal** é qualquer informação relativa a pessoas naturais que as identifica ou as torna identificáveis (art. 4, 9). A lei protege pessoas naturais: os dados de uma pessoa jurídica estão fora do seu âmbito.",
+          "**Dado sensível** é o que se refere à esfera íntima do titular, ou cujo uso indevido pode dar origem a discriminação ou trazer risco grave. De forma enunciativa, a lei cita os que podem revelar origem racial ou étnica; crenças ou convicções religiosas, filosóficas e morais; filiação sindical; opiniões políticas; dados relativos à saúde, à vida, à preferência ou orientação sexual, dados genéticos ou dados biométricos (art. 4, 11). O Decreto 285 define dados biométricos, genéticos e relativos à saúde (art. 4, 2 a 4).",
+          "**Dados anonimizados fora da lei.** Ficam fora do seu âmbito os tratamentos de informação obtida por um procedimento prévio de dissociação ou anonimização, de modo que o resultado não possa ser associado ao titular (art. 3, 5). *Dado dissociado* é o que não pode ser associado ao titular nem permitir, por sua estrutura, conteúdo ou grau de desagregação, sua identificação (art. 4, 10).",
+          "**Finalidade.** Os dados são usados para os fins autorizados; qualquer outro uso exige consentimento, lei especial ou outra base legal (arts. 2, 2 e 11). O tratamento posterior para pesquisa ou estudo dispensa consentimento se os dados forem anonimizados (art. 12).",
+          "**Dados de saúde e sensíveis.** O consentimento para dados de saúde deve ser prévio, irrefutável e expresso (art. 8; Decreto 285, art. 18). Dados sensíveis não podem ser transferidos salvo exceções, e para fins históricos, estatísticos ou científicos devem ser dissociados (art. 13).",
+          "**Dados econômicos, financeiros, bancários ou comerciais** são tratados com consentimento prévio (art. 8, 3). As referências de crédito têm, além disso, lei própria: a Lei 24 de 2002.",
+          "**Condenações criminais** têm regras próprias de comunicação (art. 30; Decreto 285, art. 7).",
+          "**Segurança.** Medidas técnicas e organizacionais proporcionais, em especial para dados sensíveis (art. 2, 5; Decreto 285, art. 36). Uma violação de segurança é notificada à ANTAI e aos titulares afetados em até setenta e duas horas (Decreto 285, art. 37).",
+          "**Sanções.** Multas de mil a dez mil balboas fixadas pela ANTAI (art. 36). Não observar as regras sobre dados sensíveis é infração muito grave, que pode levar ao fechamento dos registros da base de dados ou à suspensão da atividade de tratamento (arts. 41 e 43)."
+        ] },
+        "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o titular não autorizou, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia efetivamente anonimizada fica, pelo artigo 3, fora do âmbito da lei: é para isso que o set serve.",
+        "A lista de dados sensíveis é enunciativa. O set também trata como sensíveis a identidade de gênero e a vida sexual, que expõem as pessoas a discriminação da mesma forma. Há propostas de reforma da lei em discussão, entre elas multas maiores; este documento segue o texto vigente em setembro de 2026.",
+        { "note": "Este documento descreve controles técnicos. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não do profile set sozinho." }
+      ]
+    },
+    {
+      "title": "Usando o set",
+      "body": [
+        { "list": [
+          "**Carregar** — *Configurações → Profile Sets → Carregar*. Carregar de novo reseta cada objeto do set para como ele vem.",
+          "**Enviar ao Delphix** — pelo profile set, ou com *Enviar tudo ao Delphix*. Domínios, algoritmos e arquivos vão antes.",
+          "**Perfilar** — rode um job de profiling com o set e revise os domínios atribuídos antes de mascarar.",
+          "**Mascarar** — rode o job de mascaramento. Use a mesma chave do engine em todos os ambientes para manter os valores mascarados consistentes entre sistemas."
+        ] },
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: uma cédula, um RUC com DV, uma placa, um corregimento.",
+        "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas panamenhos (`NUM_CEDULA`, `CIP`, `FEC_NAC`, `COD_CORREG`, `NIS`), nos campos da fatura eletrônica (`dRuc`, `dDV`) e em inglês.",
+        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da cédula: o número continua legível na imagem. Reporte essas colunas como risco residual." }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": ["Dados que identificam uma pessoa sozinhos. A cédula é a chave de quase todo registro panamenho: é o RUC da pessoa natural, o número da carteira de motorista e a identificação perante a Caja de Seguro Social. Ela é mascarada do mesmo jeito em toda parte, e o RUC mantém dígito verificador válido, porque as aplicações o validam."],
+      "domains": ["PA_L1_CEDULA", "PA_L1_RUC", "PA_L1_RUC_DV", "PA_L1_PASAPORTE", "PA_L1_DOCUMENTO_MIGRATORIO", "PA_L1_SEGURO_SOCIAL", "PA_L1_IDONEIDAD", "PA_L1_NOMBRE", "PA_L1_APELLIDO", "PA_L1_NOMBRE_COMPLETO", "PA_L1_EMAIL", "PA_L1_TELEFONO", "PA_L1_DIRECCION", "PA_L1_DIRECCION_COMPLEMENTO", "PA_L1_CUENTA_BANCARIA", "PA_L1_TARJETA", "PA_L1_IP", "PA_L1_DISPOSITIVO", "PA_L1_PLACA", "PA_L1_VIN", "PA_L1_FINCA", "PA_L1_NUMERO_CONTRATO", "PA_L1_USUARIO_RRSS", "PA_L1_CREDENCIAL", "PA_L1_GEOLOCALIZACION", "PA_L1_TEXTO_LIBRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": ["Dados que sozinhos não identificam ninguém, mas combinados identificam. O Panamá tem 699 corregimentos, e 616 deles tinham menos de 10.000 habitantes no censo de 2023: uma data de nascimento, um sexo e um desses corregimentos apontam para um punhado de pessoas. Esses atributos são generalizados ou deslocados em vez de substituídos, e os dados mantêm seu valor analítico."],
+      "domains": ["PA_L2_FECHA_NACIMIENTO", "PA_L2_ANIO_NACIMIENTO", "PA_L2_EDAD", "PA_L2_FECHA_EVENTO", "PA_L2_SEXO", "PA_L2_DISTRITO", "PA_L2_CORREGIMIENTO", "PA_L2_CODIGO_LUGAR", "PA_L2_LUGAR_POBLADO", "PA_L2_BARRIADA", "PA_L2_CODIGO_POSTAL", "PA_L2_NACIONALIDAD", "PA_L2_ESTADO_CIVIL", "PA_L2_OCUPACION", "PA_L2_EMPLEADOR", "PA_L2_ESCOLARIDAD", "PA_L2_ESCUELA", "PA_L2_DEPENDIENTES"]
+    },
+    {
+      "id": "L3",
+      "title": "Dados sensíveis",
+      "intro": ["As categorias do artigo 4, numeral 11 — origem étnica, saúde, dados genéticos e biométricos, crenças, opiniões políticas, filiação sindical, orientação sexual — e, porque a lista é enunciativa, a identidade de gênero e a vida sexual. Colunas categóricas mantêm sua forma: uma flag sim/não continua flag, um código numérico recebe outros dígitos e qualquer outro valor é trocado por um da lista da sua categoria. Onde os valores não compartilham vocabulário, são suprimidos para `Sin información`."],
+      "domains": ["PA_L3_ETNIA", "PA_L3_LENGUA_INDIGENA", "PA_L3_SALUD_DIAGNOSTICO", "PA_L3_SALUD_MEDICAMENTO", "PA_L3_SALUD_IDENTIFICADOR", "PA_L3_SALUD_TEXTO_CLINICO", "PA_L3_SALUD_RESULTADO_EXAMEN", "PA_L3_SALUD_GRUPO_SANGUINEO", "PA_L3_SALUD_DISCAPACIDAD", "PA_L3_SALUD_SEXUAL_REPRODUCTIVA", "PA_L3_SALUD_MENTAL_ADICCIONES", "PA_L3_BIOMETRICO", "PA_L3_INFORMACION_GENETICA", "PA_L3_ORIENTACION_SEXUAL", "PA_L3_IDENTIDAD_GENERO", "PA_L3_VIDA_SEXUAL", "PA_L3_RELIGION", "PA_L3_CREENCIA_FILOSOFICA_MORAL", "PA_L3_OPINION_POLITICA", "PA_L3_AFILIACION_POLITICA", "PA_L3_AFILIACION_SINDICAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Dados econômicos e de crédito",
+      "intro": ["A lei não os chama de sensíveis, mas exige consentimento prévio para dados econômicos, financeiros, bancários e comerciais (art. 8, 3), protege o titular de decisões automatizadas sobre seu crédito (art. 19), e as referências de crédito têm lei própria, a Lei 24 de 2002. Vão além da conta bancária: uma referência da APC, um valor de pensão, um programa do MIDES ou a condição de pobreza dizem tanto sobre uma pessoa quanto o salário. As categorias são trocadas dentro da própria notação; os valores são mapeados para uma faixa plausível sem relação com o valor real."],
+      "domains": ["PA_FIN_REFERENCIA_CREDITO", "PA_FIN_MONTO_DEUDA", "PA_FIN_INGRESO_MENSUAL", "PA_FIN_PATRIMONIO", "PA_FIN_PENSION", "PA_FIN_SEGURO_SOCIAL", "PA_FIN_PROGRAMA_SOCIAL", "PA_FIN_NIVEL_SOCIOECONOMICO", "PA_FIN_VIVIENDA"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes criminais",
+      "intro": ["As condenações criminais têm regras próprias na lei (art. 30) e no regulamento (Decreto 285, art. 7), e estão entre os dados que mais podem dar origem a discriminação. Recebem o mesmo cuidado que os dados sensíveis."],
+      "domains": ["PA_PENAL_ANTECEDENTES", "PA_PENAL_CAUSA"]
+    }
+  ],
+  "domains": {
+    "PA_L1_CEDULA": {
+      "title": "Cédula de identidade",
+      "what": "O número da cédula expedida pelo Tribunal Electoral: província de nascimento (1 a 13; 10, 11 e 12 são as comarcas Guna Yala, Emberá-Wounaan e Ngäbe-Buglé), tomo e asiento do registro civil. `8-442-445`. As letras marcam outros casos: `E` estrangeiro residente, `N` naturalizado, `PE` panamenho nascido no exterior, `AV` registrado antes da vigência do registro civil, `PI` panamenho indígena; `8-NT-12-3456` é o número tributário de quem não tem cédula. No Panamá a carteira de motorista leva o número da cédula, e as colunas dela também caem aqui.",
+      "masking": "A província passa a outra província entre 1 e 13, e tomo e asiento são mapeados dígito a dígito mantendo o tamanho; as letras ficam, e com elas o tipo de documento. O mapeamento é um-para-um: uma cédula usada como chave não colide. O mesmo algoritmo mascara a cédula dentro do RUC, então cédula e RUC de uma pessoa continuam coincidindo. Texto sem forma de cédula é mascarado caractere a caractere."
+    },
+    "PA_L1_RUC": {
+      "title": "RUC",
+      "what": "O Registro Único de Contribuyentes da DGI. O de uma pessoa natural é a cédula, com um dígito verificador de dois algarismos ao lado: `8-442-445 DV 08`. O de uma pessoa jurídica é o número do Registro Público: `155596713-2-2015 DV 59`. Uma mesma coluna costuma misturar os dois.",
+      "masking": "O RUC de pessoa natural é mascarado como a cédula e o DV é recalculado, então todo RUC mascarado passa na validação da DGI. São reconhecidos os separadores ` DV `, ` DV`, `-` e o espaço. O RUC de pessoa jurídica fica como está: não é dado pessoal pelo artigo 4, e mantê-lo preserva os cruzamentos com cadastros de fornecedores. Ver *O DV do RUC, calculado pelo set*."
+    },
+    "PA_L1_RUC_DV": {
+      "title": "DV em coluna própria",
+      "what": "O dígito verificador do RUC guardado à parte, como na fatura eletrônica (`dDV`) ou numa coluna `DV`.",
+      "masking": "Os dois dígitos são mapeados. Não podem ser recalculados: um algoritmo enxerga uma coluna só, e o RUC está em outra. Mascará-lo evita que ajude a ligar a linha ao RUC real."
+    },
+    "PA_L1_PASAPORTE": {
+      "title": "Passaporte",
+      "what": "Números de passaporte panamenho e estrangeiro.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_DOCUMENTO_MIGRATORIO": {
+      "title": "Documento migratório",
+      "what": "Carné de residente, permissões de residência e de trabalho, vistos e números de identificação estrangeiros. A cédula `E` do residente permanente está no domínio de cédula.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_SEGURO_SOCIAL": {
+      "title": "Número de seguro social",
+      "what": "O número de segurado ou de carteira da Caja de Seguro Social que sistemas antigos guardam. Hoje a CSS identifica o segurado pela cédula.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_IDONEIDAD": {
+      "title": "Idoneidad profissional",
+      "what": "O número de idoneidad que habilita a exercer uma profissão regulamentada — medicina, enfermagem, direito, engenharia. Os registros são públicos: o número leva direto ao nome da pessoa.",
+      "masking": "Caractere a caractere, mantendo o tamanho."
+    },
+    "PA_L1_NOMBRE": {
+      "title": "Nomes",
+      "what": "Primeiro e segundo nome (`NOMBRES`, `PRIMER_NOMBRE`), inclusive nomes compostos como `Luis Carlos`.",
+      "masking": "Cada palavra é trocada por um nome de uma lista de 253 nomes usados no Panamá, mantendo o número de palavras e as maiúsculas. Mais de três palavras são mascaradas caractere a caractere."
+    },
+    "PA_L1_APELLIDO": {
+      "title": "Sobrenomes",
+      "what": "Sobrenomes paterno e materno, numa coluna ou em duas, e o sobrenome de casada: `González de Pérez`.",
+      "masking": "Cada sobrenome é trocado por um de uma lista de 200 sobrenomes frequentes no Panamá — encabeçada por Rodríguez, González, Sánchez, Martínez, Castillo e Ábrego —, mantendo o número de palavras e as maiúsculas. O `de` do sobrenome de casada fica."
+    },
+    "PA_L1_NOMBRE_COMPLETO": {
+      "title": "Nome completo",
+      "what": "Nomes e sobrenomes numa coluna, na ordem panamenha, com o `de` e o sobrenome do marido quando há, ou como `APELLIDOS, NOMBRES`. Também o nome de um titular, beneficiário, segurado ou responsável (*acudiente*).",
+      "masking": "Nomes passam a nomes e sobrenomes a sobrenomes, por posição: uma palavra é nome, duas são nome e sobrenome, três são nome e dois sobrenomes, quatro são dois nomes e dois sobrenomes. `María Elena González de Pérez` mantém o `de` e sua estrutura. Uma vírgula separa os sobrenomes dos nomes."
+    },
+    "PA_L1_EMAIL": {
+      "title": "E-mail",
+      "what": "Endereços de e-mail pessoais e de trabalho.",
+      "masking": "O nome e o domínio são mapeados caractere a caractere e o domínio de topo passa a `.test`, reservado para testes: um endereço mascarado nunca recebe e-mail."
+    },
+    "PA_L1_TELEFONO": {
+      "title": "Telefone",
+      "what": "Fixos de 7 dígitos (`223-4567`) e celulares de 8 começando com 6 (`6123-4567`), com ou sem `+507`. O Panamá não tem códigos de área.",
+      "masking": "Ficam `+507`, os separadores e o primeiro dígito — o 6 do celular, a região do fixo —; o resto é mascarado dígito a dígito. Um número sem forma de número panamenho é mascarado inteiro."
+    },
+    "PA_L1_DIRECCION": {
+      "title": "Endereço",
+      "what": "A linha de endereço como se escreve no Panamá, que quase nunca tem número de rua: rua ou via, edifício, andar e apartamento, ou barriada, rua e casa.",
+      "masking": "É trocada por um de 3.000 endereços panamenhos fictícios, com ruas, vias, barriadas e edifícios comuns, em proporções realistas."
+    },
+    "PA_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento do endereço",
+      "what": "Número da casa, apartamento, andar, edifício, torre ou lote em colunas próprias.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_CUENTA_BANCARIA": {
+      "title": "Conta bancária",
+      "what": "Números de conta corrente, poupança e folha de pagamento, nos formatos de cada banco.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_TARJETA": {
+      "title": "Cartão de pagamento",
+      "what": "Números de cartão de crédito, débito e pré-pago, inclusive a Tarjeta Clave Social com que o MIDES paga seus programas.",
+      "masking": "É trocado por outro número de cartão que continua passando na verificação de Luhn. Valores sem forma de cartão passam sem mudança em vez de derrubar a linha."
+    },
+    "PA_L1_IP": {
+      "title": "Endereço IP",
+      "what": "Endereços IPv4 e IPv6 de usuários e dispositivos.",
+      "masking": "Cada octeto IPv4 é mapeado para um número de 1 a 254; um endereço IPv6 é mapeado como hexadecimal."
+    },
+    "PA_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": "IMEI, endereço MAC, identificadores de publicidade e de sessão, números de série de equipamentos.",
+      "masking": "Hexadecimal continua hexadecimal e dígitos continuam dígitos, então o valor mantém o formato."
+    },
+    "PA_L1_PLACA": {
+      "title": "Placa de veículo",
+      "what": "Placas no formato vigente desde 2013, duas letras e quatro dígitos (`AB1234`), as de seis dígitos anteriores e as de categoria: `M` moto, `T` táxi, `B` ônibus, `G` governo, `CD` corpo diplomático, `PR` imprensa e outras.",
+      "masking": "Letras de série e dígitos são mapeados; as letras de categoria ficam, então uma placa de táxi continua de táxi."
+    },
+    "PA_L1_VIN": {
+      "title": "Número de identificação do veículo",
+      "what": "O VIN e os números de motor e de chassi.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_FINCA": {
+      "title": "Número de finca",
+      "what": "O número de finca, folio real ou código de localização cadastral de um imóvel. O Registro Público é de consulta pública: a finca leva ao proprietário.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_NUMERO_CONTRATO": {
+      "title": "Número de contrato ou de cliente",
+      "what": "Números de contrato, apólice, empréstimo, cliente, empregado, folha ou sinistro, e o NIS do serviço de energia elétrica.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_USUARIO_RRSS": {
+      "title": "Usuário ou rede social",
+      "what": "Nomes de usuário, apelidos e perfis de redes sociais.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L1_CREDENCIAL": {
+      "title": "Credencial",
+      "what": "Senhas, PINs, hashes de senha, tokens e chaves de API.",
+      "masking": "Cada caractere vira `X`. Uma credencial não precisa parecer real num ambiente de teste."
+    },
+    "PA_L1_GEOLOCALIZACION": {
+      "title": "Geolocalização",
+      "what": "Latitude e longitude, juntas ou em colunas separadas. O Panamá fica entre 7° e 10° de latitude norte e 77° e 83° de longitude oeste.",
+      "masking": "A parte inteira e a primeira casa decimal ficam — cerca de 11 km — e o resto é mascarado: o lugar é generalizado, não deslocado."
+    },
+    "PA_L1_TEXTO_LIBRE": {
+      "title": "Texto livre",
+      "what": "Observações, comentários, reclamações e notas onde dados pessoais são escritos sem estrutura.",
+      "masking": "Free Text Redaction: cédulas, e-mails, celulares, fixos com hífen, números de cartão, placas e IPs viram `[DATO]`, e os nomes e sobrenomes das listas, `[NOMBRE]`."
+    },
+    "PA_L2_FECHA_NACIMIENTO": {
+      "title": "Data de nascimento",
+      "what": "A data de nascimento, em colunas de data, timestamp ou texto.",
+      "masking": "É deslocada em até 60 dias para trás ou para frente: quebra o vínculo com a pessoa e mantém idades e coortes quase intactas."
+    },
+    "PA_L2_ANIO_NACIMIENTO": {
+      "title": "Ano de nascimento",
+      "what": "Só o ano de nascimento.",
+      "masking": "A década fica e o último dígito é mapeado: 1985 vira outro ano dos anos oitenta."
+    },
+    "PA_L2_EDAD": {
+      "title": "Idade",
+      "what": "Idades em anos, inteiras ou com decimais.",
+      "masking": "A dezena fica e a unidade é mapeada (37 vira 3x). A partir de 100 anos, 90: idades extremas identificam sozinhas."
+    },
+    "PA_L2_FECHA_EVENTO": {
+      "title": "Datas de eventos da vida",
+      "what": "Datas de óbito, casamento, admissão e desligamento, aposentadoria, internação, diagnóstico, naturalização e outros eventos pessoais.",
+      "masking": "São deslocadas em até 30 dias: menos que a data de nascimento, porque costumam ser combinadas com ela."
+    },
+    "PA_L2_SEXO": {
+      "title": "Sexo",
+      "what": "Sexo registral em qualquer notação: `F`/`M`, `H`/`M`, `Femenino`, `Hombre`, `Male`.",
+      "masking": "É trocado dentro do próprio vocabulário: `F`/`M` continua `F`/`M`."
+    },
+    "PA_L2_DISTRITO": {
+      "title": "Distrito",
+      "what": "O nome do distrito. O Panamá tem 81 distritos com habitantes — a comarca Guna Yala não se divide em distritos —, e 47 tinham menos de 20.000 habitantes em 2023.",
+      "masking": "Um distrito com menos de 20.000 habitantes passa ao distrito mais próximo da sua província ou comarca com pelo menos 20.000; os maiores ficam. Ver *Onde as pessoas moram*."
+    },
+    "PA_L2_CORREGIMIENTO": {
+      "title": "Corregimento",
+      "what": "O nome do corregimento, a menor divisão com população recenseada: 699, com média de 5.800 habitantes.",
+      "masking": "Um corregimento com menos de 10.000 habitantes passa ao corregimento mais próximo da sua província ou comarca com pelo menos 10.000, ou do país se a província não tiver nenhum. Os grandes ficam. Ver *Onde as pessoas moram*."
+    },
+    "PA_L2_CODIGO_LUGAR": {
+      "title": "Código de corregimento ou distrito",
+      "what": "Os códigos geográficos do INEC: seis dígitos para o corregimento (`040612`), quatro para o distrito (`0306`), também sem o zero inicial.",
+      "masking": "Com a mesma regra dos nomes: um corregimento ou distrito pequeno passa ao código do grande que lhe corresponde."
+    },
+    "PA_L2_LUGAR_POBLADO": {
+      "title": "Lugar povoado",
+      "what": "Lugares povoados, vilarejos e comunidades, e o local de nascimento.",
+      "masking": "É trocado pelo nome de um corregimento com mais de 20.000 habitantes: continua sendo um lugar, não mais o dela."
+    },
+    "PA_L2_BARRIADA": {
+      "title": "Barriada ou loteamento",
+      "what": "Barriadas, urbanizações, residenciais e setores.",
+      "masking": "É trocada por uma de 75 barriadas e urbanizações comuns."
+    },
+    "PA_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": "Os códigos postais dos Correos y Telégrafos, pouco usados no Panamá. Os dois primeiros dígitos indicam a província.",
+      "masking": "Os dois primeiros dígitos ficam e o resto vira zeros."
+    },
+    "PA_L2_NACIONALIDAD": {
+      "title": "Nacionalidade",
+      "what": "Nacionalidade ou país de nascimento. Numa base panamenha, uma nacionalidade incomum identifica.",
+      "masking": "É trocada por uma das 20 nacionalidades mais comuns no Panamá."
+    },
+    "PA_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": "Estado conjugal, com as categorias do censo: unido, casado, solteiro, separado de casamento, separado de união, divorciado, viúvo.",
+      "masking": "É trocado por outra das sete categorias."
+    },
+    "PA_L2_OCUPACION": {
+      "title": "Ocupação",
+      "what": "Ocupação, profissão ou cargo. Um cargo raro (`Gerente Regional de Operaciones Bocas del Toro`) é único na base.",
+      "masking": "É trocado por uma de 40 ocupações comuns."
+    },
+    "PA_L2_EMPLEADOR": {
+      "title": "Empregador",
+      "what": "O nome do empregador (*patrono*) ou do local de trabalho.",
+      "masking": "É trocado por um de 25 empregadores fictícios."
+    },
+    "PA_L2_ESCOLARIDAD": {
+      "title": "Escolaridade",
+      "what": "Nível de ensino nos termos do sistema panamenho: primaria, premedia, media, vocacional, superior.",
+      "masking": "É trocado por outro dos 13 níveis."
+    },
+    "PA_L2_ESCUELA": {
+      "title": "Escola",
+      "what": "O nome da escola, do colégio, do centro básico geral ou da universidade.",
+      "masking": "É trocado por um de 15 centros de ensino fictícios."
+    },
+    "PA_L2_DEPENDIENTES": {
+      "title": "Filhos e dependentes",
+      "what": "Número de filhos, de dependentes ou de integrantes do domicílio.",
+      "masking": "Limitado a 5: domicílios grandes são raros, e uma contagem rara identifica."
+    },
+    "PA_L3_ETNIA": {
+      "title": "Origem étnica",
+      "what": "Pertencimento a um povo indígena — Ngäbe, Guna, Emberá, Buglé, Wounaan, Naso Tjërdi, Bokota, Bri Bri — ou autoidentificação afrodescendente — afropanamenho, moreno, negro, afrocolonial, afroantilhano —, nos termos do censo de 2023, muitas vezes como flag sim/não.",
+      "masking": "Uma flag continua flag no seu vocabulário, um código recebe outros dígitos e qualquer outro valor é trocado por um da lista do censo."
+    },
+    "PA_L3_LENGUA_INDIGENA": {
+      "title": "Língua indígena",
+      "what": "A língua indígena que a pessoa fala: ngäbere, buglere, guna, emberá, wounmeu, naso tjërdi, bribri.",
+      "masking": "Como a origem étnica: flags e códigos mantêm a forma, nomes são trocados por outra língua da lista."
+    },
+    "PA_L3_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico",
+      "what": "Diagnósticos, em códigos CID-10 (`F32.9`, `B20`) ou em texto, e antecedentes, alergias e doenças crônicas.",
+      "masking": "Um código CID-10 é trocado por outro código comum do mesmo formato, com ou sem decimal; um texto, por um diagnóstico comum. O diagnóstico real não sobrevive."
+    },
+    "PA_L3_SALUD_MEDICAMENTO": {
+      "title": "Medicamento",
+      "what": "Medicamentos e princípios ativos. Alguns revelam o diagnóstico: um antirretroviral, um antipsicótico.",
+      "masking": "É trocado por um de 26 medicamentos de uso geral."
+    },
+    "PA_L3_SALUD_IDENTIFICADOR": {
+      "title": "Identificador clínico",
+      "what": "Número de prontuário, expediente, internação, receita ou atestado.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L3_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": "Notas de evolução, anamnese, epicrise e resumos clínicos.",
+      "masking": "Free Text Redaction, como o texto livre: cédulas, contatos e nomes são redigidos. O conteúdo clínico fica; se também precisar sumir, atribua a coluna a um domínio de supressão."
+    },
+    "PA_L3_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultado de exame",
+      "what": "Resultados de laboratório e imagem: HIV, carga viral, glicemia, testes de gravidez ou toxicológicos.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    },
+    "PA_L3_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": "Grupo ABO e fator Rh.",
+      "masking": "É trocado por outro dos oito grupos."
+    },
+    "PA_L3_SALUD_DISCAPACIDAD": {
+      "title": "Deficiência",
+      "what": "Tipo ou grau de deficiência, com os tipos que a SENADIS certifica: física, visual, auditiva, intelectual, psicossocial, visceral.",
+      "masking": "Flags e códigos mantêm a forma; o tipo é trocado por outro da lista."
+    },
+    "PA_L3_SALUD_SEXUAL_REPRODUCTIVA": {
+      "title": "Saúde sexual e reprodutiva",
+      "what": "Gravidez, semanas de gestação, abortos, anticoncepcionais, fertilidade, infecções sexualmente transmissíveis.",
+      "masking": "Flags mantêm a forma; qualquer outro valor vira `Sin información`."
+    },
+    "PA_L3_SALUD_MENTAL_ADICCIONES": {
+      "title": "Saúde mental e dependência química",
+      "what": "Transtornos mentais, tentativas de suicídio, consumo de substâncias e tratamentos de dependência.",
+      "masking": "Suprimido para `Sin información`."
+    },
+    "PA_L3_BIOMETRICO": {
+      "title": "Dado biométrico",
+      "what": "Templates de digital, rosto, íris ou voz guardados como texto (hash, base64). A lei os chama de sensíveis e o Decreto 285 os define.",
+      "masking": "Cada caractere vira `X`. Colunas binárias ficam de fora: ver *Limites*."
+    },
+    "PA_L3_INFORMACION_GENETICA": {
+      "title": "Dado genético",
+      "what": "Perfis genéticos, sequências, mutações, cariótipos, testes de paternidade.",
+      "masking": "Cada caractere vira `X`."
+    },
+    "PA_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientação sexual",
+      "what": "Orientação ou preferência sexual, que a lei cita expressamente.",
+      "masking": "Flags e códigos mantêm a forma; o valor é trocado por outro da lista."
+    },
+    "PA_L3_IDENTIDAD_GENERO": {
+      "title": "Identidade de gênero",
+      "what": "Identidade de gênero, mudança de nome por identidade, pronomes.",
+      "masking": "Flags e códigos mantêm a forma; o valor é trocado por outro da lista."
+    },
+    "PA_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": "Atividade, conduta e histórico sexual.",
+      "masking": "Suprimido para `Sin información`."
+    },
+    "PA_L3_RELIGION": {
+      "title": "Religião",
+      "what": "Religião ou denominação: católica, evangélica, adventista, testemunha de Jeová, bahá'í, judaica, muçulmana, e as religiões indígenas Mamatata e Ibeorgun.",
+      "masking": "Flags e códigos mantêm a forma; o valor é trocado por outro da lista."
+    },
+    "PA_L3_CREENCIA_FILOSOFICA_MORAL": {
+      "title": "Crenças filosóficas e morais",
+      "what": "Convicções pessoais, objeção de consciência, posições éticas.",
+      "masking": "Suprimido para `Sin información`."
+    },
+    "PA_L3_OPINION_POLITICA": {
+      "title": "Opinião política",
+      "what": "Ideologia, preferência eleitoral, intenção de voto.",
+      "masking": "É trocada por outra posição de uma escala genérica."
+    },
+    "PA_L3_AFILIACION_POLITICA": {
+      "title": "Filiação política",
+      "what": "Partido em que a pessoa está inscrita ou que apoia. O Tribunal Electoral contava mais de 1,5 milhão de inscritos em partidos em 2026.",
+      "masking": "É trocada por um dos partidos legalmente constituídos — PRD, Realizando Metas, Cambio Democrático, Panameñista, MOLIRENA, MOCA, FAD, Alianza, Partido Popular — ou por candidatura independente (*libre postulación*) ou sem partido."
+    },
+    "PA_L3_AFILIACION_SINDICAL": {
+      "title": "Filiação sindical",
+      "what": "Pertencimento a sindicato, grêmio ou associação de trabalhadores, contribuição sindical, convenção coletiva.",
+      "masking": "Flags mantêm a forma; qualquer outro valor vira `Sin información`."
+    },
+    "PA_FIN_REFERENCIA_CREDITO": {
+      "title": "Referência de crédito",
+      "what": "Pontuação e referências da APC, dias de atraso, carteira vencida, cobrança judicial, contas baixadas como prejuízo.",
+      "masking": "Uma pontuação recebe outros dígitos, uma flag continua flag e qualquer situação é trocada por outra situação de crédito."
+    },
+    "PA_FIN_MONTO_DEUDA": {
+      "title": "Valor de dívida",
+      "what": "Saldos de empréstimos, cartões e hipotecas, valores em atraso, limites de crédito, parcelas.",
+      "masking": "Mapeado para um valor entre B/.100 e B/.500.000."
+    },
+    "PA_FIN_INGRESO_MENSUAL": {
+      "title": "Salário e renda",
+      "what": "Salário, décimo terceiro, renda do domicílio.",
+      "masking": "Mapeado para um valor entre B/.350 e B/.25.000."
+    },
+    "PA_FIN_PATRIMONIO": {
+      "title": "Patrimônio",
+      "what": "Valor cadastral ou de mercado de imóveis e veículos, poupança, aplicações a prazo, patrimônio.",
+      "masking": "Mapeado para um valor entre B/.10.000 e B/.3.000.000."
+    },
+    "PA_FIN_PENSION": {
+      "title": "Pensão e conta individual",
+      "what": "Valor de aposentadoria ou pensão da CSS, saldo da conta individual, do SIACAP ou do fundo de cesantía.",
+      "masking": "Mapeado para um valor entre B/.120 e B/.6.000."
+    },
+    "PA_FIN_SEGURO_SOCIAL": {
+      "title": "Cobertura da seguridade social",
+      "what": "A condição perante a Caja de Seguro Social, com as categorias do censo: segurado direto, beneficiário, aposentado ou pensionista, sem seguro social. Revela trabalho formal ou informal.",
+      "masking": "Flags e códigos mantêm a forma; a categoria é trocada por outra."
+    },
+    "PA_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programa social",
+      "what": "Beneficiários de programas de transferência: 120 a los 65, Red de Oportunidades, Ángel Guardián e Bono Alimenticio Nutricional do MIDES, PASE-U e bolsas do IFARHU. Ser beneficiário revela pobreza, velhice ou deficiência.",
+      "masking": "Flags e códigos mantêm a forma; o programa é trocado por outro."
+    },
+    "PA_FIN_NIVEL_SOCIOECONOMICO": {
+      "title": "Nível socioeconômico",
+      "what": "Condição de pobreza, quintil ou decil de renda, índice de pobreza multidimensional.",
+      "masking": "Um quintil ou decil passa a outro número da mesma faixa, com seu prefixo; uma condição, a outra da lista."
+    },
+    "PA_FIN_VIVIENDA": {
+      "title": "Posse da moradia",
+      "what": "Se a moradia é própria, hipotecada, alugada, cedida ou uma ocupação, e suas condições.",
+      "masking": "Flags e códigos mantêm a forma; a condição é trocada por outra da lista do censo."
+    },
+    "PA_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes criminais",
+      "what": "Récord policivo, antecedentes criminais, sentenças, delitos, detenções e medidas cautelares.",
+      "masking": "Uma flag continua flag; qualquer outro valor vira uma situação genérica: com antecedentes, sem antecedentes ou sem informação."
+    },
+    "PA_PENAL_CAUSA": {
+      "title": "Número de processo",
+      "what": "Números de carpetilla, pasta de investigação, causa, processo judicial ou denúncia.",
+      "masking": "Caractere a caractere, mantendo tamanho e formato."
+    }
+  },
+  "closing": [
+    {
+      "title": "O DV do RUC, calculado pelo set",
+      "body": [
+        "O DV de um RUC de pessoa natural são dois dígitos que a DGI calcula sobre uma tabela de 21 posições: os campos da cédula alinhados à direita em larguras fixas — asiento 5, tomo 3, um código de dois dígitos para as letras (`AV` 15, `PI` 79, `E` 50, `N` 40, `PE` 75), província 2 — e um 5 constante. Os pesos crescem a partir de 2 na direita, módulo 11, e resto 0 ou 1 dá 0; o segundo dígito repete a conta com o primeiro acrescentado. Um campo maior que a sua largura empurra os que estão à esquerda, e uma província de um dígito com `AV` ou `PI` é preenchida com dois zeros.",
+        "Nenhum framework do plugin faz essa conta: o Check Digit sabe somar dígitos com pesos, mas não preencher campos nem pesar letras. O set faz com tabelas:",
+        { "list": [
+          "A cédula é mascarada com o mesmo algoritmo do domínio de cédula. Letras e separadores são trocados por marcadores de um caractere, e o DV antigo é substituído por um estado inicial.",
+          "O estado — soma ponderada, soma dos dígitos e posição — percorre o valor da direita para a esquerda, um caractere por passo. Cada passo é um Data Cleansing que transforma *caractere + estado* em *novo estado + caractere*.",
+          "Na ponta esquerda, uma tabela transforma o estado nos dois dígitos do DV, e um segundo percurso os leva de volta ao lugar do DV antigo.",
+          "Os marcadores voltam a ser letras e separadores."
+        ] },
+        "As tabelas são arquivos de Data Cleansing gerados com o set, e os passos são algoritmos Regex Decompose unidos em String Algorithm Chains de no máximo oito — o limite do engine. Todo RUC mascarado tem DV válido e o mapeamento continua um-para-um. O preço é uma árvore de algoritmos longa sob o domínio e uma tabela de passos com mais de 30.000 linhas."
+      ]
+    },
+    {
+      "title": "Onde as pessoas moram: distritos e corregimentos",
+      "body": [
+        "Com os dados do XII Censo de População de 2023 (INEC), o set conhece a população, o distrito, a província e a localização de cada um dos 699 corregimentos.",
+        { "list": [
+          "Um **corregimento** com menos de 10.000 habitantes passa ao corregimento mais próximo da sua província ou comarca que tenha pelo menos 10.000. Darién, Los Santos e as comarcas Emberá-Wounaan e Ngäbe-Buglé não têm nenhum: os delas vão para o mais próximo do país.",
+          "Um **distrito** com menos de 20.000 habitantes passa ao distrito mais próximo da sua província ou comarca com pelo menos 20.000, ou do país na comarca Emberá-Wounaan.",
+          "A proximidade é medida entre centroides, o do distrito ponderado pela população dos seus corregimentos.",
+          "Sessenta nomes de corregimento se repetem — há cinco San José —: um nome só é generalizado se todos os que o levam forem pequenos. Os códigos do INEC não têm essa ambiguidade."
+        ] },
+        "O resultado é sempre um lugar real, perto do original, e cada grupo de pessoas que acaba compartilhando um nome reúne pelo menos 10.000 habitantes. Nomes que também são nomes ou sobrenomes de pessoas ficam fora da lista de detecção, para que uma coluna de sobrenomes não seja tomada por corregimentos."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        { "list": [
+          "**Colunas binárias** — fotos da cédula, imagens de digitais, PDFs clínicos em BLOBs — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
+          "**O DV em coluna própria** não é recalculado: é mascarado, e deixa de corresponder ao RUC mascarado. Onde a aplicação valida RUC e DV guardados separadamente, a validação falha.",
+          "**As letras da cédula ficam.** `PI` continua indicando um registro como panamenho indígena, e `E`, `N` e `PE`, a condição de estrangeiro, naturalizado ou nascido no exterior. Trocá-las quebraria o formato ou faria cédulas diferentes colidirem. Se esse dado for sensível no seu caso, trate-o junto com a coluna de origem étnica ou nacionalidade.",
+          "**Cédulas com a província preenchida com zero** (`08-442-445`) ou sem hífens são mascaradas caractere a caractere, sem recalcular o DV. O RUC `NT` também é mascarado sem recálculo.",
+          "**O RUC de pessoa jurídica fica.** Uma sociedade de um único dono continua sendo pessoa jurídica para a lei.",
+          "**Data Cleansing deixa passar o que não conhece**: um corregimento escrito de um jeito que não está na lista passa sem mudança.",
+          "**Texto livre** é redigido palavra por palavra: um telefone escrito com espaços não é encontrado, e um nome que também é palavra comum (`Luz`, `Rosa`) é redigido onde aparecer.",
+          "**Menores de idade** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam o aniversário de 18 anos, mas algumas cruzam. Onde isso importa, divida a regra por faixa etária com Multi-Column Condition.",
+          "**Endereços** são trocados como uma linha inteira. Rua, barriada, corregimento e distrito em colunas separadas são mascarados de forma independente e deixam de formar um endereço coerente.",
+          "**Placas e VINs** mantêm o formato, mas não o dígito verificador do VIN."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "O set é gerado e conferido por dois scripts guardados com ele no repositório:",
+        { "list": [
+          "`build.mjs` gera o set, suas tabelas de lookup e as tabelas do DV a partir das definições e das listas mantidas à mão.",
+          "`verify.mjs` confirma primeiro que seu cálculo do DV reproduz os exemplos do algoritmo publicado. Revisa a configuração de cada classifier e perfila 138 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 24 que não são dado pessoal. Depois mascara 255 valores de amostra e 210 placeholders como `N/D` pelo app em execução: RUCs com DV nos quatro separadores e nos cinco tipos de letra, conferindo o DV de cada um; 150 cédulas e 150 RUCs quanto a colisões; e 20 pessoas cuja cédula e RUC precisam continuar coincidindo."
+        ] },
+        "No último build, todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        { "list": [
+          "Lei 81 de 26 de março de 2019, sobre Proteção de Dados Pessoais — Gaceta Oficial 28743-A, 29 de março de 2019 (Asamblea Nacional, Legispan).",
+          "Decreto Executivo 285 de 28 de maio de 2021, que regulamenta a Lei 81 de 2019.",
+          "Autoridad Nacional de Transparencia y Acceso a la Información (ANTAI), Dirección de Protección de Datos Personales.",
+          "Algoritmo de cálculo do dígito verificador do RUC — Dirección General de Ingresos e Autoridad Nacional para la Innovación Gubernamental.",
+          "Formato da cédula de identidade e suas letras — Tribunal Electoral, Dirección Nacional de Cedulación. Inscritos em partidos políticos, julho e agosto de 2026 — Tribunal Electoral.",
+          "População, código e localização dos 699 corregimentos; grupos indígenas e afrodescendentes; estado conjugal; seguridade social; escolaridade — XII Censo Nacional de Población y VIII de Vivienda 2023 (INEC), no serviço geográfico por corregimento publicado com a Esri Panamá.",
+          "Sobrenomes e nomes mais frequentes — Registro Civil do Tribunal Electoral.",
+          "Tipos de deficiência certificados — Secretaría Nacional de Discapacidad (SENADIS). Programas de transferência de 2026 — Ministerio de Desarrollo Social (MIDES) e IFARHU (PASE-U).",
+          "Referências de crédito — Lei 24 de 2002 e APC. Religião — pesquisa nacional de 2015. Placas — Autoridad del Tránsito y Transporte Terrestre (formato de 2013). Numeração telefônica — ASEP, Plan Nacional de Numeración. Códigos postais — Correos y Telégrafos."
+        ] }
+      ]
+    }
+  ]
+}

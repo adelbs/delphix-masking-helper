@@ -471,7 +471,7 @@
         "The set is generated and checked by two scripts kept with it in the repository:",
         { "list": [
           "`build.mjs` generates the set from its definitions and hand-kept lists.",
-          "`verify.mjs` reviews every classifier configuration, profiles 129 columns with the whole set at its threshold — well named, badly named, and 21 columns that are not personal data — and masks 184 sample values and 204 placeholders such as `S/I`, including 60 random RUTs checked for a valid check digit."
+          "`verify.mjs` reviews every classifier configuration, profiles 129 columns with the whole set at its threshold — well named, badly named, and 21 columns that are not personal data — masks 184 sample values and 204 placeholders such as `S/I` — checking that each masked value comes from the right vocabulary, and 60 random RUTs for a valid check digit — and runs each of the 101 algorithms on its own sample input, sent only the algorithms it references, as the tester does."
         ] },
         "At the last build every column was assigned as expected and every value masked as expected."
       ]

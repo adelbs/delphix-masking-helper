@@ -38,6 +38,27 @@ function parseConfig(raw: string): Record<string, unknown> {
   } catch { return {} }
 }
 
+/**
+ * The saved algorithms a configuration needs, at any depth. An algorithm it names may name others
+ * in turn — a Regex Decompose applying a String Algorithm Chain of Check Digits — and the runner
+ * can only set up what it is sent: with the direct references alone, the test failed with
+ * "Sub-algorithm not found" for anything nested.
+ */
+function referencedAlgorithms(config: unknown, saved: Array<{ name: string; framework: string; config: string }>) {
+  const byName = new Map(saved.map(a => [a.name, a]))
+  const found = new Map<string, { name: string; className: string; config: Record<string, unknown> }>()
+  const pending = collectAlgoRefNames(config)
+  while (pending.length) {
+    const name = pending.pop()!
+    const algo = byName.get(name)
+    if (!algo || found.has(name)) continue
+    const algoConfig = parseConfig(algo.config)
+    found.set(name, { name, className: algo.framework, config: algoConfig })
+    pending.push(...collectAlgoRefNames(algoConfig))
+  }
+  return [...found.values()]
+}
+
 interface Props {
   framework: Framework
   /** Set when a saved algorithm was opened: the panel edits that row instead of creating one. */
@@ -189,10 +210,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
     setOutput(null)
     try {
       const effectiveConfig = getEffectiveConfig()
-      const refNames = collectAlgoRefNames(effectiveConfig)
-      const additionalAlgorithms = savedAlgorithms
-        .filter(t => refNames.includes(t.name))
-        .map(a => ({ name: a.name, className: a.framework, config: parseConfig(a.config) }))
+      const additionalAlgorithms = referencedAlgorithms(effectiveConfig, savedAlgorithms)
       const result = await api.mask({ framework: framework.className, config: effectiveConfig, input, mode: maskMode, additionalAlgorithms })
       if (result.output !== undefined) {
         setOutput({ value: result.output, ok: true })
@@ -211,10 +229,12 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
     setMcResult(null)
     setMcError(null)
     try {
+      const effectiveConfig = getEffectiveConfig()
       const result = await api.maskMultiColumn({
         framework: framework.className,
-        config: getEffectiveConfig(),
+        config: effectiveConfig,
         columns: mcColumns.map(c => ({ name: c.name, value: c.value || null, type: c.type })),
+        additionalAlgorithms: referencedAlgorithms(effectiveConfig, savedAlgorithms),
       })
       if (result.columns) {
         setMcResult(result.columns)
@@ -234,7 +254,13 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
     setBatchMasking(true)
     setBatchResults([])
     try {
-      const result = await api.maskBatch({ framework: framework.className, config: getEffectiveConfig(), inputs: batchRows })
+      const effectiveConfig = getEffectiveConfig()
+      const result = await api.maskBatch({
+        framework: framework.className,
+        config: effectiveConfig,
+        inputs: batchRows,
+        additionalAlgorithms: referencedAlgorithms(effectiveConfig, savedAlgorithms),
+      })
       setBatchResults(result.results)
     } catch (e) {
       toast.error((e as Error).message)
