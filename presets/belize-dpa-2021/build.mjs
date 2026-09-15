@@ -386,7 +386,7 @@ lookup('BZ_ADDRESS', 'bz-addresses.txt', (() => {
   return [...out]
 })(), '#24 Cleghorn Street, Belize City', 'PRESERVE_LOOKUP_FILE')
 domain('BZ_L1_ADDRESS', 'BZ_ADDRESS',
-  byName(['address(?!_?(ip|mac|email|e_?mail|web|url|book|type|id))[a-z0-9_]*|addr(ess)?_?(line|1|2)?[a-z0-9_]*|street(_?(address|name))?|residential_?address|home_?address|mailing_?address|postal_?address|physical_?address|residence|place_?of_?residence|domicile|direccion(?!_?(ip|mac|correo|electronica))[a-z_]*|domicilio[a-z_]*', 0.8]),
+  byName(['(?<!(mac|ip|e_?mail|web|url)_?)address(?!_?(ip|mac|email|e_?mail|web|url|book|type|id))[a-z0-9_]*|(?<!(mac|ip|e_?mail|web|url)_?)addr(ess)?_?(line|1|2)?[a-z0-9_]*|street(_?(address|name))?|residential_?address|home_?address|mailing_?address|postal_?address|physical_?address|residence|place_?of_?residence|domicile|direccion(?!_?(ip|mac|correo|electronica))[a-z_]*|domicilio[a-z_]*', 0.8]),
   byType(STRING(6)),
   byPattern([
     [String.raw`(?i)#?\s*\d+[A-Z]?\s+.*\b(street|st\.?|avenue|ave\.?|road|rd\.?|drive|dr\.?|lane|boulevard|blvd\.?|highway|hwy)\b.*`, 0.8],
@@ -891,8 +891,19 @@ const referenced = JSON.stringify([domains, algorithms.map((x) => x.config)])
 const orphans = algorithms.filter((a) => !referenced.includes(`"${a.name}"`))
 if (orphans.length) throw new Error(`algorithms nobody uses: ${orphans.map((a) => a.name).join(', ')}`)
 
+// The essential pack: identity documents, names, contact, address and birth date. Loading it brings
+// these domains and only what they lean on; the extended pack is everything.
+const ESSENTIAL = [
+  'BZ_L1_SOCIAL_SECURITY_NUMBER', 'BZ_L1_TIN', 'BZ_L1_PASSPORT',
+  'BZ_L1_GIVEN_NAME', 'BZ_L1_SURNAME', 'BZ_L1_FULL_NAME', 'BZ_L1_EMAIL', 'BZ_L1_PHONE',
+  'BZ_L1_ADDRESS', 'BZ_L1_ADDRESS_DETAIL', 'BZ_L2_BIRTH_DATE',
+]
+const notDomains = ESSENTIAL.filter((name) => !domains.some((d) => d.name === name))
+if (notDomains.length) throw new Error(`essential pack names domains the set does not have: ${notDomains.join(', ')}`)
+
+const VERSION = 2
 const preset = {
-  version: 1,
+  version: VERSION,
   name: {
     en: 'Belize — Data Protection Act, 2021 (personal data protection)',
     'pt-BR': 'Belize — Data Protection Act, 2021 (proteção de dados pessoais)',
@@ -904,10 +915,16 @@ const preset = {
     es: 'Descubre y enmascara datos personales de Belice conforme a la Data Protection Act, 2021: identificadores directos (número de seguridad social, TIN, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, ciudad o aldea), los datos personales sensibles de la sección 2 — incluidos el historial o la situación financiera y los procesos penales — y registros de salud.',
   },
   profileSet: {
-    name: 'BZ - Data Protection Act 2021 - Personal data',
+    name: `BZ - Data Protection Act 2021 - v${VERSION}`,
     description: 'Direct identifiers, quasi-identifiers, sensitive personal data (section 2), health records, financial record or position, and criminal record and proceedings, under the Data Protection Act, 2021 of Belize.',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
+  },
+  packs: {
+    essential: {
+      description: 'Essential pack of the Data Protection Act, 2021: social security number, TIN, passport, names, contact, address and birth date.',
+      domains: ESSENTIAL,
+    },
   },
   classifiers,
   domains,

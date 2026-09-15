@@ -105,6 +105,7 @@ h2{ font-family:"Iowan Old Style",Georgia,serif; font-size:19pt; font-weight:400
 
 .tag{ font-size:6.8pt; letter-spacing:.07em; text-transform:uppercase; font-weight:700; padding:.6mm 1.9mm; border-radius:1mm; white-space:nowrap; }
 .tag-algo{ background:#eceff2; color:var(--ink-2); }
+.tag-essential{ background:#e3f1e8; color:#1d6b3f; }
 .k-PATH{ background:var(--k-path-wash); color:var(--k-path); }
 .k-TYPE{ background:var(--k-type-wash); color:var(--k-type); }
 .k-REGEX{ background:var(--k-regex-wash); color:var(--k-regex); }

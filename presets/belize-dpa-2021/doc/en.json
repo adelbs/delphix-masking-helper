@@ -15,7 +15,10 @@
           "**Financial record or position** — credit references, debt, income, assets, pensions, social security benefits, social programmes, poverty and housing tenure. Section 2 makes them sensitive.",
           "**Criminal record and proceedings** — records, charges, outcomes and case numbers, also sensitive under section 2."
         ] },
-        "Everything the set needs travels with it: loading it creates the domains, classifiers, algorithms and lookup files, and sending it to a Masking Engine sends all of them."
+        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NAME`, `RESULT`, `CITY` — needs the values to agree. A column with a meaningless name (`FIELD1`, `REMARKS`) is still found when its values have a recognizable shape or vocabulary: a social security number, a Belizean phone number, a plate, a village.",
+        "Column names are recognized in English, in the abbreviations of Belizean systems (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) and in Spanish, which a large part of the country speaks.",
+        { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a scan of the social security card or passport: the number is still readable in the image. Report those columns as residual risk." }
       ]
     },
     {
@@ -39,20 +42,6 @@
         "A test environment with production data is processing for purposes the data was not collected for, and it holds sensitive data — financial and criminal data among them — outside the controls built for it. A copy from which individuals can no longer be identified is not personal data: that is what the set is for.",
         "The list of sensitive data in section 2 is closed, but the set goes further where the risk is the same: it treats health records, gender identity and the language a person speaks — which reveals Maya, Garifuna or Mennonite origin — with the same care.",
         { "note": "The definition of personal data counts what the controller holds or is likely to hold. Masking is deterministic for the engine key, so whoever has both the production data and the key can link a masked row back to its source. Keep the key, and access to production, away from the people who use the masked copy. Whether a copy counts as anonymised is a legal assessment of the whole environment, not of the profile set alone." }
-      ]
-    },
-    {
-      "title": "Using the set",
-      "body": [
-        { "list": [
-          "**Load** — *Settings → Profile Sets → Load*. Loading again resets every object of the set to how it ships.",
-          "**Send to Delphix** — from the profile set, or with *Send everything to Delphix*. Domains, algorithms and files go first.",
-          "**Profile** — run a profiling job with the set and review the assigned domains before masking.",
-          "**Mask** — run the masking job. Use the same engine key in every environment so masked values stay consistent across systems."
-        ] },
-        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NAME`, `RESULT`, `CITY` — needs the values to agree. A column with a meaningless name (`FIELD1`, `REMARKS`) is still found when its values have a recognizable shape or vocabulary: a social security number, a Belizean phone number, a plate, a village.",
-        "Column names are recognized in English, in the abbreviations of Belizean systems (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) and in Spanish, which a large part of the country speaks.",
-        { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a scan of the social security card or passport: the number is still readable in the image. Report those columns as residual risk." }
       ]
     }
   ],
@@ -492,12 +481,14 @@
     {
       "title": "Verification",
       "body": [
-        "The set is generated and checked by two scripts kept next to it in the repository:",
+        "Before publication the set was checked outside a Masking Engine:",
         { "list": [
-          "`build.mjs` generates the set and its lookup tables from the definitions and the hand-kept lists.",
-          "`verify.mjs` reviews every classifier configuration and profiles 141 columns with the whole set at its threshold — well named, badly named and 32 that are not personal data. It audits the generalization table for all 221 places. It then masks 145 sample values and 198 placeholders such as `N/A` through the running app, checking each output against its vocabulary, and 150 social security numbers for collisions."
+          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
+          "Profiling was simulated on 141 columns with the whole set at its assignment threshold — well named, badly named, and 32 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "The table that generalizes towns and villages was audited for all 221 places.",
+          "The algorithms, run with the Delphix algorithm plugin, masked 145 sample values and 198 placeholders such as `N/A`, checking each output against its vocabulary, and 150 social security numbers for collisions. Each of the 90 algorithms also masked its own sample input."
         ] },
-        "In the last build, every column was assigned as expected and every value was masked as expected."
+        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
       ]
     },
     {

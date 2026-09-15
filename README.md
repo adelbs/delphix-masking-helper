@@ -10,6 +10,12 @@ values, **build** a configured algorithm from a problem described in plain langu
 with a Masking Engine — pulling its algorithms down to work on and pushing yours back up. All
 without creating a Rule Set or running a masking job.
 
+It covers sensitive data discovery too: the **domains** a column can belong to, the
+**classifiers** that decide it — each one testable against a column you describe — and the
+**profile sets** a profiling job runs. Ready-made profile sets for the data protection laws of
+**Chile, Mexico, Panama and Belize** ship with the tool, each loaded in one click and documented
+in a PDF.
+
 > **Wording follows Delphix.** A **framework** is a masking technique the plugin provides —
 > Secure Lookup, Character Mapping, Date Shift. Configuring one produces an **algorithm**: named,
 > saved and ready to use. The sidebar lists frameworks; what you save is an algorithm.
@@ -27,13 +33,13 @@ without creating a Rule Set or running a masking job.
 > `lib/` — see [Delphix libraries](#delphix-libraries) below.
 > Reference: [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
 
-![The assistant building an algorithm, an algorithm being tested, and algorithms being synced with a Delphix engine](docs/demo.gif)
+![An algorithm being tested, a classifier tested against a described column, the profile sets that ship with the tool, and a connected Delphix engine](docs/demo.gif)
 
-<sub>Three things, in order: asking the assistant for an algorithm and watching it build and
-validate one; running an algorithm against a real value; importing from a Delphix engine and
-sending one back. Recorded against the default local provider (Ollama · `llama3.1:8b`) on an M1
-Pro — the model's reply is time-lapsed, since locally it takes around a minute. Every masked value
-is real output from the plugin, and the engine is a real one.</sub>
+<sub>Four things, in order: running an algorithm against a real value; testing a classifier
+against a column described on screen, and seeing which domain profiling would assign; the profile
+sets that ship with the tool; and the integration with a Delphix engine, with an algorithm that
+came down from it. Every masked value is real output from the plugin, every score comes from the
+local classifier evaluator, and the engine is a real one.</sub>
 
 ## How it works
 
@@ -222,6 +228,8 @@ npm run build
 The home screen has a chat that helps you two ways: explaining how a framework works and which
 one fits a situation, and **building a ready-to-use algorithm** from a problem you describe in
 plain language. You do not need to know which framework to use — that is what it works out.
+Building takes a hosted provider — Claude, Gemini or GitHub Models; a local model only advises
+(see [A local model advises](#a-local-model-advises)).
 
 For example:
 
@@ -265,9 +273,22 @@ field shows a mask and you replace the key by typing a new one.
 "GitHub Models (Copilot)" is the OpenAI-compatible endpoint that comes with a GitHub account.
 GitHub Copilot itself has no public chat API for third-party applications.
 
-> **On local models.** The framework catalog takes about 12k tokens of context. That is
-> comfortable for Claude and Gemini, but tight for small local models — one with an 8k window
-> will truncate the catalog and pick the wrong framework. Prefer a model with a large context.
+### A local model advises
+
+With Ollama the assistant explains the catalog and recommends a framework and the values for its
+parameters, but it never saves an algorithm: you pick the framework in the sidebar and fill in
+what it suggested. The chat says so in a banner for as long as a local model is selected.
+
+That is a measured decision. Tested on `llama3.2:3b` and `llama3.1:8b`, neither model ever
+answered "no framework does this" — not even on the questions where that was the only right
+answer. What they produced instead was a configuration that runs and does not solve the problem:
+the runner accepts it, and you find out much later. A model that cannot say no is not given the
+button that writes to your saved algorithms. For algorithms built and validated for you, configure
+a hosted provider.
+
+The framework catalog also takes about 12k tokens of context. That is comfortable for Claude and
+Gemini, but tight for small local models — one with an 8k window will truncate the catalog and
+pick the wrong framework. Prefer a model with a large context.
 
 ## Finding things in the sidebar
 
@@ -373,11 +394,32 @@ does the reverse: every member is sent first, and the set is then created or upd
 by the ids the engine gave back — a set can only reference classifiers the engine already holds.
 
 **Pre-configured profile sets.** *Settings → Profile Sets* lists profile sets that ship with the
-tool, each with a PDF of its documentation and everything it needs. **Load** creates the set, its
+tool, each with a PDF of its documentation and everything it needs. **Load** asks for a pack: the
+**essential pack** is the minimum for the law — identity documents, names, contact, address and
+birth date — and the **extended pack** is the whole set. Either one creates the profile set, its
 classifiers, domains, algorithms and files in one go. Loading again never duplicates anything: the
 button becomes **Reset**, which puts every item back the way it ships and discards the changes made
-to it. If a name the set uses already belongs to something that did not come from it, the tool
-lists what would be replaced and asks first. The format is described in `presets/README.md`.
+to it, and picking the other pack there switches, removing what the new pack does not include.
+**Unload** removes what the set brought, except anything something of yours still uses; what was
+sent to Delphix stays there. If a name the set uses already belongs to something that did not come
+from it, the tool lists what would be replaced and asks first. The profile set is named after the
+country, the law and its version (`CL - Ley 21.719 - v3`), and the card shows the version it ships
+with. The format is described in `presets/README.md`.
+
+Four ship today, one per country, all with a profile set threshold of 60. The counts below are the
+extended pack; each essential pack has 11 to 13 domains:
+
+| Profile set | Law | Domains | Classifiers | Algorithms | Documentation |
+|---|---|---|---|---|---|
+| [Chile](presets/chile-ley-21719/) | Ley 21.719 | 73 | 132 | 101 | [en](presets/chile-ley-21719/doc.en.pdf) · [pt-BR](presets/chile-ley-21719/doc.pt-BR.pdf) · [es](presets/chile-ley-21719/doc.es.pdf) |
+| [Mexico](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 153 | 154 | [en](presets/mexico-lfpdppp/doc.en.pdf) · [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
+| [Panama](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 135 | 142 | [en](presets/panama-ley-81/doc.en.pdf) · [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) · [es](presets/panama-ley-81/doc.es.pdf) |
+| [Belize](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 124 | 90 | [en](presets/belize-dpa-2021/doc.en.pdf) · [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) · [es](presets/belize-dpa-2021/doc.es.pdf) |
+
+Each one groups its domains into direct identifiers, quasi-identifiers and the sensitive data its
+law names, and masks national identifiers with a valid check digit wherever the number has one —
+Chile's RUT, Mexico's CURP and RFC, a natural person's RUC in Panama. The README in each folder explains the design and
+its limits; the PDF lists every domain, classifier, algorithm and file, with masked examples.
 
 **Importing.** There is no per-object import: connecting the integration brings the whole engine
 down, and **Refresh from Delphix** brings it down again. An algorithm built on a framework this

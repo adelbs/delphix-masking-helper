@@ -1,7 +1,7 @@
 import type {
   Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage, Classifier, ClassifierCatalog,
   ClassifierFrameworkName, ClassifierReview, ClassifierTestField, ClassifierTestResult,
-  ProfileSet, ProfileSetPreset,
+  PresetConflict, PresetPack, ProfileSet, ProfileSetPreset,
   BuiltinReferences, Domain, EngineReferences, Framework, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
 import type { EngineExportResult, EngineImportResult, ImportProgress, SyncExportResult } from '@/lib/engine-sync'
@@ -316,10 +316,25 @@ export const api = {
   getPresets: () =>
     request<ProfileSetPreset[]>('/api/presets'),
 
-  /** Creates the preset, or resets it when loaded before. A 409 carries `conflicts`; `overwrite` confirms them. */
-  loadPreset: (id: string, overwrite = false) =>
-    request<{ mode: 'loaded' | 'reset'; profileSetId: number; files: string[] }>(
-      `/api/presets/${encodeURIComponent(id)}/load`, { method: 'POST', ...json({ overwrite }) }),
+  /**
+   * Creates one pack of the preset, or resets it when loaded before — removing what the pack does
+   * not carry. A 409 carries `conflicts`; `overwrite` confirms them.
+   */
+  loadPreset: (id: string, pack: PresetPack, overwrite = false) =>
+    request<{
+      mode: 'loaded' | 'reset' | 'switched'
+      pack: PresetPack
+      profileSetId: number
+      files: string[]
+      removed: PresetConflict[]
+      /** Items the pack no longer carries that something else here still uses. */
+      kept: PresetConflict[]
+    }>(`/api/presets/${encodeURIComponent(id)}/load`, { method: 'POST', ...json({ overwrite, pack }) }),
+
+  /** Removes what the preset brought, except what something else here still uses. */
+  unloadPreset: (id: string) =>
+    request<{ removed: PresetConflict[]; kept: PresetConflict[] }>(
+      `/api/presets/${encodeURIComponent(id)}/unload`, { method: 'POST' }),
 
   /** A link rather than a request: the browser downloads the PDF itself. */
   presetDocUrl: (id: string, locale: string) =>

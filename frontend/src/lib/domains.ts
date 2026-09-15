@@ -1,53 +1,20 @@
-import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
 import { getFrameworkGroup, type FrameworkGroup } from '@/lib/framework-metadata'
+import { createListStore } from '@/lib/list-store'
 import type { Algorithm, Domain } from '@/types'
 
 /**
  * The domains, shared the same way the algorithms are — the sidebar shows them while the
  * editor writes to them, so one cache with subscribers is what keeps the two in step.
  */
-let cache: Domain[] | null = null
-let mountFetch: Promise<Domain[]> | null = null
-const listeners = new Set<(rows: Domain[]) => void>()
-
-function publish(rows: Domain[]) {
-  cache = rows
-  for (const notify of listeners) notify(rows)
-}
-
-function ensureLoaded(): Promise<Domain[]> {
-  if (cache) return Promise.resolve(cache)
-  mountFetch ??= api.getDomains()
-    .then(rows => { publish(rows); return rows })
-    .catch(() => [])
-    .finally(() => { mountFetch = null })
-  return mountFetch
-}
+const store = createListStore<Domain>('domains', () => api.getDomains())
 
 /** Call after any write. Always hits the server, for the same reason as the algorithm store. */
-export async function refreshDomains(): Promise<Domain[]> {
-  try {
-    const rows = await api.getDomains()
-    publish(rows)
-    return rows
-  } catch {
-    return cache ?? []
-  }
-}
+export const refreshDomains = store.refresh
 
 export function useDomains(): { domains: Domain[]; loading: boolean; refresh: () => Promise<Domain[]> } {
-  const [domains, setDomains] = useState<Domain[]>(() => cache ?? [])
-  const [loading, setLoading] = useState(cache === null)
-
-  useEffect(() => {
-    let live = true
-    listeners.add(setDomains)
-    ensureLoaded().then(() => { if (live) setLoading(false) })
-    return () => { live = false; listeners.delete(setDomains) }
-  }, [])
-
-  return { domains, loading, refresh: refreshDomains }
+  const { rows, loading } = store.useList()
+  return { domains: rows, loading, refresh: refreshDomains }
 }
 
 /**

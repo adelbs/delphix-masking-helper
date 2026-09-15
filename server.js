@@ -669,6 +669,56 @@ app.post('/api/delphix/test', async (req, res) => {
   });
   res.json({ configured: delphix.isConfigured(cfg), ...(await delphix.probe(cfg)) });
 });
+
+/**
+ * Pushes one saved algorithm row to the engine and records where it landed.
+ *
+ * What it references goes first: every algorithm its configuration names that is this machine's
+ * to send, and every file the engine could not otherwise open. The configuration that reaches the
+ * engine names them as they end up there; the local row keeps its own addresses, which are the
+ * ones that run here.
+ *
+ * Shared with the domain and classifier exports and with sending everything. Returns what
+ * `delphix.saveAlgorithm` returned plus `renamedLocally`.
+ */
+async function pushAlgorithmRow(ctx, row, { asked = null, description } = {}) {
+  if (ctx.done.has(row.id)) return ctx.done.get(row.id);
+  if (ctx.visiting.has(row.id)) {
+    const err = new Error(`"${row.name}" ends up referencing itself, so there is no order to send it in.`);
+    err.code = 'reference-cycle';
+    throw err;
+  }
+  ctx.visiting.add(row.id);
+  try {
+    const stored = parseStoredConfig(row.config);
+    const linked = row.delphix_origin === ctx.origin ? row.delphix_name : null;
+    const existingName = asked && asked !== linked ? null : linked;
+    const name = asked || linked || String(row.name).trim();
+    const renamedLocally = Boolean(existingName && !asked && String(row.name).trim() !== existingName);
+
+    const renames = {};
+    for (const reference of delphix.algorithmReferenceNames(stored)) {
+      const target = await pushReference(ctx, reference, row.name);
+      if (target !== reference) renames[reference] = target;
+    }
+    const engine = await ctx.engineAlgorithms();
+    const current = existingName ? engine.get(existingName)?.config : null;
+    const config = await engineReadyFiles(ctx, delphix.rewriteConfig(stored, { algorithms: renames }), current);
+
+    const out = await delphix.saveAlgorithm(ctx.cfg, {
+      name, className: row.framework, config, description, existingName,
+    });
+    db.prepare(`UPDATE saved_algorithms SET delphix_name = ?, delphix_origin = ?,
+                updated_at = datetime('now') WHERE id = ?`).run(out.name, ctx.origin, row.id);
+    engine.set(out.name, { algorithmName: out.name, createdBy: ctx.cfg.username, config });
+    const result = { ...out, renamedLocally };
+    ctx.done.set(row.id, result);
+    return result;
+  } finally {
+    ctx.visiting.delete(row.id);
+  }
+}
+
 app.post('/api/delphix/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
@@ -1469,6 +1519,48 @@ app.delete('/api/domains/:id', (req, res) => {
   db.prepare('DELETE FROM domains WHERE id = ?').run(req.params.id);
   res.json({ ok: true });
 });
+
+/**
+ * Pushes one local domain to the engine, with the algorithms it names.
+ *
+ * **The algorithms go first, and that is not a nicety.** The engine validates the reference:
+ * posting a domain whose `defaultAlgorithmCode` it does not know answers
+ * `404 Could not find Algorithm '<name>'`. A domain built on an algorithm that only exists
+ * here would simply fail, and the fix — "go and send the algorithm first" — is something the
+ * tool can do itself (`pushReference`, which also leaves the engine's read-only plugin
+ * instances alone: a stock engine's domains point at those constantly).
+ *
+ * A failure to send an algorithm stops the whole push. Continuing would post a domain whose
+ * reference is missing, which fails anyway — with an error about the domain, pointing away
+ * from the algorithm that actually went wrong.
+ *
+ * Memoised by row id in `ctx.domainsDone`: sending everything reaches the same domain through
+ * dozens of classifiers, and each would otherwise PUT it again.
+ */
+async function pushDomainRow(ctx, row) {
+  const already = ctx.domainsDone.get(row.id);
+  if (already) return already;
+  // What the domain will reference is the name the algorithm ends up with *there* — a legacy
+  // row whose local name drifted from its delphix_name would otherwise point at a name the
+  // engine does not have.
+  const reference = {};
+  for (const field of ['default_algorithm', 'default_tokenization']) {
+    const name = String(row[field] ?? '').trim();
+    reference[field] = name ? await pushReference(ctx, name, row.name) : '';
+  }
+
+  const out = await delphix.saveDomain(ctx.cfg, {
+    name: row.name,
+    defaultAlgorithm: reference.default_algorithm,
+    defaultTokenization: reference.default_tokenization,
+  });
+  db.prepare(`UPDATE domains SET delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
+    .run(ctx.origin, row.id);
+  const result = { mode: out.mode, name: out.name };
+  ctx.domainsDone.set(row.id, result);
+  return result;
+}
+
 app.post('/api/delphix/domains/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
@@ -2139,9 +2231,14 @@ app.delete('/api/delphix/integration', (req, res) => {
 // Loading writes all of it in one transaction, and tags every row with the preset it came from.
 // That tag is what makes loading twice a reset rather than a second copy: the rows are found
 // again — a classifier or set even after being renamed here — and put back the way they ship.
+// It is also what lets a preset be unloaded: the tagged rows are the ones it brought.
+//
+// A preset loads as one of two packs. The extended pack is everything in it; the essential pack is
+// the domains the manifest lists under packs.essential, with only what those lean on.
 
 const PRESETS_DIR = path.join(__dirname, 'presets');
 const PRESET_LOCALES = ['en', 'pt-BR', 'es'];
+const PRESET_PACKS = ['essential', 'extended'];
 /** How a preset's configuration names one of its own files; rewritten to a path here on load. */
 const PRESET_FILE_SCHEME = 'preset-file://';
 
@@ -2165,6 +2262,10 @@ db.exec(`
     loaded_at TEXT NOT NULL DEFAULT (datetime('now'))
   )
 `);
+// Loads from before the packs were the whole preset: a null pack reads as extended.
+if (!db.prepare("SELECT COUNT(*) AS n FROM pragma_table_info('preset_loads') WHERE name = 'pack'").get().n) {
+  db.exec('ALTER TABLE preset_loads ADD COLUMN pack TEXT');
+}
 
 /** Every string in a configuration, passed through `fn`. */
 function mapStrings(value, fn) {
@@ -2208,6 +2309,7 @@ function readPreset(id) {
     name: manifest?.name ?? {},
     summary: manifest?.summary ?? {},
     profileSet: manifest?.profileSet ?? {},
+    packs: manifest?.packs ?? {},
     classifiers: listOf(manifest?.classifiers),
     domains: listOf(manifest?.domains),
     algorithms: listOf(manifest?.algorithms),
@@ -2284,49 +2386,125 @@ function presetProblems(p) {
     if (typeof a.framework !== 'string' || !a.framework) out.push(`algorithm "${a.name}" has no framework.`);
     undeclared('algorithm', a);
   }
+
+  if (!p.packs || typeof p.packs !== 'object' || Array.isArray(p.packs)) {
+    out.push('packs must be an object.');
+  } else {
+    for (const key of Object.keys(p.packs)) {
+      if (key !== 'essential') out.push(`packs.${key}: the only pack a preset declares is essential; extended is everything.`);
+    }
+    const essential = p.packs.essential;
+    if (essential !== undefined) {
+      const listed = listOf(essential?.domains);
+      if (!listed.length) out.push('packs.essential.domains must name at least one domain.');
+      for (const name of listed) {
+        if (!domainNames.has(name)) out.push(`packs.essential.domains names "${name}", which is not among the domains.`);
+      }
+      if (listed.length && !members.some((m) => p.classifiers.some((c) => c.name === m && listed.includes(c.domain)))) {
+        out.push('packs.essential leaves the profile set with no classifier.');
+      }
+    }
+  }
   return out;
 }
 
+/** The packs a preset can load as, smallest first. */
+const presetPackIds = (p) => PRESET_PACKS.filter((pack) => pack === 'extended' || p.packs?.essential);
+
+/**
+ * The part of a preset one pack loads. Extended is all of it. Essential is the listed domains, the
+ * classifiers that vote for them, the algorithms those domains name together with everything those
+ * reference, and the files any of that reads — the same closure the engine sync follows.
+ */
+function presetPack(p, pack) {
+  if (pack === 'extended') return { ...p, pack };
+  const essential = p.packs.essential;
+  const wanted = new Set(listOf(essential.domains));
+  const domains = p.domains.filter((d) => wanted.has(d.name.trim()));
+  const classifiers = p.classifiers.filter((c) => wanted.has(c.domain));
+
+  const byName = new Map(p.algorithms.map((a) => [a.name.trim(), a]));
+  const reached = new Set();
+  const reach = (name) => {
+    const key = String(name ?? '').trim();
+    if (reached.has(key) || !byName.has(key)) return;
+    reached.add(key);
+    for (const ref of delphix.algorithmReferenceNames(byName.get(key).config)) reach(ref);
+  };
+  for (const d of domains) { reach(d.algorithm); reach(d.tokenization); }
+  const algorithms = p.algorithms.filter((a) => reached.has(a.name.trim()));
+
+  const read = new Set([...algorithms, ...classifiers].flatMap((item) => presetFileRefs(item.config)));
+  const members = new Set(classifiers.map((c) => c.name.trim()));
+  return {
+    ...p,
+    pack,
+    domains,
+    classifiers,
+    algorithms,
+    files: p.files.filter((file) => read.has(file)),
+    profileSet: {
+      ...p.profileSet,
+      description: essential.description ?? p.profileSet.description,
+      classifiers: listOf(p.profileSet.classifiers).filter((name) => members.has(name.trim())),
+    },
+  };
+}
+
+const presetCounts = (view) => ({
+  classifiers: view.classifiers.length,
+  domains: view.domains.length,
+  algorithms: view.algorithms.length,
+  files: view.files.length,
+});
+
+const presetLoad = (id) => db.prepare(`
+  SELECT version, COALESCE(pack, 'extended') AS pack, loaded_at FROM preset_loads WHERE preset_id = ?
+`).get(id) ?? null;
+
 /** What the settings tab lists. */
 function presetListing(p) {
+  // A broken manifest may not hold the shapes a pack is cut from; its counts are all it can show.
+  const packs = p.problems.length ? ['extended'] : presetPackIds(p);
   return {
     id: p.id,
     version: p.version,
     name: p.name,
     summary: p.summary,
-    profileSet: { name: p.profileSet.name ?? '', threshold: p.profileSet.threshold ?? THRESHOLD_DEFAULT },
-    counts: {
-      classifiers: p.classifiers.length,
-      domains: p.domains.length,
-      algorithms: p.algorithms.length,
-      files: p.files.length,
-    },
+    profileSet: { name: p.profileSet.name ?? '' },
+    packs: Object.fromEntries(packs.map((pack) => [pack, presetCounts(presetPack(p, pack))])),
     docs: p.docs,
-    loaded: db.prepare('SELECT version, loaded_at FROM preset_loads WHERE preset_id = ?').get(p.id) ?? null,
+    loaded: presetLoad(p.id),
     problems: p.problems,
   };
 }
 
 /**
- * Where each item of a preset goes, and what is in the way.
+ * Where each item of one pack of a preset goes, and what is in the way.
  *
  * The row a load writes is the one tagged with this preset and item — found even if a classifier
  * or set was renamed here — or else the one holding the name. Anything holding the name that is
  * not that row, or a row holding it that did not come from this preset, is a conflict: loading
  * would overwrite or remove something the user made, so it is refused unless confirmed.
+ *
+ * The profile set is found by the preset alone: there is one per preset, and its name carries the
+ * version, so the name it was loaded under is not the one it ships with now.
  */
-function planPreset(p) {
-  const plan = { targets: new Map(), clashes: [], conflicts: [] };
+function planPreset(p, pack) {
+  const view = presetPack(p, pack);
+  const plan = { view, targets: new Map(), clashes: [], conflicts: [] };
   const items = [
-    ...p.algorithms.map((item) => ['algorithm', item]),
-    ...p.domains.map((item) => ['domain', item]),
-    ...p.classifiers.map((item) => ['classifier', item]),
-    ['profileSet', p.profileSet],
+    ...view.algorithms.map((item) => ['algorithm', item]),
+    ...view.domains.map((item) => ['domain', item]),
+    ...view.classifiers.map((item) => ['classifier', item]),
+    ['profileSet', view.profileSet],
   ];
   for (const [kind, item] of items) {
     const table = PRESET_TABLES[kind];
     const name = item.name.trim();
-    const tagged = db.prepare(`SELECT * FROM ${table} WHERE preset_id = ? AND preset_item = ?`).get(p.id, name);
+    const tagged = kind === 'profileSet'
+      ? db.prepare('SELECT * FROM profile_sets WHERE preset_id = ? ORDER BY id').get(p.id)
+      : db.prepare(`SELECT * FROM ${table} WHERE preset_id = ? AND preset_item = ?`).get(p.id, name);
     const holders = db.prepare(`SELECT * FROM ${table} WHERE name = ?`).all(name);
     const target = tagged ?? holders[0] ?? null;
     plan.targets.set(`${kind}:${name}`, target);
@@ -2337,18 +2515,29 @@ function planPreset(p) {
     }
   }
 
-  // A file is only in the way the first time: after that, resetting means overwriting it.
-  const loadedBefore = db.prepare('SELECT 1 FROM preset_loads WHERE preset_id = ?').get(p.id);
-  if (!loadedBefore) {
-    for (const file of p.files) {
-      const dest = path.join(filesDirPath(), file);
-      if (fs.existsSync(dest) && !fs.readFileSync(dest).equals(fs.readFileSync(path.join(p.dir, 'files', file)))) {
-        plan.conflicts.push({ kind: 'file', name: file });
-      }
+  // A file is in the way only when this preset did not put it there: after the first load of a
+  // pack, resetting means overwriting its files. A file only the other pack reads was never copied.
+  const loaded = presetLoad(p.id);
+  const copied = presetCopiedFiles(p, loaded);
+  for (const file of view.files) {
+    if (copied.has(file)) continue;
+    const dest = path.join(filesDirPath(), file);
+    if (fs.existsSync(dest) && !fs.readFileSync(dest).equals(fs.readFileSync(path.join(p.dir, 'files', file)))) {
+      plan.conflicts.push({ kind: 'file', name: file });
     }
   }
-  plan.loadedBefore = Boolean(loadedBefore);
+  plan.loaded = loaded;
+  plan.copied = copied;
   return plan;
+}
+
+/**
+ * The files the last load of a preset copied: the ones its pack reads. Only those are the preset's
+ * to overwrite or remove — a file of the same name it never copied belongs to someone else.
+ */
+function presetCopiedFiles(p, loaded) {
+  if (!loaded) return new Set();
+  return new Set(presetPack(p, presetPackIds(p).includes(loaded.pack) ? loaded.pack : 'extended').files);
 }
 
 function removePresetClash(kind, id) {
@@ -2357,21 +2546,121 @@ function removePresetClash(kind, id) {
   db.prepare(`DELETE FROM ${PRESET_TABLES[kind]} WHERE id = ?`).run(id);
 }
 
+/** The rows tagged with a preset, as `{kind, row}`. */
+const presetRows = (presetId) => Object.entries(PRESET_TABLES).flatMap(([kind, table]) => (
+  db.prepare(`SELECT * FROM ${table} WHERE preset_id = ?`).all(presetId).map((row) => ({ kind, row }))));
+
+/** A stored configuration; one that does not parse references nothing. */
+function storedConfig(text) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {};
+  }
+}
+
 /**
- * Writes a planned preset. The engine link of a row it lands on is kept, so sending the set to
+ * Removes rows a preset brought. What something else still leans on stays — a saved algorithm of
+ * the user's inside a chain, a domain another classifier votes for, a classifier in another set —
+ * and, since it stays, so does what it leans on in turn. What stays loses the tag: it is no longer
+ * the preset's to reset or remove.
+ */
+function removePresetRows(doomed) {
+  const key = (kind, id) => `${kind}:${id}`;
+  const going = new Set(doomed.map(({ kind, row }) => key(kind, row.id)));
+  const staying = (kind, row) => !going.has(key(kind, row.id));
+
+  const algorithms = db.prepare('SELECT id, name, config FROM saved_algorithms').all()
+    .map((row) => ({ ...row, refs: delphix.algorithmReferenceNames(storedConfig(row.config)) }));
+  const domains = db.prepare('SELECT id, name, default_algorithm, default_tokenization FROM domains').all();
+  const classifiers = db.prepare('SELECT id, domain_name FROM classifiers').all();
+  const memberships = db.prepare('SELECT profile_set_id, classifier_id FROM profile_set_classifiers').all();
+
+  const spare = (kind, isUsed) => {
+    let changed = false;
+    for (const { kind: k, row } of doomed) {
+      if (k === kind && going.has(key(kind, row.id)) && isUsed(row)) { going.delete(key(kind, row.id)); changed = true; }
+    }
+    return changed;
+  };
+  for (let changed = true; changed;) {
+    const algorithmsUsed = new Set([
+      ...algorithms.filter((a) => staying('algorithm', a)).flatMap((a) => a.refs),
+      ...domains.filter((d) => staying('domain', d)).flatMap((d) => [d.default_algorithm, d.default_tokenization]),
+    ]);
+    const domainsUsed = new Set(classifiers.filter((c) => staying('classifier', c)).map((c) => c.domain_name));
+    const classifiersUsed = new Set(memberships.filter((m) => staying('profileSet', { id: m.profile_set_id })).map((m) => m.classifier_id));
+    changed = [
+      spare('algorithm', (row) => algorithmsUsed.has(row.name)),
+      spare('domain', (row) => domainsUsed.has(row.name)),
+      spare('classifier', (row) => classifiersUsed.has(row.id)),
+    ].some(Boolean);
+  }
+
+  const removed = [];
+  const kept = [];
+  for (const { kind, row } of doomed) {
+    if (going.has(key(kind, row.id))) {
+      removePresetClash(kind, row.id);
+      removed.push({ kind, name: row.name });
+    } else {
+      db.prepare(`UPDATE ${PRESET_TABLES[kind]} SET preset_id = NULL, preset_item = NULL WHERE id = ?`).run(row.id);
+      kept.push({ kind, name: row.name });
+    }
+  }
+  return { removed, kept };
+}
+
+/**
+ * Deletes the preset's files that a load or unload left without a reader. A file stays when any
+ * configuration here still points at it, or when its content is no longer what the preset ships —
+ * an edit made in the files tab is the user's.
+ */
+function removePresetFiles(p, names) {
+  const dir = filesDirPath();
+  const read = new Set([
+    ...db.prepare('SELECT config FROM saved_algorithms').all(),
+    ...db.prepare('SELECT config FROM classifiers').all(),
+  ].flatMap((row) => delphix.configStrings(storedConfig(row.config))));
+  const removed = [];
+  const kept = [];
+  for (const name of names) {
+    const dest = path.join(dir, name);
+    if (!fs.existsSync(dest)) continue;
+    const shipped = path.join(p.dir, 'files', name);
+    if (read.has(pathToFileURL(dest).href) || !fs.existsSync(shipped) || !fs.readFileSync(dest).equals(fs.readFileSync(shipped))) {
+      kept.push({ kind: 'file', name });
+      continue;
+    }
+    fs.unlinkSync(dest);
+    removed.push({ kind: 'file', name });
+  }
+  return { removed, kept };
+}
+
+/**
+ * Writes a planned pack. The engine link of a row it lands on is kept, so sending the set to
  * Delphix after a reset updates what is there instead of creating a copy.
+ *
+ * What the preset brought before and this pack does not carry — the other pack's items, or items a
+ * newer version dropped — is removed, unless something else still uses it.
  */
 function applyPreset(p, plan, displayName) {
+  const { view } = plan;
   const dir = filesDirPath();
   const target = (kind, name) => plan.targets.get(`${kind}:${name.trim()}`);
   const classifierIds = new Map();
+  // `kind:id` of every row this load writes; what else carries the tag is what the pack dropped.
+  const written = new Set();
+  const wrote = (kind, id) => { written.add(`${kind}:${id}`); return id; };
   let setId;
+  let leftovers;
 
   db.exec('BEGIN');
   try {
     for (const { kind, row } of plan.clashes) removePresetClash(kind, row.id);
 
-    for (const a of p.algorithms) {
+    for (const a of view.algorithms) {
       const name = a.name.trim();
       const config = JSON.stringify(resolvePresetFiles(a.config, dir));
       const row = target('algorithm', name);
@@ -2380,16 +2669,16 @@ function applyPreset(p, plan, displayName) {
           UPDATE saved_algorithms SET name = ?, framework = ?, display_name = ?, config = ?, input = ?, output = NULL,
             preset_id = ?, preset_item = ?, updated_at = datetime('now')
           WHERE id = ?
-        `).run(name, a.framework, displayName.get(a.framework), config, String(a.input ?? ''), p.id, name, row.id);
+        `).run(name, a.framework, displayName.get(a.framework), config, String(a.input ?? ''), p.id, name, wrote('algorithm', row.id));
       } else {
-        db.prepare(`
+        wrote('algorithm', Number(db.prepare(`
           INSERT INTO saved_algorithms (name, framework, display_name, config, input, key_value, output, preset_id, preset_item)
           VALUES (?, ?, ?, ?, ?, ?, NULL, ?, ?)
-        `).run(name, a.framework, displayName.get(a.framework), config, String(a.input ?? ''), MASKING_KEY, p.id, name);
+        `).run(name, a.framework, displayName.get(a.framework), config, String(a.input ?? ''), MASKING_KEY, p.id, name).lastInsertRowid));
       }
     }
 
-    for (const d of p.domains) {
+    for (const d of view.domains) {
       const name = d.name.trim();
       const row = target('domain', name);
       const algorithm = String(d.algorithm ?? '');
@@ -2398,15 +2687,15 @@ function applyPreset(p, plan, displayName) {
         db.prepare(`
           UPDATE domains SET default_algorithm = ?, default_tokenization = ?, preset_id = ?, preset_item = ?, updated_at = datetime('now')
           WHERE id = ?
-        `).run(algorithm, tokenization, p.id, name, row.id);
+        `).run(algorithm, tokenization, p.id, name, wrote('domain', row.id));
       } else {
-        db.prepare(`
+        wrote('domain', Number(db.prepare(`
           INSERT INTO domains (name, default_algorithm, default_tokenization, preset_id, preset_item) VALUES (?, ?, ?, ?, ?)
-        `).run(name, algorithm, tokenization, p.id, name);
+        `).run(name, algorithm, tokenization, p.id, name).lastInsertRowid));
       }
     }
 
-    for (const c of p.classifiers) {
+    for (const c of view.classifiers) {
       const name = c.name.trim();
       const row = target('classifier', name);
       const config = JSON.stringify(resolvePresetFiles(c.config, dir));
@@ -2430,11 +2719,10 @@ function applyPreset(p, plan, displayName) {
       }
     }
 
-    const set = p.profileSet;
+    const set = view.profileSet;
     const setName = set.name.trim();
     const setRow = target('profileSet', setName);
     const threshold = Number(set.threshold ?? THRESHOLD_DEFAULT);
-    let setId;
     if (setRow) {
       db.prepare(`
         UPDATE profile_sets SET name = ?, description = ?, assignment_threshold = ?, preset_id = ?, preset_item = ?, updated_at = datetime('now')
@@ -2448,25 +2736,14 @@ function applyPreset(p, plan, displayName) {
     }
     setMembers(setId, listOf(set.classifiers).map((name) => classifierIds.get(name.trim())));
 
-    // Rows an older version of the preset shipped and this one does not: left alone, but no longer
-    // counted as the preset's, so a later reset does not pretend to own them.
-    const shipped = {
-      algorithm: p.algorithms.map((a) => a.name.trim()),
-      domain: p.domains.map((d) => d.name.trim()),
-      classifier: p.classifiers.map((c) => c.name.trim()),
-      profileSet: [setName],
-    };
-    for (const [kind, table] of Object.entries(PRESET_TABLES)) {
-      db.prepare(`
-        UPDATE ${table} SET preset_id = NULL, preset_item = NULL
-        WHERE preset_id = ? AND preset_item NOT IN (SELECT value FROM json_each(?))
-      `).run(p.id, JSON.stringify(shipped[kind]));
-    }
+    wrote('profileSet', setId);
+    for (const id of classifierIds.values()) wrote('classifier', id);
+    leftovers = removePresetRows(presetRows(p.id).filter(({ kind, row }) => !written.has(`${kind}:${row.id}`)));
 
     db.prepare(`
-      INSERT INTO preset_loads (preset_id, version, loaded_at) VALUES (?, ?, datetime('now'))
-      ON CONFLICT(preset_id) DO UPDATE SET version = excluded.version, loaded_at = excluded.loaded_at
-    `).run(p.id, p.version);
+      INSERT INTO preset_loads (preset_id, version, pack, loaded_at) VALUES (?, ?, ?, datetime('now'))
+      ON CONFLICT(preset_id) DO UPDATE SET version = excluded.version, pack = excluded.pack, loaded_at = excluded.loaded_at
+    `).run(p.id, p.version, view.pack);
     db.exec('COMMIT');
   } catch (err) {
     db.exec('ROLLBACK');
@@ -2474,8 +2751,17 @@ function applyPreset(p, plan, displayName) {
   }
 
   ensureDir(dir);
-  for (const file of p.files) fs.copyFileSync(path.join(p.dir, 'files', file), path.join(dir, file));
-  return { mode: plan.loadedBefore ? 'reset' : 'loaded', profileSetId: setId, files: p.files };
+  for (const file of view.files) fs.copyFileSync(path.join(p.dir, 'files', file), path.join(dir, file));
+  const carried = new Set(view.files);
+  const files = removePresetFiles(p, [...plan.copied].filter((file) => !carried.has(file)));
+  return {
+    mode: !plan.loaded ? 'loaded' : plan.loaded.pack === view.pack ? 'reset' : 'switched',
+    pack: view.pack,
+    profileSetId: setId,
+    files: view.files,
+    removed: [...leftovers.removed, ...files.removed],
+    kept: [...leftovers.kept, ...files.kept],
+  };
 }
 
 app.get('/api/presets', (req, res) => {
@@ -2492,15 +2778,20 @@ app.get('/api/presets/:id/doc', (req, res) => {
 });
 
 /**
- * Creates the preset — or, when it was loaded before, puts every row back the way it ships.
- * Answers 409 with `conflicts` when that would overwrite something that did not come from it;
- * sending `overwrite: true` is the confirmation.
+ * Creates one pack of the preset — `pack` is essential or extended, extended when left out. When
+ * the preset was loaded before, every row goes back the way it ships, and what the chosen pack does
+ * not carry is removed. Answers 409 with `conflicts` when that would overwrite something that did
+ * not come from it; sending `overwrite: true` is the confirmation.
  */
 app.post('/api/presets/:id/load', async (req, res) => {
   const p = readPresets().find((x) => x.id === req.params.id);
   if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
   if (p.problems.length) {
     return res.status(400).json({ code: 'preset-invalid', problems: p.problems, error: p.problems.join(' ') });
+  }
+  const pack = req.body?.pack ?? 'extended';
+  if (!presetPackIds(p).includes(pack)) {
+    return res.status(400).json({ code: 'preset-pack', error: `This profile set has no ${String(pack)} pack.` });
   }
 
   let displayName;
@@ -2509,13 +2800,13 @@ app.post('/api/presets/:id/load', async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-  const unknown = p.algorithms.filter((a) => !displayName.has(a.framework));
+  const plan = planPreset(p, pack);
+  const unknown = plan.view.algorithms.filter((a) => !displayName.has(a.framework));
   if (unknown.length) {
     const problems = unknown.map((a) => `algorithm "${a.name}": the plugin has no framework ${a.framework}.`);
     return res.status(400).json({ code: 'preset-invalid', problems, error: problems.join(' ') });
   }
 
-  const plan = planPreset(p);
   if (plan.conflicts.length && req.body?.overwrite !== true) {
     return res.status(409).json({
       code: 'preset-conflict',
@@ -2528,6 +2819,30 @@ app.post('/api/presets/:id/load', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+/**
+ * Removes what the preset brought: every row tagged with it, and the files it copied that nothing
+ * reads any more. What something else here still uses is kept and named in `kept`. The engine is
+ * not touched — what was sent to Delphix stays there.
+ */
+app.post('/api/presets/:id/unload', (req, res) => {
+  const p = readPresets().find((x) => x.id === req.params.id);
+  if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
+
+  const copied = presetCopiedFiles(p, presetLoad(p.id));
+  let rows;
+  db.exec('BEGIN');
+  try {
+    rows = removePresetRows(presetRows(p.id));
+    db.prepare('DELETE FROM preset_loads WHERE preset_id = ?').run(p.id);
+    db.exec('COMMIT');
+  } catch (err) {
+    db.exec('ROLLBACK');
+    return res.status(500).json({ error: err.message });
+  }
+  const files = removePresetFiles(p, [...copied]);
+  res.json({ removed: [...rows.removed, ...files.removed], kept: [...rows.kept, ...files.kept] });
 });
 
 // SPA fallback

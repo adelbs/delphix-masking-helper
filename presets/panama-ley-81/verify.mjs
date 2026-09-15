@@ -294,6 +294,27 @@ function verifyClassifiers() {
     console.log(`  ✗ ${column.name}: expected ${column.expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
   }
   console.log(`profiled ${COLUMNS.length} columns: ${passed} as expected`)
+
+  // The essential pack runs only the classifiers of its domains. Its columns must still land where
+  // they did, and no other column may be taken for one of its domains now that the domains that
+  // used to win those columns are not there.
+  const essential = new Set(preset.packs.essential.domains)
+  const pack = resolved.filter((c) => essential.has(c.domain))
+  // A seven-digit code whose name no essential domain knows looks like a landline by its values
+  // alone. In the extended pack a column-name rule claims it (NIS is a contract number); here the
+  // telephone is the only candidate left, and profiling proposes it.
+  const ALSO = { NIS: 'PA_L1_TELEFONO' }
+  let packPassed = 0
+  for (const column of COLUMNS) {
+    const expect = essential.has(column.expect) ? column.expect : (ALSO[column.name] ?? '')
+    const field = { name: column.name, parent: null, sqlType: column.sqlType, length: column.length || null, autoIncrement: false, values: column.values }
+    const result = kit.evaluateField({ classifiers: pack, field, threshold: preset.profileSet.threshold, readFile })
+    if (result.assigned === expect) { packPassed++; continue }
+    failures++
+    const ranking = result.ranking.slice(0, 3).map((r) => `${r.domain} ${r.percent}%`).join(', ')
+    console.log(`  ✗ essential pack, ${column.name}: expected ${expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
+  }
+  console.log(`profiled ${COLUMNS.length} columns with the essential pack (${pack.length} classifiers): ${packPassed} as expected`)
 }
 
 // ── Algorithms ──────────────────────────────────────────────────────────────

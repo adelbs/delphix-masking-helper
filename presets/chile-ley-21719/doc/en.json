@@ -14,7 +14,9 @@
           "**Socioeconomic situation** — FONASA tier and ISAPRE, Registro Social de Hogares, state benefits, commercial debt, income, pension fund, housing, student aid.",
           "**Criminal records** — convictions and court case numbers."
         ] },
-        "Everything the set needs travels with it: loading it creates its domains, classifiers, algorithms and lookup files, and sending it to a Masking Engine sends all of them."
+        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary.",
+        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). The algorithms of this set work on text, numbers and dates: a scanned ID card stored in a BLOB keeps its RUT readable. Report those columns as residual risk." }
       ]
     },
     {
@@ -24,19 +26,6 @@
         "Socioeconomic situation is a category of Chilean law: data that are ordinary elsewhere — a FONASA tier, an ISAPRE, a Registro Social de Hogares percentile, a DICOM record — are sensitive in Chile, and templates built for GDPR do not cover them.",
         "The law takes effect on 1 December 2026. On 31 August 2026 the Government sent the Senate a bill (Boletín 18.623-07) that would move that date to 1 December 2027; check its status. The date does not change this set.",
         { "note": "This document describes technical controls. Whether a copy of the data counts as anonymized is a legal assessment of the whole environment — its access, its retention, what else is joined to it — and not of the profile set alone." }
-      ]
-    },
-    {
-      "title": "Using the set",
-      "body": [
-        { "list": [
-          "**Load** — *Settings → Profile Sets → Load*. Loading again resets every object of the set to how it ships.",
-          "**Send to Delphix** — from the profile set, or with *Send everything to Delphix*. Domains, algorithms and files go first.",
-          "**Profile** — run a profiling job with the set, then review the domains it assigned before masking.",
-          "**Mask** — run the masking job. Use the same engine key in every environment to keep masked values consistent across systems."
-        ] },
-        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary.",
-        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). The algorithms of this set work on text, numbers and dates: a scanned ID card stored in a BLOB keeps its RUT readable. Report those columns as residual risk." }
       ]
     }
   ],
@@ -468,12 +457,13 @@
     {
       "title": "Verification",
       "body": [
-        "The set is generated and checked by two scripts kept with it in the repository:",
+        "Before publication the set was checked outside a Masking Engine:",
         { "list": [
-          "`build.mjs` generates the set from its definitions and hand-kept lists.",
-          "`verify.mjs` reviews every classifier configuration, profiles 129 columns with the whole set at its threshold — well named, badly named, and 21 columns that are not personal data — masks 184 sample values and 204 placeholders such as `S/I` — checking that each masked value comes from the right vocabulary, and 60 random RUTs for a valid check digit — and runs each of the 101 algorithms on its own sample input, sent only the algorithms it references, as the tester does."
+          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
+          "Profiling was simulated on 129 columns with the whole set at its assignment threshold — well named, badly named, and 21 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "The algorithms, run with the Delphix algorithm plugin, masked 184 sample values and 204 placeholders such as `S/I`, checking that each masked value comes from the right vocabulary, and 60 random RUTs for a valid check digit. Each of the 101 algorithms also masked its own sample input."
         ] },
-        "At the last build every column was assigned as expected and every value masked as expected."
+        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
       ]
     },
     {

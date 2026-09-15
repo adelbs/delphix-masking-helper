@@ -11,8 +11,9 @@ The law takes effect on 1 December 2026. A bill sent to the Senate on 31 August 
 
 | | |
 |---|---|
-| Profile set | `CL - Ley 21.719 - Datos personales`, assignment threshold 60 |
-| Contents | 73 domains, 132 classifiers, 101 algorithms, 72 files |
+| Profile set | `CL - Ley 21.719 - v3`, assignment threshold 60 |
+| Extended pack | 73 domains, 132 classifiers, 101 algorithms, 72 files — everything below |
+| Essential pack | 13 domains, 30 classifiers, 21 algorithms, 6 files — RUT, identity documents, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
 ## Files

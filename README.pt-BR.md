@@ -11,6 +11,12 @@ de um problema descrito em linguagem natural e **sincronizar** com um Masking En
 algoritmos dele para trabalhar e devolvendo os seus. Tudo sem precisar criar um Rule Set nem
 executar um masking job.
 
+Cobre também a descoberta de dado sensível: os **domínios** a que uma coluna pode pertencer, os
+**classifiers** que decidem isso — cada um testável contra uma coluna que você descreve — e os
+**profile sets** que um job de profiling roda. Profile sets prontos para as leis de proteção de
+dados do **Chile, México, Panamá e Belize** vêm com a ferramenta, cada um carregado com um clique
+e documentado em PDF.
+
 > **A nomenclatura segue a da Delphix.** Um **framework** é uma técnica de mascaramento que o
 > plugin oferece — Secure Lookup, Character Mapping, Date Shift. Configurar um produz um
 > **algoritmo**: com nome, salvo e pronto para usar. A barra lateral lista frameworks; o que você
@@ -28,13 +34,13 @@ executar um masking job.
 > com a Delphix, normalmente por meio de uma licença ativa e do seu time de conta. Coloque quinze
 > jars em `lib/` — veja [Bibliotecas do Delphix](#bibliotecas-do-delphix) abaixo. Referência: [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
 
-![O assistente construindo um algoritmo, um algoritmo sendo testado, e algoritmos sendo sincronizados com uma instância Delphix](docs/demo.gif)
+![Um algoritmo sendo testado, um classifier testado contra uma coluna descrita, os profile sets que vêm com a ferramenta, e uma instância Delphix conectada](docs/demo.gif)
 
-<sub>Três coisas, nesta ordem: pedir um algoritmo ao assistente e vê-lo construir e validar um;
-executar um algoritmo com um valor real; importar de uma instância Delphix e devolver um. Gravado
-com o provedor local padrão (Ollama · `llama3.1:8b`) num M1 Pro — a resposta do modelo está
-acelerada, porque localmente leva cerca de um minuto. Todos os valores mascarados são saída real
-do plugin, e a instância é real.</sub>
+<sub>Quatro coisas, nesta ordem: executar um algoritmo com um valor real; testar um classifier
+contra uma coluna descrita na tela e ver qual domínio o profiling atribuiria; os profile sets que
+vêm com a ferramenta; e a integração com uma instância Delphix, com um algoritmo que veio dela.
+Todos os valores mascarados são saída real do plugin, toda pontuação vem do avaliador local de
+classifiers, e a instância é real.</sub>
 
 ## Como funciona
 
@@ -224,7 +230,8 @@ npm run build
 A tela inicial tem um chat que ajuda de duas formas: explicando como um framework funciona e qual
 se encaixa em cada situação, e **construindo um algoritmo pronto para uso** a partir de um
 problema descrito em linguagem natural. Você não precisa saber qual framework usar — é isso que
-ele resolve.
+ele resolve. Construir exige um provedor hospedado — Claude, Gemini ou GitHub Models; um modelo
+local só aconselha (veja [Um modelo local aconselha](#um-modelo-local-aconselha)).
 
 Por exemplo:
 
@@ -268,9 +275,22 @@ mostra uma máscara e você troca a chave digitando uma nova.
 "GitHub Models (Copilot)" é o endpoint compatível com OpenAI que vem com a conta do GitHub. O
 GitHub Copilot em si não expõe API de chat para aplicações de terceiros.
 
-> **Sobre modelos locais.** O catálogo de frameworks ocupa cerca de 12k tokens de contexto. É
-> folgado para Claude e Gemini, mas apertado para modelos locais pequenos — um com janela de 8k
-> vai truncar o catálogo e errar a escolha do framework. Prefira um modelo com contexto grande.
+### Um modelo local aconselha
+
+Com o Ollama, o assistente explica o catálogo e recomenda um framework e os valores dos
+parâmetros, mas nunca salva um algoritmo: você escolhe o framework na barra lateral e preenche o
+que ele sugeriu. O chat avisa isso num banner enquanto um modelo local estiver selecionado.
+
+É uma decisão medida. Testados o `llama3.2:3b` e o `llama3.1:8b`, nenhum dos dois respondeu
+"nenhum framework faz isso" — nem nas perguntas em que essa era a única resposta certa. O que
+produziram foi uma configuração que roda e não resolve o problema: o runner aceita, e você só
+descobre muito depois. Um modelo que não sabe dizer não fica sem o botão que grava nos seus
+algoritmos salvos. Para algoritmos construídos e validados para você, configure um provedor
+hospedado.
+
+O catálogo de frameworks também ocupa cerca de 12k tokens de contexto. É folgado para Claude e
+Gemini, mas apertado para modelos locais pequenos — um com janela de 8k vai truncar o catálogo e
+errar a escolha do framework. Prefira um modelo com contexto grande.
 
 ## Achar as coisas na barra lateral
 
@@ -376,11 +396,33 @@ Delphix** faz o inverso: cada membro vai primeiro, e o set é então criado ou a
 pelos ids que a instância devolveu — um set só pode referenciar classifiers que a instância já tem.
 
 **Profile sets pré-configurados.** *Configurações → Profile Sets* lista profile sets que já vêm com
-a ferramenta, cada um com a documentação em PDF e tudo de que precisa. **Carregar** cria de uma vez
-o set, os classifiers, os domínios, os algoritmos e os arquivos. Carregar de novo não duplica nada:
-o botão vira **Resetar**, que devolve cada item ao estado original e descarta as alterações feitas
-nele. Se um nome usado pelo set já pertence a algo que não veio dele, a ferramenta lista o que seria
-substituído e pergunta antes. O formato está em `presets/README.md`.
+a ferramenta, cada um com a documentação em PDF e tudo de que precisa. **Carregar** pergunta o
+pacote: o **pacote essencial** é o mínimo para a lei — documentos de identidade, nomes, contato,
+endereço e data de nascimento — e o **pacote estendido** é o set completo. Qualquer um cria de uma
+vez o profile set, os classifiers, os domínios, os algoritmos e os arquivos. Carregar de novo não
+duplica nada: o botão vira **Resetar**, que devolve cada item ao estado original e descarta as
+alterações feitas nele, e escolher ali o outro pacote troca um pelo outro, removendo o que o novo
+pacote não inclui. **Descarregar** remove o que o set trouxe, exceto o que algo seu ainda usa; o que
+foi enviado ao Delphix continua lá. Se um nome usado pelo set já pertence a algo que não veio dele, a
+ferramenta lista o que seria substituído e pergunta antes. O profile set leva o país, a lei e a
+versão no nome (`CL - Ley 21.719 - v3`), e o cartão mostra a versão que vem com a ferramenta. O
+formato está em `presets/README.md`.
+
+Hoje são quatro, um por país, todos com limiar de 60 no profile set. Os números abaixo são do pacote
+estendido; cada pacote essencial tem de 11 a 13 domínios:
+
+| Profile set | Lei | Domínios | Classifiers | Algoritmos | Documentação |
+|---|---|---|---|---|---|
+| [Chile](presets/chile-ley-21719/) | Ley 21.719 | 73 | 132 | 101 | [pt-BR](presets/chile-ley-21719/doc.pt-BR.pdf) · [en](presets/chile-ley-21719/doc.en.pdf) · [es](presets/chile-ley-21719/doc.es.pdf) |
+| [México](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 153 | 154 | [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [en](presets/mexico-lfpdppp/doc.en.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
+| [Panamá](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 135 | 142 | [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) · [en](presets/panama-ley-81/doc.en.pdf) · [es](presets/panama-ley-81/doc.es.pdf) |
+| [Belize](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 124 | 90 | [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) · [en](presets/belize-dpa-2021/doc.en.pdf) · [es](presets/belize-dpa-2021/doc.es.pdf) |
+
+Cada um agrupa os domínios em identificadores diretos, quase-identificadores e os dados sensíveis
+que a sua lei nomeia, e mascara os identificadores nacionais com dígito verificador válido onde o
+número tem um — o RUT do Chile, o CURP e o RFC do México, o RUC de pessoa natural no Panamá. O
+README de cada pasta explica o desenho e os limites; o PDF lista cada domínio, classifier,
+algoritmo e arquivo, com exemplos mascarados.
 
 **Importar.** Não há importação por objeto: conectar a integração traz o engine inteiro, e
 **Atualizar do Delphix** traz de novo. Um algoritmo sobre um framework que a ferramenta não

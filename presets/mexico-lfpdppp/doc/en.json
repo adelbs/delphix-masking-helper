@@ -14,7 +14,10 @@
           "**Financial and patrimonial data** — credit bureau records, debts, income, assets, retirement savings, housing credit, social security, social programs, socioeconomic level, tax regime.",
           "**Criminal records** — records and case numbers."
         ] },
-        "Everything the set needs travels with it: loading it creates its domains, classifiers, algorithms and lookup files, and sending it to a Masking Engine sends all of them."
+        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a CURP, an RFC, an INE voter key, a CLABE, a plate, a municipality.",
+        "Column names are recognized in Spanish, in the abbreviations of Mexican systems (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), in the attribute names of CFDI 4.0 invoices (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) and in English.",
+        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often store photos of the INE credential: the CURP and the voter key stay readable in the image. Report those columns as residual risk." }
       ]
     },
     {
@@ -34,20 +37,6 @@
         "A test environment filled with production data is processing for a purpose the privacy notice does not cover, and holds sensitive and financial data outside the controls built for them. A dissociated copy is the route the law itself provides: that is what this set is for.",
         "Two notes on the categories. The 2010 law listed **union membership** as sensitive; the 2025 text no longer names it. Its list is not exhaustive and union membership still exposes people to discrimination, so the set keeps it. **Biometric data** are not named either; they identify a person by definition and are treated as sensitive here.",
         { "note": "This document describes technical controls. Whether a copy counts as dissociated is a legal assessment of the whole environment — its access, its retention, what else is joined to it — and not of the profile set alone." }
-      ]
-    },
-    {
-      "title": "Using the set",
-      "body": [
-        { "list": [
-          "**Load** — *Settings → Profile Sets → Load*. Loading again resets every object of the set to how it ships.",
-          "**Send to Delphix** — from the profile set, or with *Send everything to Delphix*. Domains, algorithms and files go first.",
-          "**Profile** — run a profiling job with the set, then review the domains it assigned before masking.",
-          "**Mask** — run the masking job. Use the same engine key in every environment to keep masked values consistent across systems."
-        ] },
-        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a CURP, an RFC, an INE voter key, a CLABE, a plate, a municipality.",
-        "Column names are recognized in Spanish, in the abbreviations of Mexican systems (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), in the attribute names of CFDI 4.0 invoices (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) and in English.",
-        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often store photos of the INE credential: the CURP and the voter key stay readable in the image. Report those columns as residual risk." }
       ]
     }
   ],
@@ -540,12 +529,13 @@
     {
       "title": "Verification",
       "body": [
-        "The set is generated and checked by two scripts kept with it in the repository:",
+        "Before publication the set was checked outside a Masking Engine:",
         { "list": [
-          "`build.mjs` generates the set, its lookup tables and its check digit tables from its definitions and hand-kept lists.",
-          "`verify.mjs` reviews every classifier configuration, profiles 151 columns with the whole set at its threshold — well named, badly named, and 26 columns that are not personal data — and masks 350 sample values and 228 placeholders such as `S/D` through the running app. Random CURPs, RFCs, NSS and CLABEs are checked for a valid check digit and a valid date, 150 of each for collisions, and pairs of CURP and RFC of the same person for agreement."
+          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
+          "Profiling was simulated on 151 columns with the whole set at its assignment threshold — well named, badly named, and 26 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "The algorithms, run with the Delphix algorithm plugin, masked 350 sample values and 228 placeholders such as `S/D`. Random CURPs, RFCs, NSS and CLABEs were checked for a valid check digit and a valid date, 150 of each for collisions, and pairs of CURP and RFC of the same person for agreement."
         ] },
-        "At the last build every column was assigned as expected and every value masked as expected."
+        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
       ]
     },
     {

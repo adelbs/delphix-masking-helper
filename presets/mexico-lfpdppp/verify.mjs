@@ -296,6 +296,23 @@ function verifyClassifiers() {
     console.log(`  ✗ ${column.name}: expected ${column.expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
   }
   console.log(`profiled ${COLUMNS.length} columns: ${passed} as expected`)
+
+  // The essential pack runs only the classifiers of its domains. Its columns must still land where
+  // they did, and no other column may be taken for one of its domains now that the domains that
+  // used to win those columns are not there.
+  const essential = new Set(preset.packs.essential.domains)
+  const pack = resolved.filter((c) => essential.has(c.domain))
+  let packPassed = 0
+  for (const column of COLUMNS) {
+    const expect = essential.has(column.expect) ? column.expect : ''
+    const field = { name: column.name, parent: null, sqlType: column.sqlType, length: column.length || null, autoIncrement: false, values: column.values }
+    const result = kit.evaluateField({ classifiers: pack, field, threshold: preset.profileSet.threshold, readFile })
+    if (result.assigned === expect) { packPassed++; continue }
+    failures++
+    const ranking = result.ranking.slice(0, 3).map((r) => `${r.domain} ${r.percent}%`).join(', ')
+    console.log(`  ✗ essential pack, ${column.name}: expected ${expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
+  }
+  console.log(`profiled ${COLUMNS.length} columns with the essential pack (${pack.length} classifiers): ${packPassed} as expected`)
 }
 
 // ── Algorithms ──────────────────────────────────────────────────────────────

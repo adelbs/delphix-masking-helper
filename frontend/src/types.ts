@@ -115,6 +115,14 @@ export interface ProfileSet {
 }
 
 /**
+ * How much of a preset gets loaded: the essential pack is the minimum for its law (identity
+ * documents, names, contact, address, birth date); the extended pack is all of it.
+ */
+export type PresetPack = 'essential' | 'extended'
+
+export interface PresetCounts { classifiers: number; domains: number; algorithms: number; files: number }
+
+/**
  * A profile set shipped with the tool, together with everything it leans on — its classifiers,
  * their domains, those domains' algorithms and the files they read. Loaded from Settings.
  */
@@ -124,12 +132,13 @@ export interface ProfileSetPreset {
   /** By locale; `en` is always present. */
   name: Partial<Record<Locale, string>>
   summary: Partial<Record<Locale, string>>
-  profileSet: { name: string; threshold: number }
-  counts: { classifiers: number; domains: number; algorithms: number; files: number }
+  profileSet: { name: string }
+  /** What each pack it can load as brings; `extended` is always there. */
+  packs: Partial<Record<PresetPack, PresetCounts>> & { extended: PresetCounts }
   /** The locales it has a documentation PDF in. */
   docs: Locale[]
-  /** When it was last loaded here, and which version; null if never. */
-  loaded: { version: number; loaded_at: string } | null
+  /** When it was last loaded here, which version and which pack; null if never. */
+  loaded: { version: number; pack: PresetPack; loaded_at: string } | null
   /** Why it cannot be loaded; empty when it can. */
   problems: string[]
 }

@@ -496,7 +496,7 @@ lookup('MX_DIRECCION', 'mx-direcciones.txt', (() => {
   return [...out]
 })(), 'Av. Insurgentes Sur 1602 Int. 4', 'PRESERVE_LOOKUP_FILE')
 domain('MX_L1_DIRECCION', 'MX_DIRECCION',
-  byName(['direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio(?!_?fiscal)[a-z_]*|calle(_?y_?numero)?|avenida|address|street|addr|dir_?(particular|comercial|laboral|envio|entrega|facturacion|cliente|paciente|trabajo)|entre_?calles|y_?calle|residencia|lugar_?(de_?)?residencia|home_?address', 0.8]),
+  byName(['direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio(?!_?fiscal)[a-z_]*|calle(_?y_?numero)?|avenida|(?<!(mac|ip|e_?mail|web|url)_?)address|street|(?<!(mac|ip|e_?mail|web|url)_?)addr|dir_?(particular|comercial|laboral|envio|entrega|facturacion|cliente|paciente|trabajo)|entre_?calles|y_?calle|residencia|lugar_?(de_?)?residencia|home_?address', 0.8]),
   byType(STRING(6)),
   byPattern([
     [String.raw`(?i)(av(enida)?\.?|calle|c\.|privada|priv\.?|andador|cerrada|calzada|calz\.?|blvd\.?|boulevard|bulevar|prolongaci[oó]n|prol\.?|carretera|camino|circuito|retorno)\s+.+\d+.*`, 0.8],
@@ -1027,8 +1027,19 @@ const referenced = JSON.stringify([domains, algorithms.map((x) => x.config)])
 const orphans = algorithms.filter((a) => !referenced.includes(`"${a.name}"`))
 if (orphans.length) throw new Error(`algorithms nobody uses: ${orphans.map((a) => a.name).join(', ')}`)
 
+// The essential pack: identity documents, names, contact, address and birth date. Loading it brings
+// these domains and only what they lean on; the extended pack is everything.
+const ESSENTIAL = [
+  'MX_L1_CURP', 'MX_L1_RFC', 'MX_L1_NSS', 'MX_L1_CLAVE_ELECTOR', 'MX_L1_PASAPORTE',
+  'MX_L1_NOMBRE', 'MX_L1_APELLIDO', 'MX_L1_NOMBRE_COMPLETO', 'MX_L1_EMAIL', 'MX_L1_TELEFONO',
+  'MX_L1_DIRECCION', 'MX_L1_DIRECCION_COMPLEMENTO', 'MX_L2_FECHA_NACIMIENTO',
+]
+const notDomains = ESSENTIAL.filter((name) => !domains.some((d) => d.name === name))
+if (notDomains.length) throw new Error(`essential pack names domains the set does not have: ${notDomains.join(', ')}`)
+
+const VERSION = 2
 const preset = {
-  version: 1,
+  version: VERSION,
   name: {
     en: 'Mexico — LFPDPPP (personal data held by private parties)',
     'pt-BR': 'México — LFPDPPP (dados pessoais em posse de particulares)',
@@ -1040,10 +1051,16 @@ const preset = {
     es: 'Descubre y enmascara datos personales mexicanos conforme a la ley federal de 2025: identificadores directos (CURP, RFC y NSS con dígito verificador válido, clave de elector, CLABE, nombres, contacto), cuasi-identificadores (fecha de nacimiento, municipio, código postal), los datos sensibles del artículo 2 y los datos financieros y patrimoniales que requieren consentimiento expreso.',
   },
   profileSet: {
-    name: 'MX - LFPDPPP - Datos personales',
+    name: `MX - LFPDPPP - v${VERSION}`,
     description: 'Identificadores directos, cuasi-identificadores, datos sensibles (art. 2, VI) y datos financieros y patrimoniales (art. 7) de la LFPDPPP 2025.',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
+  },
+  packs: {
+    essential: {
+      description: 'Paquete esencial de la LFPDPPP 2025: CURP, RFC, NSS, clave de elector, pasaporte, nombres, contacto, domicilio y fecha de nacimiento.',
+      domains: ESSENTIAL,
+    },
   },
   classifiers,
   domains,

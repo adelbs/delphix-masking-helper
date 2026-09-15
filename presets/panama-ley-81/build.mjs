@@ -543,7 +543,7 @@ lookup('PA_DIRECCION', 'pa-direcciones.txt', (() => {
   return [...out]
 })(), 'Vía España, Edificio Plaza, Piso 12, Apto. 12B', 'PRESERVE_LOOKUP_FILE')
 domain('PA_L1_DIRECCION', 'PA_DIRECCION',
-  byName(['direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle(_?y_?casa)?|avenida|address|street|addr|dir_?(residencial|residencia|particular|comercial|laboral|envio|entrega|facturacion|cliente|paciente|trabajo)|residencia|lugar_?(de_?)?residencia|home_?address|ubicacion_?(domicilio|vivienda)|senas|punto_?de_?referencia', 0.8]),
+  byName(['direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle(_?y_?casa)?|avenida|(?<!(mac|ip|e_?mail|web|url)_?)address|street|addr|dir_?(residencial|residencia|particular|comercial|laboral|envio|entrega|facturacion|cliente|paciente|trabajo)|residencia|lugar_?(de_?)?residencia|home_?address|ubicacion_?(domicilio|vivienda)|senas|punto_?de_?referencia', 0.8]),
   byType(STRING(6)),
   byPattern([
     [String.raw`(?i)(v[ií]a|ave?\.?|avenida|calle|c\.|carretera|paseo|boulevard|blvd\.?|corredor|camino)\s+.+`, 0.7],
@@ -1049,8 +1049,19 @@ const referenced = JSON.stringify([domains, algorithms.map((x) => x.config)])
 const orphans = algorithms.filter((a) => !referenced.includes(`"${a.name}"`))
 if (orphans.length) throw new Error(`algorithms nobody uses: ${orphans.map((a) => a.name).join(', ')}`)
 
+// The essential pack: identity documents, names, contact, address and birth date. Loading it brings
+// these domains and only what they lean on; the extended pack is everything.
+const ESSENTIAL = [
+  'PA_L1_CEDULA', 'PA_L1_RUC', 'PA_L1_RUC_DV', 'PA_L1_PASAPORTE',
+  'PA_L1_NOMBRE', 'PA_L1_APELLIDO', 'PA_L1_NOMBRE_COMPLETO', 'PA_L1_EMAIL', 'PA_L1_TELEFONO',
+  'PA_L1_DIRECCION', 'PA_L1_DIRECCION_COMPLEMENTO', 'PA_L2_FECHA_NACIMIENTO',
+]
+const notDomains = ESSENTIAL.filter((name) => !domains.some((d) => d.name === name))
+if (notDomains.length) throw new Error(`essential pack names domains the set does not have: ${notDomains.join(', ')}`)
+
+const VERSION = 2
 const preset = {
-  version: 1,
+  version: VERSION,
   name: {
     en: 'Panama — Ley 81 de 2019 (personal data protection)',
     'pt-BR': 'Panamá — Ley 81 de 2019 (proteção de dados pessoais)',
@@ -1062,10 +1073,16 @@ const preset = {
     es: 'Descubre y enmascara datos personales panameños conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021: identificadores directos (cédula, RUC con DV válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, distrito, corregimiento), los datos sensibles del artículo 4, datos económicos y de crédito, y antecedentes penales.',
   },
   profileSet: {
-    name: 'PA - Ley 81 de 2019 - Datos personales',
+    name: `PA - Ley 81 de 2019 - v${VERSION}`,
     description: 'Identificadores directos, cuasi-identificadores, datos sensibles (art. 4, 11), datos económicos y de crédito, y antecedentes penales, conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021.',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
+  },
+  packs: {
+    essential: {
+      description: 'Paquete esencial de la Ley 81 de 2019: cédula, RUC, pasaporte, nombres, contacto, dirección y fecha de nacimiento.',
+      domains: ESSENTIAL,
+    },
   },
   classifiers,
   domains,

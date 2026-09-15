@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
+import { createListStore } from '@/lib/list-store'
 import type { Algorithm } from '@/types'
 
 /**
@@ -11,62 +11,24 @@ import type { Algorithm } from '@/types'
  *
  * With the list in the sidebar that stops working. The sidebar is on screen while the tester
  * saves, deletes and imports, so it has to hear about those. One cache with subscribers is what
- * makes "save in the tester" show up in the sidebar without a page reload.
+ * makes "save in the tester" show up in the sidebar without a page reload. The cache and its
+ * subscribers are in `list-store.ts`, shared with the other lists.
  */
-let cache: Algorithm[] | null = null
-let mountFetch: Promise<Algorithm[]> | null = null
-const listeners = new Set<(rows: Algorithm[]) => void>()
-
-function publish(rows: Algorithm[]) {
-  cache = rows
-  for (const notify of listeners) notify(rows)
-}
-
-/**
- * Fetches only when nothing has been loaded yet, and only once however many components ask
- * during the same render pass. This is the mount path.
- */
-function ensureLoaded(): Promise<Algorithm[]> {
-  if (cache) return Promise.resolve(cache)
-  mountFetch ??= api.getAlgorithms()
-    .then(rows => { publish(rows); return rows })
-    .catch(() => [])
-    .finally(() => { mountFetch = null })
-  return mountFetch
-}
+const store = createListStore<Algorithm>('algorithms', () => api.getAlgorithms())
 
 /**
  * Re-reads the list and tells everyone. Call it after anything that writes — save, update,
- * delete, duplicate, import. Always hits the server: a caller that just wrote is precisely the
- * one that must not be served the copy taken before the write.
+ * delete, duplicate, import.
  */
-export async function refreshAlgorithms(): Promise<Algorithm[]> {
-  try {
-    const rows = await api.getAlgorithms()
-    publish(rows)
-    return rows
-  } catch {
-    // A failed refresh leaves the last good list on screen rather than blanking the sidebar.
-    return cache ?? []
-  }
-}
+export const refreshAlgorithms = store.refresh
 
 export function useAlgorithms(): {
   algorithms: Algorithm[]
   loading: boolean
   refresh: () => Promise<Algorithm[]>
 } {
-  const [algorithms, setAlgorithms] = useState<Algorithm[]>(() => cache ?? [])
-  const [loading, setLoading] = useState(cache === null)
-
-  useEffect(() => {
-    let live = true
-    listeners.add(setAlgorithms)
-    ensureLoaded().then(() => { if (live) setLoading(false) })
-    return () => { live = false; listeners.delete(setAlgorithms) }
-  }, [])
-
-  return { algorithms, loading, refresh: refreshAlgorithms }
+  const { rows, loading } = store.useList()
+  return { algorithms: rows, loading, refresh: refreshAlgorithms }
 }
 
 /** Handles records saved before and after the double-serialisation fix. */

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
 import { useT, type MessageKey } from '@/lib/i18n'
+import { createListStore } from '@/lib/list-store'
 import type {
   Classifier, ClassifierCatalog, ClassifierField, ClassifierFrameworkName, ClassifierIssue,
 } from '@/types'
@@ -9,47 +10,14 @@ import type {
  * The classifiers, shared the same way the domains are — the sidebar lists them while the
  * editor writes to them, so one cache with subscribers keeps the two in step.
  */
-let cache: Classifier[] | null = null
-let mountFetch: Promise<Classifier[]> | null = null
-const listeners = new Set<(rows: Classifier[]) => void>()
-
-function publish(rows: Classifier[]) {
-  cache = rows
-  for (const notify of listeners) notify(rows)
-}
-
-function ensureLoaded(): Promise<Classifier[]> {
-  if (cache) return Promise.resolve(cache)
-  mountFetch ??= api.getClassifiers()
-    .then(rows => { publish(rows); return rows })
-    .catch(() => [])
-    .finally(() => { mountFetch = null })
-  return mountFetch
-}
+const store = createListStore<Classifier>('classifiers', () => api.getClassifiers())
 
 /** Call after any write. Always hits the server, for the same reason as the algorithm store. */
-export async function refreshClassifiers(): Promise<Classifier[]> {
-  try {
-    const rows = await api.getClassifiers()
-    publish(rows)
-    return rows
-  } catch {
-    return cache ?? []
-  }
-}
+export const refreshClassifiers = store.refresh
 
 export function useClassifiers(): { classifiers: Classifier[]; loading: boolean; refresh: () => Promise<Classifier[]> } {
-  const [classifiers, setClassifiers] = useState<Classifier[]>(() => cache ?? [])
-  const [loading, setLoading] = useState(cache === null)
-
-  useEffect(() => {
-    let live = true
-    listeners.add(setClassifiers)
-    ensureLoaded().then(() => { if (live) setLoading(false) })
-    return () => { live = false; listeners.delete(setClassifiers) }
-  }, [])
-
-  return { classifiers, loading, refresh: refreshClassifiers }
+  const { rows, loading } = store.useList()
+  return { classifiers: rows, loading, refresh: refreshClassifiers }
 }
 
 /** The frameworks' settings and the SQL types. Static for the life of the server. */

@@ -18,9 +18,18 @@ src/
 ├── types.ts                    # Interfaces TypeScript
 ├── index.css                   # Tailwind base + scrollbar customizada
 ├── lib/
-│   ├── api.ts                  # Chamadas à API do Express (/api/*), incluindo o chat via SSE
+│   ├── api.ts                  # Chamadas à API do Express (/api/*), incluindo chat e sincronização via SSE
 │   ├── utils.ts                # cn() — merge de classes Tailwind com tailwind-merge
 │   ├── algorithms.ts                # useAlgorithms(): lista salva com cache e subscribers
+│   ├── domains.ts                   # useDomains() + a categoria de um domínio
+│   ├── classifiers.ts               # useClassifiers(), catálogo dos frameworks de classifier
+│   ├── profile-sets.ts              # Store dos profile sets
+│   ├── references.ts                # Nomes referenciáveis: built-ins do plugin e do engine
+│   ├── grouping.ts                  # Modos de agrupamento da barra e o alcance de um profile set
+│   ├── engine-sync.ts               # Respostas da sincronização e os toasts do que viajou junto
+│   ├── import-progress.ts           # Progresso da sincronização (a barra só anda para a frente)
+│   ├── field-form.ts                # O campo que o teste de classifier descreve
+│   ├── framework-guide.ts           # Seções do guia para a aba Documentação
 │   ├── version.ts                   # useVersion(): qual build está rodando
 │   ├── framework-metadata.ts        # Estrutura, exemplos e textos pt-BR por framework
 │   ├── framework-knowledge.en.json  # Textos em inglês — compartilhado com o ai.js do servidor
@@ -31,14 +40,21 @@ src/
 │       ├── I18nProvider.tsx    # Provider do contexto
 │       └── messages/           # en.ts (fonte das chaves), pt-BR.ts, es.ts
 └── components/
-    ├── Sidebar.tsx             # Sessões colapsáveis + busca; mobile = overlay
+    ├── Sidebar.tsx             # Cinco sessões colapsáveis, busca e filtro por profile set; mobile = overlay
+    ├── LocaleFlags.tsx         # Troca de idioma pelas bandeiras do rodapé da barra
+    ├── SetupNeeded.tsx         # Tela de primeiro uso quando faltam os JARs do Delphix
     ├── WelcomeScreen.tsx       # Home: cabeçalho + chat com a IA
     ├── Chat.tsx                # Chat com a IA (streaming SSE, card de algoritmo salvo)
     ├── FrameworkTester.tsx     # Testa um framework, ou edita um algoritmo salvo
-    ├── EngineImport.tsx        # Modal de importação de uma instância Delphix
+    ├── DomainEditor.tsx        # Nome, algoritmo e tokenização de um domínio
+    ├── ClassifierEditor.tsx    # Configuração e teste de um classifier
+    ├── FieldForm.tsx           # A coluna descrita no teste de classifier
+    ├── ProfileSetEditor.tsx    # Nome, limiar e membros de um profile set
+    ├── ReferencePicker.tsx     # Campo pesquisável para nomear algoritmo ou domínio
+    ├── ImportProgressBar.tsx   # Barra de progresso da sincronização
     ├── DuplicatePrompt.tsx     # Pede o nome da cópia
     ├── FrameworkDoc.tsx        # Aba Documentação: a seção do guia daquele framework
-    ├── Settings.tsx            # Configurações: abas Geral, IA e Arquivos
+    ├── Settings.tsx            # Configurações: abas Geral, IA, Delphix, Profile Sets e Arquivos
     └── ConfigForm.tsx          # Formulário dinâmico gerado a partir do JSON Schema
 ```
 

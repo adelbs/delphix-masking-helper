@@ -1,16 +1,19 @@
 /**
- * Records docs/demo.gif — the three things the tool does, in one pass:
+ * Records docs/demo.gif — what the tool does, in one pass:
  *
- *   1. asking the assistant for an algorithm and watching it build one
- *   2. testing an algorithm against a real value
- *   3. syncing with a Delphix engine: importing one and sending one back
+ *   1. testing an algorithm against a real value
+ *   2. testing a classifier against a column described on screen
+ *   3. the profile sets that ship with the tool
+ *   4. syncing with a Delphix engine: the integration, then an algorithm that came from it
  *
  * Drives the running app in headless Chrome and encodes the frames as a GIF. No ffmpeg or
  * ImageMagick involved: Chrome decodes and rescales each screenshot on its own canvas, and
  * gifenc does the quantising.
  *
- * Requires the app running (`npm run dev`), Ollama up for scene 1, and a Delphix engine
- * configured for scene 3 — the scenes are skipped with a warning if their backing is missing.
+ * Requires the app running (`npm run dev`), the Chile profile set loaded (scene 2 opens one of
+ * its classifiers), and a Delphix engine connected under Settings → Delphix for scene 4. There is
+ * no assistant scene: with the default local provider the assistant advises and does not build,
+ * so recording one would need a hosted provider.
  *
  *   node docs/record-demo.mjs [output.gif]
  */
@@ -32,6 +35,10 @@ const OUT = process.argv[2]
 const VIEW = { width: 1180, height: 720 }
 const SCALE = 0.66
 const COLORS = 40
+
+/** The classifier scene 2 tests, and the engine algorithm scene 4 sends back. */
+const CLASSIFIER = 'CL_L1_RUT - Regex'
+const ENGINE_ALGORITHM = process.env.DEMO_ALGORITHM || 'ACCOUNT_NUMBER'
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))
 
@@ -68,123 +75,187 @@ async function hold(page, ms) {
   await sleep(ms)
 }
 
-/** Types into a field the way a person does, capturing along the way. */
-async function type(page, selector, text, { chunk = 3, delay = 60 } = {}) {
-  await page.click(selector)
+/** Types into an element the way a person does, capturing along the way. */
+async function typeInto(page, handle, text, { chunk = 3, delay = 60 } = {}) {
+  await handle.click()
   for (let i = 0; i < text.length; i += chunk) {
-    await page.type(selector, text.slice(i, i + chunk), { delay: 0 })
+    await handle.type(text.slice(i, i + chunk), { delay: 0 })
     await shoot(page, delay)
   }
 }
 
 /**
  * Waits for the page to reach a state, capturing while it waits. Fixed sleeps were guesswork:
- * listing a remote engine takes around eight seconds, and a shorter guess recorded an empty
- * dialog. The wait is shown time-lapsed, so the GIF does not sit on a spinner.
+ * a call to a remote engine takes seconds, and a shorter guess recorded an empty screen. The
+ * wait is shown time-lapsed, so the GIF does not sit on a spinner.
  */
-async function waitFor(page, fn, { timeout = 40000, every = 700, delay = 70 } = {}) {
+async function waitFor(page, fn, { timeout = 40000, every = 700, delay = 70 } = {}, ...args) {
   const started = Date.now()
   while (Date.now() - started < timeout) {
-    if (await page.evaluate(fn)) return true
+    if (await page.evaluate(fn, ...args)) return true
     await sleep(every)
     await shoot(page, delay)
   }
   return false
 }
 
-/** Clicks the first element whose text matches. */
-async function clickText(page, selector, re) {
+/**
+ * The first visible element whose text matches. Visible matters: the page also renders the
+ * sidebar's mobile overlay, hidden at this width, and its buttons come first in the document —
+ * Puppeteer refuses to click those.
+ */
+async function byText(page, selector, re) {
   // Flags travel with the source: rebuilding the regex from `.source` alone dropped the `i`,
   // and a label like "Personal data" then failed to match /Personal Data/i.
   const handle = await page.evaluateHandle((sel, source, flags) => {
     const rx = new RegExp(source, flags)
-    return [...document.querySelectorAll(sel)].find(e => rx.test(e.textContent || ''))
+    // The overlay is translated off screen, not hidden, so it still has boxes: check the viewport.
+    const onScreen = (e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.right > 0 && r.left < innerWidth }
+    return [...document.querySelectorAll(sel)].find(e => onScreen(e) && rx.test(e.textContent || ''))
   }, selector, re.source, re.flags)
   const el = handle.asElement()
   if (!el) throw new Error(`no ${selector} matching ${re}`)
+  return el
+}
+
+async function clickText(page, selector, re) {
+  const el = await byText(page, selector, re)
   await el.click()
   return el
 }
 
-// ── scenes ───────────────────────────────────────────────────────────────────
-
-async function sceneAssistant(page) {
-  console.log('  scene 1 — the assistant')
-  await hold(page, 900)
-  await type(page,
-    'main textarea',
-    'Mask a 15-char numeric column padded with leading zeros, keeping the padding.',
-    { chunk: 4, delay: 55 })
-  await hold(page, 500)
-  await page.keyboard.press('Enter')
-
-  // The local model takes about a minute; sample it and let the GIF play it back fast. The
-  // finish line is the green "saved" card — the assistant not only answered, the configuration
-  // it produced was run and accepted. Waiting on a bubble instead matched the user's own
-  // message and ended the scene immediately.
-  const built = await waitFor(page, () => Boolean(document.querySelector('main .bg-green-50')),
-    { timeout: 180000, every: 2600, delay: 65 })
-  if (!built) console.warn('     the assistant did not produce a saved algorithm in time')
-  await hold(page, 3000)
+/** Clicks a sidebar result once the filter has produced it — a long list renders a beat later. */
+async function clickSidebarItem(page, re) {
+  const shown = await waitFor(page, (source, flags) => {
+    const rx = new RegExp(source, flags)
+    return [...document.querySelectorAll('aside nav button')].some(e => {
+      const r = e.getBoundingClientRect()
+      return r.width > 0 && r.right > 0 && r.left < innerWidth && rx.test(e.textContent || '')
+    })
+  }, { timeout: 8000, every: 250, delay: 60 }, re.source, re.flags)
+  if (!shown) throw new Error(`the sidebar never listed ${re}`)
+  return clickText(page, 'aside nav button', re)
 }
 
+/** Replaces what the sidebar filter holds. Results come out flat, so the hit is one click away. */
+async function filterSidebar(page, text) {
+  const box = (await page.evaluateHandle(() =>
+    [...document.querySelectorAll('aside input[type=text]')]
+      .find(e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.right > 0 && r.left < innerWidth }))).asElement()
+  await clearField(box)
+  if (text) await typeInto(page, box, text, { chunk: 4, delay: 55 })
+  await sleep(300)
+}
+
+/**
+ * Empties a React-controlled field. A triple click does not select an input's whole value in
+ * headless Chrome, so the next text was appended to the old one; setting the value through the
+ * native setter and firing `input` is what React listens to.
+ */
+async function setField(handle, value) {
+  await handle.evaluate((el, v) => {
+    const proto = el instanceof HTMLTextAreaElement ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype
+    Object.getOwnPropertyDescriptor(proto, 'value').set.call(el, v)
+    el.dispatchEvent(new Event('input', { bubbles: true }))
+  }, value)
+}
+const clearField = (handle) => setField(handle, '')
+
+/** Scrolls the main pane so `selector` reaches the top, in steps the GIF can follow. */
+async function scrollMainTo(page, selector, re, { steps = 8, offset = 12 } = {}) {
+  for (let i = 1; i <= steps; i++) {
+    await page.evaluate((sel, source, flags, part, off) => {
+      const rx = new RegExp(source, flags)
+      const el = [...document.querySelectorAll(sel)].find(e => rx.test(e.textContent || ''))
+      let pane = el?.parentElement
+      while (pane && !(pane.scrollHeight > pane.clientHeight && getComputedStyle(pane).overflowY !== 'visible')) pane = pane.parentElement
+      if (!el || !pane) return
+      const target = pane.scrollTop + el.getBoundingClientRect().top - pane.getBoundingClientRect().top - off
+      pane.scrollTop = pane.scrollTop + (target - pane.scrollTop) * part
+    }, selector, re.source, re.flags, i / steps, offset)
+    await shoot(page, 60)
+  }
+}
+
+// ── scenes ───────────────────────────────────────────────────────────────────
+
 async function sceneTest(page) {
-  console.log('  scene 2 — testing an algorithm')
-  await clickText(page, 'aside nav button', /Personal Data|Dados Pessoais/i)
-  await sleep(400); await shoot(page, 250)
+  console.log('  scene 1 — testing an algorithm')
+  // With no stored layout the sidebar opens on Frameworks, categories closed.
+  // Nothing is captured before the framework opens: the home screen carries the local-model
+  // notices, which are not what this scene is about.
+  await clickText(page, 'aside nav button', /Personal Data/i)
+  await sleep(400)
   await clickText(page, 'aside nav button', /^Phone$/)
   await sleep(1600); await hold(page, 900)
 
-  await clickText(page, 'main button', /Example|Exemplo/i)
+  await clickText(page, 'main button', /Example/i)
   await sleep(1200); await hold(page, 1100)
 
-  await clickText(page, 'main button', /^\s*(Mask|Mascarar)\s*$/i)
+  await clickText(page, 'main button', /^\s*Mask\s*$/i)
   for (let i = 0; i < 8; i++) { await sleep(280); await shoot(page, 90) }
-  await hold(page, 2400)
+  await hold(page, 2200)
+}
+
+async function sceneClassifier(page) {
+  console.log('  scene 2 — testing a classifier')
+  await filterSidebar(page, 'RUT - Regex')
+  await clickSidebarItem(page, new RegExp(CLASSIFIER.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')))
+  await sleep(1400); await hold(page, 1400)
+
+  await scrollMainTo(page, 'main h3', /^Test$/)
+  await hold(page, 500)
+
+  // The test card's own fields, found from its heading so no placeholder text is relied on.
+  const card = await page.evaluateHandle(() => {
+    const h = [...document.querySelectorAll('main h3')].find(e => e.textContent.trim() === 'Test')
+    return h.parentElement.parentElement
+  })
+  const [fieldName] = await card.$$('input[type=text]')
+  await typeInto(page, fieldName, 'RUT_CLIENTE', { chunk: 3, delay: 55 })
+  const values = await card.$('textarea')
+  await scrollMainTo(page, 'main label', /Sample values/i, { steps: 5, offset: 60 })
+  await typeInto(page, values, '12.345.678-5\n9.876.543-K\n15.222.333-1', { chunk: 5, delay: 55 })
+  const numbers = await card.$$('input[type=number]')
+  const threshold = numbers[numbers.length - 1]
+  // Set, not typed: emptying a number field makes it 0 at once, and the digits land beside it.
+  await setField(threshold, '60')
+  await shoot(page, 300)
+  await hold(page, 500)
+
+  await clickText(page, 'main button', /Run test/i)
+  const ran = await waitFor(page, () => /This classifier/i.test(document.querySelector('main')?.textContent || ''),
+    { every: 400, delay: 80 })
+  if (!ran) console.warn('     the classifier test did not answer in time')
+  await scrollMainTo(page, 'main h4', /This classifier/i, { steps: 10, offset: 90 })
+  await hold(page, 3400)
+}
+
+async function scenePresets(page) {
+  console.log('  scene 3 — pre-configured profile sets')
+  await filterSidebar(page, '')
+  await clickText(page, 'aside button', /^\s*Settings\s*$/)
+  await sleep(700)
+  await clickText(page, 'main button', /^\s*Profile Sets\s*$/)
+  const listed = await waitFor(page, () => /Version \d+/.test(document.querySelector('main')?.textContent || ''),
+    { every: 400, delay: 80 })
+  if (!listed) console.warn('     the profile set list did not load')
+  await hold(page, 2600)
+  await scrollMainTo(page, 'main h3, main h4, main p', /Panama/i, { steps: 10, offset: 40 })
+  await hold(page, 2200)
 }
 
 async function sceneSync(page) {
-  console.log('  scene 3 — syncing with the engine')
-  // The engine import moved into the sidebar: open the Algorithms section, then its ⋯ menu.
-  await clickText(page, 'aside nav button', /^Algorithms|^Algoritmos/i)
-  await sleep(500); await hold(page, 600)
-  await page.evaluate(() => {
-    const b = document.querySelector('aside button[title]')
-    const more = [...document.querySelectorAll('aside button')]
-      .find(x => x.querySelector('svg[class*="ellipsis"], svg[class*="more-horizontal"]'))
-    ;(more ?? b).click()
-  })
-  await sleep(400); await hold(page, 700)
+  console.log('  scene 4 — syncing with the engine')
+  await clickText(page, 'main button', /^\s*Delphix\s*$/)
+  await sleep(900); await hold(page, 2600)
 
-  await clickText(page, 'aside button, aside label', /Import from Delphix|Importar do Delphix/i)
-  const listed = await waitFor(page, () =>
-    [...document.querySelectorAll('label')].some(l => {
-      const i = l.querySelector('input[type=checkbox]'); return i && !i.disabled
-    }), { every: 600, delay: 80 })
-  if (!listed) throw new Error('the engine listing never arrived')
-  await hold(page, 1700)
-
-  // pick one the tool can actually run
-  const picked = await page.evaluate(() => {
-    const l = [...document.querySelectorAll('label')]
-      .find(x => x.querySelector('input[type=checkbox]') && !x.querySelector('input').disabled)
-    if (!l) return null
-    l.querySelector('input').click()
-    return l.textContent.trim().split('\n')[0]
-  })
-  console.log(`     importing ${picked}`)
-  await sleep(400); await hold(page, 1200)
-
-  await clickText(page, 'button', /Import \d+|Importar \d+/)
-  await waitFor(page, () => !document.querySelector('h3')?.textContent?.match(/Import from|Importar de/),
-    { every: 500, delay: 90 })
-  await hold(page, 1900)
-
-  // and push one back
-  await clickText(page, 'main button', /Send to Delphix|Enviar ao Delphix/i)
-  await waitFor(page, () => document.querySelectorAll('[data-sonner-toast]').length > 0,
-    { every: 450, delay: 90 })
-  await hold(page, 2800)
+  // An algorithm the engine sent down, open in the tester with its own Send to Delphix. The
+  // scene stops short of pressing it: recording must not depend on, or change, the engine.
+  await filterSidebar(page, ENGINE_ALGORITHM)
+  await clickSidebarItem(page, new RegExp(`^${ENGINE_ALGORITHM}`))
+  await sleep(1600); await hold(page, 3200)
+  await filterSidebar(page, '')
 }
 
 // ── run ──────────────────────────────────────────────────────────────────────
@@ -207,19 +278,25 @@ const browser = await puppeteer.launch({
   args: ['--force-device-scale-factor=1', '--hide-scrollbars', '--lang=en-US'],
 })
 const page = await browser.newPage()
-// The UI follows the browser language; the GIF ships in all three READMEs, so it is recorded
-// in English, the site's default.
 await page.setExtraHTTPHeaders({ 'Accept-Language': 'en-US,en' })
 await page.setViewport(VIEW)
+// A stored layout from an earlier visit would change what the first clicks open.
+await page.evaluateOnNewDocument(() => {
+  try { localStorage.removeItem('dlpx.sidebar.open'); localStorage.removeItem('dlpx.sidebar.groupBy') } catch {}
+})
 await page.goto(APP, { waitUntil: 'networkidle2' })
 await sleep(2000)
 
 try {
-  await sceneAssistant(page)
   await sceneTest(page)
+  await sceneClassifier(page)
+  await scenePresets(page)
   await sceneSync(page)
 } catch (err) {
-  console.error(`  stopped: ${err.message}`)
+  // The screen the scene gave up on says more than the message does.
+  const shot = OUT.replace(/\.gif$/, '') + '.stopped.png'
+  await page.screenshot({ path: shot }).catch(() => {})
+  console.error(`  stopped: ${err.message} (screen saved to ${shot})`)
 }
 
 enc.finish()

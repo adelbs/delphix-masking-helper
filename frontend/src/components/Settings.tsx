@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw, CheckCircle2,
-  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers,
+  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers, ChevronDown,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
@@ -11,7 +11,7 @@ import { useVersion } from '@/lib/version'
 import { announceImport, refreshAfterImport } from '@/lib/engine-sync'
 import { ImportProgressBar } from '@/components/ImportProgressBar'
 import { useImportProgress } from '@/lib/import-progress'
-import type { AiStatus, Locale, PresetConflict, ProfileSetPreset, ServerFile } from '@/types'
+import type { AiStatus, Locale, PresetConflict, PresetPack, ProfileSetPreset, ServerFile } from '@/types'
 
 interface Props {
   filesDir: string
@@ -361,44 +361,78 @@ const formatLoadedAt = (value: string, locale: Locale) =>
 /**
  * Profile sets shipped with the tool.
  *
- * Loading one writes the set and everything it leans on. Loading it again is a reset, not a copy:
- * the server finds the same rows and puts them back the way they ship. What stands in the way —
- * something of the user's under a name the preset uses — comes back as conflicts to confirm.
+ * Loading one writes the set and everything it leans on, as one of two packs: essential, the
+ * minimum for its law, or extended, all of it. Loading it again is a reset, not a copy: the server
+ * finds the same rows and puts them back the way they ship, removing what the chosen pack does not
+ * carry. What stands in the way — something of the user's under a name the preset uses — comes back
+ * as conflicts to confirm. Unloading removes what it brought.
  */
 function PresetsTab() {
   const { t, locale } = useT()
   const [presets, setPresets] = useState<ProfileSetPreset[] | null>(null)
   const [failed, setFailed] = useState(false)
-  const [busy, setBusy] = useState<string | null>(null)
+  const [busy, setBusy] = useState<{ id: string; unloading: boolean } | null>(null)
 
   useEffect(() => {
     api.getPresets().then(setPresets).catch(() => { setFailed(true); setPresets([]) })
   }, [])
 
   const text = (byLocale: Partial<Record<Locale, string>>) => byLocale[locale] ?? byLocale.en ?? ''
+  const packName = (pack: PresetPack) => t(`presets.pack.${pack}`)
+  const announceKept = (kept: PresetConflict[]) => {
+    if (!kept.length) return
+    toast.info(t('presets.kept', { names: kept.map(c => `${c.name} (${t(`presets.kind.${c.kind}`)})`).join(', ') }))
+  }
+  const refresh = async () => {
+    await refreshAfterImport()
+    setPresets(await api.getPresets())
+  }
 
-  const run = async (preset: ProfileSetPreset, overwrite: boolean): Promise<void> => {
+  const run = async (preset: ProfileSetPreset, pack: PresetPack, overwrite: boolean): Promise<void> => {
     const name = text(preset.name)
     try {
-      const out = await api.loadPreset(preset.id, overwrite)
-      toast.success(t(out.mode === 'reset' ? 'presets.resetDone' : 'presets.loaded', { name }))
-      await refreshAfterImport()
-      setPresets(await api.getPresets())
+      const out = await api.loadPreset(preset.id, pack, overwrite)
+      const done = out.mode === 'reset' ? 'presets.resetDone' : out.mode === 'switched' ? 'presets.switched' : 'presets.loaded'
+      toast.success(t(done, { name, pack: packName(out.pack) }))
+      announceKept(out.kept)
+      await refresh()
     } catch (e) {
       const err = e as Error & { code?: string; conflicts?: PresetConflict[] }
       if (err.code === 'preset-conflict' && err.conflicts) {
         const names = err.conflicts.map(c => `${c.name} (${t(`presets.kind.${c.kind}`)})`).join(', ')
-        if (confirm(t('presets.conflictConfirm', { name, names }))) return run(preset, true)
+        if (confirm(t('presets.conflictConfirm', { name, names }))) return run(preset, pack, true)
         return
       }
       toast.error(err.message)
     }
   }
 
-  const load = async (preset: ProfileSetPreset) => {
-    if (preset.loaded && !confirm(t('presets.resetConfirm', { name: text(preset.name) }))) return
-    setBusy(preset.id)
-    try { await run(preset, false) } finally { setBusy(null) }
+  const load = async (preset: ProfileSetPreset, pack: PresetPack) => {
+    const name = text(preset.name)
+    if (preset.loaded) {
+      const question = preset.loaded.pack === pack
+        ? t('presets.resetConfirm', { name })
+        : t('presets.switchConfirm', { name, pack: packName(pack) })
+      if (!confirm(question)) return
+    }
+    setBusy({ id: preset.id, unloading: false })
+    try { await run(preset, pack, false) } finally { setBusy(null) }
+  }
+
+  const unload = async (preset: ProfileSetPreset) => {
+    const name = text(preset.name)
+    if (!confirm(t('presets.unloadConfirm', { name }))) return
+    setBusy({ id: preset.id, unloading: true })
+    try {
+      const out = await api.unloadPreset(preset.id)
+      toast.success(t('presets.unloaded', { name, n: out.removed.length }))
+      announceKept(out.kept)
+      await refresh()
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally {
+      setBusy(null)
+    }
   }
 
   return (
@@ -420,25 +454,28 @@ function PresetsTab() {
             {presets.map(preset => {
               const summary = text(preset.summary)
               const blocked = preset.problems.length > 0
-              const working = busy === preset.id
+              const working = busy?.id === preset.id
               return (
-                <li key={preset.id} className="flex flex-col sm:flex-row sm:items-start gap-3 px-4 py-3.5">
+                <li key={preset.id} className="flex items-start gap-3 px-4 py-3.5">
                   <Layers size={16} className="hidden sm:block text-slate-400 mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-slate-800">{text(preset.name)}</p>
                     {summary && <p className="text-xs text-slate-500 mt-0.5">{summary}</p>}
                     <p className="text-xs text-slate-400 mt-1">
                       {t('presets.counts', {
-                        classifiers: preset.counts.classifiers,
-                        domains: preset.counts.domains,
-                        algorithms: preset.counts.algorithms,
-                        threshold: preset.profileSet.threshold,
+                        version: preset.version ?? '—',
+                        classifiers: preset.packs.extended.classifiers,
+                        domains: preset.packs.extended.domains,
+                        algorithms: preset.packs.extended.algorithms,
                       })}
                     </p>
                     {preset.loaded && (
                       <p className="flex items-center gap-1 text-xs text-emerald-700 mt-1">
                         <CheckCircle2 size={12} />
-                        {t('presets.loadedAt', { date: formatLoadedAt(preset.loaded.loaded_at, locale) })}
+                        {t('presets.loadedAt', {
+                          pack: packName(preset.loaded.pack),
+                          date: formatLoadedAt(preset.loaded.loaded_at, locale),
+                        })}
                       </p>
                     )}
                     {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
@@ -452,9 +489,9 @@ function PresetsTab() {
                         </ul>
                       </div>
                     )}
-                  </div>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Below the text rather than beside it: three buttons beside it left the text a sliver. */}
+                  <div className="flex flex-wrap items-center gap-2 mt-3">
                     {preset.docs.length > 0 ? (
                       <a
                         href={api.presetDocUrl(preset.id, locale)}
@@ -471,9 +508,10 @@ function PresetsTab() {
                         <FileDown size={13} /> {t('presets.doc')}
                       </span>
                     )}
-                    <button
-                      onClick={() => load(preset)}
+                    <PackMenu
+                      preset={preset}
                       disabled={blocked || busy !== null}
+                      onPick={pack => load(preset, pack)}
                       className={cn(
                         'flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-60',
                         preset.loaded
@@ -481,9 +519,20 @@ function PresetsTab() {
                           : 'text-white bg-blue-600 hover:bg-blue-700'
                       )}
                     >
-                      {working ? <Loader2 size={13} className="animate-spin" /> : preset.loaded ? <RotateCcw size={13} /> : <Download size={13} />}
-                      {working ? t('presets.working') : preset.loaded ? t('presets.reset') : t('presets.load')}
-                    </button>
+                      {working && !busy.unloading ? <Loader2 size={13} className="animate-spin" /> : preset.loaded ? <RotateCcw size={13} /> : <Download size={13} />}
+                      {working && !busy.unloading ? t('presets.working') : preset.loaded ? t('presets.reset') : t('presets.load')}
+                    </PackMenu>
+                    {preset.loaded && (
+                      <button
+                        onClick={() => unload(preset)}
+                        disabled={busy !== null}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-700 bg-white hover:bg-red-50 border border-red-200 rounded-lg transition-colors disabled:opacity-60"
+                      >
+                        {working && busy.unloading ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                        {working && busy.unloading ? t('presets.unloading') : t('presets.unload')}
+                      </button>
+                    )}
+                  </div>
                   </div>
                 </li>
               )
@@ -491,6 +540,92 @@ function PresetsTab() {
           </ul>
         )}
       </div>
+    </div>
+  )
+}
+
+/**
+ * The load button, opening the choice of pack. Each pack says what it brings, and the one loaded
+ * is marked. Drawn fixed for the reason the sidebar's menus are: positioned inside the settings
+ * page, the panel would scroll with it and could end up past the visible edge. Scrolling closes it.
+ */
+function PackMenu({ preset, disabled, onPick, className, children }: {
+  preset: ProfileSetPreset
+  disabled: boolean
+  onPick: (pack: PresetPack) => void
+  className: string
+  children: React.ReactNode
+}) {
+  const { t } = useT()
+  const [at, setAt] = useState<{ top: number; right: number } | null>(null)
+  const open = at !== null
+  const box = useRef<HTMLDivElement>(null)
+  const close = () => setAt(null)
+
+  const toggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (open) { close(); return }
+    const r = e.currentTarget.getBoundingClientRect()
+    setAt({ top: r.bottom + 4, right: Math.max(8, window.innerWidth - r.right) })
+  }
+
+  useEffect(() => {
+    if (!open) return
+    const away = (e: MouseEvent) => {
+      if (box.current && !box.current.contains(e.target as Node)) close()
+    }
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
+    document.addEventListener('mousedown', away)
+    document.addEventListener('keydown', esc)
+    window.addEventListener('resize', close)
+    document.addEventListener('scroll', close, true)
+    return () => {
+      document.removeEventListener('mousedown', away)
+      document.removeEventListener('keydown', esc)
+      window.removeEventListener('resize', close)
+      document.removeEventListener('scroll', close, true)
+    }
+  }, [open])
+
+  const packs = (['essential', 'extended'] as const).filter(pack => preset.packs[pack])
+
+  return (
+    <div ref={box}>
+      <button onClick={toggle} disabled={disabled} aria-haspopup="menu" aria-expanded={open} className={className}>
+        {children}
+        <ChevronDown size={12} />
+      </button>
+      {at && (
+        <div
+          role="menu"
+          style={{ top: at.top, right: at.right }}
+          className="fixed z-50 w-72 max-w-[calc(100vw-16px)] rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+        >
+          {packs.map(pack => {
+            const counts = preset.packs[pack]!
+            return (
+              <button
+                key={pack}
+                role="menuitem"
+                onClick={() => { close(); onPick(pack) }}
+                className="flex w-full flex-col items-start gap-0.5 px-3 py-2 text-left hover:bg-slate-50 transition-colors"
+              >
+                <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-800">
+                  {t(`presets.pack.${pack}`)}
+                  {preset.loaded?.pack === pack && (
+                    <span className="flex items-center gap-0.5 text-[10px] font-medium text-emerald-700">
+                      <Check size={11} /> {t('presets.pack.current')}
+                    </span>
+                  )}
+                </span>
+                <span className="text-xs text-slate-500">{t(`presets.pack.${pack}Hint`)}</span>
+                <span className="text-[11px] text-slate-400">
+                  {t('presets.pack.counts', { domains: counts.domains, classifiers: counts.classifiers, algorithms: counts.algorithms })}
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

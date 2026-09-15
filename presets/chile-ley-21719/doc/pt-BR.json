@@ -14,7 +14,9 @@
           "**Situação socioeconômica** — tramo FONASA e ISAPRE, Registro Social de Hogares, benefícios do Estado, dívida comercial, renda, fundo de pensão, moradia, financiamento estudantil.",
           "**Antecedentes penais** — condenações e números de processos judiciais."
         ] },
-        "Tudo de que o set precisa viaja com ele: carregá-lo cria os domínios, classifiers, algoritmos e arquivos de lookup, e enviá-lo a um Masking Engine envia todos eles."
+        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem significado (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível.",
+        { "tip": "Antes de mascarar, faça o inventário das colunas binárias (BLOB, imagens, PDF). Os algoritmos deste set trabalham com texto, números e datas: uma cédula escaneada guardada num BLOB continua com o RUT legível. Reporte essas colunas como risco residual." }
       ]
     },
     {
@@ -24,19 +26,6 @@
         "Situação socioeconômica é uma categoria do direito chileno: dados comuns em outros países — um tramo FONASA, uma ISAPRE, um percentil do Registro Social de Hogares, um registro no DICOM — são sensíveis no Chile, e modelos feitos para o GDPR não os cobrem.",
         "A lei entra em vigor em 1º de dezembro de 2026. Em 31 de agosto de 2026 o Governo enviou ao Senado um projeto (Boletín 18.623-07) que adiaria a data para 1º de dezembro de 2027; verifique a tramitação. A data não muda este set.",
         { "note": "Este documento descreve controles técnicos. Se uma cópia dos dados conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não só do profile set." }
-      ]
-    },
-    {
-      "title": "Como usar o set",
-      "body": [
-        { "list": [
-          "**Carregar** — *Configurações → Profile Sets → Carregar*. Carregar de novo reseta todos os objetos do set para como vêm.",
-          "**Enviar ao Delphix** — pelo profile set, ou com *Enviar tudo ao Delphix*. Domínios, algoritmos e arquivos vão antes.",
-          "**Perfilar** — rode um job de profiling com o set e revise os domínios atribuídos antes de mascarar.",
-          "**Mascarar** — rode o job de mascaramento. Use a mesma chave do engine em todos os ambientes, para que os valores mascarados sejam consistentes entre sistemas."
-        ] },
-        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem significado (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível.",
-        { "tip": "Antes de mascarar, faça o inventário das colunas binárias (BLOB, imagens, PDF). Os algoritmos deste set trabalham com texto, números e datas: uma cédula escaneada guardada num BLOB continua com o RUT legível. Reporte essas colunas como risco residual." }
       ]
     }
   ],
@@ -468,12 +457,13 @@
     {
       "title": "Verificação",
       "body": [
-        "O set é gerado e conferido por dois scripts guardados com ele no repositório:",
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
         { "list": [
-          "`build.mjs` gera o set a partir das definições e das listas mantidas à mão.",
-          "`verify.mjs` revisa a configuração de cada classifier, perfila 129 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — mascara 184 valores de amostra e 204 placeholders como `S/I` — conferindo se cada valor mascarado vem do vocabulário certo, e o dígito verificador de 60 RUTs aleatórios — e roda cada um dos 101 algoritmos no seu próprio input de exemplo, recebendo só os algoritmos que referencia, como faz o tester."
+          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
+          "O profiling foi simulado em 129 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 184 valores de amostra e 204 placeholders como `S/I`, conferindo se cada valor mascarado vem do vocabulário certo, e o dígito verificador de 60 RUTs aleatórios. Cada um dos 101 algoritmos também mascarou o seu próprio valor de exemplo."
         ] },
-        "Na última geração, todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
       ]
     },
     {

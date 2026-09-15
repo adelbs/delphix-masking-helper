@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": {
     "en": "Chile — Law 21.719 (personal data protection)",
     "pt-BR": "Chile — Lei 21.719 (proteção de dados pessoais)",
@@ -11,7 +11,7 @@
     "es": "Descubre y enmascara datos personales chilenos en tres capas: identificadores directos (RUT con dígito verificador válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, comuna, edad) y las categorías sensibles del artículo 2, incluida la situación socioeconómica."
   },
   "profileSet": {
-    "name": "CL - Ley 21.719 - Datos personales",
+    "name": "CL - Ley 21.719 - v3",
     "description": "Identificadores directos, cuasi-identificadores y datos sensibles (art. 2 g) de la Ley 21.719.",
     "threshold": 60,
     "classifiers": [
@@ -148,6 +148,26 @@
       "CL_L3_PENAL_CAUSA - Path",
       "CL_L3_PENAL_CAUSA - Regex"
     ]
+  },
+  "packs": {
+    "essential": {
+      "description": "Paquete esencial de la Ley 21.719: RUT, documentos de identidad, nombres, contacto, dirección y fecha de nacimiento.",
+      "domains": [
+        "CL_L1_RUT",
+        "CL_L1_RUT_CUERPO",
+        "CL_L1_RUT_DV",
+        "CL_L1_NUMERO_DOCUMENTO",
+        "CL_L1_PASAPORTE",
+        "CL_L1_NOMBRE",
+        "CL_L1_APELLIDO",
+        "CL_L1_NOMBRE_COMPLETO",
+        "CL_L1_EMAIL",
+        "CL_L1_TELEFONO",
+        "CL_L1_DIRECCION",
+        "CL_L1_DIRECCION_COMPLEMENTO",
+        "CL_L2_FECHA_NACIMIENTO"
+      ]
+    }
   },
   "classifiers": [
     {
@@ -611,7 +631,7 @@
         "paths": [
           {
             "matchType": "REGEX",
-            "fieldValue": "(?i)(?<![a-z])(?:direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle|avenida|pasaje|address|street|addr|dir_?(particular|comercial|laboral|envio|despacho|facturacion|cliente|paciente|trabajo)|residencia|villa|poblacion|lugar_?residencia|home_?address)(?![a-z])",
+            "fieldValue": "(?i)(?<![a-z])(?:direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle|avenida|pasaje|(?<!(mac|ip|e_?mail|web|url)_?)address|street|(?<!(mac|ip|e_?mail|web|url)_?)addr|dir_?(particular|comercial|laboral|envio|despacho|facturacion|cliente|paciente|trabajo)|residencia|villa|poblacion|lugar_?residencia|home_?address)(?![a-z])",
             "parentValue": "",
             "matchStrength": 0.8,
             "caseSensitive": false,

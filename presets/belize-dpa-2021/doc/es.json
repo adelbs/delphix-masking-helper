@@ -15,7 +15,10 @@
           "**Historial o situación financiera** — referencias de crédito, deudas, ingresos, patrimonio, pensiones, prestaciones de seguridad social, programas sociales, pobreza y tenencia de la vivienda. La sección 2 los hace sensibles.",
           "**Antecedentes y procesos penales** — antecedentes, cargos, resultados y números de causa, también sensibles según la sección 2."
         ] },
-        "Todo lo que el set necesita viaja con él: cargarlo crea los dominios, classifiers, algoritmos y archivos de lookup, y enviarlo a un Masking Engine los envía todos."
+        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos en los que estos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa.",
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NAME`, `RESULT`, `CITY` — necesita que los valores coincidan. Una columna de nombre sin sentido (`FIELD1`, `REMARKS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocible: un número de seguridad social, un teléfono de Belice, una placa, una aldea.",
+        "Los nombres de columna se reconocen en inglés, en las abreviaturas de los sistemas de Belice (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) y en español, que habla buena parte del país.",
+        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOBs, imágenes, PDFs). Los procesos de alta suelen guardar la imagen de la tarjeta de seguridad social o del pasaporte: el número sigue legible en la imagen. Reporte esas columnas como riesgo residual." }
       ]
     },
     {
@@ -39,20 +42,6 @@
         "Un ambiente de pruebas con datos de producción es un tratamiento para fines para los que el dato no fue recopilado, y guarda datos sensibles — financieros y penales entre ellos — fuera de los controles hechos para ellos. Una copia a partir de la cual las personas ya no pueden ser identificadas no es dato personal: para eso existe el set.",
         "La lista de datos sensibles de la sección 2 es cerrada, pero el set va más allá donde el riesgo es el mismo: trata con el mismo cuidado los registros de salud, la identidad de género y el idioma que habla la persona — que revela origen maya, garífuna o menonita.",
         { "note": "La definición de dato personal cuenta lo que el responsable tiene o probablemente tendrá. El enmascaramiento es determinista para la clave del engine, así que quien tenga a la vez los datos de producción y la clave puede vincular una fila enmascarada con su origen. Mantenga la clave, y el acceso a producción, lejos de quienes usan la copia enmascarada. Si una copia cuenta como anonimizada es una evaluación jurídica del ambiente completo, no solo del profile set." }
-      ]
-    },
-    {
-      "title": "Cómo usar el set",
-      "body": [
-        { "list": [
-          "**Cargar** — *Configuración → Profile Sets → Cargar*. Cargar de nuevo devuelve cada objeto del set a como viene de fábrica.",
-          "**Enviar a Delphix** — desde el profile set, o con *Enviar todo a Delphix*. Dominios, algoritmos y archivos van primero.",
-          "**Perfilar** — ejecute un job de profiling con el set y revise los dominios asignados antes de enmascarar.",
-          "**Enmascarar** — ejecute el job de enmascaramiento. Use la misma clave del engine en todos los ambientes para que los valores enmascarados sigan siendo consistentes entre sistemas."
-        ] },
-        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NAME`, `RESULT`, `CITY` — necesita que los valores coincidan. Una columna de nombre sin sentido (`FIELD1`, `REMARKS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocible: un número de seguridad social, un teléfono de Belice, una placa, una aldea.",
-        "Los nombres de columna se reconocen en inglés, en las abreviaturas de los sistemas de Belice (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) y en español, que habla buena parte del país.",
-        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOBs, imágenes, PDFs). Los procesos de alta suelen guardar la imagen de la tarjeta de seguridad social o del pasaporte: el número sigue legible en la imagen. Reporte esas columnas como riesgo residual." }
       ]
     }
   ],
@@ -492,12 +481,14 @@
     {
       "title": "Verificación",
       "body": [
-        "El set se genera y se comprueba con dos scripts guardados junto a él en el repositorio:",
+        "Antes de su publicación, el set se verificó fuera de un Masking Engine:",
         { "list": [
-          "`build.mjs` genera el set y sus tablas de lookup a partir de las definiciones y las listas mantenidas a mano.",
-          "`verify.mjs` revisa la configuración de cada classifier y perfila 141 columnas con el set completo en su umbral — bien nombradas, mal nombradas y 32 que no son datos personales. Audita la tabla de generalización de los 221 lugares. Luego enmascara 145 valores de muestra y 198 marcadores como `N/A` a través de la aplicación en ejecución, comprobando cada salida contra su vocabulario, y 150 números de seguridad social en busca de colisiones."
+          "La configuración de cada classifier se revisó contra lo que acepta un Masking Engine.",
+          "El profiling se simuló en 141 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 32 columnas que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
+          "La tabla que generaliza ciudades y aldeas se auditó para los 221 lugares.",
+          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon 145 valores de muestra y 198 marcadores como `N/A`, comprobando cada salida contra su vocabulario, y 150 números de seguridad social contra colisiones. Cada uno de los 90 algoritmos también enmascaró su propio valor de ejemplo."
         ] },
-        "En el último build, todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba."
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
       ]
     },
     {

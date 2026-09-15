@@ -147,6 +147,14 @@ function pdfLinks(t) {
   }).join('\n    ')
 }
 
+/** The profile sets that ship with the tool. Their PDFs live under presets/, outside the folder
+ *  Pages serves, so the link goes to the repository's copy in the visitor's language. */
+function presetRows(locale, t) {
+  return t.presets.map(p => `
+        <li><span class="c">${esc(p.country)}</span><span class="law">${esc(p.law)}</span>`
+    + `<a href="${REPO}/blob/main/presets/${p.id}/doc.${locale}.pdf">${esc(t.presetsDoc)}</a></li>`).join('')
+}
+
 // ── landing ──────────────────────────────────────────────────────────────────
 
 function landing(locale) {
@@ -226,6 +234,21 @@ ${topbar(locale, 'home', t)}
 <section><div class="wrap">
   <div class="split">
     <div>
+      <h2 class="sec">${esc(t.discoveryTitle)}</h2>
+      <p class="sec-lede" style="margin-bottom:0">${esc(t.discoveryP)}</p>
+    </div>
+    <div class="card">
+      <h3>${esc(t.presetsTitle)}</h3>
+      <p>${esc(t.presetsP)}</p>
+      <ul class="presets">${presetRows(locale, t)}
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <div class="split">
+    <div>
       <h2 class="sec">${esc(t.assistantTitle)}</h2>
       <p class="sec-lede" style="margin-bottom:0">${esc(t.assistantP)}</p>
       <p class="note-line">${esc(t.assistantNote)}</p>
@@ -238,7 +261,7 @@ ${topbar(locale, 'home', t)}
   </div>
 </div></section>
 
-<section class="alt"><div class="wrap narrow">
+<section><div class="wrap narrow">
   <h2 class="sec">${esc(t.pdfTitle)}</h2>
   <p class="sec-lede">${esc(t.pdfP)}</p>
   <div class="dl">

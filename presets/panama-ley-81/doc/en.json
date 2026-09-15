@@ -14,7 +14,10 @@
           "**Economic and credit data** — APC credit references, debt, salary, assets, pensions, social security coverage, social programs, poverty, housing tenure.",
           "**Criminal records** — police records and case numbers."
         ] },
-        "Everything the set needs travels with it: loading it creates the domains, classifiers, algorithms and lookup files, and sending it to a Masking Engine sends all of them."
+        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a cédula, a RUC with its DV, a plate, a corregimiento.",
+        "Column names are recognized in Spanish, in the abbreviations of Panamanian systems (`NUM_CEDULA`, `CIP`, `FEC_NAC`, `COD_CORREG`, `NIS`), in the fields of the electronic invoice (`dRuc`, `dDV`) and in English.",
+        { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a photo of the cédula: the number is still readable in the image. Report those columns as residual risk." }
       ]
     },
     {
@@ -36,20 +39,6 @@
         "A test environment with production data is processing for a purpose the data subject did not authorize, and it holds sensitive and financial data outside the controls built for them. A copy that is effectively anonymized falls, under article 3, outside the law: that is what the set is for.",
         "The list of sensitive data is not exhaustive. The set also treats gender identity and sexual life as sensitive, since they expose people to discrimination in the same way. Reform proposals are under discussion, among them higher fines; this document follows the text in force in September 2026.",
         { "note": "This document describes technical controls. Whether a copy counts as anonymized is a legal assessment of the whole environment — access, retention, what else it is combined with — not of the profile set alone." }
-      ]
-    },
-    {
-      "title": "Using the set",
-      "body": [
-        { "list": [
-          "**Load** — *Settings → Profile Sets → Load*. Loading again resets every object of the set to how it ships.",
-          "**Send to Delphix** — from the profile set, or with *Send everything to Delphix*. Domains, algorithms and files go first.",
-          "**Profile** — run a profiling job with the set and review the assigned domains before masking.",
-          "**Mask** — run the masking job. Use the same engine key in every environment so masked values stay consistent across systems."
-        ] },
-        "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a cédula, a RUC with its DV, a plate, a corregimiento.",
-        "Column names are recognized in Spanish, in the abbreviations of Panamanian systems (`NUM_CEDULA`, `CIP`, `FEC_NAC`, `COD_CORREG`, `NIS`), in the fields of the electronic invoice (`dRuc`, `dDV`) and in English.",
-        { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a photo of the cédula: the number is still readable in the image. Report those columns as residual risk." }
       ]
     }
   ],
@@ -515,12 +504,14 @@
     {
       "title": "Verification",
       "body": [
-        "The set is generated and checked by two scripts kept next to it in the repository:",
+        "Before publication the set was checked outside a Masking Engine:",
         { "list": [
-          "`build.mjs` generates the set, its lookup tables and the DV tables from the definitions and the hand-kept lists.",
-          "`verify.mjs` first confirms that its DV computation reproduces the examples of the published algorithm. It reviews every classifier configuration and profiles 138 columns with the whole set at its threshold — well named, badly named and 24 that are not personal data. It then masks 255 sample values and 210 placeholders such as `N/D` through the running app: RUCs with a DV in the four separators and the five letter types, checking each DV; 150 cédulas and 150 RUCs for collisions; and 20 people whose cédula and RUC must still agree."
+          "The computation of the RUC check digit was first checked against the examples of the published algorithm.",
+          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
+          "Profiling was simulated on 138 columns with the whole set at its assignment threshold — well named, badly named, and 24 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "The algorithms, run with the Delphix algorithm plugin, masked 255 sample values and 210 placeholders such as `N/D`: RUCs with a DV in the four separators and the five letter types, checking each DV; 150 cédulas and 150 RUCs for collisions; and 20 people whose cédula and RUC must still agree."
         ] },
-        "In the last build, every column was assigned as expected and every value was masked as expected."
+        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
       ]
     },
     {

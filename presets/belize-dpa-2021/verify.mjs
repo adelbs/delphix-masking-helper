@@ -261,6 +261,27 @@ function verifyClassifiers() {
   }
   const negatives = COLUMNS.filter((c) => !c.expect).length
   console.log(`profiled ${COLUMNS.length} columns (${negatives} not personal data): ${passed} as expected`)
+
+  // The essential pack runs only the classifiers of its domains. Its columns must still land where
+  // they did, and no other column may be taken for one of its domains now that the domains that
+  // used to win those columns are not there.
+  const essential = new Set(preset.packs.essential.domains)
+  const pack = resolved.filter((c) => essential.has(c.domain))
+  // A seven-digit code whose name no essential domain knows looks like a landline by its values
+  // alone. In the extended pack a column-name rule claims it (BHIS_NO is a health identifier); here
+  // the telephone is the only candidate left, and profiling proposes it.
+  const ALSO = { BHIS_NO: 'BZ_L1_PHONE' }
+  let packPassed = 0
+  for (const column of COLUMNS) {
+    const expect = essential.has(column.expect) ? column.expect : (ALSO[column.name] ?? '')
+    const field = { name: column.name, parent: null, sqlType: column.sqlType, length: column.length || null, autoIncrement: false, values: column.values }
+    const result = kit.evaluateField({ classifiers: pack, field, threshold: preset.profileSet.threshold, readFile })
+    if (result.assigned === expect) { packPassed++; continue }
+    failures++
+    const ranking = result.ranking.slice(0, 3).map((r) => `${r.domain} ${r.percent}%`).join(', ')
+    console.log(`  ✗ essential pack, ${column.name}: expected ${expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
+  }
+  console.log(`profiled ${COLUMNS.length} columns with the essential pack (${pack.length} classifiers): ${packPassed} as expected`)
 }
 
 // ── Towns and villages, offline ─────────────────────────────────────────────

@@ -34,8 +34,8 @@
     <a class="btn btn-ghost" href="https://github.com/adelbs/delphix-masking-helper">View on GitHub</a>
   </div>
   <figure class="shot">
-    <img src="demo.gif" alt="The assistant building an algorithm, an algorithm being tested, and algorithms being synced with a Delphix engine" loading="lazy" width="1200">
-    <figcaption>Three things, in order: asking the assistant for an algorithm and watching it build and validate one; running an algorithm against a real value; importing from a Delphix engine and sending one back. Every masked value is real output from the plugin.</figcaption>
+    <img src="demo.gif" alt="An algorithm being tested, a classifier tested against a described column, the profile sets that ship with the tool, and a connected Delphix engine" loading="lazy" width="1200">
+    <figcaption>Four things, in order: running an algorithm against a real value; testing a classifier against a column described on screen, and seeing which domain profiling would assign; the profile sets that ship with the tool; and the integration with a Delphix engine, with an algorithm that came down from it. Every masked value is real output from the plugin.</figcaption>
   </figure>
 </div></div>
 
@@ -66,7 +66,7 @@
       <div class="card">
         <span class="n">04</span>
         <h3>Sync</h3>
-        <p>Connect to a Masking Engine and pull its algorithms down to work on, or push yours up. An algorithm that came from the engine is updated there, not duplicated beside it.</p>
+        <p>Connect to a Masking Engine and mirror it here — algorithms, domains, classifiers and profile sets — or push your work up. What came from the engine is updated there, not duplicated beside it.</p>
       </div>
   </div>
 </div></section>
@@ -102,16 +102,35 @@
 
 <section class="alt"><div class="wrap narrow">
   <h2 class="sec">Connected to your engine</h2>
-  <p class="sec-lede" style="margin-bottom:0">Point the tool at a Masking Engine and its algorithms are yours to work on: pull one down, change it, run it against real values until it does what you need, and send it back. The engine gets an update, not a second copy — the tool remembers where each algorithm came from. Anything you build from scratch goes up as a new algorithm.</p>
+  <p class="sec-lede" style="margin-bottom:0">Connect a Masking Engine and the whole of it comes down to work on: its algorithms, domains, classifiers and profile sets. Change what you need, run it against real values until it does what it should, and send it back. The engine gets an update, not a second copy — the tool remembers where everything came from, and whatever an object relies on travels with it. Anything you build from scratch goes up as new.</p>
   <p class="note-line">Nothing is sent anywhere until you ask for it.</p>
 </div></section>
 
 <section><div class="wrap">
   <div class="split">
     <div>
+      <h2 class="sec">Find the sensitive data before you mask it</h2>
+      <p class="sec-lede" style="margin-bottom:0">Masking starts with knowing which columns hold personal data. The tool keeps the domains, classifiers and profile sets a profiling job runs, and tests a classifier against a column you describe — its name, its type, a few sample values — showing how confident the profiler would be and which domain it would assign. Nothing runs on the engine.</p>
+    </div>
+    <div class="card">
+      <h3>Ready-made for four data protection laws</h3>
+      <p>Load one and everything it needs is created in one go: the profile set, its classifiers, the domains they find, the algorithms that mask them and the files those read — the essential pack with the minimum for the law, or the extended pack with all of it. National identifiers keep a valid check digit after masking. Every set comes with a PDF documenting each item, and unloading removes what it brought.</p>
+      <ul class="presets">
+        <li><span class="c">Chile</span><span class="law">Ley 21.719</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/chile-ley-21719/doc.en.pdf">Documentation (PDF)</a></li>
+        <li><span class="c">Mexico</span><span class="law">LFPDPPP (2025)</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/mexico-lfpdppp/doc.en.pdf">Documentation (PDF)</a></li>
+        <li><span class="c">Panama</span><span class="law">Ley 81 de 2019</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/panama-ley-81/doc.en.pdf">Documentation (PDF)</a></li>
+        <li><span class="c">Belize</span><span class="law">Data Protection Act, 2021</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/belize-dpa-2021/doc.en.pdf">Documentation (PDF)</a></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <div class="split">
+    <div>
       <h2 class="sec">An assistant that checks its own work</h2>
       <p class="sec-lede" style="margin-bottom:0">Describe what you need to mask and the assistant picks the framework and configures it. Before anything is saved it actually runs the algorithm with that configuration — if it does not work, nothing is saved and you are told why. A configuration that looks plausible but fails never reaches you.</p>
-      <p class="note-line">It runs against a local model by default, so nothing leaves your machine.</p>
+      <p class="note-line">Building takes a hosted model — Claude, Gemini or GitHub Models. The default local model keeps everything on your machine and advises: it explains and recommends, but does not save algorithms.</p>
     </div>
     <div class="card">
       <h3>The framework reference</h3>
@@ -121,7 +140,7 @@
   </div>
 </div></section>
 
-<section class="alt"><div class="wrap narrow">
+<section><div class="wrap narrow">
   <h2 class="sec">Or take it with you</h2>
   <p class="sec-lede">The same reference as a printable PDF, one per language.</p>
   <div class="dl">

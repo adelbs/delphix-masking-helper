@@ -14,7 +14,10 @@
           "**Dados financeiros e patrimoniais** — birô de crédito, dívidas, renda, patrimônio, poupança de aposentadoria, crédito habitacional, seguridade social, programas sociais, nível socioeconômico, regime fiscal.",
           "**Antecedentes criminais** — antecedentes e números de processo."
         ] },
-        "Tudo o que o set precisa viaja com ele: carregá-lo cria os domínios, classifiers, algoritmos e arquivos de lookup, e enviá-lo a um Masking Engine envia todos eles."
+        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um CURP, um RFC, uma chave de eleitor, uma CLABE, uma placa, um município.",
+        "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas mexicanos (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), nos atributos das notas fiscais CFDI 4.0 (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) e em inglês.",
+        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da credencial do INE: o CURP e a chave de eleitor continuam legíveis na imagem. Reporte essas colunas como risco residual." }
       ]
     },
     {
@@ -34,20 +37,6 @@
         "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o aviso de privacidade não cobre, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia dissociada é o caminho que a própria lei oferece: é para isso que o set serve.",
         "Duas notas sobre as categorias. A lei de 2010 listava a **filiação sindical** como sensível; o texto de 2025 não a cita mais. A lista não é exaustiva e a filiação sindical continua expondo as pessoas a discriminação, então o set a mantém. **Dados biométricos** também não são citados; identificam a pessoa por definição e são tratados aqui como sensíveis.",
         { "note": "Este documento descreve controles técnicos. Se uma cópia conta como dissociada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não do profile set sozinho." }
-      ]
-    },
-    {
-      "title": "Usando o set",
-      "body": [
-        { "list": [
-          "**Carregar** — *Configurações → Profile Sets → Carregar*. Carregar de novo reseta cada objeto do set para como ele vem.",
-          "**Enviar ao Delphix** — pelo profile set, ou com *Enviar tudo ao Delphix*. Domínios, algoritmos e arquivos vão antes.",
-          "**Perfilar** — rode um job de profiling com o set e revise os domínios atribuídos antes de mascarar.",
-          "**Mascarar** — rode o job de mascaramento. Use a mesma chave do engine em todos os ambientes para manter os valores mascarados consistentes entre sistemas."
-        ] },
-        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um CURP, um RFC, uma chave de eleitor, uma CLABE, uma placa, um município.",
-        "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas mexicanos (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), nos atributos das notas fiscais CFDI 4.0 (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) e em inglês.",
-        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da credencial do INE: o CURP e a chave de eleitor continuam legíveis na imagem. Reporte essas colunas como risco residual." }
       ]
     }
   ],
@@ -540,12 +529,13 @@
     {
       "title": "Verificação",
       "body": [
-        "O set é gerado e conferido por dois scripts guardados com ele no repositório:",
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
         { "list": [
-          "`build.mjs` gera o set, suas tabelas de lookup e suas tabelas de dígito verificador a partir das definições e das listas mantidas à mão.",
-          "`verify.mjs` revisa a configuração de cada classifier, perfila 151 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 26 colunas que não são dado pessoal — e mascara 350 valores de amostra e 228 placeholders como `S/D` pelo app em execução. CURPs, RFCs, NSS e CLABEs aleatórios são conferidos quanto a dígito verificador e data válidos, 150 de cada quanto a colisões, e pares de CURP e RFC da mesma pessoa quanto à concordância."
+          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
+          "O profiling foi simulado em 151 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 26 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 350 valores de amostra e 228 placeholders como `S/D`. CURPs, RFCs, NSS e CLABEs aleatórios foram conferidos quanto a dígito verificador e data válidos, 150 de cada quanto a colisões, e pares de CURP e RFC da mesma pessoa quanto à concordância."
         ] },
-        "No último build, todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
       ]
     },
     {

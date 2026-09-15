@@ -15,7 +15,10 @@
           "**Registro ou situação financeira** — referências de crédito, dívidas, renda, patrimônio, pensões, benefícios da previdência social, programas sociais, pobreza e posse da moradia. A seção 2 os torna sensíveis.",
           "**Antecedentes e processos criminais** — antecedentes, acusações, desfechos e números de processo, também sensíveis pela seção 2."
         ] },
-        "Tudo de que o set precisa viaja com ele: carregá-lo cria os domínios, classifiers, algoritmos e arquivos de lookup, e enviá-lo a um Masking Engine envia todos eles."
+        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NAME`, `RESULT`, `CITY` — precisa que os valores concordem. Uma coluna de nome sem sentido (`FIELD1`, `REMARKS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um número da previdência social, um telefone de Belize, uma placa, uma vila.",
+        "Os nomes de coluna são reconhecidos em inglês, nas abreviações dos sistemas de Belize (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) e em espanhol, que boa parte do país fala.",
+        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOBs, imagens, PDFs). Processos de cadastro costumam guardar a imagem do cartão da previdência social ou do passaporte: o número continua legível na imagem. Reporte essas colunas como risco residual." }
       ]
     },
     {
@@ -39,20 +42,6 @@
         "Um ambiente de teste com dados de produção é tratamento para finalidades para as quais o dado não foi coletado, e guarda dados sensíveis — financeiros e criminais entre eles — fora dos controles feitos para eles. Uma cópia a partir da qual as pessoas não podem mais ser identificadas não é dado pessoal: é para isso que o set existe.",
         "A lista de dados sensíveis da seção 2 é fechada, mas o set vai além onde o risco é o mesmo: trata com o mesmo cuidado os registros de saúde, a identidade de gênero e a língua que a pessoa fala — que revela origem maia, garífuna ou menonita.",
         { "note": "A definição de dado pessoal conta o que o controlador tem ou provavelmente terá. O mascaramento é determinístico para a chave do engine, então quem tem ao mesmo tempo os dados de produção e a chave consegue ligar uma linha mascarada à sua origem. Mantenha a chave, e o acesso à produção, longe de quem usa a cópia mascarada. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro, não só do profile set." }
-      ]
-    },
-    {
-      "title": "Como usar o set",
-      "body": [
-        { "list": [
-          "**Carregar** — *Configurações → Profile Sets → Carregar*. Carregar de novo volta cada objeto do set ao estado de fábrica.",
-          "**Enviar ao Delphix** — pelo profile set, ou com *Enviar tudo ao Delphix*. Domínios, algoritmos e arquivos vão antes.",
-          "**Perfilar** — rode um job de profiling com o set e revise os domínios atribuídos antes de mascarar.",
-          "**Mascarar** — rode o job de mascaramento. Use a mesma chave do engine em todos os ambientes para que os valores mascarados continuem consistentes entre sistemas."
-        ] },
-        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NAME`, `RESULT`, `CITY` — precisa que os valores concordem. Uma coluna de nome sem sentido (`FIELD1`, `REMARKS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um número da previdência social, um telefone de Belize, uma placa, uma vila.",
-        "Os nomes de coluna são reconhecidos em inglês, nas abreviações dos sistemas de Belize (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) e em espanhol, que boa parte do país fala.",
-        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOBs, imagens, PDFs). Processos de cadastro costumam guardar a imagem do cartão da previdência social ou do passaporte: o número continua legível na imagem. Reporte essas colunas como risco residual." }
       ]
     }
   ],
@@ -492,12 +481,14 @@
     {
       "title": "Verificação",
       "body": [
-        "O set é gerado e conferido por dois scripts guardados ao lado dele no repositório:",
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
         { "list": [
-          "`build.mjs` gera o set e suas tabelas de lookup a partir das definições e das listas mantidas à mão.",
-          "`verify.mjs` revisa a configuração de cada classifier e perfila 141 colunas com o set inteiro no seu limiar — bem nomeadas, mal nomeadas e 32 que não são dados pessoais. Audita a tabela de generalização dos 221 lugares. Depois mascara 145 valores de amostra e 198 marcadores como `N/A` pelo app em execução, conferindo cada saída contra o seu vocabulário, e 150 números da previdência social em busca de colisões."
+          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
+          "O profiling foi simulado em 141 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 32 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A tabela que generaliza cidades e vilas foi auditada para os 221 lugares.",
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 145 valores de amostra e 198 marcadores como `N/A`, conferindo cada saída contra o seu vocabulário, e 150 números da previdência social quanto a colisões. Cada um dos 90 algoritmos também mascarou o seu próprio valor de exemplo."
         ] },
-        "No último build, todas as colunas foram atribuídas como esperado e todos os valores foram mascarados como esperado."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
       ]
     },
     {

@@ -14,7 +14,10 @@
           "**Datos financieros y patrimoniales** — buró de crédito, adeudos, ingresos, patrimonio, ahorro para el retiro, crédito de vivienda, seguridad social, programas sociales, nivel socioeconómico, régimen fiscal.",
           "**Antecedentes penales** — antecedentes y números de causa."
         ] },
-        "Todo lo que el set necesita viaja con él: cargarlo crea sus dominios, classifiers, algoritmos y archivos de lookup, y enviarlo a un Masking Engine los envía todos."
+        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos en los que estos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa.",
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — necesita que los valores coincidan. Una columna con un nombre sin sentido (`CAMPO1`, `OBS`) se encuentra igual cuando sus valores tienen una forma o un vocabulario reconocible: una CURP, un RFC, una clave de elector, una CLABE, una placa, un municipio.",
+        "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas mexicanos (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), en los atributos de los CFDI 4.0 (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) y en inglés.",
+        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOB, imágenes, PDF). Los procesos de alta suelen guardar la foto de la credencial del INE: la CURP y la clave de elector siguen legibles en la imagen. Reporte esas columnas como riesgo residual." }
       ]
     },
     {
@@ -34,20 +37,6 @@
         "Un ambiente de pruebas con datos de producción es tratamiento para una finalidad que el aviso de privacidad no cubre, y guarda datos sensibles y financieros fuera de los controles hechos para ellos. Una copia disociada es la vía que la propia ley ofrece: para eso sirve este set.",
         "Dos notas sobre las categorías. La ley de 2010 mencionaba la **afiliación sindical** como dato sensible; el texto de 2025 ya no la nombra. Su lista no es limitativa y la afiliación sindical sigue exponiendo a las personas a discriminación, así que el set la conserva. Los **datos biométricos** tampoco se nombran; identifican a la persona por definición y aquí se tratan como sensibles.",
         { "note": "Este documento describe controles técnicos. Si una copia cuenta como disociada es una evaluación jurídica del ambiente completo — su acceso, su conservación, con qué más se cruza — y no del profile set por sí solo." }
-      ]
-    },
-    {
-      "title": "Uso del set",
-      "body": [
-        { "list": [
-          "**Cargar** — *Configuración → Profile Sets → Cargar*. Cargarlo otra vez restablece cada objeto del set tal como viene.",
-          "**Enviar a Delphix** — desde el profile set, o con *Enviar todo a Delphix*. Los dominios, algoritmos y archivos van primero.",
-          "**Perfilar** — ejecute un job de profiling con el set y revise los dominios asignados antes de enmascarar.",
-          "**Enmascarar** — ejecute el job de enmascaramiento. Use la misma llave del engine en todos los ambientes para mantener los valores enmascarados consistentes entre sistemas."
-        ] },
-        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — necesita que los valores coincidan. Una columna con un nombre sin sentido (`CAMPO1`, `OBS`) se encuentra igual cuando sus valores tienen una forma o un vocabulario reconocible: una CURP, un RFC, una clave de elector, una CLABE, una placa, un municipio.",
-        "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas mexicanos (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), en los atributos de los CFDI 4.0 (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) y en inglés.",
-        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOB, imágenes, PDF). Los procesos de alta suelen guardar la foto de la credencial del INE: la CURP y la clave de elector siguen legibles en la imagen. Reporte esas columnas como riesgo residual." }
       ]
     }
   ],
@@ -540,12 +529,13 @@
     {
       "title": "Verificación",
       "body": [
-        "El set se genera y se verifica con dos scripts guardados junto a él en el repositorio:",
+        "Antes de su publicación, el set se verificó fuera de un Masking Engine:",
         { "list": [
-          "`build.mjs` genera el set, sus tablas de lookup y sus tablas de dígito verificador a partir de sus definiciones y de listas mantenidas a mano.",
-          "`verify.mjs` revisa la configuración de cada classifier, perfila 151 columnas con el set completo en su umbral — bien nombradas, mal nombradas y 26 columnas que no son datos personales — y enmascara 350 valores de muestra y 228 marcadores como `S/D` a través de la aplicación en ejecución. Se verifica que CURPs, RFCs, NSS y CLABEs aleatorios tengan dígito verificador y fecha válidos, 150 de cada uno contra colisiones, y pares de CURP y RFC de la misma persona en cuanto a su coincidencia."
+          "La configuración de cada classifier se revisó contra lo que acepta un Masking Engine.",
+          "El profiling se simuló en 151 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 26 columnas que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
+          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon 350 valores de muestra y 228 marcadores como `S/D`. Se verificó que CURPs, RFCs, NSS y CLABEs aleatorios tuvieran dígito verificador y fecha válidos, 150 de cada uno contra colisiones, y que pares de CURP y RFC de la misma persona coincidieran."
         ] },
-        "En la última compilación todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba."
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
       ]
     },
     {

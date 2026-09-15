@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "name": {
     "en": "Panama — Ley 81 de 2019 (personal data protection)",
     "pt-BR": "Panamá — Ley 81 de 2019 (proteção de dados pessoais)",
@@ -11,7 +11,7 @@
     "es": "Descubre y enmascara datos personales panameños conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021: identificadores directos (cédula, RUC con DV válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, distrito, corregimiento), los datos sensibles del artículo 4, datos económicos y de crédito, y antecedentes penales."
   },
   "profileSet": {
-    "name": "PA - Ley 81 de 2019 - Datos personales",
+    "name": "PA - Ley 81 de 2019 - v2",
     "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 4, 11), datos económicos y de crédito, y antecedentes penales, conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021.",
     "threshold": 60,
     "classifiers": [
@@ -151,6 +151,25 @@
       "PA_PENAL_CAUSA - Path",
       "PA_PENAL_CAUSA - Regex"
     ]
+  },
+  "packs": {
+    "essential": {
+      "description": "Paquete esencial de la Ley 81 de 2019: cédula, RUC, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "domains": [
+        "PA_L1_CEDULA",
+        "PA_L1_RUC",
+        "PA_L1_RUC_DV",
+        "PA_L1_PASAPORTE",
+        "PA_L1_NOMBRE",
+        "PA_L1_APELLIDO",
+        "PA_L1_NOMBRE_COMPLETO",
+        "PA_L1_EMAIL",
+        "PA_L1_TELEFONO",
+        "PA_L1_DIRECCION",
+        "PA_L1_DIRECCION_COMPLEMENTO",
+        "PA_L2_FECHA_NACIMIENTO"
+      ]
+    }
   },
   "classifiers": [
     {
@@ -684,7 +703,7 @@
         "paths": [
           {
             "matchType": "REGEX",
-            "fieldValue": "(?i)(?<![a-z])(?:direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle(_?y_?casa)?|avenida|address|street|addr|dir_?(residencial|residencia|particular|comercial|laboral|envio|entrega|facturacion|cliente|paciente|trabajo)|residencia|lugar_?(de_?)?residencia|home_?address|ubicacion_?(domicilio|vivienda)|senas|punto_?de_?referencia)(?![a-z])",
+            "fieldValue": "(?i)(?<![a-z])(?:direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle(_?y_?casa)?|avenida|(?<!(mac|ip|e_?mail|web|url)_?)address|street|addr|dir_?(residencial|residencia|particular|comercial|laboral|envio|entrega|facturacion|cliente|paciente|trabajo)|residencia|lugar_?(de_?)?residencia|home_?address|ubicacion_?(domicilio|vivienda)|senas|punto_?de_?referencia)(?![a-z])",
             "parentValue": "",
             "matchStrength": 0.8,
             "caseSensitive": false,

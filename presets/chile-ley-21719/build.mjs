@@ -351,7 +351,7 @@ lookup('CL_DIRECCION', 'cl-direcciones.txt', (() => {
   return [...out]
 })(), 'Av. Providencia 1234, depto 502', 'PRESERVE_LOOKUP_FILE')
 domain('CL_L1_DIRECCION', 'CL_DIRECCION',
-  byName(['direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle|avenida|pasaje|address|street|addr|dir_?(particular|comercial|laboral|envio|despacho|facturacion|cliente|paciente|trabajo)|residencia|villa|poblacion|lugar_?residencia|home_?address', 0.8]),
+  byName(['direccion(?!_?(ip|mac|web|url|correo|mail|electronica|email))[a-z_]*|direcci[oó]n|dir|domicilio[a-z_]*|calle|avenida|pasaje|(?<!(mac|ip|e_?mail|web|url)_?)address|street|(?<!(mac|ip|e_?mail|web|url)_?)addr|dir_?(particular|comercial|laboral|envio|despacho|facturacion|cliente|paciente|trabajo)|residencia|villa|poblacion|lugar_?residencia|home_?address', 0.8]),
   byType(STRING(6)),
   byPattern([
     [String.raw`(?i)(av(enida)?\.?|calle|pasaje|psje\.?|pje\.?|camino|diagonal|villa|poblaci[oó]n|block)\s+.+\d+.*`, 0.8],
@@ -813,8 +813,19 @@ if (orphans.length) throw new Error(`algorithms nobody uses: ${orphans.map((a) =
 const withoutInput = algorithms.filter((a) => a.input === undefined).map((a) => a.name)
 if (withoutInput.length) throw new Error(`algorithms without a sample input: ${withoutInput.join(', ')}`)
 
+// The essential pack: identity documents, names, contact, address and birth date. Loading it brings
+// these domains and only what they lean on; the extended pack is everything.
+const ESSENTIAL = [
+  'CL_L1_RUT', 'CL_L1_RUT_CUERPO', 'CL_L1_RUT_DV', 'CL_L1_NUMERO_DOCUMENTO', 'CL_L1_PASAPORTE',
+  'CL_L1_NOMBRE', 'CL_L1_APELLIDO', 'CL_L1_NOMBRE_COMPLETO', 'CL_L1_EMAIL', 'CL_L1_TELEFONO',
+  'CL_L1_DIRECCION', 'CL_L1_DIRECCION_COMPLEMENTO', 'CL_L2_FECHA_NACIMIENTO',
+]
+const notDomains = ESSENTIAL.filter((name) => !domains.some((d) => d.name === name))
+if (notDomains.length) throw new Error(`essential pack names domains the set does not have: ${notDomains.join(', ')}`)
+
+const VERSION = 3
 const preset = {
-  version: 2,
+  version: VERSION,
   name: {
     en: 'Chile — Law 21.719 (personal data protection)',
     'pt-BR': 'Chile — Lei 21.719 (proteção de dados pessoais)',
@@ -826,10 +837,16 @@ const preset = {
     es: 'Descubre y enmascara datos personales chilenos en tres capas: identificadores directos (RUT con dígito verificador válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, comuna, edad) y las categorías sensibles del artículo 2, incluida la situación socioeconómica.',
   },
   profileSet: {
-    name: 'CL - Ley 21.719 - Datos personales',
+    name: `CL - Ley 21.719 - v${VERSION}`,
     description: 'Identificadores directos, cuasi-identificadores y datos sensibles (art. 2 g) de la Ley 21.719.',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
+  },
+  packs: {
+    essential: {
+      description: 'Paquete esencial de la Ley 21.719: RUT, documentos de identidad, nombres, contacto, dirección y fecha de nacimiento.',
+      domains: ESSENTIAL,
+    },
   },
   classifiers,
   domains,
