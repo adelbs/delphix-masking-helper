@@ -20,7 +20,7 @@
     <div><span class="cover-fact-n">59</span><span class="cover-fact-l">Algoritmos integrados</span></div>
   </div>
   <div class="cover-meta">
-    <span>Plugin <code>delphix-algorithm-plugin 2026.3.0</code></span>
+    <span>Plugin <code>delphix-algorithm-plugin 2026.5.0</code></span>
     <span>Salidas verificadas en AlgorithmRunner</span>
   </div>
 </div>
@@ -693,11 +693,12 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
 
     <div class="label">Parámetros</div>
     <div class="params">
-      <div class="p-row"><div class="p-name">regularExpressions</div><div class="p-desc">Lista de objetos <code>{patternString}</code> con las regex que identifican los tramos a redactar. Cada patrón se aplica a todo el texto, en todas las ocurrencias.</div></div>
+      <div class="p-row"><div class="p-name">regularExpressions</div><div class="p-desc">Lista de objetos <code>{patternString}</code> con las regex que identifican los tramos a redactar. El texto se lee palabra por palabra, y el patrón debe coincidir con la palabra entera, ya sin la puntuación de los extremos (comillas, paréntesis, coma, punto): <code>\d{4} \d{4}</code> nunca coincide, porque el espacio separa dos palabras. Desde el plugin 2026.5, el tabulador y el salto de línea también separan palabras; antes, solo el espacio.</div></div>
       <div class="p-row"><div class="p-name">isDenyList</div><div class="p-desc"><strong>true</strong> — lista de bloqueo: redacta lo que <em>coincide</em> con los patrones. <strong>false</strong> — lista de permitidos: redacta todo lo que <em>no</em> coincide. La segunda opción es más segura para textos impredecibles, pero suele destruir la legibilidad.</div></div>
       <div class="p-row"><div class="p-name">regExRedactValue</div><div class="p-desc">Texto que sustituye los tramos capturados por las expresiones regulares. Ej.: <code>[REDACTED]</code>.</div></div>
       <div class="p-row"><div class="p-name">lookupFile</div><div class="p-desc">Archivo con términos literales, uno por línea, buscados en el texto. Útil para nombres propios y términos que la regex describe mal.</div></div>
       <div class="p-row"><div class="p-name">lookupFileRedactValue</div><div class="p-desc">Texto que sustituye las ocurrencias encontradas por el archivo. Es independiente de <code>regExRedactValue</code>, lo que permite marcar visualmente el origen de cada redacción.</div></div>
+      <div class="p-row"><div class="p-name">retryMatchWithStrippedPrefix</div><div class="p-desc">Cuando nada coincide con la palabra sin el símbolo inicial, vuelve a intentarlo con él. Sirve para valores escritos pegados a un símbolo, como <code>+34612345678</code> frente al patrón <code>\+\d{11}</code>. Nuevo en el plugin 2026.5.</div></div>
     </div>
   </div>
 </div>
@@ -1015,6 +1016,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> shortInputHandling</div><div class="p-desc">Entrada más corta de lo esperado: <strong>FALLBACK</strong> delega, <strong>PAD_LEFT</strong> / <strong>PAD_RIGHT</strong> rellenan con <code>padCharacter</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> padCharacter</div><div class="p-desc">Carácter de relleno para entradas cortas. Normalmente <code>0</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> trimWhitespace</div><div class="p-desc">Elimina los espacios de ambos extremos antes de procesar. Necesario en columnas <code>CHAR(n)</code> con relleno.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> preservedTailLength</div><div class="p-desc">Cuántos caracteres del final del cuerpo quedan como están. Siguen contando en el cálculo del dígito de control. Por defecto <code>0</code>; nuevo en el plugin 2026.5.</div></div>
     </div>
   </div>
 </div>
@@ -1301,7 +1303,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
   <tr><td>Null-Safe Secure Lookup (§7.2)</td><td>Devuelve siempre <code>null</code> — depende del archivo incorporado que resuelve el Engine.</td></tr>
 </table>
 
-<div class="note" style="margin-top:5mm;"><b>Sobre las salidas de esta guía.</b> Todos los pares entrada → salida se generaron ejecutando los algoritmos en <code>AlgorithmRunner</code> con el plugin <code>delphix-algorithm-plugin 2026.3.0-SNAPSHOT</code>. Los algoritmos deterministas reproducen exactamente estos valores con la misma clave; Shuffle, por su naturaleza, produce una permutación distinta en cada ejecución.</div>
+<div class="note" style="margin-top:5mm;"><b>Sobre las salidas de esta guía.</b> Todos los pares entrada → salida se generaron ejecutando los algoritmos en <code>AlgorithmRunner</code> con el plugin <code>delphix-algorithm-plugin 2026.5.0-SNAPSHOT</code>. Los algoritmos deterministas reproducen exactamente estos valores con la misma clave; Shuffle, por su naturaleza, produce una permutación distinta en cada ejecución.</div>
 
 </body>
 </html>

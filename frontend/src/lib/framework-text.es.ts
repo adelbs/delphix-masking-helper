@@ -156,6 +156,7 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
       regExRedactValue: 'Texto que sustituye a los fragmentos encontrados por las expresiones regulares.',
       lookupFile: 'Archivo de texto con una lista de términos (uno por línea) a buscar en la entrada. Cada aparición encontrada se redacta.',
       lookupFileRedactValue: 'Texto que sustituye a los fragmentos encontrados mediante el archivo de lookup (independiente de regExRedactValue).',
+      retryMatchWithStrippedPrefix: 'Si es verdadero, una palabra que no coincidió sin el símbolo inicial (p. ej. "+") se vuelve a probar con él. Útil para valores como +34612345678 frente a \\+\\d{11}. El texto se divide en palabras por espacio, tabulador y salto de línea, y el patrón debe coincidir con la palabra entera.',
     },
     labels: {
       regularExpressions: 'Expresiones regulares',
@@ -163,6 +164,7 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
       regExRedactValue: 'Sustitución para coincidencias de regex',
       lookupFile: 'Archivo de términos (lookup)',
       lookupFileRedactValue: 'Sustitución para coincidencias del archivo',
+      retryMatchWithStrippedPrefix: 'Reintentar con el símbolo inicial',
     },
   },
   Redact: {
@@ -418,6 +420,7 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
       'inputHandlingConfig.shortInputHandling': 'Qué hacer cuando la entrada tiene menos dígitos de los esperados. FALLBACK = delega en fallbackAlgorithm. PAD_LEFT = rellena con padCharacter por la izquierda. PAD_RIGHT = rellena con padCharacter por la derecha.',
       'inputHandlingConfig.padCharacter': 'Carácter usado para rellenar entradas cortas cuando shortInputHandling = PAD_LEFT o PAD_RIGHT. Normalmente "0".',
       'inputHandlingConfig.trimWhitespace': 'Si es verdadero, elimina espacios y tabuladores de los extremos de la entrada antes de procesarla. Útil cuando los datos vienen con relleno de la base de datos.',
+      'inputHandlingConfig.preservedTailLength': 'Cuántos caracteres del final del cuerpo quedan sin cambios. Siguen contando en el cálculo del dígito de control. Por defecto 0.',
     },
     labels: {
       weightList: 'Lista de pesos (uno por dígito de datos)',
@@ -437,6 +440,7 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
       'inputHandlingConfig.shortInputHandling': 'Acción para entrada corta',
       'inputHandlingConfig.padCharacter': 'Carácter de relleno',
       'inputHandlingConfig.trimWhitespace': 'Quitar espacios de los extremos',
+      'inputHandlingConfig.preservedTailLength': 'Caracteres finales conservados',
     },
   },
   Tokenization: {

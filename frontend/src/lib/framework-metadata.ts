@@ -231,6 +231,7 @@ const METADATA: Record<string, FrameworkMetadata> = {
       regExRedactValue: 'Texto que substitui os trechos encontrados pelas expressões regulares.',
       lookupFile: 'Arquivo de texto com uma lista de termos (um por linha) a buscar no input. Cada ocorrência encontrada é redigida.',
       lookupFileRedactValue: 'Texto que substitui os trechos encontrados pelo arquivo de lookup (independente do regExRedactValue).',
+      retryMatchWithStrippedPrefix: 'Se verdadeiro, uma palavra que não casou sem o símbolo da frente (ex: "+") é testada de novo com ele. Útil para valores como +5511987654321 contra \\+\\d{13}. O texto é dividido em palavras por espaço, tab e quebra de linha, e o padrão precisa casar com a palavra inteira.',
     },
     labels: {
       regularExpressions: 'Expressões regulares',
@@ -238,6 +239,7 @@ const METADATA: Record<string, FrameworkMetadata> = {
       regExRedactValue: 'Substituição para matches de regex',
       lookupFile: 'Arquivo de termos (lookup)',
       lookupFileRedactValue: 'Substituição para matches do arquivo',
+      retryMatchWithStrippedPrefix: 'Tentar de novo com o símbolo da frente',
     },
     example: { config: { isDenyList: true, regExRedactValue: '[REDACTED]', regularExpressions: [{ patternString: '[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}' }] }, input: 'Contate João pelo e-mail joao.silva@empresa.com.', key: '' },
   },
@@ -514,6 +516,7 @@ const METADATA: Record<string, FrameworkMetadata> = {
       'inputHandlingConfig.shortInputHandling': 'O que fazer quando a entrada tem menos dígitos que o esperado. FALLBACK = delega ao fallbackAlgorithm. PAD_LEFT = completa com padCharacter à esquerda. PAD_RIGHT = completa com padCharacter à direita.',
       'inputHandlingConfig.padCharacter': 'Caractere usado para preencher entradas curtas quando shortInputHandling = PAD_LEFT ou PAD_RIGHT. Normalmente "0".',
       'inputHandlingConfig.trimWhitespace': 'Se verdadeiro, remove espaços e tabs das extremidades da entrada antes de processar. Útil quando os dados vêm com padding do banco.',
+      'inputHandlingConfig.preservedTailLength': 'Quantos caracteres do fim do corpo ficam inalterados. Continuam entrando no cálculo do verificador. Padrão 0.',
     },
     labels: {
       weightList: 'Lista de pesos (um por dígito de dados)',
@@ -533,6 +536,7 @@ const METADATA: Record<string, FrameworkMetadata> = {
       'inputHandlingConfig.shortInputHandling': 'Ação para entrada curta',
       'inputHandlingConfig.padCharacter': 'Caractere de preenchimento',
       'inputHandlingConfig.trimWhitespace': 'Remover espaços das extremidades',
+      'inputHandlingConfig.preservedTailLength': 'Caracteres finais preservados',
     },
     example: { config: { weightList: [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5], modulusNumber: 11, checkDigitIndex: 12, calculateChecksumRightToLeft: true, numDigitsForCheckdigitCalculation: 12 }, input: '123456789012', key: 'chave-check' },
   },

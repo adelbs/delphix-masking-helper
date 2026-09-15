@@ -20,7 +20,7 @@
     <div><span class="cover-fact-n">59</span><span class="cover-fact-l">Algoritmos built-in</span></div>
   </div>
   <div class="cover-meta">
-    <span>Plugin <code>delphix-algorithm-plugin 2026.3.0</code></span>
+    <span>Plugin <code>delphix-algorithm-plugin 2026.5.0</code></span>
     <span>Saídas verificadas no AlgorithmRunner</span>
   </div>
 </div>
@@ -693,11 +693,12 @@ O primeiro padrão só casa com valores que tenham <code>@</code>; todo o resto 
 
     <div class="label">Parâmetros</div>
     <div class="params">
-      <div class="p-row"><div class="p-name">regularExpressions</div><div class="p-desc">Lista de objetos <code>{patternString}</code> com as regex que identificam trechos a redigir. Cada padrão é aplicado ao texto inteiro, em todas as ocorrências.</div></div>
+      <div class="p-row"><div class="p-name">regularExpressions</div><div class="p-desc">Lista de objetos <code>{patternString}</code> com as regex que identificam trechos a redigir. O texto é lido palavra a palavra, e o padrão precisa casar com a palavra inteira, já sem a pontuação das pontas (aspas, parênteses, vírgula, ponto): <code>\d{4} \d{4}</code> nunca casa, porque o espaço separa duas palavras. Desde o plugin 2026.5, tab e quebra de linha também separam palavras; antes, só o espaço.</div></div>
       <div class="p-row"><div class="p-name">isDenyList</div><div class="p-desc"><strong>true</strong> — lista de bloqueio: redige o que <em>casa</em> com os padrões. <strong>false</strong> — lista de permissão: redige tudo que <em>não</em> casa. A segunda opção é mais segura para textos imprevisíveis, mas costuma destruir a legibilidade.</div></div>
       <div class="p-row"><div class="p-name">regExRedactValue</div><div class="p-desc">Texto que substitui os trechos capturados pelas expressões regulares. Ex.: <code>[REDACTED]</code>.</div></div>
       <div class="p-row"><div class="p-name">lookupFile</div><div class="p-desc">Arquivo com termos literais, um por linha, buscados no texto. Serve para nomes próprios e termos que regex não descreve bem.</div></div>
       <div class="p-row"><div class="p-name">lookupFileRedactValue</div><div class="p-desc">Texto que substitui as ocorrências vindas do arquivo. É independente do <code>regExRedactValue</code>, permitindo marcar visualmente a origem de cada redação.</div></div>
+      <div class="p-row"><div class="p-name">retryMatchWithStrippedPrefix</div><div class="p-desc">Quando nada casa com a palavra sem o símbolo da frente, tenta de novo com ele. Serve para valores escritos colados a um símbolo, como <code>+5511987654321</code> contra o padrão <code>\+\d{13}</code>. Novo no plugin 2026.5.</div></div>
     </div>
   </div>
 </div>
@@ -1015,6 +1016,7 @@ O primeiro padrão só casa com valores que tenham <code>@</code>; todo o resto 
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> shortInputHandling</div><div class="p-desc">Entrada mais curta que o esperado: <strong>FALLBACK</strong> delega, <strong>PAD_LEFT</strong> / <strong>PAD_RIGHT</strong> completam com <code>padCharacter</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> padCharacter</div><div class="p-desc">Caractere de preenchimento das entradas curtas. Normalmente <code>0</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> trimWhitespace</div><div class="p-desc">Remove espaços das extremidades antes de processar. Necessário para colunas <code>CHAR(n)</code> com padding.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> preservedTailLength</div><div class="p-desc">Quantos caracteres do fim do corpo ficam como estão. Continuam entrando no cálculo do verificador. Padrão <code>0</code>; novo no plugin 2026.5.</div></div>
     </div>
   </div>
 </div>
@@ -1301,7 +1303,7 @@ O primeiro padrão só casa com valores que tenham <code>@</code>; todo o resto 
   <tr><td>Null-Safe Secure Lookup (§7.2)</td><td>Devolve sempre <code>null</code> — depende do arquivo embutido resolvido pelo Engine.</td></tr>
 </table>
 
-<div class="note" style="margin-top:5mm;"><b>Sobre as saídas deste guia.</b> Todos os pares entrada → saída foram gerados executando os algoritmos no <code>AlgorithmRunner</code> com o plugin <code>delphix-algorithm-plugin 2026.3.0-SNAPSHOT</code>. Algoritmos determinísticos reproduzem exatamente estes valores com a mesma chave; o Shuffle, por natureza, produzirá uma permutação diferente a cada execução.</div>
+<div class="note" style="margin-top:5mm;"><b>Sobre as saídas deste guia.</b> Todos os pares entrada → saída foram gerados executando os algoritmos no <code>AlgorithmRunner</code> com o plugin <code>delphix-algorithm-plugin 2026.5.0-SNAPSHOT</code>. Algoritmos determinísticos reproduzem exatamente estes valores com a mesma chave; o Shuffle, por natureza, produzirá uma permutação diferente a cada execução.</div>
 
 </body>
 </html>

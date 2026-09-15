@@ -161,14 +161,16 @@
       "isDenyList": "true = deny list: redacts the matches. false = allow list: redacts everything that does NOT match.",
       "regExRedactValue": "Text that replaces the passages found by the regular expressions.",
       "lookupFile": "Text file with a list of terms (one per line) to search for in the input. Every occurrence found is redacted.",
-      "lookupFileRedactValue": "Text that replaces the passages found via the lookup file (independent of regExRedactValue)."
+      "lookupFileRedactValue": "Text that replaces the passages found via the lookup file (independent of regExRedactValue).",
+      "retryMatchWithStrippedPrefix": "If true, a word whose leading symbol (e.g. \"+\") was set aside and then matched nothing is tried again with the symbol put back. Useful for values like +15551234567 against \\+\\d{11}. The text is split into words on spaces, tabs and line breaks, and a pattern must match a whole word."
     },
     "labels": {
       "regularExpressions": "Regular expressions",
       "isDenyList": "Deny-list mode",
       "regExRedactValue": "Replacement for regex matches",
       "lookupFile": "Term file (lookup)",
-      "lookupFileRedactValue": "Replacement for lookup-file matches"
+      "lookupFileRedactValue": "Replacement for lookup-file matches",
+      "retryMatchWithStrippedPrefix": "Retry with the leading symbol"
     }
   },
   "Redact": {
@@ -449,7 +451,8 @@
       "inputHandlingConfig.invalidInputHandling": "What to do when the input is invalid (wrong length, unexpected characters). ERROR = raises an exception (default). FALLBACK_MASK = delegates to fallbackAlgorithm instead of failing.",
       "inputHandlingConfig.shortInputHandling": "What to do when the input has fewer digits than expected. FALLBACK = delegates to fallbackAlgorithm. PAD_LEFT = pads with padCharacter on the left. PAD_RIGHT = pads with padCharacter on the right.",
       "inputHandlingConfig.padCharacter": "Character used to pad short inputs when shortInputHandling = PAD_LEFT or PAD_RIGHT. Usually \"0\".",
-      "inputHandlingConfig.trimWhitespace": "If true, strips spaces and tabs from both ends of the input before processing. Useful when the data comes padded from the database."
+      "inputHandlingConfig.trimWhitespace": "If true, strips spaces and tabs from both ends of the input before processing. Useful when the data comes padded from the database.",
+      "inputHandlingConfig.preservedTailLength": "How many characters at the end of the body stay unchanged. They still count in the check digit calculation. Default 0."
     },
     "labels": {
       "weightList": "Weight list (one per data digit)",
@@ -468,7 +471,8 @@
       "inputHandlingConfig.invalidInputHandling": "Action for invalid input",
       "inputHandlingConfig.shortInputHandling": "Action for short input",
       "inputHandlingConfig.padCharacter": "Padding character",
-      "inputHandlingConfig.trimWhitespace": "Trim surrounding whitespace"
+      "inputHandlingConfig.trimWhitespace": "Trim surrounding whitespace",
+      "inputHandlingConfig.preservedTailLength": "Trailing characters to preserve"
     }
   },
   "Tokenization": {

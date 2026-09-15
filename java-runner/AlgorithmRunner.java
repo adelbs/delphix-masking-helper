@@ -23,7 +23,7 @@ public class AlgorithmRunner {
 
     // Plugin JAR path — resolved at startup from system property or default location
     static String PLUGIN_JAR_PATH = System.getProperty("plugin.jar",
-        "../lib/delphix-algorithm-plugin-2026.3.0-SNAPSHOT.jar");
+        "../lib/delphix-algorithm-plugin-2026.5.0-SNAPSHOT.jar");
 
     // Where the tool keeps its lookup and mapping files. A configuration imported from a
     // Masking Engine points at the engine's own file store, whose contents stay there; this

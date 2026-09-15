@@ -653,11 +653,12 @@ The first pattern only matches values containing <code>@</code>; everything else
 
     <div class="label">Parameters</div>
     <div class="params">
-      <div class="p-row"><div class="p-name">regularExpressions</div><div class="p-desc">A list of <code>{patternString}</code> objects with the regexes identifying stretches to redact. Each pattern is applied across the whole text, to every occurrence.</div></div>
+      <div class="p-row"><div class="p-name">regularExpressions</div><div class="p-desc">A list of <code>{patternString}</code> objects with the regexes identifying stretches to redact. The text is read word by word, and a pattern must match the whole word once the punctuation at its ends (quotes, parentheses, comma, period) is set aside: <code>\d{4} \d{4}</code> never matches, because the space splits it into two words. Since plugin 2026.5, tabs and line breaks separate words too; before, only the space did.</div></div>
       <div class="p-row"><div class="p-name">isDenyList</div><div class="p-desc"><strong>true</strong> — deny list: redacts what <em>matches</em> the patterns. <strong>false</strong> — allow list: redacts everything that does <em>not</em> match. The second option is safer for unpredictable text, but usually destroys readability.</div></div>
       <div class="p-row"><div class="p-name">regExRedactValue</div><div class="p-desc">Text replacing the stretches captured by the regular expressions. E.g. <code>[REDACTED]</code>.</div></div>
       <div class="p-row"><div class="p-name">lookupFile</div><div class="p-desc">A file of literal terms, one per line, searched for in the text. Useful for proper nouns and terms that regex describes poorly.</div></div>
       <div class="p-row"><div class="p-name">lookupFileRedactValue</div><div class="p-desc">Text replacing occurrences found via the file. It is independent of <code>regExRedactValue</code>, letting you visually mark the origin of each redaction.</div></div>
+      <div class="p-row"><div class="p-name">retryMatchWithStrippedPrefix</div><div class="p-desc">When nothing matches the word without its leading symbol, tries again with the symbol put back. For values written flush against a symbol, like <code>+15551234567</code> against the pattern <code>\+\d{11}</code>. New in plugin 2026.5.</div></div>
     </div></div>
 </article>
 <article class="framework-card" id="redact">
@@ -957,6 +958,7 @@ The first pattern only matches values containing <code>@</code>; everything else
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> shortInputHandling</div><div class="p-desc">Input shorter than expected: <strong>FALLBACK</strong> delegates, <strong>PAD_LEFT</strong> / <strong>PAD_RIGHT</strong> pad with <code>padCharacter</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> padCharacter</div><div class="p-desc">Padding character for short input. Usually <code>0</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> trimWhitespace</div><div class="p-desc">Strips whitespace from both ends before processing. Necessary for padded <code>CHAR(n)</code> columns.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> preservedTailLength</div><div class="p-desc">How many characters at the end of the body are left as they are. They still count in the check digit calculation. Default <code>0</code>; new in plugin 2026.5.</div></div>
     </div></div>
 </article>
 <article class="framework-card" id="tokenization">

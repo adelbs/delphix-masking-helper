@@ -11,7 +11,11 @@
  *   - `\s` is `[ \t\n\x0B\f\r]` in Java; in JS it also matches NBSP and other Unicode spaces.
  *   - `$` matches before a final line terminator in Java; in JS only at the very end.
  *   - `.` excludes U+0085 in Java; JS lets it through.
- *   - `\b` on Java 8 treats letters and digits of any script as word characters; JS only ASCII.
+ *   - `\b` treats letters and digits of any script as word characters in Java; JS only ASCII.
+ *
+ * The reference is the Java the Masking Engine runs, 17 since 2026.5. Two rules changed from the
+ * Java 8 of earlier engines: a leading `^` complements a whole character class, nested classes
+ * included, and under CASE_INSENSITIVE the case classes (`\p{Lower}`, `\p{Lu}`…) match both cases.
  *   - atomic groups `(?>…)` and possessive quantifiers `*+` do not exist in JS.
  *
  * So the pattern is parsed into a tree and re-emitted with each construct spelled out the way
@@ -27,7 +31,7 @@
 
 // Java's line terminators, as a character-class body.
 const LT = '\\n\\r\\x85\\u2028\\u2029';
-// Java 8 `\b`: letters and digits of any script, underscore, and combining marks.
+// Java `\b` (through Java 18): letters and digits of any script, underscore, and combining marks.
 const WORD = '\\p{L}\\p{Mn}\\p{Nd}_';
 const JAVA_SPACE = '\\t\\n\\v\\f\\r\\x20';
 const JAVA_HSPACE = '\\t\\x20\\xA0\\u1680\\u180E\\u2000-\\u200A\\u202F\\u205F\\u3000';
@@ -254,6 +258,9 @@ function parse(source, initialFlags) {
         pos += 4;
         return Number.parseInt(m[0], 16);
       }
+      case 'N':
+        if (peek() === '{') unsupported('\\N{…} (characters by Unicode name)');
+        return fail('\\N is not a known escape');
       case 'c': {
         const next = peek();
         if (next === undefined) fail('\\c needs a following character');
@@ -302,7 +309,9 @@ function parse(source, initialFlags) {
       case 'h': case 'H': case 'v': case 'V':
         return parseQuantifier({ t: 'set', name: c }, flags);
       case 'R': return parseQuantifier({ t: 'linebreak' }, flags);
-      case 'b': return { t: 'assert', kind: 'wordb' };
+      case 'b':
+        if (rest().startsWith('{g}')) return unsupported('\\b{g} (grapheme cluster boundaries)');
+        return { t: 'assert', kind: 'wordb' };
       case 'B': return { t: 'assert', kind: 'nwordb' };
       case 'A': return { t: 'assert', kind: 'start' };
       case 'z': return { t: 'assert', kind: 'end' };
@@ -356,60 +365,43 @@ function parse(source, initialFlags) {
     }
   }
 
-  // Java 8 reads a character class left to right. A leading `^` turns each later plain member
-  // into a subtraction, while a nested class is always added: `[^a[bc]]` means "not a, or b, or
-  // c", and `[^[a]b]` means just "a". Characters below U+0100 accumulate in one set that every
-  // step refers to, so a character listed later still counts in an earlier step.
+  // A character class is the union of its members, nested classes included, and a leading `^`
+  // complements the whole union: `[^a[bc]]` is anything but a, b or c, and `[^[^a]]` is just a.
+  // (Java 8 read `^` as subtracting only the plain members after it; that changed in Java 9.)
   function parseClass(flags, outermost) {
     const snapshot = snap(flags);
-    const lowset = { t: 'lowset', cps: [] };
-    const steps = [];
-    let negating = false;
-    let atStart = true;
+    const members = [];
+    let negated = false;
+    if (peek() === '^') {
+      pos++;
+      negated = true;
+    }
     for (;;) {
       if (flags.x) while (!eof() && ' \t\n\x0B\f\r'.includes(peek())) pos++;
       const c = peek();
       if (c === undefined) fail('a [ class is never closed');
       if (c === '[') {
         pos++;
-        atStart = false;
-        steps.push({ nested: true, node: parseClass(flags, false) });
+        members.push(parseClass(flags, false));
         continue;
       }
       if (c === '&' && peek(1) === '&') unsupported('class intersection (&&)');
-      if (c === ']' && steps.length) { pos++; break; }
-      if (c === '^' && atStart && cps[pos - 1] === '[') {
-        pos++;
-        negating = !negating;
-        continue;
-      }
-      atStart = false;
+      if (c === ']' && members.length) { pos++; break; }
 
       const member = parseClassAtom(flags);
       if (member.t === 'point' && peek() === '-' && peek(1) !== undefined && peek(1) !== ']' && peek(1) !== '[') {
         pos++;
         const end = parseClassAtom(flags);
         if (end.t !== 'point' || end.cp < member.cp) fail('character range runs backwards or is not a range');
-        steps.push({ negate: negating, node: { t: 'span', from: member.cp, to: end.cp } });
+        members.push({ t: 'span', from: member.cp, to: end.cp });
         continue;
       }
-      const points = member.t === 'quote' ? member.cps.map((cp) => ({ t: 'point', cp })) : [member];
-      for (const node of points) {
-        if (node.t === 'point' && node.cp < 0x100) {
-          lowset.cps.push(node.cp);
-          steps.push({ negate: negating, node: lowset });
-        } else {
-          steps.push({ negate: negating, node });
-        }
-      }
+      if (member.t === 'quote') members.push(...member.cps.map((cp) => ({ t: 'point', cp })));
+      else members.push(member);
     }
 
-    const expr = steps.reduce((acc, step) => {
-      if (step.nested) return acc ? { t: 'union', a: acc, b: step.node } : step.node;
-      if (step.negate) return acc ? { t: 'both', a: acc, b: { t: 'except', a: step.node } } : { t: 'except', a: step.node };
-      if (!acc) return step.node;
-      return acc === step.node ? acc : { t: 'union', a: acc, b: step.node };
-    }, null);
+    const union = members.reduce((acc, node) => (acc ? { t: 'union', a: acc, b: node } : node), null);
+    const expr = negated ? { t: 'except', a: union } : union;
     return outermost ? { t: 'class', expr, flags: snapshot } : expr;
   }
 
@@ -469,13 +461,17 @@ function quantifierText(min, max) {
   return `{${min},${max}}`;
 }
 
-function propertyBody(node) {
+// Under CASE_INSENSITIVE, a class that names one case matches every cased letter instead.
+const CASE_CATEGORIES = new Set(['Lu', 'Ll', 'Lt']);
+
+function propertyBody(node, f = {}) {
   const name = node.name;
   if (Object.hasOwn(POSIX, name)) {
+    if (f.i && (name === 'Lower' || name === 'Upper')) return { kind: 'posix', body: POSIX.Alpha };
     return { kind: 'posix', body: POSIX[name] };
   }
   const cat = UNICODE_CATEGORY.exec(name);
-  if (cat) return { kind: 'unicode', body: cat[1] };
+  if (cat) return { kind: 'unicode', body: f.i && CASE_CATEGORIES.has(cat[1]) ? 'LC' : cat[1] };
   const script = /^(?:Is|script=|sc=)([A-Za-z_]+)$/.exec(name);
   if (script) {
     const value = script[1];
@@ -507,15 +503,9 @@ function emitSet(name) {
 function memberBody(it, f) {
   const asciiFold = f.i && !f.u;
   switch (it.t) {
-    case 'lowset':
     case 'point': {
-      const out = [];
-      for (const cp of it.t === 'lowset' ? it.cps : [it.cp]) {
-        out.push(escapeClassChar(cp));
-        const other = asciiFold ? otherAsciiCase(cp) : null;
-        if (other !== null) out.push(escapeClassChar(other));
-      }
-      return out.join('');
+      const other = asciiFold ? otherAsciiCase(it.cp) : null;
+      return escapeClassChar(it.cp) + (other !== null ? escapeClassChar(other) : '');
     }
     case 'span': {
       const out = [`${escapeClassChar(it.from)}-${escapeClassChar(it.to)}`];
@@ -531,7 +521,7 @@ function memberBody(it, f) {
         default: return null;
       }
     case 'prop': {
-      const p = propertyBody(it);
+      const p = propertyBody(it, f);
       if (p.kind === 'unicode') return `\\${it.negated ? 'P' : 'p'}{${p.body}}`;
       return it.negated ? null : p.body;
     }
@@ -540,30 +530,28 @@ function memberBody(it, f) {
   }
 }
 
-/** A one-character matcher for a class expression. */
-function emitClassExpr(e, f) {
-  if (e.t === 'except') {
-    const inner = e.a;
-    const body = inner.t === 'union' ? null : memberBody(inner, f);
-    if (body !== null) return `[^${body}]`;
-    return `(?:(?!${emitClassExpr(inner, f)})[\\s\\S])`;
-  }
-  if (e.t === 'both') {
-    const a = emitClassExpr(e.a, f);
-    if (e.b.t === 'except') return `(?:(?!${emitClassExpr(e.b.a, f)})${a})`;
-    return `(?:(?=${emitClassExpr(e.b, f)})${a})`;
-  }
+function unionTerms(e) {
   const terms = [];
   (function flatten(x) {
     if (x.t === 'union') { flatten(x.a); flatten(x.b); } else terms.push(x);
   }(e));
+  return terms;
+}
+
+/** A one-character matcher for a class expression. */
+function emitClassExpr(e, f) {
+  if (e.t === 'except') {
+    const bodies = unionTerms(e.a).map((it) => memberBody(it, f));
+    if (bodies.every((body) => body !== null)) return `[^${bodies.join('')}]`;
+    return `(?:(?!${emitClassExpr(e.a, f)})[\\s\\S])`;
+  }
   const parts = [];
   const extras = [];
-  for (const it of terms) {
+  for (const it of unionTerms(e)) {
     const body = memberBody(it, f);
     if (body !== null) parts.push(body);
     else if (it.t === 'set') extras.push(emitSet(it.name));
-    else if (it.t === 'prop') extras.push(`[^${propertyBody(it).body}]`);
+    else if (it.t === 'prop') extras.push(`[^${propertyBody(it, f).body}]`);
     else extras.push(emitClassExpr(it, f));
   }
   if (!extras.length) return `[${parts.join('')}]`;
@@ -633,7 +621,7 @@ function emit(node, state) {
       return node.flags.d ? '[^\\n]' : `[^${LT}]`;
     case 'set': return emitSet(node.name);
     case 'prop': {
-      const p = propertyBody(node);
+      const p = propertyBody(node, node.flags);
       if (p.kind === 'unicode') return `\\${node.negated ? 'P' : 'p'}{${p.body}}`;
       return `[${node.negated ? '^' : ''}${p.body}]`;
     }
