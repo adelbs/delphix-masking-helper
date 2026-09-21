@@ -1,0 +1,618 @@
+{
+  "title": "El Salvador — Ley para la Protección de Datos Personales",
+  "subtitle": "Discovery and masking of Salvadoran personal data: DUI and NIT with a valid check digit, quasi-identifiers, the sensitive data of article 4 g), the nationality of article 59 b), health data, financial data and criminal records.",
+  "sections": [
+    {
+      "title": "About this profile set",
+      "body": [
+        "This profile set finds the personal data in a Salvadoran database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and DUIs alone is not enough: a birth date, a sex and a small distrito already point at one person. The set works in the layers where the risk is:",
+        { "list": [
+          "**Direct identifiers** — DUI, NIT and NRC, foreigner documents, passport, civil registry records, ISSS and pension numbers, student number, names, contact, address, accounts, cards, digital wallets, devices, cookies, plates, property, free text.",
+          "**Quasi-identifiers** — birth date, age, sex, distrito and municipio with their codes, postal code, colonia, cantón, family status, occupation, employer, education.",
+          "**Sensitive data** — those of article 4 g): ethnic origin, religious convictions, political affiliation or ideology, trade union membership, sexual preferences, physical and mental health, biometric and genetic data, **moral and family situation** and **personal habits**; plus nationality, which article 59 b) names beside racial or ethnic origin, and being a victim of violence.",
+          "**Health data** — sensitive under article 4 g) and with rules of its own in article 39, in a group of its own: clinical record, coverage, ICD-10, procedures, medicines, HIV, blood group, disability, occupational, reproductive and mental health.",
+          "**Financial data** — the credit history that article 3 a) leaves to its own law, debt, income, assets, pensions, **remittances**, subsidies and housing tenure.",
+          "**Criminal records** — record certificates, procedural situation and court or prosecution file numbers."
+        ] },
+        "In a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a DUI, a NIT, an eight-digit phone, an address with colonia and polígono, a plate, a distrito.",
+        "Column names are recognized in Spanish, in the abbreviations of Salvadoran systems (`NUM_DOC`, `FEC_NAC`, `COD_MUNICIPIO`, `NRC`, `ISSS`, `CENTRO_ESCOLAR`) and in English.",
+        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often keep a photo of the DUI — with the fingerprint and the signature — and a validation selfie. Report those columns as residual risk." }
+      ]
+    },
+    {
+      "title": "Decreto 144 in brief",
+      "body": [
+        "The **Law for the Protection of Personal Data** was passed as Legislative Decree 144 on 12 November 2024, published in Official Gazette 219, Volume 445, of 15 November, and entered into force eight days later (art. 64). It is El Salvador's first general data protection law, and applying and supervising it falls to the **Agencia de Ciberseguridad del Estado (ACE)**, created by the Cybersecurity and Information Security Law passed the same day.",
+        "What matters for a copy of production data:",
+        { "list": [
+          "**Personal data** is information about an identified or identifiable natural person; data that does not allow a person to be identified or located is not personal data (art. 4 f). The data subject is always a **natural person** (art. 4 s): unlike other countries of the region, the law does not protect legal persons.",
+          "**Sensitive data** is data about the physical or moral characteristics, or the facts and circumstances of the private life, whose improper use may give rise to discrimination. The list in article 4 g) is open-ended and goes further than its neighbours': religious beliefs and convictions, ethnic origin, political affiliation or ideologies, trade union membership, sexual preferences, physical and mental health, biometric and genetic information, **moral and family situation**, **personal habits** and other intimate information of a similar nature.",
+          "**Dissociation or anonymization** is the **irreversible** procedure by which data stops being associated with its subject or allowing their identification (art. 4 h). **Pseudonymization** is processing after which the data can no longer be associated with the subject *without using additional information*, provided that this additional information is kept separate, hidden, classified and safeguarded (art. 4 q).",
+          "**Where they appear.** Sensitive data may be processed for statistical or scientific purposes when dissociated from its subjects (art. 38); public bodies may transfer or disclose data for statistical, scientific or general-interest reasons provided it is dissociated or pseudonymized (art. 49 a); and the ACE publishes its sanction decisions only with the personal data dissociated or anonymized (art. 55).",
+          "**Security.** The controller must implement security measures and comply with those the ACE issues, ensuring integrity, availability and confidentiality (arts. 34 and 36). Any security breach is notified to the ACE, to the Attorney General's Office and to the affected subjects within a maximum of **72 hours** (art. 25).",
+          "**Sanctions.** Fines of one to ten minimum wages of the commerce sector for minor infringements, eleven to twenty-five for serious ones and twenty-six to forty for very serious ones (art. 57) — with the 2026 commerce and services minimum wage of 408.80 dollars, up to some 16,350 dollars. **Reversing the pseudonymization of personal data without the subject's consent is a very serious infringement** (art. 56 c, 8)."
+        ] },
+        "**What the law leaves out.** The credit history processed by those covered by the Law regulating credit history information services is excluded (art. 3 a), although that law has its own duty of secrecy; so are domestic processing, public security and defence, and the public registries and the civil registry (art. 3 b, c and d).",
+        "**What came after.** Article 60 gave the ACE three months to issue the policies, measures and guidelines. In the Official Gazette of 11 August 2026 the Agency published the **Guidelines for the Data Protection Delegate** and the **Rules for the Administrative Sanctioning Procedure**, in force eight days later. The security-measure policies of article 36 are the thing to watch: when they are published, this set should be reviewed against them."
+      ]
+    },
+    {
+      "title": "Dissociation, pseudonymization and non-production copies",
+      "body": [
+        "Few laws in the region separate the two concepts as clearly as Decreto 144. **Dissociation or anonymization** is irreversible (art. 4 h): the data no longer allows identification. **Pseudonymization** (art. 4 q) accepts that the data can be associated with its subject again *with additional information*, and for that reason requires that information to be separate, hidden, classified and safeguarded under technical and organizational measures.",
+        "The algorithms of this set are deterministic for the Masking Engine's key: the same DUI masks the same way in every table, which keeps joins working. That key is exactly the *additional information* of article 4 q). The masked copy is **pseudonymized**, not anonymized, and remains personal data for whoever holds the key and production.",
+        { "list": [
+          "Keep the engine key separate, hidden and safeguarded — that is what the law asks for pseudonymization to count.",
+          "Do not hand the copy to people who also access production without need: reversing pseudonymization without the subject's consent is a very serious infringement (art. 56 c, 8).",
+          "If what you need is to treat the data as dissociated — statistics or science, art. 38 —, measure the re-identification risk of the quasi-identifiers that remain; the irreversibility of article 4 h) is a higher standard than this set meets."
+        ] }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Direct identifiers",
+      "intro": [
+        "Data that identifies a person on its own. The DUI is the key of almost every Salvadoran record, and since Legislative Decree 203 of 2021 the DUI number **is** the NIT of an adult natural person. It masks the same way everywhere, and DUI and NIT come out with a valid check digit, because applications validate it."
+      ],
+      "domains": ["SV_L1_DUI", "SV_L1_NIT", "SV_L1_NRC", "SV_L1_DOCUMENTO_EXTRANJERO", "SV_L1_PASAPORTE", "SV_L1_PARTIDA", "SV_L1_SEGURO_SOCIAL", "SV_L1_NIE", "SV_L1_MATRICULA_PROFESIONAL", "SV_L1_NOMBRE", "SV_L1_APELLIDO", "SV_L1_NOMBRE_COMPLETO", "SV_L1_EMAIL", "SV_L1_TELEFONO", "SV_L1_DIRECCION", "SV_L1_DIRECCION_COMPLEMENTO", "SV_L1_CUENTA_BANCARIA", "SV_L1_TARJETA", "SV_L1_BILLETERA", "SV_L1_IP", "SV_L1_DISPOSITIVO", "SV_L1_COOKIE", "SV_L1_PLACA", "SV_L1_VEHICULO", "SV_L1_INMUEBLE", "SV_L1_CONTRATO", "SV_L1_USUARIO", "SV_L1_CREDENCIAL", "SV_L1_GEOLOCALIZACION", "SV_L1_TEXTO_LIBRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Quasi-identifiers",
+      "intro": [
+        "Data that identifies nobody on its own, but does in combination. The 2023 municipal restructuring turned the 262 municipalities into distritos of 44 municipios, and the 2024 census counts both: 190 of the 262 distritos have fewer than 20,000 inhabitants — a quarter of the country lives in them — and the smallest has under 600. A birth date, a sex and one of those distritos point at a handful of people. These attributes are generalized or shifted rather than replaced, and the data keeps its analytical value."
+      ],
+      "domains": ["SV_L2_FECHA_NACIMIENTO", "SV_L2_ANIO_NACIMIENTO", "SV_L2_EDAD", "SV_L2_FECHA_EVENTO", "SV_L2_SEXO", "SV_L2_DISTRITO", "SV_L2_CODIGO_GEOGRAFICO", "SV_L2_CANTON", "SV_L2_COLONIA", "SV_L2_CODIGO_POSTAL", "SV_L2_ESTADO_FAMILIAR", "SV_L2_OCUPACION", "SV_L2_EMPLEADOR", "SV_L2_ESCOLARIDAD", "SV_L2_CENTRO_EDUCATIVO", "SV_L2_PERSONAS_A_CARGO"]
+    },
+    {
+      "id": "L3",
+      "title": "Sensitive data",
+      "intro": [
+        "The categories of article 4 g) other than health — which has its own group —, plus what article 59 b) forbids processing without following the sensitive-data chapter: racial or ethnic origin, **nationality**, party affiliation, religious, spiritual or philosophical convictions, health, sexual life and orientation. The set adds two categories the law names and no other in the region spells out — **moral and family situation** and **personal habits** — and being a victim of violence, which other Salvadoran laws order protected. Categorical columns keep their shape: a Y/N flag stays a flag, a code is replaced by another code and any other value by one from the list of its category. Where the values share no vocabulary, they are suppressed to `Sin información`."
+      ],
+      "domains": ["SV_L3_ORIGEN_ETNICO", "SV_L3_LENGUA_INDIGENA", "SV_L3_NACIONALIDAD", "SV_L3_RELIGION", "SV_L3_CONVICCION_FILOSOFICA", "SV_L3_IDEOLOGIA_POLITICA", "SV_L3_AFILIACION_PARTIDARIA", "SV_L3_AFILIACION_SINDICAL", "SV_L3_BIOMETRICO", "SV_L3_GENETICO", "SV_L3_ORIENTACION_SEXUAL", "SV_L3_VIDA_SEXUAL", "SV_L3_IDENTIDAD_GENERO", "SV_L3_SITUACION_FAMILIAR", "SV_L3_HABITOS", "SV_L3_VICTIMA"]
+    },
+    {
+      "id": "SALUD",
+      "title": "Health data",
+      "intro": [
+        "Physical and mental health is sensitive data (art. 4 g), and article 39 lets health establishments and professionals process it while respecting professional secrecy and the Law on the Duties and Rights of Patients and Health Service Providers. The law on the prevention and control of HIV adds its own confidentiality. The group covers what the ISSS, the Ministry of Health, private clinics, laboratories and occupational health keep."
+      ],
+      "domains": ["SV_SALUD_IDENTIFICADOR", "SV_SALUD_COBERTURA", "SV_SALUD_DIAGNOSTICO", "SV_SALUD_PROCEDIMIENTO", "SV_SALUD_MEDICAMENTO", "SV_SALUD_TEXTO_CLINICO", "SV_SALUD_RESULTADO_EXAMEN", "SV_SALUD_VIH", "SV_SALUD_GRUPO_SANGUINEO", "SV_SALUD_DISCAPACIDAD", "SV_SALUD_OCUPACIONAL", "SV_SALUD_REPRODUCTIVA", "SV_SALUD_MENTAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Financial and socioeconomic data",
+      "intro": [
+        "Credit history falls outside the law (art. 3 a), but not outside a test copy: its own law imposes secrecy, and a negative report follows a person for years. To that add the amounts that say how much someone has and the **remittances** that support one in four Salvadoran households and reveal who emigrated. Categories are replaced within their own notation; amounts are mapped to a plausible range in dollars, with no relation to the real value."
+      ],
+      "domains": ["SV_FIN_HISTORIAL_CREDITICIO", "SV_FIN_DEUDA", "SV_FIN_INGRESOS", "SV_FIN_PATRIMONIO", "SV_FIN_PENSION", "SV_FIN_REMESAS", "SV_FIN_PROGRAMA_SOCIAL", "SV_FIN_VIVIENDA"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Criminal records and court files",
+      "intro": [
+        "The law does not name them apart, but a criminal record certificate and a procedural situation are among the data with the heaviest consequences for a person, and their misuse discriminates — the test of article 4 g). They get the same care as sensitive data."
+      ],
+      "domains": ["SV_PENAL_ANTECEDENTES", "SV_PENAL_EXPEDIENTE"]
+    }
+  ],
+  "domains": {
+    "SV_L1_DUI": {
+      "title": "DUI",
+      "what": [
+        "The number of the Documento Único de Identidad issued by the Registro Nacional de las Personas Naturales: eight digits and a check digit, `04567890-1`. It follows the person through life and, since 2021, is also their NIT.",
+        "`NUMERO_DOCUMENTO` columns often mix DUIs, fourteen-digit NITs and passports: each value is masked by its shape."
+      ],
+      "masking": [
+        "Digit by digit, with the check digit recomputed: weights 9, 8, 7, 6, 5, 4, 3 and 2, modulus 10, ten minus the remainder. Every masked DUI is valid and the mapping is one-to-one, so a DUI used as a key does not collide."
+      ]
+    },
+    "SV_L1_NIT": {
+      "title": "NIT",
+      "what": [
+        "The fourteen-digit tax identification number, `0513-010180-238-7`: four digits for the municipality, six for the **date of birth** (ddmmyy) or of incorporation, three for a correlative and one check digit. Since Legislative Decree 203 of 2021 adult natural persons use their DUI as their NIT; the fourteen-digit one lives on for minors, foreigners and legal persons.",
+        "The digit is modulus 11 over the thirteen digits, with two rules: when the correlative is 100 or less the digit is the remainder (ten written as 0); above that, it is eleven minus the remainder (0 when the remainder is 0 or 1)."
+      ],
+      "masking": [
+        "The whole body is mapped — **the birth date included** — and the digit recomputed with the matching rule, keeping the correlative in its class. A NIT column holding a DUI is masked as a DUI. See *The DUI and NIT check digits*."
+      ]
+    },
+    "SV_L1_NRC": {
+      "title": "NRC",
+      "what": ["The VAT taxpayer registration number, `123456-7`."],
+      "masking": ["Digits are mapped and separators stay. Its check-digit rule is not public, so it is not recomputed."]
+    },
+    "SV_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Foreigner documents",
+      "what": ["The residence card, the temporary or permanent residence number, the work permit and the visa number."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_PASAPORTE": {
+      "title": "Passport",
+      "what": ["Salvadoran passport numbers — a letter and six or seven digits — and foreign ones."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_PARTIDA": {
+      "title": "Civil registry records",
+      "what": ["The number, folio and book of the birth, marriage and death records kept by the alcaldías. Article 3 d) excludes the processing done by the registry itself, not the copy a private system keeps."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_SEGURO_SOCIAL": {
+      "title": "ISSS, AFP and pensions",
+      "what": ["The ISSS affiliation number, the employer number, the NUP of the pension system and the AFP individual account number."],
+      "masking": ["Digits are mapped; separators stay."]
+    },
+    "SV_L1_NIE": {
+      "title": "Student number",
+      "what": ["The student identification number of the Ministry of Education and the codes and cards schools use."],
+      "masking": ["Digits are mapped."]
+    },
+    "SV_L1_MATRICULA_PROFESIONAL": {
+      "title": "Professional registration",
+      "what": ["The number of the Junta de Vigilancia de la Profesión Médica (JVPM) and the professional registrations, published together with the person's name."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_NOMBRE": {
+      "title": "Given name",
+      "what": ["The given name, one or two: `Morena`, `José Alberto`, `María de los Ángeles`."],
+      "masking": ["Word by word, replacing each name with one from the list. `de`, `del` and `la` stay in place. More than four words are masked character by character."]
+    },
+    "SV_L1_APELLIDO": {
+      "title": "Surname",
+      "what": ["The surnames — the father's and the mother's —, in separate columns or together, and the married name with `de`: `Menjívar de Portillo`."],
+      "masking": ["Word by word, replacing each surname with one from the list; particles stay in place."]
+    },
+    "SV_L1_NOMBRE_COMPLETO": {
+      "title": "Full name",
+      "what": [
+        "Given names and surnames in one column: `José Alberto Menjívar Portillo`. Also those of the mother, father, guardian, spouse, guarantor or personal reference.",
+        "A column named just `NOMBRE` may hold given names or full names: the values decide between the two domains."
+      ],
+      "masking": [
+        "In Salvadoran order: two words are a given name and a surname; three, a given name and two surnames; four, two and two. `APELLIDOS, NOMBRES` with a comma, as in lists, is recognized too. The result is a plausible name, never the original."
+      ]
+    },
+    "SV_L1_EMAIL": {
+      "title": "E-mail",
+      "what": ["Personal and corporate e-mail addresses."],
+      "masking": ["User and domain are mapped character by character, and the top-level domain — `.com`, `.com.sv` — becomes `.test`, reserved for testing: a masked address never delivers a message."]
+    },
+    "SV_L1_TELEFONO": {
+      "title": "Phone",
+      "what": ["Eight-digit numbers from the 2005 plan: landlines start with 2 and mobiles with 6 or 7, written `2222-3333` or `7123-4567`, with or without `+503`."],
+      "masking": ["`+503` and the first digit — which says landline or mobile — stay; the other seven digits are mapped."]
+    },
+    "SV_L1_DIRECCION": {
+      "title": "Address",
+      "what": ["The address with the street or avenue and the number — `Calle Arce #123, Colonia Escalón` —, with polígono and pasaje in the colonias and housing plans, or with the kilometre of a road."],
+      "masking": ["The whole line is replaced by a fictitious Salvadoran address of the same form. Colonia, cantón, distrito and postal code in columns of their own are handled by their domains."]
+    },
+    "SV_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Address complement",
+      "what": ["Polígono, pasaje, block, house, flat, lot or level in columns of their own."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_CUENTA_BANCARIA": {
+      "title": "Bank account",
+      "what": ["Savings, current and payroll account numbers. The bank code is not personal data and has no domain."],
+      "masking": ["Digits are mapped; separators stay."]
+    },
+    "SV_L1_TARJETA": {
+      "title": "Payment card",
+      "what": ["Credit and debit card numbers, recognized by the Luhn algorithm."],
+      "masking": ["Payment Card: another number that passes the Luhn algorithm. Only card-shaped values reach it."]
+    },
+    "SV_L1_BILLETERA": {
+      "title": "Digital wallet and bitcoin",
+      "what": ["The Chivo wallet identifier and the bitcoin and Lightning addresses that stayed in Salvadoran systems after the 2021 Bitcoin Law."],
+      "masking": ["Character by character, keeping the shape. The masked address no longer passes its own checksum, which is what a test copy wants: nobody can send funds to it."]
+    },
+    "SV_L1_IP": {
+      "title": "IP address",
+      "what": ["IPv4 and IPv6 addresses from access logs and transactions."],
+      "masking": ["Each IPv4 octet is mapped to 1–254; an IPv6 address is mapped keeping its hex characters."]
+    },
+    "SV_L1_DISPOSITIVO": {
+      "title": "Device identifier",
+      "what": ["IMEI, IMSI, ICCID, MAC address, advertising and session identifiers."],
+      "masking": ["Character by character, with hex digits kept hex: a MAC stays a MAC."]
+    },
+    "SV_L1_COOKIE": {
+      "title": "Cookies and tracking identifiers",
+      "what": ["Article 4 e) defines the cookie as what a site stores in the browser to know the browsing habits of the person behind it: cookie, visitor and campaign identifiers."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_PLACA": {
+      "title": "Vehicle plate",
+      "what": ["The plate with the class letter — P private, A rental, C freight, M motorcycle, AB bus, N national, O official, CD diplomatic — and six characters, `P123-456`; the newest ones mix digits and letters."],
+      "masking": ["Letters to letters and digits to digits, position by position: the plate format stays."]
+    },
+    "SV_L1_VEHICULO": {
+      "title": "Vehicle and licence",
+      "what": ["The VIN or chassis number, the engine number, the registration card and the driving licence number."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_INMUEBLE": {
+      "title": "Property",
+      "what": ["The registry number of the Centro Nacional de Registros, the registral entry and the cadastral number: they lead to the home and its owner."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_CONTRATO": {
+      "title": "Customer and contract numbers",
+      "what": ["Contract, policy, loan, application, member, subscriber, meter, case or administrative file numbers, and customer or employee codes."],
+      "masking": ["Character by character, keeping length and format. The mapping is deterministic, so joins keep working."]
+    },
+    "SV_L1_USUARIO": {
+      "title": "User and social media",
+      "what": ["Login, alias and social media profiles."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_L1_CREDENCIAL": {
+      "title": "Credentials",
+      "what": ["Passwords and their hashes, PIN, security and OTP codes, CVV, tokens, API keys, private keys and seed phrases."],
+      "masking": ["Every character becomes `X`. A credential has no use in a test copy, and a hash masked character by character could still be attacked."]
+    },
+    "SV_L1_GEOLOCALIZACION": {
+      "title": "Geolocation",
+      "what": ["Latitude and longitude, together or in separate columns, from apps, visits, addresses and deliveries."],
+      "masking": ["The integer part and first decimal stay — about 11 km — and the other decimals are mapped: the place is generalized, not moved far."]
+    },
+    "SV_L1_TEXTO_LIBRE": {
+      "title": "Free text",
+      "what": ["Remarks, complaint descriptions, accounts of events and messages where anything gets written — DUI, NIT, phone and name included."],
+      "masking": ["Free Text Redaction: DUIs, NITs, nine- and fourteen-digit numbers, e-mail, phones, cards, plates and IPs become `[DATO]`; given names and surnames from the list become `[NOMBRE]`. The rest of the text stays."]
+    },
+    "SV_L2_FECHA_NACIMIENTO": {
+      "title": "Birth date",
+      "what": ["The birth date, as a date, timestamp or text. In a fourteen-digit NIT it also sits inside the number."],
+      "masking": ["Shifted up to 60 days either way. Ages and school years change for few people; the date stays plausible and the same birth shifts the same way in every table."]
+    },
+    "SV_L2_ANIO_NACIMIENTO": {
+      "title": "Birth year",
+      "what": ["The birth year in a column of its own."],
+      "masking": ["The decade stays and the last digit is mapped: `1985` becomes a year from 1980 to 1989."]
+    },
+    "SV_L2_EDAD": {
+      "title": "Age",
+      "what": ["Age in years, also age group or five-year band."],
+      "masking": ["The tens digit stays and the unit is mapped (37 becomes 30–39). A hundred or more becomes 90: rare ages identify."]
+    },
+    "SV_L2_FECHA_EVENTO": {
+      "title": "Personal event dates",
+      "what": ["Dates that say something about the person: death, marriage, hiring and leaving, retirement, admission, diagnosis, childbirth, arrest, conviction, DUI issue, sick leave."],
+      "masking": ["Shifted up to 30 days either way."]
+    },
+    "SV_L2_SEXO": {
+      "title": "Sex",
+      "what": ["Sex as the system records it: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` or the codes 1 and 2."],
+      "masking": ["Replaced within its own vocabulary: `F` stays `F` or `M`, `1` stays `1` or `2`."]
+    },
+    "SV_L2_DISTRITO": {
+      "title": "Distrito and municipio",
+      "what": ["The distrito or municipio of residence, birth or care, by name — alone or with the departamento, `El Rosario - La Paz`. Since 2024 the 262 former municipalities are distritos of 44 municipios, and systems keep one or the other."],
+      "masking": ["A distrito with fewer than 20,000 inhabitants becomes the nearest distrito of its municipio with at least 20,000 — or of its departamento, when its municipio has none. The larger ones and the 44 municipios stay. See *Where people live*."]
+    },
+    "SV_L2_CODIGO_GEOGRAFICO": {
+      "title": "Distrito and municipio codes",
+      "what": ["The codes of the Dirección General de Estadística y Censos: two digits for the departamento, four for the municipio and six for the distrito."],
+      "masking": ["The same generalization as the name: a small distrito's code becomes the code of the distrito that replaces its name. The two still agree."]
+    },
+    "SV_L2_CANTON": {
+      "title": "Cantón and caserío",
+      "what": ["The cantón, caserío or hamlet of a rural address: communities of a few dozen families, and the address of much of the country."],
+      "masking": ["Replaced by `Zona rural`."]
+    },
+    "SV_L2_COLONIA": {
+      "title": "Colonia, residencial and barrio",
+      "what": ["The colonia, residencial, reparto, lotificación or barrio of residence."],
+      "masking": ["Replaced by a common Salvadoran colonia name, unrelated to the original."]
+    },
+    "SV_L2_CODIGO_POSTAL": {
+      "title": "Postal code",
+      "what": ["The four-digit postal code: the first two are the departamento and the postal zone."],
+      "masking": ["The first two digits stay and the others become zeros: `1101` becomes `1100`."]
+    },
+    "SV_L2_ESTADO_FAMILIAR": {
+      "title": "Family status",
+      "what": ["Single, married, acompañado — the non-marital union the Family Code recognizes —, separated, divorced or widowed, in words or as a code."],
+      "masking": ["Replaced by another status from the list; a code stays a code. The *family situation* itself has its own domain among the sensitive data."]
+    },
+    "SV_L2_OCUPACION": {
+      "title": "Occupation",
+      "what": ["Occupation, profession or trade, in words or by the national occupation classification code. A rare occupation in a small distrito identifies."],
+      "masking": ["Text is replaced by a common occupation; a code is mapped digit by digit."]
+    },
+    "SV_L2_EMPLEADOR": {
+      "title": "Employer",
+      "what": ["The name of the company or institution where the person works."],
+      "masking": ["Replaced by a fictitious company."]
+    },
+    "SV_L2_ESCOLARIDAD": {
+      "title": "Education",
+      "what": ["The education level attained — from none to doctorate —, in words or as a code."],
+      "masking": ["Replaced by another level from the list; a code stays a code."]
+    },
+    "SV_L2_CENTRO_EDUCATIVO": {
+      "title": "School",
+      "what": ["The centro escolar, complejo educativo, institute or university, by name or by the Ministry of Education's infrastructure code."],
+      "masking": ["Replaced by a fictitious school."]
+    },
+    "SV_L2_PERSONAS_A_CARGO": {
+      "title": "Dependants and children",
+      "what": ["Number of dependants, children or household members."],
+      "masking": ["Values from 0 to 5 stay; above 5 they become 5. Very large households are rare, and a rare count identifies."]
+    },
+    "SV_L3_ORIGEN_ETNICO": {
+      "title": "Ethnic origin",
+      "what": ["Self-identification with an indigenous people — náhuat pipil, lenca, kakawira — or as mestizo, white or afro-descendant, as the 2024 census asks it; in words, as a code or as a flag."],
+      "masking": ["A flag stays a flag, a code is replaced by another code and any other value by a category from the list."]
+    },
+    "SV_L3_LENGUA_INDIGENA": {
+      "title": "Language",
+      "what": ["The mother or indigenous language: náhuat, the language of the Pipil, is spoken by a few dozen elderly people, so declaring it identifies almost on its own."],
+      "masking": ["Replaced by a language from the list; a flag stays a flag."]
+    },
+    "SV_L3_NACIONALIDAD": {
+      "title": "Nationality",
+      "what": ["Nationality, country of origin and the condition of a returnee. Article 59 b) names it beside racial or ethnic origin among what cannot be processed without following the sensitive-data chapter."],
+      "masking": ["Replaced by a nationality from the list: the Salvadoran one and the largest foreign communities."]
+    },
+    "SV_L3_RELIGION": {
+      "title": "Religion",
+      "what": ["The religion, church or congregation the person belongs to."],
+      "masking": ["A flag stays a flag and any other value is replaced by a religion from the list."]
+    },
+    "SV_L3_CONVICCION_FILOSOFICA": {
+      "title": "Spiritual or philosophical convictions",
+      "what": ["The spiritual, philosophical or moral convictions article 59 b) names apart from religious ones, conscientious objection and membership of lodges."],
+      "masking": ["The values share no vocabulary: they are suppressed to `Sin información`. Flags and codes keep their shape."]
+    },
+    "SV_L3_IDEOLOGIA_POLITICA": {
+      "title": "Political ideology",
+      "what": ["Ideology, leaning, sympathy and voting intention, from surveys and records."],
+      "masking": ["Replaced by a position from the list — left to right, independent."]
+    },
+    "SV_L3_AFILIACION_PARTIDARIA": {
+      "title": "Party membership",
+      "what": ["The political party the person belongs to. Article 4 g) names *political affiliation or ideologies* and article 59 b) forbids processing it without following the sensitive-data chapter."],
+      "masking": ["Replaced by another party from the list of those registered with the Supreme Electoral Tribunal; a flag stays a flag."]
+    },
+    "SV_L3_AFILIACION_SINDICAL": {
+      "title": "Trade union membership",
+      "what": ["The union, membership, the union dues deducted on the payroll and union protection."],
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`."]
+    },
+    "SV_L3_BIOMETRICO": {
+      "title": "Biometric data",
+      "what": ["Fingerprint templates — the DUI's fingerprint is the country's identification pattern —, face, iris, voice and digitized signature."],
+      "masking": ["Every character becomes `X`. A masked template authenticates nobody."]
+    },
+    "SV_L3_GENETICO": {
+      "title": "Genetic data",
+      "what": ["Results of genetic and DNA tests, paternity tests, genetic profiles, mutations, karyotype and newborn screening."],
+      "masking": ["Every character becomes `X`."]
+    },
+    "SV_L3_ORIENTACION_SEXUAL": {
+      "title": "Sexual preferences",
+      "what": ["Self-declared sexual orientation or preference, in health and diversity records."],
+      "masking": ["Replaced by a category from the list."]
+    },
+    "SV_L3_VIDA_SEXUAL": {
+      "title": "Sexual life",
+      "what": ["Sexual activity and behaviour, number of partners, age at first intercourse."],
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`."]
+    },
+    "SV_L3_IDENTIDAD_GENERO": {
+      "title": "Gender identity",
+      "what": ["Self-declared gender identity. The law does not name it, but it falls squarely within the *physical or moral characteristics* whose improper use discriminates."],
+      "masking": ["Replaced by a category from the list."]
+    },
+    "SV_L3_SITUACION_FAMILIAR": {
+      "title": "Moral and family situation",
+      "what": ["The *moral and family situation* that article 4 g) lists among sensitive data: family composition and ties, who the person lives with, moral and conduct references."],
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`. Family status — single, married — has its own domain among the quasi-identifiers."]
+    },
+    "SV_L3_HABITOS": {
+      "title": "Personal habits",
+      "what": ["The *personal habits* of article 4 g): consumption, lifestyle and browsing habits, preferences, interests and purchase or search history — the profile built by the cookies of article 4 e)."],
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`."]
+    },
+    "SV_L3_VICTIMA": {
+      "title": "Victims of violence",
+      "what": ["Being a victim of gender, domestic or sexual violence, of trafficking or of forced displacement, the type of violence and the protection measures. The Special Comprehensive Law for a Life Free of Violence for Women and the law on internal forced displacement order the victim's identity protected."],
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`."]
+    },
+    "SV_SALUD_IDENTIFICADOR": {
+      "title": "Health identifiers",
+      "what": ["Clinical record, admission, care, consultation and prescription numbers."],
+      "masking": ["Character by character, keeping length and format."]
+    },
+    "SV_SALUD_COBERTURA": {
+      "title": "Health coverage",
+      "what": ["The ISSS, the public system, Bienestar Magisterial, military health, the ISBM or a private insurer, by name or code. Who pays for care says a lot about employment and income."],
+      "masking": ["A name is replaced by another coverage from the list; a code is mapped digit by digit; a flag stays a flag."]
+    },
+    "SV_SALUD_DIAGNOSTICO": {
+      "title": "Diagnosis and ICD-10",
+      "what": ["Diagnoses in words or by ICD-10 code, with a dot (`F33.1`) or without (`F331`); causes of death, of sick leave and of admission, history and allergies."],
+      "masking": ["An ICD-10 code becomes another common code in the same format, and text a common diagnosis: an HIV or mental disorder diagnosis does not survive as a category."]
+    },
+    "SV_SALUD_PROCEDIMIENTO": {
+      "title": "Procedures",
+      "what": ["Procedures, tests and surgeries, in words or by code. A viral load or a pregnancy test reveals the diagnosis."],
+      "masking": ["A code is mapped digit by digit; text is replaced by a common procedure."]
+    },
+    "SV_SALUD_MEDICAMENTO": {
+      "title": "Medicines",
+      "what": ["Prescribed or dispensed medicines, by name or active ingredient. An antiretroviral, an antipsychotic or a contraceptive reveals a diagnosis."],
+      "masking": ["Replaced by a common medicine from the list; a flag stays a flag."]
+    },
+    "SV_SALUD_TEXTO_CLINICO": {
+      "title": "Clinical text",
+      "what": ["History, present illness, progress notes, physical examination, treatment plan, discharge summaries and nursing notes."],
+      "masking": ["The same Free Text Redaction as free text: documents, contacts and names from the list are redacted. The clinical content stays — if it must not be in the copy, suppress the column."]
+    },
+    "SV_SALUD_RESULTADO_EXAMEN": {
+      "title": "Test results",
+      "what": ["Laboratory and test results — glucose, pregnancy, toxicology, blood alcohol —, also as numeric values."],
+      "masking": ["Character by character, keeping the format: a number stays a number."]
+    },
+    "SV_SALUD_VIH": {
+      "title": "HIV and sexually transmitted infections",
+      "what": ["Serological status, viral load and antiretroviral treatment, hepatitis, tuberculosis and sexually transmitted infections. The HIV prevention and control law guarantees confidentiality and forbids requiring a test to get or keep a job."],
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`."]
+    },
+    "SV_SALUD_GRUPO_SANGUINEO": {
+      "title": "Blood group and Rh",
+      "what": ["Blood group and Rh factor."],
+      "masking": ["Replaced by another group from the list."]
+    },
+    "SV_SALUD_DISCAPACIDAD": {
+      "title": "Disability",
+      "what": ["Disability status and type and the CONAIPD card, under the Special Law for the Inclusion of Persons with Disabilities."],
+      "masking": ["A flag stays a flag and any other value is replaced by a category from the list."]
+    },
+    "SV_SALUD_OCUPACIONAL": {
+      "title": "Occupational health",
+      "what": ["The fitness opinion of occupational medical exams, work accidents and occupational diseases, sick leave and absenteeism."],
+      "masking": ["An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its domain."]
+    },
+    "SV_SALUD_REPRODUCTIVA": {
+      "title": "Sexual and reproductive health",
+      "what": ["Pregnancy, last menstrual period, prenatal care, childbirth, family planning, fertility."],
+      "masking": ["Flags keep their shape; any other value becomes `Sin información`."]
+    },
+    "SV_SALUD_MENTAL": {
+      "title": "Mental health",
+      "what": ["Mental disorders, psychiatric or psychological care, suicide attempts and substance use. Article 4 g) names **physical and mental** health."],
+      "masking": ["Flags keep their shape; any other value becomes `Sin información`."]
+    },
+    "SV_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Credit history",
+      "what": ["The credit bureau report, the score, days in arrears, the state of the obligation and legal collection. Article 3 a) leaves this processing to the Law regulating credit history information services, which imposes its own duty of secrecy."],
+      "masking": ["A score gets other digits of the same length; a flag stays a flag; a status is replaced by another from the list."]
+    },
+    "SV_FIN_DEUDA": {
+      "title": "Debt",
+      "what": ["Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."],
+      "masking": ["Mapped to a value between 100 and 250,000 dollars, unrelated to the real one."]
+    },
+    "SV_FIN_INGRESOS": {
+      "title": "Income and pay",
+      "what": ["Salary, monthly or household income, fees and contributory pay. The commerce and services minimum wage was 408.80 dollars in 2026."],
+      "masking": ["Mapped to a value between 365 and 6,000 dollars."]
+    },
+    "SV_FIN_PATRIMONIO": {
+      "title": "Assets",
+      "what": ["Net worth, assets, valuations, account balances and term deposits."],
+      "masking": ["Mapped to a value between 1,000 and 500,000 dollars."]
+    },
+    "SV_FIN_PENSION": {
+      "title": "Pension and benefits",
+      "what": ["The amount of the pension, subsidy or benefit, and child support."],
+      "masking": ["Mapped to a value between 304 and 3,000 dollars."]
+    },
+    "SV_FIN_REMESAS": {
+      "title": "Remittances",
+      "what": ["The amount and frequency of family remittances and the condition of receiving them. One in four Salvadoran households does, and the data says who emigrated and what the household lives on."],
+      "masking": ["Mapped to a value between 20 and 2,000 dollars."]
+    },
+    "SV_FIN_PROGRAMA_SOCIAL": {
+      "title": "Subsidies and social programmes",
+      "what": ["The gas and electricity subsidies, the agricultural and school packages, the universal basic pension and other programmes, often as a flag."],
+      "masking": ["A flag stays a flag and any other value is replaced by a programme from the list."]
+    },
+    "SV_FIN_VIVIENDA": {
+      "title": "Housing tenure",
+      "what": ["Housing tenure: owned outright or being paid for, rented, lent, in caretaking."],
+      "masking": ["Replaced by another tenure from the list."]
+    },
+    "SV_PENAL_ANTECEDENTES": {
+      "title": "Criminal records",
+      "what": ["The criminal and police record certificate, the type of offence, the procedural situation, being deprived of liberty and arrest warrants."],
+      "masking": ["Replaced by a generic status from the list — no record, convicted, acquitted —, whatever the outcome; a flag stays a flag."]
+    },
+    "SV_PENAL_EXPEDIENTE": {
+      "title": "Court or prosecution file",
+      "what": ["The file, case or reference number the prosecution service and the courts use: correlative, unit and year, `123-UDVM-2024`. Files are looked up and lead to the parties."],
+      "masking": ["The correlative is mapped digit by digit; unit and year stay. Other numbers are masked character by character."]
+    }
+  },
+  "closing": [
+    {
+      "title": "The DUI and NIT check digits",
+      "body": [
+        "The **DUI** is the simple case: eight digits with weights 9, 8, 7, 6, 5, 4, 3 and 2 from the left, modulus 10, and the digit is ten minus the remainder, written 0 when it is ten. That is exactly what the Masking Engine's Check Digit algorithm does, so one step is enough: it maps the eight digits and writes the ninth.",
+        "The fourteen-digit **NIT** has two rules, and which applies depends on the correlative — the third block:",
+        { "list": [
+          "Correlative **above 100**: weights 2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3 and 2, modulus 11, and the digit is eleven minus the remainder, or 0 when the remainder is 0 or 1. Check Digit writes eleven minus the remainder and ten as 0: it matches with no adjustment.",
+          "Correlative **of 100 or less**: weights 14, 13, 12 … 2, modulus 11, and the digit **is the remainder** (ten written as 0). Check Digit cannot write the remainder, but it can write eleven minus it — so the set uses the **complementary weights** (eleven minus each weight, modulo 11). With them the remainder is inverted, and what Check Digit writes is the true remainder."
+        ] },
+        "Since the rule depends on the correlative and the whole body is masked, each branch keeps its class: the old branch leaves the correlative with a leading zero, and the new one maps it with Numeric Mapping into 101–999. A Regex Decompose picks the branch by the shape of the input value, with or without hyphens. The two blocks that say most about the person — the municipality and the **date of birth** — are mapped digit by digit, so a masked NIT no longer reveals when or where anyone was born."
+      ]
+    },
+    {
+      "title": "Where people live: distritos, cantones and postal code",
+      "body": [
+        "With the population of the 2024 census and the location published by the Banco Central de Reserva, the set knows the size, municipio, departamento and position of the 262 distritos and the 44 municipios.",
+        { "list": [
+          "A **distrito** with fewer than 20,000 inhabitants becomes the nearest distrito of its **municipio** with at least 20,000; when its municipio has none, the nearest of its departamento. There are 190 of 262, with 1.5 million inhabitants — a quarter of the country. Apaneca becomes Ahuachapán; Perquín, San Francisco Gotera.",
+          "The **44 municipios** and the 14 departamentos stay: the smallest municipio is far above the threshold.",
+          "Distance is measured between the census centroids, in a straight line.",
+          "Names repeat — El Rosario, San José, San Isidro, San Fernando, El Carmen, San Lorenzo. A name is generalized only when every distrito bearing it is small, and then follows the largest of them. With the departamento (`El Rosario - La Paz`, `El Rosario (La Paz)`) the same rule applies within the departamento.",
+          "The **DIGESTYC codes** follow the same table, and a person's name and code still agree.",
+          "The **cantón** and the **caserío** become `Zona rural`, the **colonia** is replaced by another and the **postal code** keeps only the departamento and the zone."
+        ] },
+        "Distrito names that are also given names or surnames, and departamento names, are left out of the detection list, so that a surname column is not taken for distritos."
+      ]
+    },
+    {
+      "title": "Limits",
+      "body": [
+        { "list": [
+          "**Binary columns** — DUI photos, fingerprints, validation selfies, clinical PDFs in BLOBs — cannot be masked by these algorithms. Inventory them and report them as residual risk.",
+          "**The NRC does not get its check digit back**: its rule is not public, so it is mapped digit by digit.",
+          "**A check digit in a column of its own** is not recomputed: it is masked and no longer matches the masked DUI or NIT.",
+          "**Departamento, municipio, the bank code and the phone prefix stay.**",
+          "**Data Cleansing leaves unknown values as they are**: a distrito spelled in a way that is not in the table — abbreviated, misspelled — passes unchanged.",
+          "**Free text** is redacted word by word: a phone written with spaces is not found, and a name that is also a common word (`Rosa`, `Cruz`, `Flores`) is redacted wherever it appears.",
+          "**Children and adolescents** — a birth date moves at most 60 days, so few people cross their 12th or 18th birthday, but some do. Where that matters, split the rule by age group with Multi-Column Condition.",
+          "**Addresses** are replaced as a whole line. Street, colonia, distrito and postal code in separate columns are masked independently and no longer form a coherent address.",
+          "**Masked bitcoin addresses** no longer pass their checksum: they serve to test the system, not to transact with it.",
+          "**The engine key** links masked values back to production for whoever holds both: the result is **pseudonymized** data (art. 4 q), not dissociated, and still personal data. Keep the key separate and safeguarded."
+        ] }
+      ]
+    },
+    {
+      "title": "Verification",
+      "body": [
+        "Before publication, the set was checked outside a Masking Engine:",
+        { "list": [
+          "The DUI check-digit rule was checked against numbers published as valid, and the NIT rule against two independent implementations of the routine Salvadoran systems use.",
+          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
+          "Profiling was simulated on 146 columns with the whole set at its assignment threshold — well named, badly named and 30 columns that are not personal data — and again with only the classifiers of the essential pack.",
+          "The table that generalizes distritos was audited for all 262: by name, by name with the departamento and by code.",
+          "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 150 DUIs and 200 NITs of both rules for validity and collisions, and 20 NITs to confirm that the birth date inside them does not survive. Every algorithm also masked its own sample value."
+        ] },
+        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+      ]
+    },
+    {
+      "title": "Sources",
+      "body": [
+        { "list": [
+          "Ley para la Protección de Datos Personales, Legislative Decree 144 of 12 November 2024 (Official Gazette 219, Volume 445, of 15 November 2024). Cybersecurity and Information Security Law. Agencia de Ciberseguridad del Estado: Guidelines for the Data Protection Delegate and Rules for the Administrative Sanctioning Procedure (Official Gazette of 11 August 2026).",
+          "Law regulating credit history information services. Law on the Duties and Rights of Patients and Health Service Providers. Law on the prevention and control of HIV. Special Comprehensive Law for a Life Free of Violence for Women. Special Law for the Inclusion of Persons with Disabilities.",
+          "Legislative Decree 203 of December 2021 (NIT and DUI harmonization). Special Law for Municipal Restructuring, Legislative Decree 762 of 2023 (44 municipios and 262 distritos, in force since 1 May 2024).",
+          "Banco Central de Reserva, Oficina Nacional de Estadística y Censos: VII Population and VI Housing Census 2024, population and location by municipio and distrito (BCR geoportal).",
+          "Ministry of Labour: minimum wage in force since June 2025. Vice-ministry of Transport: plate classes. The 2005 telephone numbering plan."
+        ] }
+      ]
+    }
+  ]
+}

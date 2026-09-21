@@ -22,7 +22,7 @@ The documentation button serves the PDF in the interface language, falling back 
 then to whichever exists.
 
 The app reads nothing else in the folder, so a preset can keep whatever produces it next to the
-output. The four that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
+output. The ten that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
 its own definitions and the raw lists in `source/`, and `verify.mjs` checks the result — reviewing
 every classifier, profiling sample columns with the local evaluator in `classifiers/` and masking
 sample values through the running app. Each folder's `README.md` explains the design of its set.
@@ -33,6 +33,12 @@ sample values through the running app. Each folder's `README.md` explains the de
 | [`mexico-lfpdppp/`](mexico-lfpdppp/) | Mexico — LFPDPPP (2025) |
 | [`panama-ley-81/`](panama-ley-81/) | Panama — Ley 81 de 2019 |
 | [`belize-dpa-2021/`](belize-dpa-2021/) | Belize — Data Protection Act, 2021 |
+| [`brazil-lgpd/`](brazil-lgpd/) | Brazil — LGPD (Lei 13.709/2018) |
+| [`colombia-ley-1581/`](colombia-ley-1581/) | Colombia — Ley 1581 de 2012 |
+| [`argentina-ley-25326/`](argentina-ley-25326/) | Argentina — Ley 25.326 |
+| [`elsalvador-ley-144/`](elsalvador-ley-144/) | El Salvador — Decreto 144 (2024) |
+| [`peru-ley-29733/`](peru-ley-29733/) | Peru — Ley 29733 |
+| [`ecuador-lopdp/`](ecuador-lopdp/) | Ecuador — LOPDP (2021) |
 
 ## Documentation
 
@@ -129,7 +135,7 @@ guide in `docs/`; the shared wording and how each framework's configuration read
 - **`version`** — bump it with every change or improvement. The settings tab shows it on the card,
   a set loaded from an older version says a new one is available, and resetting applies it.
 - **`name.en`** is required; the other languages fall back to it.
-- **`profileSet.name`** is what gets saved and sent to Delphix. The four that ship name the
+- **`profileSet.name`** is what gets saved and sent to Delphix. The ten that ship name the
   country, the law (or its number) and the version: `CL - Ley 21.719 - v3`. The set is found by
   the preset it came from, not by name, so a new version renames it and keeps its link to the engine.
 - **`packs.essential`** — the domains of the essential pack. Loading it brings those domains, the

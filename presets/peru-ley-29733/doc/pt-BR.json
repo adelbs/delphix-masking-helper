@@ -1,0 +1,1053 @@
+{
+  "title": "Peru — Ley 29733 de Protección de Datos Personales",
+  "subtitle": "Descoberta e mascaramento de dados pessoais peruanos: DNI e RUC com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 2, 5 — inclusive os rendimentos econômicos —, dados de saúde, dados financeiros e antecedentes criminais.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais de uma base peruana e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar apenas nomes e DNIs não basta: uma data de nascimento, um sexo e um distrito pequeno já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        {
+          "list": [
+            "**Identificadores diretos** — DNI e RUC, carné de extranjería, passaporte, registro civil, números do EsSalud e das pensões, código de estudante, registro profissional, nomes, contato, endereço, contas, cartões, carteiras digitais, dispositivos, cookies, placas, imóveis, texto livre.",
+            "**Quase-identificadores** — data de nascimento, idade, sexo, distrito e província com seu UBIGEO, código postal, urbanização, centro povoado, estado civil, ocupação, empregador, escolaridade.",
+            "**Dados sensíveis** — os do artigo 2, numeral 5: dados biométricos que identificam por si sós, origem racial e étnica, **rendimentos econômicos**, opiniões ou convicções políticas, religiosas, filosóficas e morais, filiação sindical e informação sobre saúde ou vida sexual; além de dados genéticos, identidade de gênero, povo e língua indígenas, nacionalidade e condição de vítima.",
+            "**Dados de saúde** — sensíveis sem ressalva, em grupo próprio: história clínica, seguro, CID-10, procedimentos, medicamentos, HIV, grupo sanguíneo, deficiência, saúde ocupacional, reprodutiva e mental.",
+            "**Dados financeiros** — os rendimentos que a própria lei chama de sensíveis, mais histórico de crédito, dívida, patrimônio, pensões, programas sociais, a classificação do SISFOH e a posse da moradia.",
+            "**Antecedentes criminais** — certidões de antecedentes, situação processual e números de processo judicial ou de pasta fiscal."
+          ]
+        },
+        "Num Masking Engine, o set é um profile set com seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos de que estes dependem — e os arquivos de consulta que leem. Os apêndices listam cada um com a configuração completa.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — precisa que os valores concordem. Uma coluna com nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm forma ou vocabulário reconhecíveis: um DNI, um RUC de onze dígitos, um celular de nove dígitos, um endereço com urbanização, manzana e lote, uma placa, um distrito.",
+        "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas peruanos (`NUM_DOC`, `FEC_NAC`, `UBIGEO`, `RUC`, `ESSALUD`, `CODIGO_MODULAR`) e em inglês.",
+        {
+          "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto do DNI — com a impressão digital e a assinatura — e uma selfie de validação. Reporte essas colunas como risco residual."
+        }
+      ]
+    },
+    {
+      "title": "A Ley 29733 em resumo",
+      "body": [
+        "A **Ley 29733 de Protección de Datos Personales** foi publicada em 3 de julho de 2011 e regulamentada em 2013. Em **30 de novembro de 2024** um novo regulamento a substituiu, o **Decreto Supremo 016-2024-JUS**, em vigor desde **30 de março de 2025**. Aplicar e fiscalizar ambos cabe à **Autoridad Nacional de Protección de Datos Personales (ANPD)**, dentro do Ministério da Justiça e Direitos Humanos.",
+        "O que importa para uma cópia de dados de produção:",
+        {
+          "list": [
+            "**Dado pessoal** é toda informação sobre uma pessoa natural que a identifique ou a torne identificável por meios que possam ser razoavelmente utilizados (art. 2, 4). O titular é sempre pessoa natural (art. 2, 12).",
+            "**Dado sensível** é uma lista curta e direta (art. 2, 5): dados biométricos que por si sós possam identificar o titular; dados de origem racial e étnica; **rendimentos econômicos**; opiniões ou convicções políticas, religiosas, filosóficas ou morais; filiação sindical; e informação relacionada à saúde ou à vida sexual. Os rendimentos não aparecem em nenhuma lei vizinha: no Peru uma coluna de salário pesa como um diagnóstico.",
+            "**Anonimização** torna o titular não identificável de modo que **não se possa reverter** (art. 2, 14). **Dissociação** é o procedimento que impede a identificação, e o artigo 41.1 do regulamento de 2024 diz expressamente que **esse procedimento é reversível**. O artigo 41.2 pede ao responsável que escolha a técnica adequada ao tipo de dado, ao número de titulares e ao risco.",
+            "**Onde aparecem.** Usar os dados para finalidade diferente daquela para que foram coletados é infração grave — *salvo que tenha havido procedimento de anonimização ou dissociação* (art. 133.7 do regulamento). Essa frase é a base legal de uma cópia mascarada fora de produção.",
+            "**Segurança.** O responsável mantém medidas de segurança (os arts. 39 e 40 do regulamento pedem avaliação de impacto onde o risco é alto), designa um **Oficial de Protección de Datos Personales** onde os arts. 37 a 39 o exigem e notifica um incidente à ANPD em até **48 horas** depois de tomar conhecimento (art. 34).",
+            "**Menores.** O dado de uma criança com menos de catorze anos exige o consentimento dos pais; entre catorze e dezoito o próprio adolescente consente (art. 25 do regulamento). Uma cópia que mantém as datas de nascimento exatas mantém essa distinção visível.",
+            "**Sanções.** As multas são medidas em UIT e chegam a dezenas de unidades impositivas tributarias nas infrações muito graves, podendo a ANPD ordenar a cessação do tratamento."
+          ]
+        },
+        "**O que a lei deixa de fora.** A lei não se aplica a dados mantidos por pessoas naturais para fins domésticos, nem aos tratados para defesa nacional, segurança pública ou investigação criminal, nem — como o regulamento explicita — a dados anonimizados."
+      ]
+    },
+    {
+      "title": "Dissociação, anonimização e cópias fora de produção",
+      "body": [
+        "O Peru é um dos poucos países que escreve a diferença na própria lei. **Anonimização** é irreversível (art. 2, 14). **Dissociação** é o procedimento que impede a identificação, e o artigo 41.1 do regulamento de 2024 diz com todas as letras que **é reversível**.",
+        "Os algoritmos deste set são determinísticos para a chave do Masking Engine: o mesmo DNI é mascarado do mesmo jeito em toda tabela, o que mantém os joins funcionando. É essa chave que torna o procedimento reversível. A cópia mascarada está **dissociada** no sentido do artigo 41, não **anonimizada**, e segue sendo dado pessoal para quem tem a chave e a produção.",
+        {
+          "list": [
+            "Mantenha a chave do engine separada da cópia e trate quem tiver as duas como quem trata dados pessoais.",
+            "O artigo 133.7 do regulamento dispensa a mudança de finalidade quando houve procedimento de dissociação; o artigo 41.2 pede que a técnica seja adequada ao dado, ao número de titulares e ao risco. Registre qual técnica este set aplica a cada coluna — os apêndices as listam uma a uma.",
+            "Se o que você precisa é de dado anonimizado — irreversível, fora da lei —, meça o risco de reidentificação dos quase-identificadores que sobram; o artigo 2, 14 é um padrão mais alto do que este set atinge."
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": [
+        "Dados que identificam uma pessoa por si sós. O DNI é a chave de quase todo registro peruano, e o RUC de uma pessoa natural é o número 10 seguido desse mesmo DNI. Os dois saem com dígito verificador válido, porque as aplicações o validam, e os dois são mascarados do mesmo jeito em toda parte."
+      ],
+      "domains": [
+        "PE_L1_DNI",
+        "PE_L1_RUC",
+        "PE_L1_DIGITO_VERIFICACION",
+        "PE_L1_CARNE_EXTRANJERIA",
+        "PE_L1_PASAPORTE",
+        "PE_L1_ACTA",
+        "PE_L1_SEGURO_SOCIAL",
+        "PE_L1_CODIGO_ESTUDIANTE",
+        "PE_L1_COLEGIATURA",
+        "PE_L1_NOMBRE",
+        "PE_L1_APELLIDO",
+        "PE_L1_NOMBRE_COMPLETO",
+        "PE_L1_RAZON_SOCIAL",
+        "PE_L1_EMAIL",
+        "PE_L1_TELEFONO",
+        "PE_L1_DIRECCION",
+        "PE_L1_DIRECCION_COMPLEMENTO",
+        "PE_L1_CUENTA_BANCARIA",
+        "PE_L1_TARJETA",
+        "PE_L1_BILLETERA",
+        "PE_L1_IP",
+        "PE_L1_DISPOSITIVO",
+        "PE_L1_COOKIE",
+        "PE_L1_PLACA",
+        "PE_L1_VEHICULO",
+        "PE_L1_INMUEBLE",
+        "PE_L1_CONTRATO",
+        "PE_L1_USUARIO",
+        "PE_L1_CREDENCIAL",
+        "PE_L1_GEOLOCALIZACION",
+        "PE_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": [
+        "Dados que não identificam ninguém sozinhos, mas identificam em conjunto. O Peru se divide em 1.892 distritos, e eles são pequenos: 1.633 tinham menos de 20.000 habitantes no censo de 2017, e centenas, menos de mil. Uma data de nascimento, um sexo e um desses distritos apontam para um punhado de pessoas. Estes atributos são generalizados ou deslocados, não substituídos, e o dado mantém o valor analítico."
+      ],
+      "domains": [
+        "PE_L2_FECHA_NACIMIENTO",
+        "PE_L2_ANIO_NACIMIENTO",
+        "PE_L2_EDAD",
+        "PE_L2_FECHA_EVENTO",
+        "PE_L2_SEXO",
+        "PE_L2_DISTRITO",
+        "PE_L2_UBIGEO",
+        "PE_L2_CENTRO_POBLADO",
+        "PE_L2_URBANIZACION",
+        "PE_L2_CODIGO_POSTAL",
+        "PE_L2_ESTADO_CIVIL",
+        "PE_L2_OCUPACION",
+        "PE_L2_EMPLEADOR",
+        "PE_L2_NIVEL_EDUCATIVO",
+        "PE_L2_INSTITUCION_EDUCATIVA",
+        "PE_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Dados sensíveis (art. 2, 5)",
+      "intro": [
+        "A lista do artigo 2, numeral 5, é curta e direta: dados biométricos que identificam por si sós, origem racial e étnica, rendimentos econômicos, opiniões ou convicções políticas, religiosas, filosóficas e morais, filiação sindical e informação sobre saúde ou vida sexual. Os rendimentos ficam no grupo financeiro, onde está o dinheiro, e a saúde em grupo próprio. Aqui está o resto, junto com os dados genéticos, a identidade de gênero, o povo e a língua indígenas, a nacionalidade e a condição de vítima que outras leis peruanas protegem e que reidentificam com a mesma rapidez."
+      ],
+      "domains": [
+        "PE_L3_ORIGEN_ETNICO",
+        "PE_L3_PUEBLO_INDIGENA",
+        "PE_L3_LENGUA",
+        "PE_L3_NACIONALIDAD",
+        "PE_L3_RELIGION",
+        "PE_L3_CONVICCION_FILOSOFICA",
+        "PE_L3_OPINION_POLITICA",
+        "PE_L3_AFILIACION_PARTIDARIA",
+        "PE_L3_AFILIACION_SINDICAL",
+        "PE_L3_BIOMETRICO",
+        "PE_L3_GENETICO",
+        "PE_L3_ORIENTACION_SEXUAL",
+        "PE_L3_VIDA_SEXUAL",
+        "PE_L3_IDENTIDAD_GENERO",
+        "PE_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Dados de saúde",
+      "intro": [
+        "O artigo 2, 5 torna sensível a *informação relacionada à saúde* sem ressalva, e a Ley 26842 General de Salud acrescenta o sigilo médico. O grupo mantém a história clínica separada do resto, para que uma base de saúde possa ser mascarada inteira."
+      ],
+      "domains": [
+        "PE_SALUD_IDENTIFICADOR",
+        "PE_SALUD_COBERTURA",
+        "PE_SALUD_DIAGNOSTICO",
+        "PE_SALUD_PROCEDIMIENTO",
+        "PE_SALUD_MEDICAMENTO",
+        "PE_SALUD_TEXTO_CLINICO",
+        "PE_SALUD_RESULTADO_EXAMEN",
+        "PE_SALUD_VIH",
+        "PE_SALUD_GRUPO_SANGUINEO",
+        "PE_SALUD_DISCAPACIDAD",
+        "PE_SALUD_OCUPACIONAL",
+        "PE_SALUD_REPRODUCTIVA",
+        "PE_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Dados financeiros e socioeconômicos",
+      "intro": [
+        "**Os rendimentos econômicos são dado sensível no Peru** (art. 2, 5) — nenhuma lei vizinha diz isso. O resto do grupo não é sensível por esse artigo, mas identifica: uma dívida, um patrimônio, uma pensão, um programa social ou uma classificação do SISFOH estreita a busca tão rápido quanto um CEP."
+      ],
+      "domains": [
+        "PE_FIN_INGRESOS",
+        "PE_FIN_HISTORIAL_CREDITICIO",
+        "PE_FIN_DEUDA",
+        "PE_FIN_PATRIMONIO",
+        "PE_FIN_PENSION",
+        "PE_FIN_PROGRAMA_SOCIAL",
+        "PE_FIN_CLASIFICACION_SOCIOECONOMICA",
+        "PE_FIN_VIVIENDA"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes criminais",
+      "intro": [
+        "A lei não lista os antecedentes criminais entre os dados sensíveis, mas a Constituição e o Código Procesal Penal os tratam como reservados, e uma certidão de antecedentes numa cópia de teste é um passivo sem contrapartida."
+      ],
+      "domains": [
+        "PE_PENAL_ANTECEDENTES",
+        "PE_PENAL_EXPEDIENTE"
+      ]
+    }
+  ],
+  "domains": {
+    "PE_L1_DNI": {
+      "title": "DNI",
+      "what": [
+        "O número do Documento Nacional de Identidad emitido pelo RENIEC: oito dígitos, `45678901`, a chave de quase todo registro peruano. O cartão imprime ao lado um **caractere de verificação**, que os sistemas guardam colado ao número (`45678901-7`) ou em coluna própria.",
+        "O mesmo domínio recebe RUCs: uma coluna de documento costuma guardar os dois."
+      ],
+      "masking": [
+        "Dígito a dígito, com o caractere de verificação recalculado — a série de dígitos ou a de letras, conforme o valor traga. Um valor com forma de RUC é mascarado como RUC."
+      ]
+    },
+    "PE_L1_RUC": {
+      "title": "RUC",
+      "what": [
+        "O número de onze dígitos do contribuinte na SUNAT, `20131378972`: dois dígitos para o tipo de contribuinte — **10** e 15 para pessoa natural, 17 para espólio, 20 para pessoa jurídica —, oito para o número e um dígito verificador. Na pessoa natural com 10, esses oito dígitos **são o DNI**."
+      ],
+      "masking": [
+        "Os dois dígitos do tipo de contribuinte ficam, os oito do número são mapeados e o dígito verificador é recalculado, de modo que DNI e RUC da mesma pessoa continuam coincidindo."
+      ]
+    },
+    "PE_L1_DIGITO_VERIFICACION": {
+      "title": "Caractere de verificação",
+      "what": [
+        "O dígito ou a letra de verificação do DNI guardado em coluna própria."
+      ],
+      "masking": [
+        "Dígitos para dígitos e letras para letras. Não dá para recalculá-lo ali: o número a que pertence não está no valor."
+      ]
+    },
+    "PE_L1_CARNE_EXTRANJERIA": {
+      "title": "Documentos de estrangeiro",
+      "what": [
+        "O carné de extranjería, as autorizações PTP e CPP da Migraciones, a condição migratória e o número do visto — os documentos das comunidades venezuelana e demais estrangeiras."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_PASAPORTE": {
+      "title": "Passaporte",
+      "what": [
+        "Números de passaporte peruano e estrangeiro."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_ACTA": {
+      "title": "Registro civil",
+      "what": [
+        "A acta, o livro e o fólio dos registros de nascimento, casamento e óbito do RENIEC e dos cartórios municipais, e o CUA que os numera."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_SEGURO_SOCIAL": {
+      "title": "EsSalud, AFP e ONP",
+      "what": [
+        "O *autogenerado* do EsSalud, o CUSPP do sistema privado de pensões e os números da ONP e da conta individual."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_CODIGO_ESTUDIANTE": {
+      "title": "Código de estudante",
+      "what": [
+        "O código de estudante, o número de matrícula e a carteira universitária, e o identificador do SIAGIE dos alunos da escola."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_COLEGIATURA": {
+      "title": "Registro profissional",
+      "what": [
+        "O número do conselho profissional — CMP para médicos, CIP para engenheiros, CAL para advogados —, publicado junto com o nome."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_NOMBRE": {
+      "title": "Prenome",
+      "what": [
+        "O prenome, um ou dois: `Milagros`, `Juan Carlos`, `María del Rosario`."
+      ],
+      "masking": [
+        "Palavra a palavra, trocando cada nome por um da lista. `de`, `del` e `la` ficam onde estão. Mais de quatro palavras são mascaradas caractere a caractere."
+      ]
+    },
+    "PE_L1_APELLIDO": {
+      "title": "Sobrenome",
+      "what": [
+        "Os sobrenomes — do pai e da mãe —, em colunas separadas ou juntos: `Quispe Huamán`. Quispe e Mamani, os dois mais comuns, são quíchua e aimará."
+      ],
+      "masking": [
+        "Palavra a palavra, trocando cada sobrenome por um da lista; as partículas ficam onde estão."
+      ]
+    },
+    "PE_L1_NOMBRE_COMPLETO": {
+      "title": "Nome completo",
+      "what": [
+        "Prenomes e sobrenomes numa coluna só: `Juan Carlos Quispe Huamán`. Também os da mãe, do pai, do tutor, do cônjuge, do companheiro, do contato de emergência e da referência.",
+        "As listas do RENIEC escrevem `APELLIDOS, NOMBRES` com vírgula; o set também lê essa forma."
+      ],
+      "masking": [
+        "Na ordem peruana: duas palavras são prenome e sobrenome; três, um prenome e dois sobrenomes; quatro, dois e dois. A forma com vírgula é mascarada mantendo a vírgula."
+      ]
+    },
+    "PE_L1_RAZON_SOCIAL": {
+      "title": "Razão social",
+      "what": [
+        "A razão social de um empresário individual, ao lado do RUC que o nomeia. A lei protege a pessoa natural por trás dela; a empresa em si não é titular."
+      ],
+      "masking": [
+        "Substituída por uma razão social fictícia."
+      ]
+    },
+    "PE_L1_EMAIL": {
+      "title": "E-mail",
+      "what": [
+        "Endereços de e-mail pessoais e corporativos."
+      ],
+      "masking": [
+        "Usuário e domínio são mapeados caractere a caractere, e o domínio de topo — `.com`, `.com.pe` — vira `.test`, reservado a testes: um endereço mascarado nunca entrega."
+      ]
+    },
+    "PE_L1_TELEFONO": {
+      "title": "Telefone",
+      "what": [
+        "Celulares de nove dígitos, todos começando por 9, e fixos com código de área — 1 para Lima e Callao, dois dígitos no resto — e seis ou sete dígitos."
+      ],
+      "masking": [
+        "`+51`, o 9 inicial do celular e o código de área do fixo ficam; os demais dígitos são mapeados, de modo que o número continua dizendo se é celular ou fixo e de que região."
+      ]
+    },
+    "PE_L1_DIRECCION": {
+      "title": "Endereço",
+      "what": [
+        "O endereço com o tipo de via e o número — `Av. Arequipa 1234, Urb. Santa Patricia` —, e o `Mz. B Lt. 12` de um asentamiento humano."
+      ],
+      "masking": [
+        "A linha inteira é substituída por um endereço peruano fictício da mesma forma. Urbanização, centro povoado, distrito e código postal têm domínios próprios para quando estão em colunas separadas."
+      ]
+    },
+    "PE_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento do endereço",
+      "what": [
+        "Manzana, lote, interior, apartamento, andar, bloco ou etapa em colunas próprias."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_CUENTA_BANCARIA": {
+      "title": "Conta bancária",
+      "what": [
+        "Números de conta poupança, corrente, salário, CTS e de detração, e o CCI de vinte dígitos. O código do banco não é dado pessoal e não tem domínio."
+      ],
+      "masking": [
+        "Os dígitos são mapeados; os separadores ficam."
+      ]
+    },
+    "PE_L1_TARJETA": {
+      "title": "Cartão de pagamento",
+      "what": [
+        "Números de cartão de crédito e débito, reconhecidos pelo algoritmo de Luhn."
+      ],
+      "masking": [
+        "Payment Card: outro número que passa no algoritmo de Luhn. Só valores com forma de cartão chegam até ele."
+      ]
+    },
+    "PE_L1_BILLETERA": {
+      "title": "Carteira digital",
+      "what": [
+        "Identificadores de Yape, Plin e outras carteiras móveis — indexadas pelo número de telefone — e os endereços bitcoin que alguns sistemas guardam."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo a forma. Um endereço bitcoin mascarado deixa de passar no próprio checksum, que é o que uma cópia de teste quer."
+      ]
+    },
+    "PE_L1_IP": {
+      "title": "Endereço IP",
+      "what": [
+        "Endereços IPv4 e IPv6 de logs de acesso e transações."
+      ],
+      "masking": [
+        "Cada octeto IPv4 é mapeado para 1–254; um endereço IPv6 é mapeado mantendo os caracteres hexadecimais."
+      ]
+    },
+    "PE_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": [
+        "IMEI, IMSI, ICCID, endereço MAC, identificadores de publicidade e de sessão."
+      ],
+      "masking": [
+        "Caractere a caractere, com os dígitos hexadecimais mantidos hexadecimais: um MAC continua MAC."
+      ]
+    },
+    "PE_L1_COOKIE": {
+      "title": "Cookies e identificadores de rastreamento",
+      "what": [
+        "O identificador que um site guarda no navegador e os parâmetros de campanha que viajam com ele. É dado pessoal quando singulariza uma pessoa por meios que possam ser razoavelmente utilizados."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_PLACA": {
+      "title": "Placa do veículo",
+      "what": [
+        "A Placa Única Nacional de Rodaje: três letras e três dígitos desde 2011 (`ABC-123`), uma variante que os mistura (`A1B-234`) e duas letras com quatro dígitos na moto."
+      ],
+      "masking": [
+        "Letras para letras e dígitos para dígitos, posição a posição: o formato da placa fica."
+      ]
+    },
+    "PE_L1_VEHICULO": {
+      "title": "Veículo e habilitação",
+      "what": [
+        "O VIN ou número do chassi, o número do motor, a tarjeta de identificação veicular e a habilitação — o *brevete*."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_INMUEBLE": {
+      "title": "Imóvel",
+      "what": [
+        "A partida registral e a ficha da SUNARP, o código cadastral e o registro de autoavaliação: levam à moradia e ao seu dono."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_CONTRATO": {
+      "title": "Números de contrato e de cliente",
+      "what": [
+        "Números de contrato, apólice, empréstimo, solicitação, sócio, assinante, fornecimento, medidor, caso ou processo administrativo, e códigos de cliente ou de empregado."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato. O mapeamento é determinístico, então os joins continuam funcionando."
+      ]
+    },
+    "PE_L1_USUARIO": {
+      "title": "Usuário e redes sociais",
+      "what": [
+        "Login, apelido e perfis de redes sociais."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_L1_CREDENCIAL": {
+      "title": "Credenciais",
+      "what": [
+        "Senhas e seus hashes, PIN, códigos de segurança e OTP, CVV, tokens, chaves de API, a *clave SOL* da SUNAT, chaves privadas e frases-semente."
+      ],
+      "masking": [
+        "Cada caractere vira `X`. Uma credencial não serve numa cópia de teste, e um hash mascarado caractere a caractere ainda poderia ser quebrado."
+      ]
+    },
+    "PE_L1_GEOLOCALIZACION": {
+      "title": "Geolocalização",
+      "what": [
+        "Latitude e longitude, juntas ou em colunas separadas, de aplicativos, visitas, endereços e entregas."
+      ],
+      "masking": [
+        "A parte inteira e a primeira decimal ficam — cerca de 11 km — e as demais decimais são mapeadas: o lugar é generalizado, não movido."
+      ]
+    },
+    "PE_L1_TEXTO_LIBRE": {
+      "title": "Texto livre",
+      "what": [
+        "Observações, descrições de reclamação, relatos e mensagens onde se escreve de tudo — DNI, RUC, telefone e nomes no meio de uma frase."
+      ],
+      "masking": [
+        "Free Text Redaction: DNIs, RUCs, e-mail, celulares, cartões, placas e IPs viram `[DATO]`, e os nomes das listas, `[NOMBRE]`."
+      ]
+    },
+    "PE_L2_FECHA_NACIMIENTO": {
+      "title": "Data de nascimento",
+      "what": [
+        "A data de nascimento, como date, timestamp ou texto."
+      ],
+      "masking": [
+        "Deslocada em até 60 dias para cada lado. Idades e anos escolares mudam para poucas pessoas; a data continua plausível e a mesma data de nascimento se move sempre do mesmo jeito."
+      ]
+    },
+    "PE_L2_ANIO_NACIMIENTO": {
+      "title": "Ano de nascimento",
+      "what": [
+        "O ano de nascimento em coluna própria."
+      ],
+      "masking": [
+        "A década fica e o último dígito é mapeado: `1985` vira um ano de 1980 a 1989."
+      ]
+    },
+    "PE_L2_EDAD": {
+      "title": "Idade",
+      "what": [
+        "Idade em anos, também faixa etária ou quinquênio."
+      ],
+      "masking": [
+        "O dígito das dezenas fica e a unidade é mapeada (37 vira 30–39). Cem ou mais vira 90: idades raras identificam."
+      ]
+    },
+    "PE_L2_FECHA_EVENTO": {
+      "title": "Datas de eventos pessoais",
+      "what": [
+        "Datas que dizem algo sobre a pessoa: óbito, casamento, admissão e desligamento, aposentadoria, internação, diagnóstico, prisão, sentença, atestado, emissão do DNI."
+      ],
+      "masking": [
+        "Deslocadas em até 30 dias para cada lado."
+      ]
+    },
+    "PE_L2_SEXO": {
+      "title": "Sexo",
+      "what": [
+        "Sexo como o sistema registra: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` ou os códigos 1 e 2."
+      ],
+      "masking": [
+        "Substituído dentro do próprio vocabulário: `F` continua `F` ou `M`, `1` continua `1` ou `2`."
+      ]
+    },
+    "PE_L2_DISTRITO": {
+      "title": "Distrito e província",
+      "what": [
+        "O distrito ou a província de residência, nascimento ou atendimento, pelo nome — sozinho ou com a província ou o departamento, `Balsas - Amazonas`."
+      ],
+      "masking": [
+        "Um distrito com menos de 20.000 habitantes vira o distrito mais próximo da sua província com pelo menos 20.000 — ou do seu departamento, quando a província não tem nenhum. As trinta e três províncias abaixo de 20.000 seguem a mesma regra dentro do seu departamento. Os 25 departamentos ficam."
+      ]
+    },
+    "PE_L2_UBIGEO": {
+      "title": "UBIGEO",
+      "what": [
+        "O código do INEI: dois dígitos para o departamento, quatro para a província e seis para o distrito."
+      ],
+      "masking": [
+        "A mesma generalização do nome: o UBIGEO de um distrito pequeno vira o UBIGEO do distrito que substitui o nome dele. O código de um grande não muda."
+      ]
+    },
+    "PE_L2_CENTRO_POBLADO": {
+      "title": "Centro povoado e caserío",
+      "what": [
+        "O centro povoado, o caserío, o anexo ou a comunidade campesina ou nativa de um endereço rural: algumas centenas de pessoas cada, e o endereço da maioria dos domicílios rurais."
+      ],
+      "masking": [
+        "Substituído por `Zona rural`."
+      ]
+    },
+    "PE_L2_URBANIZACION": {
+      "title": "Urbanização e asentamiento humano",
+      "what": [
+        "A urbanização, o asentamiento humano, o pueblo joven, a cooperativa de moradia ou o residencial de residência."
+      ],
+      "masking": [
+        "Substituída por uma peruana comum, sem relação com a original."
+      ]
+    },
+    "PE_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": [
+        "O código postal de cinco dígitos em uso desde 2011: os dois primeiros são o departamento."
+      ],
+      "masking": [
+        "Os dois primeiros dígitos ficam e os demais viram zeros: `15001` vira `15000`."
+      ]
+    },
+    "PE_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": [
+        "Solteiro, casado, conviviente — a união de fato que o Código Civil reconhece —, separado, divorciado ou viúvo, por extenso ou como código."
+      ],
+      "masking": [
+        "Substituído por outro estado da lista; um código continua código."
+      ]
+    },
+    "PE_L2_OCUPACION": {
+      "title": "Ocupação",
+      "what": [
+        "Ocupação, profissão ou ofício, por extenso ou pelo código da classificação nacional de ocupações. Uma ocupação rara num distrito pequeno identifica sozinha."
+      ],
+      "masking": [
+        "O texto é substituído por uma ocupação comum; um código é mapeado dígito a dígito."
+      ]
+    },
+    "PE_L2_EMPLEADOR": {
+      "title": "Empregador",
+      "what": [
+        "O nome da empresa ou instituição onde a pessoa trabalha."
+      ],
+      "masking": [
+        "Substituído por uma empresa fictícia."
+      ]
+    },
+    "PE_L2_NIVEL_EDUCATIVO": {
+      "title": "Escolaridade",
+      "what": [
+        "O nível de instrução alcançado — de nenhum ao doutorado — nas categorias do censo, por extenso ou como código."
+      ],
+      "masking": [
+        "Substituído por outro nível da lista; um código continua código."
+      ]
+    },
+    "PE_L2_INSTITUCION_EDUCATIVA": {
+      "title": "Instituição de ensino",
+      "what": [
+        "A instituição educativa, o CETPRO, o instituto ou a universidade, pelo nome ou pelo código modular do Ministério da Educação."
+      ],
+      "masking": [
+        "Substituída por uma instituição fictícia."
+      ]
+    },
+    "PE_L2_PERSONAS_A_CARGO": {
+      "title": "Dependentes e filhos",
+      "what": [
+        "Número de dependentes, filhos, derechohabientes ou membros do domicílio."
+      ],
+      "masking": [
+        "Valores de 0 a 5 ficam; acima de 5 viram 5. Domicílios muito grandes são raros, e uma contagem rara identifica."
+      ]
+    },
+    "PE_L3_ORIGEN_ETNICO": {
+      "title": "Origem étnica",
+      "what": [
+        "Autoidentificação como quéchua, aimará, nativo da Amazônia, afroperuano, branco, mestiço, nikkei ou tusán — as categorias que o censo de 2017 perguntou a todos a partir dos doze anos."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira, um código é trocado por outro código e qualquer outro valor por uma categoria da lista."
+      ]
+    },
+    "PE_L3_PUEBLO_INDIGENA": {
+      "title": "Povo indígena",
+      "what": [
+        "O povo da Base de Datos Oficial de Pueblos Indígenas u Originarios a que a pessoa pertence, e a comunidade campesina ou nativa. Nomear o povo é nomear a origem étnica."
+      ],
+      "masking": [
+        "Substituído por outro povo da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "PE_L3_LENGUA": {
+      "title": "Língua",
+      "what": [
+        "A língua materna ou originária. O Peru tem quarenta e oito além do espanhol, e a Ley 29735 as torna oficiais onde predominam: a língua diz de onde a pessoa vem."
+      ],
+      "masking": [
+        "Substituída por uma língua da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "PE_L3_NACIONALIDAD": {
+      "title": "Nacionalidade",
+      "what": [
+        "Nacionalidade, país de origem e condição migratória. A lei não a lista, mas ela fica ao lado da origem racial e étnica que a lei nomeia, e no Peru separa os nacionais da comunidade venezuelana."
+      ],
+      "masking": [
+        "Substituída por uma nacionalidade da lista: a peruana e as maiores comunidades estrangeiras."
+      ]
+    },
+    "PE_L3_RELIGION": {
+      "title": "Religião",
+      "what": [
+        "A religião, igreja ou congregação a que a pessoa pertence."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira e qualquer outro valor é trocado por uma religião da lista."
+      ]
+    },
+    "PE_L3_CONVICCION_FILOSOFICA": {
+      "title": "Convicções filosóficas e morais",
+      "what": [
+        "As convicções filosóficas e morais que o artigo 2, 5 nomeia ao lado das religiosas, a objeção de consciência e a filiação a uma loja."
+      ],
+      "masking": [
+        "Os valores não compartilham vocabulário: são suprimidos para `Sin información`. Bandeiras e códigos mantêm a forma."
+      ]
+    },
+    "PE_L3_OPINION_POLITICA": {
+      "title": "Opinião política",
+      "what": [
+        "A opinião política que o artigo 2, 5 nomeia: tendência, simpatia e intenção de voto, de pesquisas e cadastros."
+      ],
+      "masking": [
+        "Substituída por uma posição da lista — da esquerda à direita, independente."
+      ]
+    },
+    "PE_L3_AFILIACION_PARTIDARIA": {
+      "title": "Filiação partidária",
+      "what": [
+        "O partido político a que a pessoa pertence, do Registro de Organizaciones Políticas do JNE."
+      ],
+      "masking": [
+        "Substituído por outro partido da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "PE_L3_AFILIACION_SINDICAL": {
+      "title": "Filiação sindical",
+      "what": [
+        "O sindicato, a filiação, a contribuição sindical descontada em folha e o foro sindical. O artigo 2, 5 a nomeia expressamente."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "PE_L3_BIOMETRICO": {
+      "title": "Dados biométricos",
+      "what": [
+        "Templates de impressão digital — a digital do DNI é o padrão de identificação do país —, rosto, íris, voz e assinatura digitalizada. O artigo 2, 5 torna sensível o dado biométrico que **por si só** possa identificar o titular."
+      ],
+      "masking": [
+        "Cada caractere vira `X`. Um template mascarado não autentica ninguém."
+      ]
+    },
+    "PE_L3_GENETICO": {
+      "title": "Dados genéticos",
+      "what": [
+        "Resultados de exames genéticos e de DNA, testes de paternidade, perfis genéticos, mutações, cariótipo e triagem neonatal."
+      ],
+      "masking": [
+        "Cada caractere vira `X`."
+      ]
+    },
+    "PE_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientação sexual",
+      "what": [
+        "Orientação ou preferência sexual autodeclarada, em cadastros de saúde e de diversidade. Pertence à *vida sexual* que o artigo 2, 5 protege."
+      ],
+      "masking": [
+        "Substituída por uma categoria da lista."
+      ]
+    },
+    "PE_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": [
+        "Atividade e conduta sexual, número de parceiros, idade de início da vida sexual — nomeada palavra por palavra no artigo 2, 5."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "PE_L3_IDENTIDAD_GENERO": {
+      "title": "Identidade de gênero",
+      "what": [
+        "Identidade de gênero autodeclarada e o nome social. A lei não a nomeia, mas ela viaja com a vida sexual que a lei nomeia."
+      ],
+      "masking": [
+        "Substituída por uma categoria da lista."
+      ]
+    },
+    "PE_L3_VICTIMA": {
+      "title": "Vítimas",
+      "what": [
+        "O Registro Único de Víctimas da Ley 28592 registra as pessoas atingidas pela violência de 1980 a 2000; a Ley 30364 protege a identidade das vítimas de violência contra a mulher e integrantes do grupo familiar."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "PE_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores de saúde",
+      "what": [
+        "Números de história clínica, internação, atendimento, consulta, receita e FUA, e o identificador do RENHICE do prontuário eletrônico."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "PE_SALUD_COBERTURA": {
+      "title": "Cobertura de saúde",
+      "what": [
+        "EsSalud, o SIS, uma EPS, a sanidade das forças armadas ou da polícia, ou um seguro privado, pelo nome ou por código. Qual deles a pessoa tem diz muito sobre ela."
+      ],
+      "masking": [
+        "Um nome é trocado por outra cobertura da lista; um código é mapeado dígito a dígito; uma bandeira continua bandeira."
+      ]
+    },
+    "PE_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico e CID-10",
+      "what": [
+        "Diagnósticos por extenso ou por código CID-10, com ponto (`F33.1`) ou sem (`F331`); causas de óbito, de atestado e de internação; alergias e comorbidades."
+      ],
+      "masking": [
+        "Um código CID-10 vira outro código comum no mesmo formato, e o texto, um diagnóstico comum: um diagnóstico de HIV ou de transtorno mental não sobrevive como tal."
+      ]
+    },
+    "PE_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimentos",
+      "what": [
+        "Procedimentos, exames e cirurgias, por extenso ou por código. Uma carga viral ou um teste de gravidez revela o diagnóstico."
+      ],
+      "masking": [
+        "Um código é mapeado dígito a dígito; o texto é trocado por um procedimento comum."
+      ]
+    },
+    "PE_SALUD_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": [
+        "Medicamentos prescritos ou dispensados, pelo nome ou pelo princípio ativo. Um antirretroviral, um antipsicótico ou um anticoncepcional diz o que a coluna de diagnóstico foi mascarada para esconder."
+      ],
+      "masking": [
+        "Substituído por um medicamento comum da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "PE_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": [
+        "Anamnese, doença atual, evolução, exame físico, plano de tratamento, sumários de alta e notas de enfermagem."
+      ],
+      "masking": [
+        "A mesma Free Text Redaction do texto livre: documentos, contatos e nomes da lista são redigidos. O conteúdo clínico fica, porque é o que torna a cópia útil."
+      ]
+    },
+    "PE_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultados de exames",
+      "what": [
+        "Resultados de laboratório e de exames — glicemia, gravidez, toxicológico, alcoolemia —, também como valores numéricos."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo o formato: um número continua número."
+      ]
+    },
+    "PE_SALUD_VIH": {
+      "title": "HIV e infecções sexualmente transmissíveis",
+      "what": [
+        "Estado sorológico, carga viral e tratamento antirretroviral, hepatites, tuberculose e infecções sexualmente transmissíveis. A Ley 26626 manda manter em sigilo o resultado do teste de HIV e proíbe exigi-lo para obter ou manter um emprego."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "PE_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo e Rh",
+      "what": [
+        "Grupo sanguíneo e fator Rh."
+      ],
+      "masking": [
+        "Substituído por outro grupo da lista."
+      ]
+    },
+    "PE_SALUD_DISCAPACIDAD": {
+      "title": "Deficiência",
+      "what": [
+        "A condição e o tipo de deficiência, o registro no CONADIS e o certificado de deficiência, sob a Ley 29973."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira e qualquer outro valor é trocado por uma categoria da lista."
+      ]
+    },
+    "PE_SALUD_OCUPACIONAL": {
+      "title": "Saúde ocupacional",
+      "what": [
+        "O parecer de aptidão dos exames médicos ocupacionais (EMO), acidentes de trabalho e doenças ocupacionais, o SCTR, atestados e absenteísmo."
+      ],
+      "masking": [
+        "Um parecer é trocado por outro da lista — apto, não apto —; uma bandeira continua bandeira; o diagnóstico cai no domínio próprio."
+      ]
+    },
+    "PE_SALUD_REPRODUCTIVA": {
+      "title": "Saúde sexual e reprodutiva",
+      "what": [
+        "Gravidez, última menstruação, pré-natal, parto, planejamento familiar, fertilidade."
+      ],
+      "masking": [
+        "As bandeiras mantêm a forma; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "PE_SALUD_MENTAL": {
+      "title": "Saúde mental",
+      "what": [
+        "Transtornos mentais, atendimento psiquiátrico ou psicológico, tentativas de suicídio e uso de substâncias."
+      ],
+      "masking": [
+        "As bandeiras mantêm a forma; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "PE_FIN_INGRESOS": {
+      "title": "Rendimentos e remuneração",
+      "what": [
+        "Salário, renda mensal ou familiar, honorários e rendas de qualquer categoria. **O artigo 2, 5 lista os rendimentos econômicos entre os dados sensíveis**: no Peru esta coluna pesa como um diagnóstico. O salário mínimo é de 1.130 soles mensais desde janeiro de 2025."
+      ],
+      "masking": [
+        "Mapeados para um valor entre 1.025 e 25.000 soles, sem relação com o real."
+      ]
+    },
+    "PE_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Histórico de crédito",
+      "what": [
+        "O relatório da central de risco, o score, os dias de atraso, a classificação SBS do devedor — normal, con problema potencial, deficiente, dudoso, pérdida — e a cobrança judicial. A Ley 27489 rege as centrais."
+      ],
+      "masking": [
+        "Um score recebe outros dígitos do mesmo comprimento; uma bandeira continua bandeira; um status é trocado por outro da lista."
+      ]
+    },
+    "PE_FIN_DEUDA": {
+      "title": "Dívida",
+      "what": [
+        "Saldos de crédito e de carteira, valores em atraso, parcelas, montantes liberados e limites."
+      ],
+      "masking": [
+        "Mapeada para um valor entre 100 e 500.000 soles, sem relação com o real."
+      ]
+    },
+    "PE_FIN_PATRIMONIO": {
+      "title": "Patrimônio",
+      "what": [
+        "Patrimônio, ativos, avaliações e autoavaliações, saldos de conta, de CTS e de fundos, depósitos a prazo e a declaração juramentada de bens."
+      ],
+      "masking": [
+        "Mapeado para um valor entre 1.000 e 900.000 soles."
+      ]
+    },
+    "PE_FIN_PENSION": {
+      "title": "Pensão e benefícios",
+      "what": [
+        "O valor da pensão, do subsídio ou do benefício, e a pensão alimentícia."
+      ],
+      "masking": [
+        "Mapeado para um valor entre 300 e 8.000 soles."
+      ]
+    },
+    "PE_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programas sociais",
+      "what": [
+        "Juntos, Pensión 65, Contigo, Cuna Más, Qali Warma, Beca 18, o vale de gás do FISE e outros programas, pelo nome ou como bandeira. Estar num deles diz que o domicílio é pobre."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira e qualquer outro valor é trocado por um programa da lista."
+      ]
+    },
+    "PE_FIN_CLASIFICACION_SOCIOECONOMICA": {
+      "title": "Classificação do SISFOH",
+      "what": [
+        "A classificação socioeconômica do Padrón General de Hogares — pobre extremo, pobre, não pobre — que decide quem recebe subsídio, e o nível socioeconômico ou quintil."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira, um código é trocado por outro código e qualquer outro valor por uma classe da lista."
+      ]
+    },
+    "PE_FIN_VIVIENDA": {
+      "title": "Posse da moradia",
+      "what": [
+        "A posse da moradia nas categorias do censo: própria quitada ou em pagamento, alugada, cedida pelo empregador ou por outro domicílio, própria por invasão."
+      ],
+      "masking": [
+        "Substituída por outra forma de posse da lista."
+      ]
+    },
+    "PE_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes criminais",
+      "what": [
+        "A certidão de antecedentes penais, policiais e judiciais, o tipo de delito, a situação jurídica, a requisitória, a privação de liberdade, o registro no INPE e o REDAM de devedores de alimentos."
+      ],
+      "masking": [
+        "Substituídos por um status genérico da lista — sem antecedentes, sentenciado, absolvido —, qualquer que seja o desfecho; uma bandeira continua bandeira."
+      ]
+    },
+    "PE_PENAL_EXPEDIENTE": {
+      "title": "Processo judicial ou pasta fiscal",
+      "what": [
+        "O número que o Poder Judicial dá a um processo — correlativo, ano, distrito judicial e especialidade, `00123-2024-0-1801-JR-CI-01` — e a carpeta fiscal do Ministerio Público."
+      ],
+      "masking": [
+        "O correlativo e o número do juízo são mapeados dígito a dígito; ano, distrito judicial e especialidade ficam. Outros números são mascarados caractere a caractere."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Os dígitos verificadores do DNI e do RUC",
+      "body": [
+        "As duas regras são módulo 11, e as duas terminam onde o algoritmo Check Digit do Masking Engine não consegue segui-las sozinho.",
+        {
+          "list": [
+            "**DNI**: pesos 3, 2, 7, 6, 5, 4, 3 e 2 a partir da esquerda; onze menos o resto (zero continua zero) dá uma posição de 0 a 10, que indexa duas séries — os dígitos 6 7 8 9 0 1 1 2 3 4 5 e as letras K A B C D E F G H I J. As letras pertencem aos documentos emitidos até 14 de agosto de 2007.",
+            "**RUC**: pesos 5, 4, 3, 2, 7, 6, 5, 4, 3 e 2 sobre os dez primeiros dígitos; o dígito é onze menos o resto, escrito 0 quando dá dez e **1 quando dá onze**."
+          ]
+        },
+        "O Check Digit escreve *módulo menos resto* e escreve dez como `0`. As duas regras concordam com ele em toda parte, exceto no único ponto em que esse zero escrito é ambíguo: ele representa ao mesmo tempo um resto 0 e um resto 1, e os dois precisam de dígitos diferentes — 6 e 5 no DNI, 1 e 0 no RUC.",
+        "O set resolve isso com um **Check Digit auxiliar cujos pesos são os reais dobrados, módulo 11**. Dobrar leva um resto 0 a 0 e um resto 1 a 2, de modo que o auxiliar escreve `0` no primeiro caso e `9` no segundo — os dois casos ficam distintos. Um **Regex Decompose** então lê o par de dígitos, escreve o verdadeiro e descarta o auxiliar. Quatro passos numa cadeia, sem tabela de consulta, e o corpo inteiro mascarado dígito a dígito antes de o dígito ser calculado.",
+        "Como o RUC de uma pessoa natural é o número 10 seguido do DNI, e ambos mantêm esses oito dígitos sob o mesmo mapeamento, o DNI mascarado e o RUC mascarado da mesma pessoa continuam coincidindo."
+      ]
+    },
+    {
+      "title": "Onde as pessoas moram: distritos, UBIGEO e código postal",
+      "body": [
+        "Com a população contada pelo censo de 2017 e a localização publicada pelo INEI, o set conhece o tamanho, a província, o departamento e a posição dos 1.892 distritos e das 196 províncias.",
+        {
+          "list": [
+            "Um **distrito** com menos de 20.000 habitantes vira o distrito mais próximo da sua **província** com pelo menos 20.000; quando a província não tem nenhum, o mais próximo do seu departamento. São 1.633 de 1.892, com 7,4 milhões de habitantes.",
+            "As **33 províncias** abaixo de 20.000 — Purús tem 2.860 — seguem a mesma regra dentro do seu departamento. Os 25 departamentos ficam.",
+            "A distância é medida entre os centroides do censo, em linha reta. Os dezoito distritos criados depois do censo não têm população nem localização próprias e tomam o centro da sua província.",
+            "Os nomes se repetem muito — San Juan, Santa Rosa, San José, Independencia, Progreso. Um nome só é generalizado quando todos os lugares que o levam são pequenos, e então segue o mais populoso deles; quando esse é uma província, a substituição é uma província. Escrito com a província ou o departamento (`Balsas - Amazonas`, `Balsas (Amazonas)`), a mesma regra vale dentro dele.",
+            "O **UBIGEO** segue a mesma tabela, de modo que o nome e o código do distrito de uma pessoa continuam coincidindo.",
+            "O **centro povoado** e o **caserío** viram `Zona rural`, a **urbanização** é trocada por outra e o **código postal** guarda apenas o departamento."
+          ]
+        },
+        "Nomes de distrito que também são prenomes ou sobrenomes, e nomes de departamento, ficam de fora da lista de detecção, para que uma coluna de sobrenome não seja tomada por distritos."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        {
+          "list": [
+            "**Colunas binárias** — fotos do DNI, impressões digitais, selfies de validação, PDFs clínicos em BLOB — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
+            "**Um caractere de verificação em coluna própria** não é recalculado: é mascarado e deixa de corresponder ao DNI mascarado.",
+            "**Departamento, código do banco e código de área do telefone ficam.**",
+            "**O Data Cleansing deixa os valores desconhecidos como estão**: um distrito escrito de um jeito que não está na tabela — abreviado, com erro — passa sem mudar.",
+            "**O texto livre** é redigido palavra a palavra: um telefone escrito com espaços no meio de uma frase pode não ser encontrado, e um nome que também é palavra comum (`Rosa`, `Cruz`, `Flores`) é redigido onde quer que apareça.",
+            "**Crianças e adolescentes** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam o 14.º ou o 18.º aniversário, mas algumas cruzam. O regulamento faz essa linha importar (art. 25): onde importar, separe a regra por faixa etária com Multi-Column Condition.",
+            "**Os endereços** são substituídos como linha inteira. Via, urbanização, distrito e código postal em colunas separadas são mascarados de forma independente e deixam de formar um endereço coerente.",
+            "**Endereços bitcoin mascarados** deixam de passar no checksum: servem para testar o sistema, não para transacionar com ele.",
+            "**A chave do engine** liga os valores mascarados de volta à produção para quem tiver as duas: a cópia está **dissociada** no sentido do artigo 41 do regulamento — procedimento reversível —, não anonimizada, e segue sendo dado pessoal. Mantenha a chave separada e resguardada."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        {
+          "list": [
+            "A regra do DNI foi conferida contra o exemplo resolvido com que a própria rotina do RENIEC é publicada, e a do RUC contra RUCs publicados por órgãos públicos.",
+            "Cada configuração de classifier foi revisada contra o que um Masking Engine aceita.",
+            "O profiling foi simulado em 145 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 29 que não são dados pessoais — e de novo só com os classifiers do pacote essencial.",
+            "A tabela que generaliza lugares foi auditada para todos os 1.892 distritos e 196 províncias: pelo nome, pelo nome com a província e o departamento, e pelo UBIGEO.",
+            "Os algoritmos, executados com o plugin de algoritmos da Delphix, mascararam os valores de exemplo de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 150 DNIs da série de dígitos e 60 da série de letras, 200 RUCs dos quatro tipos de contribuinte para validade e colisões, e 20 pares de DNI e RUC para confirmar que continuam coincidindo. Cada algoritmo também mascarou o próprio valor de exemplo."
+          ]
+        },
+        "Toda coluna foi atribuída como esperado e todo valor mascarado como esperado. Antes de usar o set com dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        {
+          "list": [
+            "Ley 29733, Ley de Protección de Datos Personales (3 de julho de 2011). Regulamento, Decreto Supremo 016-2024-JUS (El Peruano, 30 de novembro de 2024, em vigor em 30 de março de 2025). Autoridad Nacional de Protección de Datos Personales, Ministerio de Justicia y Derechos Humanos.",
+            "Ley 26842 General de Salud. Ley 30024 (Registro Nacional de Historias Clínicas Electrónicas). Ley 26626 (CONTRASIDA). Ley 29973 (pessoas com deficiência). Ley 27489 (centrais de risco). Ley 28592 (Registro Único de Víctimas). Ley 30364 (violência contra a mulher e o grupo familiar). Ley 29735 (línguas originárias). Ley 29785 (consulta prévia).",
+            "Instituto Nacional de Estadística e Informática: Censos Nacionales 2017 (XII de Población, VII de Vivienda y III de Comunidades Indígenas), Directorio Nacional de Centros Poblados e o UBIGEO com a superfície e a localização de cada distrito.",
+            "RENIEC (DNI e o caractere de verificação). SUNAT (RUC e seu dígito verificador). SBS (classificação do devedor). MIDIS (SISFOH e os programas sociais). Ministerio de Cultura (Base de Datos Oficial de Pueblos Indígenas u Originarios). JNE (Registro de Organizaciones Políticas). MTPE (remuneração mínima em vigor desde janeiro de 2025). MTC (Placa Única Nacional de Rodaje). SERPOST (código postal de cinco dígitos)."
+          ]
+        }
+      ]
+    }
+  ]
+}

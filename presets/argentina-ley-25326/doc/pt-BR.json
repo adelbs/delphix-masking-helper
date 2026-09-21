@@ -1,0 +1,613 @@
+{
+  "title": "Argentina — Ley 25.326",
+  "subtitle": "Descoberta e mascaramento de dados pessoais argentinos: DNI, CUIT e CUIL com dígito verificador válido, CBU e CVU, quase-identificadores, os dados sensíveis dos artigos 2 e 7, dados genéticos e biométricos, identidade de gênero, dados de saúde, dados financeiros e antecedentes criminais.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais de um banco de dados argentino e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar só nomes e DNI não basta: uma data de nascimento, um sexo e uma localidade pequena já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        { "list": [
+          "**Identificadores diretos** — DNI e as antigas libretas, CUIT, CUIL e CDI, número de trámite do DNI, documentos de estrangeiros, passaporte, atas do registro civil, matrícula profissional, nomes, razão social, contato, endereço, CBU, CVU e alias, contas e cartões, dispositivos, placa do veículo, imóveis, texto livre.",
+          "**Quase-identificadores** — data de nascimento, idade, sexo, localidade, partido ou departamento e seus códigos do INDEC, código postal, bairro, nacionalidade, estado civil, ocupação, empregador, escolaridade.",
+          "**Dados sensíveis** — os do artigo 2: origem racial e étnica, opiniões políticas, convicções religiosas, filosóficas ou morais, filiação sindical e vida sexual; os dados genéticos e biométricos da Convenção 108+; a identidade de gênero (Lei 26.743) e a condição de vítima de violência de gênero ou de tráfico.",
+          "**Dados de saúde** — sensíveis pelo artigo 2 e regulados pelo artigo 8, num grupo próprio: prontuário e filiação, obra social ou plano de saúde, CID-10, procedimentos, medicamentos, exames, HIV, grupo sanguíneo, deficiência, saúde ocupacional, sexual e reprodutiva e mental.",
+          "**Dados financeiros** — os dos serviços de informação de crédito do artigo 26: situação na Central de Deudores do BCRA, dívidas, renda, patrimônio, aposentadorias; e os que revelam a situação socioeconômica: benefícios da ANSES e programas sociais, categoria do monotributo, posse da moradia.",
+          "**Antecedentes criminais** — os que o artigo 7.4 reserva às autoridades públicas, e os números de processo e de causa."
+        ] },
+        "Num Masking Engine, o set é um profile set com seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos em que esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um com sua configuração completa.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `DOCUMENTO`, `PARTIDO`, `DEPARTAMENTO` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um DNI com pontos, um CUIT, um CBU, um endereço com andar e apartamento, uma placa, uma localidade.",
+        "Os nomes de coluna são reconhecidos em espanhol, nas abreviaturas dos sistemas argentinos (`NRO_DOC`, `APYNOM`, `FEC_NAC`, `COD_LOCALIDAD`, `OBRA_SOCIAL`, `SITUACION_BCRA`) e em inglês.",
+        { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Os processos de cadastro costumam guardar a foto da frente e do verso do DNI e uma selfie validada contra o RENAPER. Reporte essas colunas como risco residual." }
+      ]
+    },
+    {
+      "title": "A Ley 25.326 em resumo",
+      "body": [
+        "A Lei 25.326 de Proteção dos Dados Pessoais — sancionada em 4 de outubro de 2000 e promulgada parcialmente em 30 de outubro — desenvolve o habeas data do artigo 43 da Constituição Nacional, e o Decreto 1558/2001 a regulamenta. A autoridade de aplicação é a **Agencia de Acceso a la Información Pública (AAIP)**, que absorveu em 2017 a antiga Dirección Nacional de Protección de Datos Personales. A União Europeia reconhece à Argentina um nível adequado de proteção desde 2003, e o confirmou na revisão de 2024.",
+        "O que importa para uma cópia de dados de produção:",
+        { "list": [
+          "**Dado pessoal** é a informação de qualquer tipo referida a pessoas físicas **ou de existência ideal** determinadas ou determináveis (art. 2). A lei protege também as pessoas jurídicas: por isso o set mascara a razão social e o CUIT das empresas.",
+          "**Dados sensíveis** são os que revelam origem racial e étnica, opiniões políticas, convicções religiosas, filosóficas ou morais, filiação sindical e informação referente à saúde ou à vida sexual (art. 2). Ninguém pode ser obrigado a fornecê-los, e **fica proibida a formação de arquivos que armazenem informação que direta ou indiretamente os revele**, salvo exceções (art. 7). Os dados de saúde têm ainda o regime do artigo 8 e o sigilo profissional.",
+          "**Antecedentes criminais ou contravencionais** só podem ser tratados pelas autoridades públicas competentes (art. 7.4).",
+          "**Dissociação.** A lei define a *disociación de datos* como todo tratamento de modo que a informação obtida não possa ser associada a pessoa determinada ou determinável (art. 2). Com dados dissociados, a cessão não exige consentimento (art. 11.3.e), e pesquisas e estatísticas devem usá-la (art. 28).",
+          "**Segurança e confidencialidade.** O responsável deve adotar as medidas técnicas e organizacionais que garantam a segurança e a confidencialidade dos dados (art. 9), e quem participa do tratamento guarda sigilo profissional, mesmo depois de terminada a relação com o responsável (art. 10). As medidas de segurança recomendadas pela AAIP (Resolução 47/2018, Anexo I) dizem, no item H.1.1: *utilizar técnicas de mascaramento ou dissociação da informação em ambientes de desenvolvimento, teste e QA*; quem usar dados pessoais nesses ambientes deve aplicar a eles todas as demais medidas do anexo.",
+          "**Informação de crédito.** Só podem ser arquivados dados relevantes para avaliar a solvência dos últimos cinco anos, ou dois se o devedor quitou a dívida (art. 26).",
+          "**Sanções.** Advertência, suspensão, multa e fechamento ou cancelamento do arquivo (art. 31); a Resolução AAIP 126/2024 classifica as infrações em leves, graves e muito graves e gradua as sanções desde 1º de junho de 2024. Além disso, a lei incorporou ao Código Penal os artigos 117 bis e 157 bis: inserir dados falsos num arquivo de dados pessoais e acessar ilegitimamente um banco de dados ou revelar informação nele registrada são crimes (art. 32)."
+        ] },
+        "**Convenção 108.** A Argentina aprovou a Convenção 108 do Conselho da Europa e seu protocolo adicional (Lei 27.483) e o protocolo que a moderniza, a Convenção 108+ (Lei 27.699, 2022). A 108+ acrescenta às categorias especiais os dados genéticos, os biométricos que identificam unicamente uma pessoa e os relativos a crimes, processos e condenações penais, e obriga a notificar à autoridade as violações de segurança graves. O protocolo entra em vigor quando 38 Partes o ratificarem: em maio de 2026 eram 34. Este set trata essas categorias como sensíveis de qualquer forma.",
+        "**Reforma em tramitação.** O Congresso tem vários projetos para substituir a Lei 25.326 — entre eles os expedientes 644-S-2025 e 1948-D-2025, e o 3397-D-2026, apresentado em 16 de julho de 2026, que retoma o projeto enviado pelo Poder Executivo em 2023 e fixa em 16 anos a idade para consentir o tratamento dos próprios dados. Nenhum foi aprovado. Este set segue o texto vigente."
+      ]
+    },
+    {
+      "title": "Dissociação, pseudonimização e cópias não produtivas",
+      "body": [
+        "A consequência da dissociação decorre das definições: um dado que não pode mais ser associado a uma pessoa determinada ou determinável não é dado pessoal. A lei não fala de pseudonimização, mas a pergunta é a mesma de qualquer regime: **alguém consegue associar o dado à pessoa de novo?**",
+        "Os algoritmos deste set são determinísticos para a chave do Masking Engine: o mesmo DNI é mascarado do mesmo jeito em todas as tabelas, o que mantém os joins. Por isso, para quem tem a chave **e** a produção, a cópia mascarada pode ser religada — não está dissociada no sentido do artigo 2 e continua sendo dado pessoal. Para quem tem só a cópia, os identificadores diretos foram substituídos e os quase-identificadores generalizados.",
+        { "list": [
+          "Guarde a chave do engine fora do alcance de quem usa a cópia mascarada.",
+          "Não entregue a cópia a quem também acessa a produção sem necessidade.",
+          "Revise os quase-identificadores que o set não conhece, e meça o risco de reidentificação antes de publicar ou ceder a cópia como dissociada."
+        ] }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": [
+        "Dados que identificam uma pessoa sozinhos. O DNI é a chave de quase todo registro argentino, e o mesmo número está dentro do CUIL de cada trabalhador e do CUIT de cada contribuinte. Ele é mascarado igual em toda parte, e CUIT, CUIL, CBU e CVU saem com dígito verificador válido, porque as aplicações o validam."
+      ],
+      "domains": ["AR_L1_DNI", "AR_L1_CUIT", "AR_L1_TRAMITE_DNI", "AR_L1_DOCUMENTO_EXTRANJERO", "AR_L1_PASAPORTE", "AR_L1_REGISTRO_CIVIL", "AR_L1_MATRICULA_PROFESIONAL", "AR_L1_NOMBRE", "AR_L1_APELLIDO", "AR_L1_NOMBRE_COMPLETO", "AR_L1_RAZON_SOCIAL", "AR_L1_EMAIL", "AR_L1_TELEFONO", "AR_L1_DIRECCION", "AR_L1_DIRECCION_COMPLEMENTO", "AR_L1_CBU", "AR_L1_ALIAS_CBU", "AR_L1_CUENTA_BANCARIA", "AR_L1_TARJETA", "AR_L1_IP", "AR_L1_DISPOSITIVO", "AR_L1_DOMINIO", "AR_L1_VEHICULO", "AR_L1_INMUEBLE", "AR_L1_CONTRATO", "AR_L1_USUARIO", "AR_L1_CREDENCIAL", "AR_L1_GEOLOCALIZACION", "AR_L1_TEXTO_LIBRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": [
+        "Dados que não identificam ninguém sozinhos, mas identificam em combinação. O Censo 2022 conta 2.280 gobiernos locales — municipios, comunas, comisiones de fomento e municipales —; 1.952 têm menos de 20.000 habitantes e mais de mil, menos de 2.000. Uma data de nascimento, um sexo e uma dessas cidades apontam para um punhado de pessoas. Esses atributos são generalizados ou deslocados em vez de substituídos, e o dado conserva seu valor analítico."
+      ],
+      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
+    },
+    {
+      "id": "L3",
+      "title": "Dados sensíveis",
+      "intro": [
+        "As categorias do artigo 2 que não são de saúde — que tem grupo próprio: origem racial e étnica, opiniões políticas, convicções religiosas, filosóficas ou morais, filiação sindical e vida sexual. O set acrescenta as categorias especiais da Convenção 108+ — dados genéticos e biométricos —, a orientação sexual, a **identidade de gênero**, cuja retificação registral é confidencial (Lei 26.743, art. 9), e a condição de **vítima** de violência de gênero (Lei 26.485), de tráfico (Lei 26.364) ou de crimes contra a integridade sexual, cuja identidade a lei manda proteger. As colunas categóricas conservam sua forma: uma flag S/N continua flag, um código é substituído por outro código e qualquer outro valor por um da lista da sua categoria. Onde os valores não compartilham vocabulário, são suprimidos para `Sin información`."
+      ],
+      "domains": ["AR_L3_ORIGEN_ETNICO", "AR_L3_PUEBLO_INDIGENA", "AR_L3_LENGUA_INDIGENA", "AR_L3_RELIGION", "AR_L3_CONVICCION_FILOSOFICA", "AR_L3_OPINION_POLITICA", "AR_L3_AFILIACION_PARTIDARIA", "AR_L3_AFILIACION_SINDICAL", "AR_L3_BIOMETRICO", "AR_L3_GENETICO", "AR_L3_ORIENTACION_SEXUAL", "AR_L3_VIDA_SEXUAL", "AR_L3_IDENTIDAD_GENERO", "AR_L3_VICTIMA"]
+    },
+    {
+      "id": "SALUD",
+      "title": "Dados de saúde",
+      "intro": [
+        "A informação referente à saúde é sensível (art. 2), e o prontuário é confidencial (Lei 26.529 de Direitos do Paciente). Várias leis somam seu próprio sigilo: a de HIV, hepatites virais, tuberculose e ISTs (Lei 27.675), a de interrupção voluntária da gravidez (Lei 27.610) e a de saúde mental (Lei 26.657). O grupo cobre o que guardam clínicas, obras sociales, planos de saúde, laboratórios, seguradoras de riscos do trabalho (ART) e a medicina do trabalho."
+      ],
+      "domains": ["AR_SALUD_IDENTIFICADOR", "AR_SALUD_COBERTURA", "AR_SALUD_DIAGNOSTICO", "AR_SALUD_PROCEDIMIENTO", "AR_SALUD_MEDICAMENTO", "AR_SALUD_TEXTO_CLINICO", "AR_SALUD_RESULTADO_ESTUDIO", "AR_SALUD_VIH", "AR_SALUD_GRUPO_SANGUINEO", "AR_SALUD_DISCAPACIDAD", "AR_SALUD_OCUPACIONAL", "AR_SALUD_REPRODUCTIVA", "AR_SALUD_MENTAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Dados financeiros e socioeconômicos",
+      "intro": [
+        "A informação de crédito tem regras próprias no artigo 26, e a situação de uma pessoa na **Central de Deudores do BCRA** — de 1, normal, a 6, irrecuperável por disposição técnica — está entre os dados de maior consequência. Os benefícios da ANSES e a categoria do monotributo dizem quanto alguém ganha, se tem filhos ou uma deficiência. As categorias são substituídas dentro da própria notação e faixa; os valores são mapeados para uma faixa plausível sem relação com o valor real."
+      ],
+      "domains": ["AR_FIN_SITUACION_CREDITICIA", "AR_FIN_DEUDA", "AR_FIN_INGRESOS", "AR_FIN_PATRIMONIO", "AR_FIN_JUBILACION", "AR_FIN_PROGRAMA_SOCIAL", "AR_FIN_MONOTRIBUTO", "AR_FIN_VIVIENDA"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes criminais e processos",
+      "intro": [
+        "Os dados relativos a antecedentes criminais ou contravencionais só podem ser tratados pelas autoridades públicas competentes (art. 7.4), e a Convenção 108+ os conta entre as categorias especiais. Uma empresa que os guarda — um atestado de antecedentes pedido num processo seletivo — deve protegê-los com o cuidado de um dado sensível."
+      ],
+      "domains": ["AR_PENAL_ANTECEDENTES", "AR_PENAL_EXPEDIENTE"]
+    }
+  ],
+  "domains": {
+    "AR_L1_DNI": {
+      "title": "DNI e libretas",
+      "what": [
+        "O número do Documento Nacional de Identidad do RENAPER — sete ou oito dígitos, escrito com pontos de milhar, `28.456.789` —, o mesmo por toda a vida, e o da Libreta de Enrolamiento e da Libreta Cívica que o precederam. Os DNI de estrangeiros residentes começam em 90 milhões.",
+        "Colunas `NRO_DOCUMENTO` costumam misturar DNI, CUIT ou CUIL e passaportes: cada valor é mascarado pela sua forma."
+      ],
+      "masking": [
+        "Dígito a dígito, mantendo o tamanho e os pontos. O mapeamento é um-para-um: um DNI usado como chave não colide. Um valor com forma de CUIT é mascarado como CUIT; um com letras, caractere a caractere."
+      ]
+    },
+    "AR_L1_CUIT": {
+      "title": "CUIT, CUIL e CDI",
+      "what": [
+        "A Clave Única de Identificación Tributaria da ARCA (ex-AFIP), a Clave Única de Identificación Laboral da ANSES e a Clave de Identificación: onze dígitos, `20-28456789-1`. Os dois primeiros dizem o tipo — 20 homem, 27 mulher, 23 e 24 qualquer um, 30, 33 e 34 pessoas jurídicas —; os oito do meio são o DNI de uma pessoa física; o último, o dígito verificador.",
+        "O dígito usa os pesos 5, 4, 3, 2, 7, 6, 5, 4, 3 e 2 a partir da esquerda, módulo 11: onze menos o resto, e 0 se o resto é 0. Quando o resto é 1 não há dígito possível e o tipo muda: 20 e 27 passam a 23, 30 a 33, 23 a 24 e 33 a 34."
+      ],
+      "masking": [
+        "O tipo se mantém, os oito dígitos são mapeados com o mesmo algoritmo do DNI — o CUIL de uma pessoa continua contendo o seu DNI mascarado — e o dígito é recalculado; quando o resto dá 1, o tipo muda como a ARCA mudaria. Todo CUIT mascarado é válido e o mapeamento é um-para-um. Veja *O dígito verificador do CUIT*."
+      ]
+    },
+    "AR_L1_TRAMITE_DNI": {
+      "title": "Número de trámite do DNI",
+      "what": ["O número de trámite, de onze dígitos, e a letra do exemplar impressos no DNI. Os serviços on-line os pedem para conferir que quem se cadastra tem o documento em mãos."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Documentos de estrangeiros",
+      "what": ["A residencia precaria e o certificado de residência da Dirección Nacional de Migraciones, o expediente de radicação, a cédula estrangeira e o número do visto."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_PASAPORTE": {
+      "title": "Passaporte",
+      "what": ["Números de passaporte argentinos — três letras e seis dígitos, `AAA123456` — e estrangeiros."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_REGISTRO_CIVIL": {
+      "title": "Registro civil",
+      "what": ["O número, livro e folha das atas de nascimento, casamento, união convivencial e óbito, e as certidões de fatos vitais."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_MATRICULA_PROFESIONAL": {
+      "title": "Matrícula profissional",
+      "what": ["A matrícula nacional (MN) ou provincial (MP) de médicos, advogados, contadores e demais profissões regulamentadas, e o registro REFEPS dos profissionais de saúde. Os conselhos publicam os cadastros com o nome."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_NOMBRE": {
+      "title": "Nome",
+      "what": ["O prenome, um ou mais: `Soledad`, `Juan Carlos`, `María del Carmen`. Também o nome autopercebido da Lei 26.743."],
+      "masking": ["Palavra por palavra, trocando cada nome por um da lista — os mais frequentes do registro histórico de nomes do RENAPER. `de`, `del` e `la` ficam no lugar. Mais de quatro palavras são mascaradas caractere a caractere."]
+    },
+    "AR_L1_APELLIDO": {
+      "title": "Sobrenome",
+      "what": ["O sobrenome — um, ou paterno e materno —, e o de casada: `López de Rossi`."],
+      "masking": ["Palavra por palavra, trocando cada sobrenome por um da lista — de origem espanhola, italiana, guarani, andina e de outras coletividades —; as partículas ficam no lugar."]
+    },
+    "AR_L1_NOMBRE_COMPLETO": {
+      "title": "Nome completo",
+      "what": [
+        "Nomes e sobrenomes numa só coluna: `Juan Carlos Fernández`, `FERNÁNDEZ, JUAN CARLOS`. Também os do pai, da mãe, do tutor, do cônjuge ou convivente, do fiador e da referência pessoal.",
+        "Uma coluna chamada só `NOMBRE` pode ter prenomes ou nomes completos: os valores decidem entre os dois domínios."
+      ],
+      "masking": [
+        "Na ordem argentina, com um só sobrenome como o mais comum: duas palavras são prenome e sobrenome; três, dois prenomes e um sobrenome; quatro, dois e dois; cinco, três e dois. `APELLIDO, NOMBRES` com vírgula, como em listagens e padrões eleitorais, também é reconhecido. O resultado é um nome plausível, nunca o original."
+      ]
+    },
+    "AR_L1_RAZON_SOCIAL": {
+      "title": "Razão social",
+      "what": ["A razão social ou o nome fantasia de uma empresa, fornecedor ou comércio. A Lei 25.326 protege também os dados das pessoas de existência ideal, e numa empresa individual ou numa SAS a razão social costuma ser o nome do dono."],
+      "masking": ["Trocada por uma empresa fictícia da lista."]
+    },
+    "AR_L1_EMAIL": {
+      "title": "E-mail",
+      "what": ["Endereços de e-mail pessoais e corporativos."],
+      "masking": ["O usuário e o domínio são mapeados caractere a caractere, e o domínio de topo — `.com`, `.com.ar` — vira `.test`, reservado para testes: um endereço mascarado nunca entrega mensagem."]
+    },
+    "AR_L1_TELEFONO": {
+      "title": "Telefone",
+      "what": ["Números de dez dígitos nacionais: código de área de dois a quatro dígitos — `11` Buenos Aires, `351` Córdoba, `2966` Río Gallegos — e número do assinante. Os celulares levam 9 depois do `+54`, ou 15 depois do código de área quando discados de dentro do país: `+54 9 11 4567-8901`, `(0351) 15-456-7890`. Também números locais sem código de área, `4567-8901`."],
+      "masking": ["O `+54`, o 9, o código de área, o 15 e os separadores se mantêm; o número do assinante — pelo menos seis dígitos — é mapeado."]
+    },
+    "AR_L1_DIRECCION": {
+      "title": "Endereço",
+      "what": ["O endereço com rua e número — `Av. Corrientes 1234 Piso 5 Dto. B` —, com rua numerada como em La Plata (`Calle 7 N° 1234`), ou com quadra e lote em bairros e conjuntos habitacionais (`Mz. 12 Lote 5`), e as rodovias com quilômetro."],
+      "masking": ["A linha inteira é trocada por um endereço argentino fictício com as mesmas formas. Bairro, localidade, partido e código postal em colunas próprias são tratados pelos seus domínios."]
+    },
+    "AR_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento do endereço",
+      "what": ["Andar, apartamento, unidade funcional, torre, quadra, lote, casa, número e ruas transversais em colunas próprias."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_CBU": {
+      "title": "CBU e CVU",
+      "what": [
+        "A Clave Bancaria Uniforme de uma conta bancária e a Clave Virtual Uniforme de uma conta de pagamento: 22 dígitos em dois blocos. O primeiro — banco e agência, ou 000 e o prestador de serviços de pagamento — leva um dígito verificador com os pesos 7, 1, 3, 9, 7, 1, 3; o segundo, o número da conta, um com os pesos 3, 9, 7, 1 repetidos."
+      ],
+      "masking": ["O primeiro bloco se mantém — o banco não identifica ninguém —; os treze dígitos da conta são mapeados e o dígito verificador recalculado com Check Digit. Todo CBU e CVU mascarado é válido e o mapeamento é um-para-um."]
+    },
+    "AR_L1_ALIAS_CBU": {
+      "title": "Alias CBU",
+      "what": ["O alias de uma conta, de 6 a 20 caracteres com pontos: `gato.mesa.lluvia`. Muitos titulares o montam com o próprio nome."],
+      "masking": ["Caractere a caractere, mantendo os pontos e o tamanho."]
+    },
+    "AR_L1_CUENTA_BANCARIA": {
+      "title": "Conta bancária",
+      "what": ["Números de caja de ahorros, conta corrente e conta salário, e carteiras digitais. O código do banco não é dado pessoal e não tem domínio."],
+      "masking": ["Os dígitos são mapeados; os separadores se mantêm."]
+    },
+    "AR_L1_TARJETA": {
+      "title": "Cartão de pagamento",
+      "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
+      "masking": ["Payment Card: outro número que passa no algoritmo de Luhn. Só os valores com forma de cartão chegam a ele."]
+    },
+    "AR_L1_IP": {
+      "title": "Endereço IP",
+      "what": ["Endereços IPv4 e IPv6 de registros de acesso e transações."],
+      "masking": ["Cada octeto IPv4 é mapeado para 1–254; um IPv6 é mapeado mantendo seus caracteres hexadecimais."]
+    },
+    "AR_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": ["IMEI, IMSI, ICCID, endereço MAC, identificadores de publicidade, cookies e sessões."],
+      "masking": ["Caractere a caractere, com os dígitos hexadecimais continuando hexadecimais: um MAC continua MAC."]
+    },
+    "AR_L1_DOMINIO": {
+      "title": "Placa do veículo",
+      "what": ["A placa (dominio): a do Mercosul, duas letras, três dígitos e duas letras em carros (`AE 123 KD`) e uma letra, três dígitos e três letras em motos (`A123BCD`); a anterior a 2016, três letras e três dígitos (`ABC 123`) ou três dígitos e três letras em motos. O Registro da Propriedade Automotor leva da placa ao dono."],
+      "masking": ["Letras viram letras e dígitos viram dígitos, posição por posição, com os espaços: o formato da placa se mantém."]
+    },
+    "AR_L1_VEHICULO": {
+      "title": "Veículo e habilitação",
+      "what": ["O VIN ou número do chassi, o do motor, a cédula de identificação do automotor e o número da carteira de habilitação."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_INMUEBLE": {
+      "title": "Imóvel",
+      "what": ["A partida inmobiliaria, a nomenclatura cadastral, a matrícula do Registro da Propriedade Imóvel e a conta municipal ou de rentas. Levam ao endereço e ao dono."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_CONTRATO": {
+      "title": "Números de cliente, matrícula e contrato",
+      "what": ["Números de contrato, apólice, operação, empréstimo, sócio, assinante, medidor, legajo do empregado e do aluno, e códigos de cliente ou filiado."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato. O mapeamento é determinístico, então os joins continuam funcionando."]
+    },
+    "AR_L1_USUARIO": {
+      "title": "Usuário e redes sociais",
+      "what": ["Login, apelido e perfis em redes sociais."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_L1_CREDENCIAL": {
+      "title": "Credenciais",
+      "what": ["Senhas e seus hashes, a clave fiscal, PIN, códigos de segurança e OTP, CVV, tokens, chaves de API e respostas secretas."],
+      "masking": ["Cada caractere vira `X`. Uma credencial não tem uso numa cópia de teste, e um hash mascarado caractere a caractere ainda poderia ser atacado."]
+    },
+    "AR_L1_GEOLOCALIZACION": {
+      "title": "Geolocalização",
+      "what": ["Latitude e longitude, juntas ou em colunas separadas, de aplicativos, visitas, endereços e entregas."],
+      "masking": ["A parte inteira e a primeira casa decimal se mantêm — uns 11 km — e as demais casas são mapeadas: o lugar é generalizado, não deslocado para longe."]
+    },
+    "AR_L1_TEXTO_LIBRE": {
+      "title": "Texto livre",
+      "what": ["Observações, descrições de reclamações, relatos de fatos e mensagens onde se escreve qualquer coisa — inclusive DNI, CUIL, celular e nome."],
+      "masking": ["Free Text Redaction: DNI com pontos, CUIT e CUIL, números de 7 ou 8 dígitos, CBU, e-mail, celulares, cartões, placas e IP viram `[DATO]`; nomes e sobrenomes da lista viram `[NOMBRE]`. O resto do texto se mantém."]
+    },
+    "AR_L2_FECHA_NACIMIENTO": {
+      "title": "Data de nascimento",
+      "what": ["A data de nascimento, como data, timestamp ou texto."],
+      "masking": ["Deslocada até 60 dias para qualquer lado. Idades e anos escolares mudam para poucas pessoas; a data continua plausível e o mesmo nascimento é deslocado igual em todas as tabelas."]
+    },
+    "AR_L2_ANIO_NACIMIENTO": {
+      "title": "Ano de nascimento e classe",
+      "what": ["O ano de nascimento em coluna própria, também chamado *clase*."],
+      "masking": ["A década se mantém e o último dígito é mapeado: `1985` vira um ano de 1980 a 1989."]
+    },
+    "AR_L2_EDAD": {
+      "title": "Idade",
+      "what": ["A idade em anos, também faixa etária ou quinquênio."],
+      "masking": ["A dezena se mantém e a unidade é mapeada (37 vira 30–39). Cem anos ou mais viram 90: idades raras identificam."]
+    },
+    "AR_L2_FECHA_EVENTO": {
+      "title": "Datas de eventos pessoais",
+      "what": ["Datas que dizem algo da pessoa: óbito, casamento e união convivencial, admissão, desligamento e demissão, aposentadoria, internação e alta, diagnóstico, parto, detenção, condenação, emissão do DNI, radicação, licença."],
+      "masking": ["Deslocadas até 30 dias para qualquer lado."]
+    },
+    "AR_L2_SEXO": {
+      "title": "Sexo",
+      "what": ["O sexo como o sistema registra: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Varón` ou os códigos 1 e 2. Desde o Decreto 476/2021 o DNI admite também `X`."],
+      "masking": ["Substituído dentro do próprio vocabulário: `F` continua `F` ou `M`, `1` continua `1` ou `2`. Um `X` vira `F` ou `M`: são poucos milhares de pessoas, e a marca as identificaria."]
+    },
+    "AR_L2_LOCALIDAD": {
+      "title": "Localidade e município",
+      "what": ["A localidade, a cidade ou o município de residência, de nascimento ou de emissão do documento, pelo nome — sozinho ou com a província, `Tres Lagos - Santa Cruz`, `Tres Lagos (Santa Cruz)`."],
+      "masking": ["Uma localidade de um gobierno local com menos de 20.000 habitantes — ou fora de qualquer gobierno local — vira o gobierno local mais próximo da mesma província com pelo menos 20.000; as demais se mantêm. Veja *Onde as pessoas moram*."]
+    },
+    "AR_L2_DEPARTAMENTO": {
+      "title": "Partido e departamento",
+      "what": ["O partido da província de Buenos Aires, o departamento das demais províncias ou a comuna da Cidade de Buenos Aires, pelo nome."],
+      "masking": ["Um partido ou departamento com menos de 20.000 habitantes vira o mais próximo da mesma província com pelo menos 20.000: `Iruya` vira `Orán`. Os maiores se mantêm."]
+    },
+    "AR_L2_CODIGO_GEOGRAFICO": {
+      "title": "Códigos geográficos do INDEC",
+      "what": ["Os códigos do INDEC: cinco dígitos para um partido ou departamento, seis para um gobierno local e oito para uma localidade censal. Os dois primeiros são a província."],
+      "masking": ["A mesma generalização dos nomes: o código de um lugar pequeno vira o do lugar que substitui seu nome; o de uma localidade, o da localidade principal desse gobierno local."]
+    },
+    "AR_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": ["O Código Postal Argentino — uma letra da província, quatro dígitos e três letras que chegam à face da quadra, `C1043AAZ` — e o código anterior de quatro dígitos, que nomeia uma localidade."],
+      "masking": ["A letra e os dois primeiros dígitos se mantêm, os outros dois viram zero e as letras finais `AAA`: `C1043AAZ` vira `C1000AAA` e `1636` vira `1600`."]
+    },
+    "AR_L2_BARRIO": {
+      "title": "Bairro",
+      "what": ["O bairro, o condomínio fechado ou country, a favela ou assentamento do RENABAP e o paraje rural."],
+      "masking": ["Trocado por um nome de bairro comum na Argentina, sem relação com o original."]
+    },
+    "AR_L2_NACIONALIDAD": {
+      "title": "Nacionalidade",
+      "what": ["A nacionalidade ou o país de nascimento. Paraguaios e bolivianos são as maiores comunidades estrangeiras."],
+      "masking": ["Trocada por uma nacionalidade da lista: a argentina e as maiores comunidades estrangeiras."]
+    },
+    "AR_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": ["Solteiro, casado, união convivencial — do Código Civil e Comercial de 2015 —, separado de fato, divorciado ou viúvo, por extenso ou em código."],
+      "masking": ["Trocado por outro estado civil da lista; um código continua código."]
+    },
+    "AR_L2_OCUPACION": {
+      "title": "Ocupação",
+      "what": ["A ocupação, profissão, ofício ou cargo, por extenso ou pelo código do Clasificador Nacional de Ocupaciones do INDEC. Uma ocupação rara numa cidade pequena identifica."],
+      "masking": ["Um texto é trocado por uma ocupação comum; um código é mapeado dígito a dígito."]
+    },
+    "AR_L2_EMPLEADOR": {
+      "title": "Empregador",
+      "what": ["O nome da empresa ou do órgão onde a pessoa trabalha."],
+      "masking": ["Trocado por uma empresa fictícia."]
+    },
+    "AR_L2_NIVEL_EDUCATIVO": {
+      "title": "Escolaridade",
+      "what": ["O maior nível alcançado — de sem instrução a pós-graduação, completo ou incompleto —, por extenso ou em código."],
+      "masking": ["Trocado por outro nível da lista; um código continua código."]
+    },
+    "AR_L2_ESTABLECIMIENTO_EDUCATIVO": {
+      "title": "Estabelecimento de ensino",
+      "what": ["A escola, o colégio, o instituto ou a universidade, pelo nome ou pela Clave Única de Establecimiento (CUE)."],
+      "masking": ["Trocado por um estabelecimento fictício."]
+    },
+    "AR_L2_PERSONAS_A_CARGO": {
+      "title": "Filhos e dependentes",
+      "what": ["Quantidade de filhos, dependentes ou moradores do domicílio."],
+      "masking": ["Os valores de 0 a 5 se mantêm; acima de 5 viram 5. Famílias muito numerosas são raras, e uma contagem rara identifica."]
+    },
+    "AR_L3_ORIGEN_ETNICO": {
+      "title": "Origem étnica",
+      "what": ["O reconhecimento como indígena ou descendente de povos indígenas ou originários e como afrodescendente, as duas perguntas do Censo 2022, por extenso, em código ou como flag."],
+      "masking": ["Uma flag continua flag e qualquer outro valor é trocado por uma categoria da lista."]
+    },
+    "AR_L3_PUEBLO_INDIGENA": {
+      "title": "Povo indígena",
+      "what": ["O povo indígena ou originário — mapuche, guarani, diaguita, kolla, qom, wichí, entre as dezenas que o Censo 2022 registrou — e a comunidade com personalidade jurídica inscrita no RENACI."],
+      "masking": ["Trocado por um dos povos mais numerosos; um código continua código."]
+    },
+    "AR_L3_LENGUA_INDIGENA": {
+      "title": "Língua indígena",
+      "what": ["A língua indígena que a pessoa fala ou entende — guarani, quechua, mapuzungun, qom, wichí. Revela o povo de origem."],
+      "masking": ["Trocada por uma língua da lista; uma flag continua flag."]
+    },
+    "AR_L3_RELIGION": {
+      "title": "Religião",
+      "what": ["A religião, a igreja ou o culto a que a pessoa pertence."],
+      "masking": ["Uma flag continua flag e qualquer outro valor é trocado por uma religião da lista."]
+    },
+    "AR_L3_CONVICCION_FILOSOFICA": {
+      "title": "Convicções filosóficas ou morais",
+      "what": ["As convicções filosóficas ou morais que o artigo 2 nomeia à parte das religiosas: objeção de consciência — invocada, por exemplo, diante da interrupção da gravidez ou de uma transfusão — e pertencimento a lojas maçônicas."],
+      "masking": ["Os valores não compartilham vocabulário: são suprimidos para `Sin información`. Flags e códigos conservam sua forma."]
+    },
+    "AR_L3_OPINION_POLITICA": {
+      "title": "Opiniões políticas",
+      "what": ["Orientação e ideologia política, simpatia e intenção de voto, de pesquisas e cadastros."],
+      "masking": ["Trocada por uma posição da lista — da esquerda à direita, independente."]
+    },
+    "AR_L3_AFILIACION_PARTIDARIA": {
+      "title": "Filiação partidária",
+      "what": ["O partido político ao qual a pessoa é filiada ou em que milita. Uma coluna chamada só `PARTIDO` também pode ser o partido de um endereço bonaerense: os valores decidem."],
+      "masking": ["Trocada por outro partido da lista de partidos de ordem nacional; uma flag continua flag."]
+    },
+    "AR_L3_AFILIACION_SINDICAL": {
+      "title": "Filiação sindical",
+      "what": ["O sindicato ou grêmio, a condição de filiado, a contribuição sindical descontada no holerite, o delegado sindical e a estabilidade sindical — UOM, Comercio, UOCRA, Camioneros, ATE, UPCN."],
+      "masking": ["Uma flag continua flag; qualquer outro valor vira `Sin información`."]
+    },
+    "AR_L3_BIOMETRICO": {
+      "title": "Dados biométricos",
+      "what": ["Templates de digital e de rosto — a validação contra o RENAPER é rotina em bancos e carteiras digitais —, íris, voz e assinatura digitalizada."],
+      "masking": ["Cada caractere vira `X`. Um template mascarado não autentica ninguém."]
+    },
+    "AR_L3_GENETICO": {
+      "title": "Dados genéticos",
+      "what": ["Resultados de testes genéticos, de DNA e de filiação, perfis genéticos, mutações, cariótipo e triagem neonatal. A Convenção 108+ os conta entre as categorias especiais."],
+      "masking": ["Cada caractere vira `X`."]
+    },
+    "AR_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientação sexual",
+      "what": ["A orientação sexual autodeclarada, em registros de saúde e de diversidade. É informação referente à vida sexual."],
+      "masking": ["Trocada por uma categoria da lista."]
+    },
+    "AR_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": ["Atividade e conduta sexual, número de parceiros, início das relações sexuais."],
+      "masking": ["Uma flag continua flag; qualquer outro valor vira `Sin información`."]
+    },
+    "AR_L3_IDENTIDAD_GENERO": {
+      "title": "Identidade de gênero",
+      "what": ["A identidade de gênero autopercebida, a retificação registral e a mudança de sexo registral da Lei 26.743, que proíbe dar publicidade à retificação e à certidão original sem autorização da pessoa (art. 9). O nome autopercebido fica no domínio de nome."],
+      "masking": ["Trocada por uma categoria da lista."]
+    },
+    "AR_L3_VICTIMA": {
+      "title": "Vítimas de violência",
+      "what": ["A condição de vítima de violência de gênero, familiar ou sexual, de tráfico ou de exploração, o tipo de violência, as medidas protetivas e de restrição de aproximação, o botão antipânico, e a restituição de identidade dos filhos de desaparecidos. Revelá-la expõe a pessoa ao agressor."],
+      "masking": ["Uma flag continua flag; qualquer outro valor vira `Sin información`."]
+    },
+    "AR_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores de saúde",
+      "what": ["Números de prontuário, de filiado à obra social, ao plano de saúde ou ao PAMI, de carteirinha, internação, autorização, pedido e receita."],
+      "masking": ["Caractere a caractere, mantendo tamanho e formato."]
+    },
+    "AR_SALUD_COBERTURA": {
+      "title": "Obra social e plano de saúde",
+      "what": ["A obra social, o plano de saúde (prepaga), o PAMI ou o Incluir Salud, pelo nome ou pelo código do Registro Nacional de Obras Sociales (RNOS). A maioria das obras sociales é sindical: o código diz o ofício e o sindicato. O Incluir Salud cobre quem recebe uma pensão não contributiva."],
+      "masking": ["Um nome é trocado por outra cobertura da lista; um código RNOS é mapeado dígito a dígito; uma flag continua flag."]
+    },
+    "AR_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico e CID-10",
+      "what": ["Diagnósticos por extenso ou pelo código CID-10, com ponto (`F33.1`) ou sem (`F331`); causas de morte, de licença e de internação, antecedentes e alergias."],
+      "masking": ["Um código CID-10 vira outro código comum no mesmo formato, e um texto um diagnóstico comum: um diagnóstico de HIV ou de transtorno mental não sobrevive como categoria."]
+    },
+    "AR_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimentos e prestações",
+      "what": ["Procedimentos, exames e cirurgias, por extenso ou pelo código do Nomenclador Nacional ou de um nomenclador provincial. Uma carga viral ou uma interrupção da gravidez revelam o diagnóstico."],
+      "masking": ["Um código é mapeado dígito a dígito; um texto é trocado por um procedimento comum."]
+    },
+    "AR_SALUD_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": ["Medicamentos receitados ou dispensados, pelo nome comercial, pelo princípio ativo ou pelo código de troquel. Um antirretroviral, um antipsicótico ou o misoprostol revelam um diagnóstico."],
+      "masking": ["Trocado por um medicamento comum da lista; uma flag continua flag."]
+    },
+    "AR_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": ["Anamnese, doença atual, evolução, exame físico, prescrições, epicrise e laudos."],
+      "masking": ["O mesmo Free Text Redaction do texto livre: documentos, contatos e nomes da lista são redigidos. O conteúdo clínico se mantém — se não deve estar na cópia, suprima a coluna."]
+    },
+    "AR_SALUD_RESULTADO_ESTUDIO": {
+      "title": "Resultados de exames",
+      "what": ["Resultados de laboratório e exames — glicemia, Papanicolau, gravidez, toxicológico, alcoolemia —, também como valores numéricos."],
+      "masking": ["Caractere a caractere, mantendo o formato: um número continua número."]
+    },
+    "AR_SALUD_VIH": {
+      "title": "HIV, hepatites, tuberculose e ISTs",
+      "what": ["O estado sorológico, a carga viral e o tratamento antirretroviral, as hepatites virais, a tuberculose e as infecções sexualmente transmissíveis. A Lei 27.675 garante a confidencialidade e proíbe discriminar por eles."],
+      "masking": ["Uma flag continua flag; qualquer outro valor vira `Sin información`."]
+    },
+    "AR_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": ["O grupo sanguíneo e o fator Rh."],
+      "masking": ["Trocado por outro grupo da lista."]
+    },
+    "AR_SALUD_DISCAPACIDAD": {
+      "title": "Deficiência e CUD",
+      "what": ["A condição de deficiência, o tipo — motora, auditiva, visual, visceral, intelectual, mental — e o número do Certificado Único de Discapacidad (Lei 22.431), e a pensão não contributiva por invalidez."],
+      "masking": ["Uma flag continua flag, um número de CUD é mapeado caractere a caractere e qualquer outro valor é trocado por um tipo da lista."]
+    },
+    "AR_SALUD_OCUPACIONAL": {
+      "title": "Saúde ocupacional",
+      "what": ["O resultado do exame admissional e periódico, as doenças preexistentes, os acidentes de trabalho e de trajeto e as doenças ocupacionais comunicados à ART (Lei 24.557), as licenças médicas e o absenteísmo, e a incapacidade fixada pelas comissões médicas."],
+      "masking": ["Um resultado é trocado por outro da lista — apto, inapto —; uma flag continua flag; o diagnóstico cai no seu domínio."]
+    },
+    "AR_SALUD_REPRODUCTIVA": {
+      "title": "Saúde sexual e reprodutiva",
+      "what": ["Gravidez, data da última menstruação, pré-natal, parto, interrupção voluntária ou legal da gravidez (Lei 27.610), método contraceptivo, fertilidade e reprodução assistida."],
+      "masking": ["As flags conservam sua forma; qualquer outro valor vira `Sin información`."]
+    },
+    "AR_SALUD_MENTAL": {
+      "title": "Saúde mental",
+      "what": ["Transtornos mentais, atendimento psiquiátrico ou psicológico, internação involuntária, tentativa de suicídio e uso problemático de substâncias (Lei 26.657)."],
+      "masking": ["As flags conservam sua forma; qualquer outro valor vira `Sin información`."]
+    },
+    "AR_FIN_SITUACION_CREDITICIA": {
+      "title": "Situação de crédito",
+      "what": ["A situação do devedor na Central de Deudores do BCRA — 1 normal, 2 risco baixo ou acompanhamento especial, 3 risco médio ou com problemas, 4 risco alto, 5 irrecuperável, 6 irrecuperável por disposição técnica —, os cheques devolvidos, os dias de atraso, a cobrança judicial e o score dos birôs de crédito."],
+      "masking": ["A situação é substituída dentro da sua faixa — 1–2, 3–4, 5–6 —, e a análise por faixa conserva sua forma; `Situación 4` continua escrito igual. Um score recebe outros dígitos com o mesmo tamanho; um status por extenso, outro da lista; uma flag continua flag."]
+    },
+    "AR_FIN_DEUDA": {
+      "title": "Dívidas",
+      "what": ["Saldos devedores, valores de empréstimos e parcelas, valores em atraso e limites de compra."],
+      "masking": ["Mapeado para um valor entre 10.000 e 500.000.000 de pesos, sem relação com o valor real."]
+    },
+    "AR_FIN_INGRESOS": {
+      "title": "Renda e remuneração",
+      "what": ["Salário básico, bruto ou líquido, remuneração tributável, vencimentos, renda familiar e faturamento anual."],
+      "masking": ["Mapeado para um valor entre 300.000 e 30.000.000 de pesos."]
+    },
+    "AR_FIN_PATRIMONIO": {
+      "title": "Patrimônio",
+      "what": ["Patrimônio, bens pessoais, valores venais e avaliações, saldos em contas e prazos fixos, posições em moeda estrangeira."],
+      "masking": ["Mapeado para um valor entre 1.000.000 e 3.000.000.000 de pesos."]
+    },
+    "AR_FIN_JUBILACION": {
+      "title": "Aposentadorias e benefícios",
+      "what": ["O valor da aposentadoria ou pensão, o de um auxílio ou benefício e a pensão alimentícia."],
+      "masking": ["Mapeado para um valor entre 250.000 e 12.000.000 de pesos."]
+    },
+    "AR_FIN_PROGRAMA_SOCIAL": {
+      "title": "Benefícios e programas sociais",
+      "what": ["Os benefícios da ANSES e os programas nacionais — Asignación Universal por Hijo e por Embarazo, Prestación Alimentar, Progresar, pensões não contributivas, PUAM, salário-família — e o nível de renda da segmentação de subsídios de energia, muitas vezes como flag. Receber a AUH diz que a pessoa tem filhos e trabalha na informalidade; uma pensão não contributiva, que tem uma deficiência."],
+      "masking": ["Uma flag continua flag e qualquer outro valor é trocado por um benefício da lista."]
+    },
+    "AR_FIN_MONOTRIBUTO": {
+      "title": "Categoria do monotributo",
+      "what": ["A categoria do Régimen Simplificado, de A a K, que a ARCA atribui pela receita bruta anual."],
+      "masking": ["A categoria é substituída dentro da sua faixa — A–D, E–H, I–K —; `Categoría C` continua escrito igual."]
+    },
+    "AR_FIN_VIVIENDA": {
+      "title": "Posse da moradia",
+      "what": ["A posse da moradia como o Censo 2022 pergunta: proprietário da moradia e do terreno ou só da moradia, inquilino, ocupante por empréstimo ou por trabalho."],
+      "masking": ["Trocada por outra condição da lista."]
+    },
+    "AR_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes",
+      "what": ["O atestado de antecedentes criminais do Registro Nacional de Reincidencia, as contravenções, o tipo de crime, a situação processual, a prisão preventiva, a condição de detido e os mandados de prisão."],
+      "masking": ["Substituído por uma situação genérica da lista — sem antecedentes, condenado, absolvido sumariamente —, seja qual for o desfecho; uma flag continua flag."]
+    },
+    "AR_PENAL_EXPEDIENTE": {
+      "title": "Processo e causa",
+      "what": ["O número do processo nos tribunais nacionais e federais — a sigla da câmara, o número e o ano, `CCC 12345/2023` —, a IPP da província de Buenos Aires (`PP-07-00-012345-23/00`) e os números de causa, inquérito e denúncia. As causas são consultadas on-line e levam às partes."],
+      "masking": ["O número é mapeado dígito a dígito; a sigla, o departamento judicial, a promotoria e o ano se mantêm. Os demais números são mascarados caractere a caractere."]
+    }
+  },
+  "closing": [
+    {
+      "title": "O dígito verificador do CUIT",
+      "body": [
+        "O algoritmo Check Digit do Masking Engine calcula um dígito módulo 11 como *onze menos o resto* e escreve o 10 como 0. Para o CUIT isso acerta em dez dos onze restos possíveis: quando o resto é 1, a ARCA não usa um dígito, muda o tipo — 20 e 27 passam a 23, 30 a 33, 23 a 24, 33 a 34 —, e o Check Digit escreveria 0. Um em cada onze CUITs mascarados seria inválido.",
+        "O set resolve isso em dois passos, sem tabelas:",
+        { "list": [
+          "Um Check Digit com os **pesos dobrados** mantém o tipo, mapeia os oito dígitos do DNI e escreve no lugar do dígito um dígito auxiliar. Como 2 × 1 ≡ 2 módulo 11, o auxiliar é 9 exatamente quando o resto do corpo mascarado com os pesos verdadeiros é 1.",
+          "Um Regex Decompose, quando o auxiliar é 9, reescreve o tipo e o dígito: mudar o tipo soma um múltiplo conhecido dos pesos, e o dígito novo fica determinado — 23 e 9 para um 20, 23 e 4 para um 27, 33 e 9 para um 30, 24 e 6 para um 23, 34 e 6 para um 33. Em qualquer outro caso aplica um Check Digit com os pesos verdadeiros sobre o corpo, que deixa como está, e recalcula o dígito."
+        ] },
+        "O corpo é mapeado com o mesmo Character Mapping do DNI: o CUIL de uma pessoa física continua contendo o seu DNI mascarado. O CBU e o CVU não têm esse problema — o módulo deles é 10 — e se resolvem com um único Check Digit sobre a conta."
+      ]
+    },
+    {
+      "title": "Onde as pessoas moram: localidades, partidos e código postal",
+      "body": [
+        "Com a população do Censo 2022 por gobierno local e por departamento, e a localização de cada um segundo o serviço Georef, o set conhece o tamanho, a província e a posição de 528 partidos, departamentos e comunas, de 2.280 gobiernos locales e das 4.027 localidades censais do INDEC.",
+        { "list": [
+          "Um **gobierno local** com menos de 20.000 habitantes vira o gobierno local mais próximo da mesma província com pelo menos 20.000. São 1.952, com 7 milhões de habitantes — 15% da população. El Chaltén (Santa Cruz) vira El Calafate; Tilcara (Jujuy), Libertador General San Martín; Ancasti (Catamarca), Valle Viejo.",
+          "Uma **localidade** segue o seu gobierno local. As que ficam fora de qualquer gobierno local — zonas rurais de Santiago del Estero, Córdoba ou da Patagônia — também são generalizadas, para o gobierno local grande mais próximo.",
+          "Um **partido ou departamento** com menos de 20.000 habitantes vira o mais próximo da mesma província com pelo menos 20.000. São 203, com 2 milhões de habitantes.",
+          "A **província** se mantém. Todas têm pelo menos um gobierno local de 20.000 habitantes.",
+          "A distância é medida entre os centroides do Georef, em linha reta.",
+          "Há nomes repetidos — San José, San Martín, Villa Nueva, 25 de Mayo — e outros que só diferem num acento. Um nome só é generalizado quando todos os lugares que o têm são pequenos, e então segue o maior deles. Com a província (`San José - Entre Ríos`, `San José (Entre Ríos)`, `San José, Entre Ríos`) vale a mesma regra dentro da província.",
+          "Os **códigos do INDEC** seguem a mesma tabela, e o nome e o código de uma pessoa continuam coincidindo.",
+          "Na província de Buenos Aires o gobierno local é o partido: uma localidade pequena vira o nome do partido mais próximo, que nem sempre é o da sua cidade principal — `Carhué` vira `Saavedra`, cuja sede é Pigüé.",
+          "O **código postal** conserva a província e os dois primeiros dígitos."
+        ] },
+        "Os nomes de lugares que também são nomes ou sobrenomes de pessoas, e os de províncias, ficam fora da lista de detecção, para que uma coluna de sobrenomes não seja tomada por localidades."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        { "list": [
+          "**Colunas binárias** — fotos do DNI, selfies de validação biométrica, digitais, PDFs de prontuários em BLOB — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
+          "**Uma localidade pequena dentro de um gobierno local grande** se mantém: o censo publica população por gobierno local, não por localidade. Um paraje rural de um partido grande conserva o nome.",
+          "**O DNI de sete dígitos** é mascarado com sete dígitos; dentro do CUIL ele tem um zero na frente e é mascarado com oito. O DNI e o CUIL dessa pessoa deixam de coincidir.",
+          "**O dígito verificador em coluna própria** não é recalculado: é mascarado e deixa de corresponder ao CUIT mascarado.",
+          "**A província, o banco do CBU e o código de área do telefone se mantêm.**",
+          "**Data Cleansing deixa passar o que não conhece**: uma localidade escrita de uma forma que a tabela não tem — abreviada, com erro de grafia — passa sem mudança.",
+          "**O texto livre** é redigido palavra por palavra: um celular escrito com espaços não é encontrado, e um nome que também é palavra comum (`Luz`, `Rosa`, `Paz`) é redigido onde aparecer.",
+          "**Crianças e adolescentes** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam os 13, 16 ou 18 anos, mas algumas cruzam. Onde importar, divida a regra por faixa etária com Multi-Column Condition.",
+          "**Os endereços** são trocados como uma linha inteira. Rua, número, bairro, localidade e código postal em colunas separadas são mascarados de forma independente e deixam de formar um endereço coerente.",
+          "**A chave do engine** religa os valores mascarados à produção para quem tem as duas coisas: nesse caso o resultado não está dissociado e continua sendo dado pessoal. Guarde a chave longe de quem usa a cópia."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        { "list": [
+          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
+          "O profiling foi simulado em 160 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "As tabelas que generalizam lugares foram auditadas para os 528 partidos e departamentos e para os 2.280 gobiernos locales e as 4.027 localidades: pelo nome, pelo nome com a província e pelo código.",
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 240 CUITs de todos os tipos — inclusive os que mudam de tipo — e 150 CBUs quanto a validade e colisões; 150 DNIs quanto a colisões; e 20 pessoas cujo DNI e CUIL precisam continuar coincidindo. Cada algoritmo também mascarou o seu próprio valor de exemplo."
+        ] },
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        { "list": [
+          "Lei 25.326 de Proteção dos Dados Pessoais e Decreto 1558/2001 (InfoLEG). Constituição Nacional, art. 43. Lei 27.483 (Convenção 108) e Lei 27.699 (Convenção 108+). Código Penal, arts. 117 bis e 157 bis.",
+          "Agencia de Acceso a la Información Pública: Resolução 47/2018, medidas de segurança recomendadas (Anexo I, item H); Resolução 126/2024, classificação de infrações e gradação de sanções. Projetos de lei 644-S-2025, 1948-D-2025 e 3397-D-2026. Comissão Europeia, Decisão 2003/490/CE e relatório de revisão de 2024.",
+          "Leis 26.529 (direitos do paciente), 26.657 (saúde mental), 27.675 (HIV, hepatites, tuberculose e ISTs), 27.610 (interrupção voluntária da gravidez), 26.743 (identidade de gênero), 26.485 (violência contra as mulheres), 26.364 (tráfico de pessoas), 22.431 (deficiência), 24.557 (riscos do trabalho). Decreto 476/2021 (DNI com X).",
+          "INDEC: Censo Nacional de Población, Hogares y Viviendas 2022, resultados definitivos por departamento e por gobierno local; localidades censais. Serviço de normalização de dados geográficos Georef (datos.gob.ar). RENAPER: nomes de pessoas físicas (datos.gob.ar).",
+          "ARCA (ex-AFIP): CUIT, CUIL e regime simplificado. BCRA: Central de Deudores e classificação de devedores; Clave Bancaria Uniforme e Clave Virtual Uniforme. ANSES: benefícios. Correo Argentino: Código Postal Argentino. Superintendencia de Servicios de Salud: Registro Nacional de Obras Sociales."
+        ] }
+      ]
+    }
+  ]
+}

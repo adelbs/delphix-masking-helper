@@ -14,7 +14,7 @@ executar um masking job.
 Cobre também a descoberta de dado sensível: os **domínios** a que uma coluna pode pertencer, os
 **classifiers** que decidem isso — cada um testável contra uma coluna que você descreve — e os
 **profile sets** que um job de profiling roda. Profile sets prontos para as leis de proteção de
-dados do **Chile, México, Panamá e Belize** vêm com a ferramenta, cada um carregado com um clique
+dados do **Chile, México, Panamá, Belize, Brasil, Colômbia, Argentina, El Salvador, Peru e Equador** vêm com a ferramenta, cada um carregado com um clique
 e documentado em PDF.
 
 > **A nomenclatura segue a da Delphix.** Um **framework** é uma técnica de mascaramento que o
@@ -408,7 +408,7 @@ ferramenta lista o que seria substituído e pergunta antes. O profile set leva o
 versão no nome (`CL - Ley 21.719 - v3`), e o cartão mostra a versão que vem com a ferramenta. O
 formato está em `presets/README.md`.
 
-Hoje são quatro, um por país, todos com limiar de 60 no profile set. Os números abaixo são do pacote
+Hoje são dez, um por país, todos com limiar de 60 no profile set. Os números abaixo são do pacote
 estendido; cada pacote essencial tem de 11 a 13 domínios:
 
 | Profile set | Lei | Domínios | Classifiers | Algoritmos | Documentação |
@@ -417,10 +417,16 @@ estendido; cada pacote essencial tem de 11 a 13 domínios:
 | [México](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 153 | 154 | [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [en](presets/mexico-lfpdppp/doc.en.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
 | [Panamá](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 135 | 142 | [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) · [en](presets/panama-ley-81/doc.en.pdf) · [es](presets/panama-ley-81/doc.es.pdf) |
 | [Belize](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 124 | 90 | [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) · [en](presets/belize-dpa-2021/doc.en.pdf) · [es](presets/belize-dpa-2021/doc.es.pdf) |
+| [Brasil](presets/brazil-lgpd/) | LGPD (Lei 13.709/2018) | 84 | 148 | 162 | [pt-BR](presets/brazil-lgpd/doc.pt-BR.pdf) · [en](presets/brazil-lgpd/doc.en.pdf) · [es](presets/brazil-lgpd/doc.es.pdf) |
+| [Colômbia](presets/colombia-ley-1581/) | Ley 1581 de 2012 | 82 | 143 | 144 | [pt-BR](presets/colombia-ley-1581/doc.pt-BR.pdf) · [en](presets/colombia-ley-1581/doc.en.pdf) · [es](presets/colombia-ley-1581/doc.es.pdf) |
+| [Argentina](presets/argentina-ley-25326/) | Ley 25.326 | 83 | 148 | 119 | [pt-BR](presets/argentina-ley-25326/doc.pt-BR.pdf) · [en](presets/argentina-ley-25326/doc.en.pdf) · [es](presets/argentina-ley-25326/doc.es.pdf) |
+| [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 143 | 110 | [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) · [en](presets/elsalvador-ley-144/doc.en.pdf) · [es](presets/elsalvador-ley-144/doc.es.pdf) |
+| [Peru](presets/peru-ley-29733/) | Ley 29733 | 85 | 144 | 122 | [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) · [en](presets/peru-ley-29733/doc.en.pdf) · [es](presets/peru-ley-29733/doc.es.pdf) |
+| [Equador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 141 | 112 | [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) · [en](presets/ecuador-lopdp/doc.en.pdf) · [es](presets/ecuador-lopdp/doc.es.pdf) |
 
 Cada um agrupa os domínios em identificadores diretos, quase-identificadores e os dados sensíveis
 que a sua lei nomeia, e mascara os identificadores nacionais com dígito verificador válido onde o
-número tem um — o RUT do Chile, o CURP e o RFC do México, o RUC de pessoa natural no Panamá. O
+número tem um — o RUT do Chile, o CURP e o RFC do México, o RUC de pessoa natural no Panamá, o CPF, o CNPJ (inclusive o alfanumérico), o PIS, o título de eleitor e o CNS no Brasil, o NIT na Colômbia, o CUIT, o CUIL, o CBU e o CVU na Argentina, o DUI e o NIT em El Salvador, o DNI e o RUC no Peru, a cédula e o RUC no Equador. O
 README de cada pasta explica o desenho e os limites; o PDF lista cada domínio, classifier,
 algoritmo e arquivo, com exemplos mascarados.
 

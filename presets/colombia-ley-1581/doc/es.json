@@ -1,0 +1,604 @@
+{
+  "title": "Colombia — Ley 1581 de 2012",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales colombianos: cédula y NIT con dígito de verificación válido, cuasi-identificadores, los datos sensibles del artículo 5, víctimas del conflicto armado, datos financieros de la Ley 1266 de 2008 y antecedentes penales.",
+  "sections": [
+    {
+      "title": "Acerca de este profile set",
+      "body": [
+        "Este profile set encuentra los datos personales de una base de datos colombiana y los enmascara, para que una copia no productiva — de pruebas, desarrollo, capacitación o análisis — deje de identificar a alguien.",
+        "Enmascarar solo nombres y cédulas no basta: una fecha de nacimiento, un sexo y un municipio pequeño ya apuntan a una persona. El set trabaja en las capas donde está el riesgo:",
+        { "list": [
+          "**Identificadores directos** — cédula, tarjeta de identidad y NUIP, NIT, documentos de extranjeros (cédula de extranjería, PPT, PEP), pasaporte, registro civil, tarjeta profesional, nombres, contacto, dirección, cuentas, tarjetas y llave Bre-B, dispositivos, vehículos, inmuebles, texto libre.",
+          "**Cuasi-identificadores** — fecha de nacimiento, edad, sexo, municipio y código DIVIPOLA, código postal, barrio, vereda, nacionalidad, estado civil, ocupación, empleador, escolaridad.",
+          "**Datos sensibles** — los del artículo 5: origen racial o étnico, orientación política, convicciones religiosas o filosóficas, pertenencia a sindicatos, a organizaciones sociales y de derechos humanos y a partidos, vida sexual y datos biométricos — y, porque la lista es enunciativa, datos genéticos, identidad de género, la condición de víctima del conflicto armado y la de persona en proceso de reincorporación.",
+          "**Datos de salud** — también sensibles por el artículo 5, en un grupo propio: historia clínica, afiliación al sistema de salud, CIE-10, procedimientos CUPS, medicamentos, exámenes, grupo sanguíneo, discapacidad, salud ocupacional, reproductiva y mental.",
+          "**Datos financieros** — los de la Ley 1266 de 2008: reportes en centrales de riesgo, deudas, ingresos, patrimonio, pensión; y los que revelan la situación socioeconómica: estrato, Sisbén IV, programas sociales, tenencia de la vivienda.",
+          "**Antecedentes penales y procesos** — antecedentes judiciales, disciplinarios y fiscales, medidas correctivas, situación jurídica y números de radicado."
+        ] },
+        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos en los que esos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa.",
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza por sí solo; uno ambiguo — `NOMBRE`, `DOCUMENTO`, `CARGO`, `PROCESO` — necesita que los valores concuerden. Una columna de nombre sin sentido (`CAMPO1`, `OBS`) igual se encuentra cuando los valores tienen formato o vocabulario reconocible: una cédula con puntos, un NIT, una dirección con nomenclatura, una placa, un municipio.",
+        "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas colombianos (`NRO_DOCUMENTO`, `CC_CLIENTE`, `FEC_NAC`, `COD_MPIO`, `DX_PRINCIPAL`, `ESTRATO`, `GRUPO_SISBEN`) y en inglés.",
+        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOB, imágenes, PDF). Los procesos de vinculación suelen guardar la foto de la cédula — con la huella y el grupo sanguíneo — y una selfie de validación biométrica. Reporte esas columnas como riesgo residual." }
+      ]
+    },
+    {
+      "title": "La Ley 1581 de 2012 en resumen",
+      "body": [
+        "La Ley Estatutaria 1581 del 17 de octubre de 2012 — Diario Oficial 48.587 — dicta las disposiciones generales para la protección de datos personales y desarrolla el derecho de hábeas data del artículo 15 de la Constitución. Pasó por control previo de constitucionalidad (sentencia C-748 de 2011) y está reglamentada por el Decreto 1377 de 2013, compilado en el Decreto Único Reglamentario 1074 de 2015. La autoridad es la **Superintendencia de Industria y Comercio (SIC)**, por medio de su Delegatura para la Protección de Datos Personales.",
+        "Lo que importa para una copia de datos de producción:",
+        { "list": [
+          "**Dato personal** es cualquier información vinculada o que pueda asociarse a una o varias personas naturales determinadas o determinables (art. 3, c). Un dato que ya no puede asociarse a nadie deja de serlo.",
+          "**Datos sensibles** son los que afectan la intimidad del titular o cuyo uso indebido puede generar su discriminación, *tales como* los que revelen el origen racial o étnico, la orientación política, las convicciones religiosas o filosóficas, la pertenencia a sindicatos, organizaciones sociales, de derechos humanos o que promueva intereses de cualquier partido político o que garanticen los derechos de los partidos de oposición, y los datos relativos a la salud, a la vida sexual y los biométricos (art. 5). Su tratamiento está **prohibido** salvo las excepciones del artículo 6; con fines históricos, estadísticos o científicos se exige la **supresión de la identidad** de los titulares (art. 6, e).",
+          "**Niños, niñas y adolescentes.** El tratamiento de sus datos está proscrito salvo los de naturaleza pública (art. 7); la Corte Constitucional lo admitió cuando responde a su interés superior y respeta sus derechos (C-748 de 2011), y el Decreto 1377 fija los requisitos.",
+          "**Principios.** Finalidad, libertad, acceso y circulación restringida, **seguridad** y **confidencialidad** (art. 4): quien interviene en el tratamiento debe impedir la consulta, el uso o el acceso no autorizado o fraudulento, y guardar reserva incluso después de terminada su labor. Una base de pruebas con datos reales, abierta a desarrolladores y proveedores, difícilmente cumple ambos.",
+          "**Incidentes de seguridad.** El responsable informa a la SIC las violaciones a los códigos de seguridad (art. 17, n); la SIC fija un plazo de quince días hábiles desde que se detectan, por el Registro Nacional de Bases de Datos.",
+          "**Sanciones.** Multas personales e institucionales de hasta 2.000 salarios mínimos mensuales — en 2026, unos 3.500 millones de pesos —, suspensión de las actividades de tratamiento hasta por seis meses, cierre temporal y **cierre inmediato y definitivo** de la operación que involucre datos sensibles (art. 23). Además, obtener, compilar, vender o divulgar datos personales sin estar facultado es delito: el artículo 269F del Código Penal (Ley 1273 de 2009) lo castiga con 48 a 96 meses de prisión."
+        ] },
+        "**Datos financieros.** Las bases de datos reguladas por la Ley 1266 de 2008 — hábeas data financiero, crediticio y comercial — quedan fuera de la Ley 1581, pero sus principios les aplican (art. 2, e y parágrafo). La Ley 2157 de 2021 limita la permanencia del dato negativo al doble del tiempo de la mora, con un máximo de cuatro años.",
+        "**Reforma archivada.** En agosto de 2025 se radicaron en la Cámara los proyectos de ley estatutaria 214 y 274 de 2025, acumulados, que actualizan la Ley 1581 (datos genéticos y biométricos definidos, perfilamiento, decisiones automatizadas, multas mayores). El proyecto fue aprobado en primer debate en octubre de 2025 y en septiembre de 2026 figura como **archivado** en la página de la Cámara: una ley estatutaria debe aprobarse dentro de una sola legislatura (art. 153 de la Constitución). Este set sigue el texto vigente."
+      ]
+    },
+    {
+      "title": "Anonimización, seudonimización y copias no productivas",
+      "body": [
+        "La Ley 1581 no tiene una cláusula de anonimización: la consecuencia se deduce de la definición de dato personal. Si un dato ya no puede asociarse a una persona determinada o determinable, no es dato personal. La **Guía de Anonimización de Datos Estructurados** del Archivo General de la Nación (2020), elaborada con el Ministerio TIC, la SIC, Función Pública, el DNP y el DANE, precisa la diferencia: la **seudonimización** sustituye un atributo por otro, no produce registros completamente anónimos y *no se puede afirmar que sea un método de anonimización*, aunque reduce el riesgo de identificación.",
+        "Los algoritmos de este set son deterministas para la clave del Masking Engine: la misma cédula se enmascara igual en todas las tablas, lo que mantiene los joins. Por eso, para quien tiene la clave **y** la producción, la copia enmascarada puede volver a vincularse — está seudonimizada y sigue siendo dato personal. Para quien tiene solo la copia, los identificadores directos fueron reemplazados y los cuasi-identificadores generalizados.",
+        { "list": [
+          "Guarde la clave del engine fuera del alcance de quien usa la copia enmascarada.",
+          "No entregue la copia a quien también accede a producción sin necesidad.",
+          "Revise los cuasi-identificadores que el set no conoce. La guía de la AGN y la del DANE (2024) recomiendan medir el riesgo de reidentificación antes de publicar o compartir."
+        ] }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. La cédula es la llave de casi todo registro colombiano, y el mismo número acompaña a la persona toda la vida: el NUIP del registro civil es el de la tarjeta de identidad y luego el de la cédula, el de la licencia de conducción y el de la libreta militar, y con un dígito de verificación es su NIT. Se enmascara igual en todas partes, y el NIT sale con dígito de verificación válido, porque las aplicaciones lo validan."
+      ],
+      "domains": ["CO_L1_CEDULA", "CO_L1_NIT", "CO_L1_DOCUMENTO_EXTRANJERO", "CO_L1_PASAPORTE", "CO_L1_REGISTRO_CIVIL", "CO_L1_TARJETA_PROFESIONAL", "CO_L1_NOMBRE", "CO_L1_APELLIDO", "CO_L1_NOMBRE_COMPLETO", "CO_L1_EMAIL", "CO_L1_TELEFONO", "CO_L1_DIRECCION", "CO_L1_DIRECCION_COMPLEMENTO", "CO_L1_CUENTA_BANCARIA", "CO_L1_TARJETA", "CO_L1_LLAVE_BREB", "CO_L1_IP", "CO_L1_DISPOSITIVO", "CO_L1_PLACA", "CO_L1_VEHICULO", "CO_L1_INMUEBLE", "CO_L1_CONTRATO", "CO_L1_USUARIO", "CO_L1_CREDENCIAL", "CO_L1_GEOLOCALIZACION", "CO_L1_TEXTO_LIBRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por sí solos, pero sí en combinación. La DIVIPOLA tiene 1.102 municipios, Bogotá y 20 áreas no municipalizadas; 694 de esas 1.122 unidades tienen menos de 20.000 habitantes en la proyección del DANE para 2026, y en las más pequeñas viven unos cientos. Una fecha de nacimiento, un sexo y uno de esos municipios apuntan a un puñado de personas. Estos atributos se generalizan o desplazan en lugar de reemplazarse, y el dato conserva su valor analítico."
+      ],
+      "domains": ["CO_L2_FECHA_NACIMIENTO", "CO_L2_ANIO_NACIMIENTO", "CO_L2_EDAD", "CO_L2_FECHA_EVENTO", "CO_L2_SEXO", "CO_L2_MUNICIPIO", "CO_L2_CODIGO_MUNICIPIO", "CO_L2_CODIGO_POSTAL", "CO_L2_BARRIO", "CO_L2_VEREDA", "CO_L2_NACIONALIDAD", "CO_L2_ESTADO_CIVIL", "CO_L2_OCUPACION", "CO_L2_EMPLEADOR", "CO_L2_ESCOLARIDAD", "CO_L2_INSTITUCION_EDUCATIVA", "CO_L2_PERSONAS_A_CARGO"]
+    },
+    {
+      "id": "L3",
+      "title": "Datos sensibles",
+      "intro": [
+        "Las categorías del artículo 5 que no son de salud — que tienen grupo propio: origen racial o étnico, orientación política, convicciones religiosas o filosóficas, pertenencia a sindicatos, a organizaciones sociales y de derechos humanos y a partidos, vida sexual y datos biométricos. La lista es enunciativa (*tales como*): el set incluye los datos genéticos, la orientación sexual y la identidad de género, y dos categorías que en Colombia exponen a discriminación y a violencia — la condición de **víctima del conflicto armado**, cuya información es reservada (Ley 1448 de 2011, arts. 29 y 156), y la de **persona en proceso de reincorporación**. Las columnas categóricas conservan su forma: una bandera S/N sigue siendo bandera, un código se reemplaza por otro del mismo catálogo y cualquier otro valor por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Sin información`."
+      ],
+      "domains": ["CO_L3_GRUPO_ETNICO", "CO_L3_PUEBLO_INDIGENA", "CO_L3_LENGUA_NATIVA", "CO_L3_RELIGION", "CO_L3_CONVICCION_FILOSOFICA", "CO_L3_ORIENTACION_POLITICA", "CO_L3_AFILIACION_PARTIDO", "CO_L3_SINDICATO", "CO_L3_ORGANIZACION_SOCIAL", "CO_L3_BIOMETRICO", "CO_L3_GENETICO", "CO_L3_ORIENTACION_SEXUAL", "CO_L3_VIDA_SEXUAL", "CO_L3_IDENTIDAD_GENERO", "CO_L3_VICTIMA_CONFLICTO", "CO_L3_REINCORPORACION"]
+    },
+    {
+      "id": "SALUD",
+      "title": "Datos de salud",
+      "intro": [
+        "Los datos relativos a la salud son sensibles (art. 5), y la historia clínica es además un documento reservado que solo puede conocerse con autorización del paciente o en los casos previstos por la ley. El grupo cubre lo que guardan las IPS, las EPS, los laboratorios, las ARL y el área de seguridad y salud en el trabajo: identificadores, afiliación, diagnósticos, procedimientos, medicamentos, exámenes, grupo sanguíneo, discapacidad, salud ocupacional, reproductiva y mental."
+      ],
+      "domains": ["CO_SALUD_IDENTIFICADOR", "CO_SALUD_AFILIACION", "CO_SALUD_DIAGNOSTICO", "CO_SALUD_PROCEDIMIENTO", "CO_SALUD_MEDICAMENTO", "CO_SALUD_TEXTO_CLINICO", "CO_SALUD_RESULTADO_EXAMEN", "CO_SALUD_GRUPO_SANGUINEO", "CO_SALUD_DISCAPACIDAD", "CO_SALUD_OCUPACIONAL", "CO_SALUD_REPRODUCTIVA", "CO_SALUD_MENTAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos financieros y socioeconómicos",
+      "intro": [
+        "La información financiera, crediticia y comercial tiene su propio régimen de hábeas data (Ley 1266 de 2008, modificada por la Ley 2157 de 2021), y un reporte negativo es de los datos que más consecuencias tienen para una persona. Colombia suma dos indicadores que dicen mucho de quien vive en una vivienda: el **estrato socioeconómico** de 1 a 6 y el grupo del **Sisbén IV**, que decide el acceso al régimen subsidiado de salud y a los programas sociales. Las categorías se reemplazan dentro de su propia notación; los montos se mapean a un rango plausible sin relación con el valor real."
+      ],
+      "domains": ["CO_FIN_CREDITO", "CO_FIN_DEUDA", "CO_FIN_INGRESOS", "CO_FIN_PATRIMONIO", "CO_FIN_PENSION", "CO_FIN_ESTRATO", "CO_FIN_SISBEN", "CO_FIN_PROGRAMA_SOCIAL", "CO_FIN_VIVIENDA"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes penales y procesos",
+      "intro": [
+        "Fuera de la lista del artículo 5, pero para la Corte Constitucional los antecedentes penales son *el dato negativo por excelencia* (SU-458 de 2012): su circulación debe restringirse a quien tiene un interés legítimo. Reciben el mismo cuidado que los datos sensibles."
+      ],
+      "domains": ["CO_PENAL_ANTECEDENTES", "CO_PENAL_RADICADO"]
+    }
+  ],
+  "domains": {
+    "CO_L1_CEDULA": {
+      "title": "Cédula y documento de identidad",
+      "what": [
+        "El número de la cédula de ciudadanía de la Registraduría Nacional del Estado Civil — de 3 a 10 dígitos, escrito con puntos de miles, `79.456.123`, `1.023.456.789` —, y los que comparten su número: la tarjeta de identidad y el NUIP de los menores, la licencia de conducción y la libreta militar.",
+        "Las columnas `NUMERO_DOCUMENTO` suelen mezclar cédulas, tarjetas de identidad, NIT con su dígito y pasaportes: cada valor se enmascara según su forma."
+      ],
+      "masking": [
+        "Dígito a dígito, manteniendo la longitud y los puntos. El mapeo es uno a uno: una cédula usada como llave no colisiona, y el mismo número se enmascara igual en la tarjeta de identidad, la licencia y la libreta militar. Un valor con dígito de verificación se enmascara como NIT; uno con letras, carácter a carácter."
+      ]
+    },
+    "CO_L1_NIT": {
+      "title": "NIT",
+      "what": [
+        "El Número de Identificación Tributaria del RUT de la DIAN con su dígito de verificación, `800.197.268-4`. El de una persona natural es su cédula más el dígito; el de una persona jurídica tiene nueve dígitos y empieza por 8 o 9.",
+        "El dígito se calcula con los pesos 3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67 y 71 desde la derecha, módulo 11: si el residuo es 0 o 1 el dígito es el residuo, y si no, once menos el residuo."
+      ],
+      "masking": [
+        "El cuerpo se mapea dígito a dígito — con el mismo algoritmo que la cédula, así el NIT de una persona sigue coincidiendo con su cédula — y el dígito de verificación se recalcula. Todo NIT enmascarado es válido y el mapeo es uno a uno. Vea *El dígito de verificación del NIT*."
+      ]
+    },
+    "CO_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Documentos de extranjeros",
+      "what": ["La cédula de extranjería, el Permiso por Protección Temporal (PPT) de los migrantes venezolanos, el Permiso Especial de Permanencia (PEP), el salvoconducto y el número de visa."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_PASAPORTE": {
+      "title": "Pasaporte",
+      "what": ["Números de pasaporte colombianos — dos letras y seis o siete dígitos, `AB123456` — y extranjeros."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_REGISTRO_CIVIL": {
+      "title": "Registro civil",
+      "what": ["El indicativo serial de los registros civiles de nacimiento, matrimonio y defunción, y el número del certificado de nacido vivo o de defunción."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_TARJETA_PROFESIONAL": {
+      "title": "Tarjeta profesional",
+      "what": ["El número de la tarjeta o matrícula profesional y del registro en el ReTHUS del talento humano en salud. Los consejos profesionales publican estos registros con el nombre de la persona."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_NOMBRE": {
+      "title": "Nombre",
+      "what": ["El nombre de pila, uno o dos: `Luz`, `Juan Carlos`, `María del Pilar`."],
+      "masking": ["Palabra por palabra, reemplazando cada nombre por uno de la lista. `de`, `del` y `la` se quedan en su lugar. Más de tres palabras se enmascaran carácter a carácter."]
+    },
+    "CO_L1_APELLIDO": {
+      "title": "Apellido",
+      "what": ["Los apellidos — el primero, del padre, y el segundo, de la madre —, en columnas separadas o juntos, y el apellido de casada: `López de Gómez`."],
+      "masking": ["Palabra por palabra, reemplazando cada apellido por uno de la lista; las partículas se quedan en su lugar."]
+    },
+    "CO_L1_NOMBRE_COMPLETO": {
+      "title": "Nombre completo",
+      "what": [
+        "Nombres y apellidos en una sola columna: `Juan Carlos Rodríguez Gómez`. También los de la madre, el padre, el acudiente, el cónyuge, la referencia personal o familiar, y el nombre identitario de una persona trans.",
+        "Una columna llamada solo `NOMBRE` puede tener nombres de pila o nombres completos: los valores deciden entre los dos dominios."
+      ],
+      "masking": [
+        "En el orden colombiano: dos palabras son nombre y apellido; tres, un nombre y dos apellidos; cuatro, dos y dos; cinco, dos nombres y tres palabras de apellidos. `APELLIDOS, NOMBRES` con coma, como en los listados, también se reconoce. El resultado es un nombre plausible, nunca el original."
+      ]
+    },
+    "CO_L1_EMAIL": {
+      "title": "Correo electrónico",
+      "what": ["Direcciones de correo personales y corporativas."],
+      "masking": ["El usuario y el dominio se mapean carácter a carácter, y el dominio de nivel superior — `.com`, `.com.co` — pasa a `.test`, reservado para pruebas: una dirección enmascarada nunca entrega un mensaje."]
+    },
+    "CO_L1_TELEFONO": {
+      "title": "Teléfono",
+      "what": ["Números de diez dígitos desde el plan de numeración de 2021: celulares que empiezan por 3 (`310 456 7890`) y fijos que empiezan por 60 y el indicativo de la región (`601 345 6789` en Bogotá, `604` en Antioquia), con o sin `+57`. También fijos de siete dígitos anteriores a 2021."],
+      "masking": ["El `+57`, los tres primeros dígitos — el rango del operador o la región — y los separadores se mantienen; los otros siete dígitos se mapean."]
+    },
+    "CO_L1_DIRECCION": {
+      "title": "Dirección",
+      "what": ["La dirección con la nomenclatura urbana — la vía, su número, la vía que cruza y la distancia a ella: `Carrera 7 # 32-16`, `Cl 100 No. 19-54 Apto 802` —, que ubica una puerta en una cuadra, y las direcciones rurales con vereda, finca o kilómetro."],
+      "masking": ["La línea entera se reemplaza por una dirección colombiana ficticia con la misma nomenclatura. Barrio, vereda, municipio y código postal en columnas propias los tratan sus dominios."]
+    },
+    "CO_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento de la dirección",
+      "what": ["Apartamento, interior, torre, bloque, manzana, lote, piso u oficina en columnas propias."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_CUENTA_BANCARIA": {
+      "title": "Cuenta bancaria",
+      "what": ["Números de cuentas de ahorros y corrientes, depósitos de bajo monto y billeteras. El código del banco no es dato personal y no tiene dominio."],
+      "masking": ["Los dígitos se mapean; los separadores se mantienen."]
+    },
+    "CO_L1_TARJETA": {
+      "title": "Tarjeta de pago",
+      "what": ["Números de tarjetas de crédito y débito, reconocidos por el algoritmo de Luhn."],
+      "masking": ["Payment Card: otro número que pasa el algoritmo de Luhn. Solo los valores con forma de tarjeta llegan a él."]
+    },
+    "CO_L1_LLAVE_BREB": {
+      "title": "Llave Bre-B",
+      "what": ["La llave del sistema de pagos inmediatos Bre-B del Banco de la República: el número de un documento de identidad, un celular, un correo electrónico o una llave alfanumérica que empieza con `@`."],
+      "masking": ["Cada tipo de llave se enmascara como su dominio: el documento dígito a dígito, el celular manteniendo el rango, el correo con `.test`, la llave alfanumérica carácter a carácter manteniendo la `@`. Una llave con la cédula y la cédula de la misma persona siguen coincidiendo."]
+    },
+    "CO_L1_IP": {
+      "title": "Dirección IP",
+      "what": ["Direcciones IPv4 e IPv6 de registros de acceso y transacciones."],
+      "masking": ["Cada octeto IPv4 se mapea a 1–254; una IPv6 se mapea manteniendo sus caracteres hexadecimales."]
+    },
+    "CO_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": ["IMEI — que en Colombia se registra ante los operadores contra hurto —, IMSI, ICCID, dirección MAC, identificadores publicitarios, cookies y sesiones."],
+      "masking": ["Carácter a carácter, con los dígitos hexadecimales hexadecimales: una MAC sigue siendo MAC."]
+    },
+    "CO_L1_PLACA": {
+      "title": "Placa de vehículo",
+      "what": ["Placas de automóviles, tres letras y tres dígitos (`KDZ123`), y de motocicletas, tres letras, dos dígitos y una letra (`XYZ12D`). El RUNT lleva de la placa al propietario."],
+      "masking": ["Letras pasan a letras y dígitos a dígitos, posición por posición, con el guion: el formato de la placa se mantiene."]
+    },
+    "CO_L1_VEHICULO": {
+      "title": "Vehículo",
+      "what": ["El VIN o número de chasis, el número de motor y el de la licencia de tránsito."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_INMUEBLE": {
+      "title": "Inmueble",
+      "what": ["El folio de matrícula inmobiliaria — el código de la oficina de registro y un número, `50C-1234567` —, el número predial nacional de 30 dígitos, que empieza por el código DIVIPOLA, y la cédula o el código catastral. Los certificados de tradición son públicos y llevan al propietario."],
+      "masking": ["La oficina de registro y el municipio se mantienen; el resto se mapea dígito a dígito."]
+    },
+    "CO_L1_CONTRATO": {
+      "title": "Número de contrato y matrícula",
+      "what": ["Números de contrato, póliza, obligación, crédito, suscriptor o cuenta contrato de servicios públicos (NIC, NIU), matrícula de estudiante y códigos de cliente o empleado."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato. El mapeo es determinista, así que los joins siguen funcionando."]
+    },
+    "CO_L1_USUARIO": {
+      "title": "Usuario y redes sociales",
+      "what": ["Login, alias y perfiles en redes sociales."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_L1_CREDENCIAL": {
+      "title": "Credenciales",
+      "what": ["Contraseñas y sus hashes, PIN, códigos de seguridad y OTP, CVV, tokens, claves de API y respuestas secretas."],
+      "masking": ["Cada carácter pasa a `X`. Una credencial no tiene uso en una copia de pruebas, y un hash enmascarado carácter a carácter todavía podría atacarse."]
+    },
+    "CO_L1_GEOLOCALIZACION": {
+      "title": "Geolocalización",
+      "what": ["Latitud y longitud, juntas o en columnas separadas, de aplicaciones, visitas, domicilios y georreferenciación de predios."],
+      "masking": ["La parte entera y el primer decimal se mantienen — unos 11 km — y los demás decimales se mapean: el lugar se generaliza, no se desplaza lejos."]
+    },
+    "CO_L1_TEXTO_LIBRE": {
+      "title": "Texto libre",
+      "what": ["Observaciones, descripciones de PQRS, relatos de hechos, justificaciones y mensajes donde se escribe cualquier cosa — incluidos cédula, celular y nombre."],
+      "masking": ["Free Text Redaction: cédulas con puntos, NIT, números de 6 a 11 dígitos, correo, celulares, tarjetas, placas e IP pasan a `[DATO]`; nombres y apellidos de la lista pasan a `[NOMBRE]`. El resto del texto se mantiene."]
+    },
+    "CO_L2_FECHA_NACIMIENTO": {
+      "title": "Fecha de nacimiento",
+      "what": ["La fecha de nacimiento, como fecha, timestamp o texto."],
+      "masking": ["Desplazada hasta 60 días hacia cualquier lado. Edades y años escolares cambian para pocas personas; la fecha sigue siendo plausible y el mismo nacimiento se desplaza igual en todas las tablas."]
+    },
+    "CO_L2_ANIO_NACIMIENTO": {
+      "title": "Año de nacimiento",
+      "what": ["El año de nacimiento en columna propia."],
+      "masking": ["La década se mantiene y el último dígito se mapea: `1985` pasa a un año de 1980 a 1989."]
+    },
+    "CO_L2_EDAD": {
+      "title": "Edad",
+      "what": ["La edad en años, también grupo etario o quinquenio."],
+      "masking": ["La decena se mantiene y la unidad se mapea (37 pasa a 30–39). Cien años o más pasan a 90: las edades raras identifican."]
+    },
+    "CO_L2_FECHA_EVENTO": {
+      "title": "Fechas de eventos personales",
+      "what": ["Fechas que dicen algo de la persona: defunción, matrimonio, ingreso y retiro laboral, pensión, hospitalización y egreso, diagnóstico, parto, captura, condena, expedición de la cédula, desplazamiento, incapacidad."],
+      "masking": ["Desplazadas hasta 30 días hacia cualquier lado. La fecha de expedición de la cédula se pide como dato de validación de identidad: enmascarada, deja de servir para suplantar."]
+    },
+    "CO_L2_SEXO": {
+      "title": "Sexo",
+      "what": ["El sexo como lo registra el sistema: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` o los códigos 1 y 2."],
+      "masking": ["Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`."]
+    },
+    "CO_L2_MUNICIPIO": {
+      "title": "Municipio",
+      "what": ["El municipio de residencia, de nacimiento, de expedición del documento o de ocurrencia, por el nombre — solo o con el departamento, `La Unión - Sucre`, `La Unión (Sucre)`."],
+      "masking": ["Un municipio con menos de 20.000 habitantes pasa al municipio más cercano del mismo departamento con al menos 20.000; los mayores se mantienen. Vea *Dónde vive la gente*."]
+    },
+    "CO_L2_CODIGO_MUNICIPIO": {
+      "title": "Código del municipio (DIVIPOLA)",
+      "what": ["El código DIVIPOLA del DANE, de cinco dígitos: dos del departamento y tres del municipio, `05001` para Medellín."],
+      "masking": ["La misma generalización que el nombre: el código de un municipio pequeño pasa al del municipio que reemplaza su nombre. Los dos siguen coincidiendo."]
+    },
+    "CO_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": ["El código postal de seis dígitos de 4-72: dos del departamento, dos de la zona postal y dos del distrito postal."],
+      "masking": ["Los dos dígitos del departamento se mantienen y los demás pasan a cero: `110231` pasa a `110000`."]
+    },
+    "CO_L2_BARRIO": {
+      "title": "Barrio, localidad y comuna",
+      "what": ["El barrio, la urbanización o el conjunto residencial, la localidad o la comuna de residencia."],
+      "masking": ["Reemplazado por un nombre de barrio común en Colombia — Centro, La Esperanza, San José —, sin relación con el original."]
+    },
+    "CO_L2_VEREDA": {
+      "title": "Vereda y corregimiento",
+      "what": ["La vereda, el corregimiento, el centro poblado, el resguardo o la finca de una dirección rural: comunidades de unas decenas de familias."],
+      "masking": ["Reemplazado por `Zona rural`."]
+    },
+    "CO_L2_NACIONALIDAD": {
+      "title": "Nacionalidad",
+      "what": ["La nacionalidad o el país de nacimiento. Los venezolanos son, de lejos, la mayor comunidad extranjera."],
+      "masking": ["Reemplazada por una nacionalidad de la lista: la colombiana y las mayores comunidades extranjeras."]
+    },
+    "CO_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": ["Soltero, casado, unión marital de hecho, separado, divorciado o viudo, en palabras o en código."],
+      "masking": ["Reemplazado por otro estado civil de la lista; un código sigue siendo código."]
+    },
+    "CO_L2_OCUPACION": {
+      "title": "Ocupación",
+      "what": ["La ocupación, profesión u oficio, en palabras o por el código CIUO-08 adaptado para Colombia. Una ocupación rara en un municipio pequeño identifica."],
+      "masking": ["Un texto se reemplaza por una ocupación común; un código se mapea dígito a dígito."]
+    },
+    "CO_L2_EMPLEADOR": {
+      "title": "Empleador",
+      "what": ["El nombre de la empresa o entidad donde trabaja la persona."],
+      "masking": ["Reemplazado por una empresa ficticia."]
+    },
+    "CO_L2_ESCOLARIDAD": {
+      "title": "Escolaridad",
+      "what": ["El máximo nivel educativo — de ninguno a doctorado —, en palabras o en código."],
+      "masking": ["Reemplazado por otro nivel de la lista; un código sigue siendo código."]
+    },
+    "CO_L2_INSTITUCION_EDUCATIVA": {
+      "title": "Institución educativa",
+      "what": ["El colegio, la institución educativa o la universidad, por el nombre o por el código DANE del establecimiento."],
+      "masking": ["Reemplazada por una institución ficticia."]
+    },
+    "CO_L2_PERSONAS_A_CARGO": {
+      "title": "Personas a cargo e hijos",
+      "what": ["Número de personas a cargo, hijos o integrantes del hogar."],
+      "masking": ["Los valores de 0 a 5 se mantienen; por encima de 5 pasan a 5. Las familias muy grandes son raras, y un conteo raro identifica."]
+    },
+    "CO_L3_GRUPO_ETNICO": {
+      "title": "Autorreconocimiento étnico",
+      "what": ["El grupo étnico con el que la persona se reconoce, en las categorías del CNPV 2018: indígena (1.905.617 personas, 4,4%), gitano o Rrom, raizal del Archipiélago de San Andrés, Providencia y Santa Catalina, palenquero de San Basilio, negro, mulato, afrodescendiente o afrocolombiano, o ninguno; en palabras, en código o como bandera."],
+      "masking": ["Una bandera sigue siendo bandera, un código se reemplaza por otro código del catálogo y cualquier otro valor por una categoría del censo."]
+    },
+    "CO_L3_PUEBLO_INDIGENA": {
+      "title": "Pueblo indígena y comunidad étnica",
+      "what": ["El pueblo indígena — el CNPV 2018 identificó 115; los wayuu (380.460), zenú (307.091), nasa (243.176) y pastos (163.873) suman el 58,1% de la población indígena —, el resguardo o cabildo, el consejo comunitario afrodescendiente y la kumpania Rrom."],
+      "masking": ["Un código de pueblo se reemplaza por otro código; un nombre por uno de los pueblos más numerosos."]
+    },
+    "CO_L3_LENGUA_NATIVA": {
+      "title": "Lengua nativa",
+      "what": ["La lengua que habla la persona: en Colombia hay 65 lenguas indígenas, además del criollo de San Andrés, la lengua palenquera y el romaní. Hablar wayuunaiki o nasa yuwe revela el pueblo de origen."],
+      "masking": ["Reemplazada por una lengua de la lista; una bandera sigue siendo bandera."]
+    },
+    "CO_L3_RELIGION": {
+      "title": "Religión",
+      "what": ["La religión, la iglesia o la congregación a la que pertenece la persona."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por una religión de la lista."]
+    },
+    "CO_L3_CONVICCION_FILOSOFICA": {
+      "title": "Convicciones filosóficas",
+      "what": ["Convicciones filosóficas y morales, objeción de conciencia — que en Colombia se invoca, por ejemplo, frente al servicio militar — y pertenencia a logias."],
+      "masking": ["Los valores no comparten vocabulario: se suprimen a `Sin información`. Banderas y códigos conservan su forma."]
+    },
+    "CO_L3_ORIENTACION_POLITICA": {
+      "title": "Orientación política",
+      "what": ["Tendencia política, ideología, simpatía e intención de voto, de encuestas y registros."],
+      "masking": ["Reemplazada por una posición de la lista — de izquierda a derecha, independiente."]
+    },
+    "CO_L3_AFILIACION_PARTIDO": {
+      "title": "Afiliación a partidos",
+      "what": ["El partido o movimiento político al que la persona está afiliada, y su pertenencia a la oposición. El Consejo Nacional Electoral certificaba 28 organizaciones políticas con personería jurídica en septiembre de 2026."],
+      "masking": ["Reemplazada por otra organización de la lista de personería jurídica vigente; una bandera sigue siendo bandera."]
+    },
+    "CO_L3_SINDICATO": {
+      "title": "Pertenencia a sindicatos",
+      "what": ["El sindicato, la condición de sindicalizado, la cuota sindical descontada en nómina, el fuero sindical y la central obrera — CUT, CGT, CTC."],
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."]
+    },
+    "CO_L3_ORGANIZACION_SOCIAL": {
+      "title": "Organizaciones sociales y de derechos humanos",
+      "what": ["La pertenencia a organizaciones sociales, comunitarias y de derechos humanos, la junta de acción comunal y la condición de líder social o defensor de derechos humanos — en Colombia, una de las condiciones más expuestas a la violencia."],
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."]
+    },
+    "CO_L3_BIOMETRICO": {
+      "title": "Datos biométricos",
+      "what": ["Plantillas de huella — la validación biométrica contra la Registraduría es habitual en banca y notarías —, rostro, iris, voz y firma digitalizada."],
+      "masking": ["Cada carácter pasa a `X`. Una plantilla enmascarada no autentica a nadie."]
+    },
+    "CO_L3_GENETICO": {
+      "title": "Datos genéticos",
+      "what": ["Resultados de pruebas genéticas y de ADN, pruebas de paternidad, perfiles genéticos, mutaciones, cariotipo, tamizaje neonatal. No están en la lista del artículo 5, pero revelan la salud y el origen."],
+      "masking": ["Cada carácter pasa a `X`."]
+    },
+    "CO_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientación sexual",
+      "what": ["La orientación sexual autodeclarada, en registros de salud y de diversidad. Es dato relativo a la vida sexual."],
+      "masking": ["Reemplazada por una categoría de la lista."]
+    },
+    "CO_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": ["Actividad y conducta sexual, número de parejas, inicio de la vida sexual."],
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."]
+    },
+    "CO_L3_IDENTIDAD_GENERO": {
+      "title": "Identidad de género",
+      "what": ["La identidad de género autodeclarada. No está en la lista del artículo 5, pero expone a las mismas discriminaciones. El nombre identitario queda en el dominio de nombre completo."],
+      "masking": ["Reemplazada por una categoría de la lista."]
+    },
+    "CO_L3_VICTIMA_CONFLICTO": {
+      "title": "Víctima del conflicto armado",
+      "what": ["La condición de víctima y el hecho victimizante del Registro Único de Víctimas — desplazamiento forzado, homicidio, amenaza, desaparición forzada, secuestro, delitos contra la libertad sexual, minas antipersonal, reclutamiento —, muchas veces como bandera. La información que suministra la víctima es reservada (Ley 1448 de 2011, arts. 29 y 156)."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por un hecho victimizante de la lista."]
+    },
+    "CO_L3_REINCORPORACION": {
+      "title": "Reincorporación",
+      "what": ["La condición de persona en proceso de reincorporación o reintegración de la Agencia para la Reincorporación y la Normalización (ARN): excombatientes y firmantes de paz."],
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."]
+    },
+    "CO_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores de salud",
+      "what": ["Números de historia clínica, ingreso, atención, autorización de servicios, fórmula, incapacidad y prescripción MIPRES. La historia clínica se identifica con el número del documento del paciente, que cae en el dominio de cédula."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "CO_SALUD_AFILIACION": {
+      "title": "Afiliación al sistema de salud",
+      "what": ["El régimen — contributivo, subsidiado, especial o de excepción — y la EPS. Estar en el régimen subsidiado dice que la persona no puede cotizar."],
+      "masking": ["Un régimen se reemplaza por otro régimen y una EPS por otra EPS de la lista; una bandera sigue siendo bandera."]
+    },
+    "CO_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico y CIE-10",
+      "what": ["Diagnósticos en palabras o por el código CIE-10, con punto (`F33.1`) o sin él, como en los RIPS (`F331`, `I10X`); causas de muerte, incapacidad y hospitalización, antecedentes y alergias."],
+      "masking": ["Un código CIE-10 pasa a otro código común en el mismo formato, y un texto a un diagnóstico común: un diagnóstico de VIH o de trastorno mental no sobrevive como categoría."]
+    },
+    "CO_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimientos (CUPS)",
+      "what": ["Procedimientos, exámenes y cirugías, en palabras o por el código de la Clasificación Única de Procedimientos en Salud. Una carga viral o una interrupción voluntaria del embarazo revelan el diagnóstico."],
+      "masking": ["Un código CUPS se reemplaza por otro código común; un texto por un procedimiento común."]
+    },
+    "CO_SALUD_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": ["Medicamentos formulados, dispensados o de uso continuo, por nombre o por código CUM. Un antirretroviral, un antipsicótico o un anticonceptivo revelan un diagnóstico."],
+      "masking": ["Reemplazado por un medicamento común de la lista; una bandera sigue siendo bandera."]
+    },
+    "CO_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": ["Anamnesis, enfermedad actual, evolución, examen físico, plan de manejo, epicrisis y notas de enfermería."],
+      "masking": ["El mismo Free Text Redaction del texto libre: documentos, contactos y nombres de la lista se redactan. El contenido clínico se mantiene — si no debe estar en la copia, suprima la columna."]
+    },
+    "CO_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultados de exámenes",
+      "what": ["Resultados de laboratorio y pruebas — VIH, carga viral, glicemia, embarazo, toxicológico, alcoholemia —, también como valores numéricos."],
+      "masking": ["Carácter a carácter, manteniendo el formato: un número sigue siendo número."]
+    },
+    "CO_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo y RH",
+      "what": ["El grupo sanguíneo y el factor RH — impresos en la cédula y pedidos por casi todo empleador."],
+      "masking": ["Reemplazado por otro grupo de la lista."]
+    },
+    "CO_SALUD_DISCAPACIDAD": {
+      "title": "Discapacidad",
+      "what": ["La condición y la categoría de discapacidad de la certificación del Ministerio de Salud — física, auditiva, visual, sordoceguera, intelectual, psicosocial, múltiple — y el Registro de Localización y Caracterización de Personas con Discapacidad."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por una categoría de la lista."]
+    },
+    "CO_SALUD_OCUPACIONAL": {
+      "title": "Salud ocupacional",
+      "what": ["El concepto de aptitud de los exámenes médicos ocupacionales, los reportes de accidente de trabajo (FURAT) y enfermedad laboral (FUREL), las incapacidades, la calificación de pérdida de capacidad laboral y las restricciones médicas."],
+      "masking": ["Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico de la incapacidad cae en su dominio."]
+    },
+    "CO_SALUD_REPRODUCTIVA": {
+      "title": "Salud sexual y reproductiva",
+      "what": ["Gestación, fecha de la última menstruación, control prenatal, parto, interrupción voluntaria del embarazo, planificación familiar, fertilidad, infecciones de transmisión sexual."],
+      "masking": ["Las banderas conservan su forma; cualquier otro valor pasa a `Sin información`."]
+    },
+    "CO_SALUD_MENTAL": {
+      "title": "Salud mental",
+      "what": ["Trastornos mentales, atención psiquiátrica o psicológica, intento de suicidio, consumo de sustancias psicoactivas."],
+      "masking": ["Las banderas conservan su forma; cualquier otro valor pasa a `Sin información`."]
+    },
+    "CO_FIN_CREDITO": {
+      "title": "Centrales de riesgo",
+      "what": ["El puntaje de crédito (en DataCrédito, de 150 a 950), el reporte negativo, los días y la altura de mora, el estado de la obligación y la cartera castigada o en cobro jurídico."],
+      "masking": ["Un puntaje recibe otros dígitos con la misma longitud; una bandera sigue siendo bandera; un estado se reemplaza por otro de la lista."]
+    },
+    "CO_FIN_DEUDA": {
+      "title": "Deudas",
+      "what": ["Saldos de crédito y de cartera, valor en mora, cuotas, montos desembolsados y cupos."],
+      "masking": ["Mapeado a un valor entre 100.000 y 1.000.000.000 de pesos, sin relación con el valor real."]
+    },
+    "CO_FIN_INGRESOS": {
+      "title": "Ingresos y salario",
+      "what": ["Salario, ingresos mensuales o familiares, honorarios e ingreso base de cotización (IBC)."],
+      "masking": ["Mapeado a un valor entre 1.000.000 y 60.000.000 de pesos."]
+    },
+    "CO_FIN_PATRIMONIO": {
+      "title": "Patrimonio",
+      "what": ["Patrimonio, activos, avalúos catastrales y comerciales, saldos en cuentas, CDT e inversiones, cesantías."],
+      "masking": ["Mapeado a un valor entre 10.000.000 y 2.000.000.000 de pesos."]
+    },
+    "CO_FIN_PENSION": {
+      "title": "Mesada pensional y subsidios",
+      "what": ["El valor de la mesada pensional, de subsidios y auxilios, y de la cuota alimentaria."],
+      "masking": ["Mapeado a un valor entre un salario mínimo de 2026 (1.750.905 pesos) y 30.000.000 de pesos."]
+    },
+    "CO_FIN_ESTRATO": {
+      "title": "Estrato socioeconómico",
+      "what": ["El estrato de 1 a 6 con que se clasifica la vivienda para las tarifas de los servicios públicos (Ley 142 de 1994). Dice cuánto gana, más o menos, quien vive allí, y en qué parte de la ciudad."],
+      "masking": ["Se reemplaza dentro de su franja — bajo (1–2), medio (3–4), alto (5–6) —, así el análisis por franja conserva su forma. `Estrato 4` sigue escrito igual."]
+    },
+    "CO_FIN_SISBEN": {
+      "title": "Sisbén",
+      "what": ["El grupo del Sisbén IV — A1–A5 pobreza extrema, B1–B7 pobreza moderada, C1–C18 vulnerable, D1–D21 ni pobre ni vulnerable —, que decide el acceso al régimen subsidiado y a los programas sociales, y el puntaje del Sisbén III."],
+      "masking": ["La letra del grupo se mantiene y el subgrupo se reemplaza por otro del mismo grupo; un puntaje se mapea dígito a dígito."]
+    },
+    "CO_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programas sociales",
+      "what": ["La participación en programas sociales — Renta Ciudadana, Renta Joven, Colombia Mayor, Devolución del IVA — y en subsidios de vivienda y de desempleo, muchas veces como bandera."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por un programa de la lista."]
+    },
+    "CO_FIN_VIVIENDA": {
+      "title": "Tenencia de la vivienda",
+      "what": ["La tenencia de la vivienda — propia pagada o pagándose, en arriendo, en usufructo, posesión sin título, propiedad colectiva."],
+      "masking": ["Reemplazada por otra condición de la lista."]
+    },
+    "CO_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes",
+      "what": ["Antecedentes judiciales de la Policía, disciplinarios de la Procuraduría y fiscales de la Contraloría, el Registro Nacional de Medidas Correctivas, el tipo de delito, la situación jurídica, la medida de aseguramiento, la condición de interno del INPEC y las órdenes de captura."],
+      "masking": ["Reemplazado por una situación genérica de la lista — sin asuntos pendientes, condenado, absuelto —, sea cual sea el desenlace; una bandera sigue siendo bandera."]
+    },
+    "CO_PENAL_RADICADO": {
+      "title": "Número de radicado",
+      "what": ["El número de radicación de un proceso de la Rama Judicial — 23 dígitos: código DIVIPOLA, corporación, especialidad, despacho, año, consecutivo y recurso, `11001310300120200012300` — y los números de noticia criminal del SPOA. Los procesos se consultan en línea y llevan a las partes."],
+      "masking": ["El consecutivo se mapea dígito a dígito; ciudad, corporación, especialidad, despacho, año y recurso se mantienen. Los demás números se enmascaran carácter a carácter."]
+    }
+  },
+  "closing": [
+    {
+      "title": "El dígito de verificación del NIT",
+      "body": [
+        "El algoritmo Check Digit del Masking Engine calcula un dígito módulo 11 como *once menos el residuo* y escribe el 10 como 0. Para el NIT eso acierta en diez de los once residuos posibles: cuando el residuo es 1, la DIAN escribe 1 y Check Digit escribiría 0. Uno de cada once NIT enmascarados sería inválido.",
+        "El set lo resuelve en dos pasos, sin tablas:",
+        { "list": [
+          "Un Check Digit con los **pesos duplicados** mapea el cuerpo y escribe en el lugar del dígito un dígito auxiliar. Como 2 × 1 ≡ 2 módulo 11, el auxiliar es 9 exactamente cuando el residuo del cuerpo enmascarado con los pesos verdaderos es 1.",
+          "Un Regex Decompose cambia un 9 final por 1, y en cualquier otro caso aplica un Check Digit con los pesos verdaderos sobre el cuerpo, que deja como está, y recalcula el dígito."
+        ] },
+        "Check Digit necesita tantos pesos como dígitos, así que hay un par de pasos por longitud del cuerpo, de 6 a 10 dígitos, y un Regex Decompose que elige por la forma del valor, con o sin puntos y guion. El cuerpo se mapea con el mismo Character Mapping de la cédula: el NIT de una persona natural sigue coincidiendo con su cédula enmascarada."
+      ]
+    },
+    {
+      "title": "Dónde vive la gente: municipios, veredas y código postal",
+      "body": [
+        "Con la proyección de población municipal del DANE para 2026 (base CNPV 2018, actualización posterior al COVID-19) y la ubicación de cada cabecera según la DIVIPOLA, el set conoce el tamaño, el departamento y la posición de 1.122 municipios y áreas no municipalizadas.",
+        { "list": [
+          "Un **municipio** con menos de 20.000 habitantes pasa al municipio más cercano del mismo departamento con al menos 20.000. Son 694, con 6,4 millones de habitantes — el 12% de la población. Jardín (Antioquia) pasa a Andes; Providencia, a San Andrés; las áreas no municipalizadas de Guainía, a Inírida.",
+          "El **departamento** se mantiene. Todos tienen al menos un municipio de 20.000 habitantes.",
+          "La distancia se mide entre las coordenadas de las cabeceras, en línea recta.",
+          "Hay nombres repetidos — cuatro La Unión, cuatro Villanueva, cuatro Buenavista — y otros que solo difieren en un acento. Un nombre solo se generaliza cuando todos los municipios que lo llevan son pequeños, y entonces sigue al mayor de ellos. Con el departamento (`La Unión - Sucre`, `La Unión (Sucre)`, `La Unión, Sucre`) no hay ambigüedad, y el municipio siempre se generaliza.",
+          "El **código DIVIPOLA** sigue la misma tabla, y el nombre y el código de una persona siguen coincidiendo.",
+          "Los nombres se reconocen también como se escriben en la calle: `Cartagena`, `Cúcuta`, `Mompox`, `Bogotá`.",
+          "La **vereda** y el **corregimiento** pasan a `Zona rural`, y el **código postal** conserva solo el departamento."
+        ] },
+        "Los nombres de municipios que también son nombres o apellidos de personas, y los de departamentos, quedan fuera de la lista de detección, para que una columna de apellidos no se tome por municipios."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        { "list": [
+          "**Columnas binarias** — fotos de la cédula, selfies de validación biométrica, huellas, PDF de historias clínicas en BLOB — no pueden enmascararse con estos algoritmos. Inventaríelas y repórtelas como riesgo residual.",
+          "**El NIT con cuerpo de 5 dígitos o menos o de más de 10** se enmascara dígito a dígito, sin recalcular el dígito. Un NIT sin guion y sin puntos se lee como cuerpo y dígito: `8001972684` es `800197268-4`.",
+          "**El dígito de verificación en columna propia** no se recalcula: se enmascara y deja de corresponder al NIT enmascarado.",
+          "**El departamento, el código del banco y el indicativo del teléfono se mantienen.**",
+          "**Data Cleansing deja pasar lo que no conoce**: un municipio escrito de una forma que la tabla no tiene — abreviado, con error de ortografía — pasa sin cambios.",
+          "**El texto libre** se redacta palabra por palabra: un celular escrito con espacios no se encuentra, y un nombre que también es palabra común (`Luz`, `Rosa`, `León`) se redacta donde aparezca.",
+          "**Niños, niñas y adolescentes** — la fecha de nacimiento se mueve como máximo 60 días, así que pocas personas cruzan los 14 o los 18 años, pero algunas sí. Donde importe, divida la regla por grupo etario con Multi-Column Condition.",
+          "**Las direcciones** se reemplazan como una línea entera. Vía, barrio, municipio y código postal en columnas separadas se enmascaran de forma independiente y dejan de formar una dirección coherente.",
+          "**La clave del engine** vuelve a vincular los valores enmascarados con producción para quien tiene ambas cosas: en ese caso el resultado es dato seudonimizado, todavía dato personal. Guarde la clave lejos de quien usa la copia."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "Antes de la publicación, el set se verificó fuera de un Masking Engine:",
+        { "list": [
+          "La regla del dígito de verificación se contrastó con el NIT de la propia DIAN, `800.197.268-4`.",
+          "La configuración de cada classifier se revisó contra lo que un Masking Engine acepta.",
+          "El profiling se simuló en 151 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 31 columnas que no son dato personal — y de nuevo solo con los classifiers del paquete esencial.",
+          "La tabla que generaliza municipios se auditó para las 1.122 unidades de la DIVIPOLA: por nombre, por nombre con el departamento y por código.",
+          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de muestra de cada dominio y marcadores como `N/A`, contrastando cada salida con su vocabulario; 200 NIT de todas las longitudes — incluidos los de residuo 1 — en cuanto a validez y colisiones; 150 cédulas en cuanto a colisiones; y 20 personas cuya cédula y NIT deben seguir coincidiendo. Cada algoritmo enmascaró además su propio valor de ejemplo."
+        ] },
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        { "list": [
+          "Ley Estatutaria 1581 de 2012 (Secretaría del Senado, texto con vigencia). Corte Constitucional, sentencias C-748 de 2011 y SU-458 de 2012. Decreto 1377 de 2013, compilado en el Decreto 1074 de 2015. Constitución Política, arts. 15 y 153.",
+          "Superintendencia de Industria y Comercio: reporte de incidentes de seguridad en el Registro Nacional de Bases de Datos; proyecto de reforma de la Ley 1581 (proyectos de ley 214 y 274 de 2025, Cámara de Representantes).",
+          "Ley 1266 de 2008 y Ley 2157 de 2021 (hábeas data financiero). Ley 1273 de 2009 (art. 269F). Ley 1448 de 2011 (víctimas). Ley 142 de 1994 (estratificación). Decreto 1469 de 2025 (salario mínimo 2026).",
+          "Archivo General de la Nación, Guía de Anonimización de Datos Estructurados (2020). DANE, Guía de anonimización de datos (2024).",
+          "DANE: proyecciones de población municipal 2020–2035 (actualización post COVID-19); DIVIPOLA (datos.gov.co); CNPV 2018, autorreconocimiento étnico y pueblos indígenas.",
+          "Consejo Nacional Electoral: organizaciones políticas con personería jurídica vigente (16 de septiembre de 2026). DIAN: dígito de verificación del NIT. Banco de la República: llaves Bre-B. Departamento Nacional de Planeación: Sisbén IV. Comisión de Regulación de Comunicaciones: plan de numeración. Rama Judicial: número de radicación."
+        ] }
+      ]
+    }
+  ]
+}

@@ -14,7 +14,7 @@ masking job.
 Cubre también el descubrimiento de dato sensible: los **dominios** a los que puede pertenecer una
 columna, los **classifiers** que lo deciden — cada uno se puede probar con una columna que
 describes — y los **profile sets** que ejecuta un job de profiling. Con la herramienta vienen
-profile sets listos para las leyes de protección de datos de **Chile, México, Panamá y Belice**,
+profile sets listos para las leyes de protección de datos de **Chile, México, Panamá, Belice, Brasil, Colombia, Argentina, El Salvador, Perú y Ecuador**,
 cada uno se carga con un clic y está documentado en PDF.
 
 > **La nomenclatura sigue la de Delphix.** Un **framework** es una técnica de enmascaramiento que
@@ -414,7 +414,7 @@ a algo que no vino de él, la herramienta lista lo que se reemplazaría y pregun
 set lleva en el nombre el país, la ley y la versión (`CL - Ley 21.719 - v3`), y la tarjeta muestra la
 versión que trae la herramienta. El formato está en `presets/README.md`.
 
-Hoy vienen cuatro, uno por país, todos con umbral de 60 en el profile set. Las cifras de abajo son
+Hoy vienen diez, uno por país, todos con umbral de 60 en el profile set. Las cifras de abajo son
 del paquete extendido; cada paquete esencial tiene de 11 a 13 dominios:
 
 | Profile set | Ley | Dominios | Classifiers | Algoritmos | Documentación |
@@ -423,11 +423,17 @@ del paquete extendido; cada paquete esencial tiene de 11 a 13 dominios:
 | [México](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 153 | 154 | [es](presets/mexico-lfpdppp/doc.es.pdf) · [en](presets/mexico-lfpdppp/doc.en.pdf) · [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) |
 | [Panamá](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 135 | 142 | [es](presets/panama-ley-81/doc.es.pdf) · [en](presets/panama-ley-81/doc.en.pdf) · [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) |
 | [Belice](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 124 | 90 | [es](presets/belize-dpa-2021/doc.es.pdf) · [en](presets/belize-dpa-2021/doc.en.pdf) · [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) |
+| [Brasil](presets/brazil-lgpd/) | LGPD (Lei 13.709/2018) | 84 | 148 | 162 | [es](presets/brazil-lgpd/doc.es.pdf) · [en](presets/brazil-lgpd/doc.en.pdf) · [pt-BR](presets/brazil-lgpd/doc.pt-BR.pdf) |
+| [Colombia](presets/colombia-ley-1581/) | Ley 1581 de 2012 | 82 | 143 | 144 | [es](presets/colombia-ley-1581/doc.es.pdf) · [en](presets/colombia-ley-1581/doc.en.pdf) · [pt-BR](presets/colombia-ley-1581/doc.pt-BR.pdf) |
+| [Argentina](presets/argentina-ley-25326/) | Ley 25.326 | 83 | 148 | 119 | [es](presets/argentina-ley-25326/doc.es.pdf) · [en](presets/argentina-ley-25326/doc.en.pdf) · [pt-BR](presets/argentina-ley-25326/doc.pt-BR.pdf) |
+| [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 143 | 110 | [es](presets/elsalvador-ley-144/doc.es.pdf) · [en](presets/elsalvador-ley-144/doc.en.pdf) · [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) |
+| [Perú](presets/peru-ley-29733/) | Ley 29733 | 85 | 144 | 122 | [es](presets/peru-ley-29733/doc.es.pdf) · [en](presets/peru-ley-29733/doc.en.pdf) · [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) |
+| [Ecuador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 141 | 112 | [es](presets/ecuador-lopdp/doc.es.pdf) · [en](presets/ecuador-lopdp/doc.en.pdf) · [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) |
 
 Cada uno agrupa sus dominios en identificadores directos, cuasi-identificadores y los datos
 sensibles que nombra su ley, y enmascara los identificadores nacionales con un dígito verificador
 válido donde el número lo tiene — el RUT de Chile, la CURP y el RFC de México, el RUC de persona
-natural en Panamá. El README de cada carpeta explica el diseño y sus límites; el PDF lista cada
+natural en Panamá, el CPF, el CNPJ (también el alfanumérico), el PIS, el título electoral y el CNS en Brasil, el NIT en Colombia, el CUIT, el CUIL, el CBU y el CVU en Argentina, el DUI y el NIT en El Salvador, el DNI y el RUC en Perú, la cédula y el RUC en Ecuador. El README de cada carpeta explica el diseño y sus límites; el PDF lista cada
 dominio, classifier, algoritmo y archivo, con ejemplos enmascarados.
 
 **Importar.** No hay importación por objeto: conectar la integración trae el engine entero, y

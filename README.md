@@ -13,7 +13,7 @@ without creating a Rule Set or running a masking job.
 It covers sensitive data discovery too: the **domains** a column can belong to, the
 **classifiers** that decide it — each one testable against a column you describe — and the
 **profile sets** a profiling job runs. Ready-made profile sets for the data protection laws of
-**Chile, Mexico, Panama and Belize** ship with the tool, each loaded in one click and documented
+**Chile, Mexico, Panama, Belize, Brazil, Colombia, Argentina, El Salvador, Peru and Ecuador** ship with the tool, each loaded in one click and documented
 in a PDF.
 
 > **Wording follows Delphix.** A **framework** is a masking technique the plugin provides —
@@ -406,7 +406,7 @@ from it, the tool lists what would be replaced and asks first. The profile set i
 country, the law and its version (`CL - Ley 21.719 - v3`), and the card shows the version it ships
 with. The format is described in `presets/README.md`.
 
-Four ship today, one per country, all with a profile set threshold of 60. The counts below are the
+Ten ship today, one per country, all with a profile set threshold of 60. The counts below are the
 extended pack; each essential pack has 11 to 13 domains:
 
 | Profile set | Law | Domains | Classifiers | Algorithms | Documentation |
@@ -415,10 +415,16 @@ extended pack; each essential pack has 11 to 13 domains:
 | [Mexico](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 153 | 154 | [en](presets/mexico-lfpdppp/doc.en.pdf) · [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
 | [Panama](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 135 | 142 | [en](presets/panama-ley-81/doc.en.pdf) · [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) · [es](presets/panama-ley-81/doc.es.pdf) |
 | [Belize](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 124 | 90 | [en](presets/belize-dpa-2021/doc.en.pdf) · [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) · [es](presets/belize-dpa-2021/doc.es.pdf) |
+| [Brazil](presets/brazil-lgpd/) | LGPD (Lei 13.709/2018) | 84 | 148 | 162 | [en](presets/brazil-lgpd/doc.en.pdf) · [pt-BR](presets/brazil-lgpd/doc.pt-BR.pdf) · [es](presets/brazil-lgpd/doc.es.pdf) |
+| [Colombia](presets/colombia-ley-1581/) | Ley 1581 de 2012 | 82 | 143 | 144 | [en](presets/colombia-ley-1581/doc.en.pdf) · [pt-BR](presets/colombia-ley-1581/doc.pt-BR.pdf) · [es](presets/colombia-ley-1581/doc.es.pdf) |
+| [Argentina](presets/argentina-ley-25326/) | Ley 25.326 | 83 | 148 | 119 | [en](presets/argentina-ley-25326/doc.en.pdf) · [pt-BR](presets/argentina-ley-25326/doc.pt-BR.pdf) · [es](presets/argentina-ley-25326/doc.es.pdf) |
+| [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 143 | 110 | [en](presets/elsalvador-ley-144/doc.en.pdf) · [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) · [es](presets/elsalvador-ley-144/doc.es.pdf) |
+| [Peru](presets/peru-ley-29733/) | Ley 29733 | 85 | 144 | 122 | [en](presets/peru-ley-29733/doc.en.pdf) · [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) · [es](presets/peru-ley-29733/doc.es.pdf) |
+| [Ecuador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 141 | 112 | [en](presets/ecuador-lopdp/doc.en.pdf) · [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) · [es](presets/ecuador-lopdp/doc.es.pdf) |
 
 Each one groups its domains into direct identifiers, quasi-identifiers and the sensitive data its
 law names, and masks national identifiers with a valid check digit wherever the number has one —
-Chile's RUT, Mexico's CURP and RFC, a natural person's RUC in Panama. The README in each folder explains the design and
+Chile's RUT, Mexico's CURP and RFC, a natural person's RUC in Panama, Brazil's CPF, CNPJ (alphanumeric too), PIS, voter card and CNS, Colombia's NIT, Argentina's CUIT, CUIL, CBU and CVU, El Salvador's DUI and NIT, Peru's DNI and RUC, Ecuador's cédula and RUC. The README in each folder explains the design and
 its limits; the PDF lists every domain, classifier, algorithm and file, with masked examples.
 
 **Importing.** There is no per-object import: connecting the integration brings the whole engine

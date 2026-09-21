@@ -1,0 +1,1020 @@
+{
+  "title": "Equador — Ley Orgánica de Protección de Datos Personales",
+  "subtitle": "Descoberta e mascaramento de dados pessoais equatorianos: cédula e RUC com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 4 — que nomeia a identidade cultural, a condição migratória e o passado judicial como nenhuma lei vizinha —, dados de saúde, dados de crédito e processos penais.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais de uma base equatoriana e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar apenas nomes e cédulas não basta: uma data de nascimento, um sexo e uma paróquia pequena já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        {
+          "list": [
+            "**Identificadores diretos** — cédula e RUC, documentos de estrangeiros, passaporte, registro civil, números do IESS e das pensões, código de estudante, registro profissional, nomes, contato, endereço, contas, cartões, dispositivos, cookies, placas, imóveis, texto livre.",
+            "**Quase-identificadores** — data de nascimento, idade, sexo, paróquia e cantão com seu código DPA, código postal, ciudadela, estado civil, ocupação, empregador, escolaridade.",
+            "**Dados sensíveis** — os do artigo 4: etnia, **identidade cultural**, identidade de gênero, religião, ideologia, filiação política, **condição migratória**, orientação sexual, saúde, dados biométricos e genéticos, e os dados de apátridas e refugiados que o mesmo artigo nomeia.",
+            "**Dados de saúde** — sensíveis pelo artigo 4 e categoria especial pelo artigo 25 c): história clínica, seguro, CID-10, procedimentos, medicamentos, HIV, grupo sanguíneo, deficiência — categoria especial própria no artigo 25 d) —, saúde ocupacional, reprodutiva e mental.",
+            "**Dados de crédito** — os *datos personales crediticios* a que os artigos 28 e 29 dão regime próprio, mais dívida, renda, patrimônio, pensões, programas sociais, o Registro Social e a posse da moradia.",
+            "**Antecedentes criminais** — o **pasado judicial** que o artigo 4 lista entre os dados sensíveis, e os números de processo."
+          ]
+        },
+        "Num Masking Engine, o set é um profile set com seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos de que estes dependem — e os arquivos de consulta que leem. Os apêndices listam cada um com a configuração completa.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — precisa que os valores concordem. Uma coluna com nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm forma ou vocabulário reconhecíveis: uma cédula, um RUC de treze dígitos, um celular começando por 09, um endereço com ciudadela, manzana e villa, uma placa, uma paróquia.",
+        "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas equatorianos (`NUM_DOC`, `FEC_NAC`, `DPA`, `RUC`, `IESS`, `AMIE`) e em inglês.",
+        {
+          "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da cédula — com a impressão digital e a assinatura — e uma selfie de validação. Reporte essas colunas como risco residual."
+        }
+      ]
+    },
+    {
+      "title": "A LOPDP em resumo",
+      "body": [
+        "A **Ley Orgánica de Protección de Datos Personales** foi publicada no Quinto Suplemento do Registro Oficial 459 de **26 de maio de 2021**, e seu **Reglamento General** no Suplemento do Registro Oficial 435 de **13 de novembro de 2023**. O regime de sanções é aplicável desde 26 de maio de 2023. É a lei da região mais próxima do modelo europeu, e dele toma as definições.",
+        "O que importa para uma cópia de dados de produção:",
+        {
+          "list": [
+            "**Dado pessoal** é o dado que identifica ou torna identificável uma pessoa natural, direta ou indiretamente (art. 4). O **titular** é sempre pessoa natural: uma empresa não é titular.",
+            "**Dado sensível** é a lista mais longa da região (art. 4): etnia, identidade de gênero, **identidade cultural**, religião, ideologia, filiação política, **passado judicial**, **condição migratória**, orientação sexual, saúde, dados biométricos, dados genéticos, e os dados de apátridas e refugiados que precisam de proteção internacional — fechando com uma cláusula aberta para tudo cujo tratamento indevido possa dar origem a discriminação.",
+            "**Categorias especiais** (art. 25) são quatro: dados sensíveis, dados de **crianças e adolescentes**, dados de saúde e dados de **pessoas com deficiência e de seus substitutos**. O artigo 26 proíbe tratar dado sensível salvo em uma das hipóteses que lista.",
+            "**Anonimização** é a aplicação de medidas que impedem a identificação ou **reidentificação** de uma pessoa natural sem esforços desproporcionais (art. 4). **Pseudonimização** é o tratamento após o qual o dado já não pode ser atribuído a um titular sem usar informação adicional, desde que essa informação fique separada e sujeita a medidas técnicas e organizativas (art. 4) — o par europeu, palavra por palavra.",
+            "**Onde aparecem.** A lei **não se aplica** a dados anonimizados, enquanto não seja possível identificar o titular; assim que o dado deixar de estar dissociado ou anônimo, o tratamento volta a estar sujeito à lei (art. 2 c). O artigo 37 lista **anonimização, pseudonimização ou cifragem** em primeiro lugar entre as medidas de segurança. O artigo 31.2 pede que os dados de saúde sejam **previamente anonimizados ou pseudonimizados sempre que seja possível**.",
+            "**Segurança.** A violação é notificada à Autoridade e à ARCOTEL o quanto antes e no máximo em **cinco dias**; o encarregado notifica o responsável em dois (art. 43). Os artigos 39 a 42 pedem proteção desde o desenho e por padrão, análise de risco e avaliação de impacto."
+          ]
+        },
+        "**Os dados de crédito têm regime próprio.** O artigo 4 define os *datos personales crediticios* como os que integram o comportamento econômico de uma pessoa natural; o artigo 28 permite tratá-los para analisar solvência e **proíbe qualquer finalidade secundária**, e proíbe comunicá-los depois de cinco anos da exigibilidade da obrigação."
+      ]
+    },
+    {
+      "title": "Anonimização, pseudonimização e cópias fora de produção",
+      "body": [
+        "O Equador escreve os dois conceitos como o regulamento europeu. A **anonimização** impede a identificação **e a reidentificação** sem esforços desproporcionais, e tira o dado da lei (art. 2 c). A **pseudonimização** aceita que o dado possa voltar a ser atribuído ao titular *com informação adicional*, e por isso exige que essa informação fique separada e sob medidas técnicas e organizativas.",
+        "Os algoritmos deste set são determinísticos para a chave do Masking Engine: a mesma cédula é mascarada do mesmo jeito em toda tabela, o que mantém os joins funcionando. Essa chave é exatamente a *informação adicional* de que fala o artigo 4. A cópia mascarada está **pseudonimizada**, não anonimizada, e segue sendo dado pessoal para quem tem a chave e a produção.",
+        {
+          "list": [
+            "Mantenha a chave do engine separada da cópia e sob medidas técnicas e organizativas — é o que o artigo 4 pede para que a pseudonimização conte, e o artigo 37 a conta como medida de segurança.",
+            "Para dados de saúde, o artigo 31.2 pede anonimização ou pseudonimização *sempre que seja possível*: uma cópia mascarada de uma base clínica é a forma ordinária de cumpri-lo.",
+            "Se o que você precisa é de dado anonimizado — fora da lei pelo artigo 2 c) —, meça o risco de reidentificação dos quase-identificadores que sobram; o padrão do artigo 4 é mais alto do que este set atinge."
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": [
+        "Dados que identificam uma pessoa por si sós. A cédula é a chave de quase todo registro equatoriano, e o RUC de pessoa natural é essa mesma cédula seguida de 001. Os dois saem válidos, porque as aplicações os validam, e os dois são mascarados do mesmo jeito em toda parte. Um RUC de empresa fica como está: o artigo 4 faz titular apenas a pessoa natural."
+      ],
+      "domains": [
+        "EC_L1_CEDULA",
+        "EC_L1_RUC",
+        "EC_L1_DOCUMENTO_EXTRANJERO",
+        "EC_L1_PASAPORTE",
+        "EC_L1_ACTA",
+        "EC_L1_SEGURO_SOCIAL",
+        "EC_L1_CODIGO_ESTUDIANTE",
+        "EC_L1_REGISTRO_PROFESIONAL",
+        "EC_L1_NOMBRE",
+        "EC_L1_APELLIDO",
+        "EC_L1_NOMBRE_COMPLETO",
+        "EC_L1_RAZON_SOCIAL",
+        "EC_L1_EMAIL",
+        "EC_L1_TELEFONO",
+        "EC_L1_DIRECCION",
+        "EC_L1_DIRECCION_COMPLEMENTO",
+        "EC_L1_CUENTA_BANCARIA",
+        "EC_L1_TARJETA",
+        "EC_L1_BILLETERA",
+        "EC_L1_IP",
+        "EC_L1_DISPOSITIVO",
+        "EC_L1_COOKIE",
+        "EC_L1_PLACA",
+        "EC_L1_VEHICULO",
+        "EC_L1_INMUEBLE",
+        "EC_L1_CONTRATO",
+        "EC_L1_USUARIO",
+        "EC_L1_CREDENCIAL",
+        "EC_L1_GEOLOCALIZACION",
+        "EC_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": [
+        "Dados que não identificam ninguém sozinhos, mas identificam em conjunto. O Equador se divide em cerca de 1.040 paróquias, e 913 delas tinham menos de 20.000 habitantes no censo de 2022. Uma data de nascimento, um sexo e uma dessas paróquias apontam para um punhado de pessoas. Estes atributos são generalizados ou deslocados, não substituídos, e o dado mantém o valor analítico."
+      ],
+      "domains": [
+        "EC_L2_FECHA_NACIMIENTO",
+        "EC_L2_ANIO_NACIMIENTO",
+        "EC_L2_EDAD",
+        "EC_L2_FECHA_EVENTO",
+        "EC_L2_SEXO",
+        "EC_L2_PARROQUIA",
+        "EC_L2_DPA",
+        "EC_L2_CIUDADELA",
+        "EC_L2_CODIGO_POSTAL",
+        "EC_L2_ESTADO_CIVIL",
+        "EC_L2_OCUPACION",
+        "EC_L2_EMPLEADOR",
+        "EC_L2_NIVEL_INSTRUCCION",
+        "EC_L2_INSTITUCION_EDUCATIVA",
+        "EC_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Dados sensíveis (art. 4)",
+      "intro": [
+        "A lista do artigo 4 é a mais longa da região, e três de seus itens não aparecem em nenhuma lei vizinha: a **identidade cultural**, a **condição migratória** e o **passado judicial**. A saúde tem grupo próprio abaixo, e o passado judicial o grupo PENAL; todo o resto está aqui, junto com a filiação sindical e a condição de vítima que a cláusula aberta do mesmo artigo alcança."
+      ],
+      "domains": [
+        "EC_L3_ETNIA",
+        "EC_L3_IDENTIDAD_CULTURAL",
+        "EC_L3_LENGUA",
+        "EC_L3_CONDICION_MIGRATORIA",
+        "EC_L3_NACIONALIDAD",
+        "EC_L3_RELIGION",
+        "EC_L3_IDEOLOGIA",
+        "EC_L3_FILIACION_POLITICA",
+        "EC_L3_AFILIACION_SINDICAL",
+        "EC_L3_BIOMETRICO",
+        "EC_L3_GENETICO",
+        "EC_L3_ORIENTACION_SEXUAL",
+        "EC_L3_IDENTIDAD_GENERO",
+        "EC_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Dados de saúde",
+      "intro": [
+        "O dado de saúde é sensível pelo artigo 4 e categoria especial pelo artigo 25 c). O artigo 31.2 pede com todas as letras que seja **previamente anonimizado ou pseudonimizado sempre que seja possível**, e o artigo 25 d) acrescenta os dados de pessoas com deficiência e de seus substitutos como categoria própria."
+      ],
+      "domains": [
+        "EC_SALUD_IDENTIFICADOR",
+        "EC_SALUD_COBERTURA",
+        "EC_SALUD_DIAGNOSTICO",
+        "EC_SALUD_PROCEDIMIENTO",
+        "EC_SALUD_MEDICAMENTO",
+        "EC_SALUD_TEXTO_CLINICO",
+        "EC_SALUD_RESULTADO_EXAMEN",
+        "EC_SALUD_VIH",
+        "EC_SALUD_GRUPO_SANGUINEO",
+        "EC_SALUD_DISCAPACIDAD",
+        "EC_SALUD_OCUPACIONAL",
+        "EC_SALUD_REPRODUCTIVA",
+        "EC_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Dados de crédito e socioeconômicos",
+      "intro": [
+        "O artigo 4 define os **datos personales crediticios** como os que integram o comportamento econômico de uma pessoa natural, e os artigos 28 e 29 lhes dão regime próprio: só para analisar solvência, nunca com finalidade secundária, e sem comunicação depois de cinco anos. O resto do grupo não é dado de crédito, mas identifica: uma dívida, um patrimônio, uma pensão, um programa social ou um quintil do Registro Social estreita a busca tão rápido quanto um CEP."
+      ],
+      "domains": [
+        "EC_FIN_HISTORIAL_CREDITICIO",
+        "EC_FIN_DEUDA",
+        "EC_FIN_INGRESOS",
+        "EC_FIN_PATRIMONIO",
+        "EC_FIN_PENSION",
+        "EC_FIN_PROGRAMA_SOCIAL",
+        "EC_FIN_REGISTRO_SOCIAL",
+        "EC_FIN_VIVIENDA"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Passado judicial",
+      "intro": [
+        "O Equador é o único país da região cuja lei nomeia o **pasado judicial** entre os dados sensíveis do artigo 4. O grupo é separado apenas porque as formas são: tudo nele é dado sensível, e o artigo 26 proíbe tratá-lo salvo em uma das hipóteses que lista."
+      ],
+      "domains": [
+        "EC_PENAL_ANTECEDENTES",
+        "EC_PENAL_EXPEDIENTE"
+      ]
+    }
+  ],
+  "domains": {
+    "EC_L1_CEDULA": {
+      "title": "Cédula de identidad",
+      "what": [
+        "O número de dez dígitos do Registro Civil, `1710034065`, a chave de quase todo registro equatoriano. Os dois primeiros dígitos são a província de emissão — 01 a 24, ou 30 para quem se registrou no exterior —, o terceiro diz que o titular é pessoa natural, e o décimo é o dígito verificador.",
+        "O mesmo domínio recebe RUCs: uma coluna de documento costuma guardar os dois."
+      ],
+      "masking": [
+        "Outra cédula válida, mantendo a província de emissão e o dígito de pessoa natural e recalculando o verificador. Um valor com forma de RUC é mascarado como RUC."
+      ]
+    },
+    "EC_L1_RUC": {
+      "title": "RUC",
+      "what": [
+        "O número de treze dígitos do contribuinte no SRI. Na pessoa natural é a cédula seguida do código de estabelecimento `001`; o terceiro dígito decide — 0 a 5 pessoa natural, **6** entidade pública, **9** sociedade privada."
+      ],
+      "masking": [
+        "O RUC de pessoa natural é mascarado como a cédula que carrega, de modo que os dois coincidem. Um RUC cujo terceiro dígito é 6 ou 9 pertence a pessoa jurídica, que o artigo 4 não faz titular: fica exatamente como está."
+      ]
+    },
+    "EC_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Documentos de estrangeiro",
+      "what": [
+        "A cédula de extranjería, o carnê de refugiado ou solicitante, o visto e os números de trâmite migratório. A **condição migratória** que eles carregam é dado sensível pelo artigo 4 e tem domínio próprio."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_PASAPORTE": {
+      "title": "Passaporte",
+      "what": [
+        "Números de passaporte equatoriano e estrangeiro."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_ACTA": {
+      "title": "Registro civil",
+      "what": [
+        "A acta, o tomo e o fólio dos registros de nascimento, casamento, união de fato e óbito da Dirección General de Registro Civil, Identificación y Cedulación."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_SEGURO_SOCIAL": {
+      "title": "IESS, ISSFA e ISSPOL",
+      "what": [
+        "Os números de afiliação e patronal do IESS, a história laboral e os números dos institutos das forças armadas e da polícia."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_CODIGO_ESTUDIANTE": {
+      "title": "Código de estudante",
+      "what": [
+        "O código de estudante, o número de matrícula e a carteira universitária."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_REGISTRO_PROFESIONAL": {
+      "title": "Registro profissional",
+      "what": [
+        "O número de registro do título na SENESCYT, publicado junto com o nome, e as licenças profissionais."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_NOMBRE": {
+      "title": "Prenome",
+      "what": [
+        "O prenome, um ou dois: `Narcisa`, `Luis Alberto`, `María de los Ángeles`."
+      ],
+      "masking": [
+        "Palavra a palavra, trocando cada nome por um da lista. `de`, `del` e `la` ficam onde estão. Mais de quatro palavras são mascaradas caractere a caractere."
+      ]
+    },
+    "EC_L1_APELLIDO": {
+      "title": "Sobrenome",
+      "what": [
+        "Os sobrenomes — do pai e da mãe —, em colunas separadas ou juntos: `Zambrano Cedeño`. O set traz os equatorianos, de Zambrano e Loor na costa a Guamán e Quishpe na serra."
+      ],
+      "masking": [
+        "Palavra a palavra, trocando cada sobrenome por um da lista; as partículas ficam onde estão."
+      ]
+    },
+    "EC_L1_NOMBRE_COMPLETO": {
+      "title": "Nome completo",
+      "what": [
+        "Prenomes e sobrenomes numa coluna só: `Luis Alberto Zambrano Cedeño`. Também os da mãe, do pai, do tutor, do cônjuge, do companheiro, do contato de emergência e da referência."
+      ],
+      "masking": [
+        "Na ordem equatoriana: duas palavras são prenome e sobrenome; três, um prenome e dois sobrenomes; quatro, dois e dois. `APELLIDOS, NOMBRES` com vírgula é mascarado mantendo a vírgula."
+      ]
+    },
+    "EC_L1_RAZON_SOCIAL": {
+      "title": "Razão social",
+      "what": [
+        "A razão social sob a qual uma pessoa natural atua, ao lado do RUC que a nomeia. A empresa em si não é titular; a pessoa por trás dela é."
+      ],
+      "masking": [
+        "Substituída por uma razão social fictícia."
+      ]
+    },
+    "EC_L1_EMAIL": {
+      "title": "E-mail",
+      "what": [
+        "Endereços de e-mail pessoais e corporativos."
+      ],
+      "masking": [
+        "Usuário e domínio são mapeados caractere a caractere, e o domínio de topo — `.com`, `.com.ec` — vira `.test`, reservado a testes: um endereço mascarado nunca entrega."
+      ]
+    },
+    "EC_L1_TELEFONO": {
+      "title": "Telefone",
+      "what": [
+        "Celulares de dez dígitos começando por `09`, e fixos com código de área de um dígito depois do zero — 02 Pichincha, 04 Guayas, 07 Azuay e El Oro — e sete dígitos."
+      ],
+      "masking": [
+        "`+593`, o 9 do celular e o código de área do fixo ficam; os demais dígitos são mapeados e o espaçamento do original é mantido, de modo que o número continua dizendo se é celular ou fixo e de que região."
+      ]
+    },
+    "EC_L1_DIRECCION": {
+      "title": "Endereço",
+      "what": [
+        "O endereço com a via principal e a transversal — `Av. Amazonas N34-120 y Av. República` —, ou a ciudadela com manzana, villa e solar."
+      ],
+      "masking": [
+        "A linha inteira é substituída por um endereço equatoriano fictício da mesma forma. Ciudadela, paróquia e código postal têm domínios próprios para quando estão em colunas separadas."
+      ]
+    },
+    "EC_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento do endereço",
+      "what": [
+        "Manzana, villa, solar, lote, interior, apartamento, andar, bloco, etapa ou edifício em colunas próprias."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_CUENTA_BANCARIA": {
+      "title": "Conta bancária",
+      "what": [
+        "Números de conta poupança, corrente e salário. O código do banco não é dado pessoal e não tem domínio."
+      ],
+      "masking": [
+        "Os dígitos são mapeados; os separadores ficam."
+      ]
+    },
+    "EC_L1_TARJETA": {
+      "title": "Cartão de pagamento",
+      "what": [
+        "Números de cartão de crédito e débito, reconhecidos pelo algoritmo de Luhn."
+      ],
+      "masking": [
+        "Payment Card: outro número que passa no algoritmo de Luhn. Só valores com forma de cartão chegam até ele."
+      ]
+    },
+    "EC_L1_BILLETERA": {
+      "title": "Carteira digital",
+      "what": [
+        "Identificadores de DeUna, Peigo, PayPhone e outras carteiras, e os endereços bitcoin que alguns sistemas guardam."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo a forma. Um endereço bitcoin mascarado deixa de passar no próprio checksum, que é o que uma cópia de teste quer."
+      ]
+    },
+    "EC_L1_IP": {
+      "title": "Endereço IP",
+      "what": [
+        "Endereços IPv4 e IPv6 de logs de acesso e transações."
+      ],
+      "masking": [
+        "Cada octeto IPv4 é mapeado para 1–254; um endereço IPv6 é mapeado mantendo os caracteres hexadecimais."
+      ]
+    },
+    "EC_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": [
+        "IMEI, IMSI, ICCID, endereço MAC, identificadores de publicidade e de sessão."
+      ],
+      "masking": [
+        "Caractere a caractere, com os dígitos hexadecimais mantidos hexadecimais: um MAC continua MAC."
+      ]
+    },
+    "EC_L1_COOKIE": {
+      "title": "Cookies e identificadores de rastreamento",
+      "what": [
+        "O identificador que um site guarda no navegador e os parâmetros de campanha que viajam com ele. O artigo 4 define a **elaboración de perfiles** que eles alimentam: todo tratamento que avalia ou prevê rendimento profissional, situação econômica, saúde, preferências, interesses, localização ou movimento de uma pessoa."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_PLACA": {
+      "title": "Placa do veículo",
+      "what": [
+        "A placa com três letras e três ou quatro dígitos, `PCA-1234`; a primeira letra é a província — A Azuay, G Guayas, P Pichincha, M Manabí."
+      ],
+      "masking": [
+        "Letras para letras e dígitos para dígitos, posição a posição: o formato da placa fica."
+      ]
+    },
+    "EC_L1_VEHICULO": {
+      "title": "Veículo e habilitação",
+      "what": [
+        "O VIN ou número do chassi, o número do motor, a matrícula e a habilitação."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_INMUEBLE": {
+      "title": "Imóvel",
+      "what": [
+        "A clave catastral, o código predial e a inscrição no Registro de la Propiedad municipal: levam à moradia e ao seu dono."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_CONTRATO": {
+      "title": "Números de contrato e de cliente",
+      "what": [
+        "Números de contrato, apólice, empréstimo, solicitação, sócio, assinante, fornecimento, medidor, caso ou processo administrativo, e códigos de cliente ou de empregado."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato. O mapeamento é determinístico, então os joins continuam funcionando."
+      ]
+    },
+    "EC_L1_USUARIO": {
+      "title": "Usuário e redes sociais",
+      "what": [
+        "Login, apelido e perfis de redes sociais."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_L1_CREDENCIAL": {
+      "title": "Credenciais",
+      "what": [
+        "Senhas e seus hashes, PIN, códigos de segurança e OTP, CVV, tokens, chaves de API, a senha da assinatura eletrônica, chaves privadas e frases-semente."
+      ],
+      "masking": [
+        "Cada caractere vira `X`. Uma credencial não serve numa cópia de teste, e um hash mascarado caractere a caractere ainda poderia ser quebrado."
+      ]
+    },
+    "EC_L1_GEOLOCALIZACION": {
+      "title": "Geolocalização",
+      "what": [
+        "Latitude e longitude, juntas ou em colunas separadas, de aplicativos, visitas, endereços e entregas."
+      ],
+      "masking": [
+        "A parte inteira e a primeira decimal ficam — cerca de 11 km — e as demais decimais são mapeadas: o lugar é generalizado, não movido."
+      ]
+    },
+    "EC_L1_TEXTO_LIBRE": {
+      "title": "Texto livre",
+      "what": [
+        "Observações, descrições de reclamação, relatos e mensagens onde se escreve de tudo — cédula, RUC, telefone e nomes no meio de uma frase."
+      ],
+      "masking": [
+        "Free Text Redaction: cédulas, RUCs, e-mail, celulares, cartões, placas e IPs viram `[DATO]`, e os nomes das listas, `[NOMBRE]`."
+      ]
+    },
+    "EC_L2_FECHA_NACIMIENTO": {
+      "title": "Data de nascimento",
+      "what": [
+        "A data de nascimento, como date, timestamp ou texto. É ela que decide se a linha é de criança ou adolescente, categoria especial no art. 25 b)."
+      ],
+      "masking": [
+        "Deslocada em até 60 dias para cada lado. Idades e anos escolares mudam para poucas pessoas; a data continua plausível e a mesma data de nascimento se move sempre do mesmo jeito."
+      ]
+    },
+    "EC_L2_ANIO_NACIMIENTO": {
+      "title": "Ano de nascimento",
+      "what": [
+        "O ano de nascimento em coluna própria."
+      ],
+      "masking": [
+        "A década fica e o último dígito é mapeado: `1985` vira um ano de 1980 a 1989."
+      ]
+    },
+    "EC_L2_EDAD": {
+      "title": "Idade",
+      "what": [
+        "Idade em anos, também faixa etária ou quinquênio."
+      ],
+      "masking": [
+        "O dígito das dezenas fica e a unidade é mapeada (37 vira 30–39). Cem ou mais vira 90: idades raras identificam."
+      ]
+    },
+    "EC_L2_FECHA_EVENTO": {
+      "title": "Datas de eventos pessoais",
+      "what": [
+        "Datas que dizem algo sobre a pessoa: óbito, casamento, admissão e desligamento, aposentadoria, internação, diagnóstico, prisão, sentença, atestado, emissão da cédula."
+      ],
+      "masking": [
+        "Deslocadas em até 30 dias para cada lado."
+      ]
+    },
+    "EC_L2_SEXO": {
+      "title": "Sexo",
+      "what": [
+        "Sexo como o sistema registra: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` ou os códigos 1 e 2."
+      ],
+      "masking": [
+        "Substituído dentro do próprio vocabulário: `F` continua `F` ou `M`, `1` continua `1` ou `2`. A **identidade de gênero** do art. 4 tem domínio próprio entre os dados sensíveis."
+      ]
+    },
+    "EC_L2_PARROQUIA": {
+      "title": "Paróquia e cantão",
+      "what": [
+        "A paróquia ou o cantão de residência, nascimento ou atendimento, pelo nome — sozinho ou com o cantão ou a província, `Facundo Vela - Bolívar`."
+      ],
+      "masking": [
+        "Uma paróquia com menos de 20.000 habitantes vira a paróquia mais próxima do seu cantão com pelo menos 20.000 — ou da sua província, quando o cantão não tem nenhuma. Os 93 cantões abaixo de 20.000 seguem a mesma regra dentro da sua província. As 24 províncias ficam."
+      ]
+    },
+    "EC_L2_DPA": {
+      "title": "Código DPA",
+      "what": [
+        "O código da División Política Administrativa: dois dígitos para a província, quatro para o cantão e seis para a paróquia — os mesmos seis dígitos que o código postal usa."
+      ],
+      "masking": [
+        "A mesma generalização do nome: o código de uma paróquia pequena vira o código da paróquia que substitui o nome dela. O código de uma grande não muda."
+      ]
+    },
+    "EC_L2_CIUDADELA": {
+      "title": "Ciudadela, urbanização e bairro",
+      "what": [
+        "A ciudadela, urbanização, cooperativa, conjunto, recinto, comuna ou bairro de residência — a unidade abaixo da paróquia, e a que um endereço de entrega realmente usa."
+      ],
+      "masking": [
+        "Substituída por uma equatoriana comum, sem relação com a original."
+      ]
+    },
+    "EC_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": [
+        "O código postal de seis dígitos em uso desde 2007: é o código DPA, então os dois primeiros dígitos são a província."
+      ],
+      "masking": [
+        "Os dois primeiros dígitos ficam e os demais viram zeros: `170150` vira `170000`."
+      ]
+    },
+    "EC_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": [
+        "Solteiro, casado, em união de fato — que a Constituição equipara ao casamento —, separado, divorciado ou viúvo, por extenso ou como código."
+      ],
+      "masking": [
+        "Substituído por outro estado da lista; um código continua código."
+      ]
+    },
+    "EC_L2_OCUPACION": {
+      "title": "Ocupação",
+      "what": [
+        "Ocupação, profissão ou ofício, por extenso ou pelo código CIUO. Uma ocupação rara numa paróquia pequena identifica sozinha."
+      ],
+      "masking": [
+        "O texto é substituído por uma ocupação comum; um código é mapeado dígito a dígito."
+      ]
+    },
+    "EC_L2_EMPLEADOR": {
+      "title": "Empregador",
+      "what": [
+        "O nome da empresa ou instituição onde a pessoa trabalha."
+      ],
+      "masking": [
+        "Substituído por uma empresa fictícia."
+      ]
+    },
+    "EC_L2_NIVEL_INSTRUCCION": {
+      "title": "Escolaridade",
+      "what": [
+        "O nível de instrução alcançado — de nenhum à pós-graduação — nas categorias do censo, por extenso ou como código."
+      ],
+      "masking": [
+        "Substituído por outro nível da lista; um código continua código."
+      ]
+    },
+    "EC_L2_INSTITUCION_EDUCATIVA": {
+      "title": "Instituição de ensino",
+      "what": [
+        "A unidade educativa, o instituto ou a universidade, pelo nome ou pelo código AMIE do Ministério da Educação."
+      ],
+      "masking": [
+        "Substituída por uma instituição fictícia."
+      ]
+    },
+    "EC_L2_PERSONAS_A_CARGO": {
+      "title": "Dependentes e filhos",
+      "what": [
+        "Número de dependentes, filhos, derechohabientes ou membros do domicílio."
+      ],
+      "masking": [
+        "Valores de 0 a 5 ficam; acima de 5 viram 5. Domicílios muito grandes são raros, e uma contagem rara identifica."
+      ]
+    },
+    "EC_L3_ETNIA": {
+      "title": "Etnia",
+      "what": [
+        "Autoidentificação como mestizo, montubio, afroequatoriano, negro, mulato, indígena ou branco — as categorias que o censo de 2022 perguntou. O artigo 4 nomeia a etnia em primeiro lugar entre os dados sensíveis."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira, um código é trocado por outro código e qualquer outro valor por uma categoria da lista."
+      ]
+    },
+    "EC_L3_IDENTIDAD_CULTURAL": {
+      "title": "Identidade cultural",
+      "what": [
+        "A **identidade cultural** que o artigo 4 nomeia à parte da etnia: a nacionalidade ou o povo indígena a que a pessoa pertence. A Constituição reconhece catorze nacionalidades e dezoito povos kichwas, e nomear um deles nomeia alguns milhares de pessoas. Nenhuma outra lei da região lista isso."
+      ],
+      "masking": [
+        "Substituída por outra nacionalidade ou povo da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_L3_LENGUA": {
+      "title": "Língua",
+      "what": [
+        "A língua materna ou ancestral. No Equador se falam treze línguas indígenas além do espanhol, e algumas por poucas centenas de pessoas: a língua diz quem a pessoa é."
+      ],
+      "masking": [
+        "Substituída por uma língua da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_L3_CONDICION_MIGRATORIA": {
+      "title": "Condição migratória",
+      "what": [
+        "A **condição migratória** que o artigo 4 lista entre os dados sensíveis, e a condição de apátrida e refugiado que o mesmo artigo nomeia: categoria de residência, solicitação de refúgio ou asilo, situação regular ou irregular, mobilidade humana. No Equador esta coluna separa os nacionais das comunidades venezuelana e colombiana."
+      ],
+      "masking": [
+        "Substituída por outra condição da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_L3_NACIONALIDAD": {
+      "title": "Nacionalidade",
+      "what": [
+        "A nacionalidade de um país e o país de nascimento ou origem. O artigo 4 não a nomeia, mas ela viaja com a condição migratória que a lei nomeia."
+      ],
+      "masking": [
+        "Substituída por uma nacionalidade da lista: a equatoriana e as maiores comunidades estrangeiras."
+      ]
+    },
+    "EC_L3_RELIGION": {
+      "title": "Religião",
+      "what": [
+        "A religião, igreja ou congregação a que a pessoa pertence."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira e qualquer outro valor é trocado por uma religião da lista."
+      ]
+    },
+    "EC_L3_IDEOLOGIA": {
+      "title": "Ideologia",
+      "what": [
+        "A **ideologia** que o artigo 4 nomeia por si só, ao lado da filiação política: tendência, simpatia, intenção de voto e as convicções filosóficas ou morais da mesma família."
+      ],
+      "masking": [
+        "Substituída por uma posição da lista — da esquerda à direita, independente."
+      ]
+    },
+    "EC_L3_FILIACION_POLITICA": {
+      "title": "Filiação política",
+      "what": [
+        "A organização política a que a pessoa pertence, do registro do Consejo Nacional Electoral."
+      ],
+      "masking": [
+        "Substituída por outra organização da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_L3_AFILIACION_SINDICAL": {
+      "title": "Filiação sindical",
+      "what": [
+        "O sindicato, o comitê de empresa, a filiação e a contribuição descontada em folha. A lei não a nomeia, mas a cláusula aberta do art. 4 a alcança: é dado cujo tratamento indevido discrimina."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "EC_L3_BIOMETRICO": {
+      "title": "Dados biométricos",
+      "what": [
+        "Templates de impressão digital — a digital da cédula é o padrão de identificação do país —, rosto, íris, voz e assinatura digitalizada. O artigo 4 define o dado biométrico como o que permite ou confirma a identificação única de uma pessoa."
+      ],
+      "masking": [
+        "Cada caractere vira `X`. Um template mascarado não autentica ninguém."
+      ]
+    },
+    "EC_L3_GENETICO": {
+      "title": "Dados genéticos",
+      "what": [
+        "Resultados de exames genéticos e de DNA, testes de paternidade, perfis genéticos, mutações, cariótipo e triagem neonatal. O artigo 4 define o dado genético como o que dá informação única sobre a fisiologia ou a saúde de um indivíduo."
+      ],
+      "masking": [
+        "Cada caractere vira `X`."
+      ]
+    },
+    "EC_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientação sexual",
+      "what": [
+        "Orientação ou preferência sexual autodeclarada, e a vida sexual da mesma frase do artigo 4."
+      ],
+      "masking": [
+        "Substituída por uma categoria da lista."
+      ]
+    },
+    "EC_L3_IDENTIDAD_GENERO": {
+      "title": "Identidade de gênero",
+      "what": [
+        "A **identidade de gênero** que o artigo 4 nomeia em segundo lugar na sua lista, o nome social e a condição intersexual."
+      ],
+      "masking": [
+        "Substituída por uma categoria da lista."
+      ]
+    },
+    "EC_L3_VICTIMA": {
+      "title": "Vítimas de violência",
+      "what": [
+        "Ser vítima de violência de gênero, intrafamiliar ou sexual, de tráfico ou de desaparecimento forçado, o tipo de violência e as medidas de proteção. A Ley Orgánica Integral para Prevenir y Erradicar la Violencia contra las Mujeres protege a identidade da vítima."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "EC_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores de saúde",
+      "what": [
+        "Números de história clínica, internação, atendimento, consulta e receita, e o identificador RDACAA de um atendimento ambulatorial."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo comprimento e formato."
+      ]
+    },
+    "EC_SALUD_COBERTURA": {
+      "title": "Cobertura de saúde",
+      "what": [
+        "O seguro geral do IESS, o Seguro Social Campesino, o ISSFA, o ISSPOL, o sistema público ou um seguro privado, pelo nome ou por código. Qual deles a pessoa tem diz muito sobre ela."
+      ],
+      "masking": [
+        "Um nome é trocado por outra cobertura da lista; um código é mapeado dígito a dígito; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico e CID-10",
+      "what": [
+        "Diagnósticos por extenso ou por código CID-10, com ponto (`F33.1`) ou sem (`F331`); causas de óbito, de atestado e de internação; alergias e comorbidades."
+      ],
+      "masking": [
+        "Um código CID-10 vira outro código comum no mesmo formato, e o texto, um diagnóstico comum: um diagnóstico de HIV ou de transtorno mental não sobrevive como tal."
+      ]
+    },
+    "EC_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimentos",
+      "what": [
+        "Procedimentos, exames e cirurgias, por extenso ou por código. Uma carga viral ou um teste de gravidez revela o diagnóstico."
+      ],
+      "masking": [
+        "Um código é mapeado dígito a dígito; o texto é trocado por um procedimento comum."
+      ]
+    },
+    "EC_SALUD_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": [
+        "Medicamentos prescritos ou dispensados, pelo nome ou pelo princípio ativo. Um antirretroviral, um antipsicótico ou um anticoncepcional diz o que a coluna de diagnóstico foi mascarada para esconder."
+      ],
+      "masking": [
+        "Substituído por um medicamento comum da lista; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": [
+        "Anamnese, doença atual, evolução, exame físico, plano de tratamento, sumários de alta e notas de enfermagem."
+      ],
+      "masking": [
+        "A mesma Free Text Redaction do texto livre: documentos, contatos e nomes da lista são redigidos. O conteúdo clínico fica, porque é o que torna a cópia útil."
+      ]
+    },
+    "EC_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultados de exames",
+      "what": [
+        "Resultados de laboratório e de exames — glicemia, gravidez, toxicológico, alcoolemia —, também como valores numéricos."
+      ],
+      "masking": [
+        "Caractere a caractere, mantendo o formato: um número continua número."
+      ]
+    },
+    "EC_SALUD_VIH": {
+      "title": "HIV e infecções sexualmente transmissíveis",
+      "what": [
+        "Estado sorológico, carga viral e tratamento antirretroviral, hepatites, tuberculose e infecções sexualmente transmissíveis. A Ley de Prevención y Atención Integral del VIH/SIDA manda manter sigilo e proíbe exigir o teste para obter ou manter um emprego."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "EC_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo e Rh",
+      "what": [
+        "Grupo sanguíneo e fator Rh, que a própria cédula traz."
+      ],
+      "masking": [
+        "Substituído por outro grupo da lista."
+      ]
+    },
+    "EC_SALUD_DISCAPACIDAD": {
+      "title": "Deficiência",
+      "what": [
+        "A condição, o tipo e o percentual de deficiência, o carnê do CONADIS e o substituto. O artigo 25 d) faz dos dados de pessoas com deficiência **e de seus substitutos** uma categoria especial própria — nenhuma outra lei da região faz isso."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira e qualquer outro valor é trocado por uma categoria da lista."
+      ]
+    },
+    "EC_SALUD_OCUPACIONAL": {
+      "title": "Saúde ocupacional",
+      "what": [
+        "O parecer de aptidão dos exames médicos ocupacionais, acidentes de trabalho e doenças ocupacionais, atestados e absenteísmo."
+      ],
+      "masking": [
+        "Um parecer é trocado por outro da lista — apto, não apto —; uma bandeira continua bandeira; o diagnóstico cai no domínio próprio."
+      ]
+    },
+    "EC_SALUD_REPRODUCTIVA": {
+      "title": "Saúde sexual e reprodutiva",
+      "what": [
+        "Gravidez, última menstruação, pré-natal, parto, planejamento familiar, fertilidade."
+      ],
+      "masking": [
+        "As bandeiras mantêm a forma; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "EC_SALUD_MENTAL": {
+      "title": "Saúde mental",
+      "what": [
+        "Transtornos mentais, atendimento psiquiátrico ou psicológico, tentativas de suicídio e uso de substâncias. O artigo 4 define *datos relativos a la salud* abrangendo a saúde física **e mental**."
+      ],
+      "masking": [
+        "As bandeiras mantêm a forma; qualquer outro valor vira `Sin información`."
+      ]
+    },
+    "EC_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Histórico de crédito",
+      "what": [
+        "O relatório do buró, o score, os dias de atraso e a categoria de risco da Superintendencia de Bancos — A-1 a E. O artigo 4 os define como *datos personales crediticios*, e o artigo 28 só os admite para analisar solvência, **sem finalidade secundária** e sem comunicação depois de cinco anos."
+      ],
+      "masking": [
+        "Um score recebe outros dígitos do mesmo comprimento; uma bandeira continua bandeira; uma categoria é trocada por outra da lista."
+      ]
+    },
+    "EC_FIN_DEUDA": {
+      "title": "Dívida",
+      "what": [
+        "Saldos de crédito e de carteira, valores em atraso, parcelas, montantes liberados e limites."
+      ],
+      "masking": [
+        "Mapeada para um valor entre 100 e 250.000 dólares, sem relação com o real — o Equador usa o dólar dos EUA."
+      ]
+    },
+    "EC_FIN_INGRESOS": {
+      "title": "Rendimentos e remuneração",
+      "what": [
+        "Salário, renda mensal ou familiar, honorários e rendas. O salário básico unificado foi de 470 dólares mensais em 2025."
+      ],
+      "masking": [
+        "Mapeados para um valor entre 450 e 9.000 dólares."
+      ]
+    },
+    "EC_FIN_PATRIMONIO": {
+      "title": "Patrimônio",
+      "what": [
+        "Patrimônio, ativos, avaliações e valores catastrais, saldos de conta e de fundos, depósitos a prazo e a declaração juramentada de bens."
+      ],
+      "masking": [
+        "Mapeado para um valor entre 1.000 e 600.000 dólares."
+      ]
+    },
+    "EC_FIN_PENSION": {
+      "title": "Pensão e benefícios",
+      "what": [
+        "O valor da pensão, do subsídio ou do benefício, e a pensão alimentícia."
+      ],
+      "masking": [
+        "Mapeado para um valor entre 200 e 3.000 dólares."
+      ]
+    },
+    "EC_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programas sociais",
+      "what": [
+        "O Bono de Desarrollo Humano, o Bono Joaquín Gallegos Lara, as pensões para idosos e para pessoas com deficiência, o Crédito de Desarrollo Humano, pelo nome ou como bandeira. Estar num deles diz que o domicílio é pobre."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira e qualquer outro valor é trocado por um programa da lista."
+      ]
+    },
+    "EC_FIN_REGISTRO_SOCIAL": {
+      "title": "Registro Social",
+      "what": [
+        "A pontuação e o quintil que o Registro Social dá a cada domicílio, e que decide quem recebe subsídio, e o nível socioeconômico."
+      ],
+      "masking": [
+        "Uma bandeira continua bandeira, um código é trocado por outro código e qualquer outro valor por uma classe da lista."
+      ]
+    },
+    "EC_FIN_VIVIENDA": {
+      "title": "Posse da moradia",
+      "what": [
+        "A posse da moradia nas categorias do censo: própria quitada ou em pagamento, doada ou herdada, cedida, por serviços, alugada ou em anticrese."
+      ],
+      "masking": [
+        "Substituída por outra forma de posse da lista."
+      ]
+    },
+    "EC_PENAL_ANTECEDENTES": {
+      "title": "Passado judicial",
+      "what": [
+        "O **pasado judicial** que o artigo 4 lista entre os dados sensíveis: a certidão de antecedentes, o tipo de delito, a situação jurídica, a ordem de prisão, a privação de liberdade e o registro do SNAI."
+      ],
+      "masking": [
+        "Substituído por um status genérico da lista — sem antecedentes, sentenciado, absolvido —, qualquer que seja o desfecho; uma bandeira continua bandeira."
+      ]
+    },
+    "EC_PENAL_EXPEDIENTE": {
+      "title": "Processo judicial",
+      "what": [
+        "O número que a Função Judicial dá a um processo — unidade judicial, ano e correlativo, `17294-2024-00123` — e o expediente da Fiscalía."
+      ],
+      "masking": [
+        "A unidade judicial e o correlativo são mapeados dígito a dígito; o ano fica. Outros números são mascarados caractere a caractere."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Os dígitos verificadores da cédula e do RUC",
+      "body": [
+        "A **cédula** tem dez dígitos. Cada um dos nove primeiros é multiplicado pela série 2 1 2 1 2 1 2 1 2, todo produto maior que nove é reduzido em nove, e o décimo dígito é dez menos o resto da soma módulo dez. É o **algoritmo de Luhn**, o mesmo de um cartão de pagamento — e é isso que faz o mascaramento caber num passo só.",
+        "O framework **Payment Card** do Masking Engine preserva o resto de Luhn do valor que recebe: uma cédula válida sai como outra cédula válida. O parâmetro `preserve` fixa quantos dígitos iniciais ficam, e três deles mantêm a **província de emissão** e o dígito que diz que o titular é pessoa natural. A província fica pela mesma razão que a coluna de província fica: o set generaliza abaixo da província, não nela.",
+        "O **RUC** tem treze dígitos, e o terceiro decide a regra:",
+        {
+          "list": [
+            "**0 a 5 — pessoa natural**: o RUC é a cédula mais o código de estabelecimento `001`. O set mascara os dez dígitos como cédula e mantém o código, de modo que a cédula e o RUC da mesma pessoa continuam coincidindo.",
+            "**9 — sociedade privada**: o dígito verificador está na décima posição, calculado módulo 11 com os coeficientes 4 3 2 7 6 5 4 3 2. **6 — entidade pública**: o dígito está na nona, com os coeficientes 3 2 7 6 5 4 3 2. Nenhuma das duas é pessoa natural, então nenhuma é dado pessoal: o set deixa as duas exatamente como estão, e o diz."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Onde as pessoas moram: paróquias, código DPA e código postal",
+      "body": [
+        "Com a população contada pelo censo de 2022 e a localização publicada pela camada DPA, o set conhece o tamanho, o cantão, a província e a posição de cerca de 1.040 paróquias e 224 cantões.",
+        {
+          "list": [
+            "Uma **paróquia** com menos de 20.000 habitantes vira a paróquia mais próxima do seu **cantão** com pelo menos 20.000; quando o cantão não tem nenhuma, a mais próxima da sua província. São 913, com 4,3 milhões de habitantes.",
+            "Os **93 cantões** abaixo de 20.000 seguem a mesma regra dentro da sua província. As 24 províncias ficam.",
+            "Três províncias não têm nenhuma paróquia de 20.000 — Galápagos, Zamora Chinchipe e a zona não delimitada. Ali o valor fica dentro da província e vira a sua paróquia mais populosa: um grupo menor que nos demais casos, e a documentação o diz em vez de mandar um morador de Galápagos para o continente.",
+            "A distância é medida entre os centroides da camada DPA, em linha reta.",
+            "Os nomes se repetem — San José, Santa Rosa, San Vicente, Bellavista. Um nome só é generalizado quando todos os lugares que o levam são pequenos, e então segue o mais populoso deles; quando esse é um cantão, a substituição é um cantão. Escrito com o cantão ou a província (`Facundo Vela - Bolívar`), a mesma regra vale dentro dele.",
+            "O **código DPA** segue a mesma tabela, de modo que o nome e o código da paróquia de uma pessoa continuam coincidindo — e, como o código postal *é* o código DPA, a **ciudadela** é trocada por outra e o **código postal** guarda apenas a província."
+          ]
+        },
+        "Nomes de paróquia que também são prenomes ou sobrenomes, e nomes de província, ficam de fora da lista de detecção, para que uma coluna de sobrenome não seja tomada por paróquias."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        {
+          "list": [
+            "**Colunas binárias** — fotos da cédula, impressões digitais, selfies de validação, PDFs clínicos em BLOB — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
+            "**A província de emissão da cédula fica**, e a província também: o set generaliza abaixo da província, não nela. Se a própria província for reveladora demais para os seus dados, acrescente um passo que a mapeie — lembrando que qualquer mudança nesses dois dígitos quebra o dígito de Luhn, que então precisa ser recalculado.",
+            "**O RUC de empresa não é mascarado**: o artigo 4 faz titular apenas a pessoa natural. Se o seu rule set precisar mascarar mesmo assim, dê à coluna um domínio próprio.",
+            "**A camada DPA publica os nomes dos lugares sem os acentos agudos.** O set os restaura com um dicionário e escreve as duas grafias nas tabelas, mas um nome que não pôde restaurar sai sem acento.",
+            "**O Data Cleansing deixa os valores desconhecidos como estão**: uma paróquia escrita de um jeito que não está na tabela — abreviada, com erro — passa sem mudar.",
+            "**O texto livre** é redigido palavra a palavra: um telefone escrito com espaços no meio de uma frase pode não ser encontrado, e um nome que também é palavra comum (`Rosa`, `Cruz`, `Flores`) é redigido onde quer que apareça.",
+            "**Crianças e adolescentes** são categoria especial própria (art. 25 b). A data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam o 18.º aniversário — mas algumas cruzam. Onde essa linha importar, separe a regra por faixa etária com Multi-Column Condition.",
+            "**Os endereços** são substituídos como linha inteira. Via, ciudadela, paróquia e código postal em colunas separadas são mascarados de forma independente e deixam de formar um endereço coerente.",
+            "**A chave do engine** liga os valores mascarados de volta à produção para quem tiver as duas: a cópia está **pseudonimizada** no sentido do artigo 4, não anonimizada, e segue sendo dado pessoal. Mantenha a chave separada e sob medidas técnicas e organizativas."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        {
+          "list": [
+            "A regra da cédula foi conferida contra números válidos publicados, e as duas regras do RUC contra RUCs publicados por empresas e entidades públicas.",
+            "Cada configuração de classifier foi revisada contra o que um Masking Engine aceita.",
+            "O profiling foi simulado em 142 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 29 que não são dados pessoais — e de novo só com os classifiers do pacote essencial.",
+            "A tabela que generaliza lugares foi auditada para todas as 1.040 paróquias e 224 cantões: pelo nome, pelo nome com a província e pelo código DPA.",
+            "Os algoritmos, executados com o plugin de algoritmos da Delphix, mascararam os valores de exemplo de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 200 cédulas para validade, distinção e a província e o tipo que mantêm, 25 pares de cédula e RUC para confirmar que continuam coincidindo, e 40 RUCs de empresa para confirmar que voltam intactos. Cada algoritmo também mascarou o próprio valor de exemplo."
+          ]
+        },
+        "Toda coluna foi atribuída como esperado e todo valor mascarado como esperado. Antes de usar o set com dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        {
+          "list": [
+            "Ley Orgánica de Protección de Datos Personales (Quinto Suplemento do Registro Oficial 459, 26 de maio de 2021) e seu Reglamento General (Suplemento do Registro Oficial 435, 13 de novembro de 2023).",
+            "Constituição da República (nacionalidades e povos indígenas, união de fato). Ley Orgánica de Salud. Ley de Prevención y Atención Integral del VIH/SIDA. Ley Orgánica de Discapacidades. Ley Orgánica Integral para Prevenir y Erradicar la Violencia contra las Mujeres. Código Orgánico Integral Penal.",
+            "Instituto Nacional de Estadística y Censos: VIII Censo de Población y VII de Vivienda 2022, população por paróquia, e a División Política Administrativa com o código e a localização de cada paróquia e cantão.",
+            "Registro Civil (cédula e seu dígito verificador). SRI (RUC e suas duas regras). Superintendencia de Bancos (categorias de risco A-1 a E). IESS, ISSFA e ISSPOL. CONADIS. MIES (Registro Social e os programas sociais). CNE (registro de organizações políticas). Ministério do Trabalho (salário básico unificado 2025). ANT (placa). Correos del Ecuador (código postal de seis dígitos). SENESCYT."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "title": "Brasil — LGPD (Ley 13.709/2018)",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales brasileños: CPF, CNPJ, PIS, título electoral y CNS con dígito verificador válido, cuasi-identificadores, los datos personales sensibles del art. 5, II, datos financieros y antecedentes penales.",
+  "sections": [
+    {
+      "title": "Acerca de este profile set",
+      "body": [
+        "Este profile set encuentra los datos personales de una base de datos brasileña y los enmascara, para que una copia no productiva — de pruebas, desarrollo, capacitación o análisis — deje de identificar a alguien.",
+        "Enmascarar solo nombres y CPF no basta: una fecha de nacimiento, un sexo y un municipio pequeño ya apuntan a una persona. El set trabaja en las capas donde está el riesgo:",
+        { "list": [
+          "**Identificadores directos** — CPF, CNPJ, RG, CNH, título electoral, PIS/NIS, libreta de trabajo, pasaporte, documentos de extranjeros, actas del registro civil, registros profesionales, nombres, contacto, domicilio, cuentas, tarjetas y clave PIX, dispositivos, vehículos, inmuebles, texto libre.",
+          "**Cuasi-identificadores** — fecha de nacimiento, edad, sexo, municipio y código del IBGE, CEP, barrio, zona electoral, nacionalidad, estado civil, ocupación, empleador, escolaridad.",
+          "**Datos personales sensibles** — las categorías del art. 5, II: origen racial o étnico, convicción religiosa, opinión política, afiliación a sindicato o a organización de carácter religioso, filosófico o político, vida sexual, datos genéticos y biométricos — y, más allá de la lista, identidad de género.",
+          "**Datos de salud** — también sensibles por el art. 5, II, en un grupo propio: Tarjeta Nacional de Salud, expedientes, CIE-10, medicamentos, notas clínicas, exámenes, discapacidad, salud ocupacional, reproductiva y mental.",
+          "**Datos financieros y de crédito** — score y registros negativos, deudas, ingresos, patrimonio, beneficios del INSS, programas sociales y Cadastro Único, tramo de ingresos, vivienda.",
+          "**Antecedentes penales y procesos** — antecedentes, situación carcelaria y números de proceso."
+        ] },
+        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos en los que esos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa.",
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza por sí solo; uno ambiguo — `NOME`, `CARGO`, `RESULTADO`, `PROCESSO` — necesita que los valores concuerden. Una columna de nombre sin sentido (`CAMPO1`, `OBS`) igual se encuentra cuando los valores tienen formato o vocabulario reconocible: un CPF formateado, un CNPJ, un CEP, una placa, un municipio.",
+        "Los nombres de columna se reconocen en portugués, en los prefijos de los modelos de datos brasileños (`NR_CPF`, `NM_CLIENTE`, `DT_NASCIMENTO`, `CO_MUNICIPIO_IBGE`, `CS_RACA`, `NU_CNS`, `SG_PARTIDO`) y en inglés.",
+        { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOB, imágenes, PDF). Los procesos de alta y de prueba de vida suelen guardar la foto del RG o de la CNH y la selfie: el documento sigue legible en la imagen, y la selfie es un dato biométrico. Reporte esas columnas como riesgo residual." }
+      ]
+    },
+    {
+      "title": "La LGPD en resumen",
+      "body": [
+        "La Ley General de Protección de Datos Personales — Ley 13.709 del 14 de agosto de 2018 — está vigente desde septiembre de 2020, y sus sanciones administrativas desde el 1 de agosto de 2021 (art. 65). Fue modificada por las Leyes 13.853/2019, 14.010/2020 y 14.460/2022 y por la Ley 15.352 del 25 de febrero de 2026, que convirtió a la autoridad en la **Agência Nacional de Proteção de Dados (ANPD)**, autarquía de régimen especial con autonomía funcional, técnica, decisoria, administrativa y financiera (art. 55-A). La protección de datos personales es un derecho fundamental desde la Enmienda Constitucional 115/2022 (art. 5, LXXIX, de la Constitución).",
+        "Lo que importa para una copia de datos de producción:",
+        { "list": [
+          "**Dato personal** es la información relacionada con una persona natural identificada o identificable (art. 5, I). La ley protege a personas naturales; los datos de una persona jurídica quedan fuera — pero el CNPJ de un microemprendedor individual lleva a una persona.",
+          "**Dato personal sensible** es el dato personal sobre origen racial o étnico, convicción religiosa, opinión política, afiliación a sindicato o a organización de carácter religioso, filosófico o político, dato referente a la salud o a la vida sexual, dato genético o biométrico, cuando está vinculado a una persona natural (art. 5, II). El régimen alcanza también a cualquier tratamiento que **revele** datos sensibles y pueda causar daño (art. 11, § 1) — un beneficio del INSS por incapacidad revela una enfermedad.",
+          "**Los datos anonimizados** no son datos personales, salvo cuando la anonimización pueda revertirse con medios propios o con esfuerzos razonables, considerando costo, tiempo y la tecnología disponible (art. 12). Vea la sección siguiente.",
+          "**Principios.** Finalidad, adecuación y necesidad (art. 6, I a III): usar datos de producción identificados para probar un sistema difícilmente cumple el principio de necesidad cuando la prueba funciona con datos enmascarados. Seguridad y prevención (art. 6, VII y VIII) y medidas de seguridad desde la concepción (art. 46, § 2).",
+          "**Niños y adolescentes.** Tratamiento en su mejor interés, con consentimiento específico de uno de los padres para niños (art. 14). El Estatuto Digital del Niño y del Adolescente (Ley 15.211/2025), vigente desde el 17 de marzo de 2026, es reglamentado y fiscalizado por la ANPD.",
+          "**Los incidentes de seguridad** que puedan acarrear riesgo o daño relevante se comunican a la ANPD y a los titulares (art. 48) en **tres días hábiles** (Resolução CD/ANPD 15/2024). En la evaluación de la gravedad cuenta haber vuelto ininteligibles los datos para quien no tenía acceso (art. 48, § 3): una copia enmascarada que se filtra no es la base de producción que se filtra.",
+          "**Sanciones.** Advertencia, multa de hasta el 2% de la facturación en Brasil con un tope de R$ 50 millones por infracción, multa diaria, publicidad, bloqueo y eliminación de los datos, suspensión de la base de datos o del tratamiento y prohibición de tratar datos (art. 52), calculadas según la Resolução CD/ANPD 4/2023."
+        ] },
+        "Dos temas fuera del texto de la LGPD también están en el set. **Los datos financieros** no son sensibles en la ley, pero las operaciones de las instituciones financieras están bajo secreto (Ley Complementaria 105/2001), las bases de datos de crédito tienen ley propia (Ley 12.414/2011, la del registro positivo) y la protección del crédito es una base legal propia (art. 7, X). **Los antecedentes penales** tampoco están en la lista del art. 5, II, pero el Tribunal Superior del Trabajo estableció que exigir el certificado de antecedentes a un candidato a un empleo sin justificación legal o del puesto genera daño moral (IRR Tema 1): es un dato que expone a la discriminación y recibe el cuidado de un dato sensible."
+      ]
+    },
+    {
+      "title": "Anonimización, seudonimización y copias no productivas",
+      "body": [
+        "La LGPD distingue dos resultados. **Anonimización** es la utilización de medios técnicos razonables por los cuales un dato pierde la posibilidad de asociación, directa o indirecta, con un individuo (art. 5, XI); el dato anonimizado sale de la ley (art. 12). **Seudonimización** es el tratamiento por el cual el dato pierde esa posibilidad *salvo por el uso de información adicional mantenida por separado por el responsable en un ambiente controlado y seguro* (art. 13, § 4); el dato seudonimizado sigue siendo dato personal.",
+        "Los algoritmos de este set son deterministas para la clave del Masking Engine: el mismo CPF se enmascara igual en todas las tablas, lo que mantiene los joins. Por eso, para quien tiene la clave **y** la producción, la copia enmascarada puede volver a vincularse — está seudonimizada. Para quien tiene solo la copia, sin la clave ni la producción, los identificadores directos fueron reemplazados y los cuasi-identificadores generalizados, y revertir el proceso no está al alcance de esfuerzos razonables.",
+        { "list": [
+          "Guarde la clave del engine fuera del alcance de quien usa la copia enmascarada: es la *información adicional mantenida por separado* del art. 13, § 4.",
+          "No entregue la copia a quien también accede a producción sin necesidad.",
+          "Revise los cuasi-identificadores que el set no conoce. La ANPD recuerda que el código postal, el sexo y la fecha de nacimiento bastaron para identificar al 87% de la población de los Estados Unidos en un estudio de 2000."
+        ] },
+        "En enero de 2024 la ANPD sometió a consulta un estudio preliminar y una guía de anonimización y seudonimización; en diciembre de 2025 el tema seguía en la Agenda Regulatoria 2025–2026 (ítem 9). El estudio describe técnicas — supresión, generalización, adición de ruido, permutación, enmascaramiento, sustitución, tokenización — y advierte que el enmascaramiento parcial del CPF (`***.111.111-**`), común en publicaciones, puede reconstruirse cuando cada fuente oculta partes distintas. Este set reemplaza el identificador entero por otro válido, en lugar de ocultar una parte."
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. El CPF es la clave de casi todo registro brasileño — y, por la Ley 14.534/2023, es número suficiente para identificar al ciudadano en los servicios públicos y el número de la nueva Cédula de Identidad Nacional. Se enmascara igual en todas partes y conserva dígitos verificadores válidos, porque las aplicaciones los validan. Lo mismo vale para CNPJ, PIS, título electoral y RENAVAM."
+      ],
+      "domains": ["BR_L1_CPF", "BR_L1_CNPJ", "BR_L1_RG", "BR_L1_CNH", "BR_L1_TITULO_ELEITOR", "BR_L1_PIS_NIS", "BR_L1_CTPS", "BR_L1_PASSAPORTE", "BR_L1_DOCUMENTO_ESTRANGEIRO", "BR_L1_CERTIDAO", "BR_L1_REGISTRO_PROFISSIONAL", "BR_L1_NOME", "BR_L1_SOBRENOME", "BR_L1_NOME_COMPLETO", "BR_L1_EMAIL", "BR_L1_TELEFONE", "BR_L1_ENDERECO", "BR_L1_ENDERECO_COMPLEMENTO", "BR_L1_CONTA_BANCARIA", "BR_L1_CARTAO", "BR_L1_CHAVE_PIX", "BR_L1_IP", "BR_L1_DISPOSITIVO", "BR_L1_PLACA", "BR_L1_RENAVAM", "BR_L1_CHASSI", "BR_L1_IMOVEL", "BR_L1_CONTRATO", "BR_L1_USUARIO", "BR_L1_CREDENCIAL", "BR_L1_GEOLOCALIZACAO", "BR_L1_TEXTO_LIVRE"]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por sí solos, pero sí en combinación. Brasil tiene 5.570 municipios, y 3.860 de ellos tenían menos de 20.000 habitantes en el Censo 2022; el menor, Serra da Saudade (MG), tenía 833. Una fecha de nacimiento, un sexo y uno de esos municipios apuntan a un puñado de personas. Estos atributos se generalizan o desplazan en lugar de reemplazarse, y el dato conserva su valor analítico."
+      ],
+      "domains": ["BR_L2_DATA_NASCIMENTO", "BR_L2_ANO_NASCIMENTO", "BR_L2_IDADE", "BR_L2_DATA_EVENTO", "BR_L2_SEXO", "BR_L2_MUNICIPIO", "BR_L2_CODIGO_MUNICIPIO", "BR_L2_CEP", "BR_L2_BAIRRO", "BR_L2_ZONA_SECAO_ELEITORAL", "BR_L2_NACIONALIDADE", "BR_L2_ESTADO_CIVIL", "BR_L2_OCUPACAO", "BR_L2_EMPREGADOR", "BR_L2_ESCOLARIDADE", "BR_L2_ESCOLA", "BR_L2_DEPENDENTES"]
+    },
+    {
+      "id": "L3",
+      "title": "Datos personales sensibles",
+      "intro": [
+        "Las categorías del art. 5, II que no son datos de salud — que tienen grupo propio: origen racial o étnico, convicción religiosa, opinión política, afiliación a sindicato o a organización de carácter religioso, filosófico o político, vida sexual, datos genéticos y biométricos — y, más allá de la lista, la orientación sexual y la identidad de género, que exponen a las mismas discriminaciones. Las columnas categóricas conservan su forma: una bandera S/N sigue siendo bandera, un código numérico se reemplaza por otro código del mismo catálogo y cualquier otro valor por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Não informado`."
+      ],
+      "domains": ["BR_L3_RACA_COR", "BR_L3_ETNIA", "BR_L3_RELIGIAO", "BR_L3_CONVICCAO_ORGANIZACAO", "BR_L3_OPINIAO_POLITICA", "BR_L3_FILIACAO_PARTIDARIA", "BR_L3_FILIACAO_SINDICAL", "BR_L3_GENETICO", "BR_L3_BIOMETRICO", "BR_L3_ORIENTACAO_SEXUAL", "BR_L3_VIDA_SEXUAL", "BR_L3_IDENTIDADE_GENERO"]
+    },
+    {
+      "id": "SAUDE",
+      "title": "Datos de salud",
+      "intro": [
+        "El dato referente a la salud es dato personal sensible (art. 5, II). La ley prohíbe compartir datos de salud entre responsables con el objetivo de obtener ventaja económica, salvo en servicios de salud y asistencia farmacéutica, y prohíbe a las operadoras de planes de salud usarlos para selección de riesgos (art. 11, §§ 4 y 5). Los estudios de salud pública deben anonimizar o seudonimizar los datos siempre que sea posible (art. 13). El grupo cubre lo que guardan los sistemas de salud, las operadoras, los laboratorios y RR. HH. (salud ocupacional)."
+      ],
+      "domains": ["BR_SAUDE_CNS", "BR_SAUDE_IDENTIFICADOR", "BR_SAUDE_DIAGNOSTICO", "BR_SAUDE_MEDICAMENTO", "BR_SAUDE_TEXTO_CLINICO", "BR_SAUDE_RESULTADO_EXAME", "BR_SAUDE_TIPO_SANGUINEO", "BR_SAUDE_DEFICIENCIA", "BR_SAUDE_OCUPACIONAL", "BR_SAUDE_REPRODUTIVA", "BR_SAUDE_MENTAL"]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos financieros y de crédito",
+      "intro": [
+        "La LGPD no los llama sensibles, pero la vida financiera de una persona está protegida por el secreto bancario (Ley Complementaria 105/2001), las bases de datos de crédito tienen ley propia (Ley 12.414/2011) y la protección del crédito es una base legal propia (art. 7, X). Y varios de estos datos revelan datos sensibles: la especie de un beneficio del INSS dice si la persona está incapacitada, tiene una discapacidad o tuvo un hijo, y un beneficio del Bolsa Família o un tramo del Cadastro Único dicen que es pobre. Las categorías se reemplazan dentro de su propia notación; los montos se mapean a un rango plausible sin relación con el valor real."
+      ],
+      "domains": ["BR_FIN_CREDITO", "BR_FIN_DIVIDA", "BR_FIN_RENDA", "BR_FIN_PATRIMONIO", "BR_FIN_VALOR_BENEFICIO", "BR_FIN_BENEFICIO_INSS", "BR_FIN_NUMERO_BENEFICIO", "BR_FIN_PROGRAMA_SOCIAL", "BR_FIN_FAIXA_RENDA", "BR_FIN_MORADIA"]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes penales y procesos",
+      "intro": [
+        "Fuera de la lista del art. 5, II, pero entre los datos que más exponen a la discriminación: exigir antecedentes a un candidato a un empleo sin justificación genera daño moral presunto (TST, IRR Tema 1), y la LGPD solo deja de aplicarse cuando el tratamiento es exclusivamente para seguridad pública o para la investigación y persecución de infracciones penales (art. 4, III). En una empresa, estos datos reciben el mismo cuidado que los sensibles."
+      ],
+      "domains": ["BR_PENAL_ANTECEDENTES", "BR_PENAL_PROCESSO"]
+    }
+  ],
+  "domains": {
+    "BR_L1_CPF": {
+      "title": "CPF",
+      "what": [
+        "El número de inscripción en el Cadastro de Pessoas Físicas de la Receita Federal: nueve dígitos y dos dígitos verificadores, `529.982.247-25`. El noveno dígito es la región fiscal que emitió el número. Por la Ley 14.534/2023 es número suficiente para identificar al ciudadano en las bases de datos de servicios públicos, y la Cédula de Identidad Nacional usa el CPF como número. Aparece formateado, solo con dígitos o, en una columna numérica, sin los ceros a la izquierda.",
+        "Las columnas `CPF_CNPJ` y `NR_DOCUMENTO` guardan CPF y CNPJ juntos, y también caen aquí."
+      ],
+      "masking": [
+        "Los nueve primeros dígitos se mapean dígito a dígito — la región fiscal también cambia — y los dos dígitos verificadores se recalculan: módulo 11, pesos de 10 a 2 para el primero y de 11 a 2 para el segundo, resto 0 o 1 da 0. Todo CPF enmascarado es válido, el formato se mantiene y el mapeo es uno a uno: un CPF usado como clave no colisiona.",
+        "Un número de hasta diez dígitos se toma por un CPF que perdió los ceros y sale con once. Un valor con forma de CNPJ se enmascara como CNPJ."
+      ]
+    },
+    "BR_L1_CNPJ": {
+      "title": "CNPJ",
+      "what": [
+        "El número del Registro Nacional de Personas Jurídicas: raíz de ocho caracteres, orden del establecimiento de cuatro (`0001` es la matriz) y dos dígitos verificadores, `11.222.333/0001-81`. Desde julio de 2026 raíz y orden pueden tener letras (Instrução Normativa RFB 2.229/2024): `12.ABC.345/01DE-35`.",
+        "Los datos de persona jurídica están fuera de la LGPD, pero el CNPJ de un microemprendedor individual (MEI) o de un empresario individual lleva a una persona: la consulta pública del CNPJ muestra su nombre."
+      ],
+      "masking": [
+        "La raíz se mapea — dígitos en dígitos, letras en letras — y el orden del establecimiento se mantiene, así las sucursales de una empresa siguen siendo sucursales de la misma empresa enmascarada. Los dos dígitos verificadores se recalculan con pesos de 5 a 2 y de 9 a 2, módulo 11, con cada carácter valiendo su código ASCII menos 48 — la regla del CNPJ alfanumérico, que para dígitos es la de siempre. Todo CNPJ enmascarado es válido, y el mapeo es uno a uno."
+      ]
+    },
+    "BR_L1_RG": {
+      "title": "RG",
+      "what": ["El número de la cédula de identidad expedida por los institutos de identificación de cada estado, con formato y dígito verificador propios — en São Paulo `12.345.678-X`, con la X como dígito. Aparece con el órgano emisor (`SSP/SP`) o la sigla del estado (`MG-12.345.678`)."],
+      "masking": ["Los dígitos se mapean; letras, órgano emisor y separadores se mantienen. El dígito verificador no se recalcula: cada estado tiene su regla."]
+    },
+    "BR_L1_CNH": {
+      "title": "CNH",
+      "what": ["El número de registro de la licencia de conducir nacional: once dígitos, los dos últimos verificadores. Las columnas del RENACH y del permiso para conducir también caen aquí."],
+      "masking": ["Dígito a dígito, manteniendo la longitud. El segundo dígito verificador de la CNH depende de que el primero haya pasado de 9, una regla que Check Digit no sigue; no se recalcula."]
+    },
+    "BR_L1_TITULO_ELEITOR": {
+      "title": "Título electoral",
+      "what": ["El número de inscripción electoral: ocho dígitos secuenciales, dos del estado (01 São Paulo, 02 Minas Gerais … 28 exterior) y dos dígitos verificadores, `1023 8501 0671`."],
+      "masking": ["El estado se mantiene, la secuencia se mapea y los dos dígitos verificadores se recalculan, incluida la regla de São Paulo y Minas Gerais, en la que resto 0 da 1. Todo título enmascarado es válido, y un número que perdió los ceros en una columna numérica los recupera antes del cálculo. Vea *Dígitos verificadores calculados por el set*."]
+    },
+    "BR_L1_PIS_NIS": {
+      "title": "PIS, PASEP, NIT y NIS",
+      "what": ["El número del trabajador en el PIS (Caixa) o el PASEP (Banco do Brasil), que es también el NIT del INSS y el NIS del Cadastro Único y del Bolsa Família: diez dígitos y un dígito verificador, `120.56412.54-7`."],
+      "masking": ["El primer dígito se mantiene, los otros nueve se mapean y el dígito verificador se recalcula con pesos 3 2 9 8 7 6 5 4 3 2, módulo 11. Todo PIS enmascarado es válido y el mapeo es uno a uno. El mismo algoritmo enmascara el PIS dentro de la Tarjeta Nacional de Salud."]
+    },
+    "BR_L1_CTPS": {
+      "title": "Libreta de trabajo",
+      "what": ["Número y serie de la Carteira de Trabalho e Previdência Social en papel. La libreta digital usa el CPF."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_PASSAPORTE": {
+      "title": "Pasaporte",
+      "what": ["Números de pasaporte brasileños — dos letras y seis dígitos, `FZ123456` — y extranjeros."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_DOCUMENTO_ESTRANGEIRO": {
+      "title": "Documentos de extranjeros",
+      "what": ["El Registro Nacional Migratorio (RNM, antes RNE) de la cédula migratoria, el protocolo de refugio y el número de visa."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_CERTIDAO": {
+      "title": "Actas del registro civil",
+      "what": ["La matrícula de las actas de nacimiento, matrimonio y defunción: 32 dígitos con la oficina de registro, el acervo, el año, el tipo de libro, libro, folio, asiento y dos dígitos verificadores. También la Declaración de Nacido Vivo y la Declaración de Defunción."],
+      "masking": ["Dígito a dígito, manteniendo la longitud. El dígito verificador no se recalcula."]
+    },
+    "BR_L1_REGISTRO_PROFISSIONAL": {
+      "title": "Registro profesional",
+      "what": ["El número de inscripción en un consejo profesional — CRM, OAB, CREA, COREN, CRO, CRP, CRC y otros —, `CRM-SP 123456`. Los consejos publican estos registros con el nombre del profesional."],
+      "masking": ["Los dígitos se mapean; consejo, estado y separadores se mantienen."]
+    },
+    "BR_L1_NOME": {
+      "title": "Nombre",
+      "what": ["El nombre de pila, uno o más: `Maria`, `João Pedro`, `Maria de Fátima`. La lista de detección tiene los nombres más frecuentes del Censo 2022."],
+      "masking": ["Palabra por palabra, reemplazando cada nombre por uno de la lista del Censo 2022. `de`, `da`, `dos` y `e` se quedan en su lugar. Más de tres palabras se enmascaran carácter a carácter."]
+    },
+    "BR_L1_SOBRENOME": {
+      "title": "Apellido",
+      "what": ["Los apellidos, en general dos — el de la madre y el del padre —, con partículas: `da Silva Santos`. También el apellido de soltera. La lista de detección tiene los apellidos más frecuentes del Censo 2022."],
+      "masking": ["Palabra por palabra, reemplazando cada apellido por uno de la lista. Partículas y agnombres — Júnior, Filho, Neto, Sobrinho — se quedan en su lugar."]
+    },
+    "BR_L1_NOME_COMPLETO": {
+      "title": "Nombre completo",
+      "what": [
+        "Nombres y apellidos en una sola columna: `José Carlos da Silva Júnior`. También el nombre de la madre y del padre — pedidos en casi todo registro brasileño y usados como pregunta de seguridad —, del responsable, del cónyuge, y el **nombre social**, que revela la identidad de género de una persona trans.",
+        "Una columna llamada solo `NOME` puede tener nombres de pila o nombres completos: los valores deciden entre los dos dominios."
+      ],
+      "masking": [
+        "En el orden brasileño: dos palabras son nombre y apellido; tres, un nombre y dos apellidos (`Maria da Silva` también); desde cuatro, dos nombres y el resto apellidos. Partículas y agnombres se mantienen. `APELLIDOS, NOMBRES` con coma, como en listas, también se reconoce. El resultado es un nombre brasileño plausible, nunca el original."
+      ]
+    },
+    "BR_L1_EMAIL": {
+      "title": "Correo electrónico",
+      "what": ["Direcciones de correo personales y corporativas."],
+      "masking": ["El usuario y el dominio se mapean carácter a carácter, y el dominio de nivel superior — `.com`, `.com.br` — pasa a `.test`, reservado para pruebas: una dirección enmascarada nunca entrega un mensaje."]
+    },
+    "BR_L1_TELEFONE": {
+      "title": "Teléfono",
+      "what": ["Números con código de país (55), código de área (DDD) y ocho dígitos para fijo (empezando en 2 a 5) o nueve para celular (empezando en 9): `(11) 98765-4321`, `+55 21 3456-7890`, `11987654321`."],
+      "masking": ["El código de país, el DDD y el primer dígito se mantienen — el DDD cubre una región entera, y el primer dígito distingue celular de fijo —; los demás dígitos se mapean, manteniendo longitud y separadores."]
+    },
+    "BR_L1_ENDERECO": {
+      "title": "Domicilio",
+      "what": ["La línea de domicilio: tipo y nombre de la vía, número, complemento, a veces el barrio. `Av. Paulista, 1578, 12º andar - Bela Vista`."],
+      "masking": ["La línea entera se reemplaza por un domicilio brasileño ficticio — vía de nombre común, número, departamento o casa, barrio. Municipio, estado y CEP en columnas propias los tratan sus dominios."]
+    },
+    "BR_L1_ENDERECO_COMPLEMENTO": {
+      "title": "Número y complemento",
+      "what": ["Número del inmueble, complemento, departamento, bloque, manzana y lote en columnas propias."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_CONTA_BANCARIA": {
+      "title": "Agencia y cuenta",
+      "what": ["Agencia y cuenta bancaria, con los dígitos verificadores de cada banco (a veces X). El código del banco (COMPE, ISPB) no es dato personal y no tiene dominio."],
+      "masking": ["Los dígitos se mapean; X y separadores se mantienen. Los dígitos verificadores no se recalculan: cada banco tiene su regla."]
+    },
+    "BR_L1_CARTAO": {
+      "title": "Tarjeta de pago",
+      "what": ["Números de tarjetas de crédito y débito, reconocidos por el algoritmo de Luhn."],
+      "masking": ["Payment Card: otro número que pasa el algoritmo de Luhn. Solo los valores con forma de tarjeta llegan a él."]
+    },
+    "BR_L1_CHAVE_PIX": {
+      "title": "Clave PIX",
+      "what": ["La clave PIX es un CPF, un CNPJ, un correo, un teléfono en el formato `+5511987654321` o una clave aleatoria (un UUID)."],
+      "masking": ["Cada tipo de clave se enmascara como su dominio: CPF y CNPJ con dígitos verificadores válidos, correo con `.test`, teléfono manteniendo el DDD, clave aleatoria manteniendo el formato hexadecimal. Una clave CPF y el CPF de la misma persona siguen coincidiendo."]
+    },
+    "BR_L1_IP": {
+      "title": "Dirección IP",
+      "what": ["Direcciones IPv4 e IPv6. El Marco Civil de Internet obliga a los proveedores a guardar registros de conexión y de acceso, con la IP, que llevan al suscriptor."],
+      "masking": ["Cada octeto IPv4 se mapea a 1–254; una IPv6 se mapea manteniendo sus caracteres hexadecimales."]
+    },
+    "BR_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": ["IMEI, IMSI, ICCID, dirección MAC, identificadores publicitarios, cookies y sesiones."],
+      "masking": ["Carácter a carácter, con los dígitos hexadecimales hexadecimales: una MAC sigue siendo MAC."]
+    },
+    "BR_L1_PLACA": {
+      "title": "Placa de vehículo",
+      "what": ["Placas del patrón antiguo, tres letras y cuatro dígitos (`ABC-1234`), y del patrón Mercosur, con una letra en la quinta posición (`BRA2E19`)."],
+      "masking": ["Letras pasan a letras y dígitos a dígitos, posición por posición, con el guion: el patrón de la placa se mantiene."]
+    },
+    "BR_L1_RENAVAM": {
+      "title": "RENAVAM",
+      "what": ["El código del Registro Nacional de Vehículos Automotores: once dígitos, el último verificador. Los números antiguos, de nueve dígitos, se completan con ceros."],
+      "masking": ["Los diez primeros dígitos se mapean y el dígito verificador se recalcula con pesos 3 2 9 8 7 6 5 4 3 2, módulo 11. Todo RENAVAM enmascarado es válido, con once dígitos."]
+    },
+    "BR_L1_CHASSI": {
+      "title": "Chasis",
+      "what": ["El número de identificación del vehículo (VIN) de 17 caracteres grabado en el chasis, y el número de motor."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_IMOVEL": {
+      "title": "Inmueble",
+      "what": ["La matrícula en el registro de la propiedad, la inscripción inmobiliaria del IPTU y los códigos de inmuebles rurales — CAR, CCIR, NIRF, SNCR. Cada uno lleva al propietario por registros públicos."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_CONTRATO": {
+      "title": "Número de contrato y matrícula",
+      "what": ["Números de contrato, póliza, propuesta, protocolo, unidad consumidora e instalación, matrícula de empleado, servidor público (SIAPE) o alumno, credencial y código de cliente."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato. El mapeo es determinista, así que los joins siguen funcionando."]
+    },
+    "BR_L1_USUARIO": {
+      "title": "Usuario y redes sociales",
+      "what": ["Login, apodo y perfiles en redes sociales."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_L1_CREDENCIAL": {
+      "title": "Credenciales",
+      "what": ["Contraseñas y sus hashes, PIN, códigos de seguridad, CVV, tokens, claves de API y respuestas secretas."],
+      "masking": ["Cada carácter pasa a `X`. Una credencial no tiene uso en una copia de pruebas, y un hash enmascarado carácter a carácter todavía podría atacarse."]
+    },
+    "BR_L1_GEOLOCALIZACAO": {
+      "title": "Geolocalización",
+      "what": ["Latitud y longitud, juntas o en columnas separadas, de aplicaciones, entregas y visitas."],
+      "masking": ["La parte entera y el primer decimal se mantienen — unos 11 km — y los demás decimales se mapean: el lugar se generaliza, no se desplaza lejos."]
+    },
+    "BR_L1_TEXTO_LIVRE": {
+      "title": "Texto libre",
+      "what": ["Observaciones, historiales de atención, reclamos, justificaciones y mensajes donde se escribe cualquier cosa — incluidos CPF, teléfono y nombre."],
+      "masking": ["Free Text Redaction: CPF y CNPJ (formateados o no), correo, teléfonos, tarjetas, CEP, placas e IP pasan a `[DADO]`; nombres y apellidos de la lista del Censo 2022 pasan a `[NOME]`. El resto del texto se mantiene."]
+    },
+    "BR_L2_DATA_NASCIMENTO": {
+      "title": "Fecha de nacimiento",
+      "what": ["La fecha de nacimiento, como fecha, timestamp o texto."],
+      "masking": ["Desplazada hasta 60 días hacia cualquier lado. Edades y años escolares cambian para pocas personas; la fecha sigue siendo plausible y el mismo nacimiento se desplaza igual en todas las tablas."]
+    },
+    "BR_L2_ANO_NASCIMENTO": {
+      "title": "Año de nacimiento",
+      "what": ["El año de nacimiento en columna propia."],
+      "masking": ["La década se mantiene y el último dígito se mapea: `1985` pasa a un año de 1980 a 1989."]
+    },
+    "BR_L2_IDADE": {
+      "title": "Edad",
+      "what": ["La edad en años, también grupo etario."],
+      "masking": ["La decena se mantiene y la unidad se mapea (37 pasa a 30–39). Cien años o más pasan a 90: las edades raras identifican."]
+    },
+    "BR_L2_DATA_EVENTO": {
+      "title": "Fechas de eventos personales",
+      "what": ["Fechas que dicen algo de la persona: defunción, matrimonio, contratación y despido, jubilación, internación y alta, diagnóstico, parto, detención, expedición de documentos."],
+      "masking": ["Desplazadas hasta 30 días hacia cualquier lado."]
+    },
+    "BR_L2_SEXO": {
+      "title": "Sexo",
+      "what": ["El sexo como lo registra el sistema: `F`/`M`, `Feminino`/`Masculino`, `Mulher`/`Homem` o los códigos 1 y 2 del IBGE, del SUS y del eSocial."],
+      "masking": ["Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`."]
+    },
+    "BR_L2_MUNICIPIO": {
+      "title": "Municipio",
+      "what": ["El municipio de residencia, de nacimiento (naturalidade) o de ocurrencia, por el nombre — solo o con el estado, `Bonito - MS`, `Bonito/MS`."],
+      "masking": ["Un municipio con menos de 20.000 habitantes pasa al municipio más cercano del mismo estado con al menos 20.000; los mayores se mantienen. Vea *Dónde vive la gente*."]
+    },
+    "BR_L2_CODIGO_MUNICIPIO": {
+      "title": "Código del municipio (IBGE)",
+      "what": ["El código de municipio del IBGE, con siete dígitos, o seis sin el dígito verificador, como en el DATASUS."],
+      "masking": ["La misma generalización que el nombre: el código de un municipio pequeño pasa al código del municipio que reemplaza su nombre. Los dos siguen coincidiendo."]
+    },
+    "BR_L2_CEP": {
+      "title": "CEP (código postal)",
+      "what": ["El Código de Direccionamiento Postal: región, subregión, sector, subsector, divisor de subsector y un sufijo de tres dígitos que identifica la vía o la localidad. En una ciudad grande, un CEP es un tramo de calle."],
+      "masking": ["Los tres primeros dígitos — el sector postal — se mantienen, y los demás pasan a cero: `01310-100` pasa a `01300-000`. En una columna numérica, sin el cero a la izquierda, también."]
+    },
+    "BR_L2_BAIRRO": {
+      "title": "Barrio",
+      "what": ["El barrio de residencia."],
+      "masking": ["Reemplazado por un nombre de barrio común en Brasil — Centro, Jardim América, Vila Nova —, sin relación con el original."]
+    },
+    "BR_L2_ZONA_SECAO_ELEITORAL": {
+      "title": "Zona y sección electoral",
+      "what": ["La zona y la sección donde vota la persona. Una sección reúne algunos cientos de electores de un mismo local de votación."],
+      "masking": ["Dígito a dígito, manteniendo la longitud."]
+    },
+    "BR_L2_NACIONALIDADE": {
+      "title": "Nacionalidad",
+      "what": ["La nacionalidad o el país de nacimiento. Entre los inmigrantes, venezolanos, haitianos, bolivianos y portugueses son los grupos mayores."],
+      "masking": ["Reemplazada por una nacionalidad de la lista: la brasileña y las mayores comunidades extranjeras."]
+    },
+    "BR_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": ["El estado civil como lo registran el IBGE y el eSocial — soltero, casado, unión estable, divorciado, separado, viudo —, en palabras o en código."],
+      "masking": ["Reemplazado por otro estado civil de la lista; un código de 1 a 5 sigue siendo un código de 1 a 5."]
+    },
+    "BR_L2_OCUPACAO": {
+      "title": "Ocupación",
+      "what": ["La ocupación, profesión o cargo, en palabras o por el código de la Clasificación Brasileña de Ocupaciones (CBO), `2235-10`. Una ocupación rara en un municipio pequeño identifica."],
+      "masking": ["Un texto se reemplaza por una ocupación común; un código CBO de seis dígitos por un código CBO común; `2235-10` se mapea dígito a dígito."]
+    },
+    "BR_L2_EMPREGADOR": {
+      "title": "Empleador",
+      "what": ["El nombre de la empresa o del organismo donde trabaja la persona."],
+      "masking": ["Reemplazado por una empresa ficticia."]
+    },
+    "BR_L2_ESCOLARIDADE": {
+      "title": "Escolaridad",
+      "what": ["El nivel educativo como lo registran el IBGE y el eSocial, en palabras o en código."],
+      "masking": ["Reemplazado por otro nivel de la lista; un código sigue siendo código."]
+    },
+    "BR_L2_ESCOLA": {
+      "title": "Escuela o institución educativa",
+      "what": ["La escuela, facultad o universidad, por el nombre o por el código del INEP."],
+      "masking": ["Reemplazada por una institución ficticia."]
+    },
+    "BR_L2_DEPENDENTES": {
+      "title": "Dependientes e hijos",
+      "what": ["Número de dependientes, hijos o habitantes del hogar."],
+      "masking": ["Los valores de 0 a 5 se mantienen; por encima de 5 pasan a 5. Las familias muy grandes son raras, y un conteo raro identifica."]
+    },
+    "BR_L3_RACA_COR": {
+      "title": "Color o raza",
+      "what": ["El color o raza autodeclarado en las categorías del IBGE — en el Censo 2022, parda 45,3%, blanca 43,5%, negra 10,2%, indígena 0,8% y amarilla 0,4% —, en palabras o con los códigos 1 a 5 y 9 usados en el SUS y el eSocial. El origen racial es dato sensible (art. 5, II)."],
+      "masking": ["Un código se reemplaza por otro código del catálogo; cualquier otro valor por una categoría del IBGE."]
+    },
+    "BR_L3_ETNIA": {
+      "title": "Pueblo indígena y comunidad tradicional",
+      "what": ["El pueblo indígena — el Censo 2022 contó 1.694.836 indígenas de 391 etnias; los más numerosos son tikúna, kokama, makuxí y guaraní kaiowá —, la comunidad quilombola o tradicional y la aldea, muchas veces como bandera S/N."],
+      "masking": ["Una bandera sigue siendo bandera en su vocabulario y cualquier otro valor se reemplaza por uno de la lista."]
+    },
+    "BR_L3_RELIGIAO": {
+      "title": "Religión",
+      "what": ["La religión o la iglesia. En el Censo 2022, entre las personas de 10 años o más, el 56,7% se declaró católico, el 26,9% evangélico, el 9,3% sin religión, el 1,8% espírita y el 1,0% de umbanda o candomblé."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por una religión de la lista."]
+    },
+    "BR_L3_CONVICCAO_ORGANIZACAO": {
+      "title": "Convicciones y organizaciones religiosas, filosóficas o políticas",
+      "what": ["Convicciones filosóficas y morales, objeción de conciencia y la afiliación a una organización de carácter religioso, filosófico o político — una orden religiosa, la masonería, un movimiento social —, que la LGPD lista aparte de la religión y el partido."],
+      "masking": ["Los valores no comparten vocabulario: se suprimen a `Não informado`. Banderas y códigos conservan su forma."]
+    },
+    "BR_L3_OPINIAO_POLITICA": {
+      "title": "Opinión política",
+      "what": ["Posicionamiento político, ideología e intención de voto, de encuestas y registros."],
+      "masking": ["Reemplazada por una posición de la lista — de izquierda a derecha, sin preferencia."]
+    },
+    "BR_L3_FILIACAO_PARTIDARIA": {
+      "title": "Afiliación partidaria",
+      "what": ["El partido al que la persona está afiliada, por la sigla, el nombre o el número de lista. El TSE tenía 30 partidos registrados en septiembre de 2026."],
+      "masking": ["Una sigla pasa a otra sigla, un número a otro número y un nombre a otro nombre de la lista de partidos registrados; una bandera sigue siendo bandera."]
+    },
+    "BR_L3_FILIACAO_SINDICAL": {
+      "title": "Afiliación sindical",
+      "what": ["El sindicato, la condición de sindicalizado, la contribución o cuota sindical descontada en nómina y la central sindical."],
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Não informado`."]
+    },
+    "BR_L3_GENETICO": {
+      "title": "Datos genéticos",
+      "what": ["Resultados de exámenes genéticos y de ADN, perfiles genéticos, mutaciones, cariotipo, tamizaje neonatal."],
+      "masking": ["Cada carácter pasa a `X`."]
+    },
+    "BR_L3_BIOMETRICO": {
+      "title": "Datos biométricos",
+      "what": ["Plantillas de huella, rostro, iris y voz de control horario, prueba de vida, apertura de cuentas y torniquetes."],
+      "masking": ["Cada carácter pasa a `X`. Una plantilla enmascarada no autentica a nadie."]
+    },
+    "BR_L3_ORIENTACAO_SEXUAL": {
+      "title": "Orientación sexual",
+      "what": ["La orientación sexual autodeclarada, en registros de salud y de diversidad."],
+      "masking": ["Reemplazada por una categoría de la lista."]
+    },
+    "BR_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": ["Actividad y conducta sexual, número de parejas, inicio de la vida sexual — dato referente a la vida sexual, sensible por el art. 5, II."],
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Não informado`."]
+    },
+    "BR_L3_IDENTIDADE_GENERO": {
+      "title": "Identidad de género",
+      "what": ["La identidad de género autodeclarada. No está en la lista del art. 5, II, pero expone a las mismas discriminaciones. El nombre social queda en el dominio de nombre completo."],
+      "masking": ["Reemplazada por una categoría de la lista."]
+    },
+    "BR_SAUDE_CNS": {
+      "title": "Tarjeta Nacional de Salud",
+      "what": ["El número de la Cartão Nacional de Saúde (tarjeta del SUS): quince dígitos cuya suma ponderada, con pesos de 15 a 1, es múltiplo de 11. El definitivo empieza con 1 o 2 y es el PIS de la persona seguido de `000` o `001` y un dígito; el provisorio empieza con 7, 8 o 9."],
+      "masking": ["En el definitivo, los once primeros dígitos se enmascaran con el algoritmo del PIS — el CNS enmascarado sigue llevando el PIS enmascarado — y el final se recalcula. Todo CNS definitivo enmascarado es válido. El provisorio se enmascara dígito a dígito, manteniendo el primero."]
+    },
+    "BR_SAUDE_IDENTIFICADOR": {
+      "title": "Identificadores de salud",
+      "what": ["Números de expediente, atención, internación (AIH), guía TISS, credencial del plan de salud, receta y notificación del SINAN."],
+      "masking": ["Carácter a carácter, manteniendo longitud y formato."]
+    },
+    "BR_SAUDE_DIAGNOSTICO": {
+      "title": "Diagnóstico y CIE",
+      "what": ["Diagnósticos en palabras o por el código de la CIE-10, con punto (`F33.1`) o sin él, como en el DATASUS (`F331`); causas de licencia, internación y defunción, comorbilidades y alergias."],
+      "masking": ["Un código CIE pasa a otro código común en el mismo formato, y un texto a un diagnóstico común: `F33.1` puede pasar a `J06.9`. Así un diagnóstico de VIH o de trastorno mental no sobrevive como categoría."]
+    },
+    "BR_SAUDE_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": ["Medicamentos recetados, dispensados o de uso continuo. Un antirretroviral, un antipsicótico o un anticonceptivo revelan un diagnóstico."],
+      "masking": ["Reemplazado por un medicamento común de la lista; una bandera sigue siendo bandera."]
+    },
+    "BR_SAUDE_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": ["Anamnesis, evolución, examen físico, informes, resumen de alta y notas de enfermería."],
+      "masking": ["El mismo Free Text Redaction del texto libre: CPF, contactos y nombres de la lista se redactan. El contenido clínico se mantiene — si no debe estar en la copia, suprima la columna."]
+    },
+    "BR_SAUDE_RESULTADO_EXAME": {
+      "title": "Resultados de exámenes",
+      "what": ["Resultados de laboratorio y pruebas — VIH, carga viral, glucemia, embarazo, toxicológico —, también como valores numéricos."],
+      "masking": ["Carácter a carácter, manteniendo el formato: un número sigue siendo número."]
+    },
+    "BR_SAUDE_TIPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": ["Grupo ABO y factor Rh."],
+      "masking": ["Reemplazado por otro grupo de la lista."]
+    },
+    "BR_SAUDE_DEFICIENCIA": {
+      "title": "Discapacidad",
+      "what": ["El tipo de discapacidad — física, visual, auditiva, intelectual, mental o psicosocial, múltiple —, la condición de persona con discapacidad (Ley 13.146/2015) y el informe correspondiente."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por un tipo de la lista."]
+    },
+    "BR_SAUDE_OCUPACIONAL": {
+      "title": "Salud ocupacional",
+      "what": ["Lo que RR. HH. guarda de la salud del empleado: el resultado del certificado de salud ocupacional (ASO), la comunicación de accidente de trabajo (CAT), certificados médicos, licencias y ausencias."],
+      "masking": ["Una aptitud se reemplaza por otra de la lista — apto, no apto —; una bandera sigue siendo bandera; la CIE de la licencia cae en el dominio de diagnóstico."]
+    },
+    "BR_SAUDE_REPRODUTIVA": {
+      "title": "Salud sexual y reproductiva",
+      "what": ["Embarazo, edad gestacional, fecha de la última menstruación, control prenatal, parto, aborto, anticoncepción, fertilidad, infecciones de transmisión sexual."],
+      "masking": ["Las banderas conservan su forma; cualquier otro valor pasa a `Não informado`."]
+    },
+    "BR_SAUDE_MENTAL": {
+      "title": "Salud mental",
+      "what": ["Trastornos mentales, atención psiquiátrica o psicológica, CAPS, intento de suicidio, dependencia química."],
+      "masking": ["Las banderas conservan su forma; cualquier otro valor pasa a `Não informado`."]
+    },
+    "BR_FIN_CREDITO": {
+      "title": "Crédito y registros negativos",
+      "what": ["Score de crédito (0 a 1.000), registro negativo, restricción, protesto, días de atraso y situación del contrato."],
+      "masking": ["Un score recibe otros dígitos con la misma longitud; una bandera sigue siendo bandera; una situación se reemplaza por otra de la lista."]
+    },
+    "BR_FIN_DIVIDA": {
+      "title": "Deudas",
+      "what": ["Saldo deudor, monto en atraso, cuotas y límites de crédito."],
+      "masking": ["Mapeado a un valor entre R$ 200 y R$ 1.000.000, sin relación con el valor real."]
+    },
+    "BR_FIN_RENDA": {
+      "title": "Ingresos y salario",
+      "what": ["Salario, remuneración, haberes e ingreso mensual o familiar."],
+      "masking": ["Mapeado a un valor entre R$ 1.500 y R$ 50.000."]
+    },
+    "BR_FIN_PATRIMONIO": {
+      "title": "Patrimonio",
+      "what": ["Valor de inmuebles y bienes, saldos en cuenta, ahorro, inversiones y FGTS."],
+      "masking": ["Mapeado a un valor entre R$ 20.000 y R$ 5.000.000."]
+    },
+    "BR_FIN_VALOR_BENEFICIO": {
+      "title": "Monto de beneficio y pensión",
+      "what": ["Monto de jubilación, pensión, subsidio, BPC y pensión alimenticia."],
+      "masking": ["Mapeado a un valor entre R$ 1.500 y R$ 8.000."]
+    },
+    "BR_FIN_BENEFICIO_INSS": {
+      "title": "Especie de beneficio del INSS",
+      "what": ["La especie del beneficio previsional o asistencial, en palabras o en código: 31 y 91 (incapacidad temporal), 32 y 92 (incapacidad permanente), 80 (licencia por maternidad), 87 y 88 (BPC a la persona con discapacidad y al adulto mayor), 41 y 42 (jubilaciones), 21 (pensión por fallecimiento). Varias especies revelan una enfermedad, una discapacidad o un embarazo."],
+      "masking": ["Un código se reemplaza por otro código de especie; un texto por otra especie de la lista."]
+    },
+    "BR_FIN_NUMERO_BENEFICIO": {
+      "title": "Número de beneficio",
+      "what": ["El número de beneficio (NB) del INSS, `123.456.789-0`."],
+      "masking": ["Dígito a dígito, manteniendo formato y separadores."]
+    },
+    "BR_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programas sociales",
+      "what": ["La participación en programas sociales y en el Cadastro Único — Bolsa Família, Benefício de Prestação Continuada, Auxílio Gás, Pé-de-Meia, Tarifa Social de Energía, Minha Casa, Minha Vida, Garantia-Safra, Seguro-Defeso —, muchas veces como bandera S/N."],
+      "masking": ["Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por un programa de la lista."]
+    },
+    "BR_FIN_FAIXA_RENDA": {
+      "title": "Tramo de ingresos y clase social",
+      "what": ["Los tramos del Cadastro Único (pobreza extrema, pobreza, bajos ingresos), las clases del Critério Brasil (A, B1, B2, C1, C2, DE), deciles y quintiles de ingreso."],
+      "masking": ["Reemplazado dentro de su propia notación: un tramo por otro tramo, una clase por otra clase, un decil por otro decil."]
+    },
+    "BR_FIN_MORADIA": {
+      "title": "Condición de la vivienda",
+      "what": ["La tenencia de la vivienda — propia pagada o en pago, alquilada, cedida, ocupación."],
+      "masking": ["Reemplazada por otra condición de la lista."]
+    },
+    "BR_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes penales",
+      "what": ["Certificado y hoja de antecedentes, condenas, imputación, tipo de delito, situación carcelaria, régimen de cumplimiento, monitoreo electrónico, medidas socioeducativas y órdenes de detención."],
+      "masking": ["Reemplazado por una situación genérica de la lista — sin registro, condenado, absuelto —, sea cual sea el desenlace; una bandera sigue siendo bandera."]
+    },
+    "BR_PENAL_PROCESSO": {
+      "title": "Número de proceso",
+      "what": ["El número único de proceso del Poder Judicial (Resolução CNJ 65/2008), `0001234-56.2023.8.26.0100`: secuencia, dígitos verificadores, año, rama de la Justicia, tribunal y origen. Los procesos se consultan en los portales de los tribunales y llevan a las partes. También denuncias policiales, investigaciones y actas circunstanciadas."],
+      "masking": ["La secuencia y los dígitos verificadores se mapean dígito a dígito; año, rama, tribunal y origen se mantienen. Los dígitos verificadores (módulo 97) no se recalculan. Los demás números se enmascaran carácter a carácter."]
+    }
+  },
+  "closing": [
+    {
+      "title": "Dígitos verificadores calculados por el set",
+      "body": [
+        "Los sistemas brasileños validan sus identificadores. Un CPF inválido en una base de pruebas hace fallar el alta, la integración con la Receita Federal o la emisión de una factura. Por eso, donde la regla del dígito es pública, el set la recalcula.",
+        { "list": [
+          "**CPF.** Dos algoritmos Check Digit, uno dentro del otro. El de afuera recibe los once dígitos y entrega los diez primeros al de adentro, que entrega los nueve primeros a un Character Mapping y recalcula el primer dígito con pesos de 10 a 2; el de afuera recalcula el segundo con pesos de 11 a 2. Check Digit escribe resto 0 o 1 como 0 — exactamente la regla de la Receita. Los separadores quedan fuera del cálculo, y un número corto se completa con ceros a la izquierda.",
+          "**CNPJ, incluido el alfanumérico.** El mismo diseño con pesos de 5 a 2 y de 9 a 2, y con el tratamiento de caracteres *valor ASCII menos 48* — la regla de la Instrução Normativa RFB 2.229/2024, en la que `A` vale 17. Solo se mapea la raíz.",
+          "**PIS y RENAVAM.** Un Check Digit con pesos 3 2 9 8 7 6 5 4 3 2.",
+          "**Título electoral.** Check Digit no sigue la regla del título: el primer dígito es el propio resto, va después de los dos dígitos del estado, y en São Paulo y Minas Gerais resto 0 da 1. El set hace la cuenta con tablas: la secuencia se mapea y los dígitos antiguos pasan a `00`; una suma parcial recorre el valor de a dos dígitos por paso, cada paso un Data Cleansing que cambia *suma + dos dígitos* por *dos dígitos + suma nueva*; al final, una tabla cambia *suma + estado + 00* por el estado y los dos dígitos correctos.",
+          "**Tarjeta Nacional de Salud.** El PIS dentro del CNS definitivo se enmascara con el algoritmo del PIS, y las mismas tablas de pasos llevan la suma ponderada hasta el final, donde `0000` pasa a `000` o `001` y el dígito que vuelve la suma múltiplo de 11."
+        ] },
+        "Las tablas son archivos de Data Cleansing generados con el set — 1.100 líneas por paso —, y los pasos son algoritmos Regex Decompose unidos en String Algorithm Chains. Cada identificador sigue siendo uno a uno: dos CPF distintos nunca pasan a ser el mismo CPF."
+      ]
+    },
+    {
+      "title": "Dónde vive la gente: municipios y CEP",
+      "body": [
+        "Con la población residente del Censo Demográfico 2022 (IBGE) y la ubicación de cada cabecera, el set conoce el tamaño, el estado y la posición de los 5.570 municipios.",
+        { "list": [
+          "Un **municipio** con menos de 20.000 habitantes pasa al municipio más cercano del mismo estado con al menos 20.000. Son 3.860 municipios, con 32 millones de habitantes — el 15,8% de la población. Serra da Saudade (MG), el menor, pasa a São Gotardo; Borá (SP) pasa a Paraguaçu Paulista; Uiramutã (RR) pasa a Boa Vista.",
+          "El **estado** se mantiene: el menor, Roraima, tenía 636.707 habitantes.",
+          "La distancia se mide entre las coordenadas de las cabeceras, en línea recta. Fernando de Noronha, a más de 350 km de la costa, pasa al municipio más cercano de Pernambuco con al menos 20.000.",
+          "Doscientos treinta y dos nombres se repiten — hay cinco Bom Jesus y cinco São Domingos —, y otros solo difieren en un acento (`Goianá` y `Goiana`). Un nombre solo se generaliza cuando todos los municipios que lo llevan son pequeños, y entonces sigue al mayor de ellos. Con el estado (`Bom Jesus - RS`, `Bom Jesus/RS`) no hay ambigüedad, y el municipio siempre se generaliza.",
+          "El **código del IBGE**, de siete o seis dígitos, sigue la misma tabla, y el nombre y el código de una persona siguen coincidiendo.",
+          "El **CEP** pierde sus últimos cinco dígitos: queda el sector postal, que reúne muchas vías y, fuera de las capitales, varios municipios."
+        ] },
+        "Los nombres se reconocen como los escriben los sistemas: con acento, sin acento y en mayúsculas. Los nombres de municipios que también son nombres o apellidos de personas, y los nombres de estados (`Paraná`, `Goiás`), quedan fuera de la lista de detección, para que una columna de apellidos no se tome por municipios."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        { "list": [
+          "**Columnas binarias** — imágenes de RG y CNH, selfies de prueba de vida, huellas, PDF clínicos en BLOB — no pueden enmascararse con estos algoritmos. Inventaríelas y repórtelas como riesgo residual.",
+          "**Dígitos verificadores no recalculados.** CNH (el segundo dígito depende de que el primero haya pasado de 9), RG (una regla por estado), actas, cuentas bancarias (una regla por banco) y números de proceso del CNJ (módulo 97) se enmascaran dígito a dígito, y las aplicaciones que validan esos dígitos pueden rechazar los valores.",
+          "**CNS provisorio y números con espacios.** El CNS que empieza con 7, 8 o 9, y el CNS o el título electoral escritos con espacios (`898 0012 3456 7890`), se enmascaran dígito a dígito, sin dígito válido.",
+          "**Estado, DDD y código del banco se mantienen.** En una columna donde solo quedan el estado y el DDD, no identifican a nadie; combinados con una fecha de nacimiento y un municipio pequeño, esos ya fueron generalizados.",
+          "**Data Cleansing deja pasar lo que no conoce**: un municipio escrito de una forma que la tabla no tiene — abreviado, con error de ortografía — pasa sin cambios.",
+          "**El texto libre** se redacta palabra por palabra: un teléfono escrito con espacios no se encuentra, y un nombre que también es palabra común (`Rosa`, `Luz`, `Paz`) se redacta donde aparezca.",
+          "**Niños y adolescentes** — la fecha de nacimiento se mueve como máximo 60 días, así que pocas personas cruzan los 12 o los 18 años, pero algunas sí. Donde importe, divida la regla por grupo etario con Multi-Column Condition.",
+          "**Los domicilios** se reemplazan como una línea entera. Vía, barrio, municipio y CEP en columnas separadas se enmascaran de forma independiente y dejan de formar un domicilio coherente — un CEP enmascarado no corresponde a la vía enmascarada.",
+          "**La clave del engine** vuelve a vincular los valores enmascarados con producción para quien tiene ambas cosas: en ese caso el resultado es dato seudonimizado (art. 13, § 4), todavía dato personal. Guarde la clave lejos de quien usa la copia."
+        ] }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "Antes de la publicación, el set se verificó fuera de un Masking Engine:",
+        { "list": [
+          "Las reglas de dígito verificador se contrastaron con ejemplos publicados: el CPF `529.982.247-25`, el primer CNPJ alfanumérico emitido por la Receita Federal, `00.000.000/E08G-12` (julio de 2026), y el título `1023 8501 0671` de la OBMEP.",
+          "La configuración de cada classifier se revisó contra lo que un Masking Engine acepta.",
+          "El profiling se simuló en 164 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 33 columnas que no son dato personal — y de nuevo solo con los classifiers del paquete esencial.",
+          "La tabla que generaliza municipios se auditó para los 5.570 municipios: por nombre, por nombre con el estado y por código del IBGE.",
+          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de muestra de cada dominio y marcadores como `N/I`, contrastando cada salida con su vocabulario y cada CPF, CNPJ, PIS, título, CNS y RENAVAM con la regla de su dígito; 150 de cada uno en cuanto a colisiones y validez; y 20 personas cuyo PIS y CNS deben seguir coincidiendo. Cada algoritmo enmascaró además su propio valor de ejemplo."
+        ] },
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        { "list": [
+          "Ley 13.709 del 14 de agosto de 2018 — Ley General de Protección de Datos Personales, texto compilado (Presidencia de la República), con las modificaciones de las Leyes 13.853/2019, 14.010/2020, 14.460/2022 y 15.352/2026. Constitución Federal, art. 5, LXXIX (Enmienda Constitucional 115/2022). Ley 15.211/2025 (Estatuto Digital del Niño y del Adolescente).",
+          "Agência Nacional de Proteção de Dados: estudio preliminar *Anonimização e Pseudonimização para a Proteção de Dados Pessoais* (consulta pública, enero de 2024); Resolução CD/ANPD 15/2024 (Reglamento de Comunicación de Incidentes de Seguridad); Resolução CD/ANPD 4/2023 (Reglamento de Dosimetría); Balance de la Agenda Regulatoria 2025–2026 (segundo semestre de 2025).",
+          "Ley Complementaria 105/2001 (secreto bancario). Ley 12.414/2011 (registro positivo de crédito). Ley 14.534/2023 (CPF como número único). Ley 13.146/2015 (Ley Brasileña de Inclusión). Tribunal Superior del Trabajo, IRR Tema 1 (exigencia de certificado de antecedentes penales).",
+          "Población residente por municipio, Censo Demográfico 2022 (IBGE, SIDRA, tabla 4709). Nombres y apellidos más frecuentes — *Nomes no Brasil*, Censo 2022 (IBGE). Color o raza, religión y pueblos indígenas — Censo 2022 (IBGE). Coordenadas de las cabeceras municipales — `kelvins/municipios-brasileiros` (licencia MIT).",
+          "Partidos políticos registrados — Tribunal Superior Electoral, septiembre de 2026. Dígitos verificadores del título electoral — Clubes de Matemática de la OBMEP. CNPJ alfanumérico — Receita Federal, Instrução Normativa RFB 2.229/2024. Estructura del CEP — Correios. Tarjeta Nacional de Salud — Ministerio de Salud. Numeración única de procesos — Resolução CNJ 65/2008. Clasificación Brasileña de Ocupaciones — Ministerio de Trabajo y Empleo."
+        ] }
+      ]
+    }
+  ]
+}
