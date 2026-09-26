@@ -689,6 +689,7 @@ async function pushAlgorithmRow(ctx, row, { asked = null, description } = {}) {
     throw err;
   }
   ctx.visiting.add(row.id);
+  ctx.onStep?.('algorithm', row.name);
   try {
     const stored = parseStoredConfig(row.config);
     const linked = row.delphix_origin === ctx.origin ? row.delphix_name : null;
@@ -734,17 +735,14 @@ app.post('/api/delphix/export/:id', async (req, res) => {
   // algorithm is updated and the local rename reported back instead of silently dropped.
   const asked = req.body.name ? String(req.body.name).trim() : null;
 
-  try {
-    const ctx = exportContext(cfg);
+  await exportJob(res, cfg, 'algorithm', { id: row.id, name: row.name }, async (ctx) => {
     const out = await pushAlgorithmRow(ctx, row, { asked, description: req.body.description });
-    res.json({
+    return {
       mode: out.mode, name: out.name, engine: ctx.origin,
       renamed: Boolean(out.renamed) || out.renamedLocally,
       sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded,
-    });
-  } catch (err) {
-    exportFailure(res, err);
-  }
+    };
+  });
 });
 
 /** The names currently in filesDir — what an imported algorithm's file references can resolve to. */
@@ -855,8 +853,13 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
         + pendingClassifiers.size + pendingDomains.size + pendingAlgorithms.length);
       const threshold = Number(s.assignmentThreshold) || THRESHOLD_DEFAULT;
       // By the engine id first, since a set renamed there is still the one that was imported.
-      const existing = db.prepare('SELECT id FROM profile_sets WHERE delphix_id = ? AND delphix_origin = ?').get(s.profileSetId, origin)
-        ?? db.prepare('SELECT id FROM profile_sets WHERE name = ?').get(s.profileSetName);
+      const existing = db.prepare('SELECT id, description FROM profile_sets WHERE delphix_id = ? AND delphix_origin = ?').get(s.profileSetId, origin)
+        ?? db.prepare('SELECT id, description FROM profile_sets WHERE name = ?').get(s.profileSetName);
+      // The engine holds only the first 50 characters. What comes back cut from the text here is
+      // the same description, and the whole of it stays; anything else was edited there and wins.
+      const description = existing && delphix.engineSetDescription(existing.description) === (s.description ?? '')
+        ? existing.description
+        : delphix.fromEngineText(s.description);
       let localId;
       try {
         if (existing) {
@@ -864,13 +867,13 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
             UPDATE profile_sets SET name = ?, description = ?, assignment_threshold = ?,
                    delphix_id = ?, delphix_origin = ?, updated_at = datetime('now')
             WHERE id = ?
-          `).run(s.profileSetName, s.description ?? '', threshold, s.profileSetId, origin, existing.id);
+          `).run(s.profileSetName, description, threshold, s.profileSetId, origin, existing.id);
           localId = existing.id;
         } else {
           localId = db.prepare(`
             INSERT INTO profile_sets (name, description, assignment_threshold, delphix_id, delphix_origin)
             VALUES (?, ?, ?, ?, ?)
-          `).run(s.profileSetName, s.description ?? '', threshold, s.profileSetId, origin).lastInsertRowid;
+          `).run(s.profileSetName, description, threshold, s.profileSetId, origin).lastInsertRowid;
         }
       } catch {
         // Renamed on the engine onto a name another local set holds.
@@ -905,12 +908,12 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
             UPDATE classifiers SET name = ?, framework = ?, domain_name = ?, description = ?, config = ?,
                    delphix_id = ?, delphix_origin = ?, updated_at = datetime('now')
             WHERE id = ?
-          `).run(c.classifierName, framework, c.domainName ?? '', c.description ?? '', JSON.stringify(config), c.classifierId, origin, existing.id);
+          `).run(c.classifierName, framework, c.domainName ?? '', delphix.fromEngineText(c.description), JSON.stringify(config), c.classifierId, origin, existing.id);
         } else {
           db.prepare(`
             INSERT INTO classifiers (name, framework, domain_name, description, config, delphix_id, delphix_origin)
             VALUES (?, ?, ?, ?, ?, ?, ?)
-          `).run(c.classifierName, framework, c.domainName ?? '', c.description ?? '', JSON.stringify(config), c.classifierId, origin);
+          `).run(c.classifierName, framework, c.domainName ?? '', delphix.fromEngineText(c.description), JSON.stringify(config), c.classifierId, origin);
         }
       } catch {
         // Renamed on the engine onto a name another local classifier holds.
@@ -1017,30 +1020,83 @@ function importReply(out, kind, imported) {
 }
 
 /**
- * Runs an import as server-sent events.
+ * The sync with the engine running now — bringing everything down, sending everything up, or
+ * sending one profile set — or null.
  *
- * Bringing everything down takes a while — the engine is listed, then each item is read, and a
- * lookup file may be downloaded along the way — and a plain POST leaves the dialog with nothing
- * to show for it. So each item announces itself as it is taken up, and the reply the dialog used
- * to receive as JSON arrives as the final `done` event.
+ * Either takes minutes, and neither depends on the request that started it: close the tab and the
+ * server carries on. So the job is held here, not in the response, and anyone may follow it —
+ * the page that started it, and the same page after a reload, which would otherwise come back to
+ * idle buttons over a job still running. Holding one also answers whether a second may start:
+ * it may not, since two syncs writing the same rows at once would leave either picture half-true.
  *
- * A failure has to travel the same way: by the time the first item is read the status code is
- * long gone, so it is sent as an `error` event instead. Only a refusal raised before any of this
- * — no engine configured — is still a plain JSON 400.
+ * Events go to every follower as server-sent events: `job` first (which kind, so a follower that
+ * did not start it knows what the final reply means), the last `progress` seen, then each new one,
+ * and at the end `done` or `error`. A failure has to travel that way: by the time the first item
+ * is read the status code is long gone.
  */
-async function streamImport(res, cfg, selection, kind, pickImported) {
+let syncJob = null;
+
+function startSyncJob(kind, target = null) {
+  const job = { kind, target, progress: null, followers: new Set() };
+  job.emit = (event, data) => {
+    if (event === 'progress') job.progress = data;
+    for (const f of job.followers) f.send(event, data);
+  };
+  job.finish = (event, data) => {
+    if (syncJob === job) syncJob = null;
+    for (const f of job.followers) { f.send(event, data); f.res.end(); }
+    job.followers.clear();
+  };
+  syncJob = job;
+  return job;
+}
+
+/** Opens `res` as an event stream on `job`, caught up to where it is. */
+function followSyncJob(job, res) {
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
   const send = (event, data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  send('job', { kind: job.kind, target: job.target });
+  if (job.progress) send('progress', job.progress);
+  const follower = { send, res };
+  job.followers.add(follower);
+  // A follower that left — a reload, a closed tab — stops being written to; the job goes on.
+  res.on('close', () => job.followers.delete(follower));
+}
+
+/** The refusal for a sync asked for while another is running. */
+function refuseConcurrentSync(res) {
+  return res.status(409).json({ code: 'sync-running', error: 'A sync with the engine is already running.' });
+}
+
+/**
+ * Sends one object — a domain, a classifier, a profile set — as the app's sync job.
+ *
+ * Even one object is rarely one request: a domain brings the algorithms it names, and those their
+ * own, so a CURP domain is 29 algorithms and a preset's set is hundreds of objects. Every object
+ * taken up is announced by name (`ctx.onStep`), counted against `progress.total` where the caller
+ * knows one; without a total the bar just shows what is going up now. `work` returns the reply the
+ * editor gets as `done`. Refusals the editor can word itself travel with their code.
+ */
+async function exportJob(res, cfg, kind, target, work) {
+  if (syncJob) return refuseConcurrentSync(res);
+  const job = startSyncJob(kind, target);
+  followSyncJob(job, res);
+  const ctx = exportContext(cfg);
+  const progress = { done: 0, total: 0 };
+  ctx.onStep = (step, name) => job.emit('progress', { kind: step, name, ...progress });
   try {
-    const out = await importFromEngine(cfg, { ...selection, onProgress: (p) => send('progress', p) });
-    send('done', importReply(out, kind, pickImported(out)));
+    job.finish('done', await work(ctx, progress));
   } catch (err) {
-    send('error', { message: err.message });
+    job.finish('error', {
+      message: err.message,
+      ...(err.code ? { code: err.code } : {}),
+      ...(err.domain ? { domain: err.domain } : {}),
+      ...(err.file ? { file: err.file } : {}),
+    });
   }
-  res.end();
 }
 
 /**
@@ -1063,6 +1119,10 @@ function exportContext(cfg) {
     classifiersDone: new Map(),
     visiting: new Set(),
     uploads: new Map(),
+    // Told of each object as it is taken up, dragged-along ones included — they are most of the
+    // time a push takes (a CURP domain brings 29 algorithms), so a bar that named only what was
+    // asked for would sit still through the slow part.
+    onStep: null,
     engineAlgorithms: () => (engineAlgorithms ??= delphix.listAlgorithms(cfg)
       .then((list) => new Map(list.map((a) => [a.algorithmName, a])))),
     uploadStore: () => (uploadStore ??= delphix.uploadedFiles(cfg)),
@@ -1170,15 +1230,6 @@ async function uploadOnce(ctx, full, owned) {
   }
   ctx.uploads.set(key, reference);
   return reference;
-}
-
-/** The refusals a push can end in, with the status and code the editors word for the user. */
-function exportFailure(res, err) {
-  if (['file-missing', 'reference-missing', 'reference-cycle'].includes(err.code)) {
-    return res.status(400).json({ code: err.code, error: err.message, ...(err.file ? { file: err.file } : {}) });
-  }
-  if (err.code === 'reference-failed') return res.status(502).json({ code: err.code, error: err.message });
-  res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
 }
 
 // File management
@@ -1540,6 +1591,7 @@ app.delete('/api/domains/:id', (req, res) => {
 async function pushDomainRow(ctx, row) {
   const already = ctx.domainsDone.get(row.id);
   if (already) return already;
+  ctx.onStep?.('domain', row.name);
   // What the domain will reference is the name the algorithm ends up with *there* — a legacy
   // row whose local name drifted from its delphix_name would otherwise point at a name the
   // engine does not have.
@@ -1569,13 +1621,10 @@ app.post('/api/delphix/domains/export/:id', async (req, res) => {
   const row = db.prepare('SELECT * FROM domains WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Domain not found' });
 
-  try {
-    const ctx = exportContext(cfg);
+  await exportJob(res, cfg, 'domain', { id: row.id, name: row.name }, async (ctx) => {
     const out = await pushDomainRow(ctx, row);
-    res.json({ ...out, engine: ctx.origin, sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded });
-  } catch (err) {
-    exportFailure(res, err);
-  }
+    return { ...out, engine: ctx.origin, sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded };
+  });
 });
 
 // ── Reference names ───────────────────────────────────────────────────────────
@@ -1944,6 +1993,7 @@ app.delete('/api/profile-sets/:id', (req, res) => {
 async function pushClassifierRow(ctx, row) {
   const already = ctx.classifiersDone.get(row.id);
   if (already) return already;
+  ctx.onStep?.('classifier', row.name);
   const config = parseStoredConfig(row.config);
   let domain = null;
   const domainRow = db.prepare('SELECT * FROM domains WHERE name = ?').get(row.domain_name);
@@ -1988,23 +2038,23 @@ app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
   const { errors } = classifierKit.reviewClassifier(row.framework, parseStoredConfig(row.config));
   if (errors.length) return res.status(400).json(configRefusal('invalid-config', errors));
 
-  try {
-    const ctx = exportContext(cfg);
+  await exportJob(res, cfg, 'classifier', { id: row.id, name: row.name }, async (ctx) => {
     const out = await pushClassifierRow(ctx, row);
-    res.json({
+    return {
       mode: out.mode, name: out.name, engine: ctx.origin, domain: out.domain,
       sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded,
-    });
-  } catch (err) {
-    if (err.code === 'domain-missing') {
-      return res.status(400).json({ code: err.code, domain: err.domain, error: err.message });
-    }
-    exportFailure(res, err);
-  }
+    };
+  });
 });
 
 // ── Profile sets on the engine ────────────────────────────────────────────────
-/** Sends the set after every classifier in it, and names them there by the ids it gets back. */
+/**
+ * Sends the set after every classifier in it, and names them there by the ids it gets back.
+ *
+ * A set of a preset is 150 classifiers dragging 90 domains and 180 algorithms: minutes of work.
+ * So it runs as the app's sync job, streamed like the whole-engine ones, with a bar that survives
+ * leaving the screen or reloading the page. The reply the editor used to get as JSON is `done`.
+ */
 app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
@@ -2020,9 +2070,9 @@ app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
   if (!members.length) {
     return res.status(400).json({ code: 'no-members', error: 'A profile set with no classifier has nothing to send.' });
   }
-
-  try {
-    const ctx = exportContext(cfg);
+  await exportJob(res, cfg, 'profileSet', { id: row.id, name: row.name }, async (ctx, progress) => {
+    // Counted by member, the one thing known up front; the name is whatever is being written now.
+    progress.total = members.length + 1;
     // Every member first: the engine stores classifierIds, so a set can only be posted once each
     // of them has an id there. A member that fails stops the push — posting the set without it
     // would silently create a set that profiles for less than it was built to.
@@ -2035,8 +2085,10 @@ app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
       }
       classifierIds.push(out.id);
       sent.push({ name: out.name, mode: out.mode });
+      progress.done += 1;
     }
 
+    ctx.onStep('profileSet', row.name);
     const out = await delphix.saveProfileSet(cfg, {
       name: row.name,
       description: row.description,
@@ -2047,17 +2099,12 @@ app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
     db.prepare(`UPDATE profile_sets SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
       .run(out.id, ctx.origin, row.id);
 
-    res.json({
+    return {
       mode: out.mode, name: out.name, engine: ctx.origin,
-      classifiers: sent,
+      classifiers: sent, descriptionCut: out.descriptionCut ? [out.name] : [],
       sent: ctx.sent, skipped: ctx.skipped, uploaded: ctx.uploaded,
-    });
-  } catch (err) {
-    if (err.code === 'domain-missing') {
-      return res.status(400).json({ code: err.code, domain: err.domain, error: err.message });
-    }
-    exportFailure(res, err);
-  }
+    };
+  });
 });
 
 // ── The integration as a whole ────────────────────────────────────────────────
@@ -2074,6 +2121,10 @@ app.post('/api/delphix/sync/import', async (req, res) => {
     return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
   }
 
+  if (syncJob) return refuseConcurrentSync(res);
+  const job = startSyncJob('import');
+  followSyncJob(job, res);
+
   let selection;
   try {
     const [sets, classifiers, domains, algorithms] = await Promise.all([
@@ -2089,12 +2140,25 @@ app.post('/api/delphix/sync/import', async (req, res) => {
       algorithms: algorithms.filter((a) => a.createdBy).map((a) => a.algorithmName),
     };
   } catch (err) {
-    // The listing failed, which is before the stream starts, so this can still be a status code.
-    return res.status(err.status && err.status < 500 ? 400 : 502).json({ error: err.message });
+    return job.finish('error', { message: err.message });
   }
 
-  await streamImport(res, cfg, selection, 'all',
-    (out) => [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms]);
+  try {
+    const out = await importFromEngine(cfg, { ...selection, onProgress: (p) => job.emit('progress', p) });
+    job.finish('done', importReply(out, 'all',
+      [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms]));
+  } catch (err) {
+    job.finish('error', { message: err.message });
+  }
+});
+
+/**
+ * Follows the sync running now, if there is one: the page asks on load, so a reload in the middle
+ * of a sync finds its bar again. With nothing running the answer is plain JSON.
+ */
+app.get('/api/delphix/sync/current', (req, res) => {
+  if (!syncJob) return res.json({ running: false });
+  followSyncJob(syncJob, res);
 });
 
 /**
@@ -2114,11 +2178,7 @@ app.post('/api/delphix/sync/export', async (req, res) => {
     return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
   }
 
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  res.flushHeaders();
-  const send = (event, data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+  if (syncJob) return refuseConcurrentSync(res);
 
   const algorithms = db.prepare('SELECT * FROM saved_algorithms ORDER BY name COLLATE NOCASE').all();
   const domains = db.prepare('SELECT * FROM domains ORDER BY name COLLATE NOCASE').all();
@@ -2129,7 +2189,14 @@ app.post('/api/delphix/sync/export', async (req, res) => {
   const ctx = exportContext(cfg);
   const out = { algorithms: [], domains: [], classifiers: [], profileSets: [], skipped: [] };
   let done = 0;
-  const step = (kind, name) => { done += 1; send('progress', { kind, name, done, total }); };
+  // Everything above is synchronous, so nothing can have started a sync since the check; and
+  // nothing between here and the `try` can throw and leave the job held forever.
+  const job = startSyncJob('export');
+  followSyncJob(job, res);
+  const step = (kind, name) => { done += 1; job.emit('progress', { kind, name, done, total }); };
+  // What each step drags along is named on the bar too, without counting towards the total.
+  ctx.onStep = (kind, name) => job.emit('progress', { kind, name, done, total });
+  const descriptionCut = [];
 
   try {
     for (const row of algorithms) {
@@ -2176,13 +2243,13 @@ app.post('/api/delphix/sync/export', async (req, res) => {
       db.prepare(`UPDATE profile_sets SET delphix_id = ?, delphix_origin = ?, updated_at = datetime('now') WHERE id = ?`)
         .run(saved.id, ctx.origin, row.id);
       out.profileSets.push(saved.name);
+      if (saved.descriptionCut) descriptionCut.push(saved.name);
     }
 
-    send('done', { ...out, engine: ctx.origin, uploaded: ctx.uploaded, references: ctx.skipped });
+    job.finish('done', { ...out, engine: ctx.origin, uploaded: ctx.uploaded, references: ctx.skipped, descriptionCut });
   } catch (err) {
-    send('error', { message: err.message, done, total });
+    job.finish('error', { message: err.message, done, total });
   }
-  res.end();
 });
 
 /**

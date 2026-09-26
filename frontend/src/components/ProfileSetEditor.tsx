@@ -6,13 +6,15 @@ import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { useClassifiers } from '@/lib/classifiers'
 import { refreshProfileSets, useProfileSets } from '@/lib/profile-sets'
-import { announceExport } from '@/lib/engine-sync'
-import { forgetEngineReferences } from '@/lib/references'
+import { isSending, startObjectExport, useSyncJob } from '@/lib/sync-job'
+import { ImportProgressBar } from '@/components/ImportProgressBar'
 import type { Classifier, ProfileSet } from '@/types'
 
 const cardCls = 'bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4'
 const labelCls = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5'
 const helpCls = 'text-xs text-slate-400 mt-1'
+/** How much of a set's description the engine keeps; the rest stays here and goes up shortened. */
+const ENGINE_DESCRIPTION_MAX = 50
 const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
 
 /**
@@ -42,7 +44,10 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
   const [threshold, setThreshold] = useState(profileSet?.assignment_threshold ?? 80)
   const [members, setMembers] = useState<Set<number>>(() => new Set(profileSet?.classifier_ids ?? []))
   const [busy, setBusy] = useState(false)
-  const [sending, setSending] = useState(false)
+  // Sending runs as the app's sync job, so it outlives this screen; this set is sending if the
+  // job is about it, and no other send may start while any job runs.
+  const job = useSyncJob()
+  const sending = isSending(job, 'profileSet', profileSet?.id)
 
   const toggleMember = (id: number) => setMembers(prev => {
     const next = new Set(prev)
@@ -98,21 +103,7 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
   const sendToEngine = async () => {
     if (!editing) return
     if (dirty) { toast.error(t('profileSet.saveFirst')); return }
-    setSending(true)
-    try {
-      const out = await api.delphixExportProfileSet(profileSet.id)
-      toast.success(t(out.mode === 'updated' ? 'profileSet.exportUpdated' : 'profileSet.exportCreated', { name: out.name }))
-      if (out.classifiers.length) toast.success(t('profileSet.exportSentClassifiers', { n: out.classifiers.length }))
-      announceExport(t, out)
-      forgetEngineReferences()
-      await refreshProfileSets()
-    } catch (e) {
-      const err = e as Error & { code?: string; domain?: string }
-      toast.error(
-        err.code === 'no-members' ? t('profileSet.exportNoMembers')
-        : err.code === 'domain-missing' ? t('classifier.exportDomainMissing', { name: err.domain ?? '' })
-        : err.message)
-    } finally { setSending(false) }
+    await startObjectExport('profileSet', { id: profileSet.id, name: profileSet.name }, t)
   }
 
   return (
@@ -136,7 +127,7 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
           <div className="flex items-center gap-1.5 flex-shrink-0">
             <button
               onClick={sendToEngine}
-              disabled={sending}
+              disabled={job !== null}
               className="flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors disabled:opacity-50"
             >
               {sending ? <Loader2 size={12} className="animate-spin" /> : <CloudUpload size={12} />}
@@ -152,6 +143,11 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
           </div>
         )}
       </div>
+      {sending && job?.progress && (
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+          <ImportProgressBar progress={job.progress} />
+        </div>
+      )}
 
       <div className="flex-1 overflow-auto p-5 bg-slate-50">
         <div className="max-w-2xl space-y-5">
@@ -179,6 +175,9 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
                 placeholder={t('profileSet.descriptionPlaceholder')}
                 className={fieldCls}
               />
+              {description.length > ENGINE_DESCRIPTION_MAX && (
+                <p className={helpCls}>{t('profileSet.descriptionEngineLimit', { n: ENGINE_DESCRIPTION_MAX })}</p>
+              )}
             </div>
 
             <div>

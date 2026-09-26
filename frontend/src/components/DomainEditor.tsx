@@ -3,11 +3,12 @@ import { PanelLeftOpen, Save, Trash2, CloudUpload, Loader2, Tags } from 'lucide-
 import { toast } from 'sonner'
 import { api } from '@/lib/api'
 import { useT } from '@/lib/i18n'
-import { useAlgorithms, refreshAlgorithms } from '@/lib/algorithms'
+import { useAlgorithms } from '@/lib/algorithms'
 import { refreshDomains, useDomains } from '@/lib/domains'
-import { algorithmOptions, forgetEngineReferences, tokenizationOptions, useBuiltinReferences, useEngineReferences } from '@/lib/references'
+import { algorithmOptions, tokenizationOptions, useBuiltinReferences, useEngineReferences } from '@/lib/references'
 import { ReferencePicker } from '@/components/ReferencePicker'
-import { announceExport } from '@/lib/engine-sync'
+import { isSending, startObjectExport, useSyncJob } from '@/lib/sync-job'
+import { ImportProgressBar } from '@/components/ImportProgressBar'
 import type { Domain } from '@/types'
 
 /**
@@ -38,7 +39,9 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
   const [algorithm, setAlgorithm] = useState(domain?.default_algorithm ?? '')
   const [tokenization, setTokenization] = useState(domain?.default_tokenization ?? '')
   const [busy, setBusy] = useState(false)
-  const [sending, setSending] = useState(false)
+  // Sending runs as the app's sync job, so it outlives this screen and its bar comes back with it.
+  const job = useSyncJob()
+  const sending = isSending(job, 'domain', domain?.id)
 
   const editing = domain !== null
 
@@ -69,21 +72,7 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
 
   const sendToEngine = async () => {
     if (!editing) return
-    setSending(true)
-    try {
-      const out = await api.delphixExportDomain(domain.id)
-      toast.success(t(out.mode === 'updated' ? 'domain.exportUpdated' : 'domain.exportCreated',
-        { name: out.name }))
-      // The algorithms had to go first — the engine refuses a domain whose reference it does
-      // not know — so say which ones travelled rather than leaving it to be discovered.
-      announceExport(t, out)
-      forgetEngineReferences()
-      await refreshDomains()
-      await refreshAlgorithms()
-    } catch (e) {
-      const err = e as Error & { code?: string }
-      toast.error(err.code === 'not-configured' ? t('saved.engineNotSet') : err.message)
-    } finally { setSending(false) }
+    await startObjectExport('domain', { id: domain.id, name: domain.name }, t)
   }
 
   const remove = async () => {
@@ -123,7 +112,7 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
           <div className="flex items-center gap-1.5 flex-shrink-0">
             <button
               onClick={sendToEngine}
-              disabled={sending}
+              disabled={job !== null}
               className="flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors disabled:opacity-50"
             >
               {sending ? <Loader2 size={12} className="animate-spin" /> : <CloudUpload size={12} />}
@@ -139,6 +128,11 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
           </div>
         )}
       </div>
+      {sending && job?.progress && (
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+          <ImportProgressBar progress={job.progress} />
+        </div>
+      )}
 
       <div className="flex-1 overflow-auto p-5 bg-slate-50">
         <div className="max-w-lg space-y-5">

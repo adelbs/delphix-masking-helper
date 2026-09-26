@@ -4,7 +4,11 @@ import type {
   PresetConflict, PresetPack, ProfileSet, ProfileSetPreset,
   BuiltinReferences, Domain, EngineReferences, Framework, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
-import type { EngineExportResult, EngineImportResult, ImportProgress, SyncExportResult } from '@/lib/engine-sync'
+import type {
+  AlgorithmExportResult, ClassifierExportResult, DomainExportResult, EngineImportResult, ImportProgress,
+  ProfileSetExportResult, SyncExportResult, SyncJobResult,
+} from '@/lib/engine-sync'
+import type { SyncJobKind, SyncJobTarget } from '@/lib/sync-job'
 
 const json = (body: unknown): RequestInit => ({
   headers: { 'Content-Type': 'application/json' },
@@ -86,27 +90,31 @@ async function readEvents(body: ReadableStream<Uint8Array>, handle: (event: stri
   }
 }
 
+/** What a sync job's stream tells on the way: which job it is, and each item it takes up. */
+export interface SyncJobEvents {
+  onJob?: (kind: SyncJobKind, target: SyncJobTarget | null) => void
+  onProgress: (p: ImportProgress) => void
+}
+
 /**
- * POSTs a long job and follows it as it goes.
+ * Follows a long job as it goes — one just started, or one already running on the server.
  *
  * The result is the reply the job ends with; what the stream adds is that `onProgress` hears
  * about each item on the way, so the screen can show a bar instead of freezing. A refusal raised
- * before the stream begins — no engine configured — still arrives as JSON, and is thrown the way
- * every other request throws it.
+ * before the stream begins — no engine configured, a sync already running — still arrives as
+ * JSON, and is thrown the way every other request throws it. A successful JSON answer means there
+ * was no job to follow, and gives null.
  */
-async function streamJob<T>(
-  url: string,
-  body: unknown,
-  onProgress: (p: ImportProgress) => void,
-): Promise<T> {
+async function streamJob<T>(url: string, init: RequestInit, events: SyncJobEvents): Promise<T | null> {
   let res: Response
   try {
-    res = await fetch(url, { method: 'POST', ...json(body) })
+    res = await fetch(url, init)
   } catch {
     throw new Error(`Cannot reach ${location.host}. Is the app still running?`)
   }
 
   if (!res.body || !res.headers.get('content-type')?.includes('text/event-stream')) {
+    if (res.ok) return null
     const data = await res.json().catch(() => ({})) as { error?: string; code?: string }
     const err = new Error(data.error ?? `The server returned HTTP ${res.status}.`) as Error & { code?: string }
     if (data.code) err.code = data.code
@@ -114,13 +122,18 @@ async function streamJob<T>(
   }
 
   let result: T | null = null
-  let failure: string | null = null
+  let failure: { message: string; code?: string; domain?: string } | null = null
   await readEvents(res.body, (event, payload) => {
-    if (event === 'progress') onProgress(payload as ImportProgress)
+    if (event === 'job') events.onJob?.(payload.kind as SyncJobKind, payload.target ?? null)
+    if (event === 'progress') events.onProgress(payload as ImportProgress)
     if (event === 'done') result = payload as T
-    if (event === 'error') failure = payload.message as string
+    if (event === 'error') failure = payload
   })
-  if (failure) throw new Error(failure)
+  if (failure) {
+    // Same shape as a refusal before the stream: the code lets the UI word it in the user's language.
+    const { message, code, domain } = failure as { message: string; code?: string; domain?: string }
+    throw Object.assign(new Error(message), code ? { code } : {}, domain ? { domain } : {})
+  }
   // The stream ended without either event: the server died, or something cut the connection.
   if (!result) throw new Error('The job stopped before it finished.')
   return result
@@ -256,9 +269,9 @@ export const api = {
   deleteDomain: (id: number) =>
     request<{ ok: boolean }>(`/api/domains/${id}`, { method: 'DELETE' }),
   /** Sends the domain and, first, the algorithms (and their files) it names that this machine holds. */
-  delphixExportDomain: (id: number) =>
-    request<{ mode: 'created' | 'updated'; name: string; engine: string } & EngineExportResult>(
-      `/api/delphix/domains/export/${id}`, { method: 'POST' }),
+  /** Sends the domain after the algorithms it names. Streamed as the app's sync job. */
+  delphixExportDomain: (id: number, events: SyncJobEvents) =>
+    streamJob<DomainExportResult>(`/api/delphix/domains/export/${id}`, { method: 'POST' }, events),
 
   // ── Classifiers ────────────────────────────────────────────────────────────
   /** The frameworks' settings and the SQL types a test column can have. */
@@ -305,12 +318,12 @@ export const api = {
 
   deleteProfileSet: (id: number) =>
     request<{ ok: boolean }>(`/api/profile-sets/${id}`, { method: 'DELETE' }),
-  /** Sends every classifier in the set, then the set itself naming them by their engine ids. */
-  delphixExportProfileSet: (id: number) =>
-    request<{
-      mode: 'created' | 'updated'; name: string; engine: string;
-      classifiers: Array<{ name: string; mode: 'created' | 'updated' }>;
-    } & EngineExportResult>(`/api/delphix/profile-sets/export/${id}`, { method: 'POST' }),
+  /**
+   * Sends every classifier in the set, then the set itself naming them by their engine ids. Runs
+   * as the app's sync job — it takes minutes for a preset's set — so it streams its progress.
+   */
+  delphixExportProfileSet: (id: number, events: SyncJobEvents) =>
+    streamJob<ProfileSetExportResult>(`/api/delphix/profile-sets/export/${id}`, { method: 'POST' }, events),
   // ── Pre-configured profile sets ────────────────────────────────────────────
 
   getPresets: () =>
@@ -341,11 +354,8 @@ export const api = {
     `/api/presets/${encodeURIComponent(id)}/doc?locale=${encodeURIComponent(locale)}`,
 
   /** Sends the classifier and, first, its domain (with the domain's algorithms) and its list files. */
-  delphixExportClassifier: (id: number) =>
-    request<{
-      mode: 'created' | 'updated'; name: string; engine: string;
-      domain: { mode: 'created' | 'updated'; name: string } | null;
-    } & EngineExportResult>(`/api/delphix/classifiers/export/${id}`, { method: 'POST' }),
+  delphixExportClassifier: (id: number, events: SyncJobEvents) =>
+    streamJob<ClassifierExportResult>(`/api/delphix/classifiers/export/${id}`, { method: 'POST' }, events),
 
   // ── Reference names ────────────────────────────────────────────────────────
   /** The plugin's built-in algorithms, named the way a reference names them, and which can tokenize. */
@@ -370,28 +380,31 @@ export const api = {
   // ── The integration as a whole ─────────────────────────────────────────────
 
   /** Brings the entire engine down: every profile set, classifier, domain and algorithm on it. */
-  delphixSyncImport: (onProgress: (p: ImportProgress) => void) =>
-    streamJob<EngineImportResult>('/api/delphix/sync/import', {}, onProgress),
+  delphixSyncImport: (events: SyncJobEvents) =>
+    streamJob<EngineImportResult>('/api/delphix/sync/import', { method: 'POST', ...json({}) }, events),
 
   /** Sends everything held here up, in dependency order. */
-  delphixSyncExport: (onProgress: (p: ImportProgress) => void) =>
-    streamJob<SyncExportResult>('/api/delphix/sync/export', {}, onProgress),
+  delphixSyncExport: (events: SyncJobEvents) =>
+    streamJob<SyncExportResult>('/api/delphix/sync/export', { method: 'POST', ...json({}) }, events),
+
+  /**
+   * Follows the sync the server is running now, from wherever it has got to. Null when none is;
+   * otherwise `onJob` names the kind first, which says what the reply is.
+   */
+  delphixSyncCurrent: (events: SyncJobEvents) =>
+    streamJob<SyncJobResult>('/api/delphix/sync/current', {}, events),
 
   /** Forgets the connection and deletes every row linked to that engine. */
   deleteDelphixIntegration: () =>
     request<{ ok: boolean; engine: string | null; removed: Record<string, number> }>(
       '/api/delphix/integration', { method: 'DELETE' }),
 
-  /** Sends the algorithm after the algorithms it references, uploading the files the engine lacks. */
-  delphixExport: (id: number, name?: string) =>
-    request<{
-      mode: 'created' | 'updated'; name: string; engine: string; renamed: boolean;
-    } & EngineExportResult>(
-      `/api/delphix/export/${id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name }),
-      }),
+  /**
+   * Sends the algorithm after the algorithms it references, uploading the files the engine lacks.
+   * Streamed as the app's sync job: a chain of check digits can be dozens of algorithms.
+   */
+  delphixExport: (id: number, events: SyncJobEvents) =>
+    streamJob<AlgorithmExportResult>(`/api/delphix/export/${id}`, { method: 'POST', ...json({}) }, events),
 
   getAiStatus: () =>
     request<AiStatus>('/api/ai/status'),

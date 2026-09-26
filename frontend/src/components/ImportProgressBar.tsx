@@ -1,9 +1,14 @@
 import { Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useT, type MessageKey } from '@/lib/i18n'
-import type { ImportReached } from '@/lib/import-progress'
+import type { ImportReached } from '@/lib/sync-job'
 
-/** Where the import is now: what it is on, how far along, and a bar that only moves forward. */
+/**
+ * Where a sync is now: what it is on, how far along, and a bar that only moves forward.
+ *
+ * Without a total — the engine still being listed, or one domain whose algorithms are found as
+ * they are sent — there is nothing to measure, so the bar pulses and only the name moves.
+ */
 export function ImportProgressBar({ progress }: { progress: ImportReached }) {
   const { t } = useT()
   const listing = progress.total === 0
@@ -13,7 +18,7 @@ export function ImportProgressBar({ progress }: { progress: ImportReached }) {
       <div className="flex items-center gap-2 text-xs text-slate-500">
         <Loader2 size={12} className="animate-spin flex-shrink-0" />
         <span className="truncate">
-          {listing || !progress.name
+          {!progress.name
             ? t('sync.importReading')
             : t(`sync.importStep.${progress.kind}` as MessageKey, { name: progress.name })}
         </span>

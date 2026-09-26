@@ -51,6 +51,42 @@ export interface SyncExportResult {
   uploaded: string[]
   /** References left as they are: the engine's own plugin instances, or names only it holds. */
   references: Array<{ name: string; reason: string }>
+  /** Sets whose description the engine could hold only the start of. */
+  descriptionCut: string[]
+}
+
+/** What sending one algorithm did, and the algorithms it references that went first. */
+export interface AlgorithmExportResult extends EngineExportResult {
+  mode: 'created' | 'updated'
+  name: string
+  engine: string
+  /** Sent under another name than the row's here: a copy, or a local rename the engine refuses. */
+  renamed: boolean
+}
+
+/** What sending one domain did, and the algorithms it took along. */
+export interface DomainExportResult extends EngineExportResult {
+  mode: 'created' | 'updated'
+  name: string
+  engine: string
+}
+
+/** What sending one classifier did, the domain it needed included. */
+export interface ClassifierExportResult extends DomainExportResult {
+  domain: { mode: 'created' | 'updated'; name: string } | null
+}
+
+/** What any sync job ends with; the job's kind says which. */
+export type SyncJobResult =
+  AlgorithmExportResult | EngineImportResult | SyncExportResult | DomainExportResult | ClassifierExportResult | ProfileSetExportResult
+
+/** What sending one profile set did: the set, its classifiers, and what they dragged along. */
+export interface ProfileSetExportResult extends EngineExportResult {
+  mode: 'created' | 'updated'
+  name: string
+  engine: string
+  classifiers: Array<{ name: string; mode: 'created' | 'updated' }>
+  descriptionCut: string[]
 }
 
 /** What a push sent ahead of the object itself. */

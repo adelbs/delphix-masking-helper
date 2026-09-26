@@ -7,8 +7,8 @@ import { useT, type I18n } from '@/lib/i18n'
 import { ConfigForm } from './ConfigForm'
 import { DuplicatePrompt } from './DuplicatePrompt'
 import { useAlgorithms, refreshAlgorithms } from '@/lib/algorithms'
-import { announceExport } from '@/lib/engine-sync'
-import { forgetEngineReferences } from '@/lib/references'
+import { isSending, startObjectExport, useSyncJob } from '@/lib/sync-job'
+import { ImportProgressBar } from './ImportProgressBar'
 import { FrameworkDoc } from './FrameworkDoc'
 import { cn } from '@/lib/utils'
 import type { Algorithm, Framework, JsonSchema, JsonSchemaProperty } from '@/types'
@@ -86,7 +86,9 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
   // Only shown while editing: "save as new" is the escape hatch from update-in-place.
   const [savingAsNew, setSavingAsNew] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [sending, setSending] = useState(false)
+  // Sending runs as the app's sync job, so it outlives this screen and its bar comes back with it.
+  const job = useSyncJob()
+  const sending = isSending(job, 'algorithm', algorithm?.id)
   const [duplicating, setDuplicating] = useState(false)
   const [copied, setCopied] = useState(false)
 
@@ -324,23 +326,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
    *  that same engine, which is what delphix_origin/delphix_name record. */
   const sendToEngine = async () => {
     if (!algorithm) return
-    setSending(true)
-    try {
-      const out = await api.delphixExport(algorithm.id)
-      toast.success(t(out.mode === 'updated' ? 'saved.exportUpdated' : 'saved.exportCreated',
-        { name: out.name }))
-      if (out.renamed) toast.warning(t('saved.exportRenamed', { name: out.name }))
-      announceExport(t, out)
-      forgetEngineReferences()
-      await refreshAlgorithms()
-    } catch (e) {
-      const err = e as Error & { code?: string }
-      toast.error(err.code === 'not-configured'
-        ? t('saved.engineNotSet')
-        : t('saved.exportFailed', { error: err.message }))
-    } finally {
-      setSending(false)
-    }
+    await startObjectExport('algorithm', { id: algorithm.id, name: algorithm.name }, t)
   }
 
   const deleteAlgorithm = async () => {
@@ -387,7 +373,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
             </button>
             <button
               onClick={sendToEngine}
-              disabled={sending}
+              disabled={job !== null}
               title={t('saved.exportToEngine')}
               className={cn(headerBtn, 'text-blue-700 bg-blue-50 hover:bg-blue-100 border-blue-200')}
             >
@@ -404,6 +390,11 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
           </div>
         )}
       </div>
+      {sending && job?.progress && (
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+          <ImportProgressBar progress={job.progress} />
+        </div>
+      )}
 
       {duplicating && algorithm && (
         <div className="px-5 py-3 border-b border-slate-200 bg-white flex-shrink-0">

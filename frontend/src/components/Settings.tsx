@@ -8,9 +8,9 @@ import { api } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { useVersion } from '@/lib/version'
-import { announceImport, refreshAfterImport } from '@/lib/engine-sync'
+import { refreshAfterImport } from '@/lib/engine-sync'
 import { ImportProgressBar } from '@/components/ImportProgressBar'
-import { useImportProgress } from '@/lib/import-progress'
+import { startSync, useSyncJob } from '@/lib/sync-job'
 import type { AiStatus, Locale, PresetConflict, PresetPack, ProfileSetPreset, ServerFile } from '@/types'
 
 interface Props {
@@ -860,10 +860,13 @@ function DelphixTab() {
   /** Whether an engine is stored, which is what locks the fields. Null until the config arrives. */
   const [linked, setLinked] = useState<boolean | null>(null)
   const [saving, setSaving] = useState(false)
-  const [busy, setBusy] = useState<'import' | 'export' | 'remove' | null>(null)
+  const [removing, setRemoving] = useState(false)
+  // Import and export live outside this screen, so leaving Settings mid-job and coming back finds
+  // the bar where it was and the buttons still locked.
+  const job = useSyncJob()
+  const busy = job?.kind ?? (removing ? 'remove' : null)
   const [status, setStatus] = useState<{ configured?: boolean; ok?: boolean; error?: string; apiRoot?: string } | null>(null)
   const [checking, setChecking] = useState(false)
-  const { progress, report, clear } = useImportProgress()
 
   /** Puts the stored connection on screen. `linked` is what locks the fields. */
   const apply = (c: Record<string, string>) => {
@@ -901,18 +904,7 @@ function DelphixTab() {
   }
 
   /** Brings the engine down. Shared by the first save and the Refresh button. */
-  const pullEverything = async (kind: 'import') => {
-    setBusy(kind)
-    clear()
-    try {
-      const out = await api.delphixSyncImport(report)
-      toast.success(t('settings.dlpxImported', { n: out.imported.length }))
-      announceImport(t, out)
-      await refreshAfterImport()
-    } catch (e) {
-      toast.error((e as Error).message)
-    } finally { setBusy(null); clear() }
-  }
+  const pullEverything = () => startSync('import', t)
 
   /**
    * Saves the connection and, if it works, copies the engine down straight away.
@@ -934,30 +926,16 @@ function DelphixTab() {
       if (!probe.ok) { toast.error(t('settings.dlpxFail')); return }
       await load()
       toast.success(t('settings.saved'))
-      await pullEverything('import')
+      await pullEverything()
     } catch { toast.error(t('settings.saveError')) }
     finally { setSaving(false) }
   }
 
-  const sendEverything = async () => {
-    setBusy('export')
-    clear()
-    try {
-      const out = await api.delphixSyncExport(report)
-      const n = out.algorithms.length + out.domains.length + out.classifiers.length + out.profileSets.length
-      toast.success(t('settings.dlpxSent', { n }))
-      if (out.uploaded.length) toast.success(t('sync.uploadedFiles', { n: out.uploaded.length, files: out.uploaded.join(', ') }))
-      if (out.skipped.length) {
-        toast.warning(t('settings.dlpxSentSkipped', { n: out.skipped.length, names: out.skipped.map(s => s.name).join(', ') }))
-      }
-    } catch (e) {
-      toast.error((e as Error).message)
-    } finally { setBusy(null); clear() }
-  }
+  const sendEverything = () => startSync('export', t)
 
   const removeIntegration = async () => {
     if (!confirm(t('settings.dlpxRemoveConfirm'))) return
-    setBusy('remove')
+    setRemoving(true)
     try {
       const out = await api.deleteDelphixIntegration()
       toast.success(t('settings.dlpxRemoved', {
@@ -969,7 +947,7 @@ function DelphixTab() {
       await refreshAfterImport()
     } catch (e) {
       toast.error((e as Error).message)
-    } finally { setBusy(null) }
+    } finally { setRemoving(false) }
   }
 
   const working = saving || busy !== null
@@ -1025,7 +1003,7 @@ function DelphixTab() {
 
         {locked ? (
           <div className="flex flex-wrap items-center gap-2">
-            <button onClick={() => pullEverything('import')} disabled={working}
+            <button onClick={pullEverything} disabled={working}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
               {busy === 'import' ? <Loader2 size={14} className="animate-spin" /> : <RefreshCw size={14} />}
               {busy === 'import' ? t('settings.dlpxRefreshing') : t('settings.dlpxRefresh')}
@@ -1057,7 +1035,7 @@ function DelphixTab() {
           </div>
         )}
 
-        {progress && <ImportProgressBar progress={progress} />}
+        {job?.progress && <ImportProgressBar progress={job.progress} />}
         {!locked && <p className="text-xs text-slate-400">{t('settings.dlpxConnectHint')}</p>}
       </div>
 

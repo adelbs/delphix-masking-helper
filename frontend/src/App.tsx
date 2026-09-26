@@ -13,6 +13,7 @@ import { SetupNeeded } from '@/components/SetupNeeded'
 import { isLocalePref, readStoredPref, resolveLocale, storePref } from '@/lib/i18n'
 import { I18nProvider } from '@/lib/i18n/I18nProvider'
 import { parseConfig, refreshAlgorithms } from '@/lib/algorithms'
+import { useResumeSync } from '@/lib/sync-job'
 import type { Algorithm, Classifier, Domain, Framework, LocalePref, ProfileSet, View } from '@/types'
 
 interface TesterState {
@@ -208,6 +209,7 @@ export default function App() {
   return (
     <I18nProvider locale={resolveLocale(localePref)}>
       <Toaster position="bottom-right" richColors />
+      <ResumeSync />
 
       <div className="flex h-full overflow-hidden bg-slate-50">
 
@@ -290,4 +292,10 @@ export default function App() {
       </div>
     </I18nProvider>
   )
+}
+
+/** Picks up, on load, a sync with the engine the server is still running. Renders nothing. */
+function ResumeSync() {
+  useResumeSync()
+  return null
 }

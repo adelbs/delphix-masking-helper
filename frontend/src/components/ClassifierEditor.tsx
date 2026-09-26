@@ -10,10 +10,10 @@ import { useT, type MessageKey } from '@/lib/i18n'
 import {
   blankEntry, defaultConfig, percentOf, refreshClassifiers, useClassifierCatalog, useClassifiers, useIssueText,
 } from '@/lib/classifiers'
-import { refreshDomains, useDomains } from '@/lib/domains'
-import { refreshAlgorithms } from '@/lib/algorithms'
-import { domainOptions, forgetEngineReferences, useEngineReferences } from '@/lib/references'
-import { announceExport } from '@/lib/engine-sync'
+import { useDomains } from '@/lib/domains'
+import { domainOptions, useEngineReferences } from '@/lib/references'
+import { isSending, startObjectExport, useSyncJob } from '@/lib/sync-job'
+import { ImportProgressBar } from '@/components/ImportProgressBar'
 import { FilePickerField } from '@/components/ConfigForm'
 import { FrameworkDoc } from '@/components/FrameworkDoc'
 import { FieldForm } from '@/components/FieldForm'
@@ -63,7 +63,9 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
   // null until edited: a new classifier starts from the framework fallbacks once the catalog is in.
   const [config, setConfig] = useState<Row | null>(classifier?.config ?? null)
   const [busy, setBusy] = useState(false)
-  const [sending, setSending] = useState(false)
+  // Sending runs as the app's sync job, so it outlives this screen and its bar comes back with it.
+  const job = useSyncJob()
+  const sending = isSending(job, 'classifier', classifier?.id)
   const [tab, setTab] = useState<'config' | 'doc'>('config')
 
   const effective = config ?? (catalog ? defaultConfig(catalog, framework) : null)
@@ -135,21 +137,7 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
   const sendToEngine = async () => {
     if (!editing) return
     if (dirty) { toast.warning(t('classifier.saveFirst')); return }
-    setSending(true)
-    try {
-      const out = await api.delphixExportClassifier(classifier.id)
-      toast.success(t(out.mode === 'updated' ? 'classifier.exportUpdated' : 'classifier.exportCreated', { name: out.name }))
-      // The domain had to go first — the engine will not keep a classifier whose domain it lacks.
-      if (out.domain) toast.success(t('classifier.exportSentDomain', { name: out.domain.name }))
-      announceExport(t, out)
-      forgetEngineReferences()
-      await Promise.all([refreshClassifiers(), refreshDomains(), refreshAlgorithms()])
-    } catch (e) {
-      const err = e as Error & { code?: string }
-      toast.error(err.code === 'domain-missing'
-        ? t('classifier.exportDomainMissing', { name: classifier.domain_name })
-        : failureText(e))
-    } finally { setSending(false) }
+    await startObjectExport('classifier', { id: classifier.id, name: classifier.name }, t)
   }
 
   const remove = async () => {
@@ -184,7 +172,7 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
           <div className="flex items-center gap-1.5 flex-shrink-0">
             <button
               onClick={sendToEngine}
-              disabled={sending}
+              disabled={job !== null}
               className="flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors disabled:opacity-50"
             >
               {sending ? <Loader2 size={12} className="animate-spin" /> : <CloudUpload size={12} />}
@@ -200,6 +188,11 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
           </div>
         )}
       </div>
+      {sending && job?.progress && (
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+          <ImportProgressBar progress={job.progress} />
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white flex-shrink-0">

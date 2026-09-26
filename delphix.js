@@ -106,6 +106,51 @@ function settings(config) {
 
 const isConfigured = (cfg) => Boolean(cfg.baseUrl && cfg.username && cfg.password);
 
+// ── Text the engine refuses ───────────────────────────────────────────────────
+//
+// The Masking API answers "Invalid character '(' in field 'description'" for any of these in the
+// text of a classifier or a profile set — the description included, and the description is prose:
+// "datos sensibles (art. 2, VI)". An algorithm's description is not checked. Refusing commas and
+// parentheses here would push the problem onto every preset and every user, so the text goes up
+// with each refused character swapped for one that reads the same, and comes back down swapped
+// again. The row here keeps what was written.
+
+const ENGINE_LOOKALIKE = {
+  '~': '\u223C', '!': '\u01C3', '@': '\uFF20', '#': '\uFF03', '$': '\uFF04', '%': '\uFF05',
+  '^': '\u02C6', '&': '\uFF06', '*': '\u2217', '(': '\uFF08', ')': '\uFF09', '"': '\u201D',
+  '?': '\uFF1F', ':': '\u2236', ';': '\uFF1B', ',': '\u201A', '/': '\u2215', '\\': '\u2216',
+  '`': '\u02CB', '+': '\uFF0B', '=': '\uFF1D', '[': '\uFF3B', ']': '\uFF3D', '{': '\uFF5B',
+  '}': '\uFF5D', '|': '\u01C0', '<': '\u2039', '>': '\u203A', "'": '\u2019',
+};
+const FROM_LOOKALIKE = Object.fromEntries(Object.entries(ENGINE_LOOKALIKE).map(([a, b]) => [b, a]));
+const REFUSED_RE = new RegExp(`[${Object.keys(ENGINE_LOOKALIKE).map((c) => `\\${c}`).join('')}]`, 'g');
+const LOOKALIKE_RE = new RegExp(`[${Object.keys(FROM_LOOKALIKE).join('')}]`, 'g');
+
+/** Text as the engine will take it in a classifier or profile set. */
+const toEngineText = (text) => String(text ?? '').replace(REFUSED_RE, (c) => ENGINE_LOOKALIKE[c]);
+
+/** Text from the engine, with the swapped characters put back. */
+const fromEngineText = (text) => String(text ?? '').replace(LOOKALIKE_RE, (c) => FROM_LOOKALIKE[c]);
+
+/**
+ * The engine keeps at most 50 characters of a profile set's description (a classifier's has no
+ * such limit). One more and it refuses the whole set with "Input does not match the expected
+ * structure", which names neither the field nor the limit — and it comes last, after every
+ * classifier in the set has already been sent. So the description is cut to fit, at a word where
+ * one is near, and the row here keeps the whole of it.
+ */
+const PROFILE_SET_DESCRIPTION_MAX = 50;
+
+function engineSetDescription(text) {
+  const full = toEngineText(text);
+  if (full.length <= PROFILE_SET_DESCRIPTION_MAX) return full;
+  const cut = full.slice(0, PROFILE_SET_DESCRIPTION_MAX - 1);
+  const space = cut.lastIndexOf(' ');
+  const kept = space > PROFILE_SET_DESCRIPTION_MAX / 2 ? cut.slice(0, space) : cut;
+  // A comma or a colon left hanging before the ellipsis reads like a typo.
+  return `${kept.replace(/[\s\u201A\u2236\uFF1B.-]+$/u, '')}\u2026`;
+}
+
 // ── HTTP ──────────────────────────────────────────────────────────────────────
 
 /** The API root. Accepts either the engine host or a URL already ending in /masking/api. */
@@ -624,7 +669,7 @@ async function saveClassifier(cfg, { name, framework, domain, config, descriptio
     classifierName: name,
     domainName: domain,
     classifierConfiguration: config ?? {},
-    ...(description ? { description } : {}),
+    ...(description ? { description: toEngineText(description) } : {}),
   };
   const ids = await classifierFrameworks(cfg);
   const frameworkId = ids[framework];
@@ -689,9 +734,10 @@ async function saveProfileSet(cfg, { name, description, threshold, classifierIds
   const payload = {
     profileSetName: name,
     classifierIds: classifierIds.map(Number),
-    ...(description ? { description } : {}),
+    ...(description ? { description: engineSetDescription(description) } : {}),
     ...(threshold ? { assignmentThreshold: Number(threshold) } : {}),
   };
+  const descriptionCut = Boolean(description) && toEngineText(description) !== payload.description;
 
   let current = null;
   if (existingId != null) {
@@ -704,14 +750,14 @@ async function saveProfileSet(cfg, { name, description, threshold, classifierIds
 
   if (current) {
     const result = await auth(cfg, 'PUT', `/profile-sets/${current.profileSetId}`, payload);
-    return { mode: 'updated', id: current.profileSetId, name, result };
+    return { mode: 'updated', id: current.profileSetId, name, result, descriptionCut };
   }
   const result = await auth(cfg, 'POST', '/profile-sets', payload);
-  return { mode: 'created', id: result?.profileSetId ?? null, name, result };
+  return { mode: 'created', id: result?.profileSetId ?? null, name, result, descriptionCut };
 }
 
 module.exports = {
-  DEFAULTS, settings, isConfigured, apiRoot, probe,
+  DEFAULTS, settings, isConfigured, apiRoot, probe, toEngineText, fromEngineText, engineSetDescription,
   frameworks, coreFrameworkId, listAlgorithms, getAlgorithm, saveAlgorithm,
   listDomains, getDomain, saveDomain, deleteDomain,
   classifierFrameworks, listClassifiers, getClassifier, saveClassifier,
