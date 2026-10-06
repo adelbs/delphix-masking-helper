@@ -11,7 +11,7 @@ puts under express consent.
 
 | | |
 |---|---|
-| Profile set | `MX - LFPDPPP - v2`, assignment threshold 60 |
+| Profile set | `MX - LFPDPPP - v2`, assignment threshold 60, built 15 September 2026 |
 | Extended pack | 83 domains, 153 classifiers, 154 algorithms, 97 files — everything below |
 | Essential pack | 13 domains, 31 classifiers, 63 algorithms, 25 files — CURP, RFC, NSS, voter key, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

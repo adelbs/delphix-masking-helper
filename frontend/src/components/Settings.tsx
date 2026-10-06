@@ -17,13 +17,14 @@ interface Props {
   filesDir: string
   onSave: (filesDir: string) => void
   onToggleSidebar: () => void
+  initialTab?: 'profileSets'
 }
 
 type Tab = 'general' | 'ai' | 'delphix' | 'profileSets' | 'files'
 
-export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
+export function Settings({ filesDir, onSave, onToggleSidebar, initialTab }: Props) {
   const { t } = useT()
-  const [tab, setTab] = useState<Tab>('general')
+  const [tab, setTab] = useState<Tab>(initialTab ?? 'general')
 
   return (
     <div className="flex flex-col h-full">
@@ -72,7 +73,7 @@ export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
   )
 }
 
-function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar'>) {
+function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar' | 'initialTab'>) {
   const { t } = useT()
   const [localDir, setLocalDir] = useState(filesDir)
   const [saving, setSaving] = useState(false)
@@ -359,6 +360,16 @@ const formatLoadedAt = (value: string, locale: Locale) =>
   new Date(`${value.replace(' ', 'T')}Z`).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' })
 
 /**
+ * A preset's version date is a plain day: read it as UTC so it is not shown as the day before. A
+ * value that does not parse is shown as it came, rather than as "Invalid Date".
+ */
+const formatVersionDate = (value: string | null, locale: Locale) => {
+  if (!value) return '—'
+  const day = new Date(`${value}T00:00:00Z`)
+  return Number.isFinite(day.getTime()) ? day.toLocaleDateString(locale, { dateStyle: 'medium', timeZone: 'UTC' }) : value
+}
+
+/**
  * Profile sets shipped with the tool.
  *
  * Loading one writes the set and everything it leans on, as one of two packs: essential, the
@@ -464,6 +475,7 @@ function PresetsTab() {
                     <p className="text-xs text-slate-400 mt-1">
                       {t('presets.counts', {
                         version: preset.version ?? '—',
+                        date: formatVersionDate(preset.versionDate, locale),
                         classifiers: preset.packs.extended.classifiers,
                         domains: preset.packs.extended.domains,
                         algorithms: preset.packs.extended.algorithms,
@@ -479,7 +491,7 @@ function PresetsTab() {
                       </p>
                     )}
                     {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
-                      <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version })}</p>
+                      <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version, date: formatVersionDate(preset.versionDate, locale) })}</p>
                     )}
                     {blocked && (
                       <div className="mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">

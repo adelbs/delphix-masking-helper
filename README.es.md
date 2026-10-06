@@ -14,7 +14,7 @@ masking job.
 Cubre también el descubrimiento de dato sensible: los **dominios** a los que puede pertenecer una
 columna, los **classifiers** que lo deciden — cada uno se puede probar con una columna que
 describes — y los **profile sets** que ejecuta un job de profiling. Con la herramienta vienen
-profile sets listos para las leyes de protección de datos de **Chile, México, Panamá, Belice, Brasil, Colombia, Argentina, El Salvador, Perú y Ecuador**,
+profile sets listos para las leyes de protección de datos de **Chile, México, Panamá, Belice, Brasil, Colombia, Argentina, El Salvador, Perú, Ecuador, Uruguay, Costa Rica y España**,
 cada uno se carga con un clic y está documentado en PDF.
 
 > **La nomenclatura sigue la de Delphix.** Un **framework** es una técnica de enmascaramiento que
@@ -412,9 +412,10 @@ eliminando lo que el nuevo paquete no incluye. **Quitar** elimina lo que trajo e
 algo tuyo todavía usa; lo que se envió a Delphix sigue allí. Si un nombre que usa el set ya pertenece
 a algo que no vino de él, la herramienta lista lo que se reemplazaría y pregunta antes. El profile
 set lleva en el nombre el país, la ley y la versión (`CL - Ley 21.719 - v3`), y la tarjeta muestra la
-versión que trae la herramienta. El formato está en `presets/README.md`.
+versión que trae la herramienta **y el día en que esa versión se generó**, para saber si un set está
+viejo sin abrirlo. El formato está en `presets/README.md`.
 
-Hoy vienen diez, uno por país, todos con umbral de 60 en el profile set. Las cifras de abajo son
+Hoy vienen trece, uno por país, todos con umbral de 60 en el profile set. Las cifras de abajo son
 del paquete extendido; cada paquete esencial tiene de 11 a 13 dominios:
 
 | Profile set | Ley | Dominios | Classifiers | Algoritmos | Documentación |
@@ -429,11 +430,14 @@ del paquete extendido; cada paquete esencial tiene de 11 a 13 dominios:
 | [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 143 | 110 | [es](presets/elsalvador-ley-144/doc.es.pdf) · [en](presets/elsalvador-ley-144/doc.en.pdf) · [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) |
 | [Perú](presets/peru-ley-29733/) | Ley 29733 | 85 | 144 | 122 | [es](presets/peru-ley-29733/doc.es.pdf) · [en](presets/peru-ley-29733/doc.en.pdf) · [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) |
 | [Ecuador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 141 | 112 | [es](presets/ecuador-lopdp/doc.es.pdf) · [en](presets/ecuador-lopdp/doc.en.pdf) · [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) |
+| [Uruguay](presets/uruguay-ley-18331/) | Ley 18.331 | 83 | 141 | 114 | [es](presets/uruguay-ley-18331/doc.es.pdf) · [en](presets/uruguay-ley-18331/doc.en.pdf) · [pt-BR](presets/uruguay-ley-18331/doc.pt-BR.pdf) |
+| [Costa Rica](presets/costarica-ley-8968/) | Ley 8968 | 81 | 141 | 172 | [es](presets/costarica-ley-8968/doc.es.pdf) · [en](presets/costarica-ley-8968/doc.en.pdf) · [pt-BR](presets/costarica-ley-8968/doc.pt-BR.pdf) |
+| [España](presets/spain-lopdgdd/) | RGPD + LOPDGDD | 83 | 147 | 347 | [es](presets/spain-lopdgdd/doc.es.pdf) · [en](presets/spain-lopdgdd/doc.en.pdf) · [pt-BR](presets/spain-lopdgdd/doc.pt-BR.pdf) |
 
 Cada uno agrupa sus dominios en identificadores directos, cuasi-identificadores y los datos
 sensibles que nombra su ley, y enmascara los identificadores nacionales con un dígito verificador
 válido donde el número lo tiene — el RUT de Chile, la CURP y el RFC de México, el RUC de persona
-natural en Panamá, el CPF, el CNPJ (también el alfanumérico), el PIS, el título electoral y el CNS en Brasil, el NIT en Colombia, el CUIT, el CUIL, el CBU y el CVU en Argentina, el DUI y el NIT en El Salvador, el DNI y el RUC en Perú, la cédula y el RUC en Ecuador. El README de cada carpeta explica el diseño y sus límites; el PDF lista cada
+natural en Panamá, el CPF, el CNPJ (también el alfanumérico), el PIS, el título electoral y el CNS en Brasil, el NIT en Colombia, el CUIT, el CUIL, el CBU y el CVU en Argentina, el DUI y el NIT en El Salvador, el DNI y el RUC en Perú, la cédula y el RUC en Ecuador, la cédula de identidad y el RUT en Uruguay, y los dos dígitos de control del IBAN costarricense — el único número de Costa Rica que lleva alguno —, y en España la letra del DNI y del NIE, el número de la Seguridad Social, los dígitos de la cuenta y del IBAN, la referencia catastral y el CUPS. El README de cada carpeta explica el diseño y sus límites; el PDF lista cada
 dominio, classifier, algoritmo y archivo, con ejemplos enmascarados.
 
 **Importar.** No hay importación por objeto: conectar la integración trae el engine entero, y

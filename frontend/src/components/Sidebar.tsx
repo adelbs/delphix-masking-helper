@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Search, ShieldCheck, X, Settings, ChevronDown, ChevronRight,
-  MoreHorizontal, Server, Plus, Check, Layers,
+  MoreHorizontal, Server, Plus, Check, Layers, Package,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -87,7 +87,7 @@ interface Props {
   onNewClassifier: () => void
   onSelectProfileSet: (profileSet: ProfileSet) => void
   onNewProfileSet: () => void
-  onOpenSettings: () => void
+  onOpenSettings: (tab?: 'profileSets') => void
   onGoHome: () => void
   localePref: LocalePref
   onLocaleChange: (pref: LocalePref) => void
@@ -347,6 +347,8 @@ export function Sidebar({
                       title={t('profileSet.actions')}
                       newLabel={t('profileSet.new')}
                       onNew={onNewProfileSet}
+                      extraLabel={t('profileSet.loadPreset')}
+                      onExtra={() => onOpenSettings('profileSets')}
                     />
                   ) : null
                 }
@@ -416,7 +418,7 @@ export function Sidebar({
       {/* Footer */}
       <div className="px-3 py-3 border-t border-slate-800 flex-shrink-0 space-y-1">
         <button
-          onClick={onOpenSettings}
+          onClick={() => onOpenSettings()}
           className="flex items-center gap-2 w-full px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
         >
           <Settings size={15} />
@@ -597,12 +599,14 @@ function AlgorithmList({ algorithms, buckets, mode, open, onToggleGroup, activeI
  * Frameworks has nothing to create (they come from the plugin) and Profile Sets nothing to group
  * by, and each simply leaves that half out.
  */
-function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, grouping }: {
+function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, extraLabel, onExtra, grouping }: {
   title: string
   newLabel?: string
   importLabel?: string
   onImportFromEngine?: () => void
   onNew?: () => void
+  extraLabel?: string
+  onExtra?: () => void
   grouping?: {
     section: GroupableSection
     mode: GroupMode
@@ -646,6 +650,7 @@ function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, 
 
   const creates = onNew && newLabel
   const imports = onImportFromEngine && importLabel
+  const extra = onExtra && extraLabel
 
   return (
     <div ref={box}>
@@ -671,9 +676,14 @@ function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, 
               <Server size={13} /> {importLabel}
             </button>
           )}
+          {extra && (
+            <button onClick={() => { close(); onExtra() }} className={menuItem}>
+              <Package size={13} /> {extraLabel}
+            </button>
+          )}
           {grouping && (
             <>
-              {(creates || imports) && <div className="my-1 border-t border-slate-700" />}
+              {(creates || imports || extra) && <div className="my-1 border-t border-slate-700" />}
               <p className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                 {t('sidebar.groupBy')}
               </p>

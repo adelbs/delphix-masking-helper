@@ -1,0 +1,972 @@
+{
+  "title": "Costa Rica — Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales costarricenses: cédula de identidad, DIMEX y NITE, el IBAN con dígitos de control válidos, la dirección escrita por señas desde un punto de referencia, cuasi-identificadores, los datos sensibles que el artículo 9.1 prohíbe tratar a un particular, datos de salud, la condición socioeconómica que el artículo 3 e) llama sensible y los antecedentes penales.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encuentra los datos personales de una base costarricense y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
+        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y un distrito pequeño ya apuntan a un puñado de personas, y la mayoría de los 492 distritos de Costa Rica es pequeña. El set trabaja en las capas donde está el riesgo:",
+        {
+          "list": [
+            "**Identificadores directos** — cédula de identidad, DIMEX, NITE, pasaporte, números de seguridad social y de estudiante, registro profesional, nombres, contacto, dirección y señas, cuentas bancarias, tarjetas, dispositivos, cookies, placas, inmuebles, fotografías, texto libre.",
+            "**Cuasi-identificadores** — fecha de nacimiento, año de nacimiento, edad, sexo, distrito y cantón, el código de la División Territorial Administrativa que también es el código postal, barrio, estado civil, ocupación, empleador, escolaridad, personas a cargo.",
+            "**Datos sensibles** — las categorías del artículo 3 e) y del artículo 9.1: origen racial o étnico, opiniones políticas, convicciones religiosas, espirituales o filosóficas, información biomédica y genética, vida y orientación sexual; y los atributos que la cláusula antidiscriminatoria del artículo 4 alcanza: pueblo indígena, nacionalidad, condición migratoria, identidad de género, afiliación sindical.",
+            "**Datos de salud**, que el artículo 9.1 permite tratar solo a la propia atención en salud y solo bajo secreto profesional.",
+            "**Datos económicos** — ingresos, deudas, bienes, situación crediticia y programas sociales. El artículo 3 e) nombra la **condición socioeconómica** entre los datos sensibles, y el artículo 1 extiende la ley a los datos de los **bienes** de la persona.",
+            "**Antecedentes penales**, cuyos asientos el Registro Judicial cancela en una escala propia."
+          ]
+        },
+        "Cada grupo a continuación dice qué es cada dominio, cómo se enmascara y por qué. El descubrimiento es un profile set de 141 classifiers con umbral 60; el enmascaramiento son 81 dominios con sus algoritmos."
+      ]
+    },
+    {
+      "title": "La Ley 8968 en breve",
+      "body": [
+        "Costa Rica tiene ley de protección de datos desde 2011: la **Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales**, vigente desde el 5 de setiembre de 2011 y **nunca reformada**. Su reglamento, el Decreto Ejecutivo 37554-JP, fue reformado dos veces, por el Decreto 40008-JP en 2016 y por el Decreto 41582 en 2019, ambos sobre el registro de bases de datos y no sobre los principios. La autoridad es la **Agencia de Protección de Datos de los Habitantes (Prodhab)**, creada por el artículo 15.",
+        "Dos rasgos de la ley moldean este set. Primero, el artículo 1 declara su alcance sobre los datos de una persona **o bienes** — los bienes además de la persona —, lo que pone inmuebles, ingresos y patrimonio dentro de ella. Segundo, solo la **persona física** es titular: el artículo 3 b) define dato personal como cualquier dato relativo a una persona física identificada o identificable, y el artículo 3 g) y el artículo 2 v) del reglamento definen al interesado igual. Una empresa no es titular en Costa Rica, por eso una cédula jurídica queda exactamente como está.",
+        "En datos sensibles la ley es especialmente severa. El artículo 3 e) los define como \"información relativa al **fuero íntimo** de la persona, como por ejemplo los que revelen origen racial, opiniones políticas, convicciones religiosas o espirituales, **condición socioeconómica**, información **biomédica o genética**, vida y orientación sexual, **entre otros**\" — una lista abierta, y la única de la región que nombra la condición socioeconómica. El artículo 9.1 entonces **prohíbe** tratarlos, con cinco excepciones estrechas, y el artículo 31 a) hace del tratamiento por un particular una **falta gravísima**: quince a treinta salarios base y la suspensión del fichero por hasta seis meses.",
+        "El artículo 9.3 merece leerse al lado. Enumera lo que **no** es dato de acceso irrestricto aun constando en un registro público: \"la dirección exacta de la residencia\", \"la fotografía\", \"los números de teléfono privados y otros de igual naturaleza cuyo tratamiento pueda afectar los derechos y los intereses de la persona titular\". Tres dominios de este set existen porque ese párrafo los nombra."
+      ]
+    },
+    {
+      "title": "Desasociación, seudonimización y copias fuera de producción",
+      "body": [
+        "Costa Rica escribe la técnica en la propia ley. El artículo 6.1 dice que los datos personales que puedan afectar a su titular en ningún caso serán conservados pasados diez años desde los hechos registrados, y que \"en caso de que sea necesaria su conservación, más allá del plazo estipulado, deberán ser **desasociados de su titular**\". El artículo 2 r) del reglamento define el procedimiento: \"acción y efecto de **disociar** los datos personales, de modo que la información que se obtenga no pueda asociarse o vincularse a persona determinada o determinable\". Ninguna otra ley de la región ordena la técnica en el cuerpo del estatuto.",
+        "Conviene ser preciso sobre lo que el enmascaramiento logra frente a esa definición. El motor enmascara con una llave, y quien tiene la llave puede reproducir el mapeo: el resultado es una copia **seudonimizada**, no disociada en el sentido estricto del artículo 2 r), y sigue siendo dato personal. Lo que sí es, con claridad, es la \"medida de índole técnica\" que exige el artículo 10 y la \"medida de seguridad lógica\" que los artículos 34 a 37 del reglamento piden al responsable elegir por riesgo — incluido el **riesgo residual** que el artículo 36 f) manda calcular. Para alcanzar la desasociación hay que descartar la llave, y nada en una copia enmascarada debe leerse como anónimo mientras exista.",
+        "Dos disposiciones más hacen explícita la lectura por riesgo. El artículo 2 q) del reglamento dice que la persona física es identificable cuando la identidad pueda determinarse \"directa o **indirectamente**, mediante cualquier información referida a su identidad anatómica, fisiológica, psíquica, económica, cultural o social\", y agrega que \"una persona física **no se considerará identificable** si dicha identificación requiere plazos o actividades desproporcionadas\". El artículo 8 d) de la ley limita sus principios para bases de datos usadas con fines estadísticos, históricos o de investigación científica \"cuando **no exista riesgo** de que las personas sean identificadas\". Ambos ponen la pregunta donde este set la responde: cuánto trabajo haría falta para volver a señalar a una persona."
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. La cédula de identidad es la llave de todo registro costarricense y no lleva dígito verificador, así que nada hay que recalcular y el número cambia entero, incluido el dígito de la provincia. El IBAN es la excepción: sí lleva dígitos de control, y sale con dígitos válidos. Solo la **persona física** es titular en Costa Rica, por eso una cédula jurídica pasa intacta."
+      ],
+      "domains": [
+        "CR_L1_CEDULA",
+        "CR_L1_DIMEX",
+        "CR_L1_NITE",
+        "CR_L1_PASAPORTE",
+        "CR_L1_SEGURO_SOCIAL",
+        "CR_L1_CODIGO_ESTUDIANTE",
+        "CR_L1_MATRICULA_PROFESIONAL",
+        "CR_L1_NOMBRE",
+        "CR_L1_APELLIDO",
+        "CR_L1_NOMBRE_COMPLETO",
+        "CR_L1_EMAIL",
+        "CR_L1_TELEFONO",
+        "CR_L1_DIRECCION",
+        "CR_L1_DIRECCION_COMPLEMENTO",
+        "CR_L1_CUENTA_BANCARIA",
+        "CR_L1_TARJETA",
+        "CR_L1_BILLETERA",
+        "CR_L1_IP",
+        "CR_L1_DISPOSITIVO",
+        "CR_L1_COOKIE",
+        "CR_L1_PLACA",
+        "CR_L1_VEHICULO",
+        "CR_L1_INMUEBLE",
+        "CR_L1_CONTRATO",
+        "CR_L1_USUARIO",
+        "CR_L1_CREDENCIAL",
+        "CR_L1_IMAGEN",
+        "CR_L1_GEOLOCALIZACION",
+        "CR_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por separado e identifican a casi cualquiera juntos. El artículo 2 q) del reglamento dice que la identidad puede determinarse **indirectamente**, por cualquier información sobre la identidad anatómica, fisiológica, psíquica, económica, cultural o social de la persona. Estas columnas no se vacían — una prueba necesita edades y lugares que se comporten — sino que se engruesan hasta que una combinación deje de señalar a una persona."
+      ],
+      "domains": [
+        "CR_L2_FECHA_NACIMIENTO",
+        "CR_L2_ANIO_NACIMIENTO",
+        "CR_L2_EDAD",
+        "CR_L2_FECHA_EVENTO",
+        "CR_L2_SEXO",
+        "CR_L2_DISTRITO",
+        "CR_L2_CODIGO_DTA",
+        "CR_L2_BARRIO",
+        "CR_L2_ESTADO_CIVIL",
+        "CR_L2_OCUPACION",
+        "CR_L2_EMPLEADOR",
+        "CR_L2_NIVEL_EDUCATIVO",
+        "CR_L2_INSTITUCION_EDUCATIVA",
+        "CR_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Datos sensibles (art. 3 e y art. 9.1)",
+      "intro": [
+        "El artículo 9.1 no regula estos datos, los **prohíbe**: \"se prohíbe el tratamiento de datos de carácter personal que revelen el origen racial o étnico, opiniones políticas, convicciones religiosas, espirituales o filosóficas, así como los relativos a la salud, la vida y la orientación sexual, entre otros\", con cinco excepciones estrechas, y el artículo 31 a) hace del tratamiento por un particular una falta gravísima. Una copia de pruebas no es ninguna de esas excepciones, por eso estas columnas se reemplazan dentro de su propio vocabulario o se suprimen. El artículo 4, segundo párrafo, agrega la razón de que los atributos que la lista no nombra estén aquí también: la autodeterminación informativa existe \"evitando que se propicien **acciones discriminatorias**\"."
+      ],
+      "domains": [
+        "CR_L3_ETNIA",
+        "CR_L3_PUEBLO_INDIGENA",
+        "CR_L3_NACIONALIDAD",
+        "CR_L3_CONDICION_MIGRATORIA",
+        "CR_L3_RELIGION",
+        "CR_L3_CONVICCION_FILOSOFICA",
+        "CR_L3_OPINION_POLITICA",
+        "CR_L3_AFILIACION_PARTIDARIA",
+        "CR_L3_AFILIACION_SINDICAL",
+        "CR_L3_BIOMETRICO",
+        "CR_L3_GENETICO",
+        "CR_L3_ORIENTACION_SEXUAL",
+        "CR_L3_VIDA_SEXUAL",
+        "CR_L3_IDENTIDAD_GENERO",
+        "CR_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Datos de salud (art. 9.1 d)",
+      "intro": [
+        "La salud está entre los datos que el artículo 9.1 prohíbe, y su excepción d) abre la única puerta: el tratamiento se permite cuando es necesario para la prevención, el diagnóstico médico, la prestación de asistencia sanitaria o la gestión de servicios sanitarios, y entonces solo por un funcionario del área de la salud sujeto al secreto profesional \"o por otra persona sujeta, asimismo, a una obligación equivalente de secreto\". Un ambiente de pruebas no es la atención en salud de nadie, y quien restaura el respaldo no está bajo tal obligación. El artículo 2 c) de la Ley 8239 de derechos de las personas usuarias de los servicios de salud garantiza la confidencialidad del expediente, que la CCSS guarda para todo el país en el EDUS."
+      ],
+      "domains": [
+        "CR_SALUD_IDENTIFICADOR",
+        "CR_SALUD_COBERTURA",
+        "CR_SALUD_DIAGNOSTICO",
+        "CR_SALUD_PROCEDIMIENTO",
+        "CR_SALUD_MEDICAMENTO",
+        "CR_SALUD_TEXTO_CLINICO",
+        "CR_SALUD_RESULTADO_EXAMEN",
+        "CR_SALUD_VIH",
+        "CR_SALUD_GRUPO_SANGUINEO",
+        "CR_SALUD_DISCAPACIDAD",
+        "CR_SALUD_OCUPACIONAL",
+        "CR_SALUD_REPRODUCTIVA",
+        "CR_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos económicos (art. 3 e, art. 1 y art. 9.4)",
+      "intro": [
+        "Costa Rica es el único país de la región cuya ley nombra la **condición socioeconómica** entre los datos sensibles del artículo 3 e), al lado del origen racial y de las convicciones religiosas. El artículo 1 extiende la ley a los datos de los **bienes** de la persona, y el artículo 9.4 remite el comportamiento crediticio a las normas del Sistema Financiero Nacional — donde la SUGEF mantiene el Centro de Información Crediticia — \"sin impedir el pleno ejercicio del derecho a la autodeterminación informativa ni exceder los límites de esta ley\". Los montos mantienen su orden de magnitud para que totales y razones sigan comportándose; lo que dejan de hacer es nombrar un salario."
+      ],
+      "domains": [
+        "CR_FIN_HISTORIAL_CREDITICIO",
+        "CR_FIN_DEUDA",
+        "CR_FIN_INGRESOS",
+        "CR_FIN_PATRIMONIO",
+        "CR_FIN_PENSION",
+        "CR_FIN_PROGRAMA_SOCIAL",
+        "CR_FIN_CONDICION_SOCIOECONOMICA",
+        "CR_FIN_VIVIENDA"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Antecedentes penales (art. 8 c y Ley 6723)",
+      "intro": [
+        "El artículo 8 c) permite limitar los principios de la ley para \"la prevención, persecución, investigación, detención y represión de las infracciones penales\" — un límite escrito para las autoridades, no para quien copia sus tablas. El artículo 11 de la **Ley 6723 del Registro y Archivos Judiciales**, reformado por la **Ley 10453 del 4 de marzo de 2024**, cancela un asiento en una escala que va del fin de la pena a diez años después de ella, y una certificación para fines de empleo muestra solo lo que sigue vigente. Una copia fuera de producción guarda el asiento mientras la copia viva, que es más que cualquiera de esos plazos."
+      ],
+      "domains": [
+        "CR_PENAL_ANTECEDENTES",
+        "CR_PENAL_EXPEDIENTE"
+      ]
+    }
+  ],
+  "domains": {
+    "CR_L1_CEDULA": {
+      "title": "Cédula de identidad",
+      "what": [
+        "El número del Tribunal Supremo de Elecciones, la llave de todo registro costarricense. Su forma canónica son diez dígitos, `0P-TTTT-AAAA` — una provincia, el tomo y el asiento del registro de nacimiento — y los ceros iniciales suelen omitirse, así que se escribe `1-0234-0567` o `102340567`.",
+        "El mismo dominio recibe los otros números que una columna de documento guarda: un DIMEX de once o doce dígitos, un NITE de la serie 3-120 y la cédula jurídica de una empresa. La licencia de conducir lleva la cédula de su titular, así que una columna de licencia cae aquí también."
+      ],
+      "masking": [
+        "Dígito a dígito, conservando los guiones. La cédula **no lleva dígito verificador** — la Dirección General de Tributación la valida contra el propio Registro Civil —, así que nada hay que recalcular y el número cambia entero, **incluido el dígito de la provincia**: es la provincia del asiento de nacimiento y de otro modo sobreviviría en la copia. El primer dígito se mapea entre 1 y 9, nunca a cero, para que el resultado siga siendo una cédula bien formada.",
+        "Una **cédula jurídica** queda exactamente como está: los artículos 3 b) y g) alcanzan solo a la persona física, así que una empresa no es titular y su número no es dato personal de nadie. A partir del cuarto trimestre de 2026 ese número puede ser alfanumérico, `3-101-A00001`, por el Decreto 44648-MJ; ambas formas pasan intactas."
+      ]
+    },
+    "CR_L1_DIMEX": {
+      "title": "DIMEX",
+      "what": [
+        "El Documento de Identidad Migratorio para Extranjeros, el número de identidad de una persona extranjera residente: once o doce dígitos, sin separadores, y el identificador que la Dirección General de Tributación usa para ellas."
+      ],
+      "masking": [
+        "Todos los dígitos cambian y el largo se conserva, porque el largo es lo que distingue un DIMEX de una cédula en una columna mixta. El DIMEX tampoco tiene dígito verificador."
+      ]
+    },
+    "CR_L1_NITE": {
+      "title": "NITE",
+      "what": [
+        "El Número de Identificación Tributaria Especial, para quien no tiene cédula ni DIMEX. La serie **3-120** pertenece a una persona física extranjera y la serie **3-130** a una empresa extranjera."
+      ],
+      "masking": [
+        "Aquí la ley traza su línea más nítida: los seis dígitos de un número **3-120** se enmascaran, porque ese número pertenece a una persona física, y un número **3-130** queda intacto, porque pertenece a una empresa y una empresa no es titular. Los dos se parecen y se tratan de modos opuestos."
+      ]
+    },
+    "CR_L1_PASAPORTE": {
+      "title": "Pasaporte",
+      "what": [
+        "El número de pasaporte, costarricense o extranjero: una o dos letras y seis a ocho dígitos."
+      ],
+      "masking": [
+        "Las letras se vuelven letras y los dígitos dígitos, para que el número conserve la forma que le da el país emisor."
+      ]
+    },
+    "CR_L1_SEGURO_SOCIAL": {
+      "title": "Número de seguridad social",
+      "what": [
+        "Los números de la Caja Costarricense de Seguro Social: el número de asegurado, el número patronal de un empleador, la planilla y los códigos del SICERE."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando la forma y los separadores. Esos números se construyen a partir de la cédula, así que identifican tanto como ella."
+      ]
+    },
+    "CR_L1_CODIGO_ESTUDIANTE": {
+      "title": "Código de estudiante",
+      "what": [
+        "El identificador que una escuela, un colegio o una universidad da a un estudiante, y la cédula escolar."
+      ],
+      "masking": [
+        "Carácter por carácter. Es un identificador directo dentro de su propia institución, que es donde vive la lista."
+      ]
+    },
+    "CR_L1_MATRICULA_PROFESIONAL": {
+      "title": "Registro profesional",
+      "what": [
+        "El número de un colegio profesional — el código médico, el número de colegiado, el carné — y el número de título."
+      ],
+      "masking": [
+        "Carácter por carácter. Los registros son públicos, que es precisamente lo que hace del número una llave de vuelta a un profesional con nombre."
+      ]
+    },
+    "CR_L1_NOMBRE": {
+      "title": "Nombre",
+      "what": [
+        "Un nombre de pila por separado: el primero, el segundo, o una columna que guarda ambos."
+      ],
+      "masking": [
+        "Cada palabra se vuelve otro nombre costarricense, de una lista de 400 tomada de la frecuencia de nombres en el país — Xinia, Yorleny, Olger y Keylor entre ellos. Las partículas de un nombre compuesto quedan donde están, así que \"María de los Ángeles\" conserva su forma."
+      ]
+    },
+    "CR_L1_APELLIDO": {
+      "title": "Apellido",
+      "what": [
+        "El primer o el segundo apellido, o una columna con ambos."
+      ],
+      "masking": [
+        "Cada palabra se vuelve otro apellido costarricense, de una lista de 420 — Oconitrillo, Cartín, Garbanzo, Jirón y los apellidos ingleses de la costa caribeña entre ellos. \"De la Cruz\" conserva sus partículas."
+      ]
+    },
+    "CR_L1_NOMBRE_COMPLETO": {
+      "title": "Nombre completo",
+      "what": [
+        "El nombre entero en una columna, y el nombre de un tercero — la madre, el padre, un tutor, un contacto de emergencia, un fiador."
+      ],
+      "masking": [
+        "Leído en el orden costarricense — uno o dos nombres, el apellido del padre, el apellido de la madre — y cada palabra reemplazada por una de su misma clase, para que un nombre enmascarado siga siendo plausiblemente una persona. \"Jiménez Oconitrillo, José Pablo\" se lee al revés."
+      ]
+    },
+    "CR_L1_EMAIL": {
+      "title": "Dirección de correo electrónico",
+      "what": [
+        "Cualquier columna de dirección, personal o de trabajo."
+      ],
+      "masking": [
+        "La parte local y el dominio se enmascaran y el dominio de nivel superior se vuelve **.test**, el sufijo reservado para pruebas: una dirección enmascarada nunca entrega, así que una corrida de pruebas no puede escribirle a una persona real."
+      ]
+    },
+    "CR_L1_TELEFONO": {
+      "title": "Teléfono",
+      "what": [
+        "Todo número costarricense tiene ocho dígitos y no tiene código de área: 2 para fijo, 4 para telefonía IP, 5 a 8 para móvil. El artículo 9.3 saca los **números de teléfono privados** de los datos de acceso irrestricto por su nombre, y SINPE Móvil hace de un número móvil también una dirección de pago."
+      ],
+      "masking": [
+        "El código de país y el primer dígito quedan, así que un número enmascarado sigue diciendo fijo o móvil; los otros siete cambian y el espaciado se conserva."
+      ]
+    },
+    "CR_L1_DIRECCION": {
+      "title": "Dirección y señas",
+      "what": [
+        "Costa Rica casi no tiene direcciones de calle: una dirección es una distancia y un rumbo desde un punto de referencia — \"200 metros norte de la iglesia católica, casa esquinera color verde\" —, a veces un residencial y un número de casa, a veces la cuadrícula de avenidas y calles del centro de San José. La **dirección exacta de la residencia** es lo primero que el artículo 9.3 saca de los datos de acceso irrestricto."
+      ],
+      "masking": [
+        "La línea entera se reemplaza por una ficticia de una lista de cuatro mil construida a la manera costarricense: metros y un rumbo desde un punto de referencia, un residencial y una casa, o una avenida y una calle. La misma entrada da siempre la misma salida, así que una fila conserva a sus vecinos."
+      ]
+    },
+    "CR_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento de la dirección",
+      "what": [
+        "Lo que viene al lado de la dirección: el apartamento, el piso, la torre, el número de casa, el lote, la etapa, el apartado postal."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando la forma: un complemento que estrecha un edificio a una puerta identifica tanto como la dirección."
+      ]
+    },
+    "CR_L1_CUENTA_BANCARIA": {
+      "title": "Cuenta bancaria (IBAN)",
+      "what": [
+        "Desde 2017 toda cuenta costarricense es un IBAN de 22 caracteres: `CR`, dos dígitos de control, un cero reservado, tres dígitos para el banco y catorce para la cuenta — la Cuenta Cliente de 17 dígitos de SINPE con cinco caracteres delante. Se escribe compacto, `CR05015202001026284066`, y se imprime en grupos de cuatro, `CR05 0152 0200 1026 2840 66`."
+      ],
+      "masking": [
+        "Los catorce dígitos de la cuenta cambian y los **dos dígitos de control se recalculan**, así que el IBAN enmascarado pasa el resto ISO 13616 que toda biblioteca y todo sistema costarricense verifica. El banco queda — no es dato personal, y conservarlo mantiene una cuenta de pruebas dentro de un banco real. La última sección de este documento explica cómo se calcula el resto."
+      ]
+    },
+    "CR_L1_TARJETA": {
+      "title": "Tarjeta de pago",
+      "what": [
+        "El número de tarjeta, de crédito o de débito, con o sin espacios."
+      ],
+      "masking": [
+        "El algoritmo Payment Card mantiene válido el dígito de Luhn y los primeros dígitos en su lugar, así que la marca y el emisor sobreviven y un formulario de pago sigue aceptando el valor en una prueba."
+      ]
+    },
+    "CR_L1_BILLETERA": {
+      "title": "Billetera digital",
+      "what": [
+        "El identificador de una billetera o de una dirección de criptoactivo."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando la forma para que una verificación de formato siga pasando."
+      ]
+    },
+    "CR_L1_IP": {
+      "title": "Dirección IP",
+      "what": [
+        "La dirección del dispositivo desde el que una persona se conectó, ingresó o presentó algo."
+      ],
+      "masking": [
+        "Cada octeto se vuelve otro número entre 1 y 254, para que la dirección siga pareciendo enrutable; una IPv6 conserva hexadecimal válido."
+      ]
+    },
+    "CR_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": [
+        "IMEI, IMSI, ICCID, MAC, identificadores de publicidad y de sesión: números que siguen un dispositivo, y por lo tanto una persona."
+      ],
+      "masking": [
+        "El hexadecimal sigue siendo hexadecimal y una MAC conserva sus dos puntos; un IMEI conserva sus quince dígitos."
+      ]
+    },
+    "CR_L1_COOKIE": {
+      "title": "Cookie e identificador de seguimiento",
+      "what": [
+        "El identificador que un sitio o una campaña escribe en un navegador, y los parámetros UTM que vinieron con él."
+      ],
+      "masking": [
+        "Carácter por carácter. No nombra a nadie por sí solo y sigue un historial de navegación, razón por la cual es un identificador directo aquí."
+      ]
+    },
+    "CR_L1_PLACA": {
+      "title": "Placa del vehículo",
+      "what": [
+        "Dígitos para un carro particular, tres letras y tres dígitos en la serie alfanumérica que abrió el Registro Nacional, y un prefijo de clase para el resto — MOT una motocicleta, CL carga liviana, AB un autobús, TSJ o TA un taxi."
+      ],
+      "masking": [
+        "El prefijo de clase queda y los dígitos cambian, así que la flota sigue pareciendo una flota y la placa deja de señalar a un propietario."
+      ]
+    },
+    "CR_L1_VEHICULO": {
+      "title": "Identificadores del vehículo",
+      "what": [
+        "El VIN o número de chasis, el número de motor, el marchamo y el registro de la revisión técnica."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando las diecisiete posiciones de un VIN para que una verificación de formato siga pasando."
+      ]
+    },
+    "CR_L1_INMUEBLE": {
+      "title": "Identificadores del inmueble",
+      "what": [
+        "El folio real del Registro Inmobiliario, `1-234567-000`, el plano catastrado del Catastro, `SJ-1234567-2010`, y los números de medidor de los servicios. El artículo 1 de la ley alcanza los datos de una persona \"o **bienes**\", y el artículo 12 del reglamento lo repite."
+      ],
+      "masking": [
+        "Los dígitos cambian y los separadores y las letras de la provincia quedan, así que la referencia conserva su forma. Los registros son públicos y consultables por número, lo que hace de un folio real un camino de vuelta a un propietario."
+      ]
+    },
+    "CR_L1_CONTRATO": {
+      "title": "Números de contrato y de caso",
+      "what": [
+        "Los números internos que representan a una persona: contrato, póliza, préstamo, solicitud, siniestro, ticket, código de cliente o de empleado."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando prefijos y separadores para que los cruces por formato sigan funcionando. El número es un seudónimo, y un seudónimo que sobrevive a la copia la vuelve a ligar."
+      ]
+    },
+    "CR_L1_USUARIO": {
+      "title": "Usuario y perfil en red social",
+      "what": [
+        "El login, el alias, el apodo y el perfil de una red social."
+      ],
+      "masking": [
+        "Carácter por carácter. Un perfil es consultable, así que nombra a una persona tan seguro como el nombre."
+      ]
+    },
+    "CR_L1_CREDENCIAL": {
+      "title": "Credenciales y secretos",
+      "what": [
+        "Contraseñas y sus hashes, PINs, CVVs, tokens, llaves de API, frases semilla, preguntas y respuestas de seguridad."
+      ],
+      "masking": [
+        "Reemplazados por caracteres X. No se enmascaran para desidentificar, sino para impedir que una copia lleve credenciales que funcionan: el artículo 29 b) hace del almacenamiento o la transmisión de datos de terceros \"por medio de mecanismos inseguros\" una falta leve, y un respaldo con contraseñas vivas es eso."
+      ]
+    },
+    "CR_L1_IMAGEN": {
+      "title": "Fotografía y grabaciones",
+      "what": [
+        "La ruta o la URL de una fotografía, una selfie, una cédula escaneada, un video o la grabación de una llamada. El artículo 9.3 nombra **la fotografía** entre las cosas que no son de acceso irrestricto aun constando en un registro público."
+      ],
+      "masking": [
+        "Reemplazada por caracteres X: la referencia se corta, porque una ruta que todavía resuelve entrega el propio rostro."
+      ]
+    },
+    "CR_L1_GEOLOCALIZACION": {
+      "title": "Geolocalización",
+      "what": [
+        "Latitud y longitud, juntas o en columnas propias, y las coordenadas CRTM05 que usa la malla nacional."
+      ],
+      "masking": [
+        "La parte entera y el primer decimal quedan — unos once kilómetros — y el resto cambia: el lugar se generaliza, no se muda a otro país."
+      ]
+    },
+    "CR_L1_TEXTO_LIBRE": {
+      "title": "Texto libre",
+      "what": [
+        "Observaciones, comentarios, notas, el relato de un reclamo: las columnas donde se escribe lo que se quiera, y donde terminan cédulas, teléfonos y nombres."
+      ],
+      "masking": [
+        "El texto se conserva y lo que identifica dentro de él se redacta: una cédula, un DIMEX, un NITE, un correo, un teléfono, una tarjeta, un IBAN y una IP se vuelven `[DATO]`, y un nombre de las listas del set se vuelve `[NOMBRE]`."
+      ]
+    },
+    "CR_L2_FECHA_NACIMIENTO": {
+      "title": "Fecha de nacimiento",
+      "what": [
+        "La fecha de nacimiento, en columna de fecha o escrita como texto."
+      ],
+      "masking": [
+        "Desplazada hasta sesenta días en cualquier sentido. La edad y la generación sobreviven, la fecha exacta no — y la fecha exacta con un sexo y un distrito es lo que señala a una persona."
+      ]
+    },
+    "CR_L2_ANIO_NACIMIENTO": {
+      "title": "Año de nacimiento",
+      "what": [
+        "El año solo, cuando el sistema no guarda fecha completa."
+      ],
+      "masking": [
+        "La década queda y el último dígito cambia, así que un análisis de cohorte sigue funcionando dentro de diez años."
+      ]
+    },
+    "CR_L2_EDAD": {
+      "title": "Edad",
+      "what": [
+        "La edad en años, o el tramo en que cae."
+      ],
+      "masking": [
+        "El dígito de las decenas queda y el de las unidades cambia, así que 37 se vuelve otro treinta y tantos; de 100 en adelante el valor se vuelve 90, porque una edad muy alta es rara como para identificar."
+      ]
+    },
+    "CR_L2_FECHA_EVENTO": {
+      "title": "Otras fechas sobre la persona",
+      "what": [
+        "Defunción, matrimonio, contratación, despido, internamiento, egreso, diagnóstico, consulta, pensión, detención, sentencia, emisión de la cédula."
+      ],
+      "masking": [
+        "Desplazadas hasta treinta días. Las secuencias se mantienen — el internamiento sigue antes del egreso — y el día exacto deja de ser una llave a un registro público."
+      ]
+    },
+    "CR_L2_SEXO": {
+      "title": "Sexo",
+      "what": [
+        "El sexo como lo registra el sistema: F/M, Femenino/Masculino, Mujer/Hombre, 1/2."
+      ],
+      "masking": [
+        "Reemplazado dentro de su propio vocabulario, así que una F sigue siendo F o M y una columna CHAR(1) sigue cabiendo. La distribución sobrevive; la fila deja de decir cuál."
+      ]
+    },
+    "CR_L2_DISTRITO": {
+      "title": "Distrito y cantón",
+      "what": [
+        "El distrito o el cantón de residencia, nacimiento o atención, por su nombre — solo o con su cantón o provincia al lado, `Matambú - Hojancha`."
+      ],
+      "masking": [
+        "Un distrito de menos de 20.000 habitantes se vuelve el distrito más cercano de al menos 20.000 del mismo cantón, o de la misma provincia cuando el cantón no tiene ninguno. Los cantones siguen la misma regla un nivel arriba, y las siete provincias quedan. Un nombre compartido por varios lugares se generaliza solo cuando todos sus portadores son pequeños, así que un distrito grande y una provincia conservan su propio nombre."
+      ]
+    },
+    "CR_L2_CODIGO_DTA": {
+      "title": "Código de la DTA y código postal",
+      "what": [
+        "El código de la División Territorial Administrativa — un dígito para la provincia, dos para el cantón, dos para el distrito — que en Costa Rica **es también el código postal**: Correos de Costa Rica asigna 10101 al distrito 101 01."
+      ],
+      "masking": [
+        "La misma tabla que generaliza los nombres generaliza los códigos, así que un código postal enmascarado sigue concordando con el distrito enmascarado al lado y ninguna fila dice un lugar en palabras y otro en dígitos."
+      ]
+    },
+    "CR_L2_BARRIO": {
+      "title": "Barrio",
+      "what": [
+        "El barrio, la urbanización, el residencial o el condominio — el nivel debajo del distrito. El decreto de 2025 de la División Territorial Administrativa nombra 1.276 de ellos."
+      ],
+      "masking": [
+        "Reemplazado por otro barrio real del país, siempre el mismo para la misma entrada. Generalizar hacia arriba no diría nada que un distrito enmascarado no diga ya, y una columna de barrio suele ser toda la geografía que una tabla tiene."
+      ]
+    },
+    "CR_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": [
+        "El estado civil, como texto o como código."
+      ],
+      "masking": [
+        "Reemplazado por otro estado de la misma lista, y un código numérico por otro código. Una columna de bandera conserva su S/N."
+      ]
+    },
+    "CR_L2_OCUPACION": {
+      "title": "Ocupación",
+      "what": [
+        "La ocupación, la profesión o el puesto, como texto o como código de la clasificación nacional."
+      ],
+      "masking": [
+        "Reemplazada por otra ocupación, y un código por otro código del mismo largo. Una ocupación rara en un lugar pequeño nombra a una persona, razón por la cual esto no queda intacto."
+      ]
+    },
+    "CR_L2_EMPLEADOR": {
+      "title": "Empleador",
+      "what": [
+        "El nombre del empleador o del patrono, y el lugar de trabajo."
+      ],
+      "masking": [
+        "Reemplazado por una empresa costarricense ficticia. El empleador no es titular, pero estrecha a una persona a una planilla, razón por la cual la columna se enmascara."
+      ]
+    },
+    "CR_L2_NIVEL_EDUCATIVO": {
+      "title": "Nivel educativo",
+      "what": [
+        "El nivel más alto alcanzado, como texto o como código."
+      ],
+      "masking": [
+        "Reemplazado por otro nivel de la misma lista, y un código por otro código."
+      ]
+    },
+    "CR_L2_INSTITUCION_EDUCATIVA": {
+      "title": "Institución educativa",
+      "what": [
+        "La escuela, el colegio, el instituto o la universidad que una persona cursa o cursó."
+      ],
+      "masking": [
+        "Reemplazada por otra institución costarricense. Una escuela rural unidocente tiene un puñado de alumnos, así que nombrarla estrecha a la persona casi por completo."
+      ]
+    },
+    "CR_L2_PERSONAS_A_CARGO": {
+      "title": "Personas a cargo",
+      "what": [
+        "El número de hijos, dependientes o miembros del hogar."
+      ],
+      "masking": [
+        "Topado en cinco: un hogar de once es raro como para identificar, y cinco alcanzan para cualquier aritmética que una prueba necesite."
+      ]
+    },
+    "CR_L3_ETNIA": {
+      "title": "Origen racial o étnico",
+      "what": [
+        "La autoidentificación que pregunta el censo: indígena, afrodescendiente o negra, mulata, china, blanca o mestiza."
+      ],
+      "masking": [
+        "Reemplazado dentro de la lista, un código por otro código y una bandera por una bandera. El artículo 3 e) nombra el **origen racial** y el artículo 9.1 prohíbe tratar el **origen racial o étnico**."
+      ]
+    },
+    "CR_L3_PUEBLO_INDIGENA": {
+      "title": "Pueblo y territorio indígena",
+      "what": [
+        "El pueblo al que una persona pertenece — bribri, cabécar, maleku, chorotega, huetar, brunca, ngäbe, buglé, teribe —, el territorio indígena y la lengua materna. Costa Rica tiene ocho pueblos y 24 territorios."
+      ],
+      "masking": [
+        "Reemplazado dentro de su propia lista. Un pueblo cuenta unos miles de miembros y un territorio unos cientos, así que los dos son los cuasi-identificadores más agudos del país, además de sensibles."
+      ]
+    },
+    "CR_L3_NACIONALIDAD": {
+      "title": "Nacionalidad",
+      "what": [
+        "La nacionalidad, el país de nacimiento o de origen, la ciudadanía."
+      ],
+      "masking": [
+        "Reemplazada por otra nacionalidad de la lista. La ley no la nombra, pero está al lado del origen racial y étnico que sí nombra, y en Costa Rica separa a los nacionales de la comunidad nicaragüense — el atributo sobre el que más suelen girar las \"acciones discriminatorias\" del artículo 4."
+      ]
+    },
+    "CR_L3_CONDICION_MIGRATORIA": {
+      "title": "Condición migratoria",
+      "what": [
+        "La categoría migratoria que registra la Dirección General de Migración: residencia, categoría especial, refugiada, solicitante de refugio, permiso de trabajo, condición irregular."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista, y una bandera mantenida como bandera. De todos los atributos de una base costarricense, este es aquel cuya divulgación puede costarle a una persona su permanencia."
+      ]
+    },
+    "CR_L3_RELIGION": {
+      "title": "Religión",
+      "what": [
+        "La religión, el credo, la iglesia, la convicción religiosa o espiritual."
+      ],
+      "masking": [
+        "Reemplazada dentro de la lista. El artículo 3 e) nombra las **convicciones religiosas o espirituales** y el artículo 9.1 prohíbe tratarlas."
+      ]
+    },
+    "CR_L3_CONVICCION_FILOSOFICA": {
+      "title": "Convicciones filosóficas",
+      "what": [
+        "Una convicción filosófica, moral o ética, una objeción de conciencia, la pertenencia a una logia."
+      ],
+      "masking": [
+        "Suprimida: reemplazada por \"Sin información\". El artículo 9.1 nombra las **convicciones filosóficas** que el artículo 3 e) deja fuera, y su excepción b) permite a una fundación o asociación de finalidad filosófica guardar los datos de sus propios miembros — que es la base que este dominio protege en todas partes."
+      ]
+    },
+    "CR_L3_OPINION_POLITICA": {
+      "title": "Opinión política",
+      "what": [
+        "La opinión política, la ideología, la tendencia, la intención de voto."
+      ],
+      "masking": [
+        "Reemplazada dentro de la lista. El artículo 3 e) y el artículo 9.1 nombran las **opiniones políticas**, sin excepción que cubra una encuesta guardada en un CRM."
+      ]
+    },
+    "CR_L3_AFILIACION_PARTIDARIA": {
+      "title": "Adhesión partidaria",
+      "what": [
+        "El partido al que una persona adhiere, la militancia, la divisa política. El Tribunal Supremo de Elecciones mantiene el registro de adhesiones."
+      ],
+      "masking": [
+        "Reemplazada por otro partido del registro, y una bandera mantenida como bandera. La adhesión revela la opinión política, y eso es lo que la hace sensible."
+      ]
+    },
+    "CR_L3_AFILIACION_SINDICAL": {
+      "title": "Afiliación sindical",
+      "what": [
+        "El sindicato, la cuota rebajada de la planilla, la asociación solidarista, el gremio."
+      ],
+      "masking": [
+        "Suprimida, y una bandera mantenida como bandera. El artículo 9.1 b) permite a una organización de finalidad **sindical** guardar los datos de sus propios miembros \"con tal de que los datos no se comuniquen a terceros sin el consentimiento de las personas interesadas\" — que es exactamente lo que hace una copia enviada a un equipo de desarrollo."
+      ]
+    },
+    "CR_L3_BIOMETRICO": {
+      "title": "Datos biométricos",
+      "what": [
+        "Una huella y su plantilla, una codificación facial, un iris, una impresión de voz, una firma digitalizada."
+      ],
+      "masking": [
+        "Reemplazados por caracteres X. El artículo 3 e) nombra la **información biomédica**, y ninguna excepción del artículo 9.1 cubre una plantilla guardada por conveniencia — un biométrico no puede reemitirse cuando se filtra."
+      ]
+    },
+    "CR_L3_GENETICO": {
+      "title": "Datos genéticos",
+      "what": [
+        "ADN, un perfil genético, una prueba de paternidad o de filiación, una mutación, el tamizaje neonatal."
+      ],
+      "masking": [
+        "Reemplazados por caracteres X. El artículo 3 e) nombra **información biomédica o genética** de una sola vez, y un dato genético identifica a parientes a quienes nunca se preguntó."
+      ]
+    },
+    "CR_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientación sexual",
+      "what": [
+        "La orientación sexual como la registra el sistema."
+      ],
+      "masking": [
+        "Reemplazada dentro de la lista. El artículo 3 e) y el artículo 9.1 nombran la **orientación sexual**."
+      ]
+    },
+    "CR_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": [
+        "Actividad sexual, conducta, prácticas, número de parejas, la edad de inicio de la vida sexual."
+      ],
+      "masking": [
+        "Suprimida. El artículo 3 e) nombra la **vida** además de la **orientación sexual**, y el artículo 9.1 lo repite."
+      ]
+    },
+    "CR_L3_IDENTIDAD_GENERO": {
+      "title": "Identidad de género",
+      "what": [
+        "La identidad de género, el nombre social, los pronombres. Desde 2018 una persona puede cambiar el nombre y el marcador de sexo de la cédula, así que esta es una columna real en los sistemas costarricenses."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista. La lista del artículo 3 e) es abierta — \"entre otros\" — y el artículo 4 pide que el dato no propicie acciones discriminatorias."
+      ]
+    },
+    "CR_L3_VICTIMA": {
+      "title": "Víctima de violencia",
+      "what": [
+        "La condición de víctima, el tipo de violencia, una medida de protección, un caso del PANI."
+      ],
+      "masking": [
+        "Suprimida, y una bandera mantenida como bandera. La Ley 8589 de penalización de la violencia contra las mujeres y la Ley 9095 contra la trata de personas protegen la identidad de la víctima."
+      ]
+    },
+    "CR_SALUD_IDENTIFICADOR": {
+      "title": "Número de expediente clínico",
+      "what": [
+        "El número del expediente clínico, del registro en el EDUS, de un episodio, un internamiento, una consulta o una receta."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando la forma. El número es un seudónimo de un paciente, y suele construirse a partir de la cédula."
+      ]
+    },
+    "CR_SALUD_COBERTURA": {
+      "title": "Cobertura de salud",
+      "what": [
+        "Cómo está asegurada una persona: asegurado directo asalariado o cuenta propia, voluntario, por el Estado, pensionado del IVM o del RNC, familiar, una póliza privada, o sin seguro."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista, y un código numérico por otro código. El régimen dice más de lo que parece: \"asegurado por el Estado\" es una afirmación sobre la **condición socioeconómica** de la persona, que el artículo 3 e) llama sensible."
+      ]
+    },
+    "CR_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico",
+      "what": [
+        "El diagnóstico como código CIE-10 o como texto, la causa de muerte, el motivo de una consulta o de una incapacidad, alergias y comorbilidades."
+      ],
+      "masking": [
+        "Un código CIE-10 se vuelve otro código de la misma forma y un diagnóstico en texto otro diagnóstico común. La columna sigue pareciendo una columna de diagnóstico y deja de decir qué tiene una persona."
+      ]
+    },
+    "CR_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimiento",
+      "what": [
+        "El procedimiento, la prestación, la cirugía o el examen ordenado, como código o como texto."
+      ],
+      "masking": [
+        "Un código recibe otros dígitos del mismo largo y el texto se vuelve otro procedimiento común. Algunos procedimientos nombran un diagnóstico por sí solos, razón por la cual no quedan intactos."
+      ]
+    },
+    "CR_SALUD_MEDICAMENTO": {
+      "title": "Medicamento",
+      "what": [
+        "El medicamento prescrito o despachado, el principio activo, el código de la LOM, la posología."
+      ],
+      "masking": [
+        "Reemplazado por otro medicamento de la lista. Un medicamento es un diagnóstico escrito al revés: un antirretroviral o un antipsicótico dice lo que la columna de diagnóstico se enmascaró para no decir."
+      ]
+    },
+    "CR_SALUD_TEXTO_CLINICO": {
+      "title": "Notas clínicas",
+      "what": [
+        "La anamnesis, la evolución, el examen físico, el plan, la epicrisis, un informe de radiología o de patología."
+      ],
+      "masking": [
+        "La prosa se conserva y los identificadores dentro de ella se redactan, igual que en cualquier texto libre: el razonamiento clínico sobrevive para una prueba, el paciente no."
+      ]
+    },
+    "CR_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultado de examen",
+      "what": [
+        "El resultado de un examen de laboratorio, una serología, una biopsia, una glicemia, una presión arterial, una alcoholemia."
+      ],
+      "masking": [
+        "Carácter por carácter, conservando la forma para que unidades y rangos sigan leyéndose. Un solo resultado reactivo es un diagnóstico."
+      ]
+    },
+    "CR_SALUD_VIH": {
+      "title": "VIH e infecciones de transmisión sexual",
+      "what": [
+        "El estado serológico, la carga viral, el recuento de CD4, el tratamiento antirretroviral, sífilis, hepatitis, tuberculosis."
+      ],
+      "masking": [
+        "Suprimidas, y una bandera mantenida como bandera. La **Ley 7771 General sobre el VIH-SIDA** hace la condición confidencial y su divulgación un delito propio, más allá del artículo 9.1."
+      ]
+    },
+    "CR_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": [
+        "El grupo ABO y el factor Rh."
+      ],
+      "masking": [
+        "Reemplazado por otro grupo. Es un identificador débil por sí solo y un dato de salud de todos modos, y un grupo raro en un lugar pequeño estrecha a una persona."
+      ]
+    },
+    "CR_SALUD_DISCAPACIDAD": {
+      "title": "Discapacidad",
+      "what": [
+        "El tipo, el grado o el certificado de una discapacidad. La Ley 7600 de igualdad de oportunidades y la Ley 9379 que creó el CONAPDIS construyen registros de ella."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista, y una bandera mantenida como bandera. Una discapacidad rara en un distrito pequeño nombra a la persona tan seguro como la cédula."
+      ]
+    },
+    "CR_SALUD_OCUPACIONAL": {
+      "title": "Salud ocupacional",
+      "what": [
+        "La aptitud para el trabajo, el examen preocupacional o periódico, un accidente de trabajo, una enfermedad ocupacional, una incapacidad y sus días."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista. La boleta de incapacidad de la CCSS viaja con un diagnóstico, razón por la cual una tabla de personal guarda datos de salud sin proponérselo."
+      ]
+    },
+    "CR_SALUD_REPRODUCTIVA": {
+      "title": "Salud reproductiva",
+      "what": [
+        "El embarazo y sus semanas, el control prenatal, el parto, la interrupción, la anticoncepción, la fertilidad."
+      ],
+      "masking": [
+        "Suprimida, y una bandera mantenida como bandera. Es dato de salud por el artículo 9.1 y está al lado de la vida sexual del artículo 3 e)."
+      ]
+    },
+    "CR_SALUD_MENTAL": {
+      "title": "Salud mental",
+      "what": [
+        "Un diagnóstico o seguimiento de salud mental, un intento de suicidio, autolesión, el consumo de sustancias, una adicción, un registro del IAFA."
+      ],
+      "masking": [
+        "Suprimida. Es dato de salud, y de todos los datos de salud es aquel cuya divulgación le cuesta a una persona un trabajo, una custodia o una póliza."
+      ]
+    },
+    "CR_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Situación crediticia",
+      "what": [
+        "La categoría de la SUGEF — A1, A2, B1, B2, C1, C2, D, E —, el registro en el CIC, un score, los días de mora, el estado de un cobro."
+      ],
+      "masking": [
+        "Una categoría se vuelve otra categoría, un score otros dígitos y una bandera una bandera. El artículo 9.4 remite este dato a las normas del Sistema Financiero Nacional sin sacarlo de la ley."
+      ]
+    },
+    "CR_FIN_DEUDA": {
+      "title": "Deuda",
+      "what": [
+        "El saldo de una deuda, de un préstamo o de una tarjeta, la cuota, el límite de crédito."
+      ],
+      "masking": [
+        "Otro monto del mismo orden de magnitud, de cincuenta mil a sesenta millones de colones, para que totales y razones sigan comportándose."
+      ]
+    },
+    "CR_FIN_INGRESOS": {
+      "title": "Ingresos",
+      "what": [
+        "El salario, bruto o neto, los honorarios, el ingreso declarado, el ingreso per cápita del hogar."
+      ],
+      "masking": [
+        "Otro monto entre el salario mínimo y seis millones de colones al mes. Aquí Costa Rica difiere de sus vecinos: el artículo 3 e) nombra la **condición socioeconómica** entre los datos sensibles, así que una columna de ingresos no es meramente comercial."
+      ]
+    },
+    "CR_FIN_PATRIMONIO": {
+      "title": "Patrimonio",
+      "what": [
+        "El patrimonio, los activos, el valor fiscal o comercial de un inmueble o un vehículo, el saldo de una cuenta o una inversión, una declaración jurada de bienes."
+      ],
+      "masking": [
+        "Otro monto del mismo orden de magnitud. El artículo 1 de la ley alcanza los datos de una persona \"o **bienes**\", lo que pone esta columna dentro de ella por las palabras expresas del estatuto."
+      ]
+    },
+    "CR_FIN_PENSION": {
+      "title": "Pensión",
+      "what": [
+        "El monto de una pensión o un subsidio: el IVM, el Régimen No Contributivo, una pensión alimentaria, una pensión por invalidez."
+      ],
+      "masking": [
+        "Otro monto del mismo orden. Una pensión del Régimen No Contributivo dice que la persona es pobre, una pensión por invalidez dice que tiene una discapacidad."
+      ]
+    },
+    "CR_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programa social",
+      "what": [
+        "La pertenencia a un programa: Avancemos, Crecemos, el bono de vivienda del BANHVI, la Red de Cuido, una beca del FONABE, un beneficio del IMAS, el Régimen No Contributivo."
+      ],
+      "masking": [
+        "Reemplazado dentro de su propia lista, y una bandera mantenida como bandera. El SINIRUBE une los registros de todos los programas, así que una sola fila de él declara la condición socioeconómica de un hogar."
+      ]
+    },
+    "CR_FIN_CONDICION_SOCIOECONOMICA": {
+      "title": "Condición socioeconómica",
+      "what": [
+        "La clasificación del IMAS o del SINIRUBE — pobreza extrema, pobreza básica, vulnerabilidad, no pobre —, el puntaje de la ficha de información social, el quintil, el índice de desarrollo social."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista, un código por otro código. Este dominio lleva la frase de la propia ley: el artículo 3 e) enumera la **condición socioeconómica** como dato sensible, en la misma oración que el origen racial y la convicción religiosa, cosa que ninguna otra ley de la región hace."
+      ]
+    },
+    "CR_FIN_VIVIENDA": {
+      "title": "Tenencia de la vivienda",
+      "what": [
+        "Cómo el hogar tiene la vivienda: propia, pagando a plazos, alquilada, en precario, cedida."
+      ],
+      "masking": [
+        "Reemplazada dentro de su propia lista. \"En precario\" es una afirmación sobre pobreza, que el artículo 3 e) llama sensible."
+      ]
+    },
+    "CR_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes penales",
+      "what": [
+        "La hoja de delincuencia, los juzgamientos del Registro Judicial, una condena, un tipo de delito, una medida cautelar, la privación de libertad."
+      ],
+      "masking": [
+        "Reemplazados dentro de su propia lista, y una bandera mantenida como bandera. El artículo 11 de la Ley 6723, reformado por la Ley 10453 de 2024, cancela un asiento en una escala que va del fin de la pena a diez años después; una copia que vive más que eso guarda un asiento que el propio registro ya borró."
+      ]
+    },
+    "CR_PENAL_EXPEDIENTE": {
+      "title": "Número de expediente judicial",
+      "what": [
+        "El número que el Poder Judicial da a un caso: el año, un correlativo, la oficina y la materia, `24-001234-0007-PE`."
+      ],
+      "masking": [
+        "El correlativo cambia y el año, la oficina y la materia quedan, así que el expediente sigue pareciendo un expediente y deja de abrir un registro público. El expediente es consultable por número, y eso es lo que lo hace un identificador."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Los dígitos de control del IBAN",
+      "body": [
+        "Costa Rica es inusual porque **ninguno de sus números de identidad lleva dígito verificador**: la cédula de identidad, el DIMEX, el NITE y la cédula jurídica se validan contra un registro y no por aritmética. La Dirección General de Tributación verifica una cédula contra el Registro Civil en tiempo real. Así, nada en este set tiene que recalcular un dígito de identidad — y el número entero puede cambiar, razón por la cual incluso el dígito de la provincia de una cédula se enmascara.",
+        "El **IBAN** es el único lugar donde la aritmética importa, y ahí importa en todas partes: desde 2017 toda cuenta costarricense es un IBAN, SINPE se mueve sobre él, y cualquier biblioteca que lo toque lo valida. La regla es la ISO 13616: mover los cuatro primeros caracteres al final, leer `C` como 12 y `R` como 27, y el número resultante debe dejar resto **1 módulo 97**. El propio ejemplo del BCCR, CR05 0152 0200 1026 2840 66, lo deja.",
+        "Ningún framework de enmascaramiento calcula un resto módulo 97, y el algoritmo Check Digit escribe un carácter donde estos son dos. Así que el set lo calcula con tablas de búsqueda. Un **estado de dos dígitos** — el resto hasta ahí — se pone donde estaban los dígitos de control viejos, y viaja a la derecha por el número un carácter a la vez; cada paso es un Data Cleansing que convierte \"estado + carácter\" en \"carácter + nuevo estado\", desde una tabla de 1.067 líneas, una por cada par de resto y dígito. En el extremo derecho una tabla de 97 líneas convierte el resto en los dígitos de control, por la fórmula 98 − (r·10⁶ + 1227·100) mod 97. Un segundo viajero lleva entonces los dos dígitos de vuelta al frente.",
+        "`CR` y los espacios de la forma impresa esperan como marcadores de un carácter mientras eso ocurre, y se reescriben al final, así que la forma compacta y la impresa en grupos de cuatro salen como entraron — válidas, con su banco, y con una cuenta que no pertenece a nadie."
+      ]
+    },
+    {
+      "title": "Dónde vive la gente: distritos, cantones y el código que es también el código postal",
+      "body": [
+        "Costa Rica se divide en 7 provincias, 84 cantones y 492 distritos, y los distritos son pequeños: **413 de los 492 tienen menos de 20.000 habitantes**, unos 2,68 millones de personas — más de la mitad del país — y los más pequeños tienen unos cientos. Una fecha de nacimiento, un sexo y uno de esos distritos apuntan a un puñado de personas.",
+        "Así que un distrito debajo del umbral se vuelve el distrito más cercano de al menos 20.000 **del mismo cantón**, medido entre sus centros; cuando el cantón no tiene ninguno, el más cercano de la misma provincia. Los cantones siguen la misma regla un nivel arriba — 15 de los 84 están debajo del umbral — y las 7 provincias quedan, así que un valor generalizado nunca sale de su provincia y una columna de provincia nunca se reescribe.",
+        "Costa Rica está llena de homónimos: 179 de los 492 distritos comparten nombre con otro lugar, y hay distritos llamados San Rafael, San Isidro y San José en provincia tras provincia. Un nombre se generaliza solo cuando **todos** los lugares que lo llevan son pequeños, al destino del más poblado; 91 distritos pequeños conservan su propio nombre porque un homónimo suyo es grande. Escrito con el cantón o la provincia al lado — `Matambú - Hojancha`, en cualquiera de las cinco formas en que los sistemas lo escriben — la misma regla aplica dentro del calificador, y así se alcanza un distrito pequeño aun cuando su nombre desnudo deba quedar intacto.",
+        "Los códigos siguen a los nombres, y aquí Costa Rica da algo que ningún otro país de la región da: el código de la División Territorial Administrativa — un dígito para la provincia, dos para el cantón, dos para el distrito — **es el código postal**. Correos de Costa Rica asigna 10101 al distrito 101 01. Así que una tabla de 428 líneas generaliza el código del distrito, el del cantón y el código postal a la vez, y un código postal enmascarado siempre concuerda con el distrito enmascarado en la columna siguiente.",
+        "Debajo del distrito, el decreto de 2025 de la División Territorial Administrativa nombra 1.276 barrios. Un barrio está muy debajo de cualquier umbral, así que no se generaliza hacia arriba — eso no diría nada que un distrito enmascarado no diga ya — sino que se reemplaza por otro barrio real del país, siempre el mismo para la misma entrada."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        {
+          "list": [
+            "**Enmascarar con llave es seudonimización, no desasociación.** El artículo 2 r) del reglamento pide que el resultado no pueda asociarse o vincularse a persona determinada o determinable; quien tiene la llave puede reproducir el mapeo, así que una copia enmascarada sigue siendo dato personal y sigue necesitando las medidas del artículo 10. Para alcanzar la desasociación hay que descartar la llave.",
+            "**Las poblaciones son estimaciones.** Las poblaciones distritales son la estimación del Instituto Nacional de Estadística y Censos para 2022, proyectada del censo de 2011; suman unos 5,20 millones, cerca de 3% por encima de los 5.044.197 que contó el censo de 2022. Un distrito a unos cientos del umbral de 20.000 puede caer al otro lado con las cifras del censo, y conviene revisarlo para los pocos que están ahí.",
+            "**Dieciséis distritos no tienen cifra publicada propia.** Se crearon después de la distribución de la que viene la estimación — entre ellos los tres del cantón de Río Cuarto, Monteverde, Puerto Jiménez, Puente Salas y los territorios indígenas de Quitirrisí y Matambú — y la Isla del Coco está deshabitada. El set trata a los dieciséis como pequeños, lo que los generaliza: la opción conservadora, al costo de alguna utilidad.",
+            "**El banco de un IBAN se conserva.** No es dato personal, y conservarlo mantiene una cuenta de pruebas dentro de un banco real; pero un banco con pocos clientes en un lugar pequeño estrecha un poco a una persona. Los dos dígitos de control se recalculan desde la cuenta enmascarada, así que no filtran nada del original.",
+            "**Una fecha de nacimiento se desplaza, no se reemplaza.** Sesenta días a cada lado rompen el vínculo con un registro público y dejan la edad y la generación en su lugar. Donde la edad de un niño decide algo — un año escolar, un programa — un desplazamiento que cruza el cumpleaños mueve unas filas; donde eso importe, desplace la fecha igual en todas las tablas que la guardan.",
+            "**Las columnas binarias y los adjuntos quedan fuera de alcance.** Una cédula escaneada, una fotografía, un PDF de una hoja de delincuencia o una imagen clínica guarda todo lo que las columnas al lado dejaron de decir. El set enmascara la ruta, no el archivo.",
+            "**El descubrimiento es una propuesta, no un veredicto.** Los classifiers leen nombres de columna y valores; una columna con un nombre que nadie reconoce y pocos valores puede escapar, y una llamada como persona puede quedar atrapada por error. Revise el inventario antes de correr un job de enmascaramiento, que es para eso que existe el inventario."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "El set se verifica en cada build. Las 141 configuraciones de classifier se revisan una por una, y una batería de 146 columnas — bien nombradas, mal nombradas, y 30 que no son dato personal alguno, entre ellas una cédula jurídica — se perfila con el set entero en su umbral de 60 y de nuevo solo con el paquete esencial: toda columna cae donde debe, y ninguna de las 30 es reclamada.",
+        "La generalización se audita offline: los 492 distritos, los 84 cantones y las 7 provincias se verifican contra la regla, y cada una de las 11.582 sustituciones que la tabla escribe se verifica para que nombre un lugar de al menos 20.000 — en la provincia correcta, por el nombre, con el cantón, con la provincia y por el código.",
+        "El enmascaramiento se corre de verdad: 572 valores en todos los dominios, cada uno verificado contra lo que debería volverse. Doscientas cédulas dan doscientas salidas distintas, todas bien formadas, con el dígito de la provincia enmascarado y nunca cero. Doscientos IBAN — cien compactos y cien impresos en grupos de cuatro — dan doscientas salidas distintas, **todas válidas bajo la ISO 13616**, todas conservando su banco y su forma escrita."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        {
+          "list": [
+            "Ley 8968, Protección de la Persona frente al Tratamiento de sus Datos Personales, del 7 de julio de 2011 (La Gaceta 170 del 5 de setiembre de 2011).",
+            "Reglamento a la Ley 8968, Decreto Ejecutivo 37554-JP, reformado por el Decreto 40008-JP del 19 de julio de 2016 y el Decreto 41582 del 21 de febrero de 2019.",
+            "Ley 6723 del Registro y Archivos Judiciales, artículo 11 reformado por la Ley 10453 del 4 de marzo de 2024.",
+            "Ley 8239 de derechos y deberes de las personas usuarias de los servicios de salud; Ley 7771 General sobre el VIH-SIDA; Ley 7600 de igualdad de oportunidades para las personas con discapacidad y Ley 9379; Ley 8589 y Ley 9095 sobre violencia y trata de personas.",
+            "División Territorial Administrativa de la República, Decreto Ejecutivo 44882-MGP (Alcance 12 a La Gaceta 17 del 28 de enero de 2025): las 7 provincias, 84 cantones, 492 distritos y sus barrios.",
+            "Instituto Nacional de Estadística y Censos: la estimación de población por distrito para 2022, proyectada del censo de 2011, y los totales del censo de 2022. Códigos postales de Correos de Costa Rica. Centros distritales del conjunto de límites subnacionales del Instituto Geográfico Nacional.",
+            "Banco Central de Costa Rica, el IBAN de 22 caracteres y la Cuenta Cliente de SINPE; ISO 13616 para los dígitos de control. Decreto 44648-MJ para la cédula jurídica alfanumérica de 2026."
+          ]
+        }
+      ]
+    }
+  ]
+}

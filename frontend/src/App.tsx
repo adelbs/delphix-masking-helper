@@ -168,7 +168,8 @@ export default function App() {
     setSidebarOpen(false)
     setPickFramework(false)
   }
-  const showSettings = () => { setView('settings'); setSidebarOpen(false) }
+  const [settingsTab, setSettingsTab] = useState<'profileSets' | undefined>(undefined)
+  const showSettings = (tab?: 'profileSets') => { setSettingsTab(tab); setView('settings'); setSidebarOpen(false) }
   const toggleSidebar = () => setSidebarOpen(v => !v)
 
   const onTester = view === 'tester'
@@ -232,7 +233,7 @@ export default function App() {
             <WelcomeScreen
               onOpenSidebar={() => setSidebarOpen(true)}
               onOpenAlgorithm={openAlgorithmById}
-              onOpenSettings={showSettings}
+              onOpenSettings={() => showSettings()}
               pickFramework={pickFramework}
               onDismissPick={() => setPickFramework(false)}
             />
@@ -282,6 +283,8 @@ export default function App() {
           )}
           {view === 'settings' && (
             <Settings
+              key={settingsTab ?? 'default'}
+              initialTab={settingsTab}
               filesDir={filesDir}
               onSave={(d) => setFilesDir(d)}
               onToggleSidebar={toggleSidebar}

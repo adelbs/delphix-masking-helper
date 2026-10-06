@@ -165,7 +165,19 @@ async function api(path, body) {
 async function maskExamples(examples) {
   const filesUrl = `${pathToFileURL(nodePath.join(DIR, 'files')).href}/`
   const resolve = (config) => JSON.parse(JSON.stringify(config).replaceAll('preset-file://', filesUrl))
-  const additionalAlgorithms = preset.algorithms.map((a) => ({ name: a.name, className: a.framework, config: resolve(a.config) }))
+  // Each request carries only what its algorithm reaches, as the tester does: a whole set can be
+  // larger than the app takes in one request body.
+  const reach = (name, seen = new Set()) => {
+    if (seen.has(name)) return seen
+    seen.add(name)
+    for (const ref of refsOf(algorithms.get(name).config)) reach(ref, seen)
+    return seen
+  }
+  const closures = new Map()
+  const additionalFor = (name) => {
+    if (!closures.has(name)) closures.set(name, [...reach(name)].map((n) => algorithms.get(n)).map((a) => ({ name: a.name, className: a.framework, config: resolve(a.config) })))
+    return closures.get(name)
+  }
   const jobs = preset.domains.flatMap((d) => examples[d.name].map((input) => ({ domain: d, input })))
   const masked = new Map()
   const problems = []
@@ -174,7 +186,7 @@ async function maskExamples(examples) {
     while (next < jobs.length) {
       const { domain, input } = jobs[next++]
       const algorithm = algorithms.get(domain.algorithm)
-      const out = await api('/api/mask', { framework: algorithm.framework, config: resolve(algorithm.config), input, additionalAlgorithms })
+      const out = await api('/api/mask', { framework: algorithm.framework, config: resolve(algorithm.config), input, additionalAlgorithms: additionalFor(domain.algorithm) })
       if (typeof out.output !== 'string') problems.push(`${domain.name} ${JSON.stringify(input)}: ${out.error}`)
       masked.set(`${domain.name} ${input}`, out.output)
     }
@@ -263,6 +275,8 @@ const COLUMN_NAME_RULE = /^\(\?i\)\(\?<!\[a-z\]\)\(\?:([\s\S]*)\)\(\?!\[a-z\]\)$
 function render(locale, content, examples, masked, displayNames) {
   const t = TEXT[locale]
   const number = new Intl.NumberFormat(locale)
+  // The version date is a plain day: read it as UTC so it is not printed as the day before.
+  const day = (value) => new Date(`${value}T00:00:00Z`).toLocaleDateString(locale, { dateStyle: 'long', timeZone: 'UTC' })
   const pct = (strength) => `${Math.round(strength * 100)}%`
   const code = (s) => `<code>${esc(s)}</code>`
   const joinOr = (items) => (items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} ${t.or} ${items.at(-1)}`)
@@ -518,7 +532,9 @@ function render(locale, content, examples, masked, displayNames) {
     + `<div><span class="cover-fact-n">${preset.classifiers.length}</span><span class="cover-fact-l">${t.facts.classifiers}</span></div>`
     + `<div><span class="cover-fact-n">${preset.algorithms.length}</span><span class="cover-fact-l">${t.facts.algorithms}</span></div>`
     + '</div>'
-    + `<div class="cover-meta"><span>Profile set ${code(preset.profileSet.name)}</span><span>${t.version} ${esc(preset.version)} · ${t.threshold} ${preset.profileSet.threshold}%</span></div></div>`
+    + `<div class="cover-meta"><span>Profile set ${code(preset.profileSet.name)}</span><span>${
+      preset.versionDate ? t.versionOf(preset.version, day(preset.versionDate)) : `${t.version} ${esc(preset.version)}`
+    } · ${t.threshold} ${preset.profileSet.threshold}%</span></div></div>`
 
   return `<!doctype html><html lang="${locale}"><head><meta charset="utf-8"><title>${esc(content.title)}</title><style>${CSS}</style></head><body>`
     + cover

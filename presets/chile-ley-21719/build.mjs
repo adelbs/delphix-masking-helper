@@ -823,9 +823,13 @@ const ESSENTIAL = [
 const notDomains = ESSENTIAL.filter((name) => !domains.some((d) => d.name === name))
 if (notDomains.length) throw new Error(`essential pack names domains the set does not have: ${notDomains.join(', ')}`)
 
+// The version and the day it was built: bump both whenever anything in the set changes, so that
+// whoever loaded an older one can see how old it is.
 const VERSION = 3
+const VERSION_DATE = '2026-09-15'
 const preset = {
   version: VERSION,
+  versionDate: VERSION_DATE,
   name: {
     en: 'Chile — Law 21.719 (personal data protection)',
     'pt-BR': 'Chile — Lei 21.719 (proteção de dados pessoais)',

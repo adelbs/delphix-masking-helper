@@ -13,7 +13,7 @@ without creating a Rule Set or running a masking job.
 It covers sensitive data discovery too: the **domains** a column can belong to, the
 **classifiers** that decide it — each one testable against a column you describe — and the
 **profile sets** a profiling job runs. Ready-made profile sets for the data protection laws of
-**Chile, Mexico, Panama, Belize, Brazil, Colombia, Argentina, El Salvador, Peru and Ecuador** ship with the tool, each loaded in one click and documented
+**Chile, Mexico, Panama, Belize, Brazil, Colombia, Argentina, El Salvador, Peru, Ecuador, Uruguay, Costa Rica and Spain** ship with the tool, each loaded in one click and documented
 in a PDF.
 
 > **Wording follows Delphix.** A **framework** is a masking technique the plugin provides —
@@ -404,9 +404,10 @@ to it, and picking the other pack there switches, removing what the new pack doe
 sent to Delphix stays there. If a name the set uses already belongs to something that did not come
 from it, the tool lists what would be replaced and asks first. The profile set is named after the
 country, the law and its version (`CL - Ley 21.719 - v3`), and the card shows the version it ships
-with. The format is described in `presets/README.md`.
+with **and the day that version was built**, so you can tell how old a set is without opening it.
+The format is described in `presets/README.md`.
 
-Ten ship today, one per country, all with a profile set threshold of 60. The counts below are the
+Thirteen ship today, one per country, all with a profile set threshold of 60. The counts below are the
 extended pack; each essential pack has 11 to 13 domains:
 
 | Profile set | Law | Domains | Classifiers | Algorithms | Documentation |
@@ -421,10 +422,13 @@ extended pack; each essential pack has 11 to 13 domains:
 | [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 143 | 110 | [en](presets/elsalvador-ley-144/doc.en.pdf) · [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) · [es](presets/elsalvador-ley-144/doc.es.pdf) |
 | [Peru](presets/peru-ley-29733/) | Ley 29733 | 85 | 144 | 122 | [en](presets/peru-ley-29733/doc.en.pdf) · [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) · [es](presets/peru-ley-29733/doc.es.pdf) |
 | [Ecuador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 141 | 112 | [en](presets/ecuador-lopdp/doc.en.pdf) · [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) · [es](presets/ecuador-lopdp/doc.es.pdf) |
+| [Uruguay](presets/uruguay-ley-18331/) | Ley 18.331 | 83 | 141 | 114 | [en](presets/uruguay-ley-18331/doc.en.pdf) · [pt-BR](presets/uruguay-ley-18331/doc.pt-BR.pdf) · [es](presets/uruguay-ley-18331/doc.es.pdf) |
+| [Costa Rica](presets/costarica-ley-8968/) | Ley 8968 | 81 | 141 | 172 | [en](presets/costarica-ley-8968/doc.en.pdf) · [pt-BR](presets/costarica-ley-8968/doc.pt-BR.pdf) · [es](presets/costarica-ley-8968/doc.es.pdf) |
+| [Spain](presets/spain-lopdgdd/) | GDPR + LOPDGDD | 83 | 147 | 347 | [en](presets/spain-lopdgdd/doc.en.pdf) · [pt-BR](presets/spain-lopdgdd/doc.pt-BR.pdf) · [es](presets/spain-lopdgdd/doc.es.pdf) |
 
 Each one groups its domains into direct identifiers, quasi-identifiers and the sensitive data its
 law names, and masks national identifiers with a valid check digit wherever the number has one —
-Chile's RUT, Mexico's CURP and RFC, a natural person's RUC in Panama, Brazil's CPF, CNPJ (alphanumeric too), PIS, voter card and CNS, Colombia's NIT, Argentina's CUIT, CUIL, CBU and CVU, El Salvador's DUI and NIT, Peru's DNI and RUC, Ecuador's cédula and RUC. The README in each folder explains the design and
+Chile's RUT, Mexico's CURP and RFC, a natural person's RUC in Panama, Brazil's CPF, CNPJ (alphanumeric too), PIS, voter card and CNS, Colombia's NIT, Argentina's CUIT, CUIL, CBU and CVU, El Salvador's DUI and NIT, Peru's DNI and RUC, Ecuador's cédula and RUC, Uruguay's cédula de identidad and RUT, and the two check digits of a Costa Rican IBAN — the only number in Costa Rica that has any —, and in Spain the letter of the DNI and the NIE, the Seguridad Social number, the account and IBAN digits, the referencia catastral and the CUPS. The README in each folder explains the design and
 its limits; the PDF lists every domain, classifier, algorithm and file, with masked examples.
 
 **Importing.** There is no per-object import: connecting the integration brings the whole engine

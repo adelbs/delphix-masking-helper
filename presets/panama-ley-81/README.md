@@ -11,7 +11,7 @@ consent, and criminal records.
 
 | | |
 |---|---|
-| Profile set | `PA - Ley 81 de 2019 - v2`, assignment threshold 60 |
+| Profile set | `PA - Ley 81 de 2019 - v2`, assignment threshold 60, built 15 September 2026 |
 | Extended pack | 76 domains, 135 classifiers, 142 algorithms, 79 files — everything below |
 | Essential pack | 12 domains, 27 classifiers, 59 algorithms, 10 files — cédula, RUC, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

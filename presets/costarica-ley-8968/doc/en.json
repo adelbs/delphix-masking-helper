@@ -1,0 +1,972 @@
+{
+  "title": "Costa Rica — Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales",
+  "subtitle": "Discovery and masking of Costa Rican personal data: cédula de identidad, DIMEX and NITE, the IBAN with valid check digits, the address written as directions from a landmark, quasi-identifiers, the sensitive data article 9.1 forbids a private party to process, health data, the condición socioeconómica article 3 e) calls sensitive, and criminal records.",
+  "sections": [
+    {
+      "title": "About this profile set",
+      "body": [
+        "This profile set finds the personal data in a Costa Rican database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and cédulas alone is not enough: a birth date, a sex and one small distrito already point at a handful of people, and most of the 492 distritos of Costa Rica are small. The set works in the layers where the risk is:",
+        {
+          "list": [
+            "**Direct identifiers** — cédula de identidad, DIMEX, NITE, passport, social-security and student numbers, professional registration, names, contact, address and señas, bank accounts, cards, devices, cookies, plates, property, photographs, free text.",
+            "**Quasi-identifiers** — birth date, year of birth, age, sex, distrito and cantón, the code of the División Territorial Administrativa that doubles as the postal code, barrio, marital status, occupation, employer, education, dependants.",
+            "**Sensitive data** — the categories of article 3 e) and article 9.1: racial or ethnic origin, political opinions, religious, spiritual or philosophical convictions, biomedical and genetic information, sexual life and orientation; and the attributes the anti-discrimination clause of article 4 reaches: indigenous people, nationality, migratory condition, gender identity, trade union membership.",
+            "**Health data**, which article 9.1 lets only health care itself process, and only under professional secrecy.",
+            "**Economic data** — income, debts, assets, credit standing and social programmes. Article 3 e) names the **condición socioeconómica** among the sensitive data, and article 1 extends the law to the data of a person’s **bienes**.",
+            "**Criminal records**, whose entries the Registro Judicial cancels on a scale of its own."
+          ]
+        },
+        "Each group below says what each domain is, how it is masked and why. The discovery is a profile set of 141 classifiers at a threshold of 60; the masking is 81 domains with their algorithms."
+      ]
+    },
+    {
+      "title": "Ley 8968 in brief",
+      "body": [
+        "Costa Rica has had a data protection law since 2011: the **Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales**, in force since 5 September 2011 and **never amended**. Its regulation, Decreto Ejecutivo 37554-JP, was amended twice, by Decreto 40008-JP in 2016 and by Decreto 41582 in 2019, both on the registry of databases rather than on the principles. The authority is the **Agencia de Protección de Datos de los Habitantes (Prodhab)**, created by article 15.",
+        "Two features of the law shape this set. First, article 1 states its reach over the data of a person **o bienes** — the assets as well as the person — which puts property, income and patrimony squarely inside it. Second, only a **persona física** is a titular: article 3 b) defines a personal datum as any datum relating to an identified or identifiable natural person, and article 3 g) and article 2 v) of the regulation define the interesado the same way. A company is not a data subject in Costa Rica, so a cédula jurídica is left exactly as it is.",
+        "On sensitive data the law is unusually strict. Article 3 e) defines it as \"información relativa al **fuero íntimo** de la persona, como por ejemplo los que revelen origen racial, opiniones políticas, convicciones religiosas o espirituales, **condición socioeconómica**, información **biomédica o genética**, vida y orientación sexual, **entre otros**\" — an open list, and the only one in the region that names the socio-economic condition. Article 9.1 then **prohibits** processing it, with five narrow exceptions, and article 31 a) makes processing it a **falta gravísima** for a private party: fifteen to thirty base salaries and the suspension of the fichero for up to six months.",
+        "Article 9.3 is worth reading beside it. It lists what is **not** a datum of unrestricted access even when it sits in a public register: \"la dirección exacta de la residencia\", \"la fotografía\", \"los números de teléfono privados y otros de igual naturaleza cuyo tratamiento pueda afectar los derechos y los intereses de la persona titular\". Three domains of this set exist because that paragraph names them."
+      ]
+    },
+    {
+      "title": "Desasociación, pseudonymization and non-production copies",
+      "body": [
+        "Costa Rica writes the technique into the law itself. Article 6.1 says that personal data which may affect its holder shall in no case be kept beyond ten years from the facts recorded, and that \"en caso de que sea necesaria su conservación, más allá del plazo estipulado, deberán ser **desasociados de su titular**\". Article 2 r) of the regulation defines the procedure: \"acción y efecto de **disociar** los datos personales, de modo que la información que se obtenga no pueda asociarse o vincularse a persona determinada o determinable\". No other law of the region orders the technique in the body of the statute.",
+        "Be precise about what masking achieves against that definition. The engine masks with a key, and whoever holds the key can reproduce the mapping: the result is a **pseudonymized** copy, not a dissociated one in the strict sense of article 2 r), and it is still personal data. What it is, squarely, is the \"medida de índole técnica\" article 10 requires and the \"medida de seguridad lógica\" articles 34 to 37 of the regulation ask the responsable to choose by risk — including the **riesgo residual** article 36 f) asks to be computed. To reach desasociación the key has to be discarded, and nothing in a masked copy should be read as anonymous while it exists.",
+        "Two more provisions make the risk-based reading explicit. Article 2 q) of the regulation says a natural person is identifiable when the identity can be determined \"directa o **indirectamente**, mediante cualquier información referida a su identidad anatómica, fisiológica, psíquica, económica, cultural o social\", and adds that \"una persona física **no se considerará identificable** si dicha identificación requiere plazos o actividades desproporcionadas\". Article 8 d) of the law limits its principles for databases used for statistical, historical or scientific purposes \"cuando **no exista riesgo** de que las personas sean identificadas\". Both put the question where this set answers it: how much work it would take to point at one person again."
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Direct identifiers",
+      "intro": [
+        "Data that identifies a person on its own. The cédula de identidad is the key of every Costa Rican record and carries no check digit, so nothing has to be recomputed and the whole number changes, the provincia digit included. The IBAN is the exception: it does carry check digits, and it comes out with valid ones. Only a **persona física** is a titular in Costa Rica, so a cédula jurídica passes through untouched."
+      ],
+      "domains": [
+        "CR_L1_CEDULA",
+        "CR_L1_DIMEX",
+        "CR_L1_NITE",
+        "CR_L1_PASAPORTE",
+        "CR_L1_SEGURO_SOCIAL",
+        "CR_L1_CODIGO_ESTUDIANTE",
+        "CR_L1_MATRICULA_PROFESIONAL",
+        "CR_L1_NOMBRE",
+        "CR_L1_APELLIDO",
+        "CR_L1_NOMBRE_COMPLETO",
+        "CR_L1_EMAIL",
+        "CR_L1_TELEFONO",
+        "CR_L1_DIRECCION",
+        "CR_L1_DIRECCION_COMPLEMENTO",
+        "CR_L1_CUENTA_BANCARIA",
+        "CR_L1_TARJETA",
+        "CR_L1_BILLETERA",
+        "CR_L1_IP",
+        "CR_L1_DISPOSITIVO",
+        "CR_L1_COOKIE",
+        "CR_L1_PLACA",
+        "CR_L1_VEHICULO",
+        "CR_L1_INMUEBLE",
+        "CR_L1_CONTRATO",
+        "CR_L1_USUARIO",
+        "CR_L1_CREDENCIAL",
+        "CR_L1_IMAGEN",
+        "CR_L1_GEOLOCALIZACION",
+        "CR_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Quasi-identifiers",
+      "intro": [
+        "Data that identifies nobody alone and identifies almost anybody together. Article 2 q) of the regulation says the identity may be determined **indirectly**, by any information about a person’s anatomical, physiological, psychic, economic, cultural or social identity. These columns are not emptied — a test needs ages and places that behave — they are coarsened until a combination stops pointing at one person."
+      ],
+      "domains": [
+        "CR_L2_FECHA_NACIMIENTO",
+        "CR_L2_ANIO_NACIMIENTO",
+        "CR_L2_EDAD",
+        "CR_L2_FECHA_EVENTO",
+        "CR_L2_SEXO",
+        "CR_L2_DISTRITO",
+        "CR_L2_CODIGO_DTA",
+        "CR_L2_BARRIO",
+        "CR_L2_ESTADO_CIVIL",
+        "CR_L2_OCUPACION",
+        "CR_L2_EMPLEADOR",
+        "CR_L2_NIVEL_EDUCATIVO",
+        "CR_L2_INSTITUCION_EDUCATIVA",
+        "CR_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Sensitive data (art. 3 e and art. 9.1)",
+      "intro": [
+        "Article 9.1 does not regulate these data, it **prohibits** them: \"se prohíbe el tratamiento de datos de carácter personal que revelen el origen racial o étnico, opiniones políticas, convicciones religiosas, espirituales o filosóficas, así como los relativos a la salud, la vida y la orientación sexual, entre otros\", with five narrow exceptions, and article 31 a) makes processing them a falta gravísima for a private party. A test copy is none of those exceptions, so these columns are replaced within their own vocabulary or suppressed outright. Article 4, second paragraph, adds the reason the attributes the list does not name are here as well: informational self-determination exists \"evitando que se propicien **acciones discriminatorias**\"."
+      ],
+      "domains": [
+        "CR_L3_ETNIA",
+        "CR_L3_PUEBLO_INDIGENA",
+        "CR_L3_NACIONALIDAD",
+        "CR_L3_CONDICION_MIGRATORIA",
+        "CR_L3_RELIGION",
+        "CR_L3_CONVICCION_FILOSOFICA",
+        "CR_L3_OPINION_POLITICA",
+        "CR_L3_AFILIACION_PARTIDARIA",
+        "CR_L3_AFILIACION_SINDICAL",
+        "CR_L3_BIOMETRICO",
+        "CR_L3_GENETICO",
+        "CR_L3_ORIENTACION_SEXUAL",
+        "CR_L3_VIDA_SEXUAL",
+        "CR_L3_IDENTIDAD_GENERO",
+        "CR_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Health data (art. 9.1 d)",
+      "intro": [
+        "Health is among the data article 9.1 prohibits, and its exception d) draws the only door: processing is allowed when it is necessary for prevention, medical diagnosis, health care or the management of health services, and then only by a health worker bound to professional secrecy \"o por otra persona sujeta, asimismo, a una obligación equivalente de secreto\". A test environment is nobody’s health care, and whoever restores the dump is under no such obligation. Article 2 c) of the Ley 8239 de derechos de las personas usuarias de los servicios de salud guarantees the confidentiality of the expediente, which the CCSS keeps for the whole country in the EDUS."
+      ],
+      "domains": [
+        "CR_SALUD_IDENTIFICADOR",
+        "CR_SALUD_COBERTURA",
+        "CR_SALUD_DIAGNOSTICO",
+        "CR_SALUD_PROCEDIMIENTO",
+        "CR_SALUD_MEDICAMENTO",
+        "CR_SALUD_TEXTO_CLINICO",
+        "CR_SALUD_RESULTADO_EXAMEN",
+        "CR_SALUD_VIH",
+        "CR_SALUD_GRUPO_SANGUINEO",
+        "CR_SALUD_DISCAPACIDAD",
+        "CR_SALUD_OCUPACIONAL",
+        "CR_SALUD_REPRODUCTIVA",
+        "CR_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Economic data (art. 3 e, art. 1 and art. 9.4)",
+      "intro": [
+        "Costa Rica is the only country of the region whose law names the **condición socioeconómica** among the sensitive data of article 3 e), beside racial origin and religious convictions. Article 1 extends the law to the data of a person’s **bienes**, and article 9.4 sends credit behaviour to the rules of the Sistema Financiero Nacional — where the SUGEF keeps the Centro de Información Crediticia — \"sin impedir el pleno ejercicio del derecho a la autodeterminación informativa ni exceder los límites de esta ley\". Amounts keep their order of magnitude so that totals and ratios still behave; what they stop doing is naming a salary."
+      ],
+      "domains": [
+        "CR_FIN_HISTORIAL_CREDITICIO",
+        "CR_FIN_DEUDA",
+        "CR_FIN_INGRESOS",
+        "CR_FIN_PATRIMONIO",
+        "CR_FIN_PENSION",
+        "CR_FIN_PROGRAMA_SOCIAL",
+        "CR_FIN_CONDICION_SOCIOECONOMICA",
+        "CR_FIN_VIVIENDA"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Criminal records (art. 8 c and Ley 6723)",
+      "intro": [
+        "Article 8 c) lets the principles of the law be limited for \"la prevención, persecución, investigación, detención y represión de las infracciones penales\" — a limit written for the authorities, not for whoever copies their tables. Article 11 of the **Ley 6723 del Registro y Archivos Judiciales**, as reformed by the **Ley 10453 of 4 March 2024**, cancels an entry on a scale that runs from the end of the sentence to ten years after it, and a certification issued for employment shows only what is still current. A non-production copy keeps the entry for as long as the copy lives, which is longer than any of those terms."
+      ],
+      "domains": [
+        "CR_PENAL_ANTECEDENTES",
+        "CR_PENAL_EXPEDIENTE"
+      ]
+    }
+  ],
+  "domains": {
+    "CR_L1_CEDULA": {
+      "title": "Cédula de identidad",
+      "what": [
+        "The number of the Tribunal Supremo de Elecciones, the key of every Costa Rican record. Its canonical form is ten digits, `0P-TTTT-AAAA` — a provincia, the tomo and the asiento of the birth entry — and the leading zeroes are usually dropped, so it is written `1-0234-0567` or `102340567`.",
+        "The same domain takes the other numbers a document column holds: a DIMEX of eleven or twelve digits, a NITE of the 3-120 series, and the cédula jurídica of a company. A driving licence carries the cédula of its holder, so a licence column lands here too."
+      ],
+      "masking": [
+        "Digit by digit, keeping the hyphens. The cédula carries **no check digit** — the Dirección General de Tributación validates it against the Registro Civil itself — so nothing has to be recomputed and the whole number changes, **the provincia digit included**: it is the provincia of the birth entry and would otherwise survive into the copy. The first digit is mapped inside 1 to 9, never to a zero, so the result is still a well-formed cédula.",
+        "A **cédula jurídica** is left exactly as it is: article 3 b) and g) reach only a natural person, so a company is no titular and its number is nobody’s personal datum. From the fourth quarter of 2026 that number may be alphanumeric, `3-101-A00001`, under Decreto 44648-MJ; both forms pass through."
+      ]
+    },
+    "CR_L1_DIMEX": {
+      "title": "DIMEX",
+      "what": [
+        "The Documento de Identidad Migratorio para Extranjeros, the identity number of a foreign resident: eleven or twelve digits, no separators, and the identifier the Dirección General de Tributación uses for them."
+      ],
+      "masking": [
+        "Every digit changes and the length stays, because the length is what tells a DIMEX from a cédula in a mixed column. The DIMEX has no check digit either."
+      ]
+    },
+    "CR_L1_NITE": {
+      "title": "NITE",
+      "what": [
+        "The Número de Identificación Tributaria Especial, for a person with no cédula and no DIMEX. The **3-120** series belongs to a foreign natural person and the **3-130** series to a foreign company."
+      ],
+      "masking": [
+        "This is where the law draws its sharpest line: the six digits of a **3-120** number are masked, because that number belongs to a natural person, and a **3-130** number is left alone, because it belongs to a company and a company is no titular. The two look alike and are treated opposite ways."
+      ]
+    },
+    "CR_L1_PASAPORTE": {
+      "title": "Passport",
+      "what": [
+        "The passport number, Costa Rican or foreign: a letter or two and six to eight digits."
+      ],
+      "masking": [
+        "Letters become letters and digits become digits, so the number keeps the shape the issuing country gives it."
+      ]
+    },
+    "CR_L1_SEGURO_SOCIAL": {
+      "title": "Social security number",
+      "what": [
+        "The numbers of the Caja Costarricense de Seguro Social: the número de asegurado, the número patronal of an employer, the planilla and the SICERE codes."
+      ],
+      "masking": [
+        "Character by character, keeping the shape and any separators. These numbers are built from the cédula, so they are as identifying as it is."
+      ]
+    },
+    "CR_L1_CODIGO_ESTUDIANTE": {
+      "title": "Student code",
+      "what": [
+        "The identifier a school, a colegio or a university gives a student, and the cédula escolar."
+      ],
+      "masking": [
+        "Character by character. It is a direct identifier inside its own institution, which is where the roster lives."
+      ]
+    },
+    "CR_L1_MATRICULA_PROFESIONAL": {
+      "title": "Professional registration",
+      "what": [
+        "The number of a colegio profesional — the código médico, the número de colegiado, the carné — and the título number."
+      ],
+      "masking": [
+        "Character by character. The registers are public, which is exactly what makes the number a key back to a named professional."
+      ]
+    },
+    "CR_L1_NOMBRE": {
+      "title": "Given name",
+      "what": [
+        "A given name on its own: the first, the second, or a column that holds both."
+      ],
+      "masking": [
+        "Each word becomes another Costa Rican given name, from a list of 400 taken from the frequency of names in the country — Xinia, Yorleny, Olger and Keylor among them. The particles of a compound name stay where they are, so \"María de los Ángeles\" keeps its shape."
+      ]
+    },
+    "CR_L1_APELLIDO": {
+      "title": "Surname",
+      "what": [
+        "The first or the second surname, or a column with both."
+      ],
+      "masking": [
+        "Each word becomes another Costa Rican surname, from a list of 420 — Oconitrillo, Cartín, Garbanzo, Jirón and the English surnames of the Caribbean coast among them. \"De la Cruz\" keeps its particles."
+      ]
+    },
+    "CR_L1_NOMBRE_COMPLETO": {
+      "title": "Full name",
+      "what": [
+        "The whole name in one column, and the name of a third party — the mother, the father, a guardian, an emergency contact, a fiador."
+      ],
+      "masking": [
+        "Read in the Costa Rican order — one or two given names, the father’s surname, the mother’s surname — and each word replaced by one of its own kind, so a masked name is still plausibly a person. \"Jiménez Oconitrillo, José Pablo\" is read the other way round."
+      ]
+    },
+    "CR_L1_EMAIL": {
+      "title": "E-mail address",
+      "what": [
+        "Any address column, personal or at work."
+      ],
+      "masking": [
+        "The local part and the domain are masked and the top-level domain becomes **.test**, the suffix reserved for testing: a masked address can never deliver, so a test run cannot mail a real person."
+      ]
+    },
+    "CR_L1_TELEFONO": {
+      "title": "Telephone number",
+      "what": [
+        "Every Costa Rican number has eight digits and no area code: 2 for a landline, 4 for IP telephony, 5 to 8 for a mobile. Article 9.3 keeps the **números de teléfono privados** out of the data of unrestricted access by name, and SINPE Móvil makes a mobile number a payment address as well."
+      ],
+      "masking": [
+        "The country code and the first digit stay, so a masked number still says landline or mobile; the other seven change and the spacing is kept."
+      ]
+    },
+    "CR_L1_DIRECCION": {
+      "title": "Address and señas",
+      "what": [
+        "Costa Rica has almost no street addresses: an address is a distance and a direction from a landmark — \"200 metros norte de la iglesia católica, casa esquinera color verde\" — sometimes a residencial and a house number, sometimes the avenue-and-calle grid of central San José. The **dirección exacta de la residencia** is the first thing article 9.3 takes out of the data of unrestricted access."
+      ],
+      "masking": [
+        "The whole line is replaced by a fictitious one from a list of four thousand built in the Costa Rican way: metres and a direction from a landmark, a residencial and a house, or an avenue and a calle. The same input always gives the same output, so a row keeps its neighbours."
+      ]
+    },
+    "CR_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Address detail",
+      "what": [
+        "What comes beside the address: the apartment, the floor, the tower, the house number, the lote, the etapa, the apartado postal."
+      ],
+      "masking": [
+        "Character by character, keeping the shape: a detail that narrows a building to one door identifies as much as the address."
+      ]
+    },
+    "CR_L1_CUENTA_BANCARIA": {
+      "title": "Bank account (IBAN)",
+      "what": [
+        "Since 2017 every Costa Rican account is an IBAN of 22 characters: `CR`, two check digits, a reserved zero, three digits for the bank and fourteen for the account — the 17-digit Cuenta Cliente of SINPE with five characters in front. It is written compact, `CR05015202001026284066`, and printed in groups of four, `CR05 0152 0200 1026 2840 66`."
+      ],
+      "masking": [
+        "The fourteen digits of the account change and the **two check digits are recomputed**, so the masked IBAN passes the ISO 13616 remainder that every library and every Costa Rican system checks. The bank stays — it is not personal data, and keeping it keeps a test account inside a real bank. The last section of this document explains how the remainder is computed."
+      ]
+    },
+    "CR_L1_TARJETA": {
+      "title": "Payment card",
+      "what": [
+        "The card number, credit or debit, with or without spaces."
+      ],
+      "masking": [
+        "The Payment Card algorithm keeps the Luhn digit valid and the first digits in place, so the brand and the issuer survive and a payment form still accepts the value in a test."
+      ]
+    },
+    "CR_L1_BILLETERA": {
+      "title": "Digital wallet",
+      "what": [
+        "The identifier of a wallet or of a crypto address."
+      ],
+      "masking": [
+        "Character by character, keeping the shape so that a format check still passes."
+      ]
+    },
+    "CR_L1_IP": {
+      "title": "IP address",
+      "what": [
+        "The address of the device from which a person connected, logged in or filed something."
+      ],
+      "masking": [
+        "Each octet becomes another number between 1 and 254, so the address stays routable-looking; an IPv6 keeps valid hexadecimal."
+      ]
+    },
+    "CR_L1_DISPOSITIVO": {
+      "title": "Device identifier",
+      "what": [
+        "IMEI, IMSI, ICCID, MAC, advertising and session identifiers: numbers that follow one device, and so one person."
+      ],
+      "masking": [
+        "Hexadecimal stays hexadecimal and a MAC keeps its colons; an IMEI keeps its fifteen digits."
+      ]
+    },
+    "CR_L1_COOKIE": {
+      "title": "Cookie and tracking identifier",
+      "what": [
+        "The identifier a site or a campaign writes into a browser, and the UTM parameters that came with it."
+      ],
+      "masking": [
+        "Character by character. It names no one by itself and follows one browsing history, which is why it is a direct identifier here."
+      ]
+    },
+    "CR_L1_PLACA": {
+      "title": "Vehicle plate",
+      "what": [
+        "Digits for a private car, three letters and three digits in the alphanumeric series the Registro Nacional opened, and a class prefix for the rest — MOT a motorcycle, CL light cargo, AB a bus, TSJ or TA a taxi."
+      ],
+      "masking": [
+        "The class prefix stays and the digits change, so the fleet still looks like a fleet and the plate still points at no owner."
+      ]
+    },
+    "CR_L1_VEHICULO": {
+      "title": "Vehicle identifiers",
+      "what": [
+        "The VIN or chassis number, the engine number, the marchamo and the revisión técnica record."
+      ],
+      "masking": [
+        "Character by character, keeping the seventeen positions of a VIN so that a format check still passes."
+      ]
+    },
+    "CR_L1_INMUEBLE": {
+      "title": "Property identifiers",
+      "what": [
+        "The folio real of the Registro Inmobiliario, `1-234567-000`, the plano catastrado of the Catastro, `SJ-1234567-2010`, and the meter numbers of the utilities. Article 1 of the law reaches the data of a person \"o **bienes**\", and article 12 of the regulation repeats it."
+      ],
+      "masking": [
+        "The digits change and the separators and the provincia letters stay, so the reference keeps its shape. The registers are public and searchable by number, which is what makes a folio real a route back to an owner."
+      ]
+    },
+    "CR_L1_CONTRATO": {
+      "title": "Contract and case numbers",
+      "what": [
+        "The internal numbers that stand for one person: contract, policy, loan, application, claim, ticket, customer or employee code."
+      ],
+      "masking": [
+        "Character by character, keeping prefixes and separators so that joins by format still work. The number is a pseudonym, and a pseudonym that survives the copy links it back."
+      ]
+    },
+    "CR_L1_USUARIO": {
+      "title": "Username and social handle",
+      "what": [
+        "The login, the alias, the nickname and the handle of a social network."
+      ],
+      "masking": [
+        "Character by character. A handle is searchable, so it names a person as surely as the name does."
+      ]
+    },
+    "CR_L1_CREDENCIAL": {
+      "title": "Credentials and secrets",
+      "what": [
+        "Passwords and their hashes, PINs, CVVs, tokens, API keys, seed phrases, security questions and answers."
+      ],
+      "masking": [
+        "Replaced by X characters. These are not masked to de-identify but to stop a copy from carrying working credentials: article 29 b) makes it a falta leve to store or transmit third-party data \"por medio de mecanismos inseguros\", and a dump with live passwords is that."
+      ]
+    },
+    "CR_L1_IMAGEN": {
+      "title": "Photograph and recordings",
+      "what": [
+        "The path or the URL of a photograph, a selfie, a scanned cédula, a video or a call recording. Article 9.3 names **la fotografía** among the things that are not of unrestricted access even when they sit in a public register."
+      ],
+      "masking": [
+        "Replaced by X characters: the reference is cut, because a path that still resolves hands over the face itself."
+      ]
+    },
+    "CR_L1_GEOLOCALIZACION": {
+      "title": "Geolocation",
+      "what": [
+        "Latitude and longitude, together or in columns of their own, and the CRTM05 coordinates the national grid uses."
+      ],
+      "masking": [
+        "The integer part and the first decimal stay — about eleven kilometres — and the rest changes: the place is generalized, not moved to another country."
+      ]
+    },
+    "CR_L1_TEXTO_LIBRE": {
+      "title": "Free text",
+      "what": [
+        "Observations, comments, notes, the account of a complaint: the columns where people write whatever they like, and where cédulas, phones and names end up."
+      ],
+      "masking": [
+        "The text is kept and what identifies inside it is redacted: a cédula, a DIMEX, a NITE, an e-mail address, a phone number, a card, an IBAN and an IP become `[DATO]`, and a name from the lists of the set becomes `[NOMBRE]`."
+      ]
+    },
+    "CR_L2_FECHA_NACIMIENTO": {
+      "title": "Date of birth",
+      "what": [
+        "The date of birth, in a date column or written as text."
+      ],
+      "masking": [
+        "Moved by up to sixty days either way. The age and the generation survive, the exact date does not — and the exact date with a sex and a distrito is what points at one person."
+      ]
+    },
+    "CR_L2_ANIO_NACIMIENTO": {
+      "title": "Year of birth",
+      "what": [
+        "The year alone, when the system keeps no full date."
+      ],
+      "masking": [
+        "The decade stays and the last digit changes, so a cohort analysis still works within ten years."
+      ]
+    },
+    "CR_L2_EDAD": {
+      "title": "Age",
+      "what": [
+        "The age in years, or the band it falls in."
+      ],
+      "masking": [
+        "The tens digit stays and the units change, so 37 becomes some other thirty-something; from 100 on the value becomes 90, because a very old age is rare enough to identify."
+      ]
+    },
+    "CR_L2_FECHA_EVENTO": {
+      "title": "Other dates about the person",
+      "what": [
+        "Death, marriage, hiring, dismissal, admission, discharge, diagnosis, consultation, pension, arrest, sentence, the issue of the cédula."
+      ],
+      "masking": [
+        "Moved by up to thirty days. Sequences hold — the admission still comes before the discharge — and the exact day stops being a key into a public record."
+      ]
+    },
+    "CR_L2_SEXO": {
+      "title": "Sex",
+      "what": [
+        "The sex as the system records it: F/M, Femenino/Masculino, Mujer/Hombre, 1/2."
+      ],
+      "masking": [
+        "Replaced inside its own vocabulary, so an F stays an F or an M and a CHAR(1) column still fits. The distribution survives; the row no longer says which."
+      ]
+    },
+    "CR_L2_DISTRITO": {
+      "title": "Distrito and cantón",
+      "what": [
+        "The distrito or the cantón of residence, birth or care, by name — alone or with its cantón or provincia beside it, `Matambú - Hojancha`."
+      ],
+      "masking": [
+        "A distrito of fewer than 20,000 inhabitants becomes the nearest distrito of at least 20,000 in the same cantón, or in the same provincia when the cantón has none. The cantones follow the same rule one level up, and the seven provincias stay. A name shared by several places is generalized only when every bearer is small, so a large distrito and a provincia keep their own name."
+      ]
+    },
+    "CR_L2_CODIGO_DTA": {
+      "title": "DTA code and postal code",
+      "what": [
+        "The code of the División Territorial Administrativa — one digit for the provincia, two for the cantón, two for the distrito — which in Costa Rica **is also the postal code**: Correos de Costa Rica assigns 10101 to the distrito 101 01."
+      ],
+      "masking": [
+        "The same table that generalizes the names generalizes the codes, so a masked postal code still agrees with the masked distrito beside it and no row says one place in words and another in digits."
+      ]
+    },
+    "CR_L2_BARRIO": {
+      "title": "Barrio",
+      "what": [
+        "The barrio, the urbanización, the residencial or the condominio — the level below the distrito. The 2025 decree of the División Territorial Administrativa names 1,276 of them."
+      ],
+      "masking": [
+        "Replaced by another real barrio of the country, always the same one for the same input. Generalizing upwards would say nothing a masked distrito does not already say, and a barrio column is often all the geography a table has."
+      ]
+    },
+    "CR_L2_ESTADO_CIVIL": {
+      "title": "Marital status",
+      "what": [
+        "The marital status, as text or as a code."
+      ],
+      "masking": [
+        "Replaced by another status of the same list, and a numeric code by another code. A flag column keeps its S/N."
+      ]
+    },
+    "CR_L2_OCUPACION": {
+      "title": "Occupation",
+      "what": [
+        "The occupation, the profession or the post, as text or as a code of the national classification."
+      ],
+      "masking": [
+        "Replaced by another occupation, and a code by another code of the same length. A rare occupation in a small place names a person, which is why this is not left alone."
+      ]
+    },
+    "CR_L2_EMPLEADOR": {
+      "title": "Employer",
+      "what": [
+        "The name of the employer or the patrono, and the place of work."
+      ],
+      "masking": [
+        "Replaced by a fictitious Costa Rican company. The employer is not a titular, but it narrows a person to a payroll, which is why the column is masked."
+      ]
+    },
+    "CR_L2_NIVEL_EDUCATIVO": {
+      "title": "Level of education",
+      "what": [
+        "The highest level reached, as text or as a code."
+      ],
+      "masking": [
+        "Replaced by another level of the same list, and a code by another code."
+      ]
+    },
+    "CR_L2_INSTITUCION_EDUCATIVA": {
+      "title": "Educational institution",
+      "what": [
+        "The school, the colegio, the instituto or the university a person attends or attended."
+      ],
+      "masking": [
+        "Replaced by another Costa Rican institution. A rural unidocente school has a handful of pupils, so naming it narrows the person almost completely."
+      ]
+    },
+    "CR_L2_PERSONAS_A_CARGO": {
+      "title": "Dependants",
+      "what": [
+        "The number of children, dependants or members of the household."
+      ],
+      "masking": [
+        "Capped at five: a household of eleven is rare enough to identify, and five is enough for any arithmetic a test needs."
+      ]
+    },
+    "CR_L3_ETNIA": {
+      "title": "Racial or ethnic origin",
+      "what": [
+        "The self-identification the census asks for: indígena, afrodescendiente o negra, mulata, china, blanca o mestiza."
+      ],
+      "masking": [
+        "Replaced inside the list, a code by another code and a flag by a flag. Article 3 e) names the **origen racial** and article 9.1 prohibits processing the **origen racial o étnico** outright."
+      ]
+    },
+    "CR_L3_PUEBLO_INDIGENA": {
+      "title": "Indigenous people and territory",
+      "what": [
+        "The people a person belongs to — bribri, cabécar, maleku, chorotega, huetar, brunca, ngäbe, buglé, teribe — the territorio indígena and the mother tongue. Costa Rica has eight peoples and 24 territorios."
+      ],
+      "masking": [
+        "Replaced inside its own list. A people counts a few thousand members and a territorio a few hundred, so the two are the sharpest quasi-identifiers in the country and sensitive besides."
+      ]
+    },
+    "CR_L3_NACIONALIDAD": {
+      "title": "Nationality",
+      "what": [
+        "The nationality, the country of birth or of origin, the citizenship."
+      ],
+      "masking": [
+        "Replaced by another nationality of the list. The law does not name it, but it sits beside the racial and ethnic origin it does name, and in Costa Rica it separates the nationals from the Nicaraguan community — the attribute on which the \"acciones discriminatorias\" of article 4 most often turn."
+      ]
+    },
+    "CR_L3_CONDICION_MIGRATORIA": {
+      "title": "Migratory condition",
+      "what": [
+        "The migratory category the Dirección General de Migración records: residence, special category, refugee, applicant for refuge, work permit, irregular condition."
+      ],
+      "masking": [
+        "Replaced inside its own list, and a flag kept as a flag. Of all the attributes in a Costa Rican database this is the one whose disclosure can cost a person their stay."
+      ]
+    },
+    "CR_L3_RELIGION": {
+      "title": "Religion",
+      "what": [
+        "The religion, the creed, the church, the religious or spiritual conviction."
+      ],
+      "masking": [
+        "Replaced inside the list. Article 3 e) names the **convicciones religiosas o espirituales** and article 9.1 prohibits processing them."
+      ]
+    },
+    "CR_L3_CONVICCION_FILOSOFICA": {
+      "title": "Philosophical convictions",
+      "what": [
+        "A philosophical, moral or ethical conviction, an objection of conscience, membership of a lodge."
+      ],
+      "masking": [
+        "Suppressed: replaced by \"Sin información\". Article 9.1 names the **convicciones filosóficas** that article 3 e) leaves out, and its exception b) lets a foundation or association of a philosophical purpose keep the data of its own members — which is the database this domain protects everywhere else."
+      ]
+    },
+    "CR_L3_OPINION_POLITICA": {
+      "title": "Political opinion",
+      "what": [
+        "The political opinion, the ideology, the leaning, the voting intention."
+      ],
+      "masking": [
+        "Replaced inside the list. Article 3 e) and article 9.1 both name the **opiniones políticas**, with no exception that covers a survey kept in a CRM."
+      ]
+    },
+    "CR_L3_AFILIACION_PARTIDARIA": {
+      "title": "Party membership",
+      "what": [
+        "The party a person adheres to, the militancy, the divisa política. The Tribunal Supremo de Elecciones keeps the register of adhesiones."
+      ],
+      "masking": [
+        "Replaced by another party of the register, and a flag kept as a flag. Membership reveals the opinión política, which is what makes it sensitive."
+      ]
+    },
+    "CR_L3_AFILIACION_SINDICAL": {
+      "title": "Trade union membership",
+      "what": [
+        "The union, the dues deducted from the payroll, the asociación solidarista, the gremio."
+      ],
+      "masking": [
+        "Suppressed, and a flag kept as a flag. Article 9.1 b) lets an organization of a **sindical** purpose keep the data of its own members \"con tal de que los datos no se comuniquen a terceros sin el consentimiento de las personas interesadas\" — which is exactly what a copy sent to a development team does."
+      ]
+    },
+    "CR_L3_BIOMETRICO": {
+      "title": "Biometric data",
+      "what": [
+        "A fingerprint and its template, a facial encoding, an iris, a voiceprint, a digitalized signature."
+      ],
+      "masking": [
+        "Replaced by X characters. Article 3 e) names the **información biomédica**, and no exception of article 9.1 covers a template kept for convenience — a biometric cannot be reissued when it leaks."
+      ]
+    },
+    "CR_L3_GENETICO": {
+      "title": "Genetic data",
+      "what": [
+        "DNA, a genetic profile, a paternity or filiation test, a mutation, the neonatal screening."
+      ],
+      "masking": [
+        "Replaced by X characters. Article 3 e) names **información biomédica o genética** in one breath, and a genetic datum identifies relatives who were never asked."
+      ]
+    },
+    "CR_L3_ORIENTACION_SEXUAL": {
+      "title": "Sexual orientation",
+      "what": [
+        "The sexual orientation as the system records it."
+      ],
+      "masking": [
+        "Replaced inside the list. Article 3 e) and article 9.1 both name the **orientación sexual**."
+      ]
+    },
+    "CR_L3_VIDA_SEXUAL": {
+      "title": "Sexual life",
+      "what": [
+        "Sexual activity, conduct, practices, number of partners, the age at which sexual life began."
+      ],
+      "masking": [
+        "Suppressed. Article 3 e) names the **vida** as well as the **orientación sexual**, and article 9.1 repeats it."
+      ]
+    },
+    "CR_L3_IDENTIDAD_GENERO": {
+      "title": "Gender identity",
+      "what": [
+        "The gender identity, the social name, the pronouns. Since 2018 a person may change the name and the sex marker of the cédula, so this is a real column in Costa Rican systems."
+      ],
+      "masking": [
+        "Replaced inside its own list. The list of article 3 e) is open — \"entre otros\" — and article 4 asks that the data not propitiate discriminatory actions."
+      ]
+    },
+    "CR_L3_VICTIMA": {
+      "title": "Victim of violence",
+      "what": [
+        "The condition of victim, the kind of violence, a protection measure, a PANI case."
+      ],
+      "masking": [
+        "Suppressed, and a flag kept as a flag. The Ley 8589 de penalización de la violencia contra las mujeres and the Ley 9095 against the trafficking of persons both protect the identity of the victim."
+      ]
+    },
+    "CR_SALUD_IDENTIFICADOR": {
+      "title": "Clinical record number",
+      "what": [
+        "The number of the expediente clínico, of the EDUS record, of an episode, an admission, a consultation or a prescription."
+      ],
+      "masking": [
+        "Character by character, keeping the shape. The number is a pseudonym for a patient, and it is usually built from the cédula."
+      ]
+    },
+    "CR_SALUD_COBERTURA": {
+      "title": "Health coverage",
+      "what": [
+        "How a person is insured: asegurado directo asalariado or cuenta propia, voluntario, por el Estado, pensionado of the IVM or of the RNC, familiar, a private policy, or not insured at all."
+      ],
+      "masking": [
+        "Replaced inside its own list, and a numeric code by another code. The régimen says more than it looks: \"asegurado por el Estado\" is a statement about the person’s **condición socioeconómica**, which article 3 e) calls sensitive."
+      ]
+    },
+    "CR_SALUD_DIAGNOSTICO": {
+      "title": "Diagnosis",
+      "what": [
+        "The diagnosis as an ICD-10 code or as text, the cause of death, the reason for a consultation or an incapacidad, allergies and comorbidities."
+      ],
+      "masking": [
+        "An ICD-10 code becomes another code of the same shape and a text diagnosis another common diagnosis. The column still looks like a diagnosis column and no longer says what a person has."
+      ]
+    },
+    "CR_SALUD_PROCEDIMIENTO": {
+      "title": "Procedure",
+      "what": [
+        "The procedure, the prestación, the surgery or the examination ordered, as a code or as text."
+      ],
+      "masking": [
+        "A code gets other digits of the same length and text becomes another common procedure. Some procedures name a diagnosis on their own, which is why they are not left alone."
+      ]
+    },
+    "CR_SALUD_MEDICAMENTO": {
+      "title": "Medicine",
+      "what": [
+        "The medicine prescribed or dispensed, the active ingredient, the LOM code, the posology."
+      ],
+      "masking": [
+        "Replaced by another medicine of the list. A medicine is a diagnosis written backwards: an antiretroviral or an antipsychotic says what the diagnosis column was masked for."
+      ]
+    },
+    "CR_SALUD_TEXTO_CLINICO": {
+      "title": "Clinical notes",
+      "what": [
+        "The anamnesis, the evolución, the physical examination, the plan, the epicrisis, a radiology or pathology report."
+      ],
+      "masking": [
+        "The prose is kept and the identifiers inside it are redacted, the same way as any free text: the clinical reasoning survives for a test, the patient does not."
+      ]
+    },
+    "CR_SALUD_RESULTADO_EXAMEN": {
+      "title": "Test result",
+      "what": [
+        "The result of a laboratory test, a serology, a biopsy, a glycaemia, a blood pressure, an alcoholaemia."
+      ],
+      "masking": [
+        "Character by character, keeping the shape so that units and ranges still parse. A single reactive result is a diagnosis."
+      ]
+    },
+    "CR_SALUD_VIH": {
+      "title": "HIV and sexually transmitted infections",
+      "what": [
+        "The serological status, the viral load, the CD4 count, the antiretroviral treatment, syphilis, hepatitis, tuberculosis."
+      ],
+      "masking": [
+        "Suppressed, and a flag kept as a flag. The **Ley 7771 General sobre el VIH-SIDA** makes the condition confidential and its disclosure an offence of its own, beyond article 9.1."
+      ]
+    },
+    "CR_SALUD_GRUPO_SANGUINEO": {
+      "title": "Blood group",
+      "what": [
+        "The ABO group and the Rh factor."
+      ],
+      "masking": [
+        "Replaced by another group. It is a weak identifier on its own and a health datum all the same, and a rare group in a small place narrows a person."
+      ]
+    },
+    "CR_SALUD_DISCAPACIDAD": {
+      "title": "Disability",
+      "what": [
+        "The kind, the degree or the certificate of a disability. The Ley 7600 de igualdad de oportunidades and the Ley 9379 that created CONAPDIS both build registers of it."
+      ],
+      "masking": [
+        "Replaced inside its own list, and a flag kept as a flag. A rare disability in a small distrito names the person as surely as the cédula."
+      ]
+    },
+    "CR_SALUD_OCUPACIONAL": {
+      "title": "Occupational health",
+      "what": [
+        "Fitness for work, the pre-employment or periodic examination, an accident at work, an occupational disease, an incapacidad and its days."
+      ],
+      "masking": [
+        "Replaced inside its own list. The boleta de incapacidad of the CCSS travels with a diagnosis, which is why a personnel table holds health data without meaning to."
+      ]
+    },
+    "CR_SALUD_REPRODUCTIVA": {
+      "title": "Reproductive health",
+      "what": [
+        "Pregnancy and its weeks, the prenatal control, the delivery, the interruption, contraception, fertility."
+      ],
+      "masking": [
+        "Suppressed, and a flag kept as a flag. It is health data under article 9.1 and it sits next to the vida sexual of article 3 e)."
+      ]
+    },
+    "CR_SALUD_MENTAL": {
+      "title": "Mental health",
+      "what": [
+        "A mental health diagnosis or follow-up, a suicide attempt, self-harm, the consumption of substances, an addiction, an IAFA record."
+      ],
+      "masking": [
+        "Suppressed. It is health data, and of all health data it is the one whose disclosure costs a person a job, a custody or a policy."
+      ]
+    },
+    "CR_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Credit standing",
+      "what": [
+        "The SUGEF category — A1, A2, B1, B2, C1, C2, D, E —, the CIC record, a score, the days in arrears, the state of a collection."
+      ],
+      "masking": [
+        "A category becomes another category, a score other digits and a flag a flag. Article 9.4 sends this data to the rules of the Sistema Financiero Nacional without taking it out of the law."
+      ]
+    },
+    "CR_FIN_DEUDA": {
+      "title": "Debt",
+      "what": [
+        "The balance of a debt, a loan or a card, the instalment, the credit limit."
+      ],
+      "masking": [
+        "Another amount of the same order of magnitude, from fifty thousand to sixty million colones, so totals and ratios still behave."
+      ]
+    },
+    "CR_FIN_INGRESOS": {
+      "title": "Income",
+      "what": [
+        "The salary, gross or net, the fees, the declared income, the income per person of the household."
+      ],
+      "masking": [
+        "Another amount between the minimum wage and six million colones a month. This is where Costa Rica differs from its neighbours: article 3 e) names the **condición socioeconómica** among the sensitive data, so an income column is not merely commercial."
+      ]
+    },
+    "CR_FIN_PATRIMONIO": {
+      "title": "Assets",
+      "what": [
+        "The patrimony, the assets, the fiscal or commercial value of a property or a vehicle, the balance of an account or an investment, a sworn declaration of assets."
+      ],
+      "masking": [
+        "Another amount of the same order of magnitude. Article 1 of the law reaches the data of a person \"o **bienes**\", which puts this column inside it by the plain words of the statute."
+      ]
+    },
+    "CR_FIN_PENSION": {
+      "title": "Pension",
+      "what": [
+        "The amount of a pension or a subsidy: the IVM, the Régimen No Contributivo, an alimony, a disability pension."
+      ],
+      "masking": [
+        "Another amount of the same order. A pension of the Régimen No Contributivo says the person is poor, a pension by disability says the person has one."
+      ]
+    },
+    "CR_FIN_PROGRAMA_SOCIAL": {
+      "title": "Social programme",
+      "what": [
+        "Membership of a programme: Avancemos, Crecemos, the bono de vivienda of the BANHVI, the Red de Cuido, a FONABE scholarship, an IMAS benefit, the Régimen No Contributivo."
+      ],
+      "masking": [
+        "Replaced inside its own list, and a flag kept as a flag. The SINIRUBE joins the registers of every programme, so a single row of it states the condición socioeconómica of a household."
+      ]
+    },
+    "CR_FIN_CONDICION_SOCIOECONOMICA": {
+      "title": "Condición socioeconómica",
+      "what": [
+        "The classification of the IMAS or the SINIRUBE — pobreza extrema, pobreza básica, vulnerabilidad, no pobre —, the score of the ficha de información social, the quintile, the índice de desarrollo social."
+      ],
+      "masking": [
+        "Replaced inside its own list, a code by another code. This domain carries the law’s own phrase: article 3 e) lists the **condición socioeconómica** as a sensitive datum, in the same sentence as racial origin and religious conviction, which no other law of the region does."
+      ]
+    },
+    "CR_FIN_VIVIENDA": {
+      "title": "Housing tenure",
+      "what": [
+        "How the household holds the dwelling: owned, paying in instalments, rented, in precario, lent."
+      ],
+      "masking": [
+        "Replaced inside its own list. \"En precario\" is a statement about poverty, which article 3 e) calls sensitive."
+      ]
+    },
+    "CR_PENAL_ANTECEDENTES": {
+      "title": "Criminal record",
+      "what": [
+        "The hoja de delincuencia, the juzgamientos of the Registro Judicial, a conviction, a kind of offence, a precautionary measure, deprivation of liberty."
+      ],
+      "masking": [
+        "Replaced inside its own list, and a flag kept as a flag. Article 11 of the Ley 6723, reformed by the Ley 10453 of 2024, cancels an entry on a scale from the end of the sentence to ten years after it; a copy that lives longer than that keeps an entry the register itself has erased."
+      ]
+    },
+    "CR_PENAL_EXPEDIENTE": {
+      "title": "Judicial file number",
+      "what": [
+        "The number the Poder Judicial gives a case: the year, a correlative, the office and the matter, `24-001234-0007-PE`."
+      ],
+      "masking": [
+        "The correlative changes and the year, the office and the matter stay, so the file still looks like a file and no longer opens a public record. The file is searchable by number, which is what makes it an identifier."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "The IBAN check digits",
+      "body": [
+        "Costa Rica is unusual in that **none of its identity numbers carries a check digit**: the cédula de identidad, the DIMEX, the NITE and the cédula jurídica are all validated against a register rather than by arithmetic. The Dirección General de Tributación checks a cédula against the Registro Civil in real time. So nothing in this set has to recompute an identity digit — and the whole number can change, which is why even the provincia digit of a cédula is masked.",
+        "The **IBAN** is the one place where arithmetic matters, and it matters everywhere: since 2017 every Costa Rican account is an IBAN, SINPE moves on it, and any library that touches one validates it. The rule is ISO 13616: move the first four characters to the end, read `C` as 12 and `R` as 27, and the resulting number must leave a remainder of **1 modulo 97**. The BCCR’s own example, CR05 0152 0200 1026 2840 66, does.",
+        "No masking framework computes a remainder modulo 97, and the Check Digit algorithm writes one character where these are two. So the set computes it with lookup tables. A **two-digit state** — the remainder so far — is put where the old check digits were, and travels right through the number one character at a time; each step is a Data Cleansing that turns \"state + character\" into \"character + new state\", from a table of 1,067 lines, one for every pair of a remainder and a digit. At the right end a table of 97 lines turns the remainder into the check digits, by the formula 98 − (r·10⁶ + 1227·100) mod 97. A second traveller then carries the two digits back to the front.",
+        "`CR` and the spaces of the printed form wait as one-character markers while this happens, and are written back at the end, so the compact form and the form printed in groups of four both come out as they went in — valid, with their bank, and with an account that belongs to nobody."
+      ]
+    },
+    {
+      "title": "Where people live: distritos, cantones and the code that is also the postal code",
+      "body": [
+        "Costa Rica is divided into 7 provincias, 84 cantones and 492 distritos, and the distritos are small: **413 of the 492 hold fewer than 20,000 inhabitants**, some 2.68 million people — more than half the country — and the smallest hold a few hundred. A birth date, a sex and one of those distritos point at a handful of people.",
+        "So a distrito below the threshold becomes the nearest distrito of at least 20,000 **in the same cantón**, measured between their centres; when the cantón has none, the nearest one in the same provincia. The cantones follow the same rule one level up — 15 of the 84 are below the threshold — and the 7 provincias stay, so a generalized value never leaves its provincia and a provincia column is never rewritten.",
+        "Costa Rica is full of homonyms: 179 of the 492 distritos share a name with another place, and there are distritos called San Rafael, San Isidro and San José in province after province. A name is generalized only when **every** place that bears it is small, to the fate of the most populous; 91 small distritos keep their own name because a homonym of theirs is large. Written with the cantón or the provincia beside it — `Matambú - Hojancha`, in any of five ways systems write that — the same rule applies inside the qualifier, which is how a small distrito is reached even when its bare name has to be left alone.",
+        "The codes follow the names, and here Costa Rica gives something no other country in the region does: the code of the División Territorial Administrativa — one digit for the provincia, two for the cantón, two for the distrito — **is the postal code**. Correos de Costa Rica assigns 10101 to the distrito 101 01. So one table of 428 lines generalizes the district code, the cantón code and the postal code at once, and a masked postal code always agrees with the masked distrito in the next column.",
+        "Below the distrito, the 2025 decree of the División Territorial Administrativa names 1,276 barrios. A barrio is far below any threshold, so it is not generalized upwards — that would say nothing a masked distrito does not already say — but replaced by another real barrio of the country, always the same one for the same input."
+      ]
+    },
+    {
+      "title": "Limits",
+      "body": [
+        {
+          "list": [
+            "**Masking with a key is pseudonymization, not desasociación.** Article 2 r) of the regulation asks that the result cannot be associated or linked to a determined or determinable person; whoever holds the key can reproduce the mapping, so a masked copy is still personal data and still needs the measures of article 10. To reach desasociación the key has to be discarded.",
+            "**The population figures are estimates.** The distrito populations are the Instituto Nacional de Estadística y Censos estimate for 2022, projected from the 2011 census; they total some 5.20 million, about 3% above the 5,044,197 the 2022 census counted. A distrito within a few hundred of the 20,000 threshold may fall on the other side of it under the census figures, and that is worth checking for the few that sit there.",
+            "**Sixteen distritos have no published figure of their own.** They were created after the distribution the estimate comes from — among them the three of the Río Cuarto cantón, Monteverde, Puerto Jiménez, Puente Salas, and the indigenous territories of Quitirrisí and Matambú — and Isla del Coco is uninhabited. The set treats all sixteen as small, which generalizes them: the conservative choice, at the cost of some utility.",
+            "**The bank of an IBAN is preserved.** It is not personal data, and keeping it keeps a test account inside a real bank; but a bank with few clients in a small place narrows a person a little. The two check digits are recomputed from the masked account, so they leak nothing about the original.",
+            "**A birth date is shifted, not replaced.** Sixty days either way break the link to a public record and leave the age and the generation in place. Where a child’s age decides something — a school year, a programme — a shift across a birthday moves a few rows; where that matters, shift the date the same way in every table that holds it.",
+            "**Binary columns and attachments are out of reach.** A scanned cédula, a photograph, a PDF of a hoja de delincuencia or a clinical image keeps everything the columns beside it no longer say. The set masks the path, not the file.",
+            "**Discovery is a proposal, not a verdict.** The classifiers read column names and values; a column with a name nobody recognizes and few values may be missed, and one named like a person may be caught by mistake. Review the inventory before running a masking job, which is what the inventory is for."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verification",
+      "body": [
+        "The set is checked on every build. The 141 classifier configurations are reviewed one by one, and a battery of 146 columns — well named, badly named, and 30 that are not personal data at all, among them a cédula jurídica — is profiled with the whole set at its threshold of 60 and again with the essential pack alone: every column lands where it should, and none of the 30 is claimed.",
+        "The generalization is audited offline: all 492 distritos, all 84 cantones and all 7 provincias are checked against the rule, and every one of the 11,582 replacements the table writes is checked to name a place of at least 20,000 — in the right provincia, by name, with the cantón, with the provincia and by code.",
+        "The masking is run for real: 572 values across every domain, every one checked against what it should become. Two hundred cédulas give two hundred distinct outputs, all well formed, with the provincia digit masked and never a zero. Two hundred IBANs — one hundred compact and one hundred printed in groups of four — give two hundred distinct outputs, **all of them valid under ISO 13616**, all keeping their bank and their written form."
+      ]
+    },
+    {
+      "title": "Sources",
+      "body": [
+        {
+          "list": [
+            "Ley 8968, Protección de la Persona frente al Tratamiento de sus Datos Personales, of 7 July 2011 (La Gaceta 170 of 5 September 2011).",
+            "Reglamento a la Ley 8968, Decreto Ejecutivo 37554-JP, as amended by Decreto 40008-JP of 19 July 2016 and Decreto 41582 of 21 February 2019.",
+            "Ley 6723 del Registro y Archivos Judiciales, article 11 as reformed by Ley 10453 of 4 March 2024.",
+            "Ley 8239 de derechos y deberes de las personas usuarias de los servicios de salud; Ley 7771 General sobre el VIH-SIDA; Ley 7600 de igualdad de oportunidades para las personas con discapacidad and Ley 9379; Ley 8589 and Ley 9095 on violence and trafficking.",
+            "División Territorial Administrativa de la República, Decreto Ejecutivo 44882-MGP (Alcance 12 to La Gaceta 17 of 28 January 2025): the 7 provincias, 84 cantones, 492 distritos and their barrios.",
+            "Instituto Nacional de Estadística y Censos: the estimate of population by distrito for 2022, projected from the 2011 census, and the 2022 census totals. Postal codes from Correos de Costa Rica. District centres from the subnational boundary set of the Instituto Geográfico Nacional.",
+            "Banco Central de Costa Rica, the IBAN of 22 characters and the Cuenta Cliente of SINPE; ISO 13616 for the check digits. Decreto 44648-MJ for the alphanumeric cédula jurídica of 2026."
+          ]
+        }
+      ]
+    }
+  ]
+}

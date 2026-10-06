@@ -1,0 +1,1027 @@
+{
+  "title": "Uruguay — Ley 18.331 de Protección de Datos Personales",
+  "subtitle": "Discovery and masking of Uruguayan personal data: cédula de identidad and RUT with a valid check digit, the razón social of a legal person — a data subject in Uruguay —, quasi-identifiers, the sensitive data of article 4 E), health data, the commercial and credit data of article 22 and the offence data of article 18.",
+  "sections": [
+    {
+      "title": "About this profile set",
+      "body": [
+        "This profile set finds the personal data in a Uruguayan database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and cédulas alone is not enough: a birth date, a sex and a small localidad already point at one person. The set works in the layers where the risk is:",
+        {
+          "list": [
+            "**Direct identifiers** — cédula de identidad and RUT, foreigner documents, passport, credencial cívica, civil registry, BPS numbers, student code, professional registration, names, **razón social and nombre de fantasía**, contact, address, accounts, cards, devices, cookies, plates, property, free text.",
+            "**Quasi-identifiers** — birth date, age, sex, localidad with its INE code, barrio, postal code, marital status, occupation, employer, education.",
+            "**Sensitive data** — those of article 4 E): racial and ethnic origin, political preferences, religious **or moral** convictions, trade union membership and sexual life; plus the biometric data article 4 Ñ) added in 2020, genetic data, gender identity, the indigenous people and the victim status other Uruguayan statutes protect.",
+            "**Health data** — sensitive by article 4 E), with a regime of its own in article 19 and a dissociation clause in article 17 C): clinical record, coverage, ICD-10, procedures, medicines, HIV, blood group, disability, the compulsory carné de salud, reproductive and mental health.",
+            "**Commercial and credit data** — the *actividad comercial o crediticia* of article 22, with its five-year limit, plus debt, income, assets, pensions, social programmes and housing tenure.",
+            "**Offences** — the data on criminal, civil or administrative offences that the final paragraph of article 18 reserves to the competent public authorities."
+          ]
+        },
+        "In a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a cédula written `1.234.567-2`, a twelve-digit RUT, a mobile starting 09, an address with a door number and an apartamento, a plate, a localidad.",
+        "Column names are recognized in Spanish, in the abbreviations of Uruguayan systems (`CI`, `FEC_NAC`, `RUT`, `BPS`, `IUE`, `PADRON`) and in English.",
+        {
+          "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often keep a photo of the cédula — with the fingerprint and the signature — and a validation selfie. Report those columns as residual risk."
+        }
+      ]
+    },
+    {
+      "title": "Ley 18.331 in brief",
+      "body": [
+        "The **Ley 18.331 de Protección de Datos Personales y Acción de Habeas Data** was passed on 11 August 2008 and regulated by Decree 414/009. It has been amended several times — Ley 18.719 (2010), Ley 18.996 (2012), Ley 19.355 (2015), **Ley 19.670 (2018)**, which added extraterritorial reach, breach notification and the data protection officer, and **Ley 19.924 (2020)**, which defined the biometric datum — and those additions were regulated by **Decree 64/020**. The authority is the **Unidad Reguladora y de Control de Datos Personales (URCDP)**, inside AGESIC. Uruguay is one of only two Latin American countries the European Union has recognized as providing an adequate level of protection, and a party to Convention 108.",
+        "What matters for a copy of production data:",
+        {
+          "list": [
+            "**Personal data** is information of any kind about determinate or determinable **natural or legal** persons (art. 4 D). Uruguay is one of the few countries whose law makes a **company** a data subject: the razón social, the nombre de fantasía and the RUT of a legal person are personal data, and article 9 C) names them.",
+            "**Sensitive data** (art. 4 E) is data that reveals racial and ethnic origin, political preferences, religious **or moral** convictions, trade union membership, and information on health or sexual life. Article 18 forbids building databases that store information which **directly or indirectly** reveals it, and allows treatment for statistical or scientific purposes only \"cuando se disocien de sus titulares\".",
+            "**Dissociation** is any processing of personal data such that the information obtained **cannot be linked to a determinate or determinable person** (art. 4 G). Article 17 D) is the clause this set is written for: the prior consent of the data subject is not needed to communicate data when \"se hubiera aplicado un procedimiento de disociación de la información, de modo que los titulares de los datos no sean identificables\".",
+            "**Where dissociation appears.** Article 9-BIS D) allows a register whose publication is not of general interest to be used \"mediante técnicas de disociación u ocultamiento de los datos personales\"; article 17 C) requires \"mecanismos de disociación adecuados\" when health data travels for sanitary or epidemiological reasons; article 18 requires dissociation for statistics and science. And **article 8 a) of Decree 64/020** lists, first among the privacy-by-design measures, the \"**técnicas de disociación, seudonimización y minimización de datos**\".",
+            "**Security.** Article 10 makes the controller adopt the measures needed to guarantee the security and confidentiality of the data, and forbids registering personal data in databases that do not meet technical conditions of integrity and security. Article 38 of Ley 19.670 has a breach notified to the subjects and to the URCDP **immediately**, and the URCDP coordinates with CERTuy. Articles 6 and 7 of Decree 64/020 require an impact assessment where the risk is high — among the triggers, a permanent treatment of the data of Chapter IV or of data on offences.",
+            "**Biometric data.** Article 4 Ñ), added by Ley 19.924 in 2020, defines it as the datum obtained from a specific technical processing that permits or confirms the unique identification of a person; article 18-BIS allows processing it only after a **data protection impact assessment**.",
+            "**Sanctions.** Article 35 lets the URCDP observe, warn, fine up to **500,000 unidades indexadas**, suspend the database for five days or close it down through the courts."
+          ]
+        },
+        "**Credit data have a clock.** Article 22 authorizes the processing of data on patrimonial or credit solvency obtained from public sources or from the creditor, but the data on a natural person's commercial obligations may be registered for **five years**, renewable once for five more; a settled obligation stays for five years, not renewable. A copy of such a database carries the clock with it."
+      ]
+    },
+    {
+      "title": "Dissociation, pseudonymization and non-production copies",
+      "body": [
+        "Ley 18.331 is from 2008 and uses one word, **disociación**: processing such that the information obtained cannot be linked to a determinate or determinable person (art. 4 G). It does not define pseudonymization — but **article 8 a) of Decree 64/020**, from 2020, names the two side by side as privacy-by-design measures: \"técnicas de disociación, seudonimización y minimización de datos\".",
+        "The algorithms of this set are deterministic for the Masking Engine's key: the same cédula masks the same way in every table, which keeps joins working. Whoever holds that key and production can link the two back, so the masked copy is **pseudonymized** in the sense of the decree, not dissociated in the sense of article 4 G), and it remains personal data for them.",
+        {
+          "list": [
+            "Keep the engine key apart from the copy, and treat whoever holds both as processing personal data subject to the whole law.",
+            "Article 17 D) excuses the consent for a communication only when a dissociation procedure leaves the subjects **not identifiable**. If you rely on it, the key must not travel with the copy, and the quasi-identifiers that remain have to be measured.",
+            "Article 18 lets sensitive data be processed for statistics or science when it is dissociated from its subjects — the same standard, and a higher one than a masked copy with its key meets."
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Direct identifiers",
+      "intro": [
+        "Data that identifies a person on its own. The cédula de identidad is the key of every Uruguayan record, and both it and the RUT come out with a valid check digit, because applications validate them. Uruguay is one of the few countries whose law makes a **legal person** a data subject (art. 4 D), so the razón social, the nombre de fantasía and a company RUT are masked here like any other identifier."
+      ],
+      "domains": [
+        "UY_L1_CEDULA",
+        "UY_L1_RUT",
+        "UY_L1_DOCUMENTO_EXTRANJERO",
+        "UY_L1_PASAPORTE",
+        "UY_L1_CREDENCIAL_CIVICA",
+        "UY_L1_PARTIDA",
+        "UY_L1_SEGURO_SOCIAL",
+        "UY_L1_CODIGO_ESTUDIANTE",
+        "UY_L1_MATRICULA_PROFESIONAL",
+        "UY_L1_NOMBRE",
+        "UY_L1_APELLIDO",
+        "UY_L1_NOMBRE_COMPLETO",
+        "UY_L1_RAZON_SOCIAL",
+        "UY_L1_EMAIL",
+        "UY_L1_TELEFONO",
+        "UY_L1_DIRECCION",
+        "UY_L1_DIRECCION_COMPLEMENTO",
+        "UY_L1_CUENTA_BANCARIA",
+        "UY_L1_TARJETA",
+        "UY_L1_BILLETERA",
+        "UY_L1_IP",
+        "UY_L1_DISPOSITIVO",
+        "UY_L1_COOKIE",
+        "UY_L1_PLACA",
+        "UY_L1_VEHICULO",
+        "UY_L1_INMUEBLE",
+        "UY_L1_CONTRATO",
+        "UY_L1_USUARIO",
+        "UY_L1_CREDENCIAL",
+        "UY_L1_GEOLOCALIZACION",
+        "UY_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Quasi-identifiers",
+      "intro": [
+        "Data that identifies nobody on its own, but does in combination. Uruguay has 3.4 million inhabitants and, for the census, 652 localidades: 624 of them had fewer than 20,000 in 2023 — 873,000 people, a quarter of the country — and Montevideo holds 1.28 million of the rest. A birth date, a sex and one of those localidades point at a handful of people. These attributes are generalized or shifted rather than replaced, and the data keeps its analytical value."
+      ],
+      "domains": [
+        "UY_L2_FECHA_NACIMIENTO",
+        "UY_L2_ANIO_NACIMIENTO",
+        "UY_L2_EDAD",
+        "UY_L2_FECHA_EVENTO",
+        "UY_L2_SEXO",
+        "UY_L2_LOCALIDAD",
+        "UY_L2_CODIGO_INE",
+        "UY_L2_BARRIO",
+        "UY_L2_CODIGO_POSTAL",
+        "UY_L2_ESTADO_CIVIL",
+        "UY_L2_OCUPACION",
+        "UY_L2_EMPLEADOR",
+        "UY_L2_NIVEL_EDUCATIVO",
+        "UY_L2_INSTITUCION_EDUCATIVA",
+        "UY_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Sensitive data (art. 4 E and art. 4 Ñ)",
+      "intro": [
+        "Article 4 E) is short and from 2008: data that reveals racial and ethnic origin, political preferences, religious **or moral** convictions, trade union membership, and information on health or sexual life. Article 18 forbids building databases that store information which **directly or indirectly** reveals it. Article 4 Ñ), added in 2020, brought the biometric datum in, and article 18-BIS put an impact assessment in front of it. Health has a group of its own below; the rest is here, with the genetic data, the gender identity, the indigenous people and the victim status other Uruguayan statutes protect."
+      ],
+      "domains": [
+        "UY_L3_ASCENDENCIA",
+        "UY_L3_PUEBLO_ORIGINARIO",
+        "UY_L3_NACIONALIDAD",
+        "UY_L3_RELIGION",
+        "UY_L3_CONVICCION_MORAL",
+        "UY_L3_PREFERENCIA_POLITICA",
+        "UY_L3_AFILIACION_PARTIDARIA",
+        "UY_L3_AFILIACION_SINDICAL",
+        "UY_L3_BIOMETRICO",
+        "UY_L3_GENETICO",
+        "UY_L3_ORIENTACION_SEXUAL",
+        "UY_L3_VIDA_SEXUAL",
+        "UY_L3_IDENTIDAD_GENERO",
+        "UY_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Health data",
+      "intro": [
+        "Health data is sensitive by article 4 E) and has a regime of its own in article 19, which lets sanitary establishments and health professionals process the data of their patients \"respetando los principios del secreto profesional\". Article 17 C) is the clause this group is written for: health data may be communicated for sanitary, emergency or epidemiological reasons while \"preservando la identidad de los titulares de los datos mediante **mecanismos de disociación adecuados**\"."
+      ],
+      "domains": [
+        "UY_SALUD_IDENTIFICADOR",
+        "UY_SALUD_COBERTURA",
+        "UY_SALUD_DIAGNOSTICO",
+        "UY_SALUD_PROCEDIMIENTO",
+        "UY_SALUD_MEDICAMENTO",
+        "UY_SALUD_TEXTO_CLINICO",
+        "UY_SALUD_RESULTADO_EXAMEN",
+        "UY_SALUD_VIH",
+        "UY_SALUD_GRUPO_SANGUINEO",
+        "UY_SALUD_DISCAPACIDAD",
+        "UY_SALUD_OCUPACIONAL",
+        "UY_SALUD_REPRODUCTIVA",
+        "UY_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Commercial and credit data (art. 22)",
+      "intro": [
+        "Article 22 authorizes the processing of data on patrimonial or credit solvency from public sources or from the creditor — and then does something only Uruguay does: it puts a clock on it. The data on a natural person's commercial obligation may be registered for **five years**, renewable once; a settled obligation stays five more, not renewable. Whoever copies such a database into a test environment copies the clock with it, and the rest of the group — debt, income, assets, pasividades, social programmes, the Índice de Carencias Críticas — identifies just as well."
+      ],
+      "domains": [
+        "UY_FIN_HISTORIAL_CREDITICIO",
+        "UY_FIN_DEUDA",
+        "UY_FIN_INGRESOS",
+        "UY_FIN_PATRIMONIO",
+        "UY_FIN_PENSION",
+        "UY_FIN_PROGRAMA_SOCIAL",
+        "UY_FIN_NIVEL_SOCIOECONOMICO",
+        "UY_FIN_VIVIENDA"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Offences (art. 18)",
+      "intro": [
+        "The final paragraph of article 18 puts the data on the commission of **criminal, civil or administrative** offences under a regime of its own: it \"sólo puede ser objeto de tratamiento por parte de las autoridades públicas competentes\". A private company that copies such a column into a test environment is processing data it may not process at all — which is why this group exists, and why article 6 b) of Decree 64/020 makes a permanent treatment of it a trigger for an impact assessment."
+      ],
+      "domains": [
+        "UY_PENAL_ANTECEDENTES",
+        "UY_PENAL_EXPEDIENTE"
+      ]
+    }
+  ],
+  "domains": {
+    "UY_L1_CEDULA": {
+      "title": "Cédula de identidad",
+      "what": [
+        "The number of the Dirección Nacional de Identificación Civil, the key of every Uruguayan record: seven digits and a check digit, written `1.234.567-2`, and also plain.",
+        "The same domain takes RUTs: a document column often holds both."
+      ],
+      "masking": [
+        "Digit by digit, with the check digit recomputed: weights 2 9 8 7 6 3 4 from the left, modulus 10, ten minus the remainder — exactly what Check Digit computes. The dots and the hyphen stay where they are."
+      ]
+    },
+    "UY_L1_RUT": {
+      "title": "RUT",
+      "what": [
+        "The twelve-digit taxpayer number of the Dirección General Impositiva: two digits for the kind of taxpayer, six for the number, three for the branch and one check digit — `21-100342-001-7`.",
+        "Article 4 D) makes the data of a **legal person** personal data too, so a company RUT is masked like any other identifier — unlike the sets of countries whose law reaches only natural persons."
+      ],
+      "masking": [
+        "The kind of taxpayer and the branch stay, the six digits of the number are mapped and the check digit is recomputed."
+      ]
+    },
+    "UY_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Foreigner documents",
+      "what": [
+        "The cédula de extranjería, the refugee card, the residence and work permits, the visa and the migratory status."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_PASAPORTE": {
+      "title": "Passport",
+      "what": [
+        "Uruguayan passport numbers and foreign ones."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_CREDENCIAL_CIVICA": {
+      "title": "Credencial cívica",
+      "what": [
+        "The series of three letters and the number the Corte Electoral gives every voter — `ABC 12345`. Voting is compulsory in Uruguay, so almost every adult has one, and the internal elections put party membership beside it."
+      ],
+      "masking": [
+        "Letters to letters and digits to digits, position by position."
+      ]
+    },
+    "UY_L1_PARTIDA": {
+      "title": "Civil registry records",
+      "what": [
+        "The partida, tomo, folio and acta of the birth, marriage, concubinage and death records the Dirección General de Registro de Estado Civil keeps."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_SEGURO_SOCIAL": {
+      "title": "BPS and the professional funds",
+      "what": [
+        "The Banco de Previsión Social numbers of the worker and of the employer, the historia laboral, the FONASA affiliation and the numbers of the notarial, banking, professional, military and police funds."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_CODIGO_ESTUDIANTE": {
+      "title": "Student code",
+      "what": [
+        "The student code, the enrolment number and the university card."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_MATRICULA_PROFESIONAL": {
+      "title": "Professional registration",
+      "what": [
+        "The professional registration number and the number of the professional fund, published together with the name."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_NOMBRE": {
+      "title": "Given name",
+      "what": [
+        "The given name, one or two: `Washington`, `Juan Pablo`, `María de los Ángeles`."
+      ],
+      "masking": [
+        "Word by word, replacing each name with one from the list. `de`, `del` and `la` stay in place. More than four words are masked character by character."
+      ]
+    },
+    "UY_L1_APELLIDO": {
+      "title": "Surname",
+      "what": [
+        "The surnames — the father's and the mother's —, in separate columns or together: `Rodríguez Techera`. The set carries the Uruguayan ones, Spanish, Italian, Basque and Portuguese alike, with `Da Silva` and `De León` kept whole."
+      ],
+      "masking": [
+        "Word by word, replacing each surname with one from the list; particles stay in place."
+      ]
+    },
+    "UY_L1_NOMBRE_COMPLETO": {
+      "title": "Full name",
+      "what": [
+        "Given names and surnames in one column: `Juan Pablo Rodríguez Techera`. Also those of the mother, father, guardian, spouse, concubino, emergency contact and reference."
+      ],
+      "masking": [
+        "In Uruguayan order: two words are a given name and a surname; three, a given name and two surnames; four, two and two. `APELLIDOS, NOMBRES` with a comma is masked keeping the comma."
+      ]
+    },
+    "UY_L1_RAZON_SOCIAL": {
+      "title": "Razón social and nombre de fantasía",
+      "what": [
+        "The legal and the trading name of a company. In Uruguay this is not a courtesy: article 4 D) makes a **legal person** a data subject, and article 9 C) names the razón social, the nombre de fantasía and the RUT among the data a listing may hold without consent."
+      ],
+      "masking": [
+        "Replaced by a fictitious company name."
+      ]
+    },
+    "UY_L1_EMAIL": {
+      "title": "E-mail",
+      "what": [
+        "Personal and corporate e-mail addresses."
+      ],
+      "masking": [
+        "User and domain are mapped character by character, and the top-level domain — `.com`, `.com.uy` — becomes `.test`, reserved for tests: a masked address can never deliver."
+      ]
+    },
+    "UY_L1_TELEFONO": {
+      "title": "Phone",
+      "what": [
+        "Mobiles of nine digits starting `09`, and landlines of eight starting with 2 in Montevideo and with 4 in the interior."
+      ],
+      "masking": [
+        "`+598` and the prefix stay; the rest of the digits are mapped and the spacing of the original is kept, so the number still says mobile or landline and which region."
+      ]
+    },
+    "UY_L1_DIRECCION": {
+      "title": "Address",
+      "what": [
+        "The address with the street and the door number, the apartamento and often the corner — `Av. 18 de Julio 1234 apto. 501`, `Calle Mercedes 900 esq. Río Branco`."
+      ],
+      "masking": [
+        "The whole line is replaced by a fictitious Uruguayan address of the same form. Barrio, localidad and postal code have domains of their own for when they live in separate columns."
+      ]
+    },
+    "UY_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Address complement",
+      "what": [
+        "Apartamento, piso, block, torre, puerta, manzana, solar or the corner in columns of their own."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_CUENTA_BANCARIA": {
+      "title": "Bank account",
+      "what": [
+        "Savings, current and payroll account numbers. The bank code is not personal data and has no domain."
+      ],
+      "masking": [
+        "Digits are mapped; separators stay."
+      ]
+    },
+    "UY_L1_TARJETA": {
+      "title": "Payment card",
+      "what": [
+        "Credit and debit card numbers, recognized by the Luhn algorithm."
+      ],
+      "masking": [
+        "Payment Card: another number that passes the Luhn algorithm. Only card-shaped values reach it."
+      ]
+    },
+    "UY_L1_BILLETERA": {
+      "title": "Digital wallet",
+      "what": [
+        "Prex, Mi Dinero, OCA Blue and other wallet identifiers, and the bitcoin addresses some systems keep."
+      ],
+      "masking": [
+        "Character by character, keeping the shape. A masked bitcoin address no longer passes its own checksum, which is what a test copy wants."
+      ]
+    },
+    "UY_L1_IP": {
+      "title": "IP address",
+      "what": [
+        "IPv4 and IPv6 addresses from access logs and transactions. Article 20 binds the telecommunications operators that produce them."
+      ],
+      "masking": [
+        "Each IPv4 octet is mapped to 1–254; an IPv6 address is mapped keeping its hex characters."
+      ]
+    },
+    "UY_L1_DISPOSITIVO": {
+      "title": "Device identifier",
+      "what": [
+        "IMEI, IMSI, ICCID, MAC address, advertising and session identifiers."
+      ],
+      "masking": [
+        "Character by character, with hex digits kept hex: a MAC stays a MAC."
+      ]
+    },
+    "UY_L1_COOKIE": {
+      "title": "Cookies and tracking identifiers",
+      "what": [
+        "The identifier a site stores in the browser and the campaign parameters that travel with it. Article 21 allows profiles built for advertising only from public sources or with consent, and names the *hábitos de consumo* these identifiers build."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_PLACA": {
+      "title": "Vehicle plate",
+      "what": [
+        "The plate with three letters and four digits since 2015, `SAB 1234`; the first letter is the departamento — A Montevideo, B Artigas, C Canelones, and so on to S Treinta y Tres."
+      ],
+      "masking": [
+        "Letters to letters and digits to digits, position by position: the plate format stays."
+      ]
+    },
+    "UY_L1_VEHICULO": {
+      "title": "Vehicle and licence",
+      "what": [
+        "The VIN or chassis number, the engine number, the libreta de circulación and the driving licence."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_INMUEBLE": {
+      "title": "Property",
+      "what": [
+        "The padrón the Dirección Nacional de Catastro gives every parcel, the cadastral code and the entry in the Registro de la Propiedad: they lead to the home and its owner."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_CONTRATO": {
+      "title": "Customer and contract numbers",
+      "what": [
+        "Contract, policy, loan, application, member, subscriber, supply, case, claim or administrative file numbers, and customer or employee codes."
+      ],
+      "masking": [
+        "Character by character, keeping length and format. The mapping is deterministic, so joins keep working."
+      ]
+    },
+    "UY_L1_USUARIO": {
+      "title": "User and social media",
+      "what": [
+        "Login, alias and social media profiles."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_L1_CREDENCIAL": {
+      "title": "Credentials",
+      "what": [
+        "Passwords and their hashes, PIN, security and OTP codes, CVV, tokens, API keys, the key of an electronic signature, private keys and seed phrases."
+      ],
+      "masking": [
+        "Every character becomes `X`. A credential has no use in a test copy, and a hash masked character by character could still be cracked."
+      ]
+    },
+    "UY_L1_GEOLOCALIZACION": {
+      "title": "Geolocation",
+      "what": [
+        "Latitude and longitude, together or in separate columns, from apps, visits, addresses and deliveries."
+      ],
+      "masking": [
+        "The integer part and first decimal stay — about 11 km — and the other decimals are mapped: the place is generalized, not moved."
+      ]
+    },
+    "UY_L1_TEXTO_LIBRE": {
+      "title": "Free text",
+      "what": [
+        "Remarks, complaint descriptions, accounts of events and messages where anything gets written — cédula, RUT, phone and names in the middle of a sentence."
+      ],
+      "masking": [
+        "Free Text Redaction: cédulas, RUTs, e-mail, mobiles, cards, plates and IPs become `[DATO]`, and the names of the lists `[NOMBRE]`."
+      ]
+    },
+    "UY_L2_FECHA_NACIMIENTO": {
+      "title": "Birth date",
+      "what": [
+        "The birth date, as a date, timestamp or text."
+      ],
+      "masking": [
+        "Shifted up to 60 days either way. Ages and school years change for few people; the date stays plausible and the same birth date always moves the same way."
+      ]
+    },
+    "UY_L2_ANIO_NACIMIENTO": {
+      "title": "Birth year",
+      "what": [
+        "The birth year in a column of its own."
+      ],
+      "masking": [
+        "The decade stays and the last digit is mapped: `1985` becomes a year from 1980 to 1989."
+      ]
+    },
+    "UY_L2_EDAD": {
+      "title": "Age",
+      "what": [
+        "Age in years, also age group or five-year band. Uruguay is the oldest country of the region, so a very high age is less rare here — but still rare."
+      ],
+      "masking": [
+        "The tens digit stays and the unit is mapped (37 becomes 30–39). A hundred or more becomes 90: rare ages identify."
+      ]
+    },
+    "UY_L2_FECHA_EVENTO": {
+      "title": "Personal event dates",
+      "what": [
+        "Dates that say something about the person: death, marriage, hiring and leaving, retirement, admission, diagnosis, arrest, sentence, sick leave, cédula issue."
+      ],
+      "masking": [
+        "Shifted up to 30 days either way."
+      ]
+    },
+    "UY_L2_SEXO": {
+      "title": "Sex",
+      "what": [
+        "Sex as the system records it: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` or the codes 1 and 2."
+      ],
+      "masking": [
+        "Replaced within its own vocabulary: `F` stays `F` or `M`, `1` stays `1` or `2`. Gender identity has its own domain among the sensitive data."
+      ]
+    },
+    "UY_L2_LOCALIDAD": {
+      "title": "Localidad",
+      "what": [
+        "The localidad of residence, birth or care, by name — alone or with the departamento, `Piriápolis - Maldonado`."
+      ],
+      "masking": [
+        "A localidad with fewer than 20,000 inhabitants becomes the nearest one of at least 20,000 in the same departamento. Every departamento has one, so the value never leaves it, and the 19 departamentos stay."
+      ]
+    },
+    "UY_L2_CODIGO_INE": {
+      "title": "INE code",
+      "what": [
+        "The five-digit code of the Instituto Nacional de Estadística: two digits for the departamento and three for the localidad."
+      ],
+      "masking": [
+        "The same generalization as the name: a small localidad's code becomes the code of the localidad that replaces its name. The code of a large one does not change."
+      ]
+    },
+    "UY_L2_BARRIO": {
+      "title": "Barrio and balneario",
+      "what": [
+        "The barrio, balneario, zona or asentamiento of residence — the unit below the localidad, and the one that tells Pocitos from Casavalle inside Montevideo."
+      ],
+      "masking": [
+        "Replaced by a common Uruguayan one, unrelated to the original."
+      ]
+    },
+    "UY_L2_CODIGO_POSTAL": {
+      "title": "Postal code",
+      "what": [
+        "The five-digit postal code: the first two are the departamento and the postal zone."
+      ],
+      "masking": [
+        "The first two digits stay and the others become zeros: `11300` becomes `11000`."
+      ]
+    },
+    "UY_L2_ESTADO_CIVIL": {
+      "title": "Marital status",
+      "what": [
+        "Single, married, in unión libre or concubinato — which the Ley 18.246 recognizes —, separated, divorced or widowed, in words or as a code."
+      ],
+      "masking": [
+        "Replaced by another status from the list; a code stays a code."
+      ]
+    },
+    "UY_L2_OCUPACION": {
+      "title": "Occupation",
+      "what": [
+        "Occupation, profession or trade, in words or by the national occupation classification code. A rare occupation in a small localidad identifies on its own."
+      ],
+      "masking": [
+        "Text is replaced by a common occupation; a code is mapped digit by digit."
+      ]
+    },
+    "UY_L2_EMPLEADOR": {
+      "title": "Employer",
+      "what": [
+        "The name of the company or institution where the person works."
+      ],
+      "masking": [
+        "Replaced by a fictitious company."
+      ]
+    },
+    "UY_L2_NIVEL_EDUCATIVO": {
+      "title": "Education",
+      "what": [
+        "The education level attained — from none to a postgraduate degree — in the categories the census uses, in words or as a code."
+      ],
+      "masking": [
+        "Replaced by another level from the list; a code stays a code."
+      ]
+    },
+    "UY_L2_INSTITUCION_EDUCATIVA": {
+      "title": "School",
+      "what": [
+        "The escuela, liceo, UTU school, institute or university, by name or by its number — and a numbered escuela in a small localidad is one school."
+      ],
+      "masking": [
+        "Replaced by a fictitious school."
+      ]
+    },
+    "UY_L2_PERSONAS_A_CARGO": {
+      "title": "Dependants and children",
+      "what": [
+        "Number of dependants, children, cargas familiares or household members."
+      ],
+      "masking": [
+        "Values from 0 to 5 stay; above 5 they become 5. Very large households are rare, and a rare count identifies."
+      ]
+    },
+    "UY_L3_ASCENDENCIA": {
+      "title": "Racial and ethnic origin",
+      "what": [
+        "The ascendencia étnico-racial the census asks about — afro or black, asian, white, indigenous — which article 4 E) names first among the sensitive data."
+      ],
+      "masking": [
+        "A flag stays a flag, a code is replaced by another code and any other value by a category from the list."
+      ]
+    },
+    "UY_L3_PUEBLO_ORIGINARIO": {
+      "title": "Indigenous people",
+      "what": [
+        "The pueblo originario a person claims. Uruguay treated its indigenous peoples as extinct for a century; the census brought the charrúa descendants back into the count, and there are a few thousand of them — naming the people names a very small group."
+      ],
+      "masking": [
+        "Replaced by another people from the list; a flag stays a flag."
+      ]
+    },
+    "UY_L3_NACIONALIDAD": {
+      "title": "Nationality",
+      "what": [
+        "Nationality, country of birth or origin, and migratory status. Article 9 C) names nationality among the data a listing may hold, so the law treats it as ordinary personal data — but it sits beside the racial and ethnic origin it does call sensitive, and in Uruguay it separates the nationals from the Venezuelan and Cuban communities."
+      ],
+      "masking": [
+        "Replaced by a nationality from the list: the Uruguayan one and the largest foreign communities."
+      ]
+    },
+    "UY_L3_RELIGION": {
+      "title": "Religion",
+      "what": [
+        "The religion, church or congregation the person belongs to. Uruguay is the most secular country of the region — \"creyente sin religión\" and \"ateo o agnóstico\" are among the largest answers, and the umbandista faith is counted on its own — so a declared religion says a great deal here."
+      ],
+      "masking": [
+        "A flag stays a flag and any other value is replaced by a religion from the list."
+      ]
+    },
+    "UY_L3_CONVICCION_MORAL": {
+      "title": "Moral and philosophical convictions",
+      "what": [
+        "The **convicciones morales** article 4 E) names in the same breath as the religious ones, conscientious objection and belonging to a lodge. Only a handful of laws in the region list this."
+      ],
+      "masking": [
+        "The values share no vocabulary: they are suppressed to `Sin información`. Flags and codes keep their shape."
+      ]
+    },
+    "UY_L3_PREFERENCIA_POLITICA": {
+      "title": "Political preferences",
+      "what": [
+        "The **preferencias políticas** article 4 E) names: leaning, sympathy and voting intention, from surveys and records."
+      ],
+      "masking": [
+        "Replaced by a position from the list — left to right, independent."
+      ]
+    },
+    "UY_L3_AFILIACION_PARTIDARIA": {
+      "title": "Party membership",
+      "what": [
+        "The party, lema or sublema the person belongs to, from the register of the Corte Electoral. Uruguay votes its party internals, so membership is a recorded fact rather than an opinion."
+      ],
+      "masking": [
+        "Replaced by another party from the list; a flag stays a flag."
+      ]
+    },
+    "UY_L3_AFILIACION_SINDICAL": {
+      "title": "Trade union membership",
+      "what": [
+        "The union, the membership, the dues deducted on the payroll and the consejo de salarios. Article 4 E) names it, and article 18 lets a union keep the data of its own members — which is exactly the database this domain protects."
+      ],
+      "masking": [
+        "A flag stays a flag; any other value becomes `Sin información`."
+      ]
+    },
+    "UY_L3_BIOMETRICO": {
+      "title": "Biometric data",
+      "what": [
+        "Fingerprint templates — the cédula's fingerprint is the country's identification pattern —, face, iris, voice and digitized signature. Article 4 Ñ), added by Ley 19.924 in 2020, defines the biometric datum, and article 18-BIS allows processing it only after an impact assessment."
+      ],
+      "masking": [
+        "Every character becomes `X`. A masked template authenticates nobody."
+      ]
+    },
+    "UY_L3_GENETICO": {
+      "title": "Genetic data",
+      "what": [
+        "Results of genetic and DNA tests, paternity tests, genetic profiles, mutations, karyotype and newborn screening. The law does not name them, but they are health data by any reading of article 4 E)."
+      ],
+      "masking": [
+        "Every character becomes `X`."
+      ]
+    },
+    "UY_L3_ORIENTACION_SEXUAL": {
+      "title": "Sexual orientation",
+      "what": [
+        "Self-declared sexual orientation or preference. It belongs to the *vida sexual* article 4 E) protects."
+      ],
+      "masking": [
+        "Replaced by a category from the list."
+      ]
+    },
+    "UY_L3_VIDA_SEXUAL": {
+      "title": "Sexual life",
+      "what": [
+        "Sexual activity and behaviour, number of partners, age at first intercourse — the *vida sexual* named word for word in article 4 E)."
+      ],
+      "masking": [
+        "A flag stays a flag; any other value becomes `Sin información`."
+      ]
+    },
+    "UY_L3_IDENTIDAD_GENERO": {
+      "title": "Gender identity",
+      "what": [
+        "Self-declared gender identity and the social name. The Ley 19.684 integral para personas trans created a register and a hiring quota, so this is a real column in Uruguayan systems — and one that identifies a very small group."
+      ],
+      "masking": [
+        "Replaced by a category from the list."
+      ]
+    },
+    "UY_L3_VICTIMA": {
+      "title": "Victims of violence",
+      "what": [
+        "Being a victim of gender, domestic or sexual violence, of trafficking or of enforced disappearance, the type of violence and the protective measures. The Ley 19.580 protects the identity of the victim."
+      ],
+      "masking": [
+        "A flag stays a flag; any other value becomes `Sin información`."
+      ]
+    },
+    "UY_SALUD_IDENTIFICADOR": {
+      "title": "Health identifiers",
+      "what": [
+        "Clinical record, episode, admission, care, appointment and prescription numbers, and the affiliate or socio number of ASSE or a mutualista."
+      ],
+      "masking": [
+        "Character by character, keeping length and format."
+      ]
+    },
+    "UY_SALUD_COBERTURA": {
+      "title": "Health coverage",
+      "what": [
+        "ASSE, a mutualista (IAMC), a private insurer, military or police health, or none, by name or code. Which one a person has says a great deal about them in a country where FONASA routes everyone somewhere."
+      ],
+      "masking": [
+        "A name is replaced by another cover from the list; a code is mapped digit by digit; a flag stays a flag."
+      ]
+    },
+    "UY_SALUD_DIAGNOSTICO": {
+      "title": "Diagnosis and ICD-10",
+      "what": [
+        "Diagnoses in words or by ICD-10 code, with a dot (`F33.1`) or without (`F331`); causes of death, of sick leave and of admission; allergies and comorbidities."
+      ],
+      "masking": [
+        "An ICD-10 code becomes another common code in the same format, and text a common diagnosis: an HIV or mental disorder diagnosis does not survive as such."
+      ]
+    },
+    "UY_SALUD_PROCEDIMIENTO": {
+      "title": "Procedures",
+      "what": [
+        "Procedures, tests and surgeries, in words or by code. A viral load or a pregnancy test reveals the diagnosis."
+      ],
+      "masking": [
+        "A code is mapped digit by digit; text is replaced by a common procedure."
+      ]
+    },
+    "UY_SALUD_MEDICAMENTO": {
+      "title": "Medicines",
+      "what": [
+        "Prescribed or dispensed medicines, by name or active ingredient. An antiretroviral, an antipsychotic or a contraceptive says what the diagnosis column was masked for."
+      ],
+      "masking": [
+        "Replaced by a common medicine from the list; a flag stays a flag."
+      ]
+    },
+    "UY_SALUD_TEXTO_CLINICO": {
+      "title": "Clinical text",
+      "what": [
+        "History, present illness, progress notes, physical examination, treatment plan, discharge summaries and nursing notes."
+      ],
+      "masking": [
+        "The same Free Text Redaction as free text: documents, contacts and names from the list are redacted. The clinical content stays, because that is what makes the copy useful."
+      ]
+    },
+    "UY_SALUD_RESULTADO_EXAMEN": {
+      "title": "Test results",
+      "what": [
+        "Laboratory and test results — glicemia, pregnancy, toxicology, blood alcohol —, also as numeric values."
+      ],
+      "masking": [
+        "Character by character, keeping the format: a number stays a number."
+      ]
+    },
+    "UY_SALUD_VIH": {
+      "title": "HIV and sexually transmitted infections",
+      "what": [
+        "Serological status, viral load and antiretroviral treatment, hepatitis, tuberculosis and sexually transmitted infections. The Ley 18.335 de derechos del paciente and medical secrecy — article 302 of the Penal Code, to which article 11 of the law refers — bind the record."
+      ],
+      "masking": [
+        "A flag stays a flag; any other value becomes `Sin información`."
+      ]
+    },
+    "UY_SALUD_GRUPO_SANGUINEO": {
+      "title": "Blood group and Rh",
+      "what": [
+        "Blood group and Rh factor."
+      ],
+      "masking": [
+        "Replaced by another group from the list."
+      ]
+    },
+    "UY_SALUD_DISCAPACIDAD": {
+      "title": "Disability",
+      "what": [
+        "Disability status, type and degree, the certificate and the BPS disability allowance, under the Ley 18.651."
+      ],
+      "masking": [
+        "A flag stays a flag and any other value is replaced by a category from the list."
+      ]
+    },
+    "UY_SALUD_OCUPACIONAL": {
+      "title": "Carné de salud and occupational health",
+      "what": [
+        "The **carné de salud básico** is compulsory for every worker in Uruguay, which puts a health certificate in the personnel table of almost every employer. Also occupational exams, work accidents and occupational diseases, the BSE claim, sick leave and absenteeism."
+      ],
+      "masking": [
+        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own domain."
+      ]
+    },
+    "UY_SALUD_REPRODUCTIVA": {
+      "title": "Sexual and reproductive health",
+      "what": [
+        "Pregnancy, last menstrual period, prenatal care, childbirth, the interruption of pregnancy the Ley 18.987 regulates, family planning, fertility."
+      ],
+      "masking": [
+        "Flags keep their shape; any other value becomes `Sin información`."
+      ]
+    },
+    "UY_SALUD_MENTAL": {
+      "title": "Mental health",
+      "what": [
+        "Mental disorders, psychiatric or psychological care, intentos de autoeliminación and substance use. Article 19 covers the physical **and mental** health of the patient in so many words."
+      ],
+      "masking": [
+        "Flags keep their shape; any other value becomes `Sin información`."
+      ]
+    },
+    "UY_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Credit history",
+      "what": [
+        "The Clearing de Informes report, the score, days in arrears and the debtor category of the Banco Central — 1C to 5. Article 22 authorizes the processing but caps it: five years for a natural person's commercial obligation, renewable once, and five more for a settled one."
+      ],
+      "masking": [
+        "A score gets other digits of the same length; a flag stays a flag; a category is replaced by another from the list."
+      ]
+    },
+    "UY_FIN_DEUDA": {
+      "title": "Debt",
+      "what": [
+        "Credit and portfolio balances, amounts in arrears, instalments, amounts granted and limits."
+      ],
+      "masking": [
+        "Mapped to a value between 5,000 and 5,000,000 pesos uruguayos, unrelated to the real one."
+      ]
+    },
+    "UY_FIN_INGRESOS": {
+      "title": "Income and pay",
+      "what": [
+        "Sueldo nominal and líquido, monthly or household income, fees and rents. The national minimum wage was some 23,600 pesos a month in 2025."
+      ],
+      "masking": [
+        "Mapped to a value between 22,000 and 400,000 pesos uruguayos."
+      ]
+    },
+    "UY_FIN_PATRIMONIO": {
+      "title": "Assets",
+      "what": [
+        "Net worth, assets, tasaciones and the aforo catastral, account, CTS and fund balances, term deposits and the sworn declaration of assets."
+      ],
+      "masking": [
+        "Mapped to a value between 50,000 and 20,000,000 pesos uruguayos."
+      ]
+    },
+    "UY_FIN_PENSION": {
+      "title": "Pasividad and benefits",
+      "what": [
+        "The amount of the pasividad, the pension or the benefit, and child support. One in four Uruguayans draws one."
+      ],
+      "masking": [
+        "Mapped to a value between 15,000 and 200,000 pesos uruguayos."
+      ]
+    },
+    "UY_FIN_PROGRAMA_SOCIAL": {
+      "title": "Social programmes",
+      "what": [
+        "The Tarjeta Uruguay Social, the Asignaciones Familiares of the Plan de Equidad, the Asistencia a la Vejez, Uruguay Trabaja and the Sistema Nacional de Cuidados, by name or as a flag. Being in one says the household is poor."
+      ],
+      "masking": [
+        "A flag stays a flag and any other value is replaced by a programme from the list."
+      ]
+    },
+    "UY_FIN_NIVEL_SOCIOECONOMICO": {
+      "title": "Índice de Carencias Críticas",
+      "what": [
+        "The score the MIDES Índice de Carencias Críticas gives every household, which decides who gets a transfer, and the socioeconomic level or quintile."
+      ],
+      "masking": [
+        "A flag stays a flag, a code is replaced by another code and any other value by a class from the list."
+      ]
+    },
+    "UY_FIN_VIVIENDA": {
+      "title": "Housing tenure",
+      "what": [
+        "Housing tenure in the categories the census uses: owner of the dwelling and the land, owner of the dwelling only, tenant, occupant by employment, free occupant, occupant without permission."
+      ],
+      "masking": [
+        "Replaced by another tenure from the list."
+      ]
+    },
+    "UY_PENAL_ANTECEDENTES": {
+      "title": "Offences and records",
+      "what": [
+        "The certificate of judicial records, the type of offence, the procedural situation, the boleta de captura, being deprived of liberty and the INR record. The final paragraph of article 18 reserves the data on **criminal, civil or administrative** offences to the competent public authorities."
+      ],
+      "masking": [
+        "Replaced by a generic status from the list — no record, convicted, acquitted —, whatever the outcome; a flag stays a flag."
+      ]
+    },
+    "UY_PENAL_EXPEDIENTE": {
+      "title": "Court file",
+      "what": [
+        "The Identificador Único de Expediente the Poder Judicial gives every case — the office, a correlative and the year, `2-12345/2024` — and the ficha of the Fiscalía."
+      ],
+      "masking": [
+        "The office and the correlative are mapped digit by digit; the year stays. Other numbers are masked character by character."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "The cédula and RUT check digits",
+      "body": [
+        "The **cédula de identidad** is the simple case: seven digits with the weights 2 9 8 7 6 3 4 from the left, modulus 10, and the digit is ten minus the remainder. That is exactly what the Masking Engine's Check Digit algorithm does, so one step is enough: it maps the seven digits and writes the eighth. The published worked example — 1.234.567 gives 2 — checks out, and the dots and hyphen pass through untouched because Check Digit is told to preserve them.",
+        "The **RUT** needs one more turn. Its digit is modulus 11 over the weights 4 3 2 9 8 7 6 5 4 3 2, eleven minus the remainder, written **0 when that is eleven and 1 when it is ten**. Check Digit writes *modulus minus remainder* and writes ten as `0`, so it agrees everywhere except on one remainder: with a remainder of 1 the true digit is 1 and Check Digit writes 0 — and a remainder of 0, whose true digit really is 0, produces the same written zero. The two cases are indistinguishable from the digit alone.",
+        "The set resolves it with an **auxiliary Check Digit whose weights are the real ones doubled, modulo 11**. Doubling maps a remainder of 0 to 0 and a remainder of 1 to 2, so the auxiliary writes `0` for the first and `9` for the second — the two cases are told apart. A **Regex Decompose** then reads the pair of digits, writes the true one and drops the auxiliary. Four steps in a chain, no lookup table, and the two digits of the kind of taxpayer and the three of the branch stay where they were.",
+        "Uruguay's RUT is not derived from the cédula, so the two are masked independently — unlike Peru or Ecuador, where the taxpayer number carries the identity document inside it."
+      ]
+    },
+    {
+      "title": "Where people live: localidades, INE code and postal code",
+      "body": [
+        "With the population the 2023 census counted and a location for each place, the set knows the size, departamento and position of the 652 localidades censales and the 19 departamentos.",
+        {
+          "list": [
+            "A **localidad** with fewer than 20,000 inhabitants becomes the nearest localidad of at least 20,000 **in the same departamento**. There are 624 of them, with 873,000 inhabitants — a quarter of the country.",
+            "Every one of the 19 departamentos holds at least one localidad above the threshold, so a generalized value never leaves its departamento. The departamentos themselves are all far above it — the smallest, Flores, has some 24,600 inhabitants — and they stay.",
+            "Distance is measured between the locations, in a straight line. In seventeen of the nineteen departamentos there is exactly one localidad above the threshold, so the target is forced whatever the distance says; only Canelones, Maldonado and San José offer a real choice.",
+            "Names repeat — Santa Lucía, San Jorge, Cerro Chato, Tala. A name is generalized only when every localidad bearing it is small, and then follows the most populous of them. Written with the departamento (`Piriápolis - Maldonado`, `Piriápolis (Maldonado)`) the same rule applies inside it. A name that is also a **departamento** — Canelones, Salto, Rivera — is left alone, so that a departamento column is never rewritten; every localidad in that position is itself above the threshold.",
+            "The **INE code** follows the same table, so a person's localidad name and code still agree, and the **barrio** is replaced by another while the **postal code** keeps only the departamento and the zone."
+          ]
+        },
+        "Localidad names that are also given names or surnames, and departamento names, are left out of the detection list, so that a surname column is not taken for localidades."
+      ]
+    },
+    {
+      "title": "Limits",
+      "body": [
+        {
+          "list": [
+            "**Binary columns** — cédula photos, fingerprints, validation selfies, clinical PDFs in BLOBs — cannot be masked by these algorithms. Inventory them and report them as residual risk.",
+            "**The location of 186 of the 652 localidades is approximate**: it is the centre of the localidades of their departamento for which one was found. Because seventeen departamentos have a single target, this changes the outcome for only 84 small localidades, all in Canelones, Maldonado and San José — and the guarantee of at least 20,000 inhabitants in the same departamento holds in every case.",
+            "**The INE publishes the localidad names in capitals without their accents.** The set restores them with a dictionary and writes both spellings into the tables, but a name it could not restore comes out unaccented.",
+            "**A localidad whose name is also a departamento is not generalized**, so that a departamento column is never rewritten. Every localidad in that position is above the threshold, so nothing escapes — but if your data uses a departamento name for a smaller place, give that column a domain of its own.",
+            "**Data Cleansing leaves unknown values as they are**: a localidad spelled in a way that is not in the table — abbreviated, misspelled — passes unchanged.",
+            "**Free text** is redacted word by word: a phone written with spaces inside a sentence may not be found, and a name that is also a common word (`Rosa`, `Cruz`, `Flores`) is redacted wherever it appears.",
+            "**Children and adolescents**: a birth date moves at most 60 days, so few people cross their 18th birthday — but some do. Where that line matters, split the rule by age group with Multi-Column Condition.",
+            "**The five-year clock of article 22 travels with the data.** Masking the amount of a debt does not reset the date on which it became due, and a test copy of a credit database keeps every obligation as old as it was.",
+            "**Addresses** are replaced as a whole line. Street, barrio, localidad and postal code in separate columns are masked independently and no longer form a coherent address.",
+            "**The engine key** links masked values back to production for whoever holds both: the copy is **pseudonymized** in the sense of article 8 a) of Decree 64/020, not dissociated in the sense of article 4 G), and it remains personal data for them. Keep the key apart from the copy."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verification",
+      "body": [
+        "Before publication, the set was checked outside a Masking Engine:",
+        {
+          "list": [
+            "The cédula rule was checked against the published worked example, and the RUT rule against the published worked example of a real RUT — Antel's 21-100342-001-7.",
+            "Every classifier configuration was reviewed against what a Masking Engine accepts.",
+            "Profiling was simulated on 144 columns with the whole set at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
+            "The table that generalizes places was audited for all 652 localidades and 19 departamentos: by name, by name with the departamento, and by INE code, checking that no code leaves its departamento.",
+            "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 cédulas for validity, distinctness and the dots and hyphen they keep, and 200 RUTs for validity, distinctness and the kind of taxpayer and branch they keep. Every algorithm also masked its own sample value."
+          ]
+        },
+        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+      ]
+    },
+    {
+      "title": "Sources",
+      "body": [
+        {
+          "list": [
+            "Ley 18.331 de Protección de Datos Personales y Acción de Habeas Data (11 August 2008) and Decree 414/009, as amended by Ley 18.719 (2010), Ley 18.996 (2012), Ley 19.355 (2015), Ley 19.670 (2018, arts. 37 to 40) and Ley 19.924 (2020, arts. 86 and 87), and Decree 64/020 of 17 February 2020.",
+            "Unidad Reguladora y de Control de Datos Personales (URCDP), within AGESIC. European Commission adequacy decision 2012/484/EU. Council of Europe Convention 108.",
+            "Ley 18.335 de derechos de los pacientes. Ley 18.651 de personas con discapacidad. Ley 18.987 de interrupción voluntaria del embarazo. Ley 19.580 de violencia hacia las mujeres. Ley 19.684 integral para personas trans. Ley 18.246 de unión concubinaria. Article 302 of the Penal Code (professional secrecy).",
+            "Instituto Nacional de Estadística: Censo de Población, Hogares y Viviendas 2023 — table of localidades censales with the INE code, the population and the density of each one. Dirección Nacional de Identificación Civil (cédula and its check digit). Dirección General Impositiva (RUT and its check digit). Banco Central del Uruguay (debtor categories). BPS. MIDES (Índice de Carencias Críticas and the social programmes). Corte Electoral (credencial cívica and the register of parties). Dirección Nacional de Catastro (padrón). Ministerio de Trabajo (national minimum wage 2025)."
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -14,7 +14,7 @@ records.
 
 | | |
 |---|---|
-| Profile set | `CO - Ley 1581 de 2012 - v1`, assignment threshold 60 |
+| Profile set | `CO - Ley 1581 de 2012 - v1`, assignment threshold 60, built 17 September 2026 |
 | Extended pack | 82 domains, 143 classifiers, 144 algorithms, 89 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 36 algorithms, 5 files — cédula, NIT, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

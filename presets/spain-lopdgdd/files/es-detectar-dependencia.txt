@@ -1,0 +1,13 @@
+Grado I - Dependencia moderada
+Grado II - Dependencia severa
+Grado III - Gran dependencia
+Sin grado reconocido
+En valoración
+En valoracion
+grado i
+grado ii
+grado iii
+moderada
+severa
+gran dependencia
+sin grado

@@ -2359,6 +2359,12 @@ const resolvePresetFiles = (config, dir) => mapStrings(config ?? {}, (s) => {
 });
 
 const listOf = (value) => (Array.isArray(value) ? value : []);
+/** A real day written YYYY-MM-DD — "2026-02-30" is not one, and "2026-13-01" does not even parse. */
+const isCalendarDate = (value) => {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const day = new Date(`${value}T00:00:00Z`);
+  return Number.isFinite(day.getTime()) && day.toISOString().startsWith(value);
+};
 
 function readPreset(id) {
   const dir = path.join(PRESETS_DIR, id);
@@ -2373,6 +2379,7 @@ function readPreset(id) {
     id,
     dir,
     version: manifest?.version ?? null,
+    versionDate: manifest?.versionDate ?? null,
     name: manifest?.name ?? {},
     summary: manifest?.summary ?? {},
     profileSet: manifest?.profileSet ?? {},
@@ -2405,6 +2412,8 @@ function presetProblems(p) {
   const out = [];
   if (!/^[a-z0-9][a-z0-9-]*$/.test(p.id)) out.push(`The folder name "${p.id}" is not a valid id: use lower-case letters, digits and hyphens.`);
   if (!Number.isInteger(p.version) || p.version < 1) out.push('version must be a whole number from 1 up.');
+  // Optional, so a hand-made preset without one still loads; the ones shipped here all carry it.
+  if (p.versionDate !== null && !isCalendarDate(p.versionDate)) out.push('versionDate must be a date written YYYY-MM-DD.');
   if (!p.name.en) out.push('name.en is required.');
 
   const names = (kind, list) => {
@@ -2536,6 +2545,7 @@ function presetListing(p) {
   return {
     id: p.id,
     version: p.version,
+    versionDate: p.versionDate,
     name: p.name,
     summary: p.summary,
     profileSet: { name: p.profileSet.name ?? '' },

@@ -12,7 +12,7 @@ proceedings** — and health records.
 
 | | |
 |---|---|
-| Profile set | `BZ - Data Protection Act 2021 - v2`, assignment threshold 60 |
+| Profile set | `BZ - Data Protection Act 2021 - v2`, assignment threshold 60, built 15 September 2026 |
 | Extended pack | 72 domains, 124 classifiers, 90 algorithms, 70 files — everything below |
 | Essential pack | 11 domains, 22 classifiers, 10 algorithms, 5 files — social security number, TIN, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

@@ -18,7 +18,7 @@ criminal proceedings.
 
 | | |
 |---|---|
-| Profile set | `EC - LOPDP - v1`, assignment threshold 60 |
+| Profile set | `EC - LOPDP - v1`, assignment threshold 60, built 21 September 2026 |
 | Extended pack | 82 domains, 141 classifiers, 112 algorithms, 80 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 17 algorithms, 5 files — cédula, RUC, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

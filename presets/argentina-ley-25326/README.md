@@ -14,7 +14,7 @@ of gender violence, credit information (art. 26) and criminal records (art. 7.4)
 
 | | |
 |---|---|
-| Profile set | `AR - Ley 25.326 - v1`, assignment threshold 60 |
+| Profile set | `AR - Ley 25.326 - v1`, assignment threshold 60, built 17 September 2026 |
 | Extended pack | 83 domains, 148 classifiers, 119 algorithms, 82 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 21 algorithms, 5 files — DNI, CUIT and CUIL, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

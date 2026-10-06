@@ -22,7 +22,7 @@ The documentation button serves the PDF in the interface language, falling back 
 then to whichever exists.
 
 The app reads nothing else in the folder, so a preset can keep whatever produces it next to the
-output. The ten that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
+output. The thirteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
 its own definitions and the raw lists in `source/`, and `verify.mjs` checks the result — reviewing
 every classifier, profiling sample columns with the local evaluator in `classifiers/` and masking
 sample values through the running app. Each folder's `README.md` explains the design of its set.
@@ -39,6 +39,9 @@ sample values through the running app. Each folder's `README.md` explains the de
 | [`elsalvador-ley-144/`](elsalvador-ley-144/) | El Salvador — Decreto 144 (2024) |
 | [`peru-ley-29733/`](peru-ley-29733/) | Peru — Ley 29733 |
 | [`ecuador-lopdp/`](ecuador-lopdp/) | Ecuador — LOPDP (2021) |
+| [`uruguay-ley-18331/`](uruguay-ley-18331/) | Uruguay — Ley 18.331 |
+| [`costarica-ley-8968/`](costarica-ley-8968/) | Costa Rica — Ley 8968 |
+| [`spain-lopdgdd/`](spain-lopdgdd/) | Spain — GDPR and Ley Orgánica 3/2018 (LOPDGDD) |
 
 ## Documentation
 
@@ -106,6 +109,7 @@ guide in `docs/`; the shared wording and how each framework's configuration read
 ```json
 {
   "version": 1,
+  "versionDate": "2026-10-01",
   "name":    { "en": "…", "pt-BR": "…", "es": "…" },
   "summary": { "en": "…", "pt-BR": "…", "es": "…" },
 
@@ -134,8 +138,12 @@ guide in `docs/`; the shared wording and how each framework's configuration read
 
 - **`version`** — bump it with every change or improvement. The settings tab shows it on the card,
   a set loaded from an older version says a new one is available, and resetting applies it.
+- **`versionDate`** — the day that version was built, written `YYYY-MM-DD`. It is what says how old
+  a set is, so bump it together with the version; the card and the cover of the PDF show it beside
+  the version number. It is optional, so a preset that does not say still loads, but all thirteen
+  that ship carry it. In a `build.mjs` it sits next to the version as `VERSION_DATE`.
 - **`name.en`** is required; the other languages fall back to it.
-- **`profileSet.name`** is what gets saved and sent to Delphix. The ten that ship name the
+- **`profileSet.name`** is what gets saved and sent to Delphix. The thirteen that ship name the
   country, the law (or its number) and the version: `CL - Ley 21.719 - v3`. The set is found by
   the preset it came from, not by name, so a new version renames it and keeps its link to the engine.
 - **`packs.essential`** — the domains of the essential pack. Loading it brings those domains, the

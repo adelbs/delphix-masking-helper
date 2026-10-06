@@ -17,7 +17,7 @@ financial data and criminal records.
 
 | | |
 |---|---|
-| Profile set | `PE - Ley 29733 - v1`, assignment threshold 60 |
+| Profile set | `PE - Ley 29733 - v1`, assignment threshold 60, built 21 September 2026 |
 | Extended pack | 85 domains, 144 classifiers, 122 algorithms, 79 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 28 algorithms, 5 files — DNI, RUC, foreigner card, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

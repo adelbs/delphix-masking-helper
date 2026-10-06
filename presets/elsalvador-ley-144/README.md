@@ -14,7 +14,7 @@ situation** and **personal habits** —, the nationality of art. 59 b), financia
 
 | | |
 |---|---|
-| Profile set | `SV - Decreto 144 - v1`, assignment threshold 60 |
+| Profile set | `SV - Decreto 144 - v1`, assignment threshold 60, built 17 September 2026 |
 | Extended pack | 85 domains, 143 classifiers, 110 algorithms, 73 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 21 algorithms, 5 files — DUI, NIT, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |

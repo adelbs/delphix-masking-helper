@@ -1,0 +1,1009 @@
+{
+  "title": "Spain — GDPR and Ley Orgánica 3/2018 (LOPDGDD)",
+  "subtitle": "Discovery and masking of Spanish personal data: DNI and NIE with a valid letter, the Seguridad Social number, the IBAN and the CCC, the referencia catastral and the CUPS with valid control characters, municipios and postal codes generalized below 20,000 inhabitants, the special categories of article 9, health, economic and tax data, and criminal records and administrative sanctions.",
+  "sections": [
+    {
+      "title": "About this profile set",
+      "body": [
+        "This profile set finds the personal data in a Spanish database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and DNIs alone is not enough: a birth date, a sex and one small municipio already point at a handful of people, and 7,700 of the 8,132 municipios of Spain have fewer than 20,000 inhabitants. The set works in the layers where the risk is:",
+        {
+          "list": [
+            "**Direct identifiers** — DNI, NIE and the NIF of a natural person, passport, the support number of the card, the Seguridad Social number, student and professional numbers, names, contact, address, bank accounts, cards, devices, cookies, plates, the referencia catastral of a property, the CUPS of an electricity or gas supply, photographs, free text.",
+            "**Quasi-identifiers** — birth date, year of birth, age, sex, municipio, its INE code and the postal code, nationality and residence status, marital status, occupation, employer, education, dependants.",
+            "**Special categories** — the data of article 9 of the Regulation: racial or ethnic origin, political opinions and party membership, religious or philosophical beliefs, trade union membership, genetic and biometric data, sex life and sexual orientation; with gender identity and the victims of gender violence, which Spanish law protects in their own right.",
+            "**Health data** — the historia clínica, diagnoses, procedures, medicines, HIV, disability and dependency, occupational health, reproductive and mental health.",
+            "**Economic data** — the files of defaulters and the risk centre of the Banco de España, debts, income, assets, pensions, social benefits, and the tax data the Ley General Tributaria calls reserved.",
+            "**Criminal and administrative offences** — criminal records, the certificate of the register of sex offenders, court case numbers, and administrative sanctions such as fines and the points of a driving licence."
+          ]
+        },
+        "Each group below says what each domain is, how it is masked and why. The discovery is a profile set of 147 classifiers at a threshold of 60; the masking is 83 domains with their algorithms. Column names are recognized in Castilian, in English and, for the most common data, in Catalan, Galician and Basque."
+      ]
+    },
+    {
+      "title": "The law in Spain: the Regulation and the LOPDGDD",
+      "body": [
+        "Spain has no data protection law of its own in the way its neighbours across the Atlantic do: the law is the **General Data Protection Regulation**, Regulation (EU) 2016/679, which applies directly, and **Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales** (LOPDGDD), which adapts and completes it where the Regulation leaves room to the Member States. The fundamental right itself is in article 18.4 of the Constitution. The LOPDGDD has been amended several times — by Ley Orgánica 3/2020, Ley Orgánica 7/2021, Ley 2/2023, Ley 11/2023 and, last, by Ley 10/2025 of 26 December, which rewrote the advertising exclusion systems of article 23 — without touching the provisions this set rests on. The authority is the **Agencia Española de Protección de Datos** (AEPD), beside the authorities of Catalonia, the Basque Country and Andalusia for their own public sector.",
+        "The Regulation protects **natural persons** only: article 4.1 defines personal data as information relating to an identified or identifiable natural person, and recital 14 says it does not cover data concerning legal persons. So the NIF of a company passes through this set untouched, while the NIF of a self-employed person — which is their DNI — is masked like any other.",
+        "Four provisions of the LOPDGDD shape this set beyond the Regulation:",
+        {
+          "list": [
+            "**Article 9.1** — for ideology, trade union membership, religion, sexual orientation, beliefs and racial or ethnic origin, \"el solo consentimiento del afectado no bastará para levantar la prohibición del tratamiento de datos cuya finalidad principal sea identificar\" them. Consent, which the Regulation allows, is not enough in Spain.",
+            "**Article 10** — data on criminal convictions and offences may be processed outside the authorities only where a law with the rank of law allows it; **article 27** extends the rule to administrative infringements and sanctions.",
+            "**Article 32** — when data are rectified or erased they must be **blocked**: identified and reserved \"para impedir su tratamiento, incluyendo su visualización\", and article 32.3 forbids processing blocked data \"para ninguna finalidad distinta\" from making them available to courts and authorities.",
+            "**Additional provision 17** — the laws under which health data are processed, and the conditions for pseudonymized health data in research, quoted below."
+          ]
+        },
+        "Infringements are graded by articles 72 to 74 of the LOPDGDD, and the fines are those of article 83 of the Regulation, up to 20 million euros or 4% of worldwide turnover. Among the very serious infringements, which prescribe after three years, are processing special categories outside article 9 (art. 72.1 e), processing criminal data outside article 10 (art. 72.1 f), breaching the duty of confidentiality (art. 72.1 i), failing to block data (art. 72.1 n) — and, the provision that speaks most directly to this set, **\"la reversión deliberada de un procedimiento de anonimización a fin de permitir la reidentificación de los afectados\"** (art. 72.1 p)."
+      ]
+    },
+    {
+      "title": "Pseudonymization, anonymization and non-production copies",
+      "body": [
+        "The Regulation names the technique. Article 4.5 defines **pseudonymisation** as processing personal data so that they can no longer be attributed to a specific person without the use of additional information, \"provided that such additional information is kept separately and is subject to technical and organisational measures\". Recital 26 leaves anonymous information outside the Regulation altogether and measures identifiability by \"all the means reasonably likely to be used\". Article 25.1 names pseudonymisation as the first example of data protection by design, article 32.1 a) as the first example of a security measure, and article 6.4 e) as a safeguard that makes a further use compatible with the original one.",
+        "Masking with the engine is pseudonymization in exactly that sense: the result is deterministic for the engine's key, and whoever holds the key and the production data can reproduce the mapping. A masked copy is therefore still personal data **for whoever can reach the key**, and the key has to be kept apart from the copy. The Court of Justice drew the consequence on 4 September 2025, in **EDPS v SRB (C‑413/23 P)**: pseudonymized data may not be personal data for a recipient who has no means reasonably likely to reidentify them, while they remain personal data for the one who holds the additional information. The EDPB said the same in its Guidelines 01/2025 on pseudonymisation, adopted on 16 January 2025. The European Commission proposed in November 2025, in the Digital Omnibus, to write that relative reading into the definition of personal data; the Council's compromise of 2026 dropped the change, and in October 2026 the definition stands as it was.",
+        "Spanish law adds three things of its own. The additional provision 17 of the LOPDGDD allows pseudonymized health data in research only with **\"una separación técnica y funcional entre el equipo investigador y quienes realicen la seudonimización y conserven la información que posibilite la reidentificación\"** — the rule this set asks for the engine key. Article 28.2 a) lists \"reversión no autorizada de la seudonimización\" among the risks a controller must weigh. And article 72.1 p) makes deliberately reversing an anonymization a very serious infringement.",
+        "On copies outside production the guidance is plain. The AEPD wrote on 18 April 2022, in \"Brechas de datos personales en entornos de desarrollo y preproducción\", that the use of personal data in development and pre-production environments should be avoided, that test data should be created artificially or derived from real data so that their structure is kept but no real personal data remain, and that where real data are strictly needed the decision must be documented with an analysis of necessity and proportionality. For the public sector and its suppliers it is a rule: the **Esquema Nacional de Seguridad** (Real Decreto 311/2022) requires in measure **mp.sw.1** that development be done on a system separate from production, \"ni datos de producción en el de desarrollo\", and in its reinforcement R4 that tests before a system is put in service \"preferiblemente\" not use real data — both for systems of medium and high category. A masked copy is how both are met."
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Direct identifiers",
+      "intro": [
+        "Data that identifies a person on its own. Spanish identifiers carry check characters — the letter of the DNI, the control digits of the Seguridad Social number and of the bank account, the control letters of the referencia catastral and of the CUPS — and every Spanish system validates them, so the set recomputes each one from the masked digits. The NIF of a company is no one's personal data and passes through untouched."
+      ],
+      "domains": [
+        "ES_L1_DNI",
+        "ES_L1_NIE",
+        "ES_L1_PASAPORTE",
+        "ES_L1_SOPORTE_DOCUMENTO",
+        "ES_L1_NSS",
+        "ES_L1_CODIGO_ESTUDIANTE",
+        "ES_L1_COLEGIADO",
+        "ES_L1_NOMBRE",
+        "ES_L1_APELLIDO",
+        "ES_L1_NOMBRE_COMPLETO",
+        "ES_L1_EMAIL",
+        "ES_L1_TELEFONO",
+        "ES_L1_DIRECCION",
+        "ES_L1_DIRECCION_COMPLEMENTO",
+        "ES_L1_CUENTA_BANCARIA",
+        "ES_L1_TARJETA",
+        "ES_L1_BILLETERA",
+        "ES_L1_IP",
+        "ES_L1_DISPOSITIVO",
+        "ES_L1_COOKIE",
+        "ES_L1_MATRICULA",
+        "ES_L1_VEHICULO",
+        "ES_L1_REFERENCIA_CATASTRAL",
+        "ES_L1_CUPS",
+        "ES_L1_CONTRATO",
+        "ES_L1_USUARIO",
+        "ES_L1_CREDENCIAL",
+        "ES_L1_IMAGEN",
+        "ES_L1_GEOLOCALIZACION",
+        "ES_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Quasi-identifiers",
+      "intro": [
+        "Data that identifies nobody alone and identifies almost anybody together. Recital 26 of the Regulation asks how identifiable a person is by \"all the means reasonably likely to be used\", singling out included — and a birth date, a sex and a small municipio are such means. These columns are not emptied — a test needs ages and places that behave — they are coarsened until a combination stops pointing at one person."
+      ],
+      "domains": [
+        "ES_L2_FECHA_NACIMIENTO",
+        "ES_L2_ANIO_NACIMIENTO",
+        "ES_L2_EDAD",
+        "ES_L2_FECHA_EVENTO",
+        "ES_L2_SEXO",
+        "ES_L2_MUNICIPIO",
+        "ES_L2_CODIGO_MUNICIPIO",
+        "ES_L2_CODIGO_POSTAL",
+        "ES_L2_NACIONALIDAD",
+        "ES_L2_SITUACION_ADMINISTRATIVA",
+        "ES_L2_ESTADO_CIVIL",
+        "ES_L2_OCUPACION",
+        "ES_L2_EMPLEADOR",
+        "ES_L2_NIVEL_EDUCATIVO",
+        "ES_L2_CENTRO_EDUCATIVO",
+        "ES_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Special categories (art. 9 RGPD and art. 9 LOPDGDD)",
+      "intro": [
+        "Article 9.1 of the Regulation prohibits processing these data unless one of the exceptions of article 9.2 applies, and article 9.1 of the LOPDGDD adds that, for ideology, trade union membership, religion, sexual orientation, beliefs and racial or ethnic origin, consent alone does not lift the prohibition \"a fin de evitar situaciones discriminatorias\". A test copy is none of those exceptions, and processing these data outside them is a very serious infringement (art. 72.1 e). Gender identity and the victims of gender violence join them because Spanish law protects them in their own right: Ley 15/2022 names \"identidad sexual\" and \"expresión de género\" among the grounds of discrimination, and Ley Orgánica 1/2004 the intimacy of the victims. Categorical columns are replaced within their own vocabulary, or suppressed outright."
+      ],
+      "domains": [
+        "ES_L3_ORIGEN_ETNICO",
+        "ES_L3_RELIGION",
+        "ES_L3_CONVICCION_FILOSOFICA",
+        "ES_L3_OPINION_POLITICA",
+        "ES_L3_AFILIACION_PARTIDARIA",
+        "ES_L3_AFILIACION_SINDICAL",
+        "ES_L3_BIOMETRICO",
+        "ES_L3_GENETICO",
+        "ES_L3_ORIENTACION_SEXUAL",
+        "ES_L3_VIDA_SEXUAL",
+        "ES_L3_IDENTIDAD_GENERO",
+        "ES_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Health data (art. 9 RGPD, Ley 41/2002 and DA 17 LOPDGDD)",
+      "intro": [
+        "Health is a special category of article 9, and the additional provision 17 of the LOPDGDD lists the laws under which it is processed — the Ley General de Sanidad, Ley 41/2002 on the autonomy of the patient, the laws on the National Health System, on biomedical research, on disability — none of them a test environment. Article 16.3 of Ley 41/2002 asks that any secondary access to the historia clínica keep the identifying data \"separados de los de carácter clinicoasistencial, de manera que, como regla general, quede asegurado el anonimato\". Ley 15/2022 adds \"enfermedad o condición de salud\" and \"estado serológico\" to the grounds of discrimination."
+      ],
+      "domains": [
+        "ES_SALUD_IDENTIFICADOR",
+        "ES_SALUD_COBERTURA",
+        "ES_SALUD_DIAGNOSTICO",
+        "ES_SALUD_PROCEDIMIENTO",
+        "ES_SALUD_MEDICAMENTO",
+        "ES_SALUD_TEXTO_CLINICO",
+        "ES_SALUD_RESULTADO_PRUEBA",
+        "ES_SALUD_VIH",
+        "ES_SALUD_GRUPO_SANGUINEO",
+        "ES_SALUD_DISCAPACIDAD",
+        "ES_SALUD_DEPENDENCIA",
+        "ES_SALUD_LABORAL",
+        "ES_SALUD_REPRODUCTIVA",
+        "ES_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Economic and tax data (art. 20 LOPDGDD and art. 95 LGT)",
+      "intro": [
+        "Article 20 of the LOPDGDD allows the common files of defaulters only for debts that are certain, due and payable, and only \"mientras persista el incumplimiento, con el límite máximo de cinco años\"; article 20.3 denies the presumption of lawfulness to any profile built by adding other sources. Article 95 of the **Ley General Tributaria** makes every datum the tax administration obtains \"reservado\". And Ley 15/2022 names the \"situación socioeconómica\" among the grounds of discrimination. Amounts keep their order of magnitude so that totals and ratios still behave; what they stop doing is naming a salary."
+      ],
+      "domains": [
+        "ES_FIN_HISTORIAL_CREDITICIO",
+        "ES_FIN_DEUDA",
+        "ES_FIN_INGRESOS",
+        "ES_FIN_PATRIMONIO",
+        "ES_FIN_PENSION",
+        "ES_FIN_PRESTACION_SOCIAL",
+        "ES_FIN_TRIBUTARIO"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Criminal and administrative offences (art. 10 RGPD, arts. 10 and 27 LOPDGDD)",
+      "intro": [
+        "Article 10 of the LOPDGDD allows data on criminal convictions and offences outside the authorities only where a law with the rank of law covers them, and article 27 does the same for administrative infringements and sanctions; processing either outside those rules is a very serious infringement (art. 72.1 f and g). Article 136 of the Código Penal cancels an entry in the Registro Central de Penados after a term that runs from six months to ten years, and article 136.4 says the entries \"no serán públicas\". A non-production copy keeps the entry for as long as the copy lives, which is longer than any of those terms."
+      ],
+      "domains": [
+        "ES_PENAL_ANTECEDENTES",
+        "ES_PENAL_DELITOS_SEXUALES",
+        "ES_PENAL_PROCEDIMIENTO",
+        "ES_PENAL_SANCION_ADMINISTRATIVA"
+      ]
+    }
+  ],
+  "domains": {
+    "ES_L1_DNI": {
+      "title": "DNI and NIF of a natural person",
+      "what": [
+        "The Documento Nacional de Identidad: eight digits and a letter, `12345678Z`, often written `12.345.678-Z`. The letter is the number **modulo 23**, read in the table `TRWAGMYFPDXBNJZSQVHLCKE`, and every Spanish form checks it. The DNI is also the NIF of its holder before the tax administration, so a NIF column of a natural person is this column.",
+        "The same domain takes what a document column holds beside DNIs: a NIE, the NIF of a natural person without DNI or NIE — **K** for a Spaniard under fourteen, **L** for a Spaniard resident abroad, **M** for a foreigner without NIE, seven digits and the letter of the seven digits —, the NIF of a company, a DNI stored without its letter and a passport."
+      ],
+      "masking": [
+        "The digits change and **the letter is recomputed**, so the masked value is a valid DNI that belongs to nobody. No framework writes a letter modulo 23, so a state of two digits — the remainder so far — is put in front of the value and crosses it one character at a time; each step is a Data Cleansing over a table of 299 lines that answers \"state + character\" with \"character + new state\", stepping over the dots, hyphens and spaces of the written forms. At the end a table of 46 lines turns the remainder into the letter, upper-case or lower-case as it was.",
+        "A NIE keeps its prefix and a K, L or M NIF its letter, each recomputed in the same chain. The **NIF of a company** — a letter such as A or B, seven digits and a control character — passes through untouched: article 4.1 of the Regulation reaches natural persons only, and its recital 14 says so of legal persons."
+      ]
+    },
+    "ES_L1_NIE": {
+      "title": "NIE",
+      "what": [
+        "The Número de Identidad de Extranjero the Policía assigns to every foreign national with interests in Spain: a prefix **X**, **Y** or **Z**, seven digits and a letter, `X1234567L`. The prefix counts as a digit — X is 0, Y is 1, Z is 2 — and the letter is that eight-digit number modulo 23, the same rule as the DNI. It is printed on the Tarjeta de Identidad de Extranjero and serves as NIF."
+      ],
+      "masking": [
+        "With the same chain as the DNI: the seven digits change, the prefix stays, and the letter is recomputed with the prefix counted in. A masked NIE is a valid NIE of the same series."
+      ]
+    },
+    "ES_L1_PASAPORTE": {
+      "title": "Passport",
+      "what": [
+        "The number of a passport: since 2006 the Spanish one is three letters and six digits, `PAA123456`; foreign passports take any shape."
+      ],
+      "masking": [
+        "Character by character: letters to letters, digits to digits, so the number keeps its shape."
+      ]
+    },
+    "ES_L1_SOPORTE_DOCUMENTO": {
+      "title": "Support number of the identity card",
+      "what": [
+        "The number printed on the card itself rather than the person — the IDESP of the DNI, three letters and six digits, or the support number of the Tarjeta de Identidad de Extranjero, `E12345678`. Banks, telecom operators and administrations ask for it to check that the holder has the document in hand, and it identifies the card as surely as the DNI identifies the person."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_NSS": {
+      "title": "Seguridad Social number",
+      "what": [
+        "The number the Tesorería General de la Seguridad Social gives a person the first time it registers them, kept for life: twelve digits, `28 12345678 40` — two for the province of the first registration, eight for the number and two **control digits**, the first ten read as one number modulo 97. A number whose eight digits start with a zero is an older one, and then the zero does not count."
+      ],
+      "masking": [
+        "The province stays and the eight digits change. The two control digits are **recomputed** by a state that crosses the ten digits with a table of 1,358 lines — 97 remainders by each digit and separator — and becomes the control digits itself; a leading zero is marked, stepped over and put back. The masked number is valid under the Seguridad Social rule and keeps its written form."
+      ]
+    },
+    "ES_L1_CODIGO_ESTUDIANTE": {
+      "title": "Student number",
+      "what": [
+        "The NIA a comunidad autónoma gives every pupil, and the student or record number of a university."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_COLEGIADO": {
+      "title": "Professional registration number",
+      "what": [
+        "The number of a member of a colegio profesional — doctors, lawyers, architects, psychologists — printed on prescriptions, reports and filings, and searchable in each colegio's public register."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_NOMBRE": {
+      "title": "Given name",
+      "what": [
+        "One or two given names — `María de los Ángeles`, `José Antonio`, `Jordi`, `Iñaki`."
+      ],
+      "masking": [
+        "Word by word from a list of the 600 given names the INE counts most often among the population of 1 January 2025 — Castilian, Catalan, Galician and Basque names alike —, with the case of the input. `de`, `la`, `los` and `y` stay where they are."
+      ]
+    },
+    "ES_L1_APELLIDO": {
+      "title": "Surname",
+      "what": [
+        "A Spaniard carries two surnames, the first and the second, in the order the parents chose since Ley 20/2011 on the Registro Civil. A column may hold one or both: `García`, `Fernández López`, `de la Fuente`."
+      ],
+      "masking": [
+        "Word by word from the 500 first surnames the INE counts most often, with the case of the input; particles stay."
+      ]
+    },
+    "ES_L1_NOMBRE_COMPLETO": {
+      "title": "Full name",
+      "what": [
+        "Given names and both surnames in one column, in the Spanish order — `José Antonio García Fernández` — or with the surnames first and a comma, `GARCÍA FERNÁNDEZ, JOSÉ ANTONIO`, as registers and lists write them."
+      ],
+      "masking": [
+        "Two words are a given name and a surname; three, a given name and two surnames; four, two and two. Each word is replaced from its own list, and the form with a comma is read as surnames, then names."
+      ]
+    },
+    "ES_L1_EMAIL": {
+      "title": "E-mail",
+      "what": [
+        "An e-mail address."
+      ],
+      "masking": [
+        "The name and the domain are mapped character by character, and the top-level domain becomes `.test`, reserved for tests: a masked address can never deliver a message."
+      ]
+    },
+    "ES_L1_TELEFONO": {
+      "title": "Telephone",
+      "what": [
+        "A Spanish number is nine digits: 6 and 7 for a mobile, 8 and 9 for a landline whose first digits are the province. With Bizum, a mobile number is a payment address as well."
+      ],
+      "masking": [
+        "The country code and the first digit stay, so a masked number still says mobile or landline; the other digits change, and spaces and hyphens stay where they were."
+      ]
+    },
+    "ES_L1_DIRECCION": {
+      "title": "Address",
+      "what": [
+        "A street address: type of street, name, number, floor and door — `Calle Mayor, 12, 3º B`, `Avda. de la Constitución 45, bajo`, `Carrer de Sant Pere, 14`."
+      ],
+      "masking": [
+        "The whole line becomes a fictitious one from a list of 4,000 — calle, avenida, plaza, paseo, and the carrer, rúa and kalea of the other official languages — always the same one for the same input. Municipio and postal code are separate columns and are generalized there."
+      ]
+    },
+    "ES_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Address complement",
+      "what": [
+        "Floor, door, staircase, block, portal, the name of an urbanización, a post-office box: what narrows an address to one home."
+      ],
+      "masking": [
+        "Character by character, keeping its shape: `3º B` stays a floor and a letter."
+      ]
+    },
+    "ES_L1_CUENTA_BANCARIA": {
+      "title": "Bank account (IBAN and CCC)",
+      "what": [
+        "A Spanish account is twenty digits, the Código Cuenta Cliente: four for the bank, four for the branch, **two control digits** and ten for the account, `2100 0418 45 0200051332`. The first control digit checks bank and branch, the second the account, each a weighted sum modulo 11. The IBAN puts `ES` and **two more control digits** in front, those of ISO 13616, modulo 97: `ES91 2100 0418 4502 0005 1332`."
+      ],
+      "masking": [
+        "The ten digits of the account change; bank, branch and the first control digit stay valid. In an IBAN the plugin's IBAN algorithm masks the account and recomputes the IBAN digits — but not the second control digit, which no foreign IBAN has. The set then recomputes that digit with a state that crosses the account from right to left, carries the old and the new digit to the front, and corrects the IBAN digits for the change from a table of 10,000 lines. Compact or printed in groups of four, the masked IBAN passes both checks; a CCC alone gets its second digit recomputed the same way."
+      ]
+    },
+    "ES_L1_TARJETA": {
+      "title": "Payment card",
+      "what": [
+        "The number of a credit or debit card."
+      ],
+      "masking": [
+        "Replaced by another number that passes the Luhn check, keeping its length and separators."
+      ]
+    },
+    "ES_L1_BILLETERA": {
+      "title": "Digital wallet",
+      "what": [
+        "The identifier of an electronic or crypto wallet."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_IP": {
+      "title": "IP address",
+      "what": [
+        "An IPv4 or IPv6 address. The Court of Justice held in Breyer (C‑582/14) that a dynamic IP address is personal data for a provider who can lawfully obtain the means to identify the subscriber."
+      ],
+      "masking": [
+        "Each IPv4 octet becomes a number from 1 to 254; an IPv6 address is mapped character by character, staying hexadecimal."
+      ]
+    },
+    "ES_L1_DISPOSITIVO": {
+      "title": "Device identifier",
+      "what": [
+        "MAC address, IMEI, IMSI, advertising identifier, session identifier."
+      ],
+      "masking": [
+        "Character by character with hexadecimal letters in their own group, so a MAC stays a MAC; digits stay digits."
+      ]
+    },
+    "ES_L1_COOKIE": {
+      "title": "Cookie and tracking identifier",
+      "what": [
+        "The value of a cookie or a tracking identifier. Article 22.2 of the Ley 34/2002 de servicios de la sociedad de la información subjects them to consent, and the AEPD's guide on cookies treats them as personal data."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_MATRICULA": {
+      "title": "Vehicle plate",
+      "what": [
+        "Since September 2000 a Spanish plate is four digits and three consonants, `1234 BCD` — no vowels, and neither Ñ nor Q. The older provincial plates carry the province, `M-1234-AB`, and special plates a prefix, `E` for works vehicles, `C` for mopeds."
+      ],
+      "masking": [
+        "The digits change, and the letters of the current series change **inside the alphabet the Dirección General de Tráfico uses**, so a masked plate is still a plate. The province and the prefix stay."
+      ]
+    },
+    "ES_L1_VEHICULO": {
+      "title": "Vehicle identification",
+      "what": [
+        "The frame number (VIN, bastidor) and the numbers of the registration and inspection documents."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_REFERENCIA_CATASTRAL": {
+      "title": "Referencia catastral",
+      "what": [
+        "The twenty characters the Catastro gives every property: for an urban one, seven digits for the block and parcel and seven for the map sheet, `9872023 VH5797S`; for a rural one, the municipio, the sector, the polígono and the parcel; then four digits for the unit inside it and **two control letters**. Each letter is a weighted sum of eleven characters modulo 23. Article 51 of the Texto Refundido de la Ley del Catastro Inmobiliario makes the holder of a property a protected datum, and the reference beside a person's name is that link."
+      ],
+      "masking": [
+        "The digits that name the parcel change — the first seven of an urban reference, the five of the parcel of a rural one — and the map sheet or the polígono stay, which say where the property is no more precisely than a district. Only one control letter depends on what changed, and it is **recomputed** by a state that crosses the reference with the weight of each position, carried over the characters that do not count. A reference written in groups, or only the fourteen characters of the parcel, gets its parcel digits changed without the letters."
+      ]
+    },
+    "ES_L1_CUPS": {
+      "title": "CUPS (supply point)",
+      "what": [
+        "The Código Universal del Punto de Suministro of an electricity or gas supply: `ES`, four digits for the distributor, twelve for the point and **two control letters** — the sixteen digits modulo 529, divided by 23 and read in the table of the DNI — sometimes followed by `0F`. A CUPS names a home: the bill, the consumption curve of the smart meter and the social bonus all hang from it."
+      ],
+      "masking": [
+        "The distributor stays, the twelve digits change, and the two letters are **recomputed** by a state of three digits that crosses the value with a table of 6,877 lines. A suffix stays."
+      ]
+    },
+    "ES_L1_CONTRATO": {
+      "title": "Contract and customer number",
+      "what": [
+        "Numbers of contract, policy, loan, customer, subscriber, claim or employee — each one a key to one person in its own system."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_USUARIO": {
+      "title": "User name and social profile",
+      "what": [
+        "A login, an alias, a profile on a social network."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_L1_CREDENCIAL": {
+      "title": "Credential",
+      "what": [
+        "Passwords and their hashes, PINs, security codes, tokens, API keys, the Cl@ve PIN, answers to security questions."
+      ],
+      "masking": [
+        "Every character becomes `X`. A credential is never useful in a copy, and a hash of a real password can be attacked offline."
+      ]
+    },
+    "ES_L1_IMAGEN": {
+      "title": "Image and voice",
+      "what": [
+        "Photographs, the image of an identity document, video surveillance, recorded calls — or the path to them. The image of a person is a fundamental right in article 18.1 of the Constitution and Ley Orgánica 1/1982, and the LOPDGDD gives video surveillance its own article 22."
+      ],
+      "masking": [
+        "Every character becomes `X`, so a path or a reference no longer leads to the file."
+      ]
+    },
+    "ES_L1_GEOLOCALIZACION": {
+      "title": "Geolocation",
+      "what": [
+        "Latitude and longitude, alone or as a pair. Article 90 of the LOPDGDD regulates the geolocation of workers."
+      ],
+      "masking": [
+        "The integer part and the first decimal stay — about 11 km — and the other decimals change: the place is blurred, not moved to another region."
+      ]
+    },
+    "ES_L1_TEXTO_LIBRE": {
+      "title": "Free text",
+      "what": [
+        "Observations, comments, descriptions of a complaint or an incident: text where anything may have been typed."
+      ],
+      "masking": [
+        "Free Text Redaction replaces DNIs, NIEs, e-mails, phones, cards, IBANs and CCCs, Seguridad Social numbers and IP addresses with `[DATO]`, and the 1,100 given names and surnames of the set with `[NOMBRE]`."
+      ]
+    },
+    "ES_L2_FECHA_NACIMIENTO": {
+      "title": "Birth date",
+      "what": [
+        "The birth date — with sex and municipio, the combination that singles people out."
+      ],
+      "masking": [
+        "Shifted by up to 60 days either way, the same shift for the same date: ages and generations stay, the link to a register goes."
+      ]
+    },
+    "ES_L2_ANIO_NACIMIENTO": {
+      "title": "Year of birth",
+      "what": [
+        "The year alone."
+      ],
+      "masking": [
+        "The decade stays and the last digit changes: 1985 becomes 198x."
+      ]
+    },
+    "ES_L2_EDAD": {
+      "title": "Age",
+      "what": [
+        "An age in years."
+      ],
+      "masking": [
+        "The decade stays and the last digit changes; 100 and over becomes 90, because a centenarian is rare enough to be found."
+      ]
+    },
+    "ES_L2_FECHA_EVENTO": {
+      "title": "Date of a life event",
+      "what": [
+        "Dates of death, marriage, hiring and dismissal, admission and discharge, sick leave, arrest and sentence, issue and expiry of a document."
+      ],
+      "masking": [
+        "Shifted by up to 30 days either way."
+      ]
+    },
+    "ES_L2_SEXO": {
+      "title": "Sex",
+      "what": [
+        "Sex as registered: H/M, V/M, Hombre/Mujer, Femenino/Masculino, 1/2, and the Catalan Home/Dona."
+      ],
+      "masking": [
+        "Replaced within its own vocabulary: an `H/M` column stays `H/M`. A single `M` is read as mujer, the convention of the Spanish administration; a column that codes sex F/M, as the machine-readable zone of the DNI does, should get an algorithm of its own."
+      ]
+    },
+    "ES_L2_MUNICIPIO": {
+      "title": "Municipio",
+      "what": [
+        "The municipio of residence, birth or registration — `Valdelageve`, `Alacant`, `La Guijarrosa` —, as the INE writes it, with the article in front or behind, in any official language, or with its province beside it."
+      ],
+      "masking": [
+        "A municipio of fewer than 20,000 inhabitants becomes the **nearest municipio of at least 20,000 in the same province**; a larger one stays, and so do the province and the comunidad. A name is generalized only when every municipio that bears it is small; written with its province, the same rule applies inside it and the province stays."
+      ]
+    },
+    "ES_L2_CODIGO_MUNICIPIO": {
+      "title": "INE code of the municipio",
+      "what": [
+        "The code of the Instituto Nacional de Estadística: two digits for the province and three for the municipio, `37334`, often followed by its check digit."
+      ],
+      "masking": [
+        "The code of a small municipio becomes the code of the municipio its name goes to, with that municipio's own check digit, so a masked code agrees with the masked name and never leaves its province."
+      ]
+    },
+    "ES_L2_CODIGO_POSTAL": {
+      "title": "Postal code",
+      "what": [
+        "Five digits, the first two the province. A postal code of a rural area may cover a single village of a few dozen people."
+      ],
+      "masking": [
+        "A postal code whose main municipio is small becomes the main postal code of the municipio it is generalized to; a code of a large municipio stays. The province digits never change."
+      ]
+    },
+    "ES_L2_NACIONALIDAD": {
+      "title": "Nationality",
+      "what": [
+        "Nationality or country of birth. It is not a special category of article 9, but Ley 15/2022 forbids discrimination \"con independencia de su nacionalidad\", and in a small place a nationality points at a few families."
+      ],
+      "masking": [
+        "Replaced by one of the 27 nationalities most frequent in Spain."
+      ]
+    },
+    "ES_L2_SITUACION_ADMINISTRATIVA": {
+      "title": "Residence status",
+      "what": [
+        "The status of a foreign national under the Ley Orgánica 4/2000 de extranjería: temporary or long-term residence, a family member of an EU citizen, an applicant for international protection, a refugee, arraigo, irregular. Ley 15/2022 forbids discrimination whether a person \"disfruta o no de residencia legal\"."
+      ],
+      "masking": [
+        "Replaced within a list of statuses; yes/no flags stay flags."
+      ]
+    },
+    "ES_L2_ESTADO_CIVIL": {
+      "title": "Marital status",
+      "what": [
+        "Marital status, including the pareja de hecho of the regional registers."
+      ],
+      "masking": [
+        "Replaced within its vocabulary; a numeric code by another code."
+      ]
+    },
+    "ES_L2_OCUPACION": {
+      "title": "Occupation",
+      "what": [
+        "Profession, job title, occupational category, or its code in the Clasificación Nacional de Ocupaciones (CNO-11)."
+      ],
+      "masking": [
+        "Replaced from a list of common occupations; a CNO code gets other digits."
+      ]
+    },
+    "ES_L2_EMPLEADOR": {
+      "title": "Employer",
+      "what": [
+        "The name of the company a person works for — in a small town, one employer may be enough to tell who someone is."
+      ],
+      "masking": [
+        "Replaced by a fictitious company."
+      ]
+    },
+    "ES_L2_NIVEL_EDUCATIVO": {
+      "title": "Level of education",
+      "what": [
+        "The highest level of studies, from no studies to a doctorate, or its code."
+      ],
+      "masking": [
+        "Replaced within its vocabulary; a numeric code by another code."
+      ]
+    },
+    "ES_L2_CENTRO_EDUCATIVO": {
+      "title": "School or university",
+      "what": [
+        "The school, institute or university a person attends or attended."
+      ],
+      "masking": [
+        "Replaced by one of a list of centres."
+      ]
+    },
+    "ES_L2_PERSONAS_A_CARGO": {
+      "title": "Dependants",
+      "what": [
+        "Number of children or dependants, members of the household. Three children make a familia numerosa, and a large count is rare."
+      ],
+      "masking": [
+        "Counts from 0 to 5 stay; anything above becomes 5."
+      ]
+    },
+    "ES_L3_ORIGEN_ETNICO": {
+      "title": "Racial or ethnic origin",
+      "what": [
+        "Self-identified ethnic origin, belonging to the pueblo gitano. Spain does not ask it in the census, but surveys, social services and equality plans do. Article 9.1 of the LOPDGDD makes consent alone insufficient to process data whose main purpose is to identify it."
+      ],
+      "masking": [
+        "Replaced within a list of categories; a numeric code by another code; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_L3_RELIGION": {
+      "title": "Religion",
+      "what": [
+        "Religious belief or denomination — including the choice of religion class at school and the assignment of tax to the Catholic Church in the income tax return."
+      ],
+      "masking": [
+        "Replaced within a list of religions; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_L3_CONVICCION_FILOSOFICA": {
+      "title": "Philosophical beliefs",
+      "what": [
+        "Philosophical or moral beliefs, conscientious objection — of a health professional to abortion or euthanasia, for instance, which Ley Orgánica 3/2021 records in a register of objectors."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`: the values share no vocabulary that could be kept."
+      ]
+    },
+    "ES_L3_OPINION_POLITICA": {
+      "title": "Political opinion",
+      "what": [
+        "Ideology, self-placement on the left-right scale of 1 to 10 the CIS uses, voting intention or recall."
+      ],
+      "masking": [
+        "Replaced within a list of positions; a value of the scale by another value of the scale."
+      ]
+    },
+    "ES_L3_AFILIACION_PARTIDARIA": {
+      "title": "Party membership",
+      "what": [
+        "Membership of a political party, a member's fee, militancy."
+      ],
+      "masking": [
+        "Replaced by another party of the Spanish parliamentary spectrum; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_L3_AFILIACION_SINDICAL": {
+      "title": "Trade union membership",
+      "what": [
+        "Membership of a union, the union dues the payroll deducts, union delegates and works councils, union time off."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_L3_BIOMETRICO": {
+      "title": "Biometric data",
+      "what": [
+        "Fingerprint and face templates, voice prints, digitized handwritten signatures: \"biometric data for the purpose of uniquely identifying a natural person\", in the words of article 9.1."
+      ],
+      "masking": [
+        "Every character becomes `X`. A biometric template cannot be masked into another valid one, and a real one should never reach a copy."
+      ]
+    },
+    "ES_L3_GENETICO": {
+      "title": "Genetic data",
+      "what": [
+        "DNA profiles, genetic tests, mutations such as BRCA, newborn screening."
+      ],
+      "masking": [
+        "Every character becomes `X`."
+      ]
+    },
+    "ES_L3_ORIENTACION_SEXUAL": {
+      "title": "Sexual orientation",
+      "what": [
+        "Sexual orientation, as recorded in surveys, equality plans or health records."
+      ],
+      "masking": [
+        "Replaced within a list of orientations."
+      ]
+    },
+    "ES_L3_VIDA_SEXUAL": {
+      "title": "Sex life",
+      "what": [
+        "Data concerning a person's sex life: activity, partners, practices."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_L3_IDENTIDAD_GENERO": {
+      "title": "Gender identity",
+      "what": [
+        "Gender identity and expression, the name a person goes by, a registry rectification of sex. Ley 4/2023 lets a person rectify the sex registered in the Registro Civil by their own declaration, and Ley 15/2022 names \"identidad sexual\" and \"expresión de género\" among the grounds of discrimination."
+      ],
+      "masking": [
+        "Replaced within a list of identities."
+      ]
+    },
+    "ES_L3_VICTIMA": {
+      "title": "Victims of gender and sexual violence",
+      "what": [
+        "Whether a person is a victim of gender violence, domestic or sexual violence or trafficking; protection orders; the VioGén and ATENPRO systems. Article 63 of Ley Orgánica 1/2004 protects the intimacy of the victims and their personal data, and Ley Orgánica 10/2022 extends the protection to the victims of sexual violence."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_SALUD_IDENTIFICADOR": {
+      "title": "Health identifiers",
+      "what": [
+        "The number of the historia clínica, of an episode or an appointment, and the personal code of the health card — the CIP-SNS of the Sistema Nacional de Salud, four letters and twelve digits, and the codes of each comunidad, such as the NUHSA of Andalusia."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_SALUD_COBERTURA": {
+      "title": "Health coverage",
+      "what": [
+        "Who covers a person's health care: the Seguridad Social as holder or beneficiary, the civil-service mutual funds MUFACE, ISFAS and MUGEJU, a mutual insurer, a private insurer. A mutual fund says what a person works as."
+      ],
+      "masking": [
+        "Replaced within a list of coverages; a numeric code gets other digits."
+      ]
+    },
+    "ES_SALUD_DIAGNOSTICO": {
+      "title": "Diagnosis",
+      "what": [
+        "Diagnosis, illness, allergy or cause of death, as text or coded in **CIE-10-ES**, the Spanish edition of ICD-10 in use since 2016: `F33.1`, `E11.9`."
+      ],
+      "masking": [
+        "A code becomes another code of the same form from a list of common diagnoses; a text becomes another diagnosis; a flag stays a flag."
+      ]
+    },
+    "ES_SALUD_PROCEDIMIENTO": {
+      "title": "Medical procedure",
+      "what": [
+        "Procedure, test or surgery, as text or coded in CIE-10-ES Procedimientos — seven characters, `0DTJ4ZZ`."
+      ],
+      "masking": [
+        "A seven-character code is mapped character by character, keeping its shape; a numeric code gets other digits; a text becomes another procedure."
+      ]
+    },
+    "ES_SALUD_MEDICAMENTO": {
+      "title": "Medicine",
+      "what": [
+        "A prescribed or dispensed medicine. A medicine reveals the illness behind it: an antiretroviral, an antipsychotic, methadone."
+      ],
+      "masking": [
+        "Replaced by a common medicine of no particular meaning — paracetamol, omeprazol, enalapril."
+      ]
+    },
+    "ES_SALUD_TEXTO_CLINICO": {
+      "title": "Clinical text",
+      "what": [
+        "Anamnesis, clinical course, discharge reports, nursing notes: the free text of the historia clínica."
+      ],
+      "masking": [
+        "Free Text Redaction, as for any free text: identifiers, contact and names are replaced. The clinical content stays — redact or replace the whole column where the content itself is the risk."
+      ]
+    },
+    "ES_SALUD_RESULTADO_PRUEBA": {
+      "title": "Test result",
+      "what": [
+        "The result of an analysis or a test: glucose, cholesterol, a PCR, a pregnancy test."
+      ],
+      "masking": [
+        "Character by character, keeping its shape."
+      ]
+    },
+    "ES_SALUD_VIH": {
+      "title": "HIV and sexually transmitted infections",
+      "what": [
+        "HIV status, viral load, antiretroviral treatment and PrEP, other sexually transmitted infections, hepatitis and tuberculosis. Ley 15/2022 names the \"estado serológico\" among the grounds of discrimination."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_SALUD_GRUPO_SANGUINEO": {
+      "title": "Blood group",
+      "what": [
+        "Blood group and Rh factor."
+      ],
+      "masking": [
+        "Replaced by another of the eight groups."
+      ]
+    },
+    "ES_SALUD_DISCAPACIDAD": {
+      "title": "Disability",
+      "what": [
+        "Type and degree of disability. A degree of 33% opens the protection of the Real Decreto Legislativo 1/2013, under the scale of Real Decreto 888/2022."
+      ],
+      "masking": [
+        "Replaced within a list of types; a degree gets other digits; a flag stays a flag."
+      ]
+    },
+    "ES_SALUD_DEPENDENCIA": {
+      "title": "Dependency",
+      "what": [
+        "The grade of dependency under Ley 39/2006 — I moderate, II severe, III great dependency —, the individual care programme and the benefits that follow from it."
+      ],
+      "masking": [
+        "Replaced within the grades; a numeric grade by another grade."
+      ]
+    },
+    "ES_SALUD_LABORAL": {
+      "title": "Occupational health",
+      "what": [
+        "Fitness for work, the medical examinations of the company's health surveillance, sick leave, work accidents and occupational diseases. Article 22.4 of Ley 31/1995 de prevención de riesgos laborales keeps the results of that surveillance from the employer, except as fit or unfit."
+      ],
+      "masking": [
+        "Replaced within a list of fitness results; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_SALUD_REPRODUCTIVA": {
+      "title": "Reproductive health",
+      "what": [
+        "Pregnancy, childbirth, contraception, assisted reproduction and the voluntary interruption of pregnancy of Ley Orgánica 2/2010."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_SALUD_MENTAL": {
+      "title": "Mental health",
+      "what": [
+        "Mental disorders, psychiatric care, suicidal behaviour, addictions and their treatment."
+      ],
+      "masking": [
+        "Suppressed to `Sin información`."
+      ]
+    },
+    "ES_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Credit history",
+      "what": [
+        "Being in a file of defaulters — ASNEF, Badexcug — or in the Central de Información de Riesgos of the Banco de España, a credit score, days past due. Article 20 of the LOPDGDD lets those files keep a debt for five years at most."
+      ],
+      "masking": [
+        "Replaced within a list of credit situations; a score gets other digits; a flag stays a flag."
+      ]
+    },
+    "ES_FIN_DEUDA": {
+      "title": "Debt",
+      "what": [
+        "Outstanding balance, loan or mortgage amount, monthly instalment, credit limit, attachment."
+      ],
+      "masking": [
+        "Replaced by another amount between 100 and 600,000 euros."
+      ]
+    },
+    "ES_FIN_INGRESOS": {
+      "title": "Income",
+      "what": [
+        "Salary, payslip, income of the household, earnings from work or capital."
+      ],
+      "masking": [
+        "Replaced by another amount between 1,000 and 120,000 euros."
+      ]
+    },
+    "ES_FIN_PATRIMONIO": {
+      "title": "Assets",
+      "what": [
+        "Cadastral or appraised value of a property, account and investment balances, pension plans."
+      ],
+      "masking": [
+        "Replaced by another amount between 1,000 and 3,000,000 euros."
+      ]
+    },
+    "ES_FIN_PENSION": {
+      "title": "Pension",
+      "what": [
+        "The amount of a retirement, widow's, orphan's, disability or non-contributory pension, or of maintenance."
+      ],
+      "masking": [
+        "Replaced by another amount between 500 and 3,400 euros a month — the range of the public pensions."
+      ]
+    },
+    "ES_FIN_PRESTACION_SOCIAL": {
+      "title": "Social benefits",
+      "what": [
+        "The Ingreso Mínimo Vital, unemployment benefit and subsidy, the minimum income of each comunidad, non-contributory pensions, the social bonus for electricity, grants. Each one says a household is poor, and Ley 15/2022 names the \"situación socioeconómica\" among the grounds of discrimination."
+      ],
+      "masking": [
+        "Replaced within a list of benefits; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_FIN_TRIBUTARIO": {
+      "title": "Tax data",
+      "what": [
+        "Tax base, tax due, the result of an income tax return, withholdings, the wealth tax. Article 95 of the Ley General Tributaria makes every datum the tax administration obtains \"reservado\", to be used only to apply the taxes."
+      ],
+      "masking": [
+        "Replaced by another amount up to 250,000 euros; the sign of a refund and the cents stay."
+      ]
+    },
+    "ES_PENAL_ANTECEDENTES": {
+      "title": "Criminal records",
+      "what": [
+        "Criminal records, convictions, offences, procedural and penitentiary situation, precautionary measures."
+      ],
+      "masking": [
+        "Replaced within a list of situations; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_PENAL_DELITOS_SEXUALES": {
+      "title": "Certificate of the register of sex offenders",
+      "what": [
+        "Article 57 of Ley Orgánica 8/2021 (LOPIVI) requires anyone working with minors to present a negative certificate of the Registro Central de Delincuentes Sexuales y de Trata de Seres Humanos, so schools, clubs and companies keep a column for it — and its value is a criminal-record datum."
+      ],
+      "masking": [
+        "Replaced within a list of certificate states; a yes/no flag stays a flag."
+      ]
+    },
+    "ES_PENAL_PROCEDIMIENTO": {
+      "title": "Court case number",
+      "what": [
+        "The NIG — the general identification number of a procedure, printed in groups, `28079 43 2 2023 0012345` — and the number of the case in its court, `PA 123/2023`. Court decisions are published by the CENDOJ with the parties anonymized; the number is what links them back."
+      ],
+      "masking": [
+        "The correlative changes; the code of the court seat, the jurisdiction and the year stay."
+      ]
+    },
+    "ES_PENAL_SANCION_ADMINISTRATIVA": {
+      "title": "Administrative sanctions",
+      "what": [
+        "Administrative infringements and sanctions — fines, sanctioning files, the points of a driving licence. Article 27 of the LOPDGDD reserves them to the authority that imposes them, and processing them outside that rule is a very serious infringement (art. 72.1 g)."
+      ],
+      "masking": [
+        "Replaced within a list of sanction states; a number of points gets other digits; a flag stays a flag."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Check characters computed by lookup tables",
+      "body": [
+        "Spain validates almost every identifier by arithmetic. The letter of the DNI and the NIE is the number modulo 23; the control digits of the Seguridad Social number are the number modulo 97; the bank account carries two control digits modulo 11 and the IBAN two more modulo 97; the referencia catastral carries two letters, each a weighted sum modulo 23; the CUPS carries two letters, the number modulo 529. A masked value whose check characters were not recomputed is rejected by every form, every bank and every utility that receives it — which is exactly what a test needs to avoid.",
+        "No masking framework writes a letter, or two digits, or a remainder modulo 23, 97 or 529. Check Digit writes one digit. So the set computes them with tables. A **state** — the remainder so far, written with as many digits as the modulus needs — is put in front of the value and travels through it one character at a time. Each step is a Regex Decompose that hands three or four characters, \"state + next character\", to a Data Cleansing whose table answers \"next character + new state\". Separators and characters that do not count are stepped over by lines that carry the state unchanged. At the end a last table turns the remainder into the check characters, upper-case or lower-case as the input was.",
+        "The tables are small — 299 lines for the DNI, 1,358 for the Seguridad Social, 6,877 for the CUPS, eleven of 230 lines for the weights of the referencia catastral —, and a step that finds no line for its window leaves the value as it is, so one chain serves every written form: a DNI with or without dots and hyphen, a Seguridad Social number with or without slashes, a CUPS with or without spaces.",
+        "The bank account takes a different route. The plugin's IBAN algorithm masks the last characters of an IBAN and recomputes its two ISO 13616 digits, but it does not know the second control digit of the Spanish account, which sits between the branch and the account. The set lets the IBAN algorithm mask the account, recomputes that control digit with a state that crosses the account from right to left, carries the old and the new digit to the front as a pair, and corrects the IBAN digits for the change with a table of 10,000 lines: the second digit weighs 10¹⁶ in the number the IBAN checks, so the correction is (new − old) · 10¹⁶ modulo 97. Bank, branch and first control digit stay, and the result passes both checks."
+      ]
+    },
+    {
+      "title": "Where people live: municipios, INE codes and postal codes",
+      "body": [
+        "Spain is divided into 17 comunidades autónomas and 2 ciudades autónomas, 50 provinces and **8,132 municipios**, and the municipios are small: on the Padrón of 1 January 2025, **7,700 of them had fewer than 20,000 inhabitants** — 14.5 million people, almost a third of the 49.1 million of the country — and more than half have fewer than 1,000. A birth date, a sex and one of those municipios point at a handful of neighbours.",
+        "The threshold of 20,000 is the INE's own: when it published the microdata of the 2011 census it recoded the province and municipio of every person living in a municipio of fewer than 20,000 inhabitants, \"para preservar el secreto estadístico\". The 2021 census, published as a 10% sample, recoded below 10,000; a masked copy holds every row of the database, not a sample, so the stricter figure is the one that fits.",
+        "So a municipio below the threshold becomes the **nearest municipio of at least 20,000 in the same province**, measured between their centres; every province has one — its capital at least — so a generalized value never leaves its province, and the province and the comunidad are never rewritten. The islands follow the rule too: a small municipio of La Gomera or El Hierro goes to the nearest large one of its province, on another island.",
+        "Spanish municipio names come in many spellings: the INE writes the article behind, `Guijarrosa, La`, and gives the names of the bilingual comunidades in both languages, `Alacant/Alicante`, `Donostia/San Sebastián`; systems write `La Coruña` for `A Coruña` or `Gerona` for `Girona`. The table carries every one of those spellings, in capitals and without accents as well, and the forms with the province beside them — `Villanueva (Toledo)`, `Villanueva, Toledo` — 68,972 lines in all. A name is generalized only when **every** municipio, province or comunidad that bears it is small; written with its province, the same rule applies inside it.",
+        "The codes follow the names. The INE code of a small municipio — two digits for the province, three for the municipio, with or without its check digit — becomes the code of the municipio its name goes to, with that municipio's own check digit. The postal code follows the municipio it mostly serves, by the street segments of the INE's **Callejero del Censo Electoral** of July 2026: a code whose main municipio is small becomes the main code of the municipio it is generalized to — 8,638 of 10,790 codes — so a masked postal code agrees with the masked municipio beside it and keeps the two digits of its province."
+      ]
+    },
+    {
+      "title": "Limits",
+      "body": [
+        {
+          "list": [
+            "**Masking with a key is pseudonymization, not anonymization.** Whoever holds the key and the production data can reproduce the mapping, so the masked copy is still personal data for them and still needs the measures of article 32 of the Regulation. Keep the key apart from the copy — the separation the additional provision 17 of the LOPDGDD asks for research — and do not call the copy anonymous while the key exists.",
+            "**Blocked data must not be copied.** Article 32 of the LOPDGDD forbids processing blocked data for any purpose other than making them available to courts and authorities, and failing to block is a very serious infringement. Masking a blocked row does not make copying it lawful: leave blocked rows out of the copy, or keep them out of the subset the job reads.",
+            "**The populations are those of the Padrón of 1 January 2025.** A municipio within a few hundred inhabitants of 20,000 may cross the line with the next revision; rebuild the set when the INE publishes it.",
+            "**A postal code can span more than one municipio.** The set follows the municipio with most street segments; a code of a large town that also serves small villages around it is kept, and with it the hint that a person lives in one of them.",
+            "**Data Cleansing leaves unknown values as they are.** A municipio spelled in a way that is not in the table — an old name, a typo, the name of a hamlet instead of its municipio — passes unchanged. The entidades singulares de población below the municipio are not in the table.",
+            "**Bank and branch are preserved.** They are not personal data, and keeping them keeps a test account inside a real bank; but the branch can tell a town. Mask the branch with its own rule where that matters.",
+            "**The control letters of a referencia catastral are recomputed only in its compact form.** Written in groups, or cut to the fourteen characters of the parcel, the parcel digits change but the letters are left as they were.",
+            "**A single M is read as mujer.** That is the convention of the Spanish administration (H/M, V/M); a column that codes sex F/M, as the machine-readable zone of the DNI does, would get H instead of M in some rows and should have an algorithm of its own.",
+            "**Free text** is redacted word by word: Free Text Redaction splits on whitespace, so a phone written `612 34 56 78` is reached in pieces and not as one number. The patterns of the set are the compact forms.",
+            "**Children**: a birth date moves at most 60 days, so few people cross their 14th birthday — the age of digital consent in Spain under article 7 of the LOPDGDD — or their 18th; but some do. Split the rule by age group with Multi-Column Condition where that matters.",
+            "**Binary columns and attachments are out of reach.** A scanned DNI, a photograph, a PDF of a medical report keeps everything the columns beside it no longer say. Inventory them and report them as residual risk.",
+            "**Discovery is a proposal, not a verdict.** The classifiers read column names and values; a column with a name nobody recognizes may be missed, and one named like a person may be caught by mistake. Review the inventory before running a masking job."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verification",
+      "body": [
+        "The set is checked on every build. Each chain that computes a check character is first run in the build itself with the masking taken as the identity, and must hand a valid example back unchanged — the DNI `12345678Z`, the Seguridad Social number `28 12345678 40`, the IBAN `ES91 2100 0418 4502 0005 1332`, the referencia catastral `9872023VH5797S0001WX` and the CUPS `ES1234123456789012JY`.",
+        "The 147 classifier configurations are reviewed one by one, and a battery of 159 columns — well named, badly named, named in Catalan, Galician or Basque, and 31 that are not personal data at all, among them the NIF of a company — is profiled with the whole set at its threshold of 60 and again with the essential pack alone: every column lands where it should, and none of the 31 is claimed.",
+        "The generalization is audited offline: all 8,132 municipios, all 10,790 postal codes and all 52 provinces are checked against the rule, and every one of the 68,972 replacements the table writes names a municipio of at least 20,000 — in the same province whenever the province is written.",
+        "The masking is run for real, in the plugin: 797 values across every domain — samples, placeholders and each algorithm's own sample input — every one checked against what it should become. Then in bulk: 250 DNIs (50 of them written with dots), 100 NIEs, 200 Seguridad Social numbers, 200 IBANs — one hundred compact and one hundred printed in groups of four —, 100 CCCs, 150 referencias catastrales and 100 CUPS give as many distinct outputs, **every one valid under its own rule**, of the same shape, and keeping what it should keep: the prefix of a NIE, the province of a Seguridad Social number, bank and branch, the map sheet or the polígono, the distributor."
+      ]
+    },
+    {
+      "title": "Sources",
+      "body": [
+        {
+          "list": [
+            "Regulation (EU) 2016/679, General Data Protection Regulation: articles 4, 6, 9, 10, 25, 32, 83 and 89, and recitals 14, 26, 28 and 29.",
+            "Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales, consolidated text of the BOE as last amended by Ley 10/2025 of 26 December: articles 7, 9, 10, 20, 22, 27, 28, 32, 72 to 76 and 90, and additional provision 17.",
+            "Court of Justice of the European Union, judgment of 4 September 2025, EDPS v SRB, C‑413/23 P; judgment of 19 October 2016, Breyer, C‑582/14. European Data Protection Board, Guidelines 01/2025 on pseudonymisation, adopted 16 January 2025.",
+            "Agencia Española de Protección de Datos: \"Brechas de datos personales en entornos de desarrollo y preproducción\" (18 April 2022); Orientaciones y garantías en los procedimientos de anonimización de datos personales; La K-anonimidad como medida de la privacidad; Introducción al hash como técnica de seudonimización de datos personales.",
+            "Real Decreto 311/2022, Esquema Nacional de Seguridad: measure mp.sw.1 and its reinforcement R4; article 2.3.",
+            "Ley 41/2002 de autonomía del paciente, article 16.3; Ley 31/1995 de prevención de riesgos laborales, article 22.4; Ley 39/2006 de dependencia; Real Decreto Legislativo 1/2013 and Real Decreto 888/2022 on disability; Ley Orgánica 2/2010; Ley 15/2022 integral para la igualdad de trato y la no discriminación, article 2.1; Ley 4/2023; Ley Orgánica 1/2004, article 63; Ley Orgánica 10/2022; Ley Orgánica 3/2021.",
+            "Ley 58/2003 General Tributaria, article 95; Código Penal, article 136; Ley Orgánica 8/2021 (LOPIVI), article 57; Texto Refundido de la Ley del Catastro Inmobiliario, article 51.",
+            "Instituto Nacional de Estadística: Cifras de población de la Revisión del Padrón municipal a 1 de enero de 2025; Relación de municipios y sus códigos a 1 de enero de 2026; Callejero del Censo Electoral of July 2026; frequencies of given names and surnames of the Censo de población a 1 de enero de 2025; Censos de Población y Viviendas 2011 and 2021, microdata. Municipio centres from GeoNames, by INE code.",
+            "The rules of the check characters: the Ministerio del Interior for the letter of the DNI and NIE; the Tesorería General de la Seguridad Social for the Seguridad Social number; the Código Cuenta Cliente of the Spanish banks and ISO 13616 for the IBAN; the Dirección General del Catastro for the referencia catastral, checked against references published in the BOE; the CNMC for the CUPS."
+          ]
+        }
+      ]
+    }
+  ]
+}

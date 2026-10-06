@@ -1,0 +1,299 @@
+{
+  "ES_L1_DNI": [
+    "12345678Z",
+    "12.345.678-Z",
+    "X1234567L",
+    "K1234567S",
+    "B12345674"
+  ],
+  "ES_L1_NIE": [
+    "X1234567L",
+    "Y-1234567-X"
+  ],
+  "ES_L1_PASAPORTE": [
+    "PAA123456"
+  ],
+  "ES_L1_SOPORTE_DOCUMENTO": [
+    "BAA123456"
+  ],
+  "ES_L1_NSS": [
+    "281234567840",
+    "28/12345678/40"
+  ],
+  "ES_L1_CODIGO_ESTUDIANTE": [
+    "2012345678"
+  ],
+  "ES_L1_COLEGIADO": [
+    "2812345"
+  ],
+  "ES_L1_NOMBRE": [
+    "María de los Ángeles",
+    "JOSÉ ANTONIO",
+    "Jordi"
+  ],
+  "ES_L1_APELLIDO": [
+    "García Fernández",
+    "de la Fuente"
+  ],
+  "ES_L1_NOMBRE_COMPLETO": [
+    "José Antonio García Fernández",
+    "Lucía García",
+    "GARCÍA FERNÁNDEZ, JOSÉ ANTONIO"
+  ],
+  "ES_L1_EMAIL": [
+    "lucia.garcia@gmail.com"
+  ],
+  "ES_L1_TELEFONO": [
+    "+34 612 34 56 78",
+    "612345678",
+    "91 123 45 67"
+  ],
+  "ES_L1_DIRECCION": [
+    "Calle Mayor, 12, 3º B",
+    "Avda. de la Constitución 45, bajo"
+  ],
+  "ES_L1_DIRECCION_COMPLEMENTO": [
+    "3º B",
+    "Escalera 2"
+  ],
+  "ES_L1_CUENTA_BANCARIA": [
+    "ES9121000418450200051332",
+    "ES91 2100 0418 4502 0005 1332",
+    "2100 0418 45 0200051332"
+  ],
+  "ES_L1_TARJETA": [
+    "4532 0000 0000 0001"
+  ],
+  "ES_L1_BILLETERA": [
+    "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+  ],
+  "ES_L1_IP": [
+    "83.45.120.12"
+  ],
+  "ES_L1_DISPOSITIVO": [
+    "3c:22:fb:9a:10:e4"
+  ],
+  "ES_L1_COOKIE": [
+    "GA1.2.123456789.1700000000"
+  ],
+  "ES_L1_MATRICULA": [
+    "1234 BCD",
+    "M-1234-AB"
+  ],
+  "ES_L1_VEHICULO": [
+    "VSSZZZ6JZ9R123456"
+  ],
+  "ES_L1_REFERENCIA_CATASTRAL": [
+    "9872023VH5797S0001WX",
+    "8943507PB5284S0001KR"
+  ],
+  "ES_L1_CUPS": [
+    "ES1234123456789012JY",
+    "ES0021000000000001JN0F"
+  ],
+  "ES_L1_CONTRATO": [
+    "CT-123456"
+  ],
+  "ES_L1_USUARIO": [
+    "@lucia_garcia"
+  ],
+  "ES_L1_CREDENCIAL": [
+    "Clave#2024"
+  ],
+  "ES_L1_IMAGEN": [
+    "/fotos/persona_12.jpg"
+  ],
+  "ES_L1_GEOLOCALIZACION": [
+    "40.416775,-3.703790"
+  ],
+  "ES_L1_TEXTO_LIBRE": [
+    "Cliente García, DNI 12345678Z, correo l.garcia@gmail.com, móvil 612345678."
+  ],
+  "ES_L2_FECHA_NACIMIENTO": [
+    "1985-07-20"
+  ],
+  "ES_L2_ANIO_NACIMIENTO": [
+    "1985"
+  ],
+  "ES_L2_EDAD": [
+    "37",
+    "104"
+  ],
+  "ES_L2_FECHA_EVENTO": [
+    "2021-03-15"
+  ],
+  "ES_L2_SEXO": [
+    "H",
+    "Mujer",
+    "Femenino"
+  ],
+  "ES_L2_MUNICIPIO": [
+    "Valdelageve",
+    "Valdelageve (Salamanca)",
+    "La Guijarrosa",
+    "Alacant"
+  ],
+  "ES_L2_CODIGO_MUNICIPIO": [
+    "37334",
+    "28079"
+  ],
+  "ES_L2_CODIGO_POSTAL": [
+    "37766",
+    "28013"
+  ],
+  "ES_L2_NACIONALIDAD": [
+    "Georgiana"
+  ],
+  "ES_L2_SITUACION_ADMINISTRATIVA": [
+    "Residencia en trámite"
+  ],
+  "ES_L2_ESTADO_CIVIL": [
+    "Unión de hecho",
+    "2"
+  ],
+  "ES_L2_OCUPACION": [
+    "Director de operaciones",
+    "2211"
+  ],
+  "ES_L2_EMPLEADOR": [
+    "Corporación Industrial del Atlántico S.A."
+  ],
+  "ES_L2_NIVEL_EDUCATIVO": [
+    "Licenciatura en curso"
+  ],
+  "ES_L2_CENTRO_EDUCATIVO": [
+    "Universidad de Salamanca"
+  ],
+  "ES_L2_PERSONAS_A_CARGO": [
+    "9",
+    "2"
+  ],
+  "ES_L3_ORIGEN_ETNICO": [
+    "Afrodescendiente",
+    "3"
+  ],
+  "ES_L3_RELIGION": [
+    "Anglicana"
+  ],
+  "ES_L3_CONVICCION_FILOSOFICA": [
+    "Objetor a transfusiones"
+  ],
+  "ES_L3_OPINION_POLITICA": [
+    "Progresista",
+    "7"
+  ],
+  "ES_L3_AFILIACION_PARTIDARIA": [
+    "Ciudadanos",
+    "S"
+  ],
+  "ES_L3_AFILIACION_SINDICAL": [
+    "CCOO",
+    "S"
+  ],
+  "ES_L3_BIOMETRICO": [
+    "A1B2C3D4E5F6"
+  ],
+  "ES_L3_GENETICO": [
+    "BRCA1 positivo"
+  ],
+  "ES_L3_ORIENTACION_SEXUAL": [
+    "Homosexual"
+  ],
+  "ES_L3_VIDA_SEXUAL": [
+    "Activa"
+  ],
+  "ES_L3_IDENTIDAD_GENERO": [
+    "Transgénero"
+  ],
+  "ES_L3_VICTIMA": [
+    "Violencia de género",
+    "S"
+  ],
+  "ES_SALUD_IDENTIFICADOR": [
+    "BBBB123456789012",
+    "AN1234567890"
+  ],
+  "ES_SALUD_COBERTURA": [
+    "MUFACE"
+  ],
+  "ES_SALUD_DIAGNOSTICO": [
+    "F33.1",
+    "E119",
+    "Depresión mayor"
+  ],
+  "ES_SALUD_PROCEDIMIENTO": [
+    "0DTJ4ZZ",
+    "Determinación de carga viral de VIH"
+  ],
+  "ES_SALUD_MEDICAMENTO": [
+    "Sertralina 50 mg"
+  ],
+  "ES_SALUD_TEXTO_CLINICO": [
+    "Paciente García, DNI 12345678Z, consulta por cefalea."
+  ],
+  "ES_SALUD_RESULTADO_PRUEBA": [
+    "Positivo"
+  ],
+  "ES_SALUD_VIH": [
+    "Positivo",
+    "S"
+  ],
+  "ES_SALUD_GRUPO_SANGUINEO": [
+    "O+"
+  ],
+  "ES_SALUD_DISCAPACIDAD": [
+    "Trastorno del espectro autista"
+  ],
+  "ES_SALUD_DEPENDENCIA": [
+    "Grado II nivel 1",
+    "2"
+  ],
+  "ES_SALUD_LABORAL": [
+    "No apto temporal",
+    "S"
+  ],
+  "ES_SALUD_REPRODUCTIVA": [
+    "12 semanas de gestación"
+  ],
+  "ES_SALUD_MENTAL": [
+    "Trastorno bipolar"
+  ],
+  "ES_FIN_HISTORIAL_CREDITICIO": [
+    "Incluido en ASNEF",
+    "745"
+  ],
+  "ES_FIN_DEUDA": [
+    "18500"
+  ],
+  "ES_FIN_INGRESOS": [
+    "28500"
+  ],
+  "ES_FIN_PATRIMONIO": [
+    "185000"
+  ],
+  "ES_FIN_PENSION": [
+    "1250"
+  ],
+  "ES_FIN_PRESTACION_SOCIAL": [
+    "Ayuda de emergencia social",
+    "S"
+  ],
+  "ES_FIN_TRIBUTARIO": [
+    "-1240.55",
+    "24350"
+  ],
+  "ES_PENAL_ANTECEDENTES": [
+    "Condenado por hurto en 2019"
+  ],
+  "ES_PENAL_DELITOS_SEXUALES": [
+    "Certificado positivo"
+  ],
+  "ES_PENAL_PROCEDIMIENTO": [
+    "28079 43 2 2023 0012345",
+    "PA 123/2023"
+  ],
+  "ES_PENAL_SANCION_ADMINISTRATIVA": [
+    "Multa de tráfico por exceso de velocidad",
+    "12"
+  ]
+}

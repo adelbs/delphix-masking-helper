@@ -1,0 +1,1027 @@
+{
+  "title": "Uruguay — Ley 18.331 de Protección de Datos Personales",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales uruguayos: cédula de identidad y RUT con dígito verificador válido, la razón social de una persona jurídica — titular en el Uruguay —, cuasi-identificadores, los datos sensibles del artículo 4 E), datos de salud, los datos comerciales y crediticios del artículo 22 y los datos de infracciones del artículo 18.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encuentra los datos personales de una base uruguaya y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
+        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y una localidad pequeña ya apuntan a una persona. El set trabaja en las capas donde está el riesgo:",
+        {
+          "list": [
+            "**Identificadores directos** — cédula de identidad y RUT, documentos de extranjeros, pasaporte, credencial cívica, registro civil, números del BPS, código de estudiante, matrícula profesional, nombres, **razón social y nombre de fantasía**, contacto, dirección, cuentas, tarjetas, dispositivos, cookies, matrículas, padrones, texto libre.",
+            "**Cuasi-identificadores** — fecha de nacimiento, edad, sexo, localidad con su código INE, barrio, código postal, estado civil, ocupación, empleador, nivel educativo.",
+            "**Datos sensibles** — los del artículo 4 E): origen racial y étnico, preferencias políticas, convicciones religiosas **o morales**, afiliación sindical y vida sexual; además de los datos biométricos que el artículo 4 Ñ) agregó en 2020, datos genéticos, identidad de género, el pueblo originario y la condición de víctima que otras normas uruguayas protegen.",
+            "**Datos de salud** — sensibles por el artículo 4 E), con régimen propio en el artículo 19 y una cláusula de disociación en el artículo 17 C): historia clínica, cobertura, CIE-10, procedimientos, medicamentos, VIH, grupo sanguíneo, discapacidad, el carné de salud obligatorio, salud reproductiva y mental.",
+            "**Datos comerciales y crediticios** — la *actividad comercial o crediticia* del artículo 22, con su límite de cinco años, más deuda, ingresos, patrimonio, pasividades, programas sociales y tenencia de la vivienda.",
+            "**Infracciones** — los datos sobre infracciones penales, civiles o administrativas que el último inciso del artículo 18 reserva a las autoridades públicas competentes."
+          ]
+        },
+        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos de los que estos dependen — y los archivos de consulta que leen. Los apéndices listan cada uno con su configuración completa.",
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — necesita que los valores concuerden. Una columna con nombre sin sentido (`CAMPO1`, `OBS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocibles: una cédula escrita `1.234.567-2`, un RUT de doce dígitos, un celular que empieza en 09, una dirección con número de puerta y apartamento, una matrícula, una localidad.",
+        "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas uruguayos (`CI`, `FEC_NAC`, `RUT`, `BPS`, `IUE`, `PADRON`) y en inglés.",
+        {
+          "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOB, imágenes, PDF). Los procesos de alta suelen guardar la foto de la cédula — con la huella y la firma — y un selfie de validación. Reporte esas columnas como riesgo residual."
+        }
+      ]
+    },
+    {
+      "title": "La Ley 18.331 en breve",
+      "body": [
+        "La **Ley 18.331 de Protección de Datos Personales y Acción de Habeas Data** se aprobó el 11 de agosto de 2008 y se reglamentó por el Decreto 414/009. Se modificó varias veces — Ley 18.719 (2010), Ley 18.996 (2012), Ley 19.355 (2015), **Ley 19.670 (2018)**, que agregó alcance extraterritorial, notificación de vulneraciones y el delegado de protección de datos, y **Ley 19.924 (2020)**, que definió el dato biométrico — y esos agregados se reglamentaron por el **Decreto 64/020**. La autoridad es la **Unidad Reguladora y de Control de Datos Personales (URCDP)**, dentro de AGESIC. El Uruguay es uno de los dos únicos países de América Latina a los que la Unión Europea reconoció nivel adecuado de protección, y parte del Convenio 108.",
+        "Lo que importa para una copia de datos de producción:",
+        {
+          "list": [
+            "**Dato personal** es información de cualquier tipo referida a personas **físicas o jurídicas** determinadas o determinables (art. 4 D). El Uruguay es uno de los pocos países cuya ley hace titular a una **empresa**: la razón social, el nombre de fantasía y el RUT de una persona jurídica son datos personales, y el artículo 9 C) los nombra.",
+            "**Dato sensible** (art. 4 E) es el dato que revela origen racial y étnico, preferencias políticas, convicciones religiosas **o morales**, afiliación sindical e información referente a la salud o a la vida sexual. El artículo 18 prohíbe la formación de bases que almacenen información que **directa o indirectamente** lo revele, y admite el tratamiento con finalidades estadísticas o científicas solo \"cuando se disocien de sus titulares\".",
+            "**Disociación de datos** es todo tratamiento de datos personales de manera que la información obtenida **no pueda vincularse a persona determinada o determinable** (art. 4 G). El artículo 17 D) es la cláusula para la que está escrito este set: no se necesita el previo consentimiento del titular para comunicar datos cuando \"se hubiera aplicado un procedimiento de disociación de la información, de modo que los titulares de los datos no sean identificables\".",
+            "**Dónde aparece la disociación.** El artículo 9-BIS D) permite usar un registro cuya publicación no sea de interés general \"mediante técnicas de disociación u ocultamiento de los datos personales\"; el artículo 17 C) exige \"mecanismos de disociación adecuados\" cuando los datos de salud viajan por razones sanitarias o epidemiológicas; el artículo 18 exige disociación para la estadística y la ciencia. Y el **artículo 8 a) del Decreto 64/020** lista, en primer lugar entre las medidas de privacidad desde el diseño, las \"**técnicas de disociación, seudonimización y minimización de datos**\".",
+            "**Seguridad.** El artículo 10 obliga al responsable a adoptar las medidas necesarias para garantizar la seguridad y confidencialidad de los datos, y prohíbe registrar datos personales en bases que no reúnan condiciones técnicas de integridad y seguridad. El artículo 38 de la Ley 19.670 manda informar la vulneración a los titulares y a la URCDP **inmediatamente**, y la URCDP coordina con CERTuy. Los artículos 6 y 7 del Decreto 64/020 exigen evaluación de impacto donde el riesgo es alto — entre los disparadores, el tratamiento permanente de los datos del Capítulo IV o de datos sobre infracciones.",
+            "**Dato biométrico.** El artículo 4 Ñ), agregado por la Ley 19.924 en 2020, lo define como el dato obtenido a partir de un tratamiento técnico específico que permita o confirme la identificación única de una persona; el artículo 18-BIS solo admite tratarlo previa **evaluación de impacto en la protección de datos personales**.",
+            "**Sanciones.** El artículo 35 permite a la URCDP observar, apercibir, multar hasta **500.000 unidades indexadas**, suspender la base por cinco días o clausurarla por vía judicial."
+          ]
+        },
+        "**Los datos crediticios tienen reloj.** El artículo 22 autoriza el tratamiento de datos sobre solvencia patrimonial o crediticia obtenidos de fuentes públicas o del acreedor, pero el dato sobre obligaciones comerciales de personas físicas solo puede estar registrado por **cinco años**, renovable una vez por otros cinco; la obligación cancelada permanece cinco años, no renovables. Una copia de esa base se lleva el reloj consigo."
+      ]
+    },
+    {
+      "title": "Disociación, seudonimización y copias fuera de producción",
+      "body": [
+        "La Ley 18.331 es de 2008 y usa una sola palabra, **disociación**: el tratamiento de manera que la información obtenida no pueda vincularse a persona determinada o determinable (art. 4 G). No define la seudonimización — pero el **artículo 8 a) del Decreto 64/020**, de 2020, nombra las dos juntas como medidas de privacidad desde el diseño: \"técnicas de disociación, seudonimización y minimización de datos\".",
+        "Los algoritmos de este set son deterministas para la clave del Masking Engine: la misma cédula se enmascara igual en toda tabla, lo que mantiene los joins. Quien tenga esa clave y producción puede volver a vincularlas, así que la copia enmascarada está **seudonimizada** en el sentido del decreto, no disociada en el sentido del artículo 4 G), y para esa persona sigue siendo dato personal.",
+        {
+          "list": [
+            "Mantenga la clave del engine separada de la copia y trate a quien tenga ambas como quien trata datos personales sujetos a toda la ley.",
+            "El artículo 17 D) excusa el consentimiento para una comunicación solo cuando un procedimiento de disociación deja a los titulares **no identificables**. Si se apoya en él, la clave no puede viajar con la copia, y hay que medir los cuasi-identificadores que quedan.",
+            "El artículo 18 admite tratar dato sensible con fines estadísticos o científicos cuando se disocia de sus titulares — el mismo estándar, y más alto del que alcanza una copia enmascarada con su clave."
+          ]
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. La cédula de identidad es la llave de todo registro uruguayo, y tanto ella como el RUT salen con dígito verificador válido, porque las aplicaciones los validan. El Uruguay es uno de los pocos países cuya ley hace titular a la **persona jurídica** (art. 4 D), así que la razón social, el nombre de fantasía y el RUT de una empresa se enmascaran aquí como cualquier otro identificador."
+      ],
+      "domains": [
+        "UY_L1_CEDULA",
+        "UY_L1_RUT",
+        "UY_L1_DOCUMENTO_EXTRANJERO",
+        "UY_L1_PASAPORTE",
+        "UY_L1_CREDENCIAL_CIVICA",
+        "UY_L1_PARTIDA",
+        "UY_L1_SEGURO_SOCIAL",
+        "UY_L1_CODIGO_ESTUDIANTE",
+        "UY_L1_MATRICULA_PROFESIONAL",
+        "UY_L1_NOMBRE",
+        "UY_L1_APELLIDO",
+        "UY_L1_NOMBRE_COMPLETO",
+        "UY_L1_RAZON_SOCIAL",
+        "UY_L1_EMAIL",
+        "UY_L1_TELEFONO",
+        "UY_L1_DIRECCION",
+        "UY_L1_DIRECCION_COMPLEMENTO",
+        "UY_L1_CUENTA_BANCARIA",
+        "UY_L1_TARJETA",
+        "UY_L1_BILLETERA",
+        "UY_L1_IP",
+        "UY_L1_DISPOSITIVO",
+        "UY_L1_COOKIE",
+        "UY_L1_PLACA",
+        "UY_L1_VEHICULO",
+        "UY_L1_INMUEBLE",
+        "UY_L1_CONTRATO",
+        "UY_L1_USUARIO",
+        "UY_L1_CREDENCIAL",
+        "UY_L1_GEOLOCALIZACION",
+        "UY_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por sí solos, pero sí en combinación. El Uruguay tiene 3,4 millones de habitantes y, para el censo, 652 localidades: 624 de ellas tenían menos de 20.000 en 2023 — 873.000 personas, un cuarto del país — y Montevideo concentra 1,28 millones del resto. Una fecha de nacimiento, un sexo y una de esas localidades apuntan a un puñado de personas. Estos atributos se generalizan o desplazan, no se reemplazan, y el dato conserva su valor analítico."
+      ],
+      "domains": [
+        "UY_L2_FECHA_NACIMIENTO",
+        "UY_L2_ANIO_NACIMIENTO",
+        "UY_L2_EDAD",
+        "UY_L2_FECHA_EVENTO",
+        "UY_L2_SEXO",
+        "UY_L2_LOCALIDAD",
+        "UY_L2_CODIGO_INE",
+        "UY_L2_BARRIO",
+        "UY_L2_CODIGO_POSTAL",
+        "UY_L2_ESTADO_CIVIL",
+        "UY_L2_OCUPACION",
+        "UY_L2_EMPLEADOR",
+        "UY_L2_NIVEL_EDUCATIVO",
+        "UY_L2_INSTITUCION_EDUCATIVA",
+        "UY_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Datos sensibles (art. 4 E y art. 4 Ñ)",
+      "intro": [
+        "El artículo 4 E) es corto y de 2008: el dato que revela origen racial y étnico, preferencias políticas, convicciones religiosas **o morales**, afiliación sindical e información referente a la salud o a la vida sexual. El artículo 18 prohíbe la formación de bases que almacenen información que **directa o indirectamente** lo revele. El artículo 4 Ñ), agregado en 2020, trajo el dato biométrico, y el artículo 18-BIS puso una evaluación de impacto delante. La salud tiene un grupo propio más abajo; el resto está aquí, con los datos genéticos, la identidad de género, el pueblo originario y la condición de víctima que otras normas uruguayas protegen."
+      ],
+      "domains": [
+        "UY_L3_ASCENDENCIA",
+        "UY_L3_PUEBLO_ORIGINARIO",
+        "UY_L3_NACIONALIDAD",
+        "UY_L3_RELIGION",
+        "UY_L3_CONVICCION_MORAL",
+        "UY_L3_PREFERENCIA_POLITICA",
+        "UY_L3_AFILIACION_PARTIDARIA",
+        "UY_L3_AFILIACION_SINDICAL",
+        "UY_L3_BIOMETRICO",
+        "UY_L3_GENETICO",
+        "UY_L3_ORIENTACION_SEXUAL",
+        "UY_L3_VIDA_SEXUAL",
+        "UY_L3_IDENTIDAD_GENERO",
+        "UY_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Datos de salud",
+      "intro": [
+        "El dato de salud es sensible por el artículo 4 E) y tiene régimen propio en el artículo 19, que permite a los establecimientos sanitarios y a los profesionales de la salud tratar los datos de sus pacientes \"respetando los principios del secreto profesional\". El artículo 17 C) es la cláusula para la que está escrito este grupo: el dato de salud puede comunicarse por razones sanitarias, de emergencia o epidemiológicas \"preservando la identidad de los titulares de los datos mediante **mecanismos de disociación adecuados**\"."
+      ],
+      "domains": [
+        "UY_SALUD_IDENTIFICADOR",
+        "UY_SALUD_COBERTURA",
+        "UY_SALUD_DIAGNOSTICO",
+        "UY_SALUD_PROCEDIMIENTO",
+        "UY_SALUD_MEDICAMENTO",
+        "UY_SALUD_TEXTO_CLINICO",
+        "UY_SALUD_RESULTADO_EXAMEN",
+        "UY_SALUD_VIH",
+        "UY_SALUD_GRUPO_SANGUINEO",
+        "UY_SALUD_DISCAPACIDAD",
+        "UY_SALUD_OCUPACIONAL",
+        "UY_SALUD_REPRODUCTIVA",
+        "UY_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos comerciales y crediticios (art. 22)",
+      "intro": [
+        "El artículo 22 autoriza el tratamiento de datos sobre solvencia patrimonial o crediticia de fuentes públicas o del acreedor — y luego hace algo que solo el Uruguay hace: le pone un reloj. El dato sobre la obligación comercial de una persona física solo puede estar registrado por **cinco años**, renovable una vez; la obligación cancelada permanece cinco más, no renovables. Quien copia esa base a un ambiente de prueba se lleva el reloj consigo, y el resto del grupo — deuda, ingresos, patrimonio, pasividades, programas sociales, el Índice de Carencias Críticas — identifica igual de bien."
+      ],
+      "domains": [
+        "UY_FIN_HISTORIAL_CREDITICIO",
+        "UY_FIN_DEUDA",
+        "UY_FIN_INGRESOS",
+        "UY_FIN_PATRIMONIO",
+        "UY_FIN_PENSION",
+        "UY_FIN_PROGRAMA_SOCIAL",
+        "UY_FIN_NIVEL_SOCIOECONOMICO",
+        "UY_FIN_VIVIENDA"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Infracciones (art. 18)",
+      "intro": [
+        "El último inciso del artículo 18 pone los datos sobre la comisión de infracciones **penales, civiles o administrativas** bajo un régimen propio: \"sólo puede ser objeto de tratamiento por parte de las autoridades públicas competentes\". Una empresa privada que copia esa columna a un ambiente de prueba está tratando datos que no puede tratar en absoluto — por eso existe este grupo, y por eso el artículo 6 b) del Decreto 64/020 hace de su tratamiento permanente un disparador de evaluación de impacto."
+      ],
+      "domains": [
+        "UY_PENAL_ANTECEDENTES",
+        "UY_PENAL_EXPEDIENTE"
+      ]
+    }
+  ],
+  "domains": {
+    "UY_L1_CEDULA": {
+      "title": "Cédula de identidad",
+      "what": [
+        "El número de la Dirección Nacional de Identificación Civil, la llave de todo registro uruguayo: siete dígitos y un dígito verificador, escrito `1.234.567-2`, y también sin puntos.",
+        "El mismo dominio recibe RUT: una columna de documento suele guardar ambos."
+      ],
+      "masking": [
+        "Dígito por dígito, con el dígito verificador recalculado: pesos 2 9 8 7 6 3 4 desde la izquierda, módulo 10, diez menos el residuo — exactamente lo que calcula Check Digit. Los puntos y el guion quedan en su sitio."
+      ]
+    },
+    "UY_L1_RUT": {
+      "title": "RUT",
+      "what": [
+        "El número de doce dígitos del contribuyente en la Dirección General Impositiva: dos dígitos para el tipo de contribuyente, seis para el número, tres para la sucursal y un dígito verificador — `21-100342-001-7`.",
+        "El artículo 4 D) hace dato personal también el de una **persona jurídica**, así que el RUT de una empresa se enmascara como cualquier otro identificador — a diferencia de los sets de países cuya ley alcanza solo a personas físicas."
+      ],
+      "masking": [
+        "El tipo de contribuyente y la sucursal quedan, los seis dígitos del número se mapean y el dígito verificador se recalcula."
+      ]
+    },
+    "UY_L1_DOCUMENTO_EXTRANJERO": {
+      "title": "Documentos de extranjero",
+      "what": [
+        "La cédula de extranjería, el carné de refugiado, los permisos de residencia y trabajo, la visa y la condición migratoria."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_PASAPORTE": {
+      "title": "Pasaporte",
+      "what": [
+        "Números de pasaporte uruguayo y extranjero."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_CREDENCIAL_CIVICA": {
+      "title": "Credencial cívica",
+      "what": [
+        "La serie de tres letras y el número que la Corte Electoral da a cada elector — `ABC 12345`. El voto es obligatorio en el Uruguay, así que casi todo adulto tiene una, y las elecciones internas ponen la afiliación partidaria al lado."
+      ],
+      "masking": [
+        "Letras a letras y dígitos a dígitos, posición por posición."
+      ]
+    },
+    "UY_L1_PARTIDA": {
+      "title": "Registro civil",
+      "what": [
+        "La partida, el tomo, el folio y el acta de las inscripciones de nacimiento, matrimonio, unión concubinaria y defunción de la Dirección General de Registro de Estado Civil."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_SEGURO_SOCIAL": {
+      "title": "BPS y las cajas profesionales",
+      "what": [
+        "Los números del Banco de Previsión Social del trabajador y del empleador, la historia laboral, la afiliación al FONASA y los números de las cajas notarial, bancaria, profesional, militar y policial."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_CODIGO_ESTUDIANTE": {
+      "title": "Código de estudiante",
+      "what": [
+        "El código de estudiante, el número de matrícula y el carné universitario."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_MATRICULA_PROFESIONAL": {
+      "title": "Matrícula profesional",
+      "what": [
+        "El número de matrícula profesional y el número de la caja profesional, publicados junto al nombre."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_NOMBRE": {
+      "title": "Nombres",
+      "what": [
+        "Los nombres, uno o dos: `Washington`, `Juan Pablo`, `María de los Ángeles`."
+      ],
+      "masking": [
+        "Palabra por palabra, reemplazando cada nombre por uno de la lista. `de`, `del` y `la` quedan en su sitio. Más de cuatro palabras se enmascaran carácter por carácter."
+      ]
+    },
+    "UY_L1_APELLIDO": {
+      "title": "Apellidos",
+      "what": [
+        "Los apellidos — paterno y materno —, en columnas separadas o juntos: `Rodríguez Techera`. El set lleva los uruguayos, españoles, italianos, vascos y portugueses, con `Da Silva` y `De León` conservados enteros."
+      ],
+      "masking": [
+        "Palabra por palabra, reemplazando cada apellido por uno de la lista; las partículas quedan en su sitio."
+      ]
+    },
+    "UY_L1_NOMBRE_COMPLETO": {
+      "title": "Nombre completo",
+      "what": [
+        "Nombres y apellidos en una sola columna: `Juan Pablo Rodríguez Techera`. También los de la madre, el padre, el tutor, el cónyuge, el concubino, el contacto de emergencia y la referencia."
+      ],
+      "masking": [
+        "En orden uruguayo: dos palabras son un nombre y un apellido; tres, un nombre y dos apellidos; cuatro, dos y dos. `APELLIDOS, NOMBRES` con coma se enmascara manteniendo la coma."
+      ]
+    },
+    "UY_L1_RAZON_SOCIAL": {
+      "title": "Razón social y nombre de fantasía",
+      "what": [
+        "La denominación legal y el nombre comercial de una empresa. En el Uruguay esto no es una cortesía: el artículo 4 D) hace titular a la **persona jurídica**, y el artículo 9 C) nombra la razón social, el nombre de fantasía y el RUT entre los datos que un listado puede tener sin consentimiento."
+      ],
+      "masking": [
+        "Reemplazada por una razón social ficticia."
+      ]
+    },
+    "UY_L1_EMAIL": {
+      "title": "Correo electrónico",
+      "what": [
+        "Direcciones de correo personales y corporativas."
+      ],
+      "masking": [
+        "Usuario y dominio se mapean carácter por carácter, y el dominio de nivel superior — `.com`, `.com.uy` — pasa a `.test`, reservado para pruebas: una dirección enmascarada nunca entrega."
+      ]
+    },
+    "UY_L1_TELEFONO": {
+      "title": "Teléfono",
+      "what": [
+        "Celulares de nueve dígitos que empiezan en `09`, y fijos de ocho que empiezan en 2 en Montevideo y en 4 en el interior."
+      ],
+      "masking": [
+        "`+598` y el prefijo quedan; el resto de los dígitos se mapean y se conserva el espaciado del original, de modo que el número sigue diciendo si es celular o fijo y de qué región."
+      ]
+    },
+    "UY_L1_DIRECCION": {
+      "title": "Dirección",
+      "what": [
+        "La dirección con la calle y el número de puerta, el apartamento y a menudo la esquina — `Av. 18 de Julio 1234 apto. 501`, `Calle Mercedes 900 esq. Río Branco`."
+      ],
+      "masking": [
+        "La línea entera se reemplaza por una dirección uruguaya ficticia de la misma forma. Barrio, localidad y código postal tienen dominios propios para cuando viven en columnas separadas."
+      ]
+    },
+    "UY_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento de la dirección",
+      "what": [
+        "Apartamento, piso, block, torre, puerta, manzana, solar o la esquina en columnas propias."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_CUENTA_BANCARIA": {
+      "title": "Cuenta bancaria",
+      "what": [
+        "Números de caja de ahorros, cuenta corriente y cuenta sueldo. El código del banco no es dato personal y no tiene dominio."
+      ],
+      "masking": [
+        "Los dígitos se mapean; los separadores quedan."
+      ]
+    },
+    "UY_L1_TARJETA": {
+      "title": "Tarjeta de pago",
+      "what": [
+        "Números de tarjeta de crédito y débito, reconocidos por el algoritmo de Luhn."
+      ],
+      "masking": [
+        "Payment Card: otro número que pasa el algoritmo de Luhn. Solo los valores con forma de tarjeta llegan a él."
+      ]
+    },
+    "UY_L1_BILLETERA": {
+      "title": "Billetera digital",
+      "what": [
+        "Identificadores de Prex, Mi Dinero, OCA Blue y otras billeteras, y las direcciones bitcoin que algunos sistemas guardan."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo la forma. Una dirección bitcoin enmascarada deja de pasar su propio checksum, que es lo que quiere una copia de prueba."
+      ]
+    },
+    "UY_L1_IP": {
+      "title": "Dirección IP",
+      "what": [
+        "Direcciones IPv4 e IPv6 de registros de acceso y transacciones. El artículo 20 obliga a los operadores de telecomunicaciones que las producen."
+      ],
+      "masking": [
+        "Cada octeto IPv4 se mapea a 1–254; una dirección IPv6 se mapea manteniendo sus caracteres hexadecimales."
+      ]
+    },
+    "UY_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": [
+        "IMEI, IMSI, ICCID, dirección MAC, identificadores de publicidad y de sesión."
+      ],
+      "masking": [
+        "Carácter por carácter, con los dígitos hexadecimales mantenidos hexadecimales: una MAC sigue siendo MAC."
+      ]
+    },
+    "UY_L1_COOKIE": {
+      "title": "Cookies e identificadores de seguimiento",
+      "what": [
+        "El identificador que un sitio guarda en el navegador y los parámetros de campaña que viajan con él. El artículo 21 admite perfiles con fines publicitarios solo de fuentes públicas o con consentimiento, y nombra los *hábitos de consumo* que esos identificadores construyen."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_PLACA": {
+      "title": "Matrícula del vehículo",
+      "what": [
+        "La matrícula con tres letras y cuatro dígitos desde 2015, `SAB 1234`; la primera letra es el departamento — A Montevideo, B Artigas, C Canelones, y así hasta S Treinta y Tres."
+      ],
+      "masking": [
+        "Letras a letras y dígitos a dígitos, posición por posición: el formato de la matrícula queda."
+      ]
+    },
+    "UY_L1_VEHICULO": {
+      "title": "Vehículo y licencia",
+      "what": [
+        "El VIN o número de chasis, el número de motor, la libreta de circulación y la licencia de conducir."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_INMUEBLE": {
+      "title": "Padrón",
+      "what": [
+        "El padrón que la Dirección Nacional de Catastro da a cada parcela, el código catastral y la inscripción en el Registro de la Propiedad: llevan a la vivienda y a su dueño."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_CONTRATO": {
+      "title": "Números de contrato y de cliente",
+      "what": [
+        "Números de contrato, póliza, crédito, solicitud, socio, suscriptor, suministro, caso, siniestro o expediente administrativo, y códigos de cliente o de empleado."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato. El mapeo es determinista, así que los joins siguen funcionando."
+      ]
+    },
+    "UY_L1_USUARIO": {
+      "title": "Usuario y redes sociales",
+      "what": [
+        "Login, alias y perfiles de redes sociales."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_L1_CREDENCIAL": {
+      "title": "Credenciales",
+      "what": [
+        "Contraseñas y sus hashes, PIN, códigos de seguridad y OTP, CVV, tokens, claves de API, la clave de la firma electrónica, llaves privadas y frases semilla."
+      ],
+      "masking": [
+        "Cada carácter pasa a `X`. Una credencial no sirve en una copia de prueba, y un hash enmascarado carácter por carácter aún podría romperse."
+      ]
+    },
+    "UY_L1_GEOLOCALIZACION": {
+      "title": "Geolocalización",
+      "what": [
+        "Latitud y longitud, juntas o en columnas separadas, de aplicaciones, visitas, direcciones y entregas."
+      ],
+      "masking": [
+        "La parte entera y el primer decimal quedan — unos 11 km — y los demás decimales se mapean: el lugar se generaliza, no se mueve."
+      ]
+    },
+    "UY_L1_TEXTO_LIBRE": {
+      "title": "Texto libre",
+      "what": [
+        "Observaciones, descripciones de reclamo, relatos y mensajes donde se escribe de todo — cédula, RUT, teléfono y nombres en medio de una frase."
+      ],
+      "masking": [
+        "Free Text Redaction: cédulas, RUT, correo, celulares, tarjetas, matrículas e IP pasan a `[DATO]`, y los nombres de las listas, `[NOMBRE]`."
+      ]
+    },
+    "UY_L2_FECHA_NACIMIENTO": {
+      "title": "Fecha de nacimiento",
+      "what": [
+        "La fecha de nacimiento, como date, timestamp o texto."
+      ],
+      "masking": [
+        "Desplazada hasta 60 días en cualquier sentido. Las edades y los años escolares cambian para pocas personas; la fecha sigue siendo plausible y la misma fecha de nacimiento se mueve siempre igual."
+      ]
+    },
+    "UY_L2_ANIO_NACIMIENTO": {
+      "title": "Año de nacimiento",
+      "what": [
+        "El año de nacimiento en columna propia."
+      ],
+      "masking": [
+        "La década queda y el último dígito se mapea: `1985` pasa a un año de 1980 a 1989."
+      ]
+    },
+    "UY_L2_EDAD": {
+      "title": "Edad",
+      "what": [
+        "Edad en años, también tramo de edad o quinquenio. El Uruguay es el país más viejo de la región, así que una edad muy alta es menos rara aquí — pero rara igual."
+      ],
+      "masking": [
+        "El dígito de las decenas queda y la unidad se mapea (37 pasa a 30–39). Cien o más pasa a 90: las edades raras identifican."
+      ]
+    },
+    "UY_L2_FECHA_EVENTO": {
+      "title": "Fechas de eventos personales",
+      "what": [
+        "Fechas que dicen algo de la persona: defunción, matrimonio, ingreso y egreso, jubilación, internación, diagnóstico, detención, sentencia, certificación médica, expedición de la cédula."
+      ],
+      "masking": [
+        "Desplazadas hasta 30 días en cualquier sentido."
+      ]
+    },
+    "UY_L2_SEXO": {
+      "title": "Sexo",
+      "what": [
+        "El sexo como lo registra el sistema: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` o los códigos 1 y 2."
+      ],
+      "masking": [
+        "Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`. La identidad de género tiene dominio propio entre los datos sensibles."
+      ]
+    },
+    "UY_L2_LOCALIDAD": {
+      "title": "Localidad",
+      "what": [
+        "La localidad de residencia, nacimiento o atención, por nombre — sola o con el departamento, `Piriápolis - Maldonado`."
+      ],
+      "masking": [
+        "Una localidad con menos de 20.000 habitantes pasa a la más cercana de al menos 20.000 en el mismo departamento. Todo departamento tiene una, así que el valor nunca lo abandona, y los 19 departamentos quedan."
+      ]
+    },
+    "UY_L2_CODIGO_INE": {
+      "title": "Código INE",
+      "what": [
+        "El código de cinco dígitos del Instituto Nacional de Estadística: dos dígitos para el departamento y tres para la localidad."
+      ],
+      "masking": [
+        "La misma generalización que el nombre: el código de una localidad pequeña pasa a ser el de la localidad que reemplaza su nombre. El código de una grande no cambia."
+      ]
+    },
+    "UY_L2_BARRIO": {
+      "title": "Barrio y balneario",
+      "what": [
+        "El barrio, balneario, zona o asentamiento de residencia — la unidad bajo la localidad, y la que distingue Pocitos de Casavalle dentro de Montevideo."
+      ],
+      "masking": [
+        "Reemplazado por uno uruguayo común, sin relación con el original."
+      ]
+    },
+    "UY_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": [
+        "El código postal de cinco dígitos: los dos primeros son el departamento y la zona postal."
+      ],
+      "masking": [
+        "Los dos primeros dígitos quedan y los demás pasan a ceros: `11300` pasa a `11000`."
+      ]
+    },
+    "UY_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": [
+        "Soltero, casado, en unión libre o concubinato — que reconoce la Ley 18.246 —, separado, divorciado o viudo, en palabras o como código."
+      ],
+      "masking": [
+        "Reemplazado por otro estado de la lista; un código sigue siendo código."
+      ]
+    },
+    "UY_L2_OCUPACION": {
+      "title": "Ocupación",
+      "what": [
+        "Ocupación, profesión u oficio, en palabras o por el código de la clasificación nacional de ocupaciones. Una ocupación rara en una localidad pequeña identifica por sí sola."
+      ],
+      "masking": [
+        "El texto se reemplaza por una ocupación común; un código se mapea dígito por dígito."
+      ]
+    },
+    "UY_L2_EMPLEADOR": {
+      "title": "Empleador",
+      "what": [
+        "El nombre de la empresa o institución donde trabaja la persona."
+      ],
+      "masking": [
+        "Reemplazado por una empresa ficticia."
+      ]
+    },
+    "UY_L2_NIVEL_EDUCATIVO": {
+      "title": "Nivel educativo",
+      "what": [
+        "El nivel educativo alcanzado — de ninguno a posgrado — en las categorías del censo, en palabras o como código."
+      ],
+      "masking": [
+        "Reemplazado por otro nivel de la lista; un código sigue siendo código."
+      ]
+    },
+    "UY_L2_INSTITUCION_EDUCATIVA": {
+      "title": "Institución educativa",
+      "what": [
+        "La escuela, el liceo, la escuela de UTU, el instituto o la universidad, por nombre o por su número — y una escuela numerada en una localidad pequeña es una sola escuela."
+      ],
+      "masking": [
+        "Reemplazada por una institución ficticia."
+      ]
+    },
+    "UY_L2_PERSONAS_A_CARGO": {
+      "title": "Personas a cargo",
+      "what": [
+        "Número de personas a cargo, hijos, cargas familiares o integrantes del hogar."
+      ],
+      "masking": [
+        "Los valores de 0 a 5 quedan; por encima de 5 pasan a 5. Los hogares muy grandes son raros, y un conteo raro identifica."
+      ]
+    },
+    "UY_L3_ASCENDENCIA": {
+      "title": "Ascendencia étnico-racial",
+      "what": [
+        "La ascendencia étnico-racial que pregunta el censo — afro o negra, asiática, blanca, indígena — que el artículo 4 E) nombra en primer lugar entre los datos sensibles."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera, un código se reemplaza por otro código y cualquier otro valor por una categoría de la lista."
+      ]
+    },
+    "UY_L3_PUEBLO_ORIGINARIO": {
+      "title": "Pueblo originario",
+      "what": [
+        "El pueblo originario que una persona declara. El Uruguay trató a sus pueblos indígenas como extinguidos durante un siglo; el censo devolvió a los descendientes charrúas a la cuenta, y son unos pocos miles — nombrar el pueblo nombra un grupo muy pequeño."
+      ],
+      "masking": [
+        "Reemplazado por otro pueblo de la lista; una bandera sigue siendo bandera."
+      ]
+    },
+    "UY_L3_NACIONALIDAD": {
+      "title": "Nacionalidad",
+      "what": [
+        "Nacionalidad, país de nacimiento u origen, y condición migratoria. El artículo 9 C) nombra la nacionalidad entre los datos que puede tener un listado, así que la ley la trata como dato personal común — pero está al lado del origen racial y étnico que sí llama sensible, y en el Uruguay separa a los nacionales de las comunidades venezolana y cubana."
+      ],
+      "masking": [
+        "Reemplazada por una nacionalidad de la lista: la uruguaya y las comunidades extranjeras más grandes."
+      ]
+    },
+    "UY_L3_RELIGION": {
+      "title": "Religión",
+      "what": [
+        "La religión, iglesia o congregación a la que pertenece la persona. El Uruguay es el país más secular de la región — \"creyente sin religión\" y \"ateo o agnóstico\" están entre las respuestas más grandes, y el culto umbandista se cuenta aparte — así que una religión declarada dice mucho aquí."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por una religión de la lista."
+      ]
+    },
+    "UY_L3_CONVICCION_MORAL": {
+      "title": "Convicciones morales y filosóficas",
+      "what": [
+        "Las **convicciones morales** que el artículo 4 E) nombra en el mismo aliento que las religiosas, la objeción de conciencia y la pertenencia a una logia. Pocas leyes de la región listan esto."
+      ],
+      "masking": [
+        "Los valores no comparten vocabulario: se suprimen a `Sin información`. Banderas y códigos mantienen su forma."
+      ]
+    },
+    "UY_L3_PREFERENCIA_POLITICA": {
+      "title": "Preferencias políticas",
+      "what": [
+        "Las **preferencias políticas** que nombra el artículo 4 E): tendencia, simpatía e intención de voto, de encuestas y registros."
+      ],
+      "masking": [
+        "Reemplazada por una posición de la lista — de izquierda a derecha, independiente."
+      ]
+    },
+    "UY_L3_AFILIACION_PARTIDARIA": {
+      "title": "Afiliación partidaria",
+      "what": [
+        "El partido, lema o sublema al que pertenece la persona, del registro de la Corte Electoral. El Uruguay vota sus internas partidarias, así que la afiliación es un hecho registrado y no una opinión."
+      ],
+      "masking": [
+        "Reemplazado por otro partido de la lista; una bandera sigue siendo bandera."
+      ]
+    },
+    "UY_L3_AFILIACION_SINDICAL": {
+      "title": "Afiliación sindical",
+      "what": [
+        "El sindicato, la afiliación, la cuota descontada en nómina y el consejo de salarios. El artículo 4 E) la nombra, y el artículo 18 permite a un sindicato conservar los datos de sus propios afiliados — que es exactamente la base que protege este dominio."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."
+      ]
+    },
+    "UY_L3_BIOMETRICO": {
+      "title": "Datos biométricos",
+      "what": [
+        "Plantillas de huella — la huella de la cédula es el patrón de identificación del país —, rostro, iris, voz y firma digitalizada. El artículo 4 Ñ), agregado por la Ley 19.924 en 2020, define el dato biométrico, y el artículo 18-BIS solo admite tratarlo previa evaluación de impacto."
+      ],
+      "masking": [
+        "Cada carácter pasa a `X`. Una plantilla enmascarada no autentica a nadie."
+      ]
+    },
+    "UY_L3_GENETICO": {
+      "title": "Datos genéticos",
+      "what": [
+        "Resultados de pruebas genéticas y de ADN, pruebas de paternidad, perfiles genéticos, mutaciones, cariotipo y pesquisa neonatal. La ley no los nombra, pero son datos de salud en cualquier lectura del artículo 4 E)."
+      ],
+      "masking": [
+        "Cada carácter pasa a `X`."
+      ]
+    },
+    "UY_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientación sexual",
+      "what": [
+        "Orientación o preferencia sexual autodeclarada. Pertenece a la *vida sexual* que protege el artículo 4 E)."
+      ],
+      "masking": [
+        "Reemplazada por una categoría de la lista."
+      ]
+    },
+    "UY_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": [
+        "Actividad y conducta sexual, número de parejas, edad de inicio de la vida sexual — la *vida sexual* nombrada palabra por palabra en el artículo 4 E)."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."
+      ]
+    },
+    "UY_L3_IDENTIDAD_GENERO": {
+      "title": "Identidad de género",
+      "what": [
+        "Identidad de género autodeclarada y el nombre social. La Ley 19.684 integral para personas trans creó un registro y un cupo laboral, así que esta es una columna real en los sistemas uruguayos — y que identifica a un grupo muy pequeño."
+      ],
+      "masking": [
+        "Reemplazada por una categoría de la lista."
+      ]
+    },
+    "UY_L3_VICTIMA": {
+      "title": "Víctimas de violencia",
+      "what": [
+        "Ser víctima de violencia de género, doméstica o sexual, de trata o de desaparición forzada, el tipo de violencia y las medidas cautelares. La Ley 19.580 protege la identidad de la víctima."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."
+      ]
+    },
+    "UY_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores de salud",
+      "what": [
+        "Números de historia clínica, episodio, ingreso, atención, cita y receta, y el número de afiliado o socio de ASSE o de una mutualista."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo longitud y formato."
+      ]
+    },
+    "UY_SALUD_COBERTURA": {
+      "title": "Cobertura de salud",
+      "what": [
+        "ASSE, una mutualista (IAMC), un seguro privado, la sanidad militar o policial, o ninguna, por nombre o código. Cuál tiene una persona dice mucho en un país donde el FONASA encamina a todos a algún lado."
+      ],
+      "masking": [
+        "Un nombre se reemplaza por otra cobertura de la lista; un código se mapea dígito por dígito; una bandera sigue siendo bandera."
+      ]
+    },
+    "UY_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico y CIE-10",
+      "what": [
+        "Diagnósticos en palabras o por código CIE-10, con punto (`F33.1`) o sin él (`F331`); causas de defunción, de certificación médica y de internación; alergias y comorbilidades."
+      ],
+      "masking": [
+        "Un código CIE-10 pasa a otro código común en el mismo formato, y el texto a un diagnóstico común: un diagnóstico de VIH o de trastorno mental no sobrevive como tal."
+      ]
+    },
+    "UY_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimientos",
+      "what": [
+        "Procedimientos, exámenes y cirugías, en palabras o por código. Una carga viral o un test de embarazo revela el diagnóstico."
+      ],
+      "masking": [
+        "Un código se mapea dígito por dígito; el texto se reemplaza por un procedimiento común."
+      ]
+    },
+    "UY_SALUD_MEDICAMENTO": {
+      "title": "Medicamentos",
+      "what": [
+        "Medicamentos recetados o dispensados, por nombre o principio activo. Un antirretroviral, un antipsicótico o un anticonceptivo dice lo que la columna de diagnóstico se enmascaró para ocultar."
+      ],
+      "masking": [
+        "Reemplazado por un medicamento común de la lista; una bandera sigue siendo bandera."
+      ]
+    },
+    "UY_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": [
+        "Anamnesis, enfermedad actual, evolución, examen físico, plan de tratamiento, epicrisis y notas de enfermería."
+      ],
+      "masking": [
+        "La misma Free Text Redaction del texto libre: documentos, contactos y nombres de la lista se redactan. El contenido clínico queda, porque es lo que hace útil la copia."
+      ]
+    },
+    "UY_SALUD_RESULTADO_EXAMEN": {
+      "title": "Resultados de exámenes",
+      "what": [
+        "Resultados de laboratorio y de exámenes — glicemia, embarazo, toxicológico, alcoholemia —, también como valores numéricos."
+      ],
+      "masking": [
+        "Carácter por carácter, manteniendo el formato: un número sigue siendo número."
+      ]
+    },
+    "UY_SALUD_VIH": {
+      "title": "VIH e infecciones de transmisión sexual",
+      "what": [
+        "Estado serológico, carga viral y tratamiento antirretroviral, hepatitis, tuberculosis e infecciones de transmisión sexual. La Ley 18.335 de derechos del paciente y el secreto médico — el artículo 302 del Código Penal, al que remite el artículo 11 de la ley — obligan al registro."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."
+      ]
+    },
+    "UY_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo y Rh",
+      "what": [
+        "Grupo sanguíneo y factor Rh."
+      ],
+      "masking": [
+        "Reemplazado por otro grupo de la lista."
+      ]
+    },
+    "UY_SALUD_DISCAPACIDAD": {
+      "title": "Discapacidad",
+      "what": [
+        "La condición, el tipo y el grado de discapacidad, el certificado y la prestación por discapacidad del BPS, bajo la Ley 18.651."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por una categoría de la lista."
+      ]
+    },
+    "UY_SALUD_OCUPACIONAL": {
+      "title": "Carné de salud y salud ocupacional",
+      "what": [
+        "El **carné de salud básico** es obligatorio para todo trabajador en el Uruguay, lo que pone un certificado de salud en la tabla de personal de casi todo empleador. También exámenes ocupacionales, accidentes de trabajo y enfermedades profesionales, el siniestro del BSE, certificaciones médicas y ausentismo."
+      ],
+      "masking": [
+        "Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su propio dominio."
+      ]
+    },
+    "UY_SALUD_REPRODUCTIVA": {
+      "title": "Salud sexual y reproductiva",
+      "what": [
+        "Embarazo, última regla, control obstétrico, parto, la interrupción del embarazo que regula la Ley 18.987, planificación familiar, fertilidad."
+      ],
+      "masking": [
+        "Las banderas mantienen su forma; cualquier otro valor pasa a `Sin información`."
+      ]
+    },
+    "UY_SALUD_MENTAL": {
+      "title": "Salud mental",
+      "what": [
+        "Trastornos mentales, atención psiquiátrica o psicológica, intentos de autoeliminación y consumo de sustancias. El artículo 19 cubre la salud física **y mental** del paciente con todas sus letras."
+      ],
+      "masking": [
+        "Las banderas mantienen su forma; cualquier otro valor pasa a `Sin información`."
+      ]
+    },
+    "UY_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Historial crediticio",
+      "what": [
+        "El reporte del Clearing de Informes, el score, los días de mora y la categoría del deudor del Banco Central — 1C a 5. El artículo 22 autoriza el tratamiento pero lo limita: cinco años para la obligación comercial de una persona física, renovable una vez, y cinco más para la cancelada."
+      ],
+      "masking": [
+        "Un score recibe otros dígitos de la misma longitud; una bandera sigue siendo bandera; una categoría se reemplaza por otra de la lista."
+      ]
+    },
+    "UY_FIN_DEUDA": {
+      "title": "Deuda",
+      "what": [
+        "Saldos de crédito y de cartera, montos en mora, cuotas, montos otorgados y límites."
+      ],
+      "masking": [
+        "Mapeada a un valor entre 5.000 y 5.000.000 de pesos uruguayos, sin relación con el real."
+      ]
+    },
+    "UY_FIN_INGRESOS": {
+      "title": "Ingresos y remuneración",
+      "what": [
+        "Sueldo nominal y líquido, ingreso mensual o familiar, honorarios y rentas. El salario mínimo nacional fue de unos 23.600 pesos mensuales en 2025."
+      ],
+      "masking": [
+        "Mapeados a un valor entre 22.000 y 400.000 pesos uruguayos."
+      ]
+    },
+    "UY_FIN_PATRIMONIO": {
+      "title": "Patrimonio",
+      "what": [
+        "Patrimonio, activos, tasaciones y el aforo catastral, saldos de cuenta y de fondos, depósitos a plazo y la declaración jurada de bienes."
+      ],
+      "masking": [
+        "Mapeado a un valor entre 50.000 y 20.000.000 de pesos uruguayos."
+      ]
+    },
+    "UY_FIN_PENSION": {
+      "title": "Pasividad y beneficios",
+      "what": [
+        "El monto de la pasividad, la pensión o el beneficio, y la pensión alimenticia. Uno de cada cuatro uruguayos cobra una."
+      ],
+      "masking": [
+        "Mapeado a un valor entre 15.000 y 200.000 pesos uruguayos."
+      ]
+    },
+    "UY_FIN_PROGRAMA_SOCIAL": {
+      "title": "Programas sociales",
+      "what": [
+        "La Tarjeta Uruguay Social, las Asignaciones Familiares del Plan de Equidad, la Asistencia a la Vejez, Uruguay Trabaja y el Sistema Nacional de Cuidados, por nombre o como bandera. Estar en uno dice que el hogar es pobre."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera y cualquier otro valor se reemplaza por un programa de la lista."
+      ]
+    },
+    "UY_FIN_NIVEL_SOCIOECONOMICO": {
+      "title": "Índice de Carencias Críticas",
+      "what": [
+        "El puntaje que el Índice de Carencias Críticas del MIDES da a cada hogar, y que decide quién recibe una transferencia, y el nivel socioeconómico o quintil."
+      ],
+      "masking": [
+        "Una bandera sigue siendo bandera, un código se reemplaza por otro código y cualquier otro valor por una clase de la lista."
+      ]
+    },
+    "UY_FIN_VIVIENDA": {
+      "title": "Tenencia de la vivienda",
+      "what": [
+        "La tenencia de la vivienda en las categorías del censo: propietario de la vivienda y el terreno, propietario de la vivienda y no del terreno, inquilino, ocupante en relación de dependencia, ocupante gratuito, ocupante sin permiso."
+      ],
+      "masking": [
+        "Reemplazada por otra tenencia de la lista."
+      ]
+    },
+    "UY_PENAL_ANTECEDENTES": {
+      "title": "Infracciones y antecedentes",
+      "what": [
+        "El certificado de antecedentes judiciales, el tipo de delito, la situación procesal, la boleta de captura, la privación de libertad y el registro del INR. El último inciso del artículo 18 reserva los datos sobre infracciones **penales, civiles o administrativas** a las autoridades públicas competentes."
+      ],
+      "masking": [
+        "Reemplazados por un estado genérico de la lista — no registra, condenado, absuelto —, sea cual sea el desenlace; una bandera sigue siendo bandera."
+      ]
+    },
+    "UY_PENAL_EXPEDIENTE": {
+      "title": "Expediente judicial",
+      "what": [
+        "El Identificador Único de Expediente que el Poder Judicial da a cada juicio — la sede, un correlativo y el año, `2-12345/2024` — y la ficha de la Fiscalía."
+      ],
+      "masking": [
+        "La sede y el correlativo se mapean dígito por dígito; el año queda. Otros números se enmascaran carácter por carácter."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Los dígitos verificadores de la cédula y del RUT",
+      "body": [
+        "La **cédula de identidad** es el caso simple: siete dígitos con los pesos 2 9 8 7 6 3 4 desde la izquierda, módulo 10, y el dígito es diez menos el residuo. Es exactamente lo que hace el algoritmo Check Digit del Masking Engine, así que basta un paso: mapea los siete dígitos y escribe el octavo. El ejemplo resuelto publicado — 1.234.567 da 2 — coincide, y los puntos y el guion pasan intactos porque Check Digit recibe la instrucción de preservarlos.",
+        "El **RUT** necesita una vuelta más. Su dígito es módulo 11 sobre los pesos 4 3 2 9 8 7 6 5 4 3 2, once menos el residuo, escrito **0 cuando da once y 1 cuando da diez**. Check Digit escribe *módulo menos residuo* y escribe diez como `0`, así que coincide en todas partes salvo en un residuo: con residuo 1 el dígito verdadero es 1 y Check Digit escribe 0 — y el residuo 0, cuyo dígito verdadero sí es 0, produce el mismo cero escrito. Los dos casos son indistinguibles a partir del dígito solo.",
+        "El set lo resuelve con un **Check Digit auxiliar cuyos pesos son los reales duplicados, módulo 11**. Duplicar lleva un residuo 0 a 0 y un residuo 1 a 2, de modo que el auxiliar escribe `0` en el primer caso y `9` en el segundo — los dos casos quedan distinguidos. Un **Regex Decompose** lee entonces el par de dígitos, escribe el verdadero y descarta el auxiliar. Cuatro pasos en una cadena, sin tabla de consulta, y los dos dígitos del tipo de contribuyente y los tres de la sucursal quedan donde estaban.",
+        "El RUT uruguayo no se deriva de la cédula, así que los dos se enmascaran de forma independiente — a diferencia del Perú o el Ecuador, donde el número del contribuyente lleva el documento de identidad dentro."
+      ]
+    },
+    {
+      "title": "Dónde vive la gente: localidades, código INE y código postal",
+      "body": [
+        "Con la población que contó el censo de 2023 y una ubicación para cada lugar, el set conoce el tamaño, el departamento y la posición de las 652 localidades censales y los 19 departamentos.",
+        {
+          "list": [
+            "Una **localidad** con menos de 20.000 habitantes pasa a la localidad más cercana de al menos 20.000 **en el mismo departamento**. Son 624, con 873.000 habitantes — un cuarto del país.",
+            "Cada uno de los 19 departamentos tiene al menos una localidad por encima del umbral, así que un valor generalizado nunca abandona su departamento. Los departamentos mismos están todos muy por encima — el menor, Flores, tiene unos 24.600 habitantes — y quedan.",
+            "La distancia se mide entre las ubicaciones, en línea recta. En diecisiete de los diecinueve departamentos hay exactamente una localidad por encima del umbral, así que el destino está forzado sea cual sea la distancia; solo Canelones, Maldonado y San José ofrecen una elección real.",
+            "Los nombres se repiten — Santa Lucía, San Jorge, Cerro Chato, Tala. Un nombre solo se generaliza cuando todas las localidades que lo llevan son pequeñas, y entonces sigue a la más poblada de ellas. Escrito con el departamento (`Piriápolis - Maldonado`, `Piriápolis (Maldonado)`), la misma regla aplica dentro de él. Un nombre que también es **departamento** — Canelones, Salto, Rivera — queda intacto, para que una columna de departamento nunca se reescriba; toda localidad en esa posición está ella misma por encima del umbral.",
+            "El **código INE** sigue la misma tabla, de modo que el nombre y el código de la localidad de una persona siguen coincidiendo, y el **barrio** se reemplaza por otro mientras el **código postal** conserva solo el departamento y la zona."
+          ]
+        },
+        "Los nombres de localidad que también son nombres o apellidos, y los nombres de departamento, quedan fuera de la lista de detección, para que una columna de apellidos no se tome por localidades."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        {
+          "list": [
+            "**Columnas binarias** — fotos de la cédula, huellas, selfies de validación, PDF clínicos en BLOB — no pueden enmascararse con estos algoritmos. Inventaríelas y repórtelas como riesgo residual.",
+            "**La ubicación de 186 de las 652 localidades es aproximada**: es el centro de las localidades de su departamento para las que se encontró una. Como diecisiete departamentos tienen un destino único, esto cambia el resultado de solo 84 localidades pequeñas, todas en Canelones, Maldonado y San José — y la garantía de al menos 20.000 habitantes en el mismo departamento se cumple en todos los casos.",
+            "**El INE publica los nombres de las localidades en mayúsculas sin sus tildes.** El set las restituye con un diccionario y escribe ambas grafías en las tablas, pero un nombre que no pudo restituir sale sin tilde.",
+            "**Una localidad cuyo nombre es también un departamento no se generaliza**, para que una columna de departamento nunca se reescriba. Toda localidad en esa posición está por encima del umbral, así que nada se escapa — pero si sus datos usan un nombre de departamento para un lugar menor, dele a esa columna un dominio propio.",
+            "**Data Cleansing deja los valores desconocidos tal cual**: una localidad escrita de una forma que no está en la tabla — abreviada, mal escrita — pasa sin cambios.",
+            "**El texto libre** se redacta palabra por palabra: un teléfono escrito con espacios dentro de una frase puede no encontrarse, y un nombre que también es palabra común (`Rosa`, `Cruz`, `Flores`) se redacta dondequiera que aparezca.",
+            "**Niños y adolescentes**: la fecha de nacimiento se mueve como mucho 60 días, así que pocas personas cruzan su cumpleaños 18 — pero algunas lo hacen. Donde esa línea importe, separe la regla por grupo de edad con Multi-Column Condition.",
+            "**El reloj de cinco años del artículo 22 viaja con el dato.** Enmascarar el monto de una deuda no reinicia la fecha en que se hizo exigible, y una copia de prueba de una base crediticia mantiene cada obligación tan antigua como era.",
+            "**Las direcciones** se reemplazan como línea entera. Calle, barrio, localidad y código postal en columnas separadas se enmascaran de forma independiente y dejan de formar una dirección coherente.",
+            "**La clave del engine** vincula los valores enmascarados de vuelta a producción para quien tenga ambas: la copia está **seudonimizada** en el sentido del artículo 8 a) del Decreto 64/020, no disociada en el sentido del artículo 4 G), y para esa persona sigue siendo dato personal. Mantenga la clave separada de la copia."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "Antes de publicarse, el set se comprobó fuera de un Masking Engine:",
+        {
+          "list": [
+            "La regla de la cédula se comprobó contra el ejemplo resuelto publicado, y la del RUT contra el ejemplo resuelto de un RUT real — el 21-100342-001-7 de Antel.",
+            "Cada configuración de classifier se revisó contra lo que acepta un Masking Engine.",
+            "El profiling se simuló sobre 144 columnas con el set entero en su umbral de asignación — bien nombradas, mal nombradas y 29 que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
+            "La tabla que generaliza lugares se auditó para las 652 localidades y los 19 departamentos: por nombre, por nombre con el departamento y por código INE, comprobando que ningún código abandona su departamento.",
+            "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de ejemplo de cada dominio y marcadores como `N/A`, comprobando cada salida contra su vocabulario; 200 cédulas para validez, distinción y los puntos y el guion que conservan, y 200 RUT para validez, distinción y el tipo de contribuyente y la sucursal que conservan. Cada algoritmo enmascaró además su propio valor de ejemplo."
+          ]
+        },
+        "Toda columna se asignó como se esperaba y todo valor se enmascaró como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        {
+          "list": [
+            "Ley 18.331 de Protección de Datos Personales y Acción de Habeas Data (11 de agosto de 2008) y Decreto 414/009, con las modificaciones de la Ley 18.719 (2010), Ley 18.996 (2012), Ley 19.355 (2015), Ley 19.670 (2018, arts. 37 a 40) y Ley 19.924 (2020, arts. 86 y 87), y Decreto 64/020 del 17 de febrero de 2020.",
+            "Unidad Reguladora y de Control de Datos Personales (URCDP), dentro de AGESIC. Decisión de adecuación 2012/484/UE de la Comisión Europea. Convenio 108 del Consejo de Europa.",
+            "Ley 18.335 de derechos de los pacientes. Ley 18.651 de personas con discapacidad. Ley 18.987 de interrupción voluntaria del embarazo. Ley 19.580 de violencia hacia las mujeres. Ley 19.684 integral para personas trans. Ley 18.246 de unión concubinaria. Artículo 302 del Código Penal (secreto profesional).",
+            "Instituto Nacional de Estadística: Censo de Población, Hogares y Viviendas 2023 — tabla de localidades censales con el código INE, la población y la densidad de cada una. Dirección Nacional de Identificación Civil (cédula y su dígito verificador). Dirección General Impositiva (RUT y su dígito verificador). Banco Central del Uruguay (categorías de deudor). BPS. MIDES (Índice de Carencias Críticas y los programas sociales). Corte Electoral (credencial cívica y el registro de partidos). Dirección Nacional de Catastro (padrón). Ministerio de Trabajo (salario mínimo nacional 2025)."
+          ]
+        }
+      ]
+    }
+  ]
+}

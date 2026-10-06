@@ -13,7 +13,7 @@ criminal records.
 
 | | |
 |---|---|
-| Profile set | `BR - LGPD - v1`, assignment threshold 60 |
+| Profile set | `BR - LGPD - v1`, assignment threshold 60, built 16 September 2026 |
 | Extended pack | 84 domains, 148 classifiers, 162 algorithms, 96 files — everything below |
 | Essential pack | 13 domains, 27 classifiers, 23 algorithms, 5 files — CPF, RG, CNH, passport, names, contact, address, CEP, birth date |
 | Load it | **Settings → Profile Sets** |

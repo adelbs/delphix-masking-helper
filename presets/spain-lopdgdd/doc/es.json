@@ -1,0 +1,1009 @@
+{
+  "title": "España — RGPD y Ley Orgánica 3/2018 (LOPDGDD)",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales españoles: DNI y NIE con letra válida, el número de la Seguridad Social, el IBAN y el CCC, la referencia catastral y el CUPS con caracteres de control válidos, municipios y códigos postales generalizados por debajo de 20.000 habitantes, las categorías especiales del artículo 9, datos de salud, económicos y tributarios, y antecedentes penales y sanciones administrativas.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encuentra los datos personales de una base de datos española y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, formación o análisis — deje de identificar a nadie.",
+        "Enmascarar solo nombres y DNI no basta: una fecha de nacimiento, un sexo y un municipio pequeño ya señalan a un puñado de personas, y 7.700 de los 8.132 municipios de España tienen menos de 20.000 habitantes. El set trabaja en las capas donde está el riesgo:",
+        {
+          "list": [
+            "**Identificadores directos** — DNI, NIE y el NIF de una persona física, pasaporte, el número de soporte de la tarjeta, el número de la Seguridad Social, números de alumno y de colegiado, nombres, contacto, dirección, cuentas bancarias, tarjetas, dispositivos, cookies, matrículas, la referencia catastral de un inmueble, el CUPS de un suministro de luz o gas, fotografías, texto libre.",
+            "**Cuasi-identificadores** — fecha de nacimiento, año de nacimiento, edad, sexo, municipio, su código INE y el código postal, nacionalidad y situación administrativa, estado civil, ocupación, empleador, nivel de estudios, personas a cargo.",
+            "**Categorías especiales** — los datos del artículo 9 del Reglamento: origen racial o étnico, opiniones políticas y afiliación a un partido, convicciones religiosas o filosóficas, afiliación sindical, datos genéticos y biométricos, vida sexual y orientación sexual; con la identidad de género y las víctimas de violencia de género, que la ley española protege por sí mismas.",
+            "**Datos de salud** — la historia clínica, diagnósticos, procedimientos, medicamentos, VIH, discapacidad y dependencia, salud laboral, salud reproductiva y mental.",
+            "**Datos económicos** — los ficheros de morosos y la central de riesgos del Banco de España, deudas, ingresos, patrimonio, pensiones, prestaciones sociales, y los datos tributarios que la Ley General Tributaria declara reservados.",
+            "**Infracciones penales y administrativas** — antecedentes penales, el certificado del registro de delincuentes sexuales, números de procedimiento judicial, y sanciones administrativas como las multas y los puntos del carné de conducir."
+          ]
+        },
+        "Cada grupo de abajo dice qué es cada dominio, cómo se enmascara y por qué. El descubrimiento es un profile set de 147 classifiers con umbral 60; el enmascaramiento son 83 dominios con sus algoritmos. Los nombres de columna se reconocen en castellano, en inglés y, para los datos más comunes, en catalán, gallego y euskera."
+      ]
+    },
+    {
+      "title": "La ley en España: el Reglamento y la LOPDGDD",
+      "body": [
+        "España no tiene una ley de protección de datos propia como las de sus vecinos del otro lado del Atlántico: la ley es el **Reglamento General de Protección de Datos**, Reglamento (UE) 2016/679, de aplicación directa, y la **Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales** (LOPDGDD), que lo adapta y completa donde el Reglamento deja margen a los Estados miembros. El propio derecho fundamental está en el artículo 18.4 de la Constitución. La LOPDGDD se ha modificado varias veces — por la Ley Orgánica 3/2020, la Ley Orgánica 7/2021, la Ley 2/2023, la Ley 11/2023 y, la última, por la Ley 10/2025, de 26 de diciembre, que reescribió los sistemas de exclusión publicitaria del artículo 23 — sin tocar los preceptos en los que se apoya este set. La autoridad es la **Agencia Española de Protección de Datos** (AEPD), junto a las autoridades de Cataluña, el País Vasco y Andalucía para su propio sector público.",
+        "El Reglamento protege solo a **personas físicas**: el artículo 4.1 define el dato personal como información sobre una persona física identificada o identificable, y el considerando 14 dice que no cubre los datos de personas jurídicas. Por eso el NIF de una empresa atraviesa este set intacto, mientras que el NIF de un autónomo — que es su DNI — se enmascara como cualquier otro.",
+        "Cuatro preceptos de la LOPDGDD dan forma a este set más allá del Reglamento:",
+        {
+          "list": [
+            "**Artículo 9.1** — para la ideología, la afiliación sindical, la religión, la orientación sexual, las creencias y el origen racial o étnico, \"el solo consentimiento del afectado no bastará para levantar la prohibición del tratamiento de datos cuya finalidad principal sea identificar\" esos datos. El consentimiento, que el Reglamento admite, no basta en España.",
+            "**Artículo 10** — los datos de condenas e infracciones penales solo pueden tratarse fuera de las autoridades cuando una norma con rango de ley lo permite; el **artículo 27** extiende la regla a las infracciones y sanciones administrativas.",
+            "**Artículo 32** — cuando los datos se rectifican o suprimen deben **bloquearse**: identificarse y reservarse \"para impedir su tratamiento, incluyendo su visualización\", y el artículo 32.3 prohíbe tratar los datos bloqueados \"para ninguna finalidad distinta\" de ponerlos a disposición de jueces y autoridades.",
+            "**Disposición adicional decimoséptima** — las leyes al amparo de las cuales se tratan datos de salud, y las condiciones para los datos de salud seudonimizados en investigación, citadas abajo."
+          ]
+        },
+        "Las infracciones se gradúan en los artículos 72 a 74 de la LOPDGDD, y las multas son las del artículo 83 del Reglamento, hasta 20 millones de euros o el 4% del volumen de negocio mundial. Entre las infracciones muy graves, que prescriben a los tres años, están tratar categorías especiales fuera del artículo 9 (art. 72.1 e), tratar datos penales fuera del artículo 10 (art. 72.1 f), vulnerar el deber de confidencialidad (art. 72.1 i), incumplir la obligación de bloqueo (art. 72.1 n) — y, el precepto que habla más directamente a este set, **\"la reversión deliberada de un procedimiento de anonimización a fin de permitir la reidentificación de los afectados\"** (art. 72.1 p)."
+      ]
+    },
+    {
+      "title": "Seudonimización, anonimización y copias fuera de producción",
+      "body": [
+        "El Reglamento nombra la técnica. El artículo 4.5 define la **seudonimización** como el tratamiento de datos personales de manera que ya no puedan atribuirse a un interesado sin utilizar información adicional, \"siempre que dicha información adicional figure por separado y esté sujeta a medidas técnicas y organizativas\". El considerando 26 deja la información anónima fuera del Reglamento y mide la identificabilidad por \"todos los medios que razonablemente pueda utilizar\" alguien. El artículo 25.1 cita la seudonimización como primer ejemplo de protección de datos desde el diseño, el artículo 32.1 a) como primer ejemplo de medida de seguridad, y el artículo 6.4 e) como garantía que hace compatible un tratamiento ulterior con el original.",
+        "Enmascarar con el engine es seudonimizar exactamente en ese sentido: el resultado es determinista para la clave del engine, y quien tiene la clave y los datos de producción puede reproducir la correspondencia. Una copia enmascarada sigue siendo dato personal **para quien alcanza la clave**, y la clave debe guardarse aparte de la copia. El Tribunal de Justicia sacó la consecuencia el 4 de septiembre de 2025, en **SEPD contra JUR (C‑413/23 P)**: los datos seudonimizados pueden no ser datos personales para un destinatario que no dispone de medios razonables para reidentificarlos, mientras siguen siéndolo para quien conserva la información adicional. El CEPD dijo lo mismo en sus Directrices 01/2025 sobre seudonimización, adoptadas el 16 de enero de 2025. La Comisión Europea propuso en noviembre de 2025, en el Ómnibus Digital, llevar esa lectura relativa a la definición de dato personal; el compromiso del Consejo de 2026 retiró el cambio, y en octubre de 2026 la definición sigue como estaba.",
+        "La ley española añade tres cosas propias. La disposición adicional decimoséptima de la LOPDGDD admite datos de salud seudonimizados en investigación solo con **\"una separación técnica y funcional entre el equipo investigador y quienes realicen la seudonimización y conserven la información que posibilite la reidentificación\"** — la regla que este set pide para la clave del engine. El artículo 28.2 a) incluye la \"reversión no autorizada de la seudonimización\" entre los riesgos que el responsable debe ponderar. Y el artículo 72.1 p) hace de la reversión deliberada de una anonimización una infracción muy grave.",
+        "Sobre las copias fuera de producción la orientación es clara. La AEPD escribió el 18 de abril de 2022, en \"Brechas de datos personales en entornos de desarrollo y preproducción\", que debe evitarse el uso de datos personales en entornos de desarrollo y preproducción, que los datos de prueba deben crearse artificialmente o derivarse de los reales de forma que conserven su estructura sin contener datos personales reales, y que, donde los datos reales sean estrictamente necesarios, la decisión debe documentarse con un análisis de necesidad y proporcionalidad. Para el sector público y sus proveedores es norma: el **Esquema Nacional de Seguridad** (Real Decreto 311/2022) exige en la medida **mp.sw.1** que el desarrollo se haga en un sistema distinto y separado del de producción, \"ni datos de producción en el de desarrollo\", y en su refuerzo R4 que las pruebas previas a la implantación \"preferiblemente\" no se realicen con datos reales — ambas para sistemas de categoría media y alta. Una copia enmascarada es la forma de cumplir las dos."
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. Los identificadores españoles llevan caracteres de control — la letra del DNI, los dígitos de control del número de la Seguridad Social y de la cuenta bancaria, las letras de control de la referencia catastral y del CUPS — y todo sistema español los valida, por eso el set recalcula cada uno a partir de los dígitos enmascarados. El NIF de una empresa no es dato personal de nadie y atraviesa intacto."
+      ],
+      "domains": [
+        "ES_L1_DNI",
+        "ES_L1_NIE",
+        "ES_L1_PASAPORTE",
+        "ES_L1_SOPORTE_DOCUMENTO",
+        "ES_L1_NSS",
+        "ES_L1_CODIGO_ESTUDIANTE",
+        "ES_L1_COLEGIADO",
+        "ES_L1_NOMBRE",
+        "ES_L1_APELLIDO",
+        "ES_L1_NOMBRE_COMPLETO",
+        "ES_L1_EMAIL",
+        "ES_L1_TELEFONO",
+        "ES_L1_DIRECCION",
+        "ES_L1_DIRECCION_COMPLEMENTO",
+        "ES_L1_CUENTA_BANCARIA",
+        "ES_L1_TARJETA",
+        "ES_L1_BILLETERA",
+        "ES_L1_IP",
+        "ES_L1_DISPOSITIVO",
+        "ES_L1_COOKIE",
+        "ES_L1_MATRICULA",
+        "ES_L1_VEHICULO",
+        "ES_L1_REFERENCIA_CATASTRAL",
+        "ES_L1_CUPS",
+        "ES_L1_CONTRATO",
+        "ES_L1_USUARIO",
+        "ES_L1_CREDENCIAL",
+        "ES_L1_IMAGEN",
+        "ES_L1_GEOLOCALIZACION",
+        "ES_L1_TEXTO_LIBRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por sí solos y a casi cualquiera juntos. El considerando 26 del Reglamento pregunta cuán identificable es una persona por \"todos los medios que razonablemente pueda utilizar\" alguien, incluida la singularización — y una fecha de nacimiento, un sexo y un municipio pequeño son esos medios. Estas columnas no se vacían — una prueba necesita edades y lugares que se comporten — sino que se engrosan hasta que una combinación deja de señalar a una persona."
+      ],
+      "domains": [
+        "ES_L2_FECHA_NACIMIENTO",
+        "ES_L2_ANIO_NACIMIENTO",
+        "ES_L2_EDAD",
+        "ES_L2_FECHA_EVENTO",
+        "ES_L2_SEXO",
+        "ES_L2_MUNICIPIO",
+        "ES_L2_CODIGO_MUNICIPIO",
+        "ES_L2_CODIGO_POSTAL",
+        "ES_L2_NACIONALIDAD",
+        "ES_L2_SITUACION_ADMINISTRATIVA",
+        "ES_L2_ESTADO_CIVIL",
+        "ES_L2_OCUPACION",
+        "ES_L2_EMPLEADOR",
+        "ES_L2_NIVEL_EDUCATIVO",
+        "ES_L2_CENTRO_EDUCATIVO",
+        "ES_L2_PERSONAS_A_CARGO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Categorías especiales (art. 9 RGPD y art. 9 LOPDGDD)",
+      "intro": [
+        "El artículo 9.1 del Reglamento prohíbe tratar estos datos salvo una de las excepciones del artículo 9.2, y el artículo 9.1 de la LOPDGDD añade que, para la ideología, la afiliación sindical, la religión, la orientación sexual, las creencias y el origen racial o étnico, el solo consentimiento no levanta la prohibición \"a fin de evitar situaciones discriminatorias\". Una copia de pruebas no es ninguna de esas excepciones, y tratar estos datos fuera de ellas es infracción muy grave (art. 72.1 e). La identidad de género y las víctimas de violencia de género se suman porque la ley española las protege por sí mismas: la Ley 15/2022 nombra la \"identidad sexual\" y la \"expresión de género\" entre las causas de discriminación, y la Ley Orgánica 1/2004 la intimidad de las víctimas. Las columnas categóricas se reemplazan dentro de su propio vocabulario, o se suprimen."
+      ],
+      "domains": [
+        "ES_L3_ORIGEN_ETNICO",
+        "ES_L3_RELIGION",
+        "ES_L3_CONVICCION_FILOSOFICA",
+        "ES_L3_OPINION_POLITICA",
+        "ES_L3_AFILIACION_PARTIDARIA",
+        "ES_L3_AFILIACION_SINDICAL",
+        "ES_L3_BIOMETRICO",
+        "ES_L3_GENETICO",
+        "ES_L3_ORIENTACION_SEXUAL",
+        "ES_L3_VIDA_SEXUAL",
+        "ES_L3_IDENTIDAD_GENERO",
+        "ES_L3_VICTIMA"
+      ]
+    },
+    {
+      "id": "SALUD",
+      "title": "Datos de salud (art. 9 RGPD, Ley 41/2002 y DA 17ª LOPDGDD)",
+      "intro": [
+        "La salud es categoría especial del artículo 9, y la disposición adicional decimoséptima de la LOPDGDD enumera las leyes al amparo de las cuales se trata — la Ley General de Sanidad, la Ley 41/2002 de autonomía del paciente, las leyes del Sistema Nacional de Salud, de investigación biomédica, de discapacidad —, ninguna de ellas un entorno de pruebas. El artículo 16.3 de la Ley 41/2002 pide que todo acceso secundario a la historia clínica preserve los datos de identificación \"separados de los de carácter clinicoasistencial, de manera que, como regla general, quede asegurado el anonimato\". La Ley 15/2022 añade la \"enfermedad o condición de salud\" y el \"estado serológico\" a las causas de discriminación."
+      ],
+      "domains": [
+        "ES_SALUD_IDENTIFICADOR",
+        "ES_SALUD_COBERTURA",
+        "ES_SALUD_DIAGNOSTICO",
+        "ES_SALUD_PROCEDIMIENTO",
+        "ES_SALUD_MEDICAMENTO",
+        "ES_SALUD_TEXTO_CLINICO",
+        "ES_SALUD_RESULTADO_PRUEBA",
+        "ES_SALUD_VIH",
+        "ES_SALUD_GRUPO_SANGUINEO",
+        "ES_SALUD_DISCAPACIDAD",
+        "ES_SALUD_DEPENDENCIA",
+        "ES_SALUD_LABORAL",
+        "ES_SALUD_REPRODUCTIVA",
+        "ES_SALUD_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos económicos y tributarios (art. 20 LOPDGDD y art. 95 LGT)",
+      "intro": [
+        "El artículo 20 de la LOPDGDD admite los sistemas comunes de información crediticia solo para deudas ciertas, vencidas y exigibles, y solo \"mientras persista el incumplimiento, con el límite máximo de cinco años\"; el artículo 20.3 niega la presunción de licitud a todo perfil construido sumando otras fuentes. El artículo 95 de la **Ley General Tributaria** declara \"reservados\" todos los datos que obtiene la Administración tributaria. Y la Ley 15/2022 nombra la \"situación socioeconómica\" entre las causas de discriminación. Los importes mantienen su orden de magnitud para que totales y cocientes sigan comportándose; lo que dejan de hacer es revelar un sueldo."
+      ],
+      "domains": [
+        "ES_FIN_HISTORIAL_CREDITICIO",
+        "ES_FIN_DEUDA",
+        "ES_FIN_INGRESOS",
+        "ES_FIN_PATRIMONIO",
+        "ES_FIN_PENSION",
+        "ES_FIN_PRESTACION_SOCIAL",
+        "ES_FIN_TRIBUTARIO"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Infracciones penales y administrativas (art. 10 RGPD, arts. 10 y 27 LOPDGDD)",
+      "intro": [
+        "El artículo 10 de la LOPDGDD solo admite los datos de condenas e infracciones penales fuera de las autoridades cuando una norma con rango de ley los ampara, y el artículo 27 hace lo mismo con las infracciones y sanciones administrativas; tratar unos u otros fuera de esas reglas es infracción muy grave (art. 72.1 f y g). El artículo 136 del Código Penal cancela una inscripción del Registro Central de Penados tras un plazo que va de seis meses a diez años, y el artículo 136.4 dice que las inscripciones \"no serán públicas\". Una copia fuera de producción conserva la inscripción mientras la copia exista, que es más que cualquiera de esos plazos."
+      ],
+      "domains": [
+        "ES_PENAL_ANTECEDENTES",
+        "ES_PENAL_DELITOS_SEXUALES",
+        "ES_PENAL_PROCEDIMIENTO",
+        "ES_PENAL_SANCION_ADMINISTRATIVA"
+      ]
+    }
+  ],
+  "domains": {
+    "ES_L1_DNI": {
+      "title": "DNI y NIF de persona física",
+      "what": [
+        "El Documento Nacional de Identidad: ocho dígitos y una letra, `12345678Z`, a menudo escrito `12.345.678-Z`. La letra es el número **módulo 23**, leído en la tabla `TRWAGMYFPDXBNJZSQVHLCKE`, y todo formulario español la comprueba. El DNI es también el NIF de su titular ante Hacienda, así que una columna de NIF de persona física es esta columna.",
+        "El mismo dominio recibe lo que una columna de documento guarda junto a los DNI: un NIE, el NIF de una persona física sin DNI ni NIE — **K** para un español menor de catorce años, **L** para un español residente en el extranjero, **M** para un extranjero sin NIE, siete dígitos y la letra de los siete dígitos —, el NIF de una empresa, un DNI guardado sin su letra y un pasaporte."
+      ],
+      "masking": [
+        "Los dígitos cambian y **la letra se recalcula**, así que el valor enmascarado es un DNI válido que no pertenece a nadie. Ningún framework escribe una letra módulo 23, por eso un estado de dos dígitos — el resto hasta ahí — se pone delante del valor y lo recorre carácter a carácter; cada paso es un Data Cleansing sobre una tabla de 299 líneas que responde a \"estado + carácter\" con \"carácter + nuevo estado\", saltando los puntos, guiones y espacios de las formas escritas. Al final una tabla de 46 líneas convierte el resto en la letra, en mayúscula o minúscula como estaba.",
+        "Un NIE conserva su prefijo y un NIF K, L o M su letra, cada uno recalculado en la misma cadena. El **NIF de una empresa** — una letra como A o B, siete dígitos y un carácter de control — atraviesa intacto: el artículo 4.1 del Reglamento solo alcanza a personas físicas, y su considerando 14 lo dice de las personas jurídicas."
+      ]
+    },
+    "ES_L1_NIE": {
+      "title": "NIE",
+      "what": [
+        "El Número de Identidad de Extranjero que la Policía asigna a todo extranjero con intereses en España: un prefijo **X**, **Y** o **Z**, siete dígitos y una letra, `X1234567L`. El prefijo cuenta como dígito — X es 0, Y es 1, Z es 2 — y la letra es ese número de ocho dígitos módulo 23, la misma regla del DNI. Figura en la Tarjeta de Identidad de Extranjero y sirve de NIF."
+      ],
+      "masking": [
+        "Con la misma cadena del DNI: los siete dígitos cambian, el prefijo se mantiene, y la letra se recalcula con el prefijo incluido. Un NIE enmascarado es un NIE válido de la misma serie."
+      ]
+    },
+    "ES_L1_PASAPORTE": {
+      "title": "Pasaporte",
+      "what": [
+        "El número de un pasaporte: desde 2006 el español tiene tres letras y seis dígitos, `PAA123456`; los extranjeros tienen cualquier forma."
+      ],
+      "masking": [
+        "Carácter a carácter: letras por letras, dígitos por dígitos, así que el número conserva su forma."
+      ]
+    },
+    "ES_L1_SOPORTE_DOCUMENTO": {
+      "title": "Número de soporte del documento",
+      "what": [
+        "El número impreso en la propia tarjeta y no en la persona — el IDESP del DNI, tres letras y seis dígitos, o el número de soporte de la Tarjeta de Identidad de Extranjero, `E12345678`. Bancos, operadoras y administraciones lo piden para comprobar que el titular tiene el documento en la mano, e identifica la tarjeta tan bien como el DNI identifica a la persona."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_NSS": {
+      "title": "Número de la Seguridad Social",
+      "what": [
+        "El número que la Tesorería General de la Seguridad Social da a una persona la primera vez que la inscribe, para toda la vida: doce dígitos, `28 12345678 40` — dos de la provincia de la primera inscripción, ocho del número y dos **dígitos de control**, los diez primeros leídos como un número módulo 97. Un número cuyos ocho dígitos empiezan por cero es más antiguo, y entonces el cero no cuenta."
+      ],
+      "masking": [
+        "La provincia se mantiene y los ocho dígitos cambian. Los dos dígitos de control se **recalculan** con un estado que recorre los diez dígitos sobre una tabla de 1.358 líneas — 97 restos por cada dígito y separador — y se convierte él mismo en los dígitos de control; un cero inicial se marca, se salta y se repone. El número enmascarado es válido según la regla de la Seguridad Social y conserva su forma escrita."
+      ]
+    },
+    "ES_L1_CODIGO_ESTUDIANTE": {
+      "title": "Número de alumno",
+      "what": [
+        "El NIA que cada comunidad autónoma da a todo alumno, y el número de estudiante o de expediente de una universidad."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_COLEGIADO": {
+      "title": "Número de colegiado",
+      "what": [
+        "El número de un miembro de un colegio profesional — médicos, abogados, arquitectos, psicólogos —, impreso en recetas, informes y escritos, y consultable en el registro público de cada colegio."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_NOMBRE": {
+      "title": "Nombre",
+      "what": [
+        "Uno o dos nombres de pila — `María de los Ángeles`, `José Antonio`, `Jordi`, `Iñaki`."
+      ],
+      "masking": [
+        "Palabra a palabra, de una lista de los 600 nombres que el INE más cuenta en la población a 1 de enero de 2025 — nombres castellanos, catalanes, gallegos y vascos —, con las mayúsculas de la entrada. `de`, `la`, `los` e `y` se quedan donde están."
+      ]
+    },
+    "ES_L1_APELLIDO": {
+      "title": "Apellido",
+      "what": [
+        "Un español lleva dos apellidos, el primero y el segundo, en el orden que eligieron los progenitores desde la Ley 20/2011 del Registro Civil. Una columna puede guardar uno o los dos: `García`, `Fernández López`, `de la Fuente`."
+      ],
+      "masking": [
+        "Palabra a palabra, de los 500 primeros apellidos que el INE más cuenta, con las mayúsculas de la entrada; las partículas se quedan."
+      ]
+    },
+    "ES_L1_NOMBRE_COMPLETO": {
+      "title": "Nombre completo",
+      "what": [
+        "Nombres y los dos apellidos en una columna, en el orden español — `José Antonio García Fernández` — o con los apellidos delante y una coma, `GARCÍA FERNÁNDEZ, JOSÉ ANTONIO`, como lo escriben registros y listados."
+      ],
+      "masking": [
+        "Dos palabras son un nombre y un apellido; tres, un nombre y dos apellidos; cuatro, dos y dos. Cada palabra se reemplaza de su propia lista, y la forma con coma se lee como apellidos y después nombres."
+      ]
+    },
+    "ES_L1_EMAIL": {
+      "title": "Correo electrónico",
+      "what": [
+        "Una dirección de correo electrónico."
+      ],
+      "masking": [
+        "El nombre y el dominio se transforman carácter a carácter, y el dominio de nivel superior pasa a ser `.test`, reservado para pruebas: una dirección enmascarada nunca entrega un mensaje."
+      ]
+    },
+    "ES_L1_TELEFONO": {
+      "title": "Teléfono",
+      "what": [
+        "Un número español tiene nueve dígitos: 6 y 7 para un móvil, 8 y 9 para un fijo cuyas primeras cifras son la provincia. Con Bizum, un número de móvil es también una dirección de pago."
+      ],
+      "masking": [
+        "El prefijo del país y el primer dígito se mantienen, así que un número enmascarado sigue diciendo móvil o fijo; los demás dígitos cambian, y los espacios y guiones se quedan donde estaban."
+      ]
+    },
+    "ES_L1_DIRECCION": {
+      "title": "Dirección",
+      "what": [
+        "Una dirección postal: tipo de vía, nombre, número, piso y puerta — `Calle Mayor, 12, 3º B`, `Avda. de la Constitución 45, bajo`, `Carrer de Sant Pere, 14`."
+      ],
+      "masking": [
+        "La línea entera se convierte en una ficticia, de una lista de 4.000 — calle, avenida, plaza, paseo, y el carrer, la rúa y la kalea de las otras lenguas oficiales —, siempre la misma para la misma entrada. Municipio y código postal son columnas propias y se generalizan allí."
+      ]
+    },
+    "ES_L1_DIRECCION_COMPLEMENTO": {
+      "title": "Complemento de la dirección",
+      "what": [
+        "Piso, puerta, escalera, bloque, portal, el nombre de una urbanización, un apartado de correos: lo que estrecha una dirección a una vivienda."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma: `3º B` sigue siendo un piso y una letra."
+      ]
+    },
+    "ES_L1_CUENTA_BANCARIA": {
+      "title": "Cuenta bancaria (IBAN y CCC)",
+      "what": [
+        "Una cuenta española tiene veinte dígitos, el Código Cuenta Cliente: cuatro de la entidad, cuatro de la oficina, **dos dígitos de control** y diez de la cuenta, `2100 0418 45 0200051332`. El primer dígito de control comprueba entidad y oficina, el segundo la cuenta, cada uno una suma ponderada módulo 11. El IBAN antepone `ES` y **otros dos dígitos de control**, los de la ISO 13616, módulo 97: `ES91 2100 0418 4502 0005 1332`."
+      ],
+      "masking": [
+        "Los diez dígitos de la cuenta cambian; entidad, oficina y el primer dígito de control siguen siendo válidos. En un IBAN, el algoritmo IBAN del plugin enmascara la cuenta y recalcula los dígitos del IBAN — pero no el segundo dígito de control, que ningún IBAN extranjero tiene. El set recalcula entonces ese dígito con un estado que recorre la cuenta de derecha a izquierda, lleva el dígito antiguo y el nuevo al principio, y corrige los dígitos del IBAN por el cambio con una tabla de 10.000 líneas. Compacto o impreso en grupos de cuatro, el IBAN enmascarado supera las dos comprobaciones; un CCC solo recibe su segundo dígito recalculado del mismo modo."
+      ]
+    },
+    "ES_L1_TARJETA": {
+      "title": "Tarjeta de pago",
+      "what": [
+        "El número de una tarjeta de crédito o débito."
+      ],
+      "masking": [
+        "Se reemplaza por otro número que supera la comprobación de Luhn, conservando la longitud y los separadores."
+      ]
+    },
+    "ES_L1_BILLETERA": {
+      "title": "Monedero digital",
+      "what": [
+        "El identificador de un monedero electrónico o de criptomonedas."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_IP": {
+      "title": "Dirección IP",
+      "what": [
+        "Una dirección IPv4 o IPv6. El Tribunal de Justicia declaró en Breyer (C‑582/14) que una IP dinámica es dato personal para un proveedor que puede obtener legalmente los medios para identificar al abonado."
+      ],
+      "masking": [
+        "Cada octeto IPv4 pasa a ser un número de 1 a 254; una IPv6 se transforma carácter a carácter, siempre hexadecimal."
+      ]
+    },
+    "ES_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": [
+        "Dirección MAC, IMEI, IMSI, identificador publicitario, identificador de sesión."
+      ],
+      "masking": [
+        "Carácter a carácter, con las letras hexadecimales en un grupo propio, así que una MAC sigue siendo una MAC; los dígitos siguen siendo dígitos."
+      ]
+    },
+    "ES_L1_COOKIE": {
+      "title": "Cookie e identificador de seguimiento",
+      "what": [
+        "El valor de una cookie o de un identificador de seguimiento. El artículo 22.2 de la Ley 34/2002 de servicios de la sociedad de la información los somete a consentimiento, y la guía de la AEPD sobre cookies los trata como dato personal."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_MATRICULA": {
+      "title": "Matrícula",
+      "what": [
+        "Desde septiembre de 2000 una matrícula española es de cuatro dígitos y tres consonantes, `1234 BCD` — sin vocales, ni Ñ ni Q. Las matrículas provinciales antiguas llevan la provincia, `M-1234-AB`, y las especiales un prefijo, `E` para vehículos especiales, `C` para ciclomotores."
+      ],
+      "masking": [
+        "Los dígitos cambian, y las letras de la serie actual cambian **dentro del alfabeto que usa la Dirección General de Tráfico**, así que una matrícula enmascarada sigue siendo una matrícula. La provincia y el prefijo se mantienen."
+      ]
+    },
+    "ES_L1_VEHICULO": {
+      "title": "Identificación del vehículo",
+      "what": [
+        "El número de bastidor (VIN) y los números de los documentos de circulación y de la ITV."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_REFERENCIA_CATASTRAL": {
+      "title": "Referencia catastral",
+      "what": [
+        "Los veinte caracteres que el Catastro da a todo inmueble: para uno urbano, siete dígitos de la manzana y la parcela y siete de la hoja del plano, `9872023 VH5797S`; para uno rústico, el municipio, el sector, el polígono y la parcela; después cuatro dígitos del inmueble dentro de ella y **dos letras de control**. Cada letra es una suma ponderada de once caracteres módulo 23. El artículo 51 del Texto Refundido de la Ley del Catastro Inmobiliario hace del titular de un inmueble un dato protegido, y la referencia junto al nombre de una persona es ese vínculo."
+      ],
+      "masking": [
+        "Cambian los dígitos que nombran la parcela — los siete primeros de una referencia urbana, los cinco de la parcela de una rústica — y se mantienen la hoja del plano o el polígono, que no dicen dónde está el inmueble con más precisión que un barrio. Solo una letra de control depende de lo que cambió, y se **recalcula** con un estado que recorre la referencia con el peso de cada posición, arrastrado por encima de los caracteres que no cuentan. Una referencia escrita en grupos, o solo con los catorce caracteres de la parcela, recibe los dígitos de la parcela cambiados sin las letras."
+      ]
+    },
+    "ES_L1_CUPS": {
+      "title": "CUPS (punto de suministro)",
+      "what": [
+        "El Código Universal del Punto de Suministro de un suministro de luz o gas: `ES`, cuatro dígitos de la distribuidora, doce del punto y **dos letras de control** — los dieciséis dígitos módulo 529, divididos entre 23 y leídos en la tabla del DNI —, a veces seguidos de `0F`. Un CUPS nombra una vivienda: la factura, la curva de consumo del contador inteligente y el bono social cuelgan de él."
+      ],
+      "masking": [
+        "La distribuidora se mantiene, los doce dígitos cambian, y las dos letras se **recalculan** con un estado de tres dígitos que recorre el valor sobre una tabla de 6.877 líneas. Un sufijo se mantiene."
+      ]
+    },
+    "ES_L1_CONTRATO": {
+      "title": "Número de contrato y de cliente",
+      "what": [
+        "Números de contrato, póliza, préstamo, cliente, abonado, siniestro o empleado — cada uno la llave de una persona en su sistema."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_USUARIO": {
+      "title": "Usuario y perfil social",
+      "what": [
+        "Un login, un alias, un perfil en una red social."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_L1_CREDENCIAL": {
+      "title": "Credencial",
+      "what": [
+        "Contraseñas y sus hashes, PIN, códigos de seguridad, tokens, claves de API, el PIN de Cl@ve, respuestas a preguntas de seguridad."
+      ],
+      "masking": [
+        "Todos los caracteres pasan a ser `X`. Una credencial nunca es útil en una copia, y el hash de una contraseña real puede atacarse fuera de línea."
+      ]
+    },
+    "ES_L1_IMAGEN": {
+      "title": "Imagen y voz",
+      "what": [
+        "Fotografías, la imagen de un documento de identidad, videovigilancia, llamadas grabadas — o la ruta hasta ellas. La propia imagen es un derecho fundamental en el artículo 18.1 de la Constitución y la Ley Orgánica 1/1982, y la LOPDGDD dedica a la videovigilancia su artículo 22."
+      ],
+      "masking": [
+        "Todos los caracteres pasan a ser `X`, así que una ruta o una referencia ya no lleva al fichero."
+      ]
+    },
+    "ES_L1_GEOLOCALIZACION": {
+      "title": "Geolocalización",
+      "what": [
+        "Latitud y longitud, solas o en pareja. El artículo 90 de la LOPDGDD regula la geolocalización de los trabajadores."
+      ],
+      "masking": [
+        "La parte entera y el primer decimal se mantienen — unos 11 km — y los demás decimales cambian: el lugar se difumina, no se lleva a otra región."
+      ]
+    },
+    "ES_L1_TEXTO_LIBRE": {
+      "title": "Texto libre",
+      "what": [
+        "Observaciones, comentarios, descripciones de una reclamación o de una incidencia: texto donde puede haberse escrito cualquier cosa."
+      ],
+      "masking": [
+        "Free Text Redaction reemplaza los DNI, NIE, correos, teléfonos, tarjetas, IBAN y CCC, números de la Seguridad Social y direcciones IP por `[DATO]`, y los 1.100 nombres y apellidos del set por `[NOMBRE]`."
+      ]
+    },
+    "ES_L2_FECHA_NACIMIENTO": {
+      "title": "Fecha de nacimiento",
+      "what": [
+        "La fecha de nacimiento — con el sexo y el municipio, la combinación que singulariza a las personas."
+      ],
+      "masking": [
+        "Se desplaza hasta 60 días hacia uno u otro lado, el mismo desplazamiento para la misma fecha: edades y generaciones se mantienen, el vínculo con un registro desaparece."
+      ]
+    },
+    "ES_L2_ANIO_NACIMIENTO": {
+      "title": "Año de nacimiento",
+      "what": [
+        "El año solo."
+      ],
+      "masking": [
+        "La década se mantiene y el último dígito cambia: 1985 pasa a ser 198x."
+      ]
+    },
+    "ES_L2_EDAD": {
+      "title": "Edad",
+      "what": [
+        "Una edad en años."
+      ],
+      "masking": [
+        "La década se mantiene y el último dígito cambia; 100 o más pasa a ser 90, porque un centenario es lo bastante raro para ser encontrado."
+      ]
+    },
+    "ES_L2_FECHA_EVENTO": {
+      "title": "Fecha de un hecho vital",
+      "what": [
+        "Fechas de defunción, matrimonio, alta y baja laboral, ingreso y alta hospitalaria, baja médica, detención y sentencia, expedición y caducidad de un documento."
+      ],
+      "masking": [
+        "Se desplaza hasta 30 días hacia uno u otro lado."
+      ]
+    },
+    "ES_L2_SEXO": {
+      "title": "Sexo",
+      "what": [
+        "El sexo registrado: H/M, V/M, Hombre/Mujer, Femenino/Masculino, 1/2, y el catalán Home/Dona."
+      ],
+      "masking": [
+        "Se reemplaza dentro de su propio vocabulario: una columna `H/M` sigue siendo `H/M`. Una `M` sola se lee como mujer, la convención de la administración española; una columna que codifica el sexo F/M, como la zona de lectura mecánica del DNI, debería tener su propio algoritmo."
+      ]
+    },
+    "ES_L2_MUNICIPIO": {
+      "title": "Municipio",
+      "what": [
+        "El municipio de residencia, nacimiento o empadronamiento — `Valdelageve`, `Alacant`, `La Guijarrosa` —, como lo escribe el INE, con el artículo delante o detrás, en cualquier lengua oficial, o con su provincia al lado."
+      ],
+      "masking": [
+        "Un municipio de menos de 20.000 habitantes pasa a ser el **municipio de al menos 20.000 más cercano de la misma provincia**; uno mayor se mantiene, igual que la provincia y la comunidad. Un nombre solo se generaliza cuando todo municipio que lo lleva es pequeño; escrito con su provincia, la misma regla se aplica dentro de ella y la provincia se mantiene."
+      ]
+    },
+    "ES_L2_CODIGO_MUNICIPIO": {
+      "title": "Código INE del municipio",
+      "what": [
+        "El código del Instituto Nacional de Estadística: dos dígitos de la provincia y tres del municipio, `37334`, a menudo seguidos de su dígito de control."
+      ],
+      "masking": [
+        "El código de un municipio pequeño pasa a ser el código del municipio al que va su nombre, con el dígito de control de ese municipio, así que un código enmascarado concuerda con el nombre enmascarado y nunca sale de su provincia."
+      ]
+    },
+    "ES_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": [
+        "Cinco dígitos, los dos primeros la provincia. Un código postal rural puede cubrir un único pueblo de unas decenas de personas."
+      ],
+      "masking": [
+        "Un código postal cuyo municipio principal es pequeño pasa a ser el código principal del municipio al que se generaliza; el código de un municipio grande se mantiene. Los dígitos de la provincia nunca cambian."
+      ]
+    },
+    "ES_L2_NACIONALIDAD": {
+      "title": "Nacionalidad",
+      "what": [
+        "Nacionalidad o país de nacimiento. No es categoría especial del artículo 9, pero la Ley 15/2022 prohíbe la discriminación \"con independencia de su nacionalidad\", y en un lugar pequeño una nacionalidad señala a pocas familias."
+      ],
+      "masking": [
+        "Se reemplaza por una de las 27 nacionalidades más frecuentes en España."
+      ]
+    },
+    "ES_L2_SITUACION_ADMINISTRATIVA": {
+      "title": "Situación administrativa",
+      "what": [
+        "La situación de un extranjero según la Ley Orgánica 4/2000 de extranjería: residencia temporal o de larga duración, familiar de ciudadano de la UE, solicitante de protección internacional, refugiado, arraigo, irregular. La Ley 15/2022 prohíbe la discriminación disfrute o no la persona \"de residencia legal\"."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de situaciones; los indicadores sí/no siguen siendo indicadores."
+      ]
+    },
+    "ES_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": [
+        "El estado civil, incluida la pareja de hecho de los registros autonómicos."
+      ],
+      "masking": [
+        "Se reemplaza dentro de su vocabulario; un código numérico por otro código."
+      ]
+    },
+    "ES_L2_OCUPACION": {
+      "title": "Ocupación",
+      "what": [
+        "Profesión, puesto, categoría profesional, o su código de la Clasificación Nacional de Ocupaciones (CNO-11)."
+      ],
+      "masking": [
+        "Se reemplaza de una lista de ocupaciones comunes; un código CNO recibe otros dígitos."
+      ]
+    },
+    "ES_L2_EMPLEADOR": {
+      "title": "Empleador",
+      "what": [
+        "El nombre de la empresa donde trabaja la persona — en un pueblo, un empleador puede bastar para saber quién es alguien."
+      ],
+      "masking": [
+        "Se reemplaza por una empresa ficticia."
+      ]
+    },
+    "ES_L2_NIVEL_EDUCATIVO": {
+      "title": "Nivel de estudios",
+      "what": [
+        "El nivel de estudios más alto, de sin estudios a doctorado, o su código."
+      ],
+      "masking": [
+        "Se reemplaza dentro de su vocabulario; un código numérico por otro código."
+      ]
+    },
+    "ES_L2_CENTRO_EDUCATIVO": {
+      "title": "Centro educativo",
+      "what": [
+        "El colegio, el instituto o la universidad donde estudia o estudió la persona."
+      ],
+      "masking": [
+        "Se reemplaza por uno de una lista de centros."
+      ]
+    },
+    "ES_L2_PERSONAS_A_CARGO": {
+      "title": "Personas a cargo",
+      "what": [
+        "Número de hijos o personas a cargo, miembros del hogar. Tres hijos hacen una familia numerosa, y un número alto es raro."
+      ],
+      "masking": [
+        "Los valores de 0 a 5 se mantienen; por encima pasan a ser 5."
+      ]
+    },
+    "ES_L3_ORIGEN_ETNICO": {
+      "title": "Origen racial o étnico",
+      "what": [
+        "El origen étnico autodeclarado, la pertenencia al pueblo gitano. España no lo pregunta en el censo, pero sí encuestas, servicios sociales y planes de igualdad. El artículo 9.1 de la LOPDGDD hace insuficiente el solo consentimiento para tratar datos cuya finalidad principal sea identificarlo."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de categorías; un código numérico por otro código; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_L3_RELIGION": {
+      "title": "Religión",
+      "what": [
+        "Creencia o confesión religiosa — incluida la elección de la clase de religión en el colegio y la asignación tributaria a la Iglesia católica en la declaración de la renta."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de religiones; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_L3_CONVICCION_FILOSOFICA": {
+      "title": "Convicciones filosóficas",
+      "what": [
+        "Convicciones filosóficas o morales, objeción de conciencia — la de un profesional sanitario al aborto o a la eutanasia, por ejemplo, que la Ley Orgánica 3/2021 inscribe en un registro de objetores."
+      ],
+      "masking": [
+        "Se suprimen a `Sin información`: los valores no comparten un vocabulario que pudiera mantenerse."
+      ]
+    },
+    "ES_L3_OPINION_POLITICA": {
+      "title": "Opinión política",
+      "what": [
+        "Ideología, autoubicación en la escala izquierda-derecha de 1 a 10 que usa el CIS, intención o recuerdo de voto."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de posiciones; un valor de la escala por otro valor de la escala."
+      ]
+    },
+    "ES_L3_AFILIACION_PARTIDARIA": {
+      "title": "Afiliación a un partido",
+      "what": [
+        "La afiliación a un partido político, la cuota de afiliado, la militancia."
+      ],
+      "masking": [
+        "Se reemplaza por otro partido del arco parlamentario español; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_L3_AFILIACION_SINDICAL": {
+      "title": "Afiliación sindical",
+      "what": [
+        "La afiliación a un sindicato, la cuota sindical que descuenta la nómina, delegados sindicales y comités de empresa, crédito horario."
+      ],
+      "masking": [
+        "Se suprime a `Sin información`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_L3_BIOMETRICO": {
+      "title": "Datos biométricos",
+      "what": [
+        "Plantillas de huella y de rostro, huellas de voz, firmas manuscritas digitalizadas: \"datos biométricos dirigidos a identificar de manera unívoca a una persona física\", en palabras del artículo 9.1."
+      ],
+      "masking": [
+        "Todos los caracteres pasan a ser `X`. Una plantilla biométrica no puede enmascararse en otra válida, y una real nunca debería llegar a una copia."
+      ]
+    },
+    "ES_L3_GENETICO": {
+      "title": "Datos genéticos",
+      "what": [
+        "Perfiles de ADN, pruebas genéticas, mutaciones como BRCA, la prueba del talón."
+      ],
+      "masking": [
+        "Todos los caracteres pasan a ser `X`."
+      ]
+    },
+    "ES_L3_ORIENTACION_SEXUAL": {
+      "title": "Orientación sexual",
+      "what": [
+        "La orientación sexual, tal como la recogen encuestas, planes de igualdad o historias clínicas."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de orientaciones."
+      ]
+    },
+    "ES_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": [
+        "Datos sobre la vida sexual de una persona: actividad, parejas, prácticas."
+      ],
+      "masking": [
+        "Se suprime a `Sin información`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_L3_IDENTIDAD_GENERO": {
+      "title": "Identidad de género",
+      "what": [
+        "La identidad y la expresión de género, el nombre sentido, una rectificación registral del sexo. La Ley 4/2023 permite rectificar el sexo inscrito en el Registro Civil por declaración de la propia persona, y la Ley 15/2022 nombra la \"identidad sexual\" y la \"expresión de género\" entre las causas de discriminación."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de identidades."
+      ]
+    },
+    "ES_L3_VICTIMA": {
+      "title": "Víctimas de violencia de género y sexual",
+      "what": [
+        "Si una persona es víctima de violencia de género, doméstica o sexual o de trata; órdenes de protección; los sistemas VioGén y ATENPRO. El artículo 63 de la Ley Orgánica 1/2004 protege la intimidad de las víctimas y sus datos personales, y la Ley Orgánica 10/2022 extiende la protección a las víctimas de violencia sexual."
+      ],
+      "masking": [
+        "Se suprime a `Sin información`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_SALUD_IDENTIFICADOR": {
+      "title": "Identificadores sanitarios",
+      "what": [
+        "El número de historia clínica, de episodio o de cita, y el código personal de la tarjeta sanitaria — el CIP-SNS del Sistema Nacional de Salud, cuatro letras y doce dígitos, y los códigos de cada comunidad, como el NUHSA de Andalucía."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_SALUD_COBERTURA": {
+      "title": "Cobertura sanitaria",
+      "what": [
+        "Quién cubre la asistencia sanitaria de la persona: la Seguridad Social como titular o beneficiario, las mutualidades de funcionarios MUFACE, ISFAS y MUGEJU, una mutua, un seguro privado. Una mutualidad dice de qué trabaja la persona."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de coberturas; un código numérico recibe otros dígitos."
+      ]
+    },
+    "ES_SALUD_DIAGNOSTICO": {
+      "title": "Diagnóstico",
+      "what": [
+        "Diagnóstico, enfermedad, alergia o causa de muerte, en texto o codificado en la **CIE-10-ES**, la edición española de la CIE-10 en uso desde 2016: `F33.1`, `E11.9`."
+      ],
+      "masking": [
+        "Un código pasa a ser otro código de la misma forma, de una lista de diagnósticos comunes; un texto, otro diagnóstico; un indicador sigue siendo indicador."
+      ]
+    },
+    "ES_SALUD_PROCEDIMIENTO": {
+      "title": "Procedimiento médico",
+      "what": [
+        "Procedimiento, prueba o intervención, en texto o codificado en la CIE-10-ES Procedimientos — siete caracteres, `0DTJ4ZZ`."
+      ],
+      "masking": [
+        "Un código de siete caracteres se transforma carácter a carácter, conservando su forma; un código numérico recibe otros dígitos; un texto pasa a ser otro procedimiento."
+      ]
+    },
+    "ES_SALUD_MEDICAMENTO": {
+      "title": "Medicamento",
+      "what": [
+        "Un medicamento prescrito o dispensado. Un medicamento revela la enfermedad que hay detrás: un antirretroviral, un antipsicótico, la metadona."
+      ],
+      "masking": [
+        "Se reemplaza por un medicamento común sin significado particular — paracetamol, omeprazol, enalapril."
+      ]
+    },
+    "ES_SALUD_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": [
+        "Anamnesis, evolución, informes de alta, notas de enfermería: el texto libre de la historia clínica."
+      ],
+      "masking": [
+        "Free Text Redaction, como cualquier texto libre: se reemplazan identificadores, contacto y nombres. El contenido clínico se mantiene — suprima o reemplace la columna entera donde el propio contenido sea el riesgo."
+      ]
+    },
+    "ES_SALUD_RESULTADO_PRUEBA": {
+      "title": "Resultado de una prueba",
+      "what": [
+        "El resultado de una analítica o de una prueba: glucosa, colesterol, una PCR, un test de embarazo."
+      ],
+      "masking": [
+        "Carácter a carácter, conservando su forma."
+      ]
+    },
+    "ES_SALUD_VIH": {
+      "title": "VIH e infecciones de transmisión sexual",
+      "what": [
+        "El estado serológico frente al VIH, la carga viral, el tratamiento antirretroviral y la PrEP, otras infecciones de transmisión sexual, hepatitis y tuberculosis. La Ley 15/2022 nombra el \"estado serológico\" entre las causas de discriminación."
+      ],
+      "masking": [
+        "Se suprime a `Sin información`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_SALUD_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": [
+        "El grupo sanguíneo y el factor Rh."
+      ],
+      "masking": [
+        "Se reemplaza por otro de los ocho grupos."
+      ]
+    },
+    "ES_SALUD_DISCAPACIDAD": {
+      "title": "Discapacidad",
+      "what": [
+        "Tipo y grado de discapacidad. Un grado del 33% abre la protección del Real Decreto Legislativo 1/2013, según el baremo del Real Decreto 888/2022."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de tipos; un grado recibe otros dígitos; un indicador sigue siendo indicador."
+      ]
+    },
+    "ES_SALUD_DEPENDENCIA": {
+      "title": "Dependencia",
+      "what": [
+        "El grado de dependencia de la Ley 39/2006 — I moderada, II severa, III gran dependencia —, el programa individual de atención y las prestaciones que se siguen de él."
+      ],
+      "masking": [
+        "Se reemplaza dentro de los grados; un grado numérico por otro grado."
+      ]
+    },
+    "ES_SALUD_LABORAL": {
+      "title": "Salud laboral",
+      "what": [
+        "La aptitud para el trabajo, los reconocimientos de la vigilancia de la salud de la empresa, las bajas médicas, los accidentes de trabajo y las enfermedades profesionales. El artículo 22.4 de la Ley 31/1995 de prevención de riesgos laborales reserva los resultados de esa vigilancia, que solo llegan al empresario como apto o no apto."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de resultados de aptitud; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_SALUD_REPRODUCTIVA": {
+      "title": "Salud reproductiva",
+      "what": [
+        "Embarazo, parto, anticoncepción, reproducción asistida y la interrupción voluntaria del embarazo de la Ley Orgánica 2/2010."
+      ],
+      "masking": [
+        "Se suprime a `Sin información`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_SALUD_MENTAL": {
+      "title": "Salud mental",
+      "what": [
+        "Trastornos mentales, atención psiquiátrica, conducta suicida, adicciones y su tratamiento."
+      ],
+      "masking": [
+        "Se suprime a `Sin información`."
+      ]
+    },
+    "ES_FIN_HISTORIAL_CREDITICIO": {
+      "title": "Historial crediticio",
+      "what": [
+        "Figurar en un fichero de morosos — ASNEF, Badexcug — o en la Central de Información de Riesgos del Banco de España, una puntuación de crédito, días de impago. El artículo 20 de la LOPDGDD deja a esos ficheros conservar una deuda cinco años como máximo."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de situaciones crediticias; una puntuación recibe otros dígitos; un indicador sigue siendo indicador."
+      ]
+    },
+    "ES_FIN_DEUDA": {
+      "title": "Deuda",
+      "what": [
+        "Saldo deudor, importe de un préstamo o una hipoteca, cuota mensual, límite de crédito, embargo."
+      ],
+      "masking": [
+        "Se reemplaza por otro importe entre 100 y 600.000 euros."
+      ]
+    },
+    "ES_FIN_INGRESOS": {
+      "title": "Ingresos",
+      "what": [
+        "Sueldo, nómina, ingresos del hogar, rendimientos del trabajo o del capital."
+      ],
+      "masking": [
+        "Se reemplaza por otro importe entre 1.000 y 120.000 euros."
+      ]
+    },
+    "ES_FIN_PATRIMONIO": {
+      "title": "Patrimonio",
+      "what": [
+        "Valor catastral o de tasación de un inmueble, saldos de cuentas e inversiones, planes de pensiones."
+      ],
+      "masking": [
+        "Se reemplaza por otro importe entre 1.000 y 3.000.000 de euros."
+      ]
+    },
+    "ES_FIN_PENSION": {
+      "title": "Pensión",
+      "what": [
+        "El importe de una pensión de jubilación, viudedad, orfandad, incapacidad o no contributiva, o de alimentos."
+      ],
+      "masking": [
+        "Se reemplaza por otro importe entre 500 y 3.400 euros al mes — el intervalo de las pensiones públicas."
+      ]
+    },
+    "ES_FIN_PRESTACION_SOCIAL": {
+      "title": "Prestaciones sociales",
+      "what": [
+        "El Ingreso Mínimo Vital, la prestación y el subsidio por desempleo, la renta mínima de cada comunidad, las pensiones no contributivas, el bono social eléctrico, las becas. Cada una dice que un hogar es pobre, y la Ley 15/2022 nombra la \"situación socioeconómica\" entre las causas de discriminación."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de prestaciones; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_FIN_TRIBUTARIO": {
+      "title": "Datos tributarios",
+      "what": [
+        "Base imponible, cuota, el resultado de una declaración de la renta, retenciones, el impuesto sobre el patrimonio. El artículo 95 de la Ley General Tributaria declara \"reservados\" todos los datos que obtiene la Administración tributaria, que solo pueden usarse para aplicar los tributos."
+      ],
+      "masking": [
+        "Se reemplaza por otro importe de hasta 250.000 euros; el signo de una devolución y los céntimos se mantienen."
+      ]
+    },
+    "ES_PENAL_ANTECEDENTES": {
+      "title": "Antecedentes penales",
+      "what": [
+        "Antecedentes penales, condenas, delitos, situación procesal y penitenciaria, medidas cautelares."
+      ],
+      "masking": [
+        "Se reemplazan dentro de una lista de situaciones; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_PENAL_DELITOS_SEXUALES": {
+      "title": "Certificado del registro de delincuentes sexuales",
+      "what": [
+        "El artículo 57 de la Ley Orgánica 8/2021 (LOPIVI) exige a quien trabaja con menores un certificado negativo del Registro Central de Delincuentes Sexuales y de Trata de Seres Humanos, así que colegios, clubes y empresas guardan una columna para él — y su valor es un dato de antecedentes penales."
+      ],
+      "masking": [
+        "Se reemplaza dentro de una lista de estados del certificado; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "ES_PENAL_PROCEDIMIENTO": {
+      "title": "Número de procedimiento judicial",
+      "what": [
+        "El NIG — el número de identificación general de un procedimiento, impreso en grupos, `28079 43 2 2023 0012345` — y el número del asunto en su órgano, `PA 123/2023`. El CENDOJ publica las resoluciones judiciales con las partes anonimizadas; el número es lo que las vuelve a enlazar."
+      ],
+      "masking": [
+        "El correlativo cambia; el código de la sede del órgano, el orden jurisdiccional y el año se mantienen."
+      ]
+    },
+    "ES_PENAL_SANCION_ADMINISTRATIVA": {
+      "title": "Sanciones administrativas",
+      "what": [
+        "Infracciones y sanciones administrativas — multas, expedientes sancionadores, los puntos del carné de conducir. El artículo 27 de la LOPDGDD las reserva a la autoridad que las impone, y tratarlas fuera de esa regla es infracción muy grave (art. 72.1 g)."
+      ],
+      "masking": [
+        "Se reemplazan dentro de una lista de estados de sanción; un saldo de puntos recibe otros dígitos; un indicador sigue siendo indicador."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Caracteres de control calculados con tablas",
+      "body": [
+        "España valida casi todos sus identificadores por aritmética. La letra del DNI y del NIE es el número módulo 23; los dígitos de control del número de la Seguridad Social son el número módulo 97; la cuenta bancaria lleva dos dígitos de control módulo 11 y el IBAN otros dos módulo 97; la referencia catastral lleva dos letras, cada una una suma ponderada módulo 23; el CUPS lleva dos letras, el número módulo 529. Un valor enmascarado cuyos caracteres de control no se recalcularon es rechazado por todo formulario, todo banco y toda distribuidora que lo reciba — justo lo que una prueba necesita evitar.",
+        "Ningún framework de enmascaramiento escribe una letra, o dos dígitos, o un resto módulo 23, 97 o 529. Check Digit escribe un dígito. Por eso el set los calcula con tablas. Un **estado** — el resto hasta ahí, escrito con tantos dígitos como pide el módulo — se pone delante del valor y lo recorre carácter a carácter. Cada paso es un Regex Decompose que entrega tres o cuatro caracteres, \"estado + carácter siguiente\", a un Data Cleansing cuya tabla responde \"carácter siguiente + nuevo estado\". Los separadores y los caracteres que no cuentan se saltan con líneas que llevan el estado sin cambiarlo. Al final una última tabla convierte el resto en los caracteres de control, en mayúscula o minúscula como era la entrada.",
+        "Las tablas son pequeñas — 299 líneas para el DNI, 1.358 para la Seguridad Social, 6.877 para el CUPS, once de 230 líneas para los pesos de la referencia catastral —, y un paso que no encuentra línea para su ventana deja el valor como está, así que una sola cadena atiende todas las formas escritas: un DNI con o sin puntos y guion, un número de la Seguridad Social con o sin barras, un CUPS con o sin espacios.",
+        "La cuenta bancaria sigue otro camino. El algoritmo IBAN del plugin enmascara los últimos caracteres de un IBAN y recalcula sus dos dígitos de la ISO 13616, pero no conoce el segundo dígito de control de la cuenta española, que está entre la oficina y la cuenta. El set deja que el algoritmo IBAN enmascare la cuenta, recalcula ese dígito con un estado que recorre la cuenta de derecha a izquierda, lleva el dígito antiguo y el nuevo al principio como un par, y corrige los dígitos del IBAN por el cambio con una tabla de 10.000 líneas: el segundo dígito pesa 10¹⁶ en el número que comprueba el IBAN, así que la corrección es (nuevo − antiguo) · 10¹⁶ módulo 97. Entidad, oficina y primer dígito de control se mantienen, y el resultado supera las dos comprobaciones."
+      ]
+    },
+    {
+      "title": "Dónde vive la gente: municipios, códigos INE y códigos postales",
+      "body": [
+        "España se divide en 17 comunidades autónomas y 2 ciudades autónomas, 50 provincias y **8.132 municipios**, y los municipios son pequeños: en el Padrón a 1 de enero de 2025, **7.700 tenían menos de 20.000 habitantes** — 14,5 millones de personas, casi un tercio de los 49,1 millones del país — y más de la mitad tiene menos de 1.000. Una fecha de nacimiento, un sexo y uno de esos municipios señalan a un puñado de vecinos.",
+        "El umbral de 20.000 es el del propio INE: al publicar los microdatos del censo de 2011 recodificó la provincia y el municipio de toda persona que vivía en un municipio de menos de 20.000 habitantes, \"para preservar el secreto estadístico\". El censo de 2021, publicado como muestra del 10%, recodificó por debajo de 10.000; una copia enmascarada contiene todas las filas de la base, no una muestra, así que la cifra más estricta es la que corresponde.",
+        "Así, un municipio por debajo del umbral pasa a ser el **municipio de al menos 20.000 más cercano de la misma provincia**, medido entre sus centros; toda provincia tiene uno — su capital al menos —, así que un valor generalizado nunca sale de su provincia, y la provincia y la comunidad nunca se reescriben. Las islas siguen la regla también: un municipio pequeño de La Gomera o de El Hierro va al grande más cercano de su provincia, en otra isla.",
+        "Los nombres de los municipios españoles aparecen en muchas grafías: el INE escribe el artículo detrás, `Guijarrosa, La`, y da los nombres de las comunidades bilingües en las dos lenguas, `Alacant/Alicante`, `Donostia/San Sebastián`; los sistemas escriben `La Coruña` por `A Coruña` o `Gerona` por `Girona`. La tabla recoge cada una de esas grafías, también en mayúsculas y sin tildes, y las formas con la provincia al lado — `Villanueva (Toledo)`, `Villanueva, Toledo` —, 68.972 líneas en total. Un nombre solo se generaliza cuando **todo** municipio, provincia o comunidad que lo lleva es pequeño; escrito con su provincia, la misma regla se aplica dentro de ella.",
+        "Los códigos siguen a los nombres. El código INE de un municipio pequeño — dos dígitos de la provincia, tres del municipio, con o sin su dígito de control — pasa a ser el código del municipio al que va su nombre, con el dígito de control de ese municipio. El código postal sigue al municipio al que más sirve, por los tramos de calle del **Callejero del Censo Electoral** del INE de julio de 2026: un código cuyo municipio principal es pequeño pasa a ser el código principal del municipio al que se generaliza — 8.638 de 10.790 códigos —, así que un código postal enmascarado concuerda con el municipio enmascarado de al lado y conserva los dos dígitos de su provincia."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        {
+          "list": [
+            "**Enmascarar con clave es seudonimizar, no anonimizar.** Quien tiene la clave y los datos de producción puede reproducir la correspondencia, así que la copia enmascarada sigue siendo dato personal para esa persona y sigue necesitando las medidas del artículo 32 del Reglamento. Guarde la clave aparte de la copia — la separación que la disposición adicional decimoséptima de la LOPDGDD pide para la investigación — y no llame anónima a la copia mientras la clave exista.",
+            "**Los datos bloqueados no deben copiarse.** El artículo 32 de la LOPDGDD prohíbe tratar los datos bloqueados para cualquier finalidad distinta de ponerlos a disposición de jueces y autoridades, y no bloquear es infracción muy grave. Enmascarar una fila bloqueada no hace lícito copiarla: deje las filas bloqueadas fuera de la copia, o fuera del subconjunto que lee el job.",
+            "**Las poblaciones son las del Padrón a 1 de enero de 2025.** Un municipio a pocos cientos de habitantes de 20.000 puede cruzar la línea en la próxima revisión; reconstruya el set cuando el INE la publique.",
+            "**Un código postal puede abarcar más de un municipio.** El set sigue al municipio con más tramos de calle; el código de una ciudad grande que también sirve a pueblos de alrededor se mantiene, y con él la pista de que la persona vive en uno de ellos.",
+            "**Data Cleansing deja los valores desconocidos como están.** Un municipio escrito de una forma que no está en la tabla — un nombre antiguo, una errata, el nombre de una pedanía en lugar de su municipio — pasa sin cambios. Las entidades singulares de población por debajo del municipio no están en la tabla.",
+            "**La entidad y la oficina se conservan.** No son datos personales, y conservarlas mantiene una cuenta de prueba dentro de un banco real; pero la oficina puede delatar un pueblo. Enmascare la oficina con su propia regla donde importe.",
+            "**Las letras de control de una referencia catastral solo se recalculan en su forma compacta.** Escrita en grupos, o recortada a los catorce caracteres de la parcela, los dígitos de la parcela cambian pero las letras se quedan como estaban.",
+            "**Una M sola se lee como mujer.** Es la convención de la administración española (H/M, V/M); una columna que codifica el sexo F/M, como la zona de lectura mecánica del DNI, recibiría H en lugar de M en algunas filas y debería tener su propio algoritmo.",
+            "**El texto libre** se anonimiza palabra a palabra: Free Text Redaction separa por espacios, así que un teléfono escrito `612 34 56 78` se alcanza a trozos y no como un número. Los patrones del set son las formas compactas.",
+            "**Menores**: una fecha de nacimiento se mueve como mucho 60 días, así que pocas personas cruzan sus 14 años — la edad del consentimiento digital en España según el artículo 7 de la LOPDGDD — o sus 18; pero algunas sí. Divida la regla por grupos de edad con Multi-Column Condition donde importe.",
+            "**Las columnas binarias y los adjuntos quedan fuera de alcance.** Un DNI escaneado, una fotografía, el PDF de un informe médico guardan todo lo que las columnas de al lado ya no dicen. Inventaríelos y declárelos como riesgo residual.",
+            "**El descubrimiento es una propuesta, no un veredicto.** Los classifiers leen nombres de columna y valores; una columna con un nombre que nadie reconoce puede escaparse, y una con nombre de persona puede atraparse por error. Revise el inventario antes de lanzar un job de enmascaramiento."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "El set se comprueba en cada construcción. Cada cadena que calcula un carácter de control se ejecuta primero en la propia construcción con el enmascaramiento tomado como identidad, y debe devolver intacto un ejemplo válido — el DNI `12345678Z`, el número de la Seguridad Social `28 12345678 40`, el IBAN `ES91 2100 0418 4502 0005 1332`, la referencia catastral `9872023VH5797S0001WX` y el CUPS `ES1234123456789012JY`.",
+        "Las 147 configuraciones de classifier se revisan una a una, y una batería de 159 columnas — bien nombradas, mal nombradas, nombradas en catalán, gallego o euskera, y 31 que ni siquiera son datos personales, entre ellas el NIF de una empresa — se perfila con el set completo en su umbral de 60 y otra vez solo con el paquete esencial: cada columna cae donde debe, y ninguna de las 31 es reclamada.",
+        "La generalización se audita fuera de línea: los 8.132 municipios, los 10.790 códigos postales y las 52 provincias se comprueban contra la regla, y cada una de las 68.972 sustituciones que escribe la tabla nombra un municipio de al menos 20.000 — en la misma provincia siempre que la provincia está escrita.",
+        "El enmascaramiento se ejecuta de verdad, en el plugin: 797 valores de todos los dominios — muestras, marcadores y la entrada de ejemplo de cada algoritmo —, cada uno comprobado contra lo que debe ser. Después, en bloque: 250 DNI (50 escritos con puntos), 100 NIE, 200 números de la Seguridad Social, 200 IBAN — cien compactos y cien impresos en grupos de cuatro —, 100 CCC, 150 referencias catastrales y 100 CUPS dan otras tantas salidas distintas, **todas válidas según su propia regla**, de la misma forma, y conservando lo que deben conservar: el prefijo de un NIE, la provincia de un número de la Seguridad Social, la entidad y la oficina, la hoja del plano o el polígono, la distribuidora."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        {
+          "list": [
+            "Reglamento (UE) 2016/679, Reglamento General de Protección de Datos: artículos 4, 6, 9, 10, 25, 32, 83 y 89, y considerandos 14, 26, 28 y 29.",
+            "Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales, texto consolidado del BOE con la última modificación por la Ley 10/2025, de 26 de diciembre: artículos 7, 9, 10, 20, 22, 27, 28, 32, 72 a 76 y 90, y disposición adicional decimoséptima.",
+            "Tribunal de Justicia de la Unión Europea, sentencia de 4 de septiembre de 2025, SEPD contra JUR, C‑413/23 P; sentencia de 19 de octubre de 2016, Breyer, C‑582/14. Comité Europeo de Protección de Datos, Directrices 01/2025 sobre seudonimización, adoptadas el 16 de enero de 2025.",
+            "Agencia Española de Protección de Datos: \"Brechas de datos personales en entornos de desarrollo y preproducción\" (18 de abril de 2022); Orientaciones y garantías en los procedimientos de anonimización de datos personales; La K-anonimidad como medida de la privacidad; Introducción al hash como técnica de seudonimización de datos personales.",
+            "Real Decreto 311/2022, Esquema Nacional de Seguridad: medida mp.sw.1 y su refuerzo R4; artículo 2.3.",
+            "Ley 41/2002 de autonomía del paciente, artículo 16.3; Ley 31/1995 de prevención de riesgos laborales, artículo 22.4; Ley 39/2006 de dependencia; Real Decreto Legislativo 1/2013 y Real Decreto 888/2022 sobre discapacidad; Ley Orgánica 2/2010; Ley 15/2022 integral para la igualdad de trato y la no discriminación, artículo 2.1; Ley 4/2023; Ley Orgánica 1/2004, artículo 63; Ley Orgánica 10/2022; Ley Orgánica 3/2021.",
+            "Ley 58/2003 General Tributaria, artículo 95; Código Penal, artículo 136; Ley Orgánica 8/2021 (LOPIVI), artículo 57; Texto Refundido de la Ley del Catastro Inmobiliario, artículo 51.",
+            "Instituto Nacional de Estadística: Cifras de población de la Revisión del Padrón municipal a 1 de enero de 2025; Relación de municipios y sus códigos a 1 de enero de 2026; Callejero del Censo Electoral de julio de 2026; frecuencias de nombres y apellidos del Censo de población a 1 de enero de 2025; Censos de Población y Viviendas 2011 y 2021, microdatos. Centros de los municipios de GeoNames, por código INE.",
+            "Las reglas de los caracteres de control: el Ministerio del Interior para la letra del DNI y del NIE; la Tesorería General de la Seguridad Social para el número de la Seguridad Social; el Código Cuenta Cliente de la banca española y la ISO 13616 para el IBAN; la Dirección General del Catastro para la referencia catastral, comprobada contra referencias publicadas en el BOE; la CNMC para el CUPS."
+          ]
+        }
+      ]
+    }
+  ]
+}
