@@ -305,6 +305,7 @@ export const ptBR: Messages = {
   'settings.ai.recheck': 'Verificar de novo',
   'settings.ai.ollamaHint': 'Roda totalmente offline. Instale o Ollama e baixe um modelo, ex: `ollama pull llama3.1`. Um modelo local aconselha mas não constrói algoritmos, e em problemas com restrição fina é pouco confiável — medido em modelos da classe 8B. Prefira um provedor hospedado quando o assistente for fonte de decisão.',
   'settings.ai.copilotHint': 'Usa o GitHub Models com um token do GitHub (models:read). O GitHub Copilot não tem API de chat pública para aplicações de terceiros.',
+  'settings.ai.openaiHint': 'Usa a API da OpenAI. A chave é armazenada localmente e também pode ser fornecida por meio de DLPX_AI_OPENAI_KEY.',
   'settings.ai.installedModels': 'Modelos instalados: {models}',
 
   // Settings — files

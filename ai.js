@@ -34,6 +34,7 @@ const PROVIDERS = {
   ollama:    { label: 'Ollama (local)',      model: 'llama3.1',      baseUrl: 'http://localhost:11434', needsKey: false, numCtx: 16384, keepAlive: '1h', temperature: 0 },
   anthropic: { label: 'Claude / Anthropic',  model: 'claude-opus-5', baseUrl: '',                       needsKey: true  },
   gemini:    { label: 'Google Gemini',       model: 'gemini-2.5-pro', baseUrl: 'https://generativelanguage.googleapis.com', needsKey: true },
+  openai:    { label: 'OpenAI',               model: 'gpt-5.6-luna',   baseUrl: 'https://api.openai.com/v1', needsKey: true },
   copilot:   { label: 'GitHub Models (Copilot)', model: 'gpt-4o',    baseUrl: 'https://models.github.ai/inference', needsKey: true },
 };
 
@@ -433,6 +434,7 @@ const STREAMERS = {
   anthropic: streamAnthropic,
   ollama: streamOllama,
   gemini: streamGemini,
+  openai: streamOpenAICompatible,
   copilot: streamOpenAICompatible,
 };
 
