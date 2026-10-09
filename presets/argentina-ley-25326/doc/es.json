@@ -67,7 +67,7 @@
       "intro": [
         "Datos que no identifican a nadie por sí solos, pero sí en combinación. El Censo 2022 cuenta 2.280 gobiernos locales — municipios, comunas, comisiones de fomento y municipales —; 1.952 tienen menos de 20.000 habitantes y más de mil, menos de 2.000. Una fecha de nacimiento, un sexo y uno de esos pueblos apuntan a un puñado de personas. Estos atributos se generalizan o desplazan en lugar de reemplazarse, y el dato conserva su valor analítico."
       ],
-      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
+      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_PROVINCIA", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
     },
     {
       "id": "L3",
@@ -299,6 +299,11 @@
       "title": "Partido y departamento",
       "what": ["El partido de la provincia de Buenos Aires, el departamento de las demás provincias o la comuna de la Ciudad de Buenos Aires, por el nombre."],
       "masking": ["Un partido o departamento con menos de 20.000 habitantes pasa al más cercano de la misma provincia con al menos 20.000: `Iruya` pasa a `Orán`. Los mayores se mantienen."]
+    },
+    "AR_L2_PROVINCIA": {
+      "title": "Provincia",
+      "what": ["La provincia argentina o la Ciudad Autónoma de Buenos Aires, registrada por el nombre de la provincia o una abreviatura."],
+      "masking": ["Se reemplaza por otra provincia de la misma región oficial argentina mediante una tabla determinística de Data Cleansing."]
     },
     "AR_L2_CODIGO_GEOGRAFICO": {
       "title": "Códigos geográficos del INDEC",
