@@ -173,6 +173,7 @@ const PROVIDERS = [
   { id: 'ollama', label: 'Ollama (local)', needsKey: false, hint: 'settings.ai.ollamaHint' },
   { id: 'anthropic', label: 'Claude / Anthropic', needsKey: true, hint: null },
   { id: 'gemini', label: 'Google Gemini', needsKey: true, hint: null },
+  { id: 'openai', label: 'OpenAI', needsKey: true, hint: 'settings.ai.openaiHint' },
   { id: 'copilot', label: 'GitHub Models (Copilot)', needsKey: true, hint: 'settings.ai.copilotHint' },
 ] as const
 

@@ -306,6 +306,7 @@ export const en = {
   'settings.ai.recheck': 'Check again',
   'settings.ai.ollamaHint': 'Runs fully offline. Install Ollama and pull a model, e.g. `ollama pull llama3.1`. A local model advises but does not build algorithms, and on problems with a fine constraint it is unreliable — measured on 8B-class models. Prefer a hosted provider when the assistant is meant to be a source of decisions.',
   'settings.ai.copilotHint': 'Uses GitHub Models with a GitHub token (models:read). GitHub Copilot has no public chat API for third-party apps.',
+  'settings.ai.openaiHint': 'Uses the OpenAI API. The API key is stored locally and can also be supplied with DLPX_AI_OPENAI_KEY.',
   'settings.ai.installedModels': 'Installed models: {models}',
 
   // Settings — files

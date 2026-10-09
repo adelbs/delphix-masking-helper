@@ -316,6 +316,7 @@ const SECRET_ENV = {
   'delphix.password': 'DLPX_ENGINE_PASSWORD',
   'ai.anthropic.apiKey': 'DLPX_AI_ANTHROPIC_KEY',
   'ai.gemini.apiKey': 'DLPX_AI_GEMINI_KEY',
+  'ai.openai.apiKey': 'DLPX_AI_OPENAI_KEY',
   'ai.copilot.apiKey': 'DLPX_AI_COPILOT_KEY',
 };
 
