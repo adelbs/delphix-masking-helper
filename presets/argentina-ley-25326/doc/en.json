@@ -67,7 +67,7 @@
       "intro": [
         "Data that identifies nobody on its own, but does in combination. The 2022 census counts 2,280 gobiernos locales — municipios, comunas, comisiones de fomento and municipales —; 1,952 have fewer than 20,000 inhabitants and more than a thousand fewer than 2,000. A birth date, a sex and one of those towns point at a handful of people. These attributes are generalized or shifted rather than replaced, and the data keeps its analytical value."
       ],
-      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
+      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_PROVINCIA", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
     },
     {
       "id": "L3",
@@ -299,6 +299,11 @@
       "title": "Partido and departamento",
       "what": ["The partido of Buenos Aires province, the departamento of the other provinces or the comuna of the City of Buenos Aires, by name."],
       "masking": ["A partido or departamento with fewer than 20,000 inhabitants becomes the nearest one of the same province with at least 20,000: `Iruya` becomes `Orán`. The larger ones stay."]
+    },
+    "AR_L2_PROVINCIA": {
+      "title": "Province",
+      "what": ["The Argentine province or the Ciudad Autónoma de Buenos Aires, written as a province name or abbreviation."],
+      "masking": ["Replaced by another province within the same official Argentine region through a deterministic Data Cleansing table."]
     },
     "AR_L2_CODIGO_GEOGRAFICO": {
       "title": "INDEC geographic codes",

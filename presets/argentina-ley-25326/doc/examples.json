@@ -35,6 +35,7 @@
   "AR_L2_SEXO": ["F", "X", "Varón"],
   "AR_L2_LOCALIDAD": ["El Chaltén", "Tres Lagos - Santa Cruz", "Rosario"],
   "AR_L2_DEPARTAMENTO": ["Iruya", "La Matanza"],
+  "AR_L2_PROVINCIA": ["Mendoza", "San Juan", "Buenos Aires"],
   "AR_L2_CODIGO_GEOGRAFICO": ["10014", "785035"],
   "AR_L2_CODIGO_POSTAL": ["C1043AAZ", "1636"],
   "AR_L2_BARRIO": ["Barrio Parque Los Andes"],

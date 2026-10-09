@@ -15,7 +15,7 @@ of gender violence, credit information (art. 26) and criminal records (art. 7.4)
 | | |
 |---|---|
 | Profile set | `AR - Ley 25.326 - v1`, assignment threshold 60, built 17 September 2026 |
-| Extended pack | 83 domains, 148 classifiers, 119 algorithms, 82 files — everything below |
+| Extended pack | 84 domains, 150 classifiers, 120 algorithms, 84 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 21 algorithms, 5 files — DNI, CUIT and CUIL, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
@@ -103,6 +103,7 @@ digit recomputed by a single Check Digit.
 | `AR_L2_SEXO` | Replaced within its own vocabulary, including 1 and 2; the DNI's `X` becomes `F` or `M` |
 | `AR_L2_LOCALIDAD` | A localidad of a gobierno local under 20,000 inhabitants (2022 census) — or of none — becomes the nearest gobierno local of the same province with at least 20,000 |
 | `AR_L2_DEPARTAMENTO` | A partido or departamento under 20,000 becomes the nearest one of the same province with at least 20,000 |
+| `AR_L2_PROVINCIA` | Replaced by another province within the same official Argentine region using Data Cleansing |
 | `AR_L2_CODIGO_GEOGRAFICO` | INDEC codes of departamentos, gobiernos locales and localidades follow the names |
 | `AR_L2_CODIGO_POSTAL` | Province letter and first two digits stay (`C1043AAZ` → `C1000AAA`, `1636` → `1600`) |
 | `AR_L2_PERSONAS_A_CARGO` | Capped at 5 |

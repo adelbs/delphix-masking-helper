@@ -1,0 +1,24 @@
+Catamarca|Jujuy
+Jujuy|Salta
+Salta|Santiago del Estero
+Santiago del Estero|Tucumán
+Tucumán|Catamarca
+Chaco|Corrientes
+Corrientes|Entre Ríos
+Entre Ríos|Formosa
+Formosa|Misiones
+Misiones|Santa Fe
+Santa Fe|Chaco
+Buenos Aires|Ciudad Autónoma de Buenos Aires
+Ciudad Autónoma de Buenos Aires|Córdoba
+Córdoba|Buenos Aires
+Mendoza|San Juan
+San Juan|La Rioja
+La Rioja|San Luis
+San Luis|Mendoza
+La Pampa|Neuquén
+Neuquén|Río Negro
+Río Negro|La Pampa
+Chubut|Santa Cruz
+Santa Cruz|Tierra del Fuego
+Tierra del Fuego|Chubut
