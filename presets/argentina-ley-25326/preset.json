@@ -83,6 +83,8 @@
       "AR_L2_LOCALIDAD - List",
       "AR_L2_DEPARTAMENTO - Path",
       "AR_L2_DEPARTAMENTO - List",
+      "AR_L2_PROVINCIA - Path",
+      "AR_L2_PROVINCIA - List",
       "AR_L2_CODIGO_GEOGRAFICO - Path",
       "AR_L2_CODIGO_GEOGRAFICO - Regex",
       "AR_L2_CODIGO_POSTAL - Path",
@@ -1613,6 +1615,42 @@
         "valueLists": [
           {
             "file": "preset-file://ar-detectar-departamentos.txt",
+            "matchStrength": 0.8
+          }
+        ],
+        "tokenizeInput": false,
+        "rejectStrength": 0.4,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "AR_L2_PROVINCIA - Path",
+      "framework": "PATH",
+      "domain": "AR_L2_PROVINCIA",
+      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:provincia(_?(residencia|domicilio|nacimiento|origen))?|prov)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "AR_L2_PROVINCIA - List",
+      "framework": "LIST",
+      "domain": "AR_L2_PROVINCIA",
+      "description": "Valores conocidos.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://ar-detectar-provincias.txt",
             "matchStrength": 0.8
           }
         ],
@@ -3326,6 +3364,10 @@
       "algorithm": "AR_DEPARTAMENTO"
     },
     {
+      "name": "AR_L2_PROVINCIA",
+      "algorithm": "AR_PROVINCIA"
+    },
+    {
       "name": "AR_L2_CODIGO_GEOGRAFICO",
       "algorithm": "AR_CODIGO_GEOGRAFICO"
     },
@@ -3515,6 +3557,19 @@
     }
   ],
   "algorithms": [
+    {
+      "name": "AR_PROVINCIA",
+      "framework": "algorithm.plugin.dataCleansing.DataCleansing",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-generalizadas.txt"
+        },
+        "delimiter": "|",
+        "caseSensitive": true,
+        "trimWhitespace": true
+      },
+      "input": "Mendoza"
+    },
     {
       "name": "AR_CM_ALFANUM",
       "framework": "algorithm.plugin.characterMapping.CharacterMapping",
@@ -6995,6 +7050,7 @@
     "ar-detectar-origen-etnico.txt",
     "ar-detectar-partidos-politicos.txt",
     "ar-detectar-programas-sociales.txt",
+    "ar-detectar-provincias.txt",
     "ar-detectar-pueblos-indigenas.txt",
     "ar-detectar-religiones.txt",
     "ar-detectar-sexo.txt",
@@ -7030,6 +7086,7 @@
     "ar-partidos-politicos.txt",
     "ar-procedimientos.txt",
     "ar-programas-sociales.txt",
+    "ar-provincias-generalizadas.txt",
     "ar-pueblos-indigenas.txt",
     "ar-religiones.txt",
     "ar-sexo-1-2.txt",

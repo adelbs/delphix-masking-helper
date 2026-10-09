@@ -203,6 +203,25 @@ for (const g of GOBIERNOS) if (!/^\d{6}$/.test(g.code) || g.code.slice(0, 2) !==
 for (const l of LOCALIDADES) if (!/^\d{8}$/.test(l.code) || l.code.slice(0, 2) !== l.provinceCode || Number.isNaN(l.lat)) throw new Error(`${l.name}: bad code or location`)
 const PROVINCES = unique(DEPARTAMENTOS.map((d) => d.province))
 
+// Official Argentine regions used to keep province masking within the same region. The table is
+// deliberately a closed cycle: every jurisdiction has a deterministic substitute and no province
+// is mapped outside its official region.
+const PROVINCE_REGIONS = [
+  ['NOA', ['Catamarca', 'Jujuy', 'Salta', 'Santiago del Estero', 'Tucumán']],
+  ['NEA', ['Chaco', 'Corrientes', 'Entre Ríos', 'Formosa', 'Misiones', 'Santa Fe']],
+  ['Centro', ['Buenos Aires', 'Ciudad Autónoma de Buenos Aires', 'Córdoba']],
+  ['Cuyo', ['Mendoza', 'San Juan', 'La Rioja', 'San Luis']],
+  ['Patagonia Norte', ['La Pampa', 'Neuquén', 'Río Negro']],
+  // The preset's geography source uses the short province name "Tierra del Fuego".
+  ['Patagonia Sur', ['Chubut', 'Santa Cruz', 'Tierra del Fuego']],
+]
+const provinceRegionNames = new Set(PROVINCE_REGIONS.flatMap(([, names]) => names))
+if (provinceRegionNames.size !== 24 || PROVINCES.some((name) => !provinceRegionNames.has(name))) {
+  throw new Error('the official province regions do not cover the 24 Argentine jurisdictions')
+}
+const provincePairs = PROVINCE_REGIONS.flatMap(([, names]) => names.map((name, i) => [name, names[(i + 1) % names.length]]))
+cleansing('AR_PROVINCIA', 'ar-provincias-generalizadas.txt', provincePairs, 'Mendoza', '|')
+
 // ── Shared algorithms ───────────────────────────────────────────────────────
 
 // Vowels map to vowels and consonants to consonants, so a masked document number keeps its
@@ -814,6 +833,10 @@ domain('AR_L2_DEPARTAMENTO', 'AR_DEPARTAMENTO',
     ['departamento(?!_?(n(o|ro|umero)|piso|cod|codigo|id))|depto|dpto', 0.5],
   ),
   byList([['ar-detectar-departamentos.txt', placeNames(DEPARTAMENTOS), 0.8]], { reject: 0.4 }))
+
+domain('AR_L2_PROVINCIA', 'AR_PROVINCIA',
+  byName(['provincia(_?(residencia|domicilio|nacimiento|origen))?|prov', 0.85]),
+  byList([['ar-detectar-provincias.txt', PROVINCES, 0.8]], { reject: 0.4 }))
 
 domain('AR_L2_CODIGO_GEOGRAFICO', 'AR_CODIGO_GEOGRAFICO',
   byName(['(cod|codigo|cd|id)_?(localidad|loc|municipio|gobierno_?local|departamento|depto|dpto|partido)(_?(indec|censal|res|residencia|nac|nacimiento))?|(cod|codigo)_?indec|indec_?(cod|codigo|localidad|departamento)|codloc|coddepto|cod_?gl|localidad_?censal_?(id|cod)', 0.85]),

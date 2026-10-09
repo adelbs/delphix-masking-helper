@@ -180,6 +180,7 @@ const COLUMNS = [
   col('CAMPO14', 'varchar', 60, many(() => pick(SMALL_GOBIERNOS)), 'AR_L2_LOCALIDAD'),
   col('PARTIDO', 'varchar', 40, many(() => pick(['La Matanza', 'Lomas de Zamora', 'Quilmes', 'Tigre', 'Pilar', 'Tordillo', 'General Guido'])), 'AR_L2_DEPARTAMENTO'),
   col('DEPARTAMENTO_GEOGRAFICO', 'varchar', 40, many(() => pick(SMALL_DEPARTAMENTOS)), 'AR_L2_DEPARTAMENTO'),
+  col('PROVINCIA', 'varchar', 60, many(() => pick(['Mendoza', 'San Juan', 'Córdoba', 'Buenos Aires'])), 'AR_L2_PROVINCIA'),
   col('COD_LOCALIDAD', 'varchar', 8, many(() => pick(LOCALIDADES).code), 'AR_L2_CODIGO_GEOGRAFICO'),
   col('CODIGO_POSTAL', 'varchar', 8, many(() => `${pick(['B', 'C', 'X', 'S'])}${int(1000, 9999)}${letters(3)}`), 'AR_L2_CODIGO_POSTAL'),
   col('CP', 'number', 4, many(() => String(int(1000, 9431))), 'AR_L2_CODIGO_POSTAL'),
@@ -259,7 +260,6 @@ const COLUMNS = [
   col('SKU', 'varchar', 12, many(() => `SKU${int(10000, 99999)}`), ''),
   col('ID_TRANSACCION', 'varchar', 36, many(() => `TX${int(100000, 999999)}`), ''),
   col('AREA', 'varchar', 40, many(() => pick(['Finanzas', 'Operaciones'])), ''),
-  col('PROVINCIA', 'varchar', 30, many(() => pick(['Buenos Aires', 'Córdoba', 'Santa Fe', 'Mendoza'])), ''),
   col('COD_BANCO', 'varchar', 3, many(() => pick(['011', '007', '017', '285'])), ''),
   col('URL_PAGINA', 'varchar', 200, many(() => `https://www.ejemplo.com.ar/p/${int(1, 999)}`), ''),
   col('TIPO_DOCUMENTO', 'varchar', 4, many(() => pick(['DNI', 'LE', 'LC', 'CUIT', 'PAS'])), ''),
@@ -437,6 +437,7 @@ const MASKING = {
   AR_L2_SEXO: { inputs: ['F', 'M', 'X', 'Femenino', 'masculino', 'Varón', '1'], same: true },
   AR_L2_LOCALIDAD: { inputs: ['El Chaltén', 'Rosario', 'MAR DEL PLATA', 'Tres Lagos - Santa Cruz', 'Colonia Hocker', 'San José', 'Tilcara', 'Purmamarca'], same: true },
   AR_L2_DEPARTAMENTO: { inputs: ['Ancasti', 'La Matanza', 'Iruya - Salta', 'TORDILLO'], same: true },
+  AR_L2_PROVINCIA: { inputs: ['Mendoza', 'San Juan', 'Buenos Aires'], same: true },
   AR_L2_CODIGO_GEOGRAFICO: { inputs: ['10014', '06427', '785035', '06357110'], same: true },
   AR_L2_CODIGO_POSTAL: { inputs: ['C1043AAZ', '1636', 'B1636'], check: (i, o) => ({ C1043AAZ: 'C1000AAA', 1636: '1600', B1636: 'B1600' })[i] === o },
   AR_L2_BARRIO: { inputs: ['Barrio Parque Los Andes'], same: true },
@@ -513,6 +514,7 @@ const EXPECT = {
   // with large places and stays; the rest become a gobierno local of 20,000 or more.
   AR_L2_LOCALIDAD: (i, o) => ({ Rosario: o === 'Rosario', 'MAR DEL PLATA': o === 'MAR DEL PLATA', 'San José': o === 'San José', 'El Chaltén': o === 'El Calafate', 'Tres Lagos - Santa Cruz': o === 'El Calafate - Santa Cruz' })[i] ?? LARGE_GL.has(o.toLowerCase()),
   AR_L2_DEPARTAMENTO: (i, o) => ({ 'La Matanza': o === 'La Matanza', 'Iruya - Salta': / - Salta$/.test(o) && LARGE_DEP.has(o.slice(0, -8).toLowerCase()) })[i] ?? (o !== i && LARGE_DEP.has(fold(o).toLowerCase()) || [...LARGE_DEP].some((n) => fold(n) === fold(o).toLowerCase())),
+  AR_L2_PROVINCIA: (i, o) => ({ Mendoza: o === 'San Juan', 'San Juan': o === 'La Rioja', 'Buenos Aires': o === 'Ciudad Autónoma de Buenos Aires' })[i] ?? false,
   // La Matanza and Mar del Plata stay; Ancasti and Tres Lagos do not.
   AR_L2_CODIGO_GEOGRAFICO: (i, o) => (['06427', '06357110'].includes(i) ? o === i : o.length === i.length && o.slice(0, 2) === i.slice(0, 2) && o !== i),
   AR_L2_BARRIO: (i, o) => has('ar-barrios.txt', o),
