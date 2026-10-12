@@ -1,6 +1,6 @@
 {
   "name": "delphix-masking-helper",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "Understand and test the Delphix masking frameworks, and build algorithms from them — locally, without a Masking Engine",
   "main": "server.js",
   "scripts": {
