@@ -256,7 +256,7 @@ export const es: Messages = {
   'presets.loading': 'Cargando profile sets…',
   'presets.listError': 'No se pudieron listar los profile sets preconfigurados.',
   'presets.empty': 'Todavía no hay profile sets preconfigurados.',
-  'presets.counts': 'Versión {version} · Classifiers {classifiers} · Dominios {domains} · Algoritmos {algorithms}',
+  'presets.counts': 'Versión {version} del {date} · Classifiers {classifiers} · Dominios {domains} · Algoritmos {algorithms}',
   'presets.loadedAt': '{pack} cargado el {date}',
   'presets.pack.essential': 'Paquete esencial',
   'presets.pack.extended': 'Paquete extendido',
@@ -271,7 +271,7 @@ export const es: Messages = {
   'presets.switched': '"{name}" cambiado al {pack}.',
   'presets.unloaded': '"{name}" quitado: {n} elementos eliminados.',
   'presets.kept': 'Se conservan porque algo más aquí los usa: {names}.',
-  'presets.newVersion': 'La versión {version} está disponible: restablécelo para aplicarla.',
+  'presets.newVersion': 'La versión {version}, del {date}, está disponible: restablécelo para aplicarla.',
   'presets.doc': 'Documentación',
   'presets.noDoc': 'Este profile set todavía no tiene documentación.',
   'presets.load': 'Cargar',
@@ -305,6 +305,7 @@ export const es: Messages = {
   'settings.ai.recheck': 'Comprobar de nuevo',
   'settings.ai.ollamaHint': 'Funciona totalmente sin conexión. Instala Ollama y descarga un modelo, p. ej. `ollama pull llama3.1`. Un modelo local aconseja pero no construye algoritmos, y en problemas con una restricción fina es poco fiable — medido en modelos de clase 8B. Prefiere un proveedor alojado cuando el asistente sea fuente de decisión.',
   'settings.ai.copilotHint': 'Usa GitHub Models con un token de GitHub (models:read). GitHub Copilot no tiene API de chat pública para aplicaciones de terceros.',
+  'settings.ai.openaiHint': 'Usa la API de OpenAI. La clave se almacena localmente y también puede proporcionarse mediante DLPX_AI_OPENAI_KEY.',
   'settings.ai.installedModels': 'Modelos instalados: {models}',
 
   // Settings — files
@@ -617,6 +618,7 @@ export const es: Messages = {
   // ── Profile sets ──────────────────────────────────────────────────────────
   'profileSet.new': 'Nuevo profile set',
   'profileSet.newTitle': 'Nuevo profile set',
+  'profileSet.loadPreset': 'Cargar profile set preconfigurado',
   'profileSet.actions': 'Acciones de profile sets',
   'profileSet.empty': 'Aún no hay profile sets. Crea uno, o importa los del engine.',
   'profileSet.local': 'Solo en esta máquina',

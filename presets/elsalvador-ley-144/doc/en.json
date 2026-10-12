@@ -205,7 +205,7 @@
     "SV_L1_TARJETA": {
       "title": "Payment card",
       "what": ["Credit and debit card numbers, recognized by the Luhn algorithm."],
-      "masking": ["Payment Card: another number that passes the Luhn algorithm. Only card-shaped values reach it."]
+      "masking": ["Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
     },
     "SV_L1_BILLETERA": {
       "title": "Digital wallet and bitcoin",
@@ -500,27 +500,27 @@
     "SV_FIN_DEUDA": {
       "title": "Debt",
       "what": ["Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."],
-      "masking": ["Mapped to a value between 100 and 250,000 dollars, unrelated to the real one."]
+      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_INGRESOS": {
       "title": "Income and pay",
       "what": ["Salary, monthly or household income, fees and contributory pay. The commerce and services minimum wage was 408.80 dollars in 2026."],
-      "masking": ["Mapped to a value between 365 and 6,000 dollars."]
+      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": ["Net worth, assets, valuations, account balances and term deposits."],
-      "masking": ["Mapped to a value between 1,000 and 500,000 dollars."]
+      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_PENSION": {
       "title": "Pension and benefits",
       "what": ["The amount of the pension, subsidy or benefit, and child support."],
-      "masking": ["Mapped to a value between 304 and 3,000 dollars."]
+      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_REMESAS": {
       "title": "Remittances",
       "what": ["The amount and frequency of family remittances and the condition of receiving them. One in four Salvadoran households does, and the data says who emigrated and what the household lives on."],
-      "masking": ["Mapped to a value between 20 and 2,000 dollars."]
+      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_PROGRAMA_SOCIAL": {
       "title": "Subsidies and social programmes",

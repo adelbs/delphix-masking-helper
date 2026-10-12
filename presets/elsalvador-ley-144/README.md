@@ -14,9 +14,9 @@ situation** and **personal habits** —, the nationality of art. 59 b), financia
 
 | | |
 |---|---|
-| Profile set | `SV - Decreto 144 - v1`, assignment threshold 60 |
-| Extended pack | 85 domains, 143 classifiers, 110 algorithms, 73 files — everything below |
-| Essential pack | 12 domains, 25 classifiers, 21 algorithms, 5 files — DUI, NIT, foreigner documents, passport, names, contact, address, birth date |
+| Profile set | `SV - Decreto 144 - v2`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 85 domains, 145 classifiers, 105 algorithms, 53 files — everything below |
+| Essential pack | 12 domains, 25 classifiers, 22 algorithms, 5 files — DUI, NIT, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
 ## Files
@@ -47,10 +47,23 @@ ethnic groups, indigenous languages, religions, parties, ICD-10 codes, medicines
 **Type** classifiers rule domains out where the column cannot hold the data: an e-mail is text of at least 5
 characters, a birth date a date, timestamp or text, an amount a number.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in every table and
 every job. Placeholders such as `N/A` or `-` do not fail a row: where there is nothing to mask they pass through.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### DUI and NIT
 
@@ -77,7 +90,7 @@ masked, so the birth date inside a NIT does not survive.
 | `SV_L1_EMAIL` | Name and domain mapped character by character, top-level domain `.test` |
 | `SV_L1_TELEFONO` | `+503` and the first digit (landline 2, mobile 6 or 7) kept, seven masked |
 | `SV_L1_DIRECCION` | A fictitious address (`Calle Arce #123, Colonia Escalón`) |
-| `SV_L1_TARJETA` | Payment Card (Luhn stays valid) |
+| `SV_L1_TARJETA` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `SV_L1_BILLETERA` | Chivo and bitcoin addresses character by character — the masked one no longer passes its checksum |
 | `SV_L1_COOKIE` | Cookie and tracking identifiers, character by character (art. 4 e defines the cookie) |
 | `SV_L1_IP` | Each IPv4 octet mapped to 1–254 |
@@ -169,12 +182,17 @@ node presets/_doc/build.mjs elsalvador-ley-144
 
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
-`verify.mjs` reviews every classifier configuration, profiles 146 columns with the whole set at its threshold
+`verify.mjs` reviews every classifier configuration, profiles 152 columns with the whole set at its threshold
 and again with the essential pack — well named, badly named and 30 columns that are not personal data — and
 audits the generalization table for all 262 distritos. It then masks the sample values, placeholders and each
 algorithm's own sample input through the running app (`DLPX_URL`, default `http://localhost:3000`), checking
 outputs against their vocabulary; 150 DUIs and 200 NITs of both rules for validity and collisions, and 20 NITs
 to confirm the birth date inside them does not survive. Each value forks a JVM.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 

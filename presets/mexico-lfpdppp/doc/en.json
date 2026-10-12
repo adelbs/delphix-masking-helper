@@ -146,7 +146,7 @@
     "MX_L1_TARJETA": {
       "title": "Payment card",
       "what": "Credit and debit card numbers.",
-      "masking": "Replaced by another card number that still passes the Luhn check. Values that do not look like a card pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "MX_L1_PASAPORTE": {
       "title": "Passport",
@@ -421,22 +421,22 @@
     "MX_FIN_MONTO_DEUDA": {
       "title": "Debt amount",
       "what": "Outstanding balance, amount owed, credit limit, minimum payment.",
-      "masking": "Mapped to an amount between 1,000 and 5,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_INGRESO_MENSUAL": {
       "title": "Monthly income",
       "what": "Salary, perceptions, net pay, household income.",
-      "masking": "Mapped to an amount between 8,000 and 250,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_SALARIO_DIARIO": {
       "title": "Daily wage (SDI, SBC)",
       "what": "The integrated daily wage and the contribution base wage used by the IMSS — the way Mexican payrolls store pay.",
-      "masking": "Mapped to an amount between 280 and 3,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": "Net worth, cadastral and appraisal values, investments and savings.",
-      "masking": "Mapped to an amount between 200,000 and 30,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_AFORE": {
       "title": "AFORE",
@@ -446,7 +446,7 @@
     "MX_FIN_SALDO_RETIRO": {
       "title": "Retirement and housing savings",
       "what": "Balances of the retirement and housing subaccounts, voluntary savings, pension amounts.",
-      "masking": "Mapped to an amount between 5,000 and 5,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_CREDITO_VIVIENDA": {
       "title": "Housing credit",

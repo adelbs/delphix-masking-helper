@@ -1,0 +1,271 @@
+{
+  "CR_L1_CEDULA": [
+    "1-0234-0567",
+    "102340567",
+    "155812345678",
+    "3-120-123456",
+    "3-101-123456"
+  ],
+  "CR_L1_DIMEX": [
+    "155812345678",
+    "12345678901"
+  ],
+  "CR_L1_NITE": [
+    "3-120-123456",
+    "3130ABC123"
+  ],
+  "CR_L1_PASAPORTE": [
+    "BLM123"
+  ],
+  "CR_L1_SEGURO_SOCIAL": [
+    "A1234567"
+  ],
+  "CR_L1_CODIGO_ESTUDIANTE": [
+    "A1234567"
+  ],
+  "CR_L1_MATRICULA_PROFESIONAL": [
+    "A1234567"
+  ],
+  "CR_L1_NOMBRE": [
+    "María de los Ángeles",
+    "JOSÉ PABLO"
+  ],
+  "CR_L1_APELLIDO": [
+    "Jiménez Oconitrillo"
+  ],
+  "CR_L1_NOMBRE_COMPLETO": [
+    "José Pablo Jiménez Oconitrillo",
+    "Xinia Jiménez",
+    "JIMÉNEZ OCONITRILLO, JOSÉ PABLO"
+  ],
+  "CR_L1_EMAIL": [
+    "jose.jimenez@gmail.com"
+  ],
+  "CR_L1_TELEFONO": [
+    "+506 8312 4567",
+    "83124567",
+    "2222 1234"
+  ],
+  "CR_L1_DIRECCION": [
+    "200 metros norte de la iglesia católica, casa esquinera color verde",
+    "Urbanización Los Laureles, casa 12"
+  ],
+  "CR_L1_DIRECCION_COMPLEMENTO": [
+    "A1234567"
+  ],
+  "CR_L1_CUENTA_BANCARIA": [
+    "CR05015202001026284066",
+    "CR05 0152 0200 1026 2840 66",
+    "15202001026284066"
+  ],
+  "CR_L1_TARJETA": [
+    "4532 0000 0000 0001"
+  ],
+  "CR_L1_BILLETERA": [
+    "A1234567"
+  ],
+  "CR_L1_IP": [
+    "201.196.45.12"
+  ],
+  "CR_L1_DISPOSITIVO": [
+    "3c:22:fb:9a:10:e4"
+  ],
+  "CR_L1_COOKIE": [
+    "A1234567"
+  ],
+  "CR_L1_PLACA": [
+    "BLM123",
+    "123456",
+    "MOT123456"
+  ],
+  "CR_L1_VEHICULO": [
+    "A1234567"
+  ],
+  "CR_L1_INMUEBLE": [
+    "1-234567-000",
+    "SJ-1234567-2010"
+  ],
+  "CR_L1_CONTRATO": [
+    "A1234567"
+  ],
+  "CR_L1_USUARIO": [
+    "A1234567"
+  ],
+  "CR_L1_CREDENCIAL": [
+    "clave123"
+  ],
+  "CR_L1_IMAGEN": [
+    "clave123"
+  ],
+  "CR_L1_GEOLOCALIZACION": [
+    "9.935800",
+    "9.935800,-84.092059"
+  ],
+  "CR_L1_TEXTO_LIBRE": [
+    "Cliente Jiménez, cédula 1-0234-0567, correo j.jimenez@gmail.com, cel 83124567"
+  ],
+  "CR_L2_FECHA_NACIMIENTO": [
+    "1985-07-20"
+  ],
+  "CR_L2_ANIO_NACIMIENTO": [
+    "1985"
+  ],
+  "CR_L2_EDAD": [
+    "37",
+    "104"
+  ],
+  "CR_L2_FECHA_EVENTO": [
+    "2021-03-15"
+  ],
+  "CR_L2_SEXO": [
+    "F"
+  ],
+  "CR_L2_DISTRITO": [
+    "Quitirrisí",
+    "Matambú - Hojancha",
+    "San José"
+  ],
+  "CR_L2_CODIGO_DTA": [
+    "10707",
+    "10110",
+    "107"
+  ],
+  "CR_L2_BARRIO": [
+    "Barrio Escalante"
+  ],
+  "CR_L2_ESTADO_CIVIL": [
+    "Unión de hecho"
+  ],
+  "CR_L2_OCUPACION": [
+    "Gerente de operaciones"
+  ],
+  "CR_L2_EMPLEADOR": [
+    "Corporación Comercial Centroamericana S.A."
+  ],
+  "CR_L2_NIVEL_EDUCATIVO": [
+    "Educación universitaria en curso"
+  ],
+  "CR_L2_INSTITUCION_EDUCATIVA": [
+    "Universidad de Costa Rica"
+  ],
+  "CR_L2_PERSONAS_A_CARGO": [
+    "9"
+  ],
+  "CR_L3_ETNIA": [
+    "Afrodescendiente"
+  ],
+  "CR_L3_PUEBLO_INDIGENA": [
+    "Pueblo indígena"
+  ],
+  "CR_L3_NACIONALIDAD": [
+    "Peruana"
+  ],
+  "CR_L3_CONDICION_MIGRATORIA": [
+    "Residencia en trámite"
+  ],
+  "CR_L3_RELIGION": [
+    "Ortodoxa"
+  ],
+  "CR_L3_CONVICCION_FILOSOFICA": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_L3_OPINION_POLITICA": [
+    "Oficialista"
+  ],
+  "CR_L3_AFILIACION_PARTIDARIA": [
+    "Partido Republicano Social Cristiano"
+  ],
+  "CR_L3_AFILIACION_SINDICAL": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_L3_BIOMETRICO": [
+    "clave123"
+  ],
+  "CR_L3_GENETICO": [
+    "clave123"
+  ],
+  "CR_L3_ORIENTACION_SEXUAL": [
+    "Homosexual"
+  ],
+  "CR_L3_VIDA_SEXUAL": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_L3_IDENTIDAD_GENERO": [
+    "Transgénero"
+  ],
+  "CR_L3_VICTIMA": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_SALUD_IDENTIFICADOR": [
+    "A1234567"
+  ],
+  "CR_SALUD_COBERTURA": [
+    "Asegurado por el Estado"
+  ],
+  "CR_SALUD_DIAGNOSTICO": [
+    "F33.1",
+    "Depresión mayor"
+  ],
+  "CR_SALUD_PROCEDIMIENTO": [
+    "Prueba de carga viral para VIH"
+  ],
+  "CR_SALUD_MEDICAMENTO": [
+    "Sertralina 50 mg"
+  ],
+  "CR_SALUD_TEXTO_CLINICO": [
+    "Cliente Jiménez, cédula 1-0234-0567, correo j.jimenez@gmail.com, cel 83124567"
+  ],
+  "CR_SALUD_RESULTADO_EXAMEN": [
+    "A1234567"
+  ],
+  "CR_SALUD_VIH": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_SALUD_GRUPO_SANGUINEO": [
+    "O+"
+  ],
+  "CR_SALUD_DISCAPACIDAD": [
+    "Trastorno del espectro autista"
+  ],
+  "CR_SALUD_OCUPACIONAL": [
+    "No apto temporalmente"
+  ],
+  "CR_SALUD_REPRODUCTIVA": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_SALUD_MENTAL": [
+    "Trastorno depresivo recurrente"
+  ],
+  "CR_FIN_HISTORIAL_CREDITICIO": [
+    "En cobro judicial",
+    "A1"
+  ],
+  "CR_FIN_DEUDA": [
+    "2400000"
+  ],
+  "CR_FIN_INGRESOS": [
+    "780000"
+  ],
+  "CR_FIN_PATRIMONIO": [
+    "48000000"
+  ],
+  "CR_FIN_PENSION": [
+    "420000"
+  ],
+  "CR_FIN_PROGRAMA_SOCIAL": [
+    "Subsidio estatal"
+  ],
+  "CR_FIN_CONDICION_SOCIOECONOMICA": [
+    "Pobreza extrema"
+  ],
+  "CR_FIN_VIVIENDA": [
+    "Vivienda en precario"
+  ],
+  "CR_PENAL_ANTECEDENTES": [
+    "Condenado por hurto en 2019"
+  ],
+  "CR_PENAL_EXPEDIENTE": [
+    "24-001234-0007-PE",
+    "12-000456-0164-CI"
+  ]
+}

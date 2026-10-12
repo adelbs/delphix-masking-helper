@@ -162,7 +162,7 @@
     "BZ_L1_PAYMENT_CARD": {
       "title": "Payment card",
       "what": "Credit, debit and prepaid card numbers.",
-      "masking": "Replaced by another card number that still passes the Luhn check. Values not shaped like a card pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "BZ_L1_IP_ADDRESS": {
       "title": "IP address",
@@ -397,22 +397,22 @@
     "BZ_FIN_DEBT": {
       "title": "Debt amount",
       "what": "Loan, mortgage and card balances, amounts in arrears, credit limits, instalments.",
-      "masking": "Mapped to an amount between BZ$200 and BZ$1,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_INCOME": {
       "title": "Salary and income",
       "what": "Salary and wages, insurable earnings, household income.",
-      "masking": "Mapped to an amount between BZ$700 and BZ$40,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_ASSETS": {
       "title": "Assets",
       "what": "Property and land value, savings and account balances, fixed deposits, investments and credit union shares, net worth.",
-      "masking": "Mapped to an amount between BZ$20,000 and BZ$5,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_PENSION": {
       "title": "Pension",
       "what": "Retirement, invalidity and survivors' pension amounts, the non-contributory pension, gratuities and provident fund balances.",
-      "masking": "Mapped to an amount between BZ$100 and BZ$10,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_SSB_BENEFIT": {
       "title": "Social security benefit",

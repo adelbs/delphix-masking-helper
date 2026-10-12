@@ -153,11 +153,11 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white shrink-0">
         <button onClick={onToggleSidebar} className="text-slate-400 hover:text-slate-600 transition-colors">
           <PanelLeftOpen size={18} />
         </button>
-        <Radar size={16} className="text-slate-500 flex-shrink-0" />
+        <Radar size={16} className="text-slate-500 shrink-0" />
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-semibold text-slate-800 truncate">
             {editing ? classifier.name : t('classifier.newTitle')}
@@ -169,7 +169,7 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
           </p>
         </div>
         {editing && (
-          <div className="flex items-center gap-1.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={sendToEngine}
               disabled={job !== null}
@@ -189,13 +189,13 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
         )}
       </div>
       {sending && job?.progress && (
-        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white shrink-0">
           <ImportProgressBar progress={job.progress} />
         </div>
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white shrink-0">
         {([
           { id: 'config', label: t('classifier.tabConfig'), Icon: SlidersHorizontal },
           { id: 'doc', label: t('tester.tabDoc'), Icon: BookOpen },
@@ -296,8 +296,8 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
             </div>
 
             {catalogError ? (
-              <p className="flex gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 break-words">
-                <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+              <p className="flex gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 wrap-break-word">
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
                 {t('classifier.catalogFailed', { error: catalogError })}
               </p>
             ) : !spec || !effective ? (
@@ -344,7 +344,7 @@ function FrameworkSummary({ framework }: { framework: ClassifierFrameworkName })
     <span className="block">
       <span className="flex items-center gap-2">
         <span className="text-sm font-semibold text-slate-800">{t(k(`classifier.fw.${framework}`))}</span>
-        <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded',
+        <span className={cn('text-[10px] font-medium px-1.5 py-0.5 rounded-sm',
           target === 'metadata' ? 'bg-violet-100 text-violet-700' : 'bg-emerald-100 text-emerald-700')}>
           {t(k(`classifier.target.${target}`))}
         </span>
@@ -371,7 +371,7 @@ function ReviewPanel({ framework, review }: { framework: ClassifierFrameworkName
         <div key={g.key} className={cn('rounded-xl border p-4', g.cls)}>
           <p className="text-xs font-semibold uppercase tracking-wide mb-1.5">{g.title}</p>
           <ul className="text-sm space-y-1 list-disc pl-4">
-            {g.items.map((item, i) => <li key={i} className="break-words">{issueText(framework, item)}</li>)}
+            {g.items.map((item, i) => <li key={i} className="wrap-break-word">{issueText(framework, item)}</li>)}
           </ul>
         </div>
       ))}
@@ -454,7 +454,7 @@ function EntryList({ listKey, fields, framework, config, onChange }: {
               onClick={() => setEntries(entries.filter((_, j) => j !== i))}
               disabled={entries.length <= 1}
               title={t('classifier.removeRow')}
-              className="p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
+              className="p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-sm disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-slate-400"
             >
               <X size={14} />
             </button>
@@ -629,7 +629,7 @@ function TestPanel({ catalog, classifier }: {
       </button>
 
       {error && (
-        <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 break-words">{error}</p>
+        <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 wrap-break-word">{error}</p>
       )}
       {result && classifier && (
         <TestResult result={result} selfId={classifier.id ?? 'unsaved'} domain={classifier.domain} catalog={catalog} />
@@ -660,8 +660,8 @@ function TestResult({ result, selfId, domain, catalog }: {
 
   if (result.failure) {
     return (
-      <p className="flex gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 break-words">
-        <AlertTriangle size={16} className="flex-shrink-0 mt-0.5" />
+      <p className="flex gap-2 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg p-3 wrap-break-word">
+        <AlertTriangle size={16} className="shrink-0 mt-0.5" />
         {t('classifier.failure', { error: result.failure })}
       </p>
     )
@@ -789,7 +789,7 @@ function OwnResult({ own }: { own: ClassifierReport }) {
       {own.outcome !== 'counted' && (
         <p className="text-xs text-slate-500">{t(k(`classifier.status.${camel(own.outcome)}`))}</p>
       )}
-      {own.problem && <p className="text-xs text-red-700 break-words">{own.problem}</p>}
+      {own.problem && <p className="text-xs text-red-700 wrap-break-word">{own.problem}</p>}
       {summary && <p className="text-sm text-slate-700">{summary}</p>}
       {rows.length > 0 && (
         <div className="overflow-x-auto">
@@ -817,7 +817,7 @@ function OwnResult({ own }: { own: ClassifierReport }) {
   )
 }
 
-const cardCls = 'bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4'
+const cardCls = 'bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4'
 const labelCls = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5'
 const helpCls = 'text-xs text-slate-400 mt-1'
-const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent'

@@ -135,7 +135,7 @@
     "CL_L1_TARJETA": {
       "title": "Payment card",
       "what": "Credit and debit card numbers, with or without spaces.",
-      "masking": "Replaced by another number that still passes the Luhn check. Values that are not shaped like a card are left as they are."
+      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "CL_L1_IP": {
       "title": "IP address",
@@ -390,12 +390,12 @@
     "CL_L3_SOCIOEC_MONTO_DEUDA": {
       "title": "Debt amounts",
       "what": "Debt, arrears and outstanding balances.",
-      "masking": "Mapped to an amount between $10,000 and $50,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "CL_L3_SOCIOEC_INGRESOS": {
       "title": "Income and salary",
       "what": "Salaries, taxable income, household and per capita income, assets.",
-      "masking": "Mapped to an amount between $450,000 and $8,000,000: plausible, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "CL_L3_SOCIOEC_PREVISION_AFP": {
       "title": "Pension fund",
@@ -405,7 +405,7 @@
     "CL_L3_SOCIOEC_SALDO_PREVISIONAL": {
       "title": "Pension balances",
       "what": "Individual account balances, contributions, voluntary savings (APV) and pension amounts.",
-      "masking": "Mapped to an amount between $100,000 and $250,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "CL_L3_SOCIOEC_VIVIENDA": {
       "title": "Housing situation",

@@ -291,6 +291,13 @@ const COLUMNS = [
   col('DT_FIM', 'date', 0, many(() => iso(2015, 2025)), ''),
   col('NOME_ARQUIVO', 'varchar', 60, many(() => `relatorio_${int(1, 99)}.pdf`), ''),
   col('PESO_FRETE_KG', 'number', 6, many(() => `${int(1, 99)}.5`), ''),
+  // Short names of packaged systems (a core banking table, say): nothing but the values to go by.
+  col('PFNOM', 'char', 60, many(fullName), 'BR_L1_NOME_COMPLETO'),
+  col('PFMAIL', 'char', 80, many(() => `${pick(SURNAMES).toLowerCase()}.${int(1, 99)}@correo.com`), 'BR_L1_EMAIL'),
+  col('PFSX', 'char', 1, many(() => pick(['F', 'M'])), 'BR_L2_SEXO'),
+  col('DSPIMEI', 'char', 15, many(() => luhn('35', 15)), 'BR_L1_DISPOSITIVO'),
+  col('USPWD', 'char', 60, many(() => `$2b$12$${many(() => pick('./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'), 53).join('')}`), 'BR_L1_CREDENCIAL'),
+  col('LBSEQ', 'clob', 4000, many(() => many(() => pick('ACGT'), 60).join('')), 'BR_L3_GENETICO'),
 ]
 
 function verifyClassifiers() {
@@ -324,6 +331,24 @@ function verifyClassifiers() {
   }
   const negatives = COLUMNS.filter((c) => !c.expect).length
   console.log(`profiled ${COLUMNS.length} columns (${negatives} not personal data): ${passed} as expected`)
+
+  // The same columns as a database may hand them over: CHAR values padded with spaces, and codes of
+  // digits kept as text with zeros on the left. Each must still land where its bare twin does.
+  const TEXT_TYPES = new Set([SQL.char, SQL.varchar, SQL.clob])
+  const paddedColumns = COLUMNS.flatMap((column) => [
+    ...(TEXT_TYPES.has(column.sqlType) ? [{ ...column, how: 'spaces', values: column.values.map((v) => v.padEnd(Math.max(column.length, v.length + 3))) }] : []),
+    ...(TEXT_TYPES.has(column.sqlType) && column.values.every((v) => /^\d+$/.test(v)) ? [{ ...column, how: 'zeros', values: column.values.map((v) => v.padStart(Math.max(column.length, v.length + 2), '0')) }] : []),
+  ])
+  let paddedPassed = 0
+  for (const column of paddedColumns) {
+    const field = { name: column.name, parent: null, sqlType: column.sqlType, length: column.length || null, autoIncrement: false, values: column.values }
+    const result = kit.evaluateField({ classifiers: resolved, field, threshold: preset.profileSet.threshold, readFile })
+    if (result.assigned === column.expect) { paddedPassed++; continue }
+    failures++
+    const ranking = result.ranking.slice(0, 3).map((r) => `${r.domain} ${r.percent}%`).join(', ')
+    console.log(`  ✗ ${column.name} padded with ${column.how}: expected ${column.expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
+  }
+  console.log(`profiled ${paddedColumns.length} padded columns: ${paddedPassed} as expected`)
 
   // The essential pack runs only the classifiers of its domains. Its columns must still land where
   // they did, and no other column may be taken for one of its domains now that the domains that
@@ -557,7 +582,7 @@ const EXPECT = {
   BR_L3_IDENTIDADE_GENERO: (i, o) => has('br-identidades-genero.txt', o),
   BR_SAUDE_DIAGNOSTICO: (i, o) => (/\.\d/.test(i) ? has('br-cid10-decimal.txt', o) : /^[A-Z]\d{2,3}$/i.test(i) ? has('br-cid10.txt', o) : has('br-diagnosticos.txt', o)),
   BR_SAUDE_MEDICAMENTO: (i, o) => has('br-medicamentos.txt', o),
-  BR_SAUDE_TIPO_SANGUINEO: (i, o) => has('br-tipos-sanguineos.txt', o),
+  BR_SAUDE_TIPO_SANGUINEO: (i, o) => BLOOD_GROUPS.has(o),
   BR_SAUDE_DEFICIENCIA: (i, o) => flag(i, o) ?? has('br-deficiencias.txt', o),
   BR_SAUDE_OCUPACIONAL: (i, o) => flag(i, o) ?? has('br-aptidao.txt', o),
   BR_SAUDE_REPRODUTIVA: (i, o) => flag(i, o) ?? o === SUPPRESSED,
@@ -578,7 +603,25 @@ async function mask(framework, config, input, additionalAlgorithms) {
   return res.json()
 }
 
+// Algorithms that come with the engine (presets/_lib/engine-algorithms.mjs) are not in the set: they
+// run through a chain whose first step changes nothing — a chain takes two — and the runner finds
+// them in its own catalog.
+const ENGINE_IDENTITY = {
+  name: 'VERIFY_IDENTITY', className: 'algorithm.plugin.decompose.RegexDecompose',
+  config: { maskPatterns: [{ regex: '(.*)', actions: [{ type: 'PRESERVE' }] }], fallbackAction: { type: 'PRESERVE' }, requireMask: false },
+}
+const engineRun = (name) => ({ framework: 'algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain', config: { algorithmReferences: [{ name: ENGINE_IDENTITY.name }, { name }] } })
+const withIdentity = (list) => [...list, ENGINE_IDENTITY]
+const BLOOD_GROUPS = new Set(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+
 async function verifyAlgorithms() {
+  // An amount masked by the engine's CM Numeric keeps its number of digits: the same order of magnitude.
+  const digitCount = (v) => String(v).replace(/\D/g, '').length
+  for (const d of preset.domains) {
+    if (d.algorithm !== 'dlpx-core:CM Numeric' || !MASKING[d.name]) continue
+    const own = MASKING[d.name].check
+    MASKING[d.name].check = (i, o) => digitCount(i) === digitCount(o) && (!own || own(i, o))
+  }
   const byName = new Map(preset.algorithms.map((a) => [a.name, a]))
   // Each test sends only what the algorithm reaches, as the tester does.
   const reach = (name, seen = new Set()) => {
@@ -594,7 +637,7 @@ async function verifyAlgorithms() {
   }
   const missing = preset.domains.map((d) => d.name).filter((d) => !MASKING[d])
   if (missing.length) { failures++; console.log(`  ✗ domains with no masking test: ${missing.join(', ')}`) }
-  const run = (algorithmName, input) => { const algo = byName.get(algorithmName); return mask(algo.framework, resolve(algo.config), input, additionalFor(algorithmName)).catch((err) => ({ error: err.message })) }
+  const run = (algorithmName, input) => { const algo = byName.get(algorithmName) ?? engineRun(algorithmName); return mask(algo.framework, resolve(algo.config), input, withIdentity(additionalFor(algorithmName))).catch((err) => ({ error: err.message })) }
 
   const jobs = preset.domains.flatMap((d) => (MASKING[d.name]?.inputs ?? []).map((input) => ({ domain: d, input })))
   // Every algorithm masks its own sample input, which is what the tester opens it with.
@@ -631,6 +674,38 @@ async function verifyAlgorithms() {
   await Promise.all(Array.from({ length: 6 }, worker))
   console.log(lines.sort().join('\n'))
   console.log(`masked ${jobs.length} values: ${passed} as expected`)
+
+  // Padding: a CHAR column fills a value with spaces, and a code kept as text may come with zeros
+  // on the left. The padded value must mask as the bare one does — around the spaces, after the
+  // zeros — so that it still joins its unpadded twin in another table.
+  const same = (bare, out) => out.trim() === bare.trim()
+  // With zeros: the same number as the bare value masks to, as wide as the padded value. A domain
+  // that writes its numbers at full width (a CPF that lost a zero comes back with eleven digits)
+  // gives the same number either way.
+  const sameNumber = (bare, out) => out.replace(/^0+(?=\d)/, '') === bare.replace(/^0+(?=\d)/, '') && out.length >= bare.length
+  const isDomain = new Set(preset.domains.map((d) => d.name))
+  const padded = jobs.filter((j) => !j.placeholder && isDomain.has(j.domain.name) && !TYPED.has(j.domain.name)).flatMap(({ domain, input }) => [
+    { domain, input, value: `${input}   `, fits: same },
+    { domain, input, value: `  ${input}`, fits: same },
+    ...(/^\d{2,}$/.test(input) ? [{ domain, input, value: `00${input}`, fits: sameNumber }] : []),
+  ])
+  let paddedPassed = 0
+  const paddedLines = []
+  let nextPadded = 0
+  async function paddedWorker() {
+    while (nextPadded < padded.length) {
+      const { domain, input, value, fits } = padded[nextPadded++]
+      const algo = byName.get(domain.algorithm) ?? engineRun(domain.algorithm)
+      const run = (x) => mask(algo.framework, resolve(algo.config), x, withIdentity(additionalFor(domain.algorithm))).catch((err) => ({ error: err.message }))
+      const [bare, out] = await Promise.all([run(input), run(value)])
+      if (bare.output != null && out.output != null && fits(bare.output, out.output)) { paddedPassed++; continue }
+      failures++
+      paddedLines.push(`  ✗ padded ${domain.name} ${JSON.stringify(value)} → ${JSON.stringify(out.output ?? out.error)}, bare ${JSON.stringify(input)} → ${JSON.stringify(bare.output ?? bare.error)}`)
+    }
+  }
+  await Promise.all(Array.from({ length: 6 }, paddedWorker))
+  console.log(paddedLines.sort().join('\n'))
+  console.log(`masked ${padded.length} padded values: ${paddedPassed} as their bare value`)
 
   // Keys must stay keys: 150 distinct inputs give 150 distinct outputs, all valid.
   const keys = [

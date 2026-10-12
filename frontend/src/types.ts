@@ -129,6 +129,8 @@ export interface PresetCounts { classifiers: number; domains: number; algorithms
 export interface ProfileSetPreset {
   id: string
   version: number | null
+  /** The day that version was built, `YYYY-MM-DD`; null for a preset that does not say. */
+  versionDate: string | null
   /** By locale; `en` is always present. */
   name: Partial<Record<Locale, string>>
   summary: Partial<Record<Locale, string>>

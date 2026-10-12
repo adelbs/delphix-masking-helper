@@ -38,7 +38,7 @@ export function SetupNeeded({ missing, libDir, onRetry }: {
     <div className="h-full overflow-auto bg-slate-50">
       <div className="max-w-2xl mx-auto px-6 py-12">
         <div className="flex items-center gap-3 mb-2">
-          <span className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center flex-shrink-0">
+          <span className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
             <PackageOpen size={20} className="text-amber-700" />
           </span>
           <h1 className="text-xl font-semibold text-slate-800">{t('setup.title')}</h1>
@@ -74,8 +74,8 @@ export function SetupNeeded({ missing, libDir, onRetry }: {
             >
               <span className="flex-1 break-all">{libDir}</span>
               {copied
-                ? <Check size={13} className="text-green-600 flex-shrink-0" />
-                : <Copy size={13} className="text-slate-400 flex-shrink-0" />}
+                ? <Check size={13} className="text-green-600 shrink-0" />
+                : <Copy size={13} className="text-slate-400 shrink-0" />}
             </button>
           </li>
 

@@ -146,7 +146,7 @@
     "MX_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": "Números de cartão de crédito e débito.",
-      "masking": "Trocado por outro número de cartão que ainda passa na verificação de Luhn. Valores sem formato de cartão passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "MX_L1_PASAPORTE": {
       "title": "Passaporte",
@@ -421,22 +421,22 @@
     "MX_FIN_MONTO_DEUDA": {
       "title": "Valor da dívida",
       "what": "Saldo devedor, valor em atraso, limite de crédito, pagamento mínimo.",
-      "masking": "Mapeado para um valor entre 1.000 e 5.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_INGRESO_MENSUAL": {
       "title": "Renda mensal",
       "what": "Salário, percepções, líquido a receber, renda do domicílio.",
-      "masking": "Mapeada para um valor entre 8.000 e 250.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_SALARIO_DIARIO": {
       "title": "Salário diário (SDI, SBC)",
       "what": "O salário diário integrado e o salário base de contribuição usados pelo IMSS — o jeito como as folhas mexicanas guardam a remuneração.",
-      "masking": "Mapeado para um valor entre 280 e 3.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": "Patrimônio líquido, valores cadastrais e de avaliação, investimentos e poupança.",
-      "masking": "Mapeado para um valor entre 200.000 e 30.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_AFORE": {
       "title": "AFORE",
@@ -446,7 +446,7 @@
     "MX_FIN_SALDO_RETIRO": {
       "title": "Poupança de aposentadoria e habitação",
       "what": "Saldos das subcontas de aposentadoria e habitação, poupança voluntária, valores de pensão.",
-      "masking": "Mapeado para um valor entre 5.000 e 5.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_CREDITO_VIVIENDA": {
       "title": "Crédito habitacional",

@@ -256,7 +256,7 @@ export const ptBR: Messages = {
   'presets.loading': 'Carregando profile sets…',
   'presets.listError': 'Não foi possível listar os profile sets pré-configurados.',
   'presets.empty': 'Ainda não há profile sets pré-configurados.',
-  'presets.counts': 'Versão {version} · Classifiers {classifiers} · Domínios {domains} · Algoritmos {algorithms}',
+  'presets.counts': 'Versão {version} de {date} · Classifiers {classifiers} · Domínios {domains} · Algoritmos {algorithms}',
   'presets.loadedAt': '{pack} carregado em {date}',
   'presets.pack.essential': 'Pacote essencial',
   'presets.pack.extended': 'Pacote estendido',
@@ -271,7 +271,7 @@ export const ptBR: Messages = {
   'presets.switched': '"{name}" trocado para o {pack}.',
   'presets.unloaded': '"{name}" descarregado: {n} itens removidos.',
   'presets.kept': 'Mantidos porque algo mais aqui os usa: {names}.',
-  'presets.newVersion': 'A versão {version} está disponível — resete para aplicá-la.',
+  'presets.newVersion': 'A versão {version}, de {date}, está disponível — resete para aplicá-la.',
   'presets.doc': 'Documentação',
   'presets.noDoc': 'Este profile set ainda não tem documentação.',
   'presets.load': 'Carregar',
@@ -305,6 +305,7 @@ export const ptBR: Messages = {
   'settings.ai.recheck': 'Verificar de novo',
   'settings.ai.ollamaHint': 'Roda totalmente offline. Instale o Ollama e baixe um modelo, ex: `ollama pull llama3.1`. Um modelo local aconselha mas não constrói algoritmos, e em problemas com restrição fina é pouco confiável — medido em modelos da classe 8B. Prefira um provedor hospedado quando o assistente for fonte de decisão.',
   'settings.ai.copilotHint': 'Usa o GitHub Models com um token do GitHub (models:read). O GitHub Copilot não tem API de chat pública para aplicações de terceiros.',
+  'settings.ai.openaiHint': 'Usa a API da OpenAI. A chave é armazenada localmente e também pode ser fornecida por meio de DLPX_AI_OPENAI_KEY.',
   'settings.ai.installedModels': 'Modelos instalados: {models}',
 
   // Settings — files
@@ -617,6 +618,7 @@ export const ptBR: Messages = {
   // ── Profile sets ──────────────────────────────────────────────────────────
   'profileSet.new': 'Novo profile set',
   'profileSet.newTitle': 'Novo profile set',
+  'profileSet.loadPreset': 'Carregar profile set pré-configurado',
   'profileSet.actions': 'Ações de profile sets',
   'profileSet.empty': 'Nenhum profile set ainda. Crie um, ou importe os do engine.',
   'profileSet.local': 'Só nesta máquina',

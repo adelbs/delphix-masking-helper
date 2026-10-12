@@ -1,0 +1,5822 @@
+{
+  "version": 1,
+  "versionDate": "2026-10-11",
+  "name": {
+    "en": "Jamaica — Data Protection Act, 2020 (personal data protection)",
+    "pt-BR": "Jamaica — Data Protection Act, 2020 (proteção de dados pessoais)",
+    "es": "Jamaica — Data Protection Act, 2020 (protección de datos personales)"
+  },
+  "summary": {
+    "en": "Discovers and masks Jamaican personal data under the Data Protection Act, 2020: direct identifiers (TRN, NIS number, names, contact, documents), quasi-identifiers (birth date, town, neighbourhood), the sensitive personal data of section 2 — genetic and biometric data, filiation, ethnic origin, beliefs, political opinions, trade union membership, health, sex life and offences — and financial data.",
+    "pt-BR": "Descobre e mascara dados pessoais da Jamaica segundo o Data Protection Act, 2020: identificadores diretos (TRN, número do NIS, nomes, contato, documentos), quase-identificadores (data de nascimento, cidade, bairro), os dados pessoais sensíveis da seção 2 — dados genéticos e biométricos, filiação, origem étnica, crenças, opiniões políticas, filiação sindical, saúde, vida sexual e infrações — e dados financeiros.",
+    "es": "Descubre y enmascara datos personales de Jamaica conforme a la Data Protection Act, 2020: identificadores directos (TRN, número del NIS, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, ciudad, barrio), los datos personales sensibles de la sección 2 — datos genéticos y biométricos, filiación, origen étnico, creencias, opiniones políticas, afiliación sindical, salud, vida sexual e infracciones — y datos financieros."
+  },
+  "profileSet": {
+    "name": "JM - Data Protection Act 2020 - v1",
+    "description": "Data Protection Act 2020 - personal data",
+    "threshold": 60,
+    "classifiers": [
+      "JM_L1_TRN - Path",
+      "JM_L1_TRN - Regex",
+      "JM_L1_NIS_NUMBER - Path",
+      "JM_L1_PASSPORT - Path",
+      "JM_L1_PASSPORT - Regex",
+      "JM_L1_VOTER_ID - Path",
+      "JM_L1_DRIVERS_LICENCE - Path",
+      "JM_L1_IMMIGRATION_DOCUMENT - Path",
+      "JM_L1_VITAL_RECORD - Path",
+      "JM_L1_GIVEN_NAME - Path",
+      "JM_L1_GIVEN_NAME - List",
+      "JM_L1_SURNAME - Path",
+      "JM_L1_SURNAME - List",
+      "JM_L1_FULL_NAME - Path",
+      "JM_L1_FULL_NAME - List",
+      "JM_L1_EMAIL - Path",
+      "JM_L1_EMAIL - Type",
+      "JM_L1_EMAIL - Regex",
+      "JM_L1_PHONE - Path",
+      "JM_L1_PHONE - Regex",
+      "JM_L1_ADDRESS - Path",
+      "JM_L1_ADDRESS - Type",
+      "JM_L1_ADDRESS - Regex",
+      "JM_L1_ADDRESS_DETAIL - Path",
+      "JM_L1_BANK_ACCOUNT - Path",
+      "JM_L1_PAYMENT_CARD - Path",
+      "JM_L1_PAYMENT_CARD - Regex",
+      "JM_L1_IP_ADDRESS - Path",
+      "JM_L1_IP_ADDRESS - Regex",
+      "JM_L1_DEVICE_ID - Path",
+      "JM_L1_DEVICE_ID - Regex",
+      "JM_L1_LICENCE_PLATE - Path",
+      "JM_L1_LICENCE_PLATE - Regex",
+      "JM_L1_VIN - Path",
+      "JM_L1_VIN - Regex",
+      "JM_L1_LAND_TITLE - Path",
+      "JM_L1_LAND_TITLE - Regex",
+      "JM_L1_CONTRACT_NUMBER - Path",
+      "JM_L1_USERNAME - Path",
+      "JM_L1_CREDENTIAL - Path",
+      "JM_L1_CREDENTIAL - Regex",
+      "JM_L1_GEOLOCATION - Path",
+      "JM_L1_GEOLOCATION - Regex",
+      "JM_L1_FREE_TEXT - Path",
+      "JM_L1_FREE_TEXT - Type",
+      "JM_L1_FREE_TEXT - Regex",
+      "JM_L2_BIRTH_DATE - Path",
+      "JM_L2_BIRTH_DATE - Type",
+      "JM_L2_BIRTH_YEAR - Path",
+      "JM_L2_BIRTH_YEAR - Type",
+      "JM_L2_AGE - Path",
+      "JM_L2_AGE - Type",
+      "JM_L2_EVENT_DATE - Path",
+      "JM_L2_EVENT_DATE - Type",
+      "JM_L2_SEX - Path",
+      "JM_L2_SEX - List",
+      "JM_L2_TOWN - Path",
+      "JM_L2_TOWN - Values",
+      "JM_L2_NEIGHBOURHOOD - Path",
+      "JM_L2_NATIONALITY - Path",
+      "JM_L2_NATIONALITY - Values",
+      "JM_L2_MARITAL_STATUS - Path",
+      "JM_L2_MARITAL_STATUS - Values",
+      "JM_L2_OCCUPATION - Path",
+      "JM_L2_EMPLOYER - Path",
+      "JM_L2_EDUCATION - Path",
+      "JM_L2_EDUCATION - Values",
+      "JM_L2_SCHOOL - Path",
+      "JM_L2_DEPENDANTS - Path",
+      "JM_L2_DEPENDANTS - Type",
+      "JM_L3_GENETIC - Path",
+      "JM_L3_GENETIC - Regex",
+      "JM_L3_BIOMETRIC - Path",
+      "JM_L3_BIOMETRIC - Type",
+      "JM_L3_HEIGHT - Path",
+      "JM_L3_EYE_COLOUR - Path",
+      "JM_L3_EYE_COLOUR - Values",
+      "JM_L3_FILIATION - Path",
+      "JM_L3_FILIATION - Values",
+      "JM_L3_ETHNICITY - Path",
+      "JM_L3_ETHNICITY - Values",
+      "JM_L3_RELIGION - Path",
+      "JM_L3_RELIGION - Values",
+      "JM_L3_BELIEF - Path",
+      "JM_L3_POLITICAL_OPINION - Path",
+      "JM_L3_POLITICAL_OPINION - Values",
+      "JM_L3_POLITICAL_AFFILIATION - Path",
+      "JM_L3_POLITICAL_AFFILIATION - Values",
+      "JM_L3_TRADE_UNION - Path",
+      "JM_L3_TRADE_UNION - Values",
+      "JM_L3_SEXUAL_ORIENTATION - Path",
+      "JM_L3_SEXUAL_ORIENTATION - Values",
+      "JM_L3_SEXUAL_LIFE - Path",
+      "JM_L3_GENDER_IDENTITY - Path",
+      "JM_L3_GENDER_IDENTITY - Values",
+      "JM_HEALTH_ID - Path",
+      "JM_HEALTH_DIAGNOSIS - Path",
+      "JM_HEALTH_DIAGNOSIS - Regex",
+      "JM_HEALTH_MEDICATION - Path",
+      "JM_HEALTH_MEDICATION - Values",
+      "JM_HEALTH_CLINICAL_TEXT - Path",
+      "JM_HEALTH_CLINICAL_TEXT - Type",
+      "JM_HEALTH_TEST_RESULT - Path",
+      "JM_HEALTH_BLOOD_GROUP - Path",
+      "JM_HEALTH_BLOOD_GROUP - Values",
+      "JM_HEALTH_DISABILITY - Path",
+      "JM_HEALTH_DISABILITY - Values",
+      "JM_HEALTH_REPRODUCTIVE - Path",
+      "JM_HEALTH_MENTAL - Path",
+      "JM_FIN_CREDIT_REFERENCE - Path",
+      "JM_FIN_DEBT - Path",
+      "JM_FIN_DEBT - Type",
+      "JM_FIN_INCOME - Path",
+      "JM_FIN_INCOME - Type",
+      "JM_FIN_ASSETS - Path",
+      "JM_FIN_ASSETS - Type",
+      "JM_FIN_PENSION - Path",
+      "JM_FIN_PENSION - Type",
+      "JM_FIN_NIS_BENEFIT - Path",
+      "JM_FIN_NIS_BENEFIT - Values",
+      "JM_FIN_SOCIAL_PROGRAMME - Path",
+      "JM_FIN_SOCIAL_PROGRAMME - Values",
+      "JM_FIN_POVERTY - Path",
+      "JM_FIN_POVERTY - Values",
+      "JM_FIN_HOUSING - Path",
+      "JM_FIN_HOUSING - Values",
+      "JM_PENAL_CRIMINAL_RECORD - Path",
+      "JM_PENAL_CASE_NUMBER - Path",
+      "JM_PENAL_CASE_NUMBER - Regex"
+    ]
+  },
+  "packs": {
+    "essential": {
+      "description": "Essential pack of the Data Protection Act 2020",
+      "domains": [
+        "JM_L1_TRN",
+        "JM_L1_NIS_NUMBER",
+        "JM_L1_PASSPORT",
+        "JM_L1_DRIVERS_LICENCE",
+        "JM_L1_GIVEN_NAME",
+        "JM_L1_SURNAME",
+        "JM_L1_FULL_NAME",
+        "JM_L1_EMAIL",
+        "JM_L1_PHONE",
+        "JM_L1_ADDRESS",
+        "JM_L1_ADDRESS_DETAIL",
+        "JM_L2_BIRTH_DATE"
+      ]
+    }
+  },
+  "classifiers": [
+    {
+      "name": "JM_L1_TRN - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_TRN",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:trn|trn_?(no|num|number|nbr)|taxpayer_?(registration_?)?(no|num|number|id)|tax_?(payer_?)?reg(istration)?_?(no|num|number)|tax_?(id|identification)(_?(no|num|number))?|nin|nin_?(no|number)|nids(_?(no|num|number|id))?|national_?(id|identification)(_?(no|num|number|card))?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_TRN - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_TRN",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:\\d{3}[\\s\\-]\\d{3}[\\s\\-]\\d{3})",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:\\d{9})",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_NIS_NUMBER - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_NIS_NUMBER",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nis|nis_?(no|num|number|nbr|id|card)|national_?insurance(_?(no|num|number|scheme_?(no|number)))?|ni_?(no|num|number)|insured_?(person_?)?(no|num|number)|social_?security(_?(no|num|number))?|ssn)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_PASSPORT - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_PASSPORT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:passport[a-z_]*|pass_?port_?(no|num|number)|pp_?(no|num|number)|travel_?document(_?(no|num|number))?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_PASSPORT - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_PASSPORT",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-Z]{1,2}\\d{6,8}",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_VOTER_ID - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_VOTER_ID",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:voter_?(id|card|reg|registration)(_?(no|num|number|card))?|voters_?(id|card|reg|registration)(_?(no|num|number))?|elector(al)?_?(id|no|num|number|card|reg|registration)(_?(no|num|number))?|eoj_?(no|id|reg|number)|polling_?(division|station)_?(no|number)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_DRIVERS_LICENCE - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_DRIVERS_LICENCE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:drivers?_?licen[cs]e(_?(no|num|number))?|driving_?licen[cs]e(_?(no|num|number))?|dl_?(no|num|number)|licen[cs]e_?(no|num|number)(?!_?(plate|vehicle|business|trade|liquor|professional|firearm))|permit_?(no|number)_?driver)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_IMMIGRATION_DOCUMENT - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_IMMIGRATION_DOCUMENT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:permanent_?residen(ce|cy|t)(_?(permit|card|no|num|number|id))?|work_?permit(_?(no|num|number))?|immigration_?(permit|document|card|file|status_?no|no|num|number)|visa_?(no|num|number)|residen(ce|cy)_?permit(_?(no|number))?|pica_?(no|number|file|ref)|citizenship_?certificate(_?(no|number))?|naturali[sz]ation_?(certificate|cert|no|number)|csme_?(certificate|skills_?certificate)(_?(no|number))?|skills_?certificate(_?(no|number))?|refugee_?(id|card|no|number)|asylum_?(id|no|number)|alien_?(no|number|registration))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_VITAL_RECORD - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_VITAL_RECORD",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:birth_?cert(ificate)?(_?(no|num|number|entry|pin))?|death_?cert(ificate)?(_?(no|num|number))?|marriage_?cert(ificate)?(_?(no|num|number))?|registry_?entry(_?(no|number))?|rgd_?(no|number|entry|pin|ref)|vital_?(record|statistics)_?(no|num|number)|registration_?(no|number)_?(birth|death|marriage))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:entry_?(no|number))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.55,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_GIVEN_NAME - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_GIVEN_NAME",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:first_?names?|given_?names?|fore_?names?|christian_?name|fname|name_?first|middle_?names?|mname|name_?middle)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:name(?!_?(product|prod|item|article|company|business|trade|brand|file|street|road|avenue|village|town|city|district|parish|country|bank|branch|plan|campaign|project|service|table|column|field|user|host|server|domain|model|category|type|school|college|institution|course|programme|program|subject|document|doc|centre|center|unit|clinic|hospital|area|department|dept|position|system|app|application|group|list|report|process|event|task|profile|role|class|object|account|drug|medication|diagnosis|study|benefit|party|union|religion|ethnicity|language|place|store|shop|warehouse|supplier|vendor|contract|policy|insurance|org|organi[sz]ation|entity|parameter|variable|method|function|index|job|script|queue|resource|network|device|template|image|photo|page|site|module|menu|option|action|permission|tax|currency|issuer|invoice|payment|form|zone|route|line|sector|building|display|key|tag|label|title|code|config|setting|firm|employer|estate|parcel|scheme|community|customer|cust|client|patient|employee|emp|staff|worker|member|student|pupil|insured|beneficiary|holder|account_?holder|policy_?holder|mother|father|parent|guardian|spouse|partner|next_?of_?kin|doctor|physician|nurse|contact|emergency_?contact|guarantor|debtor|borrower|applicant|signatory|witness|representative|owner|tenant|landlord|victim|complainant|accused|defendant|donor|heir|person|driver|agent|citizen|elector|voter|taxpayer|child|dependant|dependent|relative|officer|teacher|contributor|pensioner|claimant|full|complete|last|first)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_GIVEN_NAME - List",
+      "framework": "LIST",
+      "domain": "JM_L1_GIVEN_NAME",
+      "description": "Known values.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://jm-detect-given-names.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "JM_L1_SURNAME - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_SURNAME",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:last_?names?|surnames?|family_?names?|lname|name_?last|maiden_?name|mothers?_?maiden_?name|maiden|married_?name|former_?(sur)?name)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_SURNAME - List",
+      "framework": "LIST",
+      "domain": "JM_L1_SURNAME",
+      "description": "Known values.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://jm-detect-surnames.txt",
+            "matchStrength": 0.7
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "JM_L1_FULL_NAME - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_FULL_NAME",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:full_?name|fullname|complete_?name|person_?name|name_?of_?(customer|cust|client|patient|employee|emp|staff|worker|member|student|pupil|insured|beneficiary|holder|account_?holder|policy_?holder|mother|father|parent|guardian|spouse|partner|next_?of_?kin|doctor|physician|nurse|contact|emergency_?contact|guarantor|debtor|borrower|applicant|signatory|witness|representative|owner|tenant|landlord|victim|complainant|accused|defendant|donor|heir|person|driver|agent|citizen|elector|voter|taxpayer|child|dependant|dependent|relative|officer|teacher|contributor|pensioner|claimant)|(customer|cust|client|patient|employee|emp|staff|worker|member|student|pupil|insured|beneficiary|holder|account_?holder|policy_?holder|mother|father|parent|guardian|spouse|partner|next_?of_?kin|doctor|physician|nurse|contact|emergency_?contact|guarantor|debtor|borrower|applicant|signatory|witness|representative|owner|tenant|landlord|victim|complainant|accused|defendant|donor|heir|person|driver|agent|citizen|elector|voter|taxpayer|child|dependant|dependent|relative|officer|teacher|contributor|pensioner|claimant)_?name)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:beneficiary|guardian|next_?of_?kin|spouse|emergency_?contact|guarantor|account_?holder|policy_?holder|legal_?representative|attorney|patient|victim|complainant|accused|defendant|insured_?person|nominee|executor|justice_?of_?the_?peace)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:name(?!_?(product|prod|item|article|company|business|trade|brand|file|street|road|avenue|village|town|city|district|parish|country|bank|branch|plan|campaign|project|service|table|column|field|user|host|server|domain|model|category|type|school|college|institution|course|programme|program|subject|document|doc|centre|center|unit|clinic|hospital|area|department|dept|position|system|app|application|group|list|report|process|event|task|profile|role|class|object|account|drug|medication|diagnosis|study|benefit|party|union|religion|ethnicity|language|place|store|shop|warehouse|supplier|vendor|contract|policy|insurance|org|organi[sz]ation|entity|parameter|variable|method|function|index|job|script|queue|resource|network|device|template|image|photo|page|site|module|menu|option|action|permission|tax|currency|issuer|invoice|payment|form|zone|route|line|sector|building|display|key|tag|label|title|code|config|setting|firm|employer|estate|parcel|scheme|community|customer|cust|client|patient|employee|emp|staff|worker|member|student|pupil|insured|beneficiary|holder|account_?holder|policy_?holder|mother|father|parent|guardian|spouse|partner|next_?of_?kin|doctor|physician|nurse|contact|emergency_?contact|guarantor|debtor|borrower|applicant|signatory|witness|representative|owner|tenant|landlord|victim|complainant|accused|defendant|donor|heir|person|driver|agent|citizen|elector|voter|taxpayer|child|dependant|dependent|relative|officer|teacher|contributor|pensioner|claimant|full|complete|last|first)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_FULL_NAME - List",
+      "framework": "LIST",
+      "domain": "JM_L1_FULL_NAME",
+      "description": "Known values.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://jm-detect-given-names.txt",
+            "matchStrength": 0.65
+          },
+          {
+            "file": "preset-file://jm-detect-surnames.txt",
+            "matchStrength": 0.65
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.3,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "JM_L1_EMAIL - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_EMAIL",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:e_?mail[a-z0-9_]*|mail[a-z0-9_]*|email_?address)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_EMAIL - Type",
+      "framework": "TYPE",
+      "domain": "JM_L1_EMAIL",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 5
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L1_EMAIL - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_EMAIL",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.2
+      }
+    },
+    {
+      "name": "JM_L1_PHONE - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_PHONE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:tel|telephone[a-z0-9_]*|tel_?(no|num|number|home|work|mobile|cell)|phone[a-z0-9_]*|ph_?(no|num|number)|mobile[a-z0-9_]*|cell|cell_?(phone|no|number)|cellphone|cellular|contact_?(no|num|number)|fax|whatsapp)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_PHONE - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_PHONE",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:(\\+?1[\\s\\-.]?)?\\(?(876|658)\\)?[\\s\\-.]?\\d{3}[\\s\\-.]?\\d{4})",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:[2-9]\\d{2}[\\s\\-.]\\d{4})",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:\\+?\\d[\\d\\s()\\-.]{6,15})",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_ADDRESS - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_ADDRESS",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:(?<!(mac|ip|e_?mail|web|url)_?)address(?!_?(ip|mac|email|e_?mail|web|url|book|type|id))[a-z0-9_]*|(?<!(mac|ip|e_?mail|web|url)_?)addr(ess)?_?(line|1|2)?[a-z0-9_]*|street(_?(address|name))?|residential_?address|home_?address|mailing_?address|postal_?address|physical_?address|residence|place_?of_?residence|domicile|post_?office|p_?o_?box)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_ADDRESS - Type",
+      "framework": "TYPE",
+      "domain": "JM_L1_ADDRESS",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L1_ADDRESS - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_ADDRESS",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "(?i)#?\\s*\\d+[A-Z]?\\s+.*\\b(street|st\\.?|avenue|ave\\.?|road|rd\\.?|drive|dr\\.?|lane|boulevard|blvd\\.?|crescent|close|terrace|way|highway|hwy)\\b.*",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "(?i).*\\bkingston\\s+\\d{1,2}\\b.*",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "(?i).+\\bdistrict\\b.*\\bp\\.?\\s?o\\.?(\\W.*)?",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "(?i).*\\blot\\s*(no\\.?\\s*|#\\s*)?\\d+\\s*,.+",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.2
+      }
+    },
+    {
+      "name": "JM_L1_ADDRESS_DETAIL - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_ADDRESS_DETAIL",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:house_?(no|num|number)|apt(_?(no|number))?|apartment(_?(no|number))?|unit_?(no|num|number)|flat_?(no|number)|lot_?(no|num|number)|floor_?(no|number)?|suite(_?no)?|building_?(no|number))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.7,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_BANK_ACCOUNT - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_BANK_ACCOUNT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:account_?(no|num|number|nbr)|acct_?(no|num|number|nbr)?|acc_?(no|num|number)|bank_?(account|acct)(_?(no|num|number))?|savings_?(account|acct)(_?(no|number))?|chequing_?(account|acct)(_?(no|number))?|checking_?(account|acct)(_?(no|number))?|share_?account(_?no)?|iban)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_PAYMENT_CARD - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_PAYMENT_CARD",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:card_?(no|num|number)|credit_?card(_?(no|num|number))?|debit_?card(_?(no|num|number))?|keycard(_?(no|number))?|cc_?(no|num|number)|pan|card_?pan|masked_?pan)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_PAYMENT_CARD - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_PAYMENT_CARD",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
+            "matchStrength": 0.9,
+            "checksumType": "LUHN",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_IP_ADDRESS - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_IP_ADDRESS",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ip|ip_?(address|addr|origin|source|destination|client|user|remote|public|private|login)|ipv[46]|remote_?addr(ess)?|client_?ip|host_?ip|source_?ip)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_IP_ADDRESS - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_IP_ADDRESS",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_DEVICE_ID - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_DEVICE_ID",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:imei|imsi|iccid|mac|mac_?address|device_?(id|uuid|serial)|advertising_?id|idfa|gaid|cookie(_?id)?|session_?id|serial_?(no|number)_?(device|phone|handset)|handset_?serial)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_DEVICE_ID - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_DEVICE_ID",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
+            "matchStrength": 1,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:\\d{15})",
+            "matchStrength": 0.8,
+            "checksumType": "LUHN",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_LICENCE_PLATE - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_LICENCE_PLATE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:licen[cs]e_?plates?(_?(no|num|number))?|plates?(_?(no|num|number))?|vehicle_?(reg|registration|plate|licen[cs]e)(_?(no|num|number))?|registration_?plate|number_?plate|reg_?plate|tag_?(no|number))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_LICENCE_PLATE - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_LICENCE_PLATE",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:\\d{4}[\\s\\-]?[A-Z]{2})",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "(P[A-HJ-NP]|C[A-HJ-N]|RR|DA|MA|MB)[\\s\\-]?\\d{4}",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_VIN - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_VIN",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:vin|vin_?(no|number)|vehicle_?identification_?(no|number)|chassis(_?(no|number))?|engine_?(no|number|serial)|motor_?(no|number)|serial_?(no|number)_?vehicle)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_VIN - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_VIN",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-HJ-NPR-Z0-9]{17}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_LAND_TITLE - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_LAND_TITLE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:vol(ume)?_?(and_?)?fol(io)?|title_?(deed_?)?(no|number|vol|volume|ref)|certificate_?of_?title|land_?(title|registry|register|certificate|parcel)(_?(no|num|number))?|valuation_?(no|num|number|roll)|nla_?(no|number|valuation)|parcel(_?(no|num|number|id))?|deed_?(no|number)|lease_?(no|number)|strata_?(plan|lot)(_?(no|number))?|folio(_?(no|number))?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_LAND_TITLE - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_LAND_TITLE",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "(?i).*vol(ume)?\\.?\\s*\\d+.*fol(io)?\\.?\\s*\\d+.*",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_CONTRACT_NUMBER - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_CONTRACT_NUMBER",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:contract_?(no|num|number)|policy_?(no|num|number)|loan_?(no|num|number|id)|mortgage_?(no|number)|member(ship)?_?(no|num|number|id)|customer_?(no|num|number|id)|client_?(no|num|number|id)|cust_?(no|num|id)|employee_?(no|num|number|id)|emp_?(no|num|id)|staff_?(no|num|number|id)|payroll_?(no|number)|claim_?(no|num|number)|meter_?(no|number)|jps_?account(_?no)?|nwc_?account(_?no)?|nht_?(no|number|contributor_?(no|number)?)|student_?(no|num|number|id)|pupil_?(no|number|id))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.7,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_USERNAME - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_USERNAME",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:user_?name|username|login(_?(name|id))?|user_?id_?login|nick_?name|nickname|alias|screen_?name|handle|facebook|instagram|twitter|tiktok|linkedin|social_?media(_?(handle|account|profile))?|telegram)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.7,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_CREDENTIAL - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_CREDENTIAL",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:password|passwd|pwd|pass_?word|pass|pin(_?(code|no|number))?|passcode|hash_?password|password_?hash|secret|secret_?(answer|question)|security_?(answer|question)|access_?token|refresh_?token|api_?key|otp)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_CREDENTIAL - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_CREDENTIAL",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_GEOLOCATION - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_GEOLOCATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:lat|latitude|lon|lng|longitude|coordinates?|coord_?[xy]|geo_?(lat|lon|lng|loc|location|position)|geolocation|gps(_?(location|position|coordinates))?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:long)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_GEOLOCATION - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_GEOLOCATION",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:1[78]\\.\\d{3,}\\s*,\\s*-7[678]\\.\\d{3,})",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:1[78]\\.\\d{3,})",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "-7[678]\\.\\d{3,}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L1_FREE_TEXT - Path",
+      "framework": "PATH",
+      "domain": "JM_L1_FREE_TEXT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:remarks?|comments?|notes?|observations?|narrative|free_?text|memo|messages?(?!_?(id|type|code|key|no|num|number|date|status|queue|count|log))|complaint(_?(text|details|description))?|description_?(of_?)?(case|complaint|incident|request|issue|problem|events)|incident_?(details|description|narrative)|case_?(notes?|summary|details)|statement|details|summary)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.6,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L1_FREE_TEXT - Type",
+      "framework": "TYPE",
+      "domain": "JM_L1_FREE_TEXT",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 30
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L1_FREE_TEXT - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L1_FREE_TEXT",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "0*(?:\\d{3}-?\\d{3}-?\\d{3})",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": true,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": true,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "0*(?:(876|658)[\\s\\-.]?\\d{3}[\\s\\-.]?\\d{4})",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": true,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_BIRTH_DATE - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_BIRTH_DATE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:dob|d_?o_?b|date_?of_?birth|birth_?date|birthdate|birthday|born_?(on|date)|bdate)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_BIRTH_DATE - Type",
+      "framework": "TYPE",
+      "domain": "JM_L2_BIRTH_DATE",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Date"
+          },
+          {
+            "typeName": "JavaSqlType",
+            "sqlType": 93
+          },
+          {
+            "typeName": "String",
+            "minimumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L2_BIRTH_YEAR - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_BIRTH_YEAR",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:birth_?year|year_?of_?birth|yob|yr_?of_?birth)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_BIRTH_YEAR - Type",
+      "framework": "TYPE",
+      "domain": "JM_L2_BIRTH_YEAR",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 4
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 4
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L2_AGE - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_AGE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:age(_?(years|yrs|in_?years|at_?(admission|death|entry|diagnosis|registration)|group|range|band|bracket|last_?birthday))?|years_?old)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_AGE - Type",
+      "framework": "TYPE",
+      "domain": "JM_L2_AGE",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 6
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L2_EVENT_DATE - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_EVENT_DATE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:date_?of_?(death|marriage|divorce|hire|hiring|employment|engagement|termination|dismissal|resignation|retirement|admission|discharge|diagnosis|visit|consultation|delivery|arrest|conviction|sentence|sentencing|naturali[sz]ation|injury|surgery)|(death|marriage|divorce|hire|hiring|employment|employment_?start|start_?of_?employment|termination|separation|resignation|retirement|admission|discharge|diagnosis|visit|delivery|arrest|conviction|sentencing|naturali[sz]ation|pension_?start|injury|vaccination|surgery|immigration)_?date|dod)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_EVENT_DATE - Type",
+      "framework": "TYPE",
+      "domain": "JM_L2_EVENT_DATE",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Date"
+          },
+          {
+            "typeName": "JavaSqlType",
+            "sqlType": 93
+          },
+          {
+            "typeName": "String",
+            "minimumLength": 6
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L2_SEX - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_SEX",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:sex(_?(code|at_?birth|registered))?|gender(?!_?(identity|expression))(_?code)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_SEX - List",
+      "framework": "LIST",
+      "domain": "JM_L2_SEX",
+      "description": "Known values.",
+      "config": {
+        "valueLists": [
+          {
+            "file": "preset-file://jm-detect-sex.txt",
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://jm-detect-sex-letter.txt",
+            "matchStrength": 0.6
+          }
+        ],
+        "tokenizeInput": true,
+        "rejectStrength": 0.5,
+        "tokenizationDelimiter": " "
+      }
+    },
+    {
+      "name": "JM_L2_TOWN - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_TOWN",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:town|village|community(?!_?(service|group|organi[sz]ation|work|council))|locality|settlement|home_?town|hometown|place_?of_?birth|birth_?place|birthplace|residence_?(town|village|community|district)|town_?of_?residence|post_?office_?(name|town)|postal_?town)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:city|municipality)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_TOWN - Values",
+      "framework": "REGEX",
+      "domain": "JM_L2_TOWN",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "153 — Portmore · Montego Bay · Mobay · Mo Bay · Spanish Town · May Pen · …",
+            "regex": "(?iu)(?:(?:a(?:bove rocks|delphi|enon town|l(?:bert town|exandria|ligator pond|ston)|n(?:chovy|notto bay))|b(?:a(?:laclava|mboo|th)|ethel town|l(?:ack river|uefields)|og walk|rown(?:'s town|s town)|u(?:ff bay|ll savanna))|c(?:a(?:mbridge|rron hall|scade|ve valley)|edar valley|hapelton|lar(?:emont|k(?:'s town|s town))|o(?:leyville|mfort castle|nstant spring)|ro(?:ft(?:'s hill|s hill)|ss keys))|d(?:a(?:lvey|rliston)|iscovery bay|uncans)|e(?:asington|warton)|f(?:almouth|r(?:ankfield|ome))|g(?:imme-me-bit|lengoffe|o(?:lden grove|rdon town)|r(?:ange hill|een island)|uy(?:'s hill|s hill))|h(?:a(?:lf(?: way tree|-way-tree|way tree)|yes)|ector(?:'s river|s river)|ighgate|ope(?: bay|well))|islington|j(?:a(?:ckson town|mes hill)|ohns hall|unction)|ke(?:llits|mps hill)|l(?:acovia|i(?:nstead|onel town|ttle london)|luidas vale|ong bay|uc(?:ea|ky hill))|m(?:a(?:ggotty|lvern|n(?:chioneal|deville)|roon town|vis bank|y pen)|i(?:l(?:e gully|k river)|tchell town)|o(?: bay|bay|cho|n(?:eague|tego bay)|ore town|rant bay|untainside))|n(?:ain|e(?:gril|w(?: market|port)))|o(?:cho rios|ld harbour(?: bay)?|racabessa|sbourne store)|p(?:etersfield|o(?:int hill|r(?:t(?: (?:antonio|m(?:aria|orant)|royal)|more)|us))|ratville)|r(?:a(?:ce course|mble)|etreat|i(?:chmond|o bueno|versdale)|ock(?: river|y point)|unaway bay)|s(?:a(?:int ann(?:'s bay|s bay)|n(?:dy bay|ta cruz)|v(?: la mar|-la-mar|anna(?: la mar|-la-mar)))|eaforth|iloah|outhfield|p(?:a(?:lding|nish town)|ur tree)|t(?: ann(?:'s bay|s bay)|\\. ann(?:'s bay|s bay)|ony hill))|t(?:hompson town|oll gate|r(?:inity ville|oja))|ulster spring|w(?:a(?:it-a-bit|kefield|tt town)|hite house|illiamsfield)|y(?:allahs|ork town)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L2_NEIGHBOURHOOD - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_NEIGHBOURHOOD",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:neighbou?rhood|subdivision|housing_?(area|scheme|estate|development)|residential_?area|area_?of_?residence|scheme_?name|community_?name|district_?name)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_NATIONALITY - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_NATIONALITY",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nationality|citizenship|country_?of_?(birth|origin|citizenship|nationality)|birth_?country)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_NATIONALITY - Values",
+      "framework": "REGEX",
+      "domain": "JM_L2_NATIONALITY",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "36 — Jamaican · American · British · Canadian · Chinese · Indian · …",
+            "regex": "(?iu)(?:(?:american|b(?:arbad(?:ian|os)|ritish)|c(?:anad(?:a|ian)|hin(?:a|ese)|olombia(?:n)?|uba(?:n)?)|dominican(?: republic)?|filipino|guyan(?:a|ese)|haiti(?:an)?|india(?:n)?|jamaica(?:n)?|nigeria(?:n)?|philippines|trinidad(?: and tobago|ian)?|u(?:k|nited (?:kingdom|states)|s(?:a)?)|venezuela(?:n)?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L2_MARITAL_STATUS - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_MARITAL_STATUS",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:marital_?status|civil_?status|union_?status|union_?type|marriage_?status|relationship_?status|conjugal_?status)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_MARITAL_STATUS - Values",
+      "framework": "REGEX",
+      "domain": "JM_L2_MARITAL_STATUS",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "17 — Never married · Married · Common-law union · Visiting union · Divorced · Widowed · …",
+            "regex": "(?iu)(?:(?:common(?: law|-law(?: union)?)|divorced|married|never married|s(?:eparated|ingle)|visiting(?: union)?|widow(?:e(?:d|r))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L2_OCCUPATION - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_OCCUPATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:occupation|profession|job_?title|designation|post_?title|position_?title)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:job|position|post|trade(?!_?(name|mark|licen[cs]e)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_EMPLOYER - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_EMPLOYER",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:employer(_?name)?|name_?of_?employer|employer_?business_?name|company_?of_?employment|workplace|work_?place|place_?of_?(work|employment)|employed_?(at|by|with)|current_?employer)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_EDUCATION - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_EDUCATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:education(_?(level|attainment|status|completed))?|educational_?(level|attainment)|highest_?(level_?(of_?)?)?(education|qualification|grade)|level_?of_?education|qualification|schooling|grade_?completed|csec_?(subjects|passes|grades)|cape_?(subjects|passes|grades)|cxc_?(subjects|passes|grades))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_EDUCATION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L2_EDUCATION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "30 — No schooling · Early childhood · Primary · Lower secondary grade 9 · Secondary CSEC · Sixth form CAPE · …",
+            "regex": "(?iu)(?:(?:associate(?: degree)?|bachelor(?:'s degree|s)?|c(?:ape|ollege|sec|xc)|doctorate|early childhood|h(?:eart|igh school)|lower secondary \\(grade 9\\)|master(?:'s degree|s)|n(?:o(?: schooling|ne)|vq(?:-j|j))|p(?:hd|rimary)|s(?:econdary(?: \\(csec\\))?|ixth form(?: \\(cape\\))?)|tertiary|university|vocational \\(nvq-j\\)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L2_SCHOOL - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_SCHOOL",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:school(_?name)?|name_?of_?school|high_?school|primary_?school|secondary_?school|prep_?school|sixth_?form|college(_?name)?|university(_?name)?|institution_?attended|alma_?mater)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.75,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_DEPENDANTS - Path",
+      "framework": "PATH",
+      "domain": "JM_L2_DEPENDANTS",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:dependants?|dependents?|no_?of_?(children|dependants|dependents|kids)|num(ber)?_?(of_?)?(children|dependants|dependents|kids)|children|household_?(size|members)|persons_?in_?household)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L2_DEPENDANTS - Type",
+      "framework": "TYPE",
+      "domain": "JM_L2_DEPENDANTS",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number",
+            "maximumLength": 4
+          },
+          {
+            "typeName": "String",
+            "maximumLength": 4
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L3_GENETIC - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_GENETIC",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:dna|genetic[a-z_]*|genome|genotyp[a-z_]*|gene_?(test|result|marker|panel)|genetic_?(test|marker|profile|result)|mutation|brca[12]?|karyotype|paternity_?test|dna_?(profile|sample|index)|snp|haplotype|newborn_?screening|sickle_?cell_?(genotype|trait))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_GENETIC - Regex",
+      "framework": "REGEX",
+      "domain": "JM_L3_GENETIC",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L3_BIOMETRIC - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_BIOMETRIC",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:fingerprints?|finger_?prints?|thumb_?prints?|biometric[a-z_]*|face_?(template|encoding|id|print|hash|image)|facial_?(template|recognition|id|image|image_?hash)|photo(graph)?(_?(image|file|path|blob|data|url))?|passport_?photo|selfie|headshot|mugshot|iris(_?(scan|template|code))?|retina(_?scan)?|vein_?(pattern|scan)|palm_?(print|vein)|toe_?print|foot_?print|voice_?(print|template|sample|recording)|signature_?(image|biometric|capture|pad|specimen|scan)|specimen_?signature|handwritten_?signature|keystroke(_?(dynamics|pattern))?|typing_?pattern|gait(_?(pattern|analysis))?|minutiae)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_BIOMETRIC - Type",
+      "framework": "TYPE",
+      "domain": "JM_L3_BIOMETRIC",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_L3_HEIGHT - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_HEIGHT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:height(_?(cm|m|in|inches|ft|feet|metres?|meters?))?|stature|ht_?(cm|in))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_EYE_COLOUR - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_EYE_COLOUR",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:eye_?colou?r|eyes_?colou?r|colou?r_?of_?eyes|eyes)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_EYE_COLOUR - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_EYE_COLOUR",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "15 — Brown · Dark brown · Light brown · Black · Hazel · Green · …",
+            "regex": "(?iu)(?:(?:amber|b(?:l(?:ack|k|u(?:e)?)|r(?:n|own))|dark brown|gr(?:e(?:en|y)|n|y)|h(?:azel|zl)|light brown))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_FILIATION - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_FILIATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:filiation|legitimacy|legitimate|illegitimate|legitimated|born_?(in|out_?of)_?wedlock|wedlock(_?status)?|parentage|paternity(?!_?(test|leave))(_?(status|acknowledged|declared|established|order))?|father_?(unknown|named|recorded|on_?record|acknowledged)|affiliation_?order|adopt(ed|ion)(_?(status|order|flag|date))?|birth_?parents?|biological_?(mother|father|parents?))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_FILIATION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_FILIATION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "13 — Born in wedlock · Born out of wedlock · Legitimated · Adopted · Father not recorded · Not stated · …",
+            "regex": "(?iu)(?:(?:adopted|born (?:in wedlock|out of wedlock)|father (?:not recorded|unknown)|i(?:llegitimate|n wedlock)|legitimate(?:d)?|not stated|out of wedlock|unknown father))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "6 — y · n · yes · no · 0 · 1",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "6 — y · n · yes · no · 0 · 1",
+            "regex": "(?iu)(?:(?:n(?:o)?|y(?:es)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_ETHNICITY - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_ETHNICITY",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:ethnic(ity|_?group|_?origin|_?background|_?identity)?|race|racial_?(origin|group|background)|indigenous(_?(status|group|people|peoples))?|maroon(_?(community|status))?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_ETHNICITY - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_ETHNICITY",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "26 — Black · East Indian · Chinese · White · Mixed · Maroon · …",
+            "regex": "(?iu)(?:(?:afr(?:ican|o-jamaican)|black|chinese(?:-jamaican)?|e(?:ast indian|uropean)|ind(?:ian|o-jamaican)|lebanese|m(?:aroon|ixed(?: race)?)|not stated|other|syrian(?:/lebanese)?|white))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "6 — y · n · yes · no · 0 · 1",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "6 — y · n · yes · no · 0 · 1",
+            "regex": "(?iu)(?:(?:n(?:o)?|y(?:es)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_RELIGION - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_RELIGION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:religion[a-z_]*|religious_?(affiliation|denomination|belief|beliefs|preference|group)|denomination|faith|church(_?(name|affiliation|member|membership|attended))?|creed|congregation)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_RELIGION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_RELIGION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "50 — Church of God · Seventh-day Adventist · Pentecostal · Baptist · Anglican · Roman Catholic · …",
+            "regex": "(?iu)(?:(?:a(?:dventist|gnostic|nglican|theist)|b(?:a(?:h(?:a(?:'i|i)|á'í)|ptist)|rethren)|c(?:atholic|h(?:ristian|urch of god(?: of prophecy)?))|hindu|islam|je(?:hovah(?: witness|'s witness)|wish)|m(?:ethodist|oravian|uslim)|n(?:ew testament church of god|o(?: religion|ne))|other|p(?:entecostal|ocomania|rotestant)|r(?:asta(?:fari(?:an)?)?|c|evival(?:ist)?|oman catholic)|s(?:alvation army|da|eventh-day adventist)|united church))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_BELIEF - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_BELIEF",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:beliefs?|philosophical_?(beliefs?|convictions?)|conscientious_?objection|conscientious_?objector|moral_?(beliefs?|convictions?)|personal_?convictions?|worldview)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_POLITICAL_OPINION - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_POLITICAL_OPINION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:political_?(opinion|opinions|view|views|orientation|leaning|leanings|preference|ideology)|ideology|voting_?intention|vote_?intention|intended_?vote|swing_?voter)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_POLITICAL_OPINION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_POLITICAL_OPINION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "19 — Left · Centre-left · Centre · Centre-right · Right · No preference · …",
+            "regex": "(?iu)(?:(?:c(?:ent(?:er(?: (?:left|right))?|re(?: (?:left|right)|-(?:left|right))?)|onservative)|l(?:eft(?: wing)?|iberal)|no preference|pr(?:efers not to say|ogressive)|right(?: wing)?|swing|undecided))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_POLITICAL_AFFILIATION - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_POLITICAL_AFFILIATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:political_?(party|body|membership|affiliation|group)|party_?(membership|member|affiliation|card|group|supporter|preference)|preferred_?party|member_?of_?(party|political_?(party|body))|party_?(of_?)?choice)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:party(?!_?(id|key|type|role|site|ref|code|number|no|size)))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_POLITICAL_AFFILIATION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_POLITICAL_AFFILIATION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "15 — Jamaica Labour Party · People s National Party · Independent · No party · JLP · PNP · …",
+            "regex": "(?iu)(?:(?:comrade|green|independent|j(?:amaica labour party|lp)|labourite|n(?:ational democratic movement|dm|o(?: party|ne))|orange|p(?:eople's national party|np)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_TRADE_UNION - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_TRADE_UNION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:trade_?union(_?(member|membership|name|dues))?|union_?(member|membership|affiliation|name|dues|fees|code|branch|local|delegate|representative)|unioni[sz]ed|labou?r_?union|bargaining_?unit|collective_?(agreement|bargaining)|staff_?association|shop_?steward)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_TRADE_UNION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_TRADE_UNION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "24 — BITU · NWU · UAWU · JCTU · JTA · NAJ · …",
+            "regex": "(?iu)(?:(?:b(?:itu|ustamante industrial trade union)|j(?:a(?:lgo|maica (?:association of local government officers|c(?:ivil service association|onfederation of trade unions)|teachers(?: association|' association)))|c(?:sa|tu)|ta)|n(?:a(?:j|tional workers(?: union|' union))|urses association of jamaica|wu)|police federation|tucaw|u(?:awu|case|ni(?:on(?: (?:member|of clerical, administrative and supervisory employees)|ized)|versity and allied workers union))))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_L3_SEXUAL_ORIENTATION - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_SEXUAL_ORIENTATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:sexual_?(orientation|preference)|orientation_?sexual|orient_?sexual|msm(_?(status|flag))?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_SEXUAL_ORIENTATION - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_SEXUAL_ORIENTATION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "15 — Heterosexual · Gay · Lesbian · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:eterosexual|omosexual)|l(?:esbian|gbt(?:q(?:i\\+)?)?)|other|p(?:ansexual|refer(?: not to say|s not to say))|queer|straight))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_L3_SEXUAL_LIFE - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_SEXUAL_LIFE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:sex(ual)?_?life|sexual_?(activity|behavio(u)?r|history|partners?|practices?)|sexually_?active|number_?of_?sexual_?partners|age_?(at_?)?first_?(sex|intercourse)|transactional_?sex|sex_?work(er)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_GENDER_IDENTITY - Path",
+      "framework": "PATH",
+      "domain": "JM_L3_GENDER_IDENTITY",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:gender_?(identity|expression)|preferred_?pronouns?|pronouns?|transgender|trans_?status)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_L3_GENDER_IDENTITY - Values",
+      "framework": "REGEX",
+      "domain": "JM_L3_GENDER_IDENTITY",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "14 — Woman · Man · Trans woman · Trans man · Non-binary · Gender fluid · …",
+            "regex": "(?iu)(?:(?:cisgender|female|gender fluid|ma(?:le|n)|non(?:-binary|binary)|other|prefers not to say|trans(?: (?:man|woman)|gender)?|woman))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_HEALTH_ID - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_ID",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nhf(_?(card|no|num|number|id|member_?(no|id)))?|jadep(_?(card|no|number|id))?|drug_?serv(_?(no|number|card))?|medical_?record(_?(no|num|number))?|mrn|patient_?(id|no|num|number)|docket_?(no|num|number)_?(patient|hospital|clinic)|chart_?(no|num|number)|health_?(record|card|id|insurance)(_?(no|num|number))?|hospital_?(no|num|number)|admission_?(no|num|number)|prescription_?(no|num|number)|sick_?(note|leave|certificate)_?(no|num|number)|medical_?certificate_?(no|num|number))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:chart|admission|episode)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.55,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_DIAGNOSIS - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_DIAGNOSIS",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:diagnos(is|es|tic)[a-z_]*|dx|icd_?(10|11)?(_?code)?|medical_?(condition|history|problem|diagnosis)|health_?(condition|problem)|chronic_?(condition|disease|illness)|illness(es)?|disease[a-z_]*|comorbidit(y|ies)|allerg(y|ies)|cause_?of_?(death|admission|illness|injury|sick_?leave)|reason_?for_?(visit|admission|consultation|sick_?leave)|presenting_?complaint|chief_?complaint|pre_?existing_?conditions?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_DIAGNOSIS - Regex",
+      "framework": "REGEX",
+      "domain": "JM_HEALTH_DIAGNOSIS",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-TV-Za-tv-z]\\d{2}(\\.\\d{1,2}|\\d)?",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_HEALTH_MEDICATION - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_MEDICATION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:medications?|medicines?|drugs?_?(name|prescribed)|prescribed_?(drugs?|medications?)|prescription_?(drug|medication|item)s?|active_?ingredient|dosage|treatment_?(drug|medication))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_MEDICATION - Values",
+      "framework": "REGEX",
+      "domain": "JM_HEALTH_MEDICATION",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "52 — Paracetamol · Ibuprofen · Naproxen · Diclofenac · Metformin · Glibenclamide · …",
+            "regex": "(?iu)(?:(?:a(?:cetaminophen|lprazolam|m(?:lodipine|oxicillin)|spirin|torvastatin|zithromycin)|c(?:etirizine|hlorphenamine|iprofloxacin|lonazepam)|d(?:epo-provera|i(?:azepam|clofenac)|olutegravir)|e(?:favirenz|mtricitabine|nalapril|scitalopram)|f(?:errous sulphate|luoxetine|olic acid)|glibenclamide|h(?:aloperidol|ydro(?:chlorothiazide|xyurea))|i(?:buprofen|nsulin)|l(?:ev(?:etiracetam|o(?:norgestrel|thyroxine))|ithium|o(?:ratadine|sartan))|m(?:et(?:formin|hylphenidate)|isoprostol|ultivitamin)|na(?:ltrexone|proxen)|o(?:lanzapine|meprazole)|p(?:aracetamol|rednisone)|quetiapine|risperidone|s(?:albutamol|ertraline|imvastatin)|tenofovir|valproic acid|warfarin))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_HEALTH_CLINICAL_TEXT - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_CLINICAL_TEXT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:clinical_?notes?|progress_?notes?|nurs(e|ing)_?notes?|doctors?_?notes?|physician_?notes?|medical_?notes?|discharge_?(summary|notes?)|clinical_?summary|history_?of_?present(ing)?_?illness|hpi|physical_?exam(ination)?|assessment_?(and_?)?plan|treatment_?plan|care_?plan|triage_?notes?|soap_?notes?|anamnesis)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_CLINICAL_TEXT - Type",
+      "framework": "TYPE",
+      "domain": "JM_HEALTH_CLINICAL_TEXT",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "String",
+            "minimumLength": 30
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_HEALTH_TEST_RESULT - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_TEST_RESULT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:lab_?(result|test|value)s?|test_?results?|laboratory_?(result|test)s?|hiv(_?(status|test|result))?|viral_?load|cd4(_?count)?|blood_?(sugar|glucose|pressure)|glucose|hba1c|cholesterol|bmi|pregnancy_?test|drug_?(test|screen)|covid_?(test|result)|pcr_?result|pap_?(smear|test)(_?result)?|mammogram_?result|x_?ray_?result|psa(_?result)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.8,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:result|test)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.5,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_BLOOD_GROUP - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_BLOOD_GROUP",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:blood_?(type|group)|abo(_?rh)?|rh_?factor|rh)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_BLOOD_GROUP - Values",
+      "framework": "REGEX",
+      "domain": "JM_HEALTH_BLOOD_GROUP",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "26 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-|b(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-))|b(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-)|o(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_HEALTH_DISABILITY - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_DISABILITY",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:disabilit(y|ies)[a-z_]*|disabled|impairments?|handicap(ped)?|special_?needs|functional_?limitations?|difficulty_?(seeing|hearing|walking|remembering|concentrating|self_?care|communicating)|invalidity(_?(status|grade))?|jcpd_?(no|number|registered|registration))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_DISABILITY - Values",
+      "framework": "REGEX",
+      "domain": "JM_HEALTH_DISABILITY",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "22 — Seeing · Hearing · Walking or climbing steps · Remembering or concentrating · Self-care · Communicating · …",
+            "regex": "(?iu)(?:(?:autism|blind|communicating|deaf|hearing(?: impaired)?|intellectual|learning|m(?:ental|obility|ultiple)|no(?: disability|ne)|p(?:hysical|sychosocial)|remembering or concentrating|se(?:eing|lf-care)|visual|walking or climbing steps))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_HEALTH_REPRODUCTIVE - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_REPRODUCTIVE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:pregnan(t|cy)[a-z_]*|gestation(al)?(_?age)?|weeks_?(of_?)?(pregnancy|gestation)|lmp|last_?menstrual_?period|abortions?|miscarriages?|contracepti(on|ve)[a-z_]*|family_?planning(_?method)?|fertility|infertility|ivf|gravida|antenatal|prenatal|postnatal|postpartum|sti|sexually_?transmitted(_?infection)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_HEALTH_MENTAL - Path",
+      "framework": "PATH",
+      "domain": "JM_HEALTH_MENTAL",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:mental_?(health|illness|disorder|condition)|psychiatr[a-z_]*|psycholog[a-z_]*|depression|anxiety|suicid[a-z_]*|self_?harm|substance_?(use|abuse|misuse)|alcohol(ism|_?use|_?abuse|_?dependence)|drug_?(use|abuse|addiction|dependence)|ganja_?use|cannabis_?use|addiction[a-z_]*|rehab(ilitation)?_?(programme|program|centre|center|status))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_CREDIT_REFERENCE - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_CREDIT_REFERENCE",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:credit_?(score|rating|history|report|status|bureau|reference|risk|grade|standing)|crif(_?(score|report|status))?|creditinfo(_?(score|report|status))?|delinquen(cy|t)(_?(status|days))?|days_?(past_?due|in_?arrears|overdue)|dpd|arrears(_?(status|days))?|past_?due(_?(days|status))?|overdue_?(days|status)|default_?(status|flag|indicator)|defaulted|written_?off|write_?off(_?(status|flag))?|collections?_?status|bad_?debt|loan_?(status|classification|grade)|non_?performing|npl)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_DEBT - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_DEBT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:loan_?(amount|balance|principal|outstanding)|outstanding_?(balance|amount|debt|loan|principal)|debt(_?(amount|total|balance))?|amount_?(owed|due|outstanding|in_?arrears|overdue)|balance_?(owed|outstanding|due)|arrears_?amount|credit_?limit|mortgage_?(balance|amount)|instal?lment(_?amount)?|monthly_?(payment|repayment))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_DEBT - Type",
+      "framework": "TYPE",
+      "domain": "JM_FIN_DEBT",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_FIN_INCOME - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_INCOME",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:salary|salaries|wages?|income[a-z_]*|gross_?(pay|salary|income|earnings)|net_?(pay|salary|income|earnings)|(monthly|annual|weekly|fortnightly)_?(income|salary|earnings|pay|wage)|earnings|remuneration|basic_?(pay|salary)|emoluments?|insurable_?earnings|household_?income|take_?home_?pay)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_INCOME - Type",
+      "framework": "TYPE",
+      "domain": "JM_FIN_INCOME",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_FIN_ASSETS - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_ASSETS",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:net_?worth|assets?_?(value|total)|total_?assets|property_?value|land_?value|market_?value|appraised_?value|valuation_?amount|savings(_?balance)?|account_?balance|deposit_?balance|fixed_?deposit(_?amount)?|investment_?(balance|value|amount)|share_?(balance|capital)|unit_?trust_?(balance|value))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.85,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_ASSETS - Type",
+      "framework": "TYPE",
+      "domain": "JM_FIN_ASSETS",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_FIN_PENSION - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_PENSION",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:pension(_?(amount|payment|monthly|benefit_?amount|balance))?|monthly_?pension|retirement_?(pension|benefit|amount|balance)|nis_?pension(_?amount)?|survivors?_?pension(_?amount)?|widow(er)?s?_?pension(_?amount)?|invalidity_?pension(_?amount)?|gratuity(_?amount)?|superannuation(_?(balance|amount))?|provident_?fund(_?balance)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_PENSION - Type",
+      "framework": "TYPE",
+      "domain": "JM_FIN_PENSION",
+      "description": "Rules out columns whose type cannot hold this data.",
+      "config": {
+        "allowedTypes": [
+          {
+            "typeName": "Number"
+          }
+        ],
+        "matchAutoIncrementingColumn": false,
+        "matchStrength": 0,
+        "rejectStrength": 1
+      }
+    },
+    {
+      "name": "JM_FIN_NIS_BENEFIT - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_NIS_BENEFIT",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:nis_?(benefit|claim)(_?(type|status|category))?|benefit_?(type|claim|category|name|code)|claim_?type|(sickness|maternity|funeral|invalidity|survivors?|widow(er)?s?|orphans?|employment_?injury|disablement|old_?age)_?(benefit|allowance|grant|claim)|national_?insurance_?(benefit|claim)(_?type)?)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_NIS_BENEFIT - Values",
+      "framework": "REGEX",
+      "domain": "JM_FIN_NIS_BENEFIT",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "23 — Old age pension · Invalidity benefit · Widow s or widower s benefit · Orphan s benefit · Special child benefit · Employment injury benefit · …",
+            "regex": "(?iu)(?:(?:d(?:eath(?: benefit)?|isablement(?: benefit)?)|employment injury(?: benefit)?|funeral(?: grant)?|invalidity(?: benefit)?|maternity(?: allowance)?|none|o(?:ld age(?: pension)?|rphan(?:'s benefit)?)|special child(?: benefit)?|widow(?:'s or widower's benefit|er)?))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_FIN_SOCIAL_PROGRAMME - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_SOCIAL_PROGRAMME",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:path(_?(beneficiary|programme|program|member|recipient|status|family))?|programme_?of_?advancement|social_?(programme|program|assistance|welfare|benefit|transfer|pension)s?|welfare_?(programme|program|recipient|status)|cash_?transfer|poor_?relief|beneficiary_?of_?(programme|program)|programme_?beneficiary|rehabilitation_?(grant|programme|program)|compassionate_?grant)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_SOCIAL_PROGRAMME - Values",
+      "framework": "REGEX",
+      "domain": "JM_FIN_SOCIAL_PROGRAMME",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "17 — PATH · Social Pension · Rehabilitation Programme · Poor Relief · NHF subsidy · JADEP · …",
+            "regex": "(?iu)(?:(?:compassionate grant|jadep|n(?:hf(?: subsidy)?|one)|other programme|p(?:ath|oor relief|rogramme of advancement through health and education)|rehabilitation (?:grant|programme)|social pension))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "6 — y · n · yes · no · 0 · 1",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "6 — y · n · yes · no · 0 · 1",
+            "regex": "(?iu)(?:(?:n(?:o)?|y(?:es)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.4
+      }
+    },
+    {
+      "name": "JM_FIN_POVERTY - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_POVERTY",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:poverty(_?(status|level|line|index|score|category))?|food_?poor|socio_?economic_?(status|level|index|group|class|score)|wealth_?(index|quintile)|consumption_?(quintile|decile)|income_?(quintile|decile|bracket|band)|quintile|decile|vulnerability_?(index|score)|mpi|means_?test(_?(score|result))?|beneficiary_?identification_?(score|system)|bis_?score)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_POVERTY - Values",
+      "framework": "REGEX",
+      "domain": "JM_FIN_POVERTY",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "9 — food poor · indigent · poor · not poor · vulnerable · non poor · …",
+            "regex": "(?iu)(?:(?:food poor|high|indigent|low|middle|no(?:n poor|t poor)|poor|vulnerable))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_FIN_HOUSING - Path",
+      "framework": "PATH",
+      "domain": "JM_FIN_HOUSING",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:housing_?(tenure|status|type|situation)|dwelling_?(tenure|ownership|type)|home_?ownership|own_?or_?rent|rent_?or_?own|owns_?(home|house)|squatt(er|ing)(_?status)?|land_?tenure|captured_?land|family_?land)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:tenure)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.55,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_FIN_HOUSING - Values",
+      "framework": "REGEX",
+      "domain": "JM_FIN_HOUSING",
+      "description": "Known values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "note": "21 — Owned · Owned with mortgage · Rented · Leased · Rent free · Family land · …",
+            "regex": "(?iu)(?:(?:captured land|family land|government|lease(?:d)?|mortgage(?:d)?|o(?:ther|wn(?:e(?:d(?: with mortgage)?|r))?)|rent(?: free|ed|ing)?|squatte(?:d|r)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
+      "name": "JM_PENAL_CRIMINAL_RECORD - Path",
+      "framework": "PATH",
+      "domain": "JM_PENAL_CRIMINAL_RECORD",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:criminal_?(record|history|conviction|convictions|status|background|charges?|proceedings|case_?(status|outcome))|police_?(record|certificate|clearance|report_?status)|convictions?(_?(status|record|details))?|convicted|previous_?convictions|offen[cs]es?(_?(type|committed|code|description|details))?|charged_?with|arrests?(_?(record|history))?|sentence(_?(imposed|type|length|details))?|incarcerat(ed|ion)|imprisonment|remand(ed)?(_?status)?|bail(_?status)?|probation(_?status)?|parole|verdict|acquitt(al|ed)|expunge(d|ment))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.95,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:court_?(outcome|disposal|decision|status)|case_?(outcome|disposal)|disposal)(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.55,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_PENAL_CASE_NUMBER - Path",
+      "framework": "PATH",
+      "domain": "JM_PENAL_CASE_NUMBER",
+      "description": "Column name and the variants used in Jamaican systems.",
+      "config": {
+        "paths": [
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:court_?case_?(no|num|number)|criminal_?case_?(no|num|number)|indictment_?(no|num|number)|information_?(no|num|number)|charge_?sheet_?(no|num|number)|police_?(report|station_?diary|case)_?(no|num|number)|station_?diary_?(no|number|entry)|docket_?(no|num|number)|inquest_?(no|number))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.9,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          },
+          {
+            "matchType": "REGEX",
+            "fieldValue": "(?i)(?<![a-z])(?:case_?(no|num|number|ref|reference))(?![a-z])",
+            "parentValue": "",
+            "matchStrength": 0.55,
+            "caseSensitive": false,
+            "allowPartialMatch": true
+          }
+        ],
+        "rejectStrength": 0
+      }
+    },
+    {
+      "name": "JM_PENAL_CASE_NUMBER - Regex",
+      "framework": "REGEX",
+      "domain": "JM_PENAL_CASE_NUMBER",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[A-Z]{1,4}\\s?\\d{1,5}/\\d{4}",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "(?i)\\d{1,6}\\s+of\\s+\\d{4}",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    }
+  ],
+  "domains": [
+    {
+      "name": "JM_L1_TRN",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_NIS_NUMBER",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_PASSPORT",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_VOTER_ID",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_DRIVERS_LICENCE",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_IMMIGRATION_DOCUMENT",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_VITAL_RECORD",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_GIVEN_NAME",
+      "algorithm": "JM_GIVEN_NAMES"
+    },
+    {
+      "name": "JM_L1_SURNAME",
+      "algorithm": "JM_SURNAMES"
+    },
+    {
+      "name": "JM_L1_FULL_NAME",
+      "algorithm": "JM_FULL_NAME"
+    },
+    {
+      "name": "JM_L1_EMAIL",
+      "algorithm": "JM_EMAIL"
+    },
+    {
+      "name": "JM_L1_PHONE",
+      "algorithm": "JM_PHONE"
+    },
+    {
+      "name": "JM_L1_ADDRESS",
+      "algorithm": "JM_ADDRESS"
+    },
+    {
+      "name": "JM_L1_ADDRESS_DETAIL",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_BANK_ACCOUNT",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_PAYMENT_CARD",
+      "algorithm": "JM_CARD"
+    },
+    {
+      "name": "JM_L1_IP_ADDRESS",
+      "algorithm": "JM_IP"
+    },
+    {
+      "name": "JM_L1_DEVICE_ID",
+      "algorithm": "JM_CM_HEX"
+    },
+    {
+      "name": "JM_L1_LICENCE_PLATE",
+      "algorithm": "JM_PLATE"
+    },
+    {
+      "name": "JM_L1_VIN",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_LAND_TITLE",
+      "algorithm": "JM_LAND_TITLE"
+    },
+    {
+      "name": "JM_L1_CONTRACT_NUMBER",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_USERNAME",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_L1_CREDENTIAL",
+      "algorithm": "JM_REDACT"
+    },
+    {
+      "name": "JM_L1_GEOLOCATION",
+      "algorithm": "JM_COORDINATE"
+    },
+    {
+      "name": "JM_L1_FREE_TEXT",
+      "algorithm": "JM_FREE_TEXT"
+    },
+    {
+      "name": "JM_L2_BIRTH_DATE",
+      "algorithm": "JM_BIRTH_DATE"
+    },
+    {
+      "name": "JM_L2_BIRTH_YEAR",
+      "algorithm": "JM_YEAR"
+    },
+    {
+      "name": "JM_L2_AGE",
+      "algorithm": "JM_AGE"
+    },
+    {
+      "name": "JM_L2_EVENT_DATE",
+      "algorithm": "JM_EVENT_DATE"
+    },
+    {
+      "name": "JM_L2_SEX",
+      "algorithm": "JM_SEX"
+    },
+    {
+      "name": "JM_L2_TOWN",
+      "algorithm": "JM_TOWN"
+    },
+    {
+      "name": "JM_L2_NEIGHBOURHOOD",
+      "algorithm": "JM_NEIGHBOURHOOD"
+    },
+    {
+      "name": "JM_L2_NATIONALITY",
+      "algorithm": "JM_NATIONALITY"
+    },
+    {
+      "name": "JM_L2_MARITAL_STATUS",
+      "algorithm": "JM_MARITAL_STATUS"
+    },
+    {
+      "name": "JM_L2_OCCUPATION",
+      "algorithm": "JM_OCCUPATION"
+    },
+    {
+      "name": "JM_L2_EMPLOYER",
+      "algorithm": "JM_EMPLOYER"
+    },
+    {
+      "name": "JM_L2_EDUCATION",
+      "algorithm": "JM_EDUCATION"
+    },
+    {
+      "name": "JM_L2_SCHOOL",
+      "algorithm": "JM_SCHOOL"
+    },
+    {
+      "name": "JM_L2_DEPENDANTS",
+      "algorithm": "JM_CAPPED_COUNT"
+    },
+    {
+      "name": "JM_L3_GENETIC",
+      "algorithm": "JM_REDACT"
+    },
+    {
+      "name": "JM_L3_BIOMETRIC",
+      "algorithm": "JM_REDACT"
+    },
+    {
+      "name": "JM_L3_HEIGHT",
+      "algorithm": "JM_HEIGHT"
+    },
+    {
+      "name": "JM_L3_EYE_COLOUR",
+      "algorithm": "JM_EYE_COLOUR"
+    },
+    {
+      "name": "JM_L3_FILIATION",
+      "algorithm": "JM_FILIATION"
+    },
+    {
+      "name": "JM_L3_ETHNICITY",
+      "algorithm": "JM_ETHNICITY"
+    },
+    {
+      "name": "JM_L3_RELIGION",
+      "algorithm": "JM_RELIGION"
+    },
+    {
+      "name": "JM_L3_BELIEF",
+      "algorithm": "JM_SUPPRESSED_CATEGORY"
+    },
+    {
+      "name": "JM_L3_POLITICAL_OPINION",
+      "algorithm": "JM_POLITICAL_OPINION"
+    },
+    {
+      "name": "JM_L3_POLITICAL_AFFILIATION",
+      "algorithm": "JM_POLITICAL_PARTY"
+    },
+    {
+      "name": "JM_L3_TRADE_UNION",
+      "algorithm": "JM_SUPPRESSED_CATEGORY"
+    },
+    {
+      "name": "JM_L3_SEXUAL_ORIENTATION",
+      "algorithm": "JM_SEXUAL_ORIENTATION"
+    },
+    {
+      "name": "JM_L3_SEXUAL_LIFE",
+      "algorithm": "JM_SUPPRESSED_CATEGORY"
+    },
+    {
+      "name": "JM_L3_GENDER_IDENTITY",
+      "algorithm": "JM_GENDER_IDENTITY"
+    },
+    {
+      "name": "JM_HEALTH_ID",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_HEALTH_DIAGNOSIS",
+      "algorithm": "JM_DIAGNOSIS"
+    },
+    {
+      "name": "JM_HEALTH_MEDICATION",
+      "algorithm": "JM_MEDICATION"
+    },
+    {
+      "name": "JM_HEALTH_CLINICAL_TEXT",
+      "algorithm": "JM_FREE_TEXT"
+    },
+    {
+      "name": "JM_HEALTH_TEST_RESULT",
+      "algorithm": "JM_CM_ALNUM"
+    },
+    {
+      "name": "JM_HEALTH_BLOOD_GROUP",
+      "algorithm": "dlpx-core:BloodType SL"
+    },
+    {
+      "name": "JM_HEALTH_DISABILITY",
+      "algorithm": "JM_DISABILITY"
+    },
+    {
+      "name": "JM_HEALTH_REPRODUCTIVE",
+      "algorithm": "JM_SUPPRESSED_CATEGORY"
+    },
+    {
+      "name": "JM_HEALTH_MENTAL",
+      "algorithm": "JM_SUPPRESSED_CATEGORY"
+    },
+    {
+      "name": "JM_FIN_CREDIT_REFERENCE",
+      "algorithm": "JM_CREDIT"
+    },
+    {
+      "name": "JM_FIN_DEBT",
+      "algorithm": "dlpx-core:CM Numeric"
+    },
+    {
+      "name": "JM_FIN_INCOME",
+      "algorithm": "dlpx-core:CM Numeric"
+    },
+    {
+      "name": "JM_FIN_ASSETS",
+      "algorithm": "dlpx-core:CM Numeric"
+    },
+    {
+      "name": "JM_FIN_PENSION",
+      "algorithm": "dlpx-core:CM Numeric"
+    },
+    {
+      "name": "JM_FIN_NIS_BENEFIT",
+      "algorithm": "JM_NIS_BENEFIT"
+    },
+    {
+      "name": "JM_FIN_SOCIAL_PROGRAMME",
+      "algorithm": "JM_SOCIAL_PROGRAMME"
+    },
+    {
+      "name": "JM_FIN_POVERTY",
+      "algorithm": "JM_POVERTY"
+    },
+    {
+      "name": "JM_FIN_HOUSING",
+      "algorithm": "JM_HOUSING"
+    },
+    {
+      "name": "JM_PENAL_CRIMINAL_RECORD",
+      "algorithm": "JM_CRIMINAL_RECORD"
+    },
+    {
+      "name": "JM_PENAL_CASE_NUMBER",
+      "algorithm": "JM_CM_ALNUM"
+    }
+  ],
+  "algorithms": [
+    {
+      "name": "JM_CM_ALNUM",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789",
+          "AEIOU",
+          "BCDFGHJKLMNPQRSTVWXYZ",
+          "aeiou",
+          "bcdfghjklmnpqrstvwxyz"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
+      },
+      "input": "000123456"
+    },
+    {
+      "name": "JM_CM_HEX",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789",
+          "abcdef",
+          "ABCDEF",
+          "ghijklmnopqrstuvwxyz",
+          "GHIJKLMNOPQRSTUVWXYZ"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
+      },
+      "input": "3c:22:fb:9a:10:e4"
+    },
+    {
+      "name": "JM_REDACT",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(.+)",
+            "actions": [
+              {
+                "type": "REDACT",
+                "redactCharacter": "X"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "secret123"
+    },
+    {
+      "name": "JM_SUPPRESS",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-not-stated.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Major depressive disorder"
+    },
+    {
+      "name": "JM_FLAG_YES_NO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-flag-yes-no.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Yes"
+    },
+    {
+      "name": "JM_FLAG_TRUE_FALSE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-flag-true-false.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "true"
+    },
+    {
+      "name": "JM_FLAG_Y_N",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-flag-y-n.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Y"
+    },
+    {
+      "name": "JM_FLAG_0_1",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-flag-0-1.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "0"
+    },
+    {
+      "name": "JM_FLAG",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG_YES_NO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(true|false)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG_TRUE_FALSE"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)([yn])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG_Y_N"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "([01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG_0_1"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Y"
+    },
+    {
+      "name": "JM_SUPPRESSED_CATEGORY",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_SUPPRESS"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Major depressive disorder"
+    },
+    {
+      "name": "JM_GIVEN_NAMES",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Shelly-Ann Novelette"
+    },
+    {
+      "name": "JM_GIVEN_NAME",
+      "framework": "algorithm.plugin.name.Name",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-given-names.txt"
+        },
+        "maskedValueCase": "PRESERVE_INPUT",
+        "filterAccent": true,
+        "inputCaseSensitive": false
+      },
+      "input": "Delroy"
+    },
+    {
+      "name": "JM_SURNAMES",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([^\\s\\-]+)(\\-)([^\\s\\-]+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAME"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Campbell"
+    },
+    {
+      "name": "JM_SURNAME",
+      "framework": "algorithm.plugin.name.Name",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-surnames.txt"
+        },
+        "maskedValueCase": "PRESERVE_INPUT",
+        "filterAccent": true,
+        "inputCaseSensitive": false
+      },
+      "input": "Beckford"
+    },
+    {
+      "name": "JM_FULL_NAME",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([^,]+),\\s*(.+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAMES"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAMES"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAMES"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)(\\s+)([A-Za-z]\\.?)(\\s+)(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAMES"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAMES"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_GIVEN_NAME"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SURNAMES"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Delroy A. Beckford"
+    },
+    {
+      "name": "JM_EMAIL",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([^@\\s]+)@([^@\\s]+)\\.([A-Za-z]{2,24})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "REDACT",
+                "redactString": "test"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "delroy.beckford@gmail.com"
+    },
+    {
+      "name": "JM_PHONE",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\+?1[\\s\\-.]?)?(\\(?(?:876|658)\\)?[\\s\\-.]?)(\\d{3})([\\s\\-.]?)(\\d{4}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{3})([\\s\\-.]?)(\\d{4}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "+1 876-555-0123"
+    },
+    {
+      "name": "JM_ADDRESS",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-addresses.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "12 Hope Road, Kingston 6"
+    },
+    {
+      "name": "JM_CARD",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "dlpx-core:Credit Card"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "4916 3131 2345 6780"
+    },
+    {
+      "name": "JM_OCTET",
+      "framework": "algorithm.plugin.characterMapping.NumericMapping",
+      "config": {
+        "minValue": 1,
+        "maxValue": 254
+      },
+      "input": "10"
+    },
+    {
+      "name": "JM_IP",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_OCTET"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_OCTET"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_OCTET"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_OCTET"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_HEX"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "72.27.211.10"
+    },
+    {
+      "name": "JM_PLATE",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\d{4})([\\s\\-]?)([A-Z]{2}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "([A-Z]{2})([\\s\\-]?)(\\d{4})",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{2})([\\s\\-]?)(\\d{4}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "1234 AB"
+    },
+    {
+      "name": "JM_LAND_TITLE",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(.*?vol(?:ume)?\\.?\\s*)(\\d+)(.*?fol(?:io)?\\.?\\s*)(\\d+)(.*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CM_ALNUM"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Volume 1234 Folio 567"
+    },
+    {
+      "name": "JM_COORDINATE",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(-?\\d{1,3}\\.\\d)(\\d+)\\s*,\\s*(-?\\d{1,3}\\.\\d)(\\d+)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(-?\\d{1,3}\\.\\d)(\\d+)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "18.012345"
+    },
+    {
+      "name": "JM_FREE_TEXT",
+      "framework": "algorithm.plugin.freeTextRedaction.FreeTextRedaction",
+      "config": {
+        "regularExpressions": [
+          {
+            "patternString": "(?<![\\d\\-])\\d{3}-\\d{3}-\\d{3}(?![\\d\\-])"
+          },
+          {
+            "patternString": "(?<!\\d)\\d{9}(?!\\d)"
+          },
+          {
+            "patternString": "[\\w.+\\-]+@[\\w\\-]+(\\.[\\w\\-]+)+"
+          },
+          {
+            "patternString": "(?<![\\d\\-])(\\+?1[\\s\\-.]?)?\\(?(876|658)\\)?[\\s\\-.]?\\d{3}[\\s\\-.]?\\d{4}(?![\\d\\-])"
+          },
+          {
+            "patternString": "(?<![\\d\\-])[2-9]\\d{2}-\\d{4}(?![\\d\\-])"
+          },
+          {
+            "patternString": "(?<!\\d)\\d{13,19}(?!\\d)"
+          },
+          {
+            "patternString": "(?<![A-Za-z\\d])\\d{4}\\s?[A-Z]{2}(?![A-Za-z\\d])"
+          },
+          {
+            "patternString": "(?<!\\d)(\\d{1,3}\\.){3}\\d{1,3}(?!\\d)"
+          }
+        ],
+        "regExRedactValue": "[DATA]",
+        "lookupFile": {
+          "uri": "preset-file://jm-text-names.txt"
+        },
+        "lookupFileRedactValue": "[NAME]",
+        "isDenyList": true
+      },
+      "input": "Customer Beckford, TRN 123-456-789, email d.beckford@gmail.com, tel 876-555-0123"
+    },
+    {
+      "name": "JM_BIRTH_DATE",
+      "framework": "algorithm.plugin.dateAlgorithms.DateShift",
+      "config": {
+        "minRange": -60,
+        "maxRange": 60,
+        "unit": "DAYS",
+        "roll": false
+      },
+      "input": "1985-07-20"
+    },
+    {
+      "name": "JM_EVENT_DATE",
+      "framework": "algorithm.plugin.dateAlgorithms.DateShift",
+      "config": {
+        "minRange": -30,
+        "maxRange": 30,
+        "unit": "DAYS",
+        "roll": false
+      },
+      "input": "2021-03-15"
+    },
+    {
+      "name": "JM_YEAR",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "1985"
+    },
+    {
+      "name": "JM_AGE",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "90"
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:([1-9])(\\d)(\\.\\d+))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:([1-9])(\\d))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "37"
+    },
+    {
+      "name": "JM_SEX_FEMALE_MALE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-sex-female-male.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Female"
+    },
+    {
+      "name": "JM_SEX_WOMAN_MAN",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-sex-woman-man.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Woman"
+    },
+    {
+      "name": "JM_SEX_F_M",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-sex-f-m.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "F"
+    },
+    {
+      "name": "JM_SEX",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(female|male)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SEX_FEMALE_MALE"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(woman|man)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SEX_WOMAN_MAN"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)([fm])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_SEX_F_M"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "F"
+    },
+    {
+      "name": "JM_TOWN",
+      "framework": "algorithm.plugin.dataCleansing.DataCleansing",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-town-generalized.txt"
+        },
+        "delimiter": "|",
+        "caseSensitive": true,
+        "trimWhitespace": true
+      },
+      "input": "Port Royal"
+    },
+    {
+      "name": "JM_NEIGHBOURHOOD",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-neighbourhoods.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Barbican"
+    },
+    {
+      "name": "JM_NATIONALITY",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-nationalities.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Guyanese"
+    },
+    {
+      "name": "JM_MARITAL_STATUS",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-marital-status.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Visiting union"
+    },
+    {
+      "name": "JM_OCCUPATION",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-occupations.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Regional Operations Manager, Western Division"
+    },
+    {
+      "name": "JM_EMPLOYER",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-employers.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Jamaica Public Service Company Limited"
+    },
+    {
+      "name": "JM_EDUCATION",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-education.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Secondary (CSEC)"
+    },
+    {
+      "name": "JM_SCHOOL",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-schools.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Jamaica College"
+    },
+    {
+      "name": "JM_CAPPED_COUNT",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:([0-5]))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d+))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "5"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "9"
+    },
+    {
+      "name": "JM_INCHES",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-inches.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "8"
+    },
+    {
+      "name": "JM_HEIGHT",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(1|2)(\\d{2})(\\s*cm)?)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:([12]\\.)(\\d{1,2})(\\s*m)?)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:([4-7])(\\s*(?:'|ft\\.?|feet)\\s*)(\\d{1,2})(\\s*(?:\"|''|in\\.?|inches)?))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_INCHES"
+                }
+              },
+              {
+                "type": "PRESERVE"
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "172"
+    },
+    {
+      "name": "JM_EYE_COLOUR_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-eye-colours.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Brown"
+    },
+    {
+      "name": "JM_EYE_COLOUR",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_EYE_COLOUR_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Amber"
+    },
+    {
+      "name": "JM_FILIATION_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-filiation.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Born in wedlock"
+    },
+    {
+      "name": "JM_FILIATION",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_FILIATION_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Father unknown"
+    },
+    {
+      "name": "JM_ETHNICITY_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-ethnic-groups.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Black"
+    },
+    {
+      "name": "JM_ETHNICITY",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_ETHNICITY_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Syrian/Lebanese"
+    },
+    {
+      "name": "JM_RELIGION_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-religions.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Church of God"
+    },
+    {
+      "name": "JM_RELIGION",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_RELIGION_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Salvation Army"
+    },
+    {
+      "name": "JM_POLITICAL_OPINION_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-political-opinions.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Left"
+    },
+    {
+      "name": "JM_POLITICAL_OPINION",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_POLITICAL_OPINION_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Centre-right"
+    },
+    {
+      "name": "JM_POLITICAL_PARTY_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-political-parties.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Jamaica Labour Party"
+    },
+    {
+      "name": "JM_POLITICAL_PARTY",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_POLITICAL_PARTY_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "National Democratic Movement"
+    },
+    {
+      "name": "JM_SEXUAL_ORIENTATION_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-sexual-orientations.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Heterosexual"
+    },
+    {
+      "name": "JM_SEXUAL_ORIENTATION",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_SEXUAL_ORIENTATION_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Bisexual"
+    },
+    {
+      "name": "JM_GENDER_IDENTITY_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-gender-identities.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Woman"
+    },
+    {
+      "name": "JM_GENDER_IDENTITY",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_GENDER_IDENTITY_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Trans man"
+    },
+    {
+      "name": "JM_ICD10_DECIMAL",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-icd10-decimal.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "E11.9"
+    },
+    {
+      "name": "JM_ICD10",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-icd10.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "I10"
+    },
+    {
+      "name": "JM_DIAGNOSIS_TEXT",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-diagnoses.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Essential hypertension"
+    },
+    {
+      "name": "JM_DIAGNOSIS",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "([A-TV-Za-tv-z]\\d{2}\\.\\d{1,2})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_ICD10_DECIMAL"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "([A-TV-Za-tv-z]\\d{2,3})",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_ICD10"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_DIAGNOSIS_TEXT"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "F32.9"
+    },
+    {
+      "name": "JM_MEDICATION_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-medications.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Paracetamol"
+    },
+    {
+      "name": "JM_MEDICATION",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_MEDICATION_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Sertraline 50 mg"
+    },
+    {
+      "name": "JM_DISABILITY_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-disabilities.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Seeing"
+    },
+    {
+      "name": "JM_DISABILITY",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_DISABILITY_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Severe psychosocial disability"
+    },
+    {
+      "name": "JM_CREDIT_STATUS",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-credit-statuses.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Current"
+    },
+    {
+      "name": "JM_CREDIT",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\d{2,3}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CREDIT_STATUS"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "90 days past due"
+    },
+    {
+      "name": "JM_NIS_BENEFIT_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-nis-benefits.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Old age pension"
+    },
+    {
+      "name": "JM_NIS_BENEFIT",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_NIS_BENEFIT_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Special child benefit"
+    },
+    {
+      "name": "JM_SOCIAL_PROGRAMME_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-social-programmes.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "PATH"
+    },
+    {
+      "name": "JM_SOCIAL_PROGRAMME",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_SOCIAL_PROGRAMME_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "School feeding programme"
+    },
+    {
+      "name": "JM_QUINTILE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-quintile.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "1"
+    },
+    {
+      "name": "JM_DECILE_HIGH",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-decile-high.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "6"
+    },
+    {
+      "name": "JM_DECILE",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-decile.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "1"
+    },
+    {
+      "name": "JM_POVERTY_STATUS",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-poverty-statuses.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Food poor"
+    },
+    {
+      "name": "JM_POVERTY",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:([1-5]))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_QUINTILE"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:([6-9]|10))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_DECILE_HIGH"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(decile\\s*)(\\d{1,2})",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_DECILE"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(quintile\\s*)([1-5])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_QUINTILE"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_POVERTY_STATUS"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Food poor"
+    },
+    {
+      "name": "JM_HOUSING_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-housing-tenure.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Owned"
+    },
+    {
+      "name": "JM_HOUSING",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_HOUSING_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Captured land"
+    },
+    {
+      "name": "JM_CRIMINAL_RECORD_LIST",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://jm-criminal-record.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "No criminal record"
+    },
+    {
+      "name": "JM_CRIMINAL_RECORD",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?i)(yes|no|true|false|[yn01])",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_FLAG"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "JM_CM_ALNUM"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "JM_CRIMINAL_RECORD_LIST"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Convicted of larceny, 2019"
+    }
+  ],
+  "files": [
+    "jm-addresses.txt",
+    "jm-credit-statuses.txt",
+    "jm-criminal-record.txt",
+    "jm-decile-high.txt",
+    "jm-decile.txt",
+    "jm-detect-given-names.txt",
+    "jm-detect-sex-letter.txt",
+    "jm-detect-sex.txt",
+    "jm-detect-surnames.txt",
+    "jm-diagnoses.txt",
+    "jm-disabilities.txt",
+    "jm-education.txt",
+    "jm-employers.txt",
+    "jm-ethnic-groups.txt",
+    "jm-eye-colours.txt",
+    "jm-filiation.txt",
+    "jm-flag-0-1.txt",
+    "jm-flag-true-false.txt",
+    "jm-flag-y-n.txt",
+    "jm-flag-yes-no.txt",
+    "jm-gender-identities.txt",
+    "jm-given-names.txt",
+    "jm-housing-tenure.txt",
+    "jm-icd10-decimal.txt",
+    "jm-icd10.txt",
+    "jm-inches.txt",
+    "jm-marital-status.txt",
+    "jm-medications.txt",
+    "jm-nationalities.txt",
+    "jm-neighbourhoods.txt",
+    "jm-nis-benefits.txt",
+    "jm-not-stated.txt",
+    "jm-occupations.txt",
+    "jm-political-opinions.txt",
+    "jm-political-parties.txt",
+    "jm-poverty-statuses.txt",
+    "jm-quintile.txt",
+    "jm-religions.txt",
+    "jm-schools.txt",
+    "jm-sex-f-m.txt",
+    "jm-sex-female-male.txt",
+    "jm-sex-woman-man.txt",
+    "jm-sexual-orientations.txt",
+    "jm-social-programmes.txt",
+    "jm-surnames.txt",
+    "jm-text-names.txt",
+    "jm-town-generalized.txt"
+  ]
+}

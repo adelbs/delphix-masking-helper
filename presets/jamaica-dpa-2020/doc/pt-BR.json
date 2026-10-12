@@ -1,0 +1,629 @@
+{
+  "title": "Jamaica — Data Protection Act, 2020",
+  "subtitle": "Descoberta e mascaramento de dados pessoais da Jamaica: o TRN e os outros números de identificação, nomes e contato, quase-identificadores, os dados pessoais sensíveis da seção 2 — entre eles dados biométricos, filiação, crenças, saúde, vida sexual e infrações — e dados financeiros.",
+  "sections": [
+    {
+      "title": "Sobre este profile set",
+      "body": [
+        "Este profile set encontra os dados pessoais num banco de dados jamaicano e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
+        "Mascarar só nomes e TRNs não basta: uma data de nascimento, um sexo e uma cidade de poucos milhares de habitantes chegam a apontar uma pessoa. O set trabalha nas camadas em que o risco está:",
+        {
+          "list": [
+            "**Identificadores diretos** — TRN, número do NIS, passaporte, título de eleitor, carteira de motorista, documentos de imigração, registros civis, nomes, contato, contas e cartões, títulos de terra, dispositivos, veículos, texto livre.",
+            "**Quase-identificadores** — data de nascimento, idade, sexo, cidade, bairro, nacionalidade, estado civil e tipo de união, ocupação, empregador, escolaridade.",
+            "**Dados pessoais sensíveis** — as categorias da seção 2: dados genéticos e biométricos (que a Lei estende a fotografias, altura, cor dos olhos e tipo sanguíneo), filiação, origem racial ou étnica, opiniões políticas, crenças religiosas, filosóficas e semelhantes, filiação sindical e vida sexual — e, além da lista, identidade de gênero.",
+            "**Saúde** — saúde ou condição física ou mental, também sensível: identificadores de saúde, diagnósticos, medicamentos, notas clínicas, resultados de exames, grupo sanguíneo, deficiência, saúde reprodutiva e mental.",
+            "**Dados financeiros** — referências de crédito, dívidas, renda, patrimônio, pensões, benefícios do NIS, programas sociais, pobreza e posse da moradia. Não são sensíveis pela Lei, mas são sigilosos pelas leis bancária e de informação de crédito.",
+            "**Infrações e processos** — antecedentes, acusações, desfechos e números de processo: a seção 2 torna sensível a prática alegada de uma infração, não só a condenação."
+          ]
+        },
+        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa. Alguns domínios usam algoritmos que vêm com o Masking Engine — CM Numeric, Credit Card, BloodType SL — e esses são citados, mas não incluídos.",
+        "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NAME`, `RESULT`, `CITY` — precisa que os valores concordem. Uma coluna de nome sem sentido (`FIELD1`, `PFNOM`, `REMARKS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um TRN, um telefone 876, uma placa, uma cidade, um nome completo.",
+        "Os nomes de coluna são reconhecidos em inglês e nas abreviações dos sistemas jamaicanos (`TRN`, `NIS_NO`, `NIN`, `NHF_CARD_NO`, `NHT_NUMBER`, `DOB`).",
+        {
+          "tip": "Antes de mascarar, inventarie as colunas binárias (BLOBs, imagens, PDFs). Processos de cadastro costumam guardar a digitalização do cartão do TRN, da carteira de motorista ou do passaporte — e uma fotografia é dado biométrico pela seção 2. Reporte essas colunas como risco residual."
+        }
+      ]
+    },
+    {
+      "title": "O Data Protection Act, 2020 em resumo",
+      "body": [
+        "O Data Protection Act, 2020 foi aprovado pelo Parlamento da Jamaica em 2020 e entrou em vigor em 1º de dezembro de 2023, no dia que o Ministro fixou por aviso na Gazette (s. 1). Os controladores tiveram até 31 de maio de 2024 para se registrar junto ao Information Commissioner. A Lei segue a estrutura do Data Protection Act 1998 do Reino Unido, com oito padrões de proteção de dados, e toma do RGPD as medidas de segurança, a comunicação de incidentes e as multas.",
+        "O que importa para uma cópia de dados de produção:",
+        {
+          "list": [
+            "**Dado pessoal** é a informação, armazenada de qualquer forma, relativa a uma pessoa viva — ou falecida há menos de trinta anos — que possa ser identificada por essa informação sozinha ou junto com outra informação que o controlador tenha ou provavelmente venha a ter, incluindo qualquer opinião sobre a pessoa (s. 2).",
+            "**Tratamento** inclui adaptar, alterar, combinar e \"tornar os dados anônimos\" (s. 2). Copiar dados de produção para um ambiente de teste é tratamento; mascará-los também.",
+            "**Dado pessoal sensível** é: (a) dado genético ou biométrico; (b) filiação, ou origem racial ou étnica; (c) opiniões políticas, crenças filosóficas, crenças religiosas ou outras crenças de natureza semelhante; (d) filiação a qualquer sindicato; (e) saúde ou condição física ou mental; (f) vida sexual; (g) a prática alegada de qualquer infração, ou qualquer processo por uma infração que se alegue cometida (s. 2).",
+            "**Dado biométrico** inclui características físicas — a fotografia ou outra imagem facial, impressões digitais, palmares, dos dedos dos pés e dos pés, leituras de íris e de retina, **tipo sanguíneo, altura**, padrão de veias e **cor dos olhos** — e comportamentais: modo de andar, assinatura, digitação e voz (s. 2). Uma foto de identificação ou uma coluna de altura num cadastro de pessoal é dado sensível.",
+            "**Oito padrões** (ss. 22–31): tratamento leal e lícito, com ao menos uma condição da seção 23 e, para dado sensível, uma da seção 24; finalidades especificadas e lícitas, sem tratamento posterior incompatível com elas (s. 25); dados adequados, pertinentes e limitados ao necessário (s. 26); exatos (s. 27); guardados só pelo tempo necessário (s. 28); tratados conforme os direitos do titular (s. 29); seguros (s. 30); não transferidos para fora da Jamaica sem proteção adequada (s. 31).",
+            "**Segurança.** O sétimo padrão exige medidas técnicas e organizacionais adequadas, e entre elas estão a **pseudonimização e a criptografia de dados pessoais** e um processo para testar regularmente a eficácia delas (s. 30(6)). O operador só age sob contrato escrito e por instrução do controlador (s. 30(5)).",
+            "**Quebrar a pseudonimização é crime.** Quem, de propósito e sem autorização legal, usa qualquer meio para romper a pseudonimização ou a criptografia aplicada a dados pessoais comete uma infração — até dois milhões de dólares numa Parish Court, ou multa sem limite numa Circuit Court (s. 30(7)).",
+            "**Incidentes** de violação dos padrões ou de segurança são comunicados ao Commissioner em até setenta e duas horas depois que o controlador toma conhecimento (s. 21(3)). Tratar dados contra os padrões é infração punida com multa de até dois milhões de dólares ou dois anos de prisão numa Parish Court, ou multa ou sete anos numa Circuit Court (s. 21(2)); a pessoa jurídica responde também por multa de até **quatro por cento do seu faturamento bruto anual mundial** (s. 68).",
+            "**Registro e encarregados.** O controlador se registra no Commissioner antes de tratar dados (s. 15); quem trata dados pessoais sensíveis, ou trata em grande escala, nomeia um encarregado de proteção de dados (s. 20), e todo controlador entrega uma avaliação de impacto à proteção de dados a cada ano (s. 45).",
+            "**Pesquisa, história e estatística.** O tratamento posterior só para fins de pesquisa não é incompatível com a finalidade original quando os dados não servem a medidas ou decisões sobre pessoas determinadas e não causam dano ou aflição substancial (s. 37).",
+            "**Menores.** Menor é a pessoa com menos de dezoito anos (s. 2).",
+            "**Supervisão.** O Information Commissioner, órgão criado pela seção 4, administra a Lei."
+          ]
+        },
+        "Um ambiente de teste com dados de produção é tratamento para finalidades para as quais os dados não foram coletados, por pessoas que não precisam vê-los, e guarda dados sensíveis — biométricos, de saúde e criminais entre eles — fora dos controles feitos para eles. O mascaramento é a pseudonimização que o sétimo padrão nomeia: o que vai para o ambiente de teste não identifica mais ninguém sem a chave, e usar meios para quebrá-la é uma infração própria.",
+        "A lista de dados sensíveis da seção 2 é fechada, mas o set vai além onde o risco é o mesmo: trata a identidade de gênero com o mesmo cuidado que a vida sexual, e mascara os dados financeiros, que bancos e birôs de crédito têm de manter sigilosos por outras leis.",
+        {
+          "note": "A definição de dado pessoal conta o que o controlador tem ou provavelmente terá. O mascaramento é determinístico para a chave do engine, então quem tem ao mesmo tempo os dados de produção e a chave consegue ligar uma linha mascarada à sua origem. Mantenha a chave, e o acesso à produção, longe de quem usa a cópia mascarada. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro, não só do profile set."
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores diretos",
+      "intro": [
+        "Dados que identificam uma pessoa sozinhos. Na Jamaica um número faz quase todo o trabalho: o Taxpayer Registration Number, que bancos, empregadores, o NIS e o NHT pedem, que a carteira de motorista traz e que o National Identification and Registration Act torna o número de identificação nacional do NIDS. Ele é mascarado do mesmo jeito em todo lugar, mantendo os nove dígitos, para que um TRN continue ligando as suas tabelas depois do mascaramento."
+      ],
+      "domains": [
+        "JM_L1_TRN",
+        "JM_L1_NIS_NUMBER",
+        "JM_L1_PASSPORT",
+        "JM_L1_VOTER_ID",
+        "JM_L1_DRIVERS_LICENCE",
+        "JM_L1_IMMIGRATION_DOCUMENT",
+        "JM_L1_VITAL_RECORD",
+        "JM_L1_GIVEN_NAME",
+        "JM_L1_SURNAME",
+        "JM_L1_FULL_NAME",
+        "JM_L1_EMAIL",
+        "JM_L1_PHONE",
+        "JM_L1_ADDRESS",
+        "JM_L1_ADDRESS_DETAIL",
+        "JM_L1_BANK_ACCOUNT",
+        "JM_L1_PAYMENT_CARD",
+        "JM_L1_IP_ADDRESS",
+        "JM_L1_DEVICE_ID",
+        "JM_L1_LICENCE_PLATE",
+        "JM_L1_VIN",
+        "JM_L1_LAND_TITLE",
+        "JM_L1_CONTRACT_NUMBER",
+        "JM_L1_USERNAME",
+        "JM_L1_CREDENTIAL",
+        "JM_L1_GEOLOCATION",
+        "JM_L1_FREE_TEXT"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Quase-identificadores",
+      "intro": [
+        "Dados que não identificam ninguém sozinhos, mas identificam combinados. A Jamaica tinha cerca de 2,8 milhões de habitantes no censo de 2022, em catorze paróquias; 116 das 140 cidades da lista do censo tinham menos de 10.000 habitantes. Uma data de nascimento, um sexo e uma dessas cidades apontam para um punhado de pessoas. Esses atributos são generalizados ou deslocados em vez de trocados, e os dados mantêm o valor analítico."
+      ],
+      "domains": [
+        "JM_L2_BIRTH_DATE",
+        "JM_L2_BIRTH_YEAR",
+        "JM_L2_AGE",
+        "JM_L2_EVENT_DATE",
+        "JM_L2_SEX",
+        "JM_L2_TOWN",
+        "JM_L2_NEIGHBOURHOOD",
+        "JM_L2_NATIONALITY",
+        "JM_L2_MARITAL_STATUS",
+        "JM_L2_OCCUPATION",
+        "JM_L2_EMPLOYER",
+        "JM_L2_EDUCATION",
+        "JM_L2_SCHOOL",
+        "JM_L2_DEPENDANTS"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Dados pessoais sensíveis",
+      "intro": [
+        "As categorias da seção 2 que não são saúde nem infrações — que têm grupos próprios: dados genéticos e biométricos, filiação, origem racial ou étnica, opiniões políticas, crenças religiosas, filosóficas e semelhantes, filiação sindical e vida sexual — e, além da lista, identidade de gênero. A definição jamaicana de dado biométrico é incomumente ampla: além de impressões e leituras, ela nomeia a fotografia, a altura, a cor dos olhos e o tipo sanguíneo, por isso o set dá à altura e à cor dos olhos domínios próprios. Colunas categóricas mantêm a forma: um indicador sim/não continua indicador, um código numérico ganha outros dígitos e qualquer outro valor é trocado por um da lista da sua categoria. Onde os valores não têm vocabulário comum, são suprimidos para `Not stated`."
+      ],
+      "domains": [
+        "JM_L3_GENETIC",
+        "JM_L3_BIOMETRIC",
+        "JM_L3_HEIGHT",
+        "JM_L3_EYE_COLOUR",
+        "JM_L3_FILIATION",
+        "JM_L3_ETHNICITY",
+        "JM_L3_RELIGION",
+        "JM_L3_BELIEF",
+        "JM_L3_POLITICAL_OPINION",
+        "JM_L3_POLITICAL_AFFILIATION",
+        "JM_L3_TRADE_UNION",
+        "JM_L3_SEXUAL_ORIENTATION",
+        "JM_L3_SEXUAL_LIFE",
+        "JM_L3_GENDER_IDENTITY"
+      ]
+    },
+    {
+      "id": "HEALTH",
+      "title": "Saúde ou condição física ou mental",
+      "intro": [
+        "Sensível pela seção 2 (e). A Lei também define de forma ampla os registros e a informação de saúde — pagamentos e direito a serviços de saúde incluídos — e anula qualquer cláusula contratual que obrigue uma pessoa a entregar cópia do seu registro de saúde (s. 64). Um diagnóstico, um resultado de anemia falciforme, um antirretroviral ou uma gravidez expõem uma pessoa tanto quanto qualquer outra categoria; o grupo sanguíneo é, além disso, dado biométrico pelo nome."
+      ],
+      "domains": [
+        "JM_HEALTH_ID",
+        "JM_HEALTH_DIAGNOSIS",
+        "JM_HEALTH_MEDICATION",
+        "JM_HEALTH_CLINICAL_TEXT",
+        "JM_HEALTH_TEST_RESULT",
+        "JM_HEALTH_BLOOD_GROUP",
+        "JM_HEALTH_DISABILITY",
+        "JM_HEALTH_REPRODUCTIVE",
+        "JM_HEALTH_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Dados financeiros",
+      "intro": [
+        "A Lei não lista dados financeiros como sensíveis. Eles são dados pessoais do mesmo jeito, e outras leis os fecham mais: bancos e outras instituições autorizadas guardam a informação dos clientes sob o dever de sigilo do Banking Services Act, 2014, e a informação de crédito só circula entre os birôs licenciados pelo Credit Reporting Act, 2010. Numa cópia de teste, um salário, um empréstimo em atraso, um benefício do NIS ou um indicador do PATH dizem muito sobre uma pessoa. Categorias são trocadas dentro da própria notação; valores mantêm a quantidade de dígitos, sem relação com o valor real."
+      ],
+      "domains": [
+        "JM_FIN_CREDIT_REFERENCE",
+        "JM_FIN_DEBT",
+        "JM_FIN_INCOME",
+        "JM_FIN_ASSETS",
+        "JM_FIN_PENSION",
+        "JM_FIN_NIS_BENEFIT",
+        "JM_FIN_SOCIAL_PROGRAMME",
+        "JM_FIN_POVERTY",
+        "JM_FIN_HOUSING"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Infrações e processos",
+      "intro": [
+        "A seção 2 (g) torna sensível a prática alegada de qualquer infração e o processo por ela — então uma acusação que terminou em absolvição é tão protegida quanto uma condenação. O Criminal Records (Rehabilitation of Offenders) Act permite apagar condenações antigas; uma cópia de teste que as guarda desfaz isso."
+      ],
+      "domains": [
+        "JM_PENAL_CRIMINAL_RECORD",
+        "JM_PENAL_CASE_NUMBER"
+      ]
+    }
+  ],
+  "domains": {
+    "JM_L1_TRN": {
+      "title": "Taxpayer Registration Number (TRN)",
+      "what": "O número de nove dígitos da Tax Administration Jamaica, escrito em geral `123-456-789`. Todo adulto que trabalha, tem conta em banco, dirige ou paga imposto tem um; a carteira de motorista é emitida com ele, e o National Identification and Registration Act, 2021 o torna o National Identification Number (NIN) do sistema nacional de identificação. Empresas também têm TRN. Não há dígito verificador publicado.",
+      "masking": "Cada dígito é mapeado para outro dígito, mantendo o tamanho e os separadores. O mapeamento é um para um: um TRN usado como chave não colide, e o mesmo número é mascarado do mesmo jeito em todas as tabelas — também quando aparece como número de carteira de motorista."
+    },
+    "JM_L1_NIS_NUMBER": {
+      "title": "Número do NIS",
+      "what": "O número do National Insurance Scheme, a previdência social do Ministry of Labour and Social Security, em registros de contribuição, pedidos de benefício e folhas de pagamento.",
+      "masking": "Caractere a caractere, mantendo tamanho, letras e separadores."
+    },
+    "JM_L1_PASSPORT": {
+      "title": "Passaporte",
+      "what": "Números de passaporte, jamaicano ou estrangeiro — os jamaicanos são emitidos pela Passport, Immigration and Citizenship Agency (PICA).",
+      "masking": "Caractere a caractere: letras continuam letras e dígitos continuam dígitos."
+    },
+    "JM_L1_VOTER_ID": {
+      "title": "Título de eleitor",
+      "what": "O número do cartão de identificação de eleitor do Electoral Office of Jamaica, amplamente aceito como documento, e os dados de inscrição do eleitor.",
+      "masking": "Caractere a caractere, mantendo o formato."
+    },
+    "JM_L1_DRIVERS_LICENCE": {
+      "title": "Carteira de motorista",
+      "what": "O número da carteira de motorista, que na Jamaica é o TRN do titular.",
+      "masking": "Caractere a caractere com o mesmo mapeamento do TRN: o número da carteira e o TRN da mesma pessoa continuam iguais depois do mascaramento."
+    },
+    "JM_L1_IMMIGRATION_DOCUMENT": {
+      "title": "Documentos de imigração",
+      "what": "Autorizações de trabalho, residência permanente, vistos, certificados de cidadania e naturalização, certificados de habilidades do CSME, números de processo da PICA.",
+      "masking": "Caractere a caractere, mantendo o formato."
+    },
+    "JM_L1_VITAL_RECORD": {
+      "title": "Registro civil",
+      "what": "Números de certidão e de assento de nascimento, óbito e casamento do Registrar General's Department.",
+      "masking": "Caractere a caractere, mantendo o formato (`1234/1985` continua `dddd/dddd`)."
+    },
+    "JM_L1_GIVEN_NAME": {
+      "title": "Prenomes",
+      "what": "Primeiro nome e nomes do meio (`FIRST_NAME`, `MIDDLE_NAME`), inclusive dois prenomes numa coluna, como `Shelly-Ann Novelette`.",
+      "masking": "Cada palavra é trocada por um nome de uma lista de mil nomes usados na Jamaica, mantendo a quantidade de palavras e a caixa. Mais de três palavras são mascaradas caractere a caractere."
+    },
+    "JM_L1_SURNAME": {
+      "title": "Sobrenomes",
+      "what": "Sobrenomes, de solteira e de casada, inclusive sobrenomes compostos unidos por hífen (`Fraser-Pryce`).",
+      "masking": "Cada parte vira um sobrenome de uma lista de mil sobrenomes jamaicanos; o hífen fica."
+    },
+    "JM_L1_FULL_NAME": {
+      "title": "Nome completo",
+      "what": "Prenomes e sobrenome numa coluna, na ordem inglesa — prenome, nomes do meio, sobrenome — ou escritos como `SOBRENOME, PRENOMES`. Também o nome do titular de uma conta, de um beneficiário, responsável, parente próximo ou indicado.",
+      "masking": "Prenomes viram prenomes e o sobrenome vira sobrenome, pela posição: a última palavra é o sobrenome, com hífen ou não. Uma inicial do meio continua inicial (`Delroy A. Beckford`), e uma vírgula separa o sobrenome dos prenomes."
+    },
+    "JM_L1_EMAIL": {
+      "title": "E-mail",
+      "what": "Endereços de e-mail pessoais e de trabalho.",
+      "masking": "O nome e o domínio são mapeados caractere a caractere e o domínio de topo vira `.test`, reservado para testes: um endereço mascarado nunca recebe e-mail."
+    },
+    "JM_L1_PHONE": {
+      "title": "Telefone",
+      "what": "Números do plano norte-americano com os códigos de área jamaicanos 876 e 658 — `876-555-0123`, `(876) 555-0123`, `+1 876 555 0123` — e números locais de sete dígitos.",
+      "masking": "O `+1`, o código de área e os separadores ficam; os sete dígitos são mascarados. Um número sem a forma de um número jamaicano é mascarado inteiro."
+    },
+    "JM_L1_ADDRESS": {
+      "title": "Endereço",
+      "what": "A linha de endereço como se escreve na Jamaica, onde não se usa código postal: número e rua, com a zona postal em Kingston e St. Andrew (`12 Hope Road, Kingston 6`); um lote num conjunto habitacional; ou, no interior, o distrito e a agência de correio (`Content District, Linstead P.O., St. Catherine`).",
+      "masking": "É trocada por um de 3.000 endereços jamaicanos fictícios — ruas reais de Kingston e das cidades, lotes em conjuntos habitacionais reais, distritos rurais com as suas agências de correio."
+    },
+    "JM_L1_ADDRESS_DETAIL": {
+      "title": "Complemento do endereço",
+      "what": "Número da casa, do lote, do apartamento, da unidade, do andar ou do prédio em colunas separadas.",
+      "masking": "Caractere a caractere, mantendo o formato."
+    },
+    "JM_L1_BANK_ACCOUNT": {
+      "title": "Conta bancária",
+      "what": "Números de conta em bancos, building societies e cooperativas de crédito, poupança e corrente.",
+      "masking": "Dígito a dígito, mantendo tamanho e separadores."
+    },
+    "JM_L1_PAYMENT_CARD": {
+      "title": "Cartão de pagamento",
+      "what": "Números de cartões de crédito, débito e pré-pagos.",
+      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+    },
+    "JM_L1_IP_ADDRESS": {
+      "title": "Endereço IP",
+      "what": "Endereços IPv4 e IPv6 em logs de acesso, sessões e transações.",
+      "masking": "Cada octeto IPv4 é mapeado em 1–254, então o endereço continua válido; um endereço IPv6 é mapeado dígito a dígito em hexadecimal."
+    },
+    "JM_L1_DEVICE_ID": {
+      "title": "Identificador de dispositivo",
+      "what": "IMEI, IMSI, ICCID, endereços MAC, identificadores de publicidade e cookies de sessão.",
+      "masking": "Caractere a caractere em hexadecimal: um MAC continua MAC, um IMEI continua com quinze dígitos."
+    },
+    "JM_L1_LICENCE_PLATE": {
+      "title": "Placa",
+      "what": "Placas de veículos: as particulares têm quatro dígitos e duas letras (`1234 AB`); as de transporte público de passageiros, comerciais e de aluguel põem duas letras na frente (`PP 1234`, `CA 1234`, `RR 1234`); as do governo têm só dígitos.",
+      "masking": "As letras, que dizem a categoria, ficam; os dígitos são mascarados."
+    },
+    "JM_L1_VIN": {
+      "title": "Chassi e número do motor",
+      "what": "Números de identificação do veículo, de chassi e de motor.",
+      "masking": "Caractere a caractere, mantendo o formato de 17 caracteres."
+    },
+    "JM_L1_LAND_TITLE": {
+      "title": "Título de terra e número de avaliação",
+      "what": "O volume e a folha de um título registrado (`Volume 1234 Folio 567`), o número de avaliação da National Land Agency, unidades em condomínio, escrituras e arrendamentos. Cada um leva a um proprietário no Register Book of Titles.",
+      "masking": "As palavras e os separadores ficam e os números são mascarados dígito a dígito: `Volume 1234 Folio 567` continua um volume e uma folha."
+    },
+    "JM_L1_CONTRACT_NUMBER": {
+      "title": "Número de cliente, contrato ou conta",
+      "what": "Números de cliente, associado, funcionário, apólice, empréstimo, sinistro e medidor, contas da JPS e da NWC, números de contribuinte do NHT, matrículas de estudante.",
+      "masking": "Caractere a caractere, mantendo o formato, para que as referências entre tabelas continuem batendo."
+    },
+    "JM_L1_USERNAME": {
+      "title": "Usuário e redes sociais",
+      "what": "Logins, apelidos e perfis em redes sociais.",
+      "masking": "Caractere a caractere."
+    },
+    "JM_L1_CREDENTIAL": {
+      "title": "Credencial",
+      "what": "Senhas, PINs, hashes de senha, respostas de segurança, tokens e chaves de API. Um hash é encontrado também pelo esquema — bcrypt, crypt, Argon2, PBKDF2, LDAP — com qualquer nome de coluna.",
+      "masking": "Todo caractere vira `X`. Uma credencial não tem por que parecer real num ambiente de teste."
+    },
+    "JM_L1_GEOLOCATION": {
+      "title": "Geolocalização",
+      "what": "Latitude e longitude, juntas ou em colunas separadas. A Jamaica fica entre 17,7° e 18,5° norte e 76,2° e 78,4° oeste.",
+      "masking": "A parte inteira e a primeira casa decimal ficam — cerca de 11 km — e o resto é mascarado: o lugar é generalizado, não movido."
+    },
+    "JM_L1_FREE_TEXT": {
+      "title": "Texto livre",
+      "what": "Observações, comentários, reclamações, notas de caso e depoimentos em que dados pessoais aparecem sem estrutura.",
+      "masking": "Free Text Redaction: TRNs, e-mails, telefones, números de cartão, placas e IPs viram `[DATA]`, e os nomes e sobrenomes das listas viram `[NAME]`."
+    },
+    "JM_L2_BIRTH_DATE": {
+      "title": "Data de nascimento",
+      "what": "A data de nascimento, em colunas de data, timestamp ou texto.",
+      "masking": "Deslocada até 60 dias para trás ou para a frente: quebra o vínculo com a pessoa e mantém idades e coortes quase intactas."
+    },
+    "JM_L2_BIRTH_YEAR": {
+      "title": "Ano de nascimento",
+      "what": "O ano de nascimento sozinho.",
+      "masking": "A década fica e o último dígito é mapeado."
+    },
+    "JM_L2_AGE": {
+      "title": "Idade",
+      "what": "Idades em anos, inteiras ou com decimais.",
+      "masking": "O dígito das dezenas fica e o das unidades é mapeado (37 vira 3x). A partir de 100, 90: idades extremas identificam sozinhas."
+    },
+    "JM_L2_EVENT_DATE": {
+      "title": "Datas de eventos da vida",
+      "what": "Datas de óbito, casamento, divórcio, contratação, desligamento, internação, alta, diagnóstico, prisão, condenação e naturalização.",
+      "masking": "Deslocadas até 30 dias: elas se combinam com a data de nascimento, e um deslocamento menor mantém os intervalos plausíveis."
+    },
+    "JM_L2_SEX": {
+      "title": "Sexo",
+      "what": "Sexo registrado em qualquer notação: `F`/`M`, `Female`/`Male`, `Woman`/`Man`.",
+      "masking": "Trocado dentro do próprio vocabulário: `F`/`M` continua `F`/`M`."
+    },
+    "JM_L2_TOWN": {
+      "title": "Cidade",
+      "what": "A cidade ou comunidade onde a pessoa mora ou nasceu. A lista do censo tem 140 cidades; 116 delas tinham menos de 10.000 habitantes.",
+      "masking": "Uma cidade com menos de 10.000 habitantes vira a capital da sua paróquia; as cidades maiores e as capitais ficam. Veja *Onde as pessoas moram*."
+    },
+    "JM_L2_NEIGHBOURHOOD": {
+      "title": "Bairro ou conjunto habitacional",
+      "what": "O bairro de Kingston e St. Andrew (Barbican, Havendale, Duhaney Park…), o conjunto habitacional ou o nome do distrito dentro de uma cidade.",
+      "masking": "Trocado por um de 77 bairros de Kingston e St. Andrew: ainda um lugar real, mas não mais o da pessoa."
+    },
+    "JM_L2_NATIONALITY": {
+      "title": "Nacionalidade",
+      "what": "Nacionalidade, cidadania e país de nascimento.",
+      "masking": "Trocada por uma nacionalidade de uma lista das mais encontradas na Jamaica."
+    },
+    "JM_L2_MARITAL_STATUS": {
+      "title": "Estado civil e tipo de união",
+      "what": "Estado civil e o tipo de união que o censo pergunta — casamento, união estável e união de visita são todos comuns.",
+      "masking": "Trocado por outro estado da lista do censo."
+    },
+    "JM_L2_OCCUPATION": {
+      "title": "Ocupação",
+      "what": "Ocupação, profissão, cargo e função. Um cargo raro num empregador pequeno identifica.",
+      "masking": "Trocada por uma ocupação comum."
+    },
+    "JM_L2_EMPLOYER": {
+      "title": "Empregador",
+      "what": "O nome do empregador e o local de trabalho.",
+      "masking": "Trocado por uma de uma lista de empresas fictícias."
+    },
+    "JM_L2_EDUCATION": {
+      "title": "Escolaridade",
+      "what": "O nível mais alto concluído no sistema jamaicano — primário, secundário até a grade 11 e os exames do CSEC, sixth form e CAPE, formação profissional do HEART/NSTA Trust (NVQ-J), superior — e resultados de exames.",
+      "masking": "Trocada por outro nível da lista."
+    },
+    "JM_L2_SCHOOL": {
+      "title": "Escola",
+      "what": "Escola primária e secundária, faculdade e universidade frequentadas.",
+      "masking": "Trocada por uma escola fictícia."
+    },
+    "JM_L2_DEPENDANTS": {
+      "title": "Filhos e dependentes",
+      "what": "Número de filhos, dependentes ou moradores do domicílio.",
+      "masking": "Limitado a 5: domicílios grandes são raros, e uma contagem rara identifica."
+    },
+    "JM_L3_GENETIC": {
+      "title": "Dados genéticos",
+      "what": "Perfis e amostras de DNA, testes e marcadores genéticos, testes de paternidade, genótipo da anemia falciforme, triagem neonatal. Encontrados também pelos valores: uma sequência longa de nucleotídeos.",
+      "masking": "Todo caractere vira `X`."
+    },
+    "JM_L3_BIOMETRIC": {
+      "title": "Dados biométricos",
+      "what": "O que a seção 2 nomeia: a fotografia e outras imagens faciais, impressões digitais, palmares, dos dedos dos pés e dos pés, leituras de íris e retina, padrões de veias, e as características comportamentais — modo de andar, assinatura, digitação, voz — como templates, imagens, caminhos ou hashes.",
+      "masking": "Todo caractere vira `X`. Um caminho para um arquivo de imagem também é suprimido; a imagem em si, numa coluna binária, está fora do alcance destes algoritmos."
+    },
+    "JM_L3_HEIGHT": {
+      "title": "Altura",
+      "what": "A altura de uma pessoa — dado biométrico pelo nome na seção 2 — em centímetros, metros ou pés e polegadas, como um documento de identidade ou um cadastro de pessoal ou médico a registra.",
+      "masking": "A unidade e o primeiro algarismo ficam e o resto é mascarado: `172` continua `1xx`, `1.72` continua `1.xx`, `5'8\"` continua cinco pés com outras polegadas."
+    },
+    "JM_L3_EYE_COLOUR": {
+      "title": "Cor dos olhos",
+      "what": "A cor dos olhos, também dado biométrico pelo nome na seção 2, como os registros de identidade e de carteira de motorista a trazem.",
+      "masking": "Trocada por outra cor da lista; um indicador continua indicador."
+    },
+    "JM_L3_FILIATION": {
+      "title": "Filiação",
+      "what": "De quem a pessoa descende e como isso é registrado: nascida dentro ou fora do casamento, legitimada, adotada, pai declarado ou não no assento de nascimento, ações de reconhecimento de paternidade, pais biológicos. O Status of Children Act aboliu a ilegitimidade em 1976, mas registros e cadastros de benefícios antigos guardam a marca.",
+      "masking": "Um indicador continua indicador no seu vocabulário, um código ganha outros dígitos e qualquer outro valor é trocado por um da lista."
+    },
+    "JM_L3_ETHNICITY": {
+      "title": "Origem racial ou étnica",
+      "what": "Raça ou grupo étnico nos termos do censo — Black (cerca de nove em cada dez), Mixed, East Indian, Chinese, White e outros — e a identidade maroon, um povo próprio.",
+      "masking": "Um indicador continua indicador no seu vocabulário, um código ganha outros dígitos e qualquer outro valor é trocado por um da lista do censo."
+    },
+    "JM_L3_RELIGION": {
+      "title": "Crenças religiosas",
+      "what": "Religião ou denominação, nos termos do censo: Church of God, Adventista do Sétimo Dia, Pentecostal, Batista, Anglicana, Católica Romana, Revivalista, Rastafári e outras.",
+      "masking": "Um indicador continua indicador no seu vocabulário, um código ganha outros dígitos e qualquer outro valor é trocado por um da lista do censo."
+    },
+    "JM_L3_BELIEF": {
+      "title": "Crenças filosóficas e semelhantes",
+      "what": "Convicções filosóficas ou morais, objeção de consciência e outras crenças de natureza semelhante às religiosas.",
+      "masking": "Suprimidas para `Not stated`."
+    },
+    "JM_L3_POLITICAL_OPINION": {
+      "title": "Opiniões políticas",
+      "what": "Orientação política, ideologia, intenção de voto e indicadores de eleitor indeciso.",
+      "masking": "Trocada por outra posição da lista."
+    },
+    "JM_L3_POLITICAL_AFFILIATION": {
+      "title": "Preferência ou filiação partidária",
+      "what": "O partido que a pessoa apoia ou ao qual pertence — o Jamaica Labour Party e o People's National Party, que se alternam no governo desde 1944 — e as suas cores, verde e laranja. Uma opinião política pela seção 2 (c).",
+      "masking": "Um indicador continua indicador no seu vocabulário e qualquer outro valor é trocado por um da lista."
+    },
+    "JM_L3_TRADE_UNION": {
+      "title": "Filiação sindical",
+      "what": "Filiação a sindicato, contribuições, delegados e unidades de negociação: BITU, NWU, UAWU, a JTA, a Nurses Association of Jamaica, a JCSA e outros.",
+      "masking": "Um indicador continua indicador no seu vocabulário; qualquer outro valor é suprimido para `Not stated`."
+    },
+    "JM_L3_SEXUAL_ORIENTATION": {
+      "title": "Orientação sexual",
+      "what": "A orientação sexual, que revela a vida sexual que a seção 2 (f) protege. Na Jamaica ela também expõe as pessoas à lei penal: o Offences Against the Person Act ainda pune o sexo entre homens.",
+      "masking": "Trocada por outro valor da lista."
+    },
+    "JM_L3_SEXUAL_LIFE": {
+      "title": "Vida sexual",
+      "what": "Atividade, comportamento, parceiros e histórico sexuais, e trabalho sexual.",
+      "masking": "Suprimida para `Not stated`."
+    },
+    "JM_L3_GENDER_IDENTITY": {
+      "title": "Identidade de gênero",
+      "what": "Identidade e expressão de gênero, pronomes, condição de pessoa trans. Não está na lista da seção 2, mas é tratada como sensível porque expõe as pessoas à mesma discriminação.",
+      "masking": "Trocada por outro valor da lista."
+    },
+    "JM_HEALTH_ID": {
+      "title": "Identificadores de saúde",
+      "what": "Números do cartão do National Health Fund e do JADEP, prontuários e números de paciente, internações, receitas, atestados médicos.",
+      "masking": "Caractere a caractere, mantendo o formato."
+    },
+    "JM_HEALTH_DIAGNOSIS": {
+      "title": "Diagnóstico",
+      "what": "Diagnósticos, como códigos CID-10 (`D57.1`, `B20`) ou texto, e histórico médico, alergias e doenças crônicas.",
+      "masking": "Um código CID-10 é trocado por outro código comum do mesmo formato, com ou sem decimal; o texto, por um diagnóstico comum. O diagnóstico real não sobrevive."
+    },
+    "JM_HEALTH_MEDICATION": {
+      "title": "Medicamentos",
+      "what": "Medicamentos e receitas: um antirretroviral, a hidroxiureia ou um antipsicótico revelam a condição.",
+      "masking": "Um indicador continua indicador; qualquer outro valor é trocado por um medicamento comum."
+    },
+    "JM_HEALTH_CLINICAL_TEXT": {
+      "title": "Notas clínicas",
+      "what": "Evolução, notas de enfermagem, resumos de alta, planos de cuidado.",
+      "masking": "Free Text Redaction, como em *Texto livre*: identificadores viram `[DATA]` e nomes `[NAME]`. O conteúdo clínico fica — a coluna continua sensível e não deve ser usada fora do ambiente de saúde."
+    },
+    "JM_HEALTH_TEST_RESULT": {
+      "title": "Resultados de exames",
+      "what": "Resultados de laboratório, status de HIV, carga viral, glicose, colesterol, testes de gravidez, exames toxicológicos.",
+      "masking": "Caractere a caractere: números continuam números, palavras continuam palavras da mesma forma."
+    },
+    "JM_HEALTH_BLOOD_GROUP": {
+      "title": "Grupo sanguíneo",
+      "what": "Grupo ABO e fator Rh — dado de saúde, e dado biométrico pelo nome na seção 2.",
+      "masking": "BloodType SL, que vem com o Masking Engine: trocado por outro dos oito grupos."
+    },
+    "JM_HEALTH_DISABILITY": {
+      "title": "Deficiência",
+      "what": "Tipo e condição de deficiência, dificuldades funcionais como o censo as pergunta, inscrição no Jamaica Council for Persons with Disabilities.",
+      "masking": "Um indicador continua indicador; qualquer outro valor é trocado por uma categoria da lista do censo."
+    },
+    "JM_HEALTH_REPRODUCTIVE": {
+      "title": "Saúde reprodutiva",
+      "what": "Gravidez, gestação, abortos, anticoncepção, fertilidade, pré-natal e pós-parto, infecções sexualmente transmissíveis.",
+      "masking": "Um indicador continua indicador e um número ganha outros dígitos; qualquer outro valor é suprimido para `Not stated`."
+    },
+    "JM_HEALTH_MENTAL": {
+      "title": "Saúde mental",
+      "what": "Condições de saúde mental, atendimento psiquiátrico e psicológico, suicídio e automutilação, uso de substâncias e reabilitação.",
+      "masking": "Um indicador continua indicador; qualquer outro valor é suprimido para `Not stated`."
+    },
+    "JM_FIN_CREDIT_REFERENCE": {
+      "title": "Referência de crédito",
+      "what": "Scores e relatórios de crédito, dias de atraso, inadimplência, classificação de empréstimos, créditos baixados e não performados — o que os birôs licenciados pelo Credit Reporting Act, 2010 reúnem junto aos credores.",
+      "masking": "Um score ganha outros dígitos, um indicador continua indicador e qualquer situação é trocada por outra situação de crédito."
+    },
+    "JM_FIN_DEBT": {
+      "title": "Valor de dívida",
+      "what": "Saldos de empréstimos, hipotecas e cartões, valores em atraso, limites de crédito, parcelas.",
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+    },
+    "JM_FIN_INCOME": {
+      "title": "Renda",
+      "what": "Salário, remuneração, proventos, salário de contribuição, renda do domicílio.",
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+    },
+    "JM_FIN_ASSETS": {
+      "title": "Patrimônio",
+      "what": "Valores de imóveis e terrenos, saldos de poupança e depósitos, investimentos, fundos, patrimônio líquido.",
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+    },
+    "JM_FIN_PENSION": {
+      "title": "Valor de pensão",
+      "what": "Pensões do NIS, aposentadorias complementares e superannuation, pensões por morte e por invalidez, gratificações.",
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+    },
+    "JM_FIN_NIS_BENEFIT": {
+      "title": "Benefício do NIS",
+      "what": "O benefício que o National Insurance Scheme paga: aposentadoria por idade, invalidez, pensão de viúva ou viúvo e de órfão, benefício da criança especial, acidente de trabalho e incapacidade, salário-maternidade, auxílio-funeral. A maioria revela um problema de saúde ou uma morte na família.",
+      "masking": "Um indicador continua indicador; qualquer outro valor é trocado por outro benefício da lista."
+    },
+    "JM_FIN_SOCIAL_PROGRAMME": {
+      "title": "Programa social",
+      "what": "Beneficiários do PATH — o Programme of Advancement Through Health and Education —, da pensão social, do Rehabilitation Programme, da assistência aos pobres e dos subsídios do NHF e do JADEP. Ser beneficiário revela pobreza.",
+      "masking": "Um indicador continua indicador; qualquer outro valor é trocado por outro programa da lista."
+    },
+    "JM_FIN_POVERTY": {
+      "title": "Pobreza e condição socioeconômica",
+      "what": "Condição de pobreza, quintis e decis de consumo do Jamaica Survey of Living Conditions, pontuações de teste de meios e do Beneficiary Identification System.",
+      "masking": "Um quintil continua quintil, um decil continua decil, e uma condição é trocada por outra condição."
+    },
+    "JM_FIN_HOUSING": {
+      "title": "Posse da moradia",
+      "what": "A posse da moradia como o censo a pergunta — própria, alugada, arrendada, cedida, terra de família, ocupada — e a posse da terra.",
+      "masking": "Trocada por outra forma de posse da lista."
+    },
+    "JM_PENAL_CRIMINAL_RECORD": {
+      "title": "Infrações e processos",
+      "what": "Antecedentes criminais, certidão policial, condenações, infrações, acusações, prisões, prisão preventiva, fiança, veredictos, penas e cancelamentos de registro — a alegação e o processo, qualquer que seja o desfecho.",
+      "masking": "Um indicador continua indicador; qualquer outro valor vira uma situação genérica: sem antecedentes, com antecedentes, acusado, caso arquivado, absolvido, condenado, registro cancelado ou não informado."
+    },
+    "JM_PENAL_CASE_NUMBER": {
+      "title": "Número do processo",
+      "what": "Números de processo, de denúncia, de information e de folha de acusação, de boletim de ocorrência e do station diary (`HCC 123/2023`, `456 of 2022`).",
+      "masking": "Caractere a caractere, mantendo o formato."
+    }
+  },
+  "closing": [
+    {
+      "title": "Onde as pessoas moram: cidades",
+      "body": [
+        "Com as cidades do Population and Housing Census de 2022 e as suas populações, o set conhece o tamanho e a paróquia de todas as 140 cidades da lista do censo.",
+        {
+          "list": [
+            "Uma **cidade** com menos de 10.000 habitantes vira a **capital da sua paróquia**: Kingston; Half Way Tree para St. Andrew; Spanish Town; May Pen; Mandeville; Black River; Savanna-la-Mar; Lucea; Montego Bay; Falmouth; St. Ann's Bay; Port Maria; Port Antonio; Morant Bay. 111 das 140 cidades são generalizadas.",
+            "A **paróquia** fica: a menor, Hanover, tem cerca de 70.000 habitantes.",
+            "As capitais mantêm o nome, mesmo as pequenas — Morant Bay, Black River, Port Antonio. Uma capital numa coluna mascarada diz a paróquia, nada mais: é o lugar que representa a paróquia inteira.",
+            "Vinte e quatro cidades com 10.000 habitantes ou mais ficam como estão, entre elas Portmore, Montego Bay, Spanish Town, May Pen, Mandeville e Old Harbour.",
+            "Os nomes também são reconhecidos como se costuma escrevê-los: `St. Ann's Bay` e `St Anns Bay`, `Savanna la Mar` e `Sav-la-Mar`, `Halfway Tree`, `Mobay`."
+          ]
+        },
+        "O resultado é sempre um lugar real da mesma paróquia, e todo grupo de pessoas que passa a compartilhar um nome é a população de uma paróquia ou de uma cidade grande. Nomes que também são prenomes ou sobrenomes, e os nomes das paróquias, ficam fora da lista de detecção, para que uma coluna de sobrenomes não seja tomada por cidades."
+      ]
+    },
+    {
+      "title": "Limites",
+      "body": [
+        {
+          "list": [
+            "**Colunas binárias** — digitalizações do cartão do TRN, da carteira ou do passaporte, fotografias, imagens de impressões digitais, PDFs clínicos em BLOBs — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
+            "**Comunidades menores que uma cidade ficam fora da tabela.** A lista do censo para em 140 cidades; uma coluna de distritos rurais (`Content`, `Mocho`) é detectada pelo nome, mas os valores que a tabela não conhece passam sem mudança. Onde uma coluna dessas está ao lado de data de nascimento e sexo, generalize-a para a paróquia.",
+            "**Os números de identificação não mantêm dígito verificador.** Nenhum é publicado para o TRN nem para o número do NIS, então nenhum é recalculado; aplicações que validem um podem rejeitar valores mascarados.",
+            "**TRNs de empresas também são mascarados.** Não há como distingui-los dos de pessoas.",
+            "**Números de passaporte, do NIS, de autorizações e de eleitor** não têm formato público e são mascarados caractere a caractere.",
+            "**O Data Cleansing deixa valores desconhecidos como estão**: uma cidade escrita de um jeito que a lista não tem passa sem mudança.",
+            "**Texto livre** é suprimido token a token: um telefone escrito com espaços não é encontrado, e um prenome que também é palavra comum (`Joy`, `Hope`, `Grace`) é suprimido onde aparecer.",
+            "**Palavras de cor são sobrenomes.** Brown, Black, Green e Grey estão entre os sobrenomes jamaicanos mais comuns: com só o pacote essencial carregado, uma coluna de cores dos olhos é tomada por nomes.",
+            "**Menores** — a Lei conta qualquer pessoa com menos de 18 anos. Uma data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam o aniversário de 18 anos, mas algumas cruzam. Onde isso importar, divida a regra por faixa etária com Multi-Column Condition.",
+            "**Endereços** são trocados como uma linha inteira. Rua, distrito, cidade e paróquia em colunas separadas são mascarados de forma independente e deixam de formar um endereço coerente.",
+            "**Placas e chassis** mantêm o formato, mas não o dígito verificador do VIN."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificação",
+      "body": [
+        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        {
+          "list": [
+            "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
+            "O profiling foi simulado em 157 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas, oito com os nomes curtos de sistemas de pacote e 33 colunas que não são dado pessoal —, de novo em 148 delas completadas com espaços ou zeros, e de novo só com os classifiers do pacote essencial.",
+            "A tabela que generaliza cidades foi auditada para as 140 cidades.",
+            "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 153 valores de amostra e 204 marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; os mesmos valores de novo completados com espaços ou zeros (314), que tinham de sair como o valor sem preenchimento; 150 TRNs quanto a colisões, e vinte TRNs como números de carteira de motorista, que tinham de sair iguais. Cada um dos 83 algoritmos também mascarou o seu próprio valor de exemplo."
+          ]
+        },
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+      ]
+    },
+    {
+      "title": "Fontes",
+      "body": [
+        {
+          "list": [
+            "The Data Protection Act, 2020 — Parlamento da Jamaica; texto publicado pelo Ministry of Justice e pelo Office of the Information Commissioner, com o aviso de entrada em vigor de 1º de dezembro de 2023.",
+            "População por cidade e paróquia — Population and Housing Census de 2022, Statistical Institute of Jamaica (STATIN). Origem étnica, religião, tipo de união e posse da moradia — Censo de 2011, STATIN.",
+            "Taxpayer Registration Number — Tax Administration Jamaica. National Identification and Registration Act, 2021 — National Identification System (NIDS).",
+            "National Insurance Scheme e os seus benefícios, PATH e pensão social — Ministry of Labour and Social Security. NHF e JADEP — National Health Fund.",
+            "Cartão de identificação de eleitor — Electoral Office of Jamaica. Passaportes e imigração — Passport, Immigration and Citizenship Agency.",
+            "Banking Services Act, 2014 — Bank of Jamaica. Credit Reporting Act, 2010 — Bank of Jamaica. Medidas de pobreza — Jamaica Survey of Living Conditions, Planning Institute of Jamaica.",
+            "Status of Children Act; Offences Against the Person Act; Criminal Records (Rehabilitation of Offenders) Act; DNA Evidence Act, 2016 — Laws of Jamaica, Ministry of Justice.",
+            "Frequência de sobrenomes e prenomes — Forebears, e as listas de nomes de bebês do Registrar General's Department. Numeração telefônica — North American Numbering Plan. Placas — Island Traffic Authority e Tax Administration Jamaica."
+          ]
+        }
+      ]
+    }
+  ]
+}

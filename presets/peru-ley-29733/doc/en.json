@@ -371,7 +371,7 @@
         "Credit and debit card numbers, recognized by the Luhn algorithm."
       ],
       "masking": [
-        "Payment Card: another number that passes the Luhn algorithm. Only card-shaped values reach it."
+        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "PE_L1_BILLETERA": {
@@ -884,7 +884,7 @@
         "Salary, monthly or household income, fees and rents of every category. **Article 2, 5 lists the economic income among the sensitive data**: in Peru this column weighs the same as a diagnosis. The minimum wage was 1,130 soles a month from January 2025."
       ],
       "masking": [
-        "Mapped to a value between 1,025 and 25,000 soles, unrelated to the real one."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_HISTORIAL_CREDITICIO": {
@@ -902,7 +902,7 @@
         "Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."
       ],
       "masking": [
-        "Mapped to a value between 100 and 500,000 soles, unrelated to the real one."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_PATRIMONIO": {
@@ -911,7 +911,7 @@
         "Net worth, assets, valuations and self-assessments, account, CTS and fund balances, term deposits and the sworn declaration of assets."
       ],
       "masking": [
-        "Mapped to a value between 1,000 and 900,000 soles."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_PENSION": {
@@ -920,7 +920,7 @@
         "The amount of the pension, subsidy or benefit, and child support."
       ],
       "masking": [
-        "Mapped to a value between 300 and 8,000 soles."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_PROGRAMA_SOCIAL": {

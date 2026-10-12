@@ -1,0 +1,492 @@
+10101	Carmen		101	San José	1	San José	9.936324	-84.070014	2946
+10102	Merced		101	San José	1	San José	9.940006	-84.088460	15408
+10103	Hospital		101	San José	1	San José	9.926451	-84.089374	24030
+10104	Catedral		101	San José	1	San José	9.924199	-84.074144	15682
+10105	Zapote		101	San José	1	San José	9.921113	-84.060106	21990
+10106	San Francisco de Dos Ríos		101	San José	1	San José	9.908306	-84.059727	23745
+10107	Uruca		101	San José	1	San José	9.957464	-84.115783	42861
+10108	Mata Redonda		101	San José	1	San José	9.935244	-84.110605	10119
+10109	Pavas		101	San José	1	San José	9.949570	-84.136219	89531
+10110	Hatillo		101	San José	1	San José	9.918757	-84.100276	60723
+10111	San Sebastián		101	San José	1	San José	9.910343	-84.079957	44923
+10201	Escazú		102	Escazú	1	San José	9.916207	-84.152137	13752
+10202	San Antonio		102	Escazú	1	San José	9.889724	-84.141223	28329
+10203	San Rafael		102	Escazú	1	San José	9.944951	-84.156491	29121
+10301	Desamparados		103	Desamparados	1	San José	9.896621	-84.070588	37479
+10302	San Miguel		103	Desamparados	1	San José	9.847773	-84.052497	38716
+10303	San Juan de Dios		103	Desamparados	1	San José	9.880033	-84.087664	24505
+10304	San Rafael Arriba		103	Desamparados	1	San José	9.877805	-84.075076	18412
+10305	San Antonio		103	Desamparados	1	San José	9.898990	-84.046519	11343
+10306	Frailes		103	Desamparados	1	San José	9.754692	-84.066009	4586
+10307	Patarrá		103	Desamparados	1	San José	9.864410	-84.023348	14919
+10308	San Cristóbal		103	Desamparados	1	San José	9.749928	-84.003938	4769
+10309	Rosario		103	Desamparados	1	San José	9.797571	-84.085995	3787
+10310	Damas		103	Desamparados	1	San José	9.888820	-84.044627	15713
+10311	San Rafael Abajo		103	Desamparados	1	San José	9.894341	-84.081862	26781
+10312	Gravilias		103	Desamparados	1	San José	9.886074	-84.056948	17237
+10313	Los Guido		103	Desamparados	1	San José	9.870447	-84.048088	31120
+10401	Santiago		104	Puriscal	1	San José	9.829043	-84.306709	12600
+10402	Mercedes Sur		104	Puriscal	1	San José	9.768678	-84.413487	7099
+10403	Barbacoas		104	Puriscal	1	San José	9.857419	-84.363447	4486
+10404	Grifo Alto		104	Puriscal	1	San José	9.878658	-84.391356	1492
+10405	San Rafael		104	Puriscal	1	San José	9.861942	-84.300629	2009
+10406	Candelarita		104	Puriscal	1	San José	9.788523	-84.340479	1753
+10407	Desamparaditos		104	Puriscal	1	San José	9.878809	-84.346331	794
+10408	San Antonio		104	Puriscal	1	San José	9.825203	-84.278248	4720
+10409	Chires		104	Puriscal	1	San José	9.652005	-84.392197	3640
+10501	San Marcos		105	Tarrazú	1	San José	9.669658	-84.009972	11365
+10502	San Lorenzo		105	Tarrazú	1	San José	9.553434	-84.030819	5250
+10503	San Carlos		105	Tarrazú	1	San José	9.608652	-84.104564	2172
+10601	Aserrí		106	Aserrí	1	San José	9.853741	-84.114277	30347
+10602	Tarbaca		106	Aserrí	1	San José	9.826068	-84.122542	1676
+10603	Vuelta de Jorco		106	Aserrí	1	San José	9.772511	-84.144075	7342
+10604	San Gabriel		106	Aserrí	1	San José	9.787669	-84.108577	6930
+10605	Legua		106	Aserrí	1	San José	9.685729	-84.168638	1748
+10606	Monterrey		106	Aserrí	1	San José	9.747818	-84.125224	558
+10607	Salitrillos		106	Aserrí	1	San José	9.847166	-84.084038	15879
+10701	Colón		107	Mora	1	San José	9.909748	-84.263377	17411
+10702	Guayabo		107	Mora	1	San José	9.861296	-84.268304	5414
+10703	Tabarcia		107	Mora	1	San José	9.847129	-84.237167	5160
+10704	Piedras Negras		107	Mora	1	San José	9.897411	-84.310164	498
+10705	Picagres		107	Mora	1	San José	9.907128	-84.369307	899
+10706	Jaris		107	Mora	1	San José	9.874327	-84.282229	1377
+10707	Quitirrisí		107	Mora	1	San José	9.881257	-84.232197	
+10801	Guadalupe		108	Goicoechea	1	San José	9.949371	-84.050863	22347
+10802	San Francisco		108	Goicoechea	1	San José	9.942070	-84.071628	2421
+10803	Calle Blancos		108	Goicoechea	1	San José	9.949009	-84.066808	23451
+10804	Mata de Plátano		108	Goicoechea	1	San José	9.955227	-83.976242	21198
+10805	Ipís		108	Goicoechea	1	San José	9.963951	-84.022487	32049
+10806	Rancho Redondo		108	Goicoechea	1	San José	9.961654	-83.937329	3224
+10807	Purral		108	Goicoechea	1	San José	9.959336	-84.011561	36074
+10901	Santa Ana		109	Santa Ana	1	San José	9.932029	-84.174310	12956
+10902	Salitral		109	Santa Ana	1	San José	9.894350	-84.173163	5587
+10903	Pozos		109	Santa Ana	1	San José	9.953447	-84.197098	20671
+10904	Uruca		109	Santa Ana	1	San José	9.920527	-84.190012	9129
+10905	Piedades		109	Santa Ana	1	San José	9.915981	-84.209747	10263
+10906	Brasil		109	Santa Ana	1	San José	9.937908	-84.227864	3247
+11001	Alajuelita		110	Alajuelita	1	San José	9.903477	-84.100095	13325
+11002	San Josecito		110	Alajuelita	1	San José	9.888741	-84.102741	13069
+11003	San Antonio		110	Alajuelita	1	San José	9.871828	-84.123667	6003
+11004	Concepción		110	Alajuelita	1	San José	9.889793	-84.091650	23455
+11005	San Felipe		110	Alajuelita	1	San José	9.912474	-84.115013	41306
+11101	San Isidro		111	Vázquez de Coronado	1	San José	9.973791	-83.999801	18631
+11102	San Rafael		111	Vázquez de Coronado	1	San José	9.978244	-83.956378	8643
+11103	Dulce Nombre de Jesús		111	Vázquez de Coronado	1	San José	10.085299	-83.985774	12149
+11104	Patalillo		111	Vázquez de Coronado	1	San José	9.975997	-84.018580	24907
+11105	Cascajal		111	Vázquez de Coronado	1	San José	10.058542	-83.932534	8602
+11201	San Ignacio		112	Acosta	1	San José	9.799780	-84.163467	9475
+11202	Guaitil		112	Acosta	1	San José	9.792604	-84.230546	2685
+11203	Palmichal		112	Acosta	1	San José	9.834153	-84.179106	5308
+11204	Cangrejal		112	Acosta	1	San José	9.740529	-84.189687	2121
+11205	Sabanillas		112	Acosta	1	San José	9.698030	-84.242416	2668
+11301	San Juan		113	Tibás	1	San José	9.960958	-84.081418	25866
+11302	Cinco Esquinas		113	Tibás	1	San José	9.946439	-84.083914	8617
+11303	Anselmo Llorente		113	Tibás	1	San José	9.955945	-84.070767	12913
+11304	León Xiii		113	Tibás	1	San José	9.958993	-84.100014	20551
+11305	Colima		113	Tibás	1	San José	9.956621	-84.088145	18118
+11401	San Vicente		114	Moravia	1	San José	9.963659	-84.048470	32041
+11402	San Jerónimo		114	Moravia	1	San José	10.028412	-84.000345	7463
+11403	La Trinidad		114	Moravia	1	San José	9.980261	-84.034454	23755
+11501	San Pedro		115	Montes de Oca	1	San José	9.933162	-84.044932	28844
+11502	Sabanilla		115	Montes de Oca	1	San José	9.943126	-84.030146	14082
+11503	Mercedes		115	Montes de Oca	1	San José	9.943753	-84.044274	6086
+11504	San Rafael		115	Montes de Oca	1	San José	9.945529	-83.995677	13832
+11601	San Pablo		116	Turrubares	1	San José	9.905097	-84.453010	1573
+11602	San Pedro		116	Turrubares	1	San José	9.869566	-84.443651	861
+11603	San Juan de Mata		116	Turrubares	1	San José	9.833035	-84.519531	1546
+11604	San Luis		116	Turrubares	1	San José	9.834433	-84.453645	721
+11605	Carara		116	Turrubares	1	San José	9.682708	-84.535041	2330
+11701	Santa María		117	Dota	1	San José	9.554380	-83.971249	5251
+11702	Jardín		117	Dota	1	San José	9.693284	-83.951437	702
+11703	Copey		117	Dota	1	San José	9.559874	-83.877332	2088
+11801	Curridabat		118	Curridabat	1	San José	9.916023	-84.039196	32605
+11802	Granadilla		118	Curridabat	1	San José	9.930905	-84.018083	19207
+11803	Sánchez		118	Curridabat	1	San José	9.913067	-84.021094	6833
+11804	Tirrases		118	Curridabat	1	San José	9.901455	-84.031261	22032
+11901	San Isidro de el General		119	Pérez Zeledón	1	San José	9.338868	-83.730163	48435
+11902	El General		119	Pérez Zeledón	1	San José	9.353073	-83.638261	6873
+11903	Daniel Flores		119	Pérez Zeledón	1	San José	9.308152	-83.662046	35584
+11904	Rivas		119	Pérez Zeledón	1	San José	9.486117	-83.590090	7318
+11905	San Pedro		119	Pérez Zeledón	1	San José	9.320913	-83.517034	9344
+11906	Platanares		119	Pérez Zeledón	1	San José	9.190616	-83.642629	7497
+11907	Pejibaye		119	Pérez Zeledón	1	San José	9.147063	-83.572580	7972
+11908	Cajón		119	Pérez Zeledón	1	San José	9.331148	-83.596399	9045
+11909	Barú		119	Pérez Zeledón	1	San José	9.316837	-83.812475	2854
+11910	Río Nuevo		119	Pérez Zeledón	1	San José	9.451466	-83.854382	3495
+11911	Páramo		119	Pérez Zeledón	1	San José	9.493063	-83.761637	4865
+11912	La Amistad		119	Pérez Zeledón	1	San José	9.200553	-83.547202	
+12001	San Pablo		120	León Cortés Castro	1	San José	9.683387	-84.046460	4663
+12002	San Andrés		120	León Cortés Castro	1	San José	9.723563	-84.081309	1746
+12003	Llano Bonito		120	León Cortés Castro	1	San José	9.673481	-84.124769	2269
+12004	San Isidro		120	León Cortés Castro	1	San José	9.675950	-84.082738	1870
+12005	Santa Cruz		120	León Cortés Castro	1	San José	9.723312	-84.008200	2164
+12006	San Antonio		120	León Cortés Castro	1	San José	9.724216	-84.056040	1278
+20101	Alajuela		201	Alajuela	2	Alajuela	10.031092	-84.203334	48326
+20102	San José		201	Alajuela	2	Alajuela	10.004029	-84.249249	52686
+20103	Carrizal		201	Alajuela	2	Alajuela	10.088010	-84.172304	9002
+20104	San Antonio		201	Alajuela	2	Alajuela	9.984829	-84.250479	31637
+20105	Guácima		201	Alajuela	2	Alajuela	9.960862	-84.259742	26642
+20106	San Isidro		201	Alajuela	2	Alajuela	10.090929	-84.190658	22586
+20107	Sabanilla		201	Alajuela	2	Alajuela	10.117714	-84.198857	12396
+20108	San Rafael		201	Alajuela	2	Alajuela	9.959404	-84.228962	34182
+20109	Río Segundo		201	Alajuela	2	Alajuela	10.001234	-84.196119	13561
+20110	Desamparados		201	Alajuela	2	Alajuela	10.031568	-84.185163	33654
+20111	Turrúcares		201	Alajuela	2	Alajuela	9.942130	-84.325095	9349
+20112	Tambor		201	Alajuela	2	Alajuela	10.028495	-84.250043	14338
+20113	Garita		201	Alajuela	2	Alajuela	9.989765	-84.305884	9492
+20114	Sarapiquí		201	Alajuela	2	Alajuela	10.296623	-84.178369	4021
+20201	San Ramón		202	San Ramón	2	Alajuela	10.086734	-84.469807	9107
+20202	Santiago		202	San Ramón	2	Alajuela	10.038037	-84.539183	5699
+20203	San Juan		202	San Ramón	2	Alajuela	10.105694	-84.462040	13406
+20204	Piedades Norte		202	San Ramón	2	Alajuela	10.139772	-84.554748	9564
+20205	Piedades Sur		202	San Ramón	2	Alajuela	10.097796	-84.574238	4603
+20206	San Rafael		202	San Ramón	2	Alajuela	10.031780	-84.474099	10904
+20207	San Isidro		202	San Ramón	2	Alajuela	10.083017	-84.450109	5938
+20208	Ángeles		202	San Ramón	2	Alajuela	10.168043	-84.504411	9793
+20209	Alfaro		202	San Ramón	2	Alajuela	10.089601	-84.499139	8402
+20210	Volio		202	San Ramón	2	Alajuela	10.151687	-84.448674	2727
+20211	Concepción		202	San Ramón	2	Alajuela	10.126712	-84.436039	2765
+20212	Zapotal		202	San Ramón	2	Alajuela	10.135105	-84.638161	515
+20213	Peñas Blancas		202	San Ramón	2	Alajuela	10.362982	-84.699943	12371
+20214	San Lorenzo		202	San Ramón	2	Alajuela	10.272045	-84.596114	
+20301	Grecia		203	Grecia	2	Alajuela	10.069563	-84.314810	16146
+20302	San Isidro		203	Grecia	2	Alajuela	10.131290	-84.262325	7293
+20303	San José		203	Grecia	2	Alajuela	10.099754	-84.274511	10231
+20304	San Roque		203	Grecia	2	Alajuela	10.108430	-84.296123	13660
+20305	Tacares		203	Grecia	2	Alajuela	10.031445	-84.306734	10050
+20307	Puente de Piedra		203	Grecia	2	Alajuela	10.029362	-84.342550	13274
+20308	Bolívar		203	Grecia	2	Alajuela	10.132593	-84.302301	9018
+20401	San Mateo		204	San Mateo	2	Alajuela	9.967721	-84.526801	3071
+20402	Desmonte		204	San Mateo	2	Alajuela	9.964258	-84.474447	1201
+20403	Jesús María		204	San Mateo	2	Alajuela	9.958261	-84.583754	1517
+20404	Labrador		204	San Mateo	2	Alajuela	9.933410	-84.631513	1487
+20501	Atenas		205	Atenas	2	Alajuela	9.978920	-84.374029	8015
+20502	Jesús		205	Atenas	2	Alajuela	9.956532	-84.454939	4396
+20503	Mercedes		205	Atenas	2	Alajuela	9.986905	-84.394199	3832
+20504	San Isidro		205	Atenas	2	Alajuela	9.994694	-84.428708	3521
+20505	Concepción		205	Atenas	2	Alajuela	9.956845	-84.375320	4261
+20506	San José		205	Atenas	2	Alajuela	10.015551	-84.410467	2326
+20507	Santa Eulalia		205	Atenas	2	Alajuela	10.015862	-84.379026	2510
+20508	Escobal		205	Atenas	2	Alajuela	9.944937	-84.424720	1019
+20601	Naranjo		206	Naranjo	2	Alajuela	10.100615	-84.389086	17348
+20602	San Miguel		206	Naranjo	2	Alajuela	10.063928	-84.399354	5782
+20603	San José		206	Naranjo	2	Alajuela	10.150805	-84.402372	3666
+20604	Cirrí Sur		206	Naranjo	2	Alajuela	10.144159	-84.368293	5533
+20605	San Jerónimo		206	Naranjo	2	Alajuela	10.128455	-84.355986	4076
+20606	San Juan		206	Naranjo	2	Alajuela	10.118584	-84.415424	3688
+20607	El Rosario		206	Naranjo	2	Alajuela	10.044989	-84.380242	4638
+20608	Palmitos		206	Naranjo	2	Alajuela	10.094929	-84.420716	5033
+20701	Palmares		207	Palmares	2	Alajuela	10.054539	-84.433146	3764
+20702	Zaragoza		207	Palmares	2	Alajuela	10.034004	-84.457371	9901
+20703	Buenos Aires		207	Palmares	2	Alajuela	10.070477	-84.437300	8931
+20704	Santiago		207	Palmares	2	Alajuela	10.021629	-84.448072	3379
+20705	Candelaria		207	Palmares	2	Alajuela	10.025962	-84.426039	2457
+20706	Esquipulas		207	Palmares	2	Alajuela	10.057194	-84.418399	8435
+20707	La Granja		207	Palmares	2	Alajuela	10.056052	-84.447429	4938
+20801	San Pedro		208	Poás	2	Alajuela	10.082020	-84.239876	8243
+20802	San Juan		208	Poás	2	Alajuela	10.135635	-84.234611	5647
+20803	San Rafael		208	Poás	2	Alajuela	10.098459	-84.260698	6655
+20804	Carrillos		208	Poás	2	Alajuela	10.036819	-84.271465	11330
+20805	Sabana Redonda		208	Poás	2	Alajuela	10.149451	-84.209325	3051
+20901	Orotina		209	Orotina	2	Alajuela	9.902345	-84.526182	10680
+20902	El Mastate		209	Orotina	2	Alajuela	9.916867	-84.555468	2249
+20903	Hacienda Vieja		209	Orotina	2	Alajuela	9.923393	-84.487065	1242
+20904	Coyolar		209	Orotina	2	Alajuela	9.874847	-84.575187	7685
+20905	La Ceiba		209	Orotina	2	Alajuela	9.898145	-84.631609	2592
+21001	Quesada		210	San Carlos	2	Alajuela	10.343923	-84.418917	46127
+21002	Florencia		210	San Carlos	2	Alajuela	10.367264	-84.486571	18517
+21003	Buenavista		210	San Carlos	2	Alajuela	10.282508	-84.477507	420
+21004	Aguas Zarcas		210	San Carlos	2	Alajuela	10.418715	-84.324924	26305
+21005	Venecia		210	San Carlos	2	Alajuela	10.336195	-84.289273	12172
+21006	Pital		210	San Carlos	2	Alajuela	10.602788	-84.236658	25359
+21007	La Fortuna		210	San Carlos	2	Alajuela	10.449805	-84.710284	19584
+21008	La Tigra		210	San Carlos	2	Alajuela	10.354725	-84.586855	7964
+21009	La Palmera	La Palmeira	210	San Carlos	2	Alajuela	10.366125	-84.367406	7940
+21010	Venado		210	San Carlos	2	Alajuela	10.568651	-84.766715	2173
+21011	Cutris		210	San Carlos	2	Alajuela	10.694258	-84.329087	15537
+21012	Monterrey		210	San Carlos	2	Alajuela	10.576820	-84.631390	4321
+21013	Pocosol		210	San Carlos	2	Alajuela	10.751005	-84.480978	19696
+21101	Zarcero		211	Zarcero	2	Alajuela	10.188687	-84.377683	4397
+21102	Laguna		211	Zarcero	2	Alajuela	10.218796	-84.467576	2031
+21103	Tapesco		211	Zarcero	2	Alajuela	10.219029	-84.404928	1582
+21104	Guadalupe		211	Zarcero	2	Alajuela	10.189771	-84.437572	1427
+21105	Palmira		211	Zarcero	2	Alajuela	10.208030	-84.352656	1712
+21106	Zapote		211	Zarcero	2	Alajuela	10.242934	-84.455384	944
+21107	Brisas		211	Zarcero	2	Alajuela	10.242820	-84.379252	2536
+21201	Sarchí Norte		212	Sarchí	2	Alajuela	10.125708	-84.335961	8382
+21202	Sarchí Sur		212	Sarchí	2	Alajuela	10.074553	-84.344496	6539
+21203	Toro Amarillo		212	Sarchí	2	Alajuela	10.222781	-84.281351	380
+21204	San Pedro		212	Sarchí	2	Alajuela	10.137044	-84.320780	4463
+21205	Rodríguez		212	Sarchí	2	Alajuela	10.117840	-84.349851	2832
+21301	Upala		213	Upala	2	Alajuela	10.865497	-84.999204	16850
+21302	Aguas Claras		213	Upala	2	Alajuela	10.864634	-85.256023	5714
+21303	San José	Pizote;San José o Pizote	213	Upala	2	Alajuela	10.946979	-85.169368	8795
+21304	Bijagua		213	Upala	2	Alajuela	10.747000	-85.048945	5363
+21305	Delicias		213	Upala	2	Alajuela	10.963322	-85.051073	5479
+21306	Dos Ríos		213	Upala	2	Alajuela	10.934373	-85.374185	4017
+21307	Yolillal		213	Upala	2	Alajuela	10.900647	-84.939211	4129
+21308	Canalete		213	Upala	2	Alajuela	10.827864	-85.058347	5119
+21401	Los Chiles		214	Los Chiles	2	Alajuela	10.964004	-84.603388	21714
+21402	Caño Negro		214	Los Chiles	2	Alajuela	10.926274	-84.806757	2333
+21403	El Amparo		214	Los Chiles	2	Alajuela	10.834706	-84.656959	7772
+21404	San Jorge		214	Los Chiles	2	Alajuela	10.710838	-84.603849	3369
+21501	San Rafael		215	Guatuso	2	Alajuela	10.678682	-84.786157	10117
+21502	Buenavista		215	Guatuso	2	Alajuela	10.776187	-84.798114	1990
+21503	Cote		215	Guatuso	2	Alajuela	10.617689	-84.906506	1092
+21504	Katira		215	Guatuso	2	Alajuela	10.747464	-84.914041	6497
+21601	Río Cuarto		216	Río Cuarto	2	Alajuela	10.320321	-84.218811	
+21602	Santa Rita		216	Río Cuarto	2	Alajuela	10.406153	-84.212629	
+21603	Santa Isabel		216	Río Cuarto	2	Alajuela	10.503503	-84.195681	
+30101	Oriental		301	Cartago	3	Cartago	9.860915	-83.915619	12310
+30102	Occidental		301	Cartago	3	Cartago	9.862650	-83.925761	10465
+30103	Carmen		301	Cartago	3	Cartago	9.881483	-83.913716	19390
+30104	San Nicolás		301	Cartago	3	Cartago	9.896825	-83.938072	29913
+30105	Aguacaliente	San Francisco;Aguacaliente o San Francisco	301	Cartago	3	Cartago	9.726534	-83.866821	36408
+30106	Guadalupe	Arenilla;Guadalupe o Arenilla	301	Cartago	3	Cartago	9.865397	-83.958412	16547
+30107	Corralillo		301	Cartago	3	Cartago	9.789706	-84.056149	12064
+30108	Tierra Blanca		301	Cartago	3	Cartago	9.929292	-83.890550	5926
+30109	Dulce Nombre		301	Cartago	3	Cartago	9.677126	-83.814379	12004
+30110	Llano Grande		301	Cartago	3	Cartago	9.933000	-83.923255	5120
+30111	Quebradilla		301	Cartago	3	Cartago	9.849934	-83.992437	6057
+30201	Paraíso		302	Paraíso	3	Cartago	9.836605	-83.845711	21561
+30202	Santiago		302	Paraíso	3	Cartago	9.870047	-83.809310	6493
+30203	Orosi		302	Paraíso	3	Cartago	9.686215	-83.745404	10208
+30204	Cachí		302	Paraíso	3	Cartago	9.834249	-83.785964	5944
+30205	Llanos de Santa Lucía		302	Paraíso	3	Cartago	9.848190	-83.881164	19590
+30206	Birrisito		302	Paraíso	3	Cartago	9.859213	-83.854017	
+30301	Tres Ríos		303	La Unión	3	Cartago	9.906871	-83.989214	9298
+30302	San Diego		303	La Unión	3	Cartago	9.891880	-83.993577	25354
+30303	San Juan		303	La Unión	3	Cartago	9.910324	-84.004406	15752
+30304	San Rafael		303	La Unión	3	Cartago	9.903421	-83.969115	16277
+30305	Concepción		303	La Unión	3	Cartago	9.923809	-83.994968	19259
+30306	Dulce Nombre		303	La Unión	3	Cartago	9.932735	-83.963774	9289
+30307	San Ramón		303	La Unión	3	Cartago	9.937167	-83.990838	4526
+30308	Río Azul		303	La Unión	3	Cartago	9.887127	-84.021943	14860
+30401	Juan Viñas		304	Jiménez	3	Cartago	9.899290	-83.753780	7095
+30402	Tucurrique		304	Jiménez	3	Cartago	9.846610	-83.734862	5601
+30403	Pejibaye		304	Jiménez	3	Cartago	9.773592	-83.675659	3665
+30404	La Victoria		304	Jiménez	3	Cartago	9.916656	-83.739277	
+30501	Turrialba		305	Turrialba	3	Cartago	9.889695	-83.684420	27039
+30502	La Suiza		305	Turrialba	3	Cartago	9.768152	-83.608380	7939
+30503	Peralta		305	Turrialba	3	Cartago	9.967108	-83.622362	621
+30504	Santa Cruz		305	Turrialba	3	Cartago	10.013337	-83.751362	3804
+30505	Santa Teresita		305	Turrialba	3	Cartago	9.987556	-83.660544	5402
+30506	Pavones		305	Turrialba	3	Cartago	9.914390	-83.622223	4628
+30507	Tuis		305	Turrialba	3	Cartago	9.846678	-83.574332	2950
+30508	Tayutic		305	Turrialba	3	Cartago	9.813259	-83.540787	2506
+30509	Santa Rosa		305	Turrialba	3	Cartago	9.937747	-83.718385	5747
+30510	Tres Equis		305	Turrialba	3	Cartago	9.948391	-83.563820	1964
+30511	La Isabel		305	Turrialba	3	Cartago	9.927707	-83.662587	6362
+30512	Chirripó		305	Turrialba	3	Cartago	9.733001	-83.501183	4584
+30601	Pacayas		306	Alvarado	3	Cartago	9.937636	-83.817146	5989
+30602	Cervantes		306	Alvarado	3	Cartago	9.896938	-83.802360	6916
+30603	Capellades		306	Alvarado	3	Cartago	9.954304	-83.787957	2710
+30701	San Rafael		307	Oreamuno	3	Cartago	9.870108	-83.897055	29275
+30702	Cot		307	Oreamuno	3	Cartago	9.888631	-83.872599	11360
+30703	Potrero Cerrado		307	Oreamuno	3	Cartago	9.930696	-83.872946	2705
+30704	Cipreses		307	Oreamuno	3	Cartago	9.894393	-83.838562	4234
+30705	Santa Rosa		307	Oreamuno	3	Cartago	10.026145	-83.841162	3021
+30801	El Tejar		308	El Guarco	3	Cartago	9.843854	-83.948102	27037
+30802	San Isidro		308	El Guarco	3	Cartago	9.726102	-83.916679	11632
+30803	Tobosi		308	El Guarco	3	Cartago	9.817453	-83.998047	7834
+30804	Patio de Agua		308	El Guarco	3	Cartago	9.789567	-84.009440	456
+40101	Heredia		401	Heredia	4	Heredia	9.998616	-84.117127	18988
+40102	Mercedes		401	Heredia	4	Heredia	10.006193	-84.129903	30276
+40103	San Francisco		401	Heredia	4	Heredia	9.985547	-84.115414	60166
+40104	Ulloa		401	Heredia	4	Heredia	9.975171	-84.138598	35618
+40105	Varablanca		401	Heredia	4	Heredia	10.178059	-84.057843	972
+40201	Barva		402	Barva	4	Heredia	10.020450	-84.123873	5099
+40202	San Pedro		402	Barva	4	Heredia	10.034905	-84.136995	12026
+40203	San Pablo		402	Barva	4	Heredia	10.049682	-84.107620	10105
+40204	San Roque		402	Barva	4	Heredia	10.016022	-84.136430	5507
+40205	Santa Lucía		402	Barva	4	Heredia	10.026339	-84.112757	8524
+40206	San José de la Montaña		402	Barva	4	Heredia	10.086237	-84.108508	6929
+40207	Puente Salas		402	Barva	4	Heredia	10.049381	-84.130135	
+40301	Santo Domingo		403	Santo Domingo	4	Heredia	9.979498	-84.090626	5050
+40302	San Vicente		403	Santo Domingo	4	Heredia	9.990665	-84.079218	8072
+40303	San Miguel		403	Santo Domingo	4	Heredia	9.982560	-84.051651	7988
+40304	Paracito		403	Santo Domingo	4	Heredia	10.002243	-84.026516	2832
+40305	Santo Tomás		403	Santo Domingo	4	Heredia	9.978319	-84.075469	7953
+40306	Santa Rosa		403	Santo Domingo	4	Heredia	9.972541	-84.100755	9264
+40307	Tures		403	Santo Domingo	4	Heredia	9.992233	-84.057050	4477
+40308	Pará		403	Santo Domingo	4	Heredia	10.004362	-84.035256	4199
+40401	Santa Bárbara		404	Santa Bárbara	4	Heredia	10.038257	-84.159349	6394
+40402	San Pedro		404	Santa Bárbara	4	Heredia	10.029083	-84.167736	7016
+40403	San Juan		404	Santa Bárbara	4	Heredia	10.019395	-84.161797	9308
+40404	Jesús		404	Santa Bárbara	4	Heredia	10.055100	-84.144451	11842
+40405	Santo Domingo		404	Santa Bárbara	4	Heredia	10.108334	-84.146212	3699
+40406	Purabá		404	Santa Bárbara	4	Heredia	10.066302	-84.154922	5619
+40501	San Rafael		405	San Rafael	4	Heredia	10.015652	-84.099796	10787
+40502	San Josecito		405	San Rafael	4	Heredia	10.012660	-84.110504	14331
+40503	Santiago		405	San Rafael	4	Heredia	10.004662	-84.101379	10534
+40504	Ángeles		405	San Rafael	4	Heredia	10.069993	-84.083531	13017
+40505	Concepción		405	San Rafael	4	Heredia	10.045013	-84.059921	7891
+40601	San Isidro		406	San Isidro	4	Heredia	10.013490	-84.052605	6413
+40602	San José		406	San Isidro	4	Heredia	10.032411	-84.020724	8895
+40603	Concepción		406	San Isidro	4	Heredia	10.042138	-84.035332	3115
+40604	San Francisco		406	San Isidro	4	Heredia	10.009953	-84.065599	5232
+40701	San Antonio		407	Belén	4	Heredia	9.978006	-84.185533	11625
+40702	La Ribera		407	Belén	4	Heredia	9.993798	-84.179179	7753
+40703	La Asunción		407	Belén	4	Heredia	9.978926	-84.167726	7475
+40801	San Joaquín		408	Flores	4	Heredia	10.005845	-84.158780	8341
+40802	Barrantes		408	Flores	4	Heredia	10.014436	-84.152339	5340
+40803	Llorente		408	Flores	4	Heredia	9.997241	-84.159985	11720
+40901	San Pablo		409	San Pablo	4	Heredia	9.998657	-84.091936	21485
+40902	Rincón de Sabanilla		409	San Pablo	4	Heredia	9.982213	-84.104662	10034
+41001	Puerto Viejo		410	Sarapiquí	4	Heredia	10.573520	-83.925591	31580
+41002	La Virgen		410	Sarapiquí	4	Heredia	10.434318	-84.095248	16493
+41003	Las Horquetas		410	Sarapiquí	4	Heredia	10.321657	-83.948321	35957
+41004	Llanuras del Gaspar		410	Sarapiquí	4	Heredia	10.676213	-83.854417	2059
+41005	Cureña		410	Sarapiquí	4	Heredia	10.683052	-84.067951	1598
+50101	Liberia		501	Liberia	5	Guanacaste	10.615191	-85.446735	67132
+50102	Cañas Dulces		501	Liberia	5	Guanacaste	10.745728	-85.454787	4075
+50103	Mayorga		501	Liberia	5	Guanacaste	10.848938	-85.496929	2032
+50104	Nacascolo		501	Liberia	5	Guanacaste	10.699106	-85.594767	3129
+50105	Curubandé		501	Liberia	5	Guanacaste	10.733119	-85.391748	3242
+50201	Nicoya		502	Nicoya	5	Guanacaste	10.106050	-85.502383	27131
+50202	La Mansión	Mansión	502	Nicoya	5	Guanacaste	10.120433	-85.326249	5772
+50203	San Antonio		502	Nicoya	5	Guanacaste	10.253441	-85.380436	7148
+50204	Quebrada Honda		502	Nicoya	5	Guanacaste	10.190227	-85.281022	2591
+50205	Sámara		502	Nicoya	5	Guanacaste	9.911845	-85.532317	4685
+50206	Nosara		502	Nicoya	5	Guanacaste	9.978339	-85.627781	7213
+50207	Belén de Nosarita		502	Nicoya	5	Guanacaste	9.999150	-85.516960	3084
+50301	Santa Cruz		503	Santa Cruz	5	Guanacaste	10.214848	-85.577869	28008
+50302	Bolsón		503	Santa Cruz	5	Guanacaste	10.347195	-85.450744	2182
+50303	Veintisiete de Abril		503	Santa Cruz	5	Guanacaste	10.216323	-85.732622	9302
+50304	Tempate		503	Santa Cruz	5	Guanacaste	10.394897	-85.738321	6467
+50305	Cartagena		503	Santa Cruz	5	Guanacaste	10.364559	-85.686686	5147
+50306	Cuajiniquil		503	Santa Cruz	5	Guanacaste	10.061811	-85.685202	2678
+50307	Diriá		503	Santa Cruz	5	Guanacaste	10.283350	-85.526052	4983
+50308	Cabo Velas		503	Santa Cruz	5	Guanacaste	10.376696	-85.819960	4381
+50309	Tamarindo		503	Santa Cruz	5	Guanacaste	10.292122	-85.802854	8136
+50401	Bagaces		504	Bagaces	5	Guanacaste	10.446780	-85.296078	16462
+50402	La Fortuna		504	Bagaces	5	Guanacaste	10.641017	-85.176349	3112
+50403	Mogote		504	Bagaces	5	Guanacaste	10.700455	-85.272291	4079
+50404	Río Naranjo		504	Bagaces	5	Guanacaste	10.661636	-85.110780	1194
+50501	Filadelfia		505	Carrillo	5	Guanacaste	10.418994	-85.428965	8967
+50502	Palmira		505	Carrillo	5	Guanacaste	10.545391	-85.593828	6910
+50503	Sardinal		505	Carrillo	5	Guanacaste	10.534341	-85.670445	20094
+50504	Belén		505	Carrillo	5	Guanacaste	10.406167	-85.597618	11785
+50601	Cañas		506	Cañas	5	Guanacaste	10.445138	-85.093248	26577
+50602	Palmira		506	Cañas	5	Guanacaste	10.593332	-85.088429	1361
+50603	San Miguel		506	Cañas	5	Guanacaste	10.343266	-85.072373	2076
+50604	Bebedero		506	Cañas	5	Guanacaste	10.376310	-85.153171	2582
+50605	Porozal		506	Cañas	5	Guanacaste	10.269965	-85.186540	797
+50701	Las Juntas		507	Abangares	5	Guanacaste	10.237990	-85.017131	10437
+50702	Sierra		507	Abangares	5	Guanacaste	10.326808	-84.896201	2827
+50703	San Juan		507	Abangares	5	Guanacaste	10.222898	-84.930891	1857
+50704	Colorado		507	Abangares	5	Guanacaste	10.213217	-85.117217	5161
+50801	Tilarán		508	Tilarán	5	Guanacaste	10.481162	-84.945449	9449
+50802	Quebrada Grande		508	Tilarán	5	Guanacaste	10.414653	-84.929235	3104
+50803	Tronadora		508	Tilarán	5	Guanacaste	10.419431	-84.819158	2029
+50804	Santa Rosa		508	Tilarán	5	Guanacaste	10.506984	-85.001892	2188
+50805	Líbano		508	Tilarán	5	Guanacaste	10.410271	-84.989098	958
+50806	Tierras Morenas		508	Tilarán	5	Guanacaste	10.587263	-84.998717	1545
+50807	Arenal		508	Tilarán	5	Guanacaste	10.529417	-84.858684	2711
+50808	Cabeceras		508	Tilarán	5	Guanacaste	10.366655	-84.864869	
+50901	Carmona		509	Nandayure	5	Guanacaste	9.991961	-85.260647	2663
+50902	Santa Rita		509	Nandayure	5	Guanacaste	10.039993	-85.281705	1480
+50903	Zapotal		509	Nandayure	5	Guanacaste	9.935151	-85.323491	1263
+50904	San Pablo		509	Nandayure	5	Guanacaste	10.020644	-85.202030	2362
+50905	Porvenir		509	Nandayure	5	Guanacaste	9.918279	-85.296294	759
+50906	Bejuco		509	Nandayure	5	Guanacaste	9.826447	-85.262893	3311
+51001	La Cruz		510	La Cruz	5	Guanacaste	11.084475	-85.634772	13204
+51002	Santa Cecilia		510	La Cruz	5	Guanacaste	11.030898	-85.403102	9191
+51003	La Garita		510	La Cruz	5	Guanacaste	11.069241	-85.513555	2665
+51004	Santa Elena		510	La Cruz	5	Guanacaste	10.892304	-85.729105	3011
+51101	Hojancha		511	Hojancha	5	Guanacaste	10.045662	-85.428780	4707
+51102	Monte Romo		511	Hojancha	5	Guanacaste	9.963685	-85.393390	724
+51103	Puerto Carrillo		511	Hojancha	5	Guanacaste	9.924818	-85.434796	1893
+51104	Huacas		511	Hojancha	5	Guanacaste	10.035600	-85.357562	761
+51105	Matambú		511	Hojancha	5	Guanacaste	10.086120	-85.417510	
+60101	Puntarenas		601	Puntarenas	6	Puntarenas	10.014768	-84.762568	10342
+60102	Pitahaya		601	Puntarenas	6	Puntarenas	10.044897	-84.824955	2755
+60103	Chomes		601	Puntarenas	6	Puntarenas	10.098927	-84.914223	6645
+60104	Lepanto		601	Puntarenas	6	Puntarenas	9.888051	-85.117688	10444
+60105	Paquera		601	Puntarenas	6	Puntarenas	9.826454	-84.995180	8410
+60106	Manzanillo		601	Puntarenas	6	Puntarenas	10.148188	-85.025232	3459
+60107	Guacimal		601	Puntarenas	6	Puntarenas	10.214849	-84.839426	1173
+60108	Barranca		601	Puntarenas	6	Puntarenas	10.001160	-84.725844	39426
+60110	Isla del Coco		601	Puntarenas	6	Puntarenas	5.528195	-87.059316	
+60111	Cóbano		601	Puntarenas	6	Puntarenas	9.684882	-85.115654	9736
+60112	Chacarita		601	Puntarenas	6	Puntarenas	9.984332	-84.769028	21244
+60113	Chira		601	Puntarenas	6	Puntarenas	10.099478	-85.155577	1714
+60114	Acapulco		601	Puntarenas	6	Puntarenas	10.171082	-84.798109	1560
+60115	El Roble		601	Puntarenas	6	Puntarenas	9.977342	-84.741847	21240
+60116	Arancibia		601	Puntarenas	6	Puntarenas	10.225331	-84.716266	784
+60201	Espíritu Santo		602	Esparza	6	Puntarenas	9.990614	-84.679938	22181
+60202	San Juan Grande		602	Esparza	6	Puntarenas	9.969494	-84.655107	8915
+60203	Macacona		602	Esparza	6	Puntarenas	10.015564	-84.616705	5482
+60204	San Rafael		602	Esparza	6	Puntarenas	9.984722	-84.599398	1725
+60205	San Jerónimo		602	Esparza	6	Puntarenas	10.071741	-84.653860	941
+60206	Caldera		602	Esparza	6	Puntarenas	9.919502	-84.689515	
+60301	Buenos Aires		603	Buenos Aires	6	Puntarenas	9.195127	-83.272837	29454
+60302	Volcán		603	Buenos Aires	6	Puntarenas	9.246941	-83.462507	3690
+60303	Potrero Grande		603	Buenos Aires	6	Puntarenas	9.100622	-83.128005	6494
+60304	Boruca		603	Buenos Aires	6	Puntarenas	9.014818	-83.332275	3289
+60305	Pilas		603	Buenos Aires	6	Puntarenas	9.098967	-83.441636	1749
+60306	Colinas		603	Buenos Aires	6	Puntarenas	9.030318	-83.432242	1391
+60307	Chánguena		603	Buenos Aires	6	Puntarenas	8.886873	-83.177765	2929
+60308	Biolley		603	Buenos Aires	6	Puntarenas	9.057750	-83.025635	2589
+60309	Brunka		603	Buenos Aires	6	Puntarenas	9.228511	-83.385174	3197
+60401	Miramar		604	Montes de Oro	6	Puntarenas	10.110077	-84.746951	9027
+60402	La Unión		604	Montes de Oro	6	Puntarenas	10.208673	-84.688451	1513
+60403	San Isidro		604	Montes de Oro	6	Puntarenas	10.050120	-84.723576	4047
+60501	Puerto Cortés		605	Osa	6	Puntarenas	9.023333	-83.565743	8844
+60502	Palmar		605	Osa	6	Puntarenas	8.938044	-83.428526	9716
+60503	Sierpe		605	Osa	6	Puntarenas	8.809381	-83.493852	3645
+60504	Bahía Ballena		605	Osa	6	Puntarenas	9.178988	-83.718815	3487
+60505	Piedras Blancas		605	Osa	6	Puntarenas	8.812683	-83.256632	4529
+60506	Bahía Drake		605	Osa	6	Puntarenas	8.645571	-83.601827	1162
+60601	Quepos		606	Quepos	6	Puntarenas	9.458787	-84.154764	25665
+60602	Savegre		606	Quepos	6	Puntarenas	9.351778	-83.951545	4116
+60603	Naranjito		606	Quepos	6	Puntarenas	9.482904	-84.101312	4239
+60701	Golfito		607	Golfito	6	Puntarenas	8.652468	-83.165028	11867
+60703	Guaycará		607	Golfito	6	Puntarenas	8.686632	-83.096962	14120
+60704	Pavón		607	Golfito	6	Puntarenas	8.298053	-83.029352	7700
+60801	San Vito		608	Coto Brus	6	Puntarenas	8.839971	-82.968038	16629
+60802	Sabalito		608	Coto Brus	6	Puntarenas	8.882707	-82.807738	13202
+60803	Aguabuena		608	Coto Brus	6	Puntarenas	8.737269	-82.947051	7050
+60804	Limoncito		608	Coto Brus	6	Puntarenas	8.852010	-83.051403	4152
+60805	Pittier		608	Coto Brus	6	Puntarenas	8.996885	-82.947580	3247
+60806	Gutiérrez Braun		608	Coto Brus	6	Puntarenas	8.970291	-82.841311	
+60901	Parrita		609	Parrita	6	Puntarenas	9.548493	-84.358684	20984
+61001	Corredor		610	Corredores	6	Puntarenas	8.608378	-82.930554	20050
+61002	La Cuesta		610	Corredores	6	Puntarenas	8.472985	-82.870976	5333
+61003	Canoas		610	Corredores	6	Puntarenas	8.563493	-82.885177	15929
+61004	Laurel		610	Corredores	6	Puntarenas	8.444372	-82.937596	12172
+61101	Jacó		611	Garabito	6	Puntarenas	9.620938	-84.596796	18613
+61102	Tárcoles		611	Garabito	6	Puntarenas	9.743251	-84.611871	8791
+61103	Lagunillas		611	Garabito	6	Puntarenas	9.828689	-84.621751	
+61201	Monteverde		612	Monteverde	6	Puntarenas	10.290785	-84.813264	4943
+61301	Puerto Jiménez		613	Puerto Jiménez	6	Puntarenas	8.533708	-83.458500	12836
+70101	Limón		701	Limón	7	Limón	10.002921	-83.054611	60710
+70102	Valle la Estrella		701	Limón	7	Limón	9.689925	-83.166350	20818
+70103	Río Blanco		701	Limón	7	Limón	9.980393	-83.143894	10257
+70104	Matama		701	Limón	7	Limón	9.868551	-83.127031	8451
+70201	Guápiles		702	Pococí	7	Limón	10.211144	-83.839535	39611
+70202	Jiménez		702	Pococí	7	Limón	10.181773	-83.768573	13052
+70203	Rita		702	Pococí	7	Limón	10.434298	-83.797488	29241
+70204	Roxana		702	Pococí	7	Limón	10.359047	-83.660951	20342
+70205	Cariari		702	Pococí	7	Limón	10.434839	-83.691938	40278
+70206	Colorado		702	Pococí	7	Limón	10.654733	-83.671956	5040
+70207	La Colonia		702	Pococí	7	Limón	10.271819	-83.822886	7110
+70301	Siquirres		703	Siquirres	7	Limón	10.087619	-83.519072	34576
+70302	Pacuarito		703	Siquirres	7	Limón	10.106888	-83.427347	10804
+70303	Florida		703	Siquirres	7	Limón	10.046713	-83.649746	2656
+70304	Germania		703	Siquirres	7	Limón	10.169024	-83.574732	3062
+70305	El Cairo		703	Siquirres	7	Limón	10.193448	-83.525574	7628
+70306	Alegría		703	Siquirres	7	Limón	10.118025	-83.583891	6947
+70307	Reventazón		703	Siquirres	7	Limón	10.243268	-83.385950	
+70401	Bratsi		704	Talamanca	7	Limón	9.610631	-82.938376	10590
+70402	Sixaola		704	Talamanca	7	Limón	9.557510	-82.665476	11847
+70403	Cahuita		704	Talamanca	7	Limón	9.679008	-82.844738	13656
+70404	Telire		704	Talamanca	7	Limón	9.374014	-83.121858	8709
+70501	Matina		705	Matina	7	Limón	9.985685	-83.335998	10437
+70502	Batán		705	Matina	7	Limón	10.101161	-83.336989	20814
+70503	Carrandí		705	Matina	7	Limón	10.005490	-83.253001	16140
+70601	Guácimo		706	Guácimo	7	Limón	10.171898	-83.708442	26152
+70602	Mercedes		706	Guácimo	7	Limón	10.138505	-83.653885	2357
+70603	Pocora		706	Guácimo	7	Limón	10.143531	-83.621631	8494
+70604	Río Jiménez		706	Guácimo	7	Limón	10.304404	-83.461331	11836
+70605	Duacarí		706	Guácimo	7	Limón	10.316784	-83.618449	8182

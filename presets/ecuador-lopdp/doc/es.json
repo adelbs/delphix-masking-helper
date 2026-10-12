@@ -357,7 +357,7 @@
         "Números de tarjeta de crédito y débito, reconocidos por el algoritmo de Luhn."
       ],
       "masking": [
-        "Payment Card: otro número que pasa el algoritmo de Luhn. Solo los valores con forma de tarjeta llegan a él."
+        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "EC_L1_BILLETERA": {
@@ -861,7 +861,7 @@
         "Saldos de crédito y de cartera, montos en mora, cuotas, montos desembolsados y límites."
       ],
       "masking": [
-        "Mapeada a un valor entre 100 y 250.000 dólares, sin relación con el real — el Ecuador usa el dólar estadounidense."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_INGRESOS": {
@@ -870,7 +870,7 @@
         "Sueldo, ingreso mensual o familiar, honorarios y rentas. El salario básico unificado fue de 470 dólares mensuales en 2025."
       ],
       "masking": [
-        "Mapeados a un valor entre 450 y 9.000 dólares."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_PATRIMONIO": {
@@ -879,7 +879,7 @@
         "Patrimonio, activos, avalúos y valores catastrales, saldos de cuenta y de fondos, depósitos a plazo y la declaración juramentada de bienes."
       ],
       "masking": [
-        "Mapeado a un valor entre 1.000 y 600.000 dólares."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_PENSION": {
@@ -888,7 +888,7 @@
         "El monto de la pensión, el subsidio o el beneficio, y la pensión de alimentos."
       ],
       "masking": [
-        "Mapeado a un valor entre 200 y 3.000 dólares."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_PROGRAMA_SOCIAL": {

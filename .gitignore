@@ -37,3 +37,6 @@ Thumbs.db
 .claude/
 CLAUDE.md
 CLAUDE.local.md
+
+# Logs of presets/verify-all.sh
+presets/_logs/

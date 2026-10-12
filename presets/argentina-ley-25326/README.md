@@ -14,8 +14,8 @@ of gender violence, credit information (art. 26) and criminal records (art. 7.4)
 
 | | |
 |---|---|
-| Profile set | `AR - Ley 25.326 - v1`, assignment threshold 60 |
-| Extended pack | 83 domains, 148 classifiers, 119 algorithms, 82 files — everything below |
+| Profile set | `AR - Ley 25.326 - v3`, assignment threshold 60, built 12 October 2026 |
+| Extended pack | 84 domains, 150 classifiers, 129 algorithms, 70 files — everything below |
 | Essential pack | 12 domains, 25 classifiers, 21 algorithms, 5 files — DNI, CUIT and CUIL, foreigner documents, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
@@ -51,10 +51,23 @@ situations and social benefits.
 **Type** classifiers rule domains out where the column cannot hold the data: an e-mail is text of at least 5
 characters, a birth date a date, timestamp or text, an amount a number.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in every table and
 every job. Placeholders such as `N/A` or `-` do not fail a row: where there is nothing to mask they pass through.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### DNI, CUIT, CUIL, CBU and CVU
 
@@ -84,7 +97,7 @@ digit recomputed by a single Check Digit.
 | `AR_L1_TELEFONO` | `+54`, 9, area code and 15 kept, subscriber number masked |
 | `AR_L1_DIRECCION` | A fictitious address (`San Martín 1250 Piso 3 Dto. B`, `Calle 7 N° 1234`, `Mz. 12 Lote 5`) |
 | `AR_L1_CBU` | Bank block kept, account masked, valid check digits |
-| `AR_L1_TARJETA` | Payment Card (Luhn stays valid) |
+| `AR_L1_TARJETA` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `AR_L1_IP` | Each IPv4 octet mapped to 1–254 |
 | `AR_L1_DOMINIO` | Letters to letters and digits to digits, plate format kept |
 | `AR_L1_GEOLOCALIZACION` | Integer part and first decimal kept (about 11 km) |
@@ -103,6 +116,7 @@ digit recomputed by a single Check Digit.
 | `AR_L2_SEXO` | Replaced within its own vocabulary, including 1 and 2; the DNI's `X` becomes `F` or `M` |
 | `AR_L2_LOCALIDAD` | A localidad of a gobierno local under 20,000 inhabitants (2022 census) — or of none — becomes the nearest gobierno local of the same province with at least 20,000 |
 | `AR_L2_DEPARTAMENTO` | A partido or departamento under 20,000 becomes the nearest one of the same province with at least 20,000 |
+| `AR_L2_PROVINCIA` | **Optional, never assigned by profiling** (no classifier). Assigned by hand, it replaces the province — name or ISO code — with one of its INDEC region, by Secure Lookup; see Province below |
 | `AR_L2_CODIGO_GEOGRAFICO` | INDEC codes of departamentos, gobiernos locales and localidades follow the names |
 | `AR_L2_CODIGO_POSTAL` | Province letter and first two digits stay (`C1043AAZ` → `C1000AAA`, `1636` → `1600`) |
 | `AR_L2_PERSONAS_A_CARGO` | Capped at 5 |
@@ -148,6 +162,21 @@ local is generalized too. A name shared by several places — or differing only 
 when all are small; written with the province (`San José - Entre Ríos`, `San José (Entre Ríos)`) the same rule
 applies within the province.
 
+## Province
+
+The set keeps the province: everything above is generalized within it, and the postal code keeps its letter.
+`AR_L2_PROVINCIA` is there for a column that must change anyway. No classifier votes for it, so profiling never
+assigns it — assign it to the column in the engine's inventory. Sending the profile set does not send it either:
+send the domain itself from **Domains** (its algorithms go along).
+
+A province becomes one of its INDEC statistical region — Northwest, Northeast, Cuyo, Pampas, Patagonia — chosen by a
+keyed Secure Lookup, so the substitution is not a table anyone can read in this repository. CABA goes with the
+Pampas (the INDEC puts it with the surrounding partidos in Greater Buenos Aires) and is not among the substitutes.
+A first Data Cleansing step writes every spelling as the official name, in the same case: `Cordoba`, `CÓRDOBA` and
+`córdoba`, or `CABA` and `Capital Federal`, draw the same province. The ISO 3166-2 code (`AR-X`) is replaced
+within the same regions. Masking the province while the localidad, partido or postal code stay makes the row
+incoherent (`Rosario` in another province) — the reason it is optional.
+
 ## Limits
 
 - **Binary columns** (DNI photos, biometric selfies, clinical PDFs in BLOBs) cannot be masked by these algorithms.
@@ -159,7 +188,8 @@ applies within the province.
 - **A seven-digit DNI** is masked with seven digits, but inside the CUIL it carries a leading zero and is masked
   with eight: that person's DNI and CUIL no longer agree.
 - **A check digit in a column of its own** is masked, not recomputed.
-- **Province, the CBU's bank and the phone area code are not masked.**
+- **Province, the CBU's bank and the phone area code are not masked** — the province only with the optional
+  `AR_L2_PROVINCIA`, assigned by hand.
 - **Data Cleansing leaves unknown values as they are**: a localidad spelled in a way that is not in the table passes
   unchanged.
 - **Free text** is redacted token by token: a phone written with spaces is not found there.
@@ -178,19 +208,25 @@ node presets/_doc/build.mjs argentina-ley-25326
 
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
-`verify.mjs` reviews every classifier configuration, profiles 160 columns with the whole set at its threshold and
+`verify.mjs` reviews every classifier configuration, profiles 166 columns with the whole set at its threshold and
 again with the essential pack — well named, badly named and 31 columns that are not personal data — and audits the
 generalization tables for all 528 departamentos and all 2,280 gobiernos locales and 4,027 localidades. It then
 masks the sample values, placeholders and each algorithm's own sample input through the running app (`DLPX_URL`,
 default `http://localhost:3000`), checking outputs against their vocabulary; 240 CUITs of every type for validity
 and collisions, type changes included; 150 CBUs for validity and collisions; 150 DNIs for collisions; and 20 people
-whose DNI and CUIL must still agree. Each value forks a JVM.
+whose DNI and CUIL must still agree; and 106 spellings of the 24 jurisdictions, each of which must draw one
+province of its region however it is written. A `PROVINCIA` column must stay unassigned. Each value forks a JVM.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 
 Law 25.326 and Decree 1558/2001 (InfoLEG); National Constitution, art. 43; Laws 27.483 and 27.699 (Convention 108
 and 108+); AAIP Resolutions 47/2018 and 126/2024; bills 644-S-2025, 1948-D-2025 and 3397-D-2026; European Commission
-Decision 2003/490/EC and its 2024 review; Laws 26.529, 26.657, 27.675, 27.610, 26.743, 26.485, 26.364, 22.431 and
+Decision 2003/490/EC and its 2024 review; INDEC statistical regions; Laws 26.529, 26.657, 27.675, 27.610, 26.743, 26.485, 26.364, 22.431 and
 24.557; Decree 476/2021; INDEC 2022 census final results by departamento and gobierno local; Georef (datos.gob.ar);
 RENAPER historical names (datos.gob.ar); ARCA CUIT and simplified regime; BCRA Central de Deudores, CBU and CVU;
 ANSES benefits; Correo Argentino CPA; Superintendencia de Servicios de Salud RNOS.

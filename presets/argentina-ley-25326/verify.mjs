@@ -73,6 +73,22 @@ const fold = (s) => s.normalize('NFD').replace(/\p{M}/gu, '')
 const PERSONAL = new Set([...GIVEN, ...SURNAMES].map((w) => fold(w).toLowerCase()))
 const SMALL_GOBIERNOS = GOBIERNOS.filter((g) => g.population < 20000 && !PERSONAL.has(fold(g.name).toLowerCase())).map((g) => g.name)
 const SMALL_DEPARTAMENTOS = DEPARTAMENTOS.filter((d) => d.population < 20000 && !PERSONAL.has(fold(d.name).toLowerCase())).map((d) => d.name)
+// The INDEC statistical regions, CABA with the Pampeana; the ISO 3166-2 letter of each jurisdiction.
+const CABA = 'Ciudad Autónoma de Buenos Aires'
+const PROVINCE_REGION = Object.fromEntries(Object.entries({
+  NOA: 'Catamarca K|Jujuy Y|La Rioja F|Salta A|Santiago del Estero G|Tucumán T',
+  NEA: 'Chaco H|Corrientes W|Formosa P|Misiones N',
+  CUYO: 'Mendoza M|San Juan J|San Luis D',
+  PAMPEANA: `Buenos Aires B|Córdoba X|Entre Ríos E|La Pampa L|Santa Fe S|${CABA} C`,
+  PATAGONIA: 'Chubut U|Neuquén Q|Río Negro R|Santa Cruz Z|Tierra del Fuego V',
+}).flatMap(([region, list]) => list.split('|').map((p) => [p.slice(0, -2), region])))
+const ISO_PROVINCE = {
+  K: 'Catamarca', Y: 'Jujuy', F: 'La Rioja', A: 'Salta', G: 'Santiago del Estero', T: 'Tucumán', H: 'Chaco', W: 'Corrientes',
+  P: 'Formosa', N: 'Misiones', M: 'Mendoza', J: 'San Juan', D: 'San Luis', B: 'Buenos Aires', X: 'Córdoba', E: 'Entre Ríos',
+  L: 'La Pampa', S: 'Santa Fe', C: CABA, U: 'Chubut', Q: 'Neuquén', R: 'Río Negro', Z: 'Santa Cruz', V: 'Tierra del Fuego',
+}
+const PROVINCE_ALIAS = { caba: CABA, 'c.a.b.a.': CABA, 'capital federal': CABA, 'ciudad de buenos aires': CABA, 'tierra del fuego, antartida e islas del atlantico sur': 'Tierra del Fuego' }
+const provinceOf = (v) => { const k = fold(v).toLowerCase(); return PROVINCE_ALIAS[k] ?? Object.keys(PROVINCE_REGION).find((p) => fold(p).toLowerCase() === k) }
 
 const pad = (n, w) => String(n).padStart(w, '0')
 const digits = (n) => many(() => int(0, 9), n).join('')
@@ -277,6 +293,13 @@ const COLUMNS = [
   col('FECHA_FIN', 'date', 0, many(() => iso(2015, 2025)), ''),
   col('NOMBRE_ARCHIVO', 'varchar', 60, many(() => `reporte_${int(1, 99)}.pdf`), ''),
   col('PESO_KG', 'number', 6, many(() => `${int(1, 99)}.5`), ''),
+  // Short names of packaged systems (a core banking table, say): nothing but the values to go by.
+  col('PFNOM', 'char', 60, many(fullName), 'AR_L1_NOMBRE_COMPLETO'),
+  col('PFMAIL', 'char', 80, many(() => `${pick(SURNAMES).toLowerCase()}.${int(1, 99)}@correo.com`), 'AR_L1_EMAIL'),
+  col('PFSX', 'char', 1, many(() => pick(['F', 'M'])), 'AR_L2_SEXO'),
+  col('DSPIMEI', 'char', 15, many(() => luhn('35', 15)), 'AR_L1_DISPOSITIVO'),
+  col('USPWD', 'char', 60, many(() => `$2b$12$${many(() => pick('./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'), 53).join('')}`), 'AR_L1_CREDENCIAL'),
+  col('LBSEQ', 'clob', 4000, many(() => many(() => pick('ACGT'), 60).join('')), 'AR_L3_GENETICO'),
 ]
 
 function verifyClassifiers() {
@@ -296,7 +319,10 @@ function verifyClassifiers() {
   console.log(`reviewed ${resolved.length} classifiers (${hints} hints)`)
 
   const covered = new Set(COLUMNS.map((c) => c.expect).filter(Boolean))
-  const uncovered = preset.domains.map((d) => d.name).filter((d) => !covered.has(d))
+  // A domain with no classifier is assigned by hand, never by profiling (AR_L2_PROVINCIA): the
+  // PROVINCIA column below checks that it stays unassigned.
+  const detected = new Set(preset.classifiers.map((c) => c.domain))
+  const uncovered = preset.domains.map((d) => d.name).filter((d) => detected.has(d) && !covered.has(d))
   if (uncovered.length) { failures++; console.log(`  ✗ domains with no test column: ${uncovered.join(', ')}`) }
 
   const profile = (classifiers, expectOf, label) => {
@@ -314,6 +340,24 @@ function verifyClassifiers() {
   }
   const negatives = COLUMNS.filter((c) => !c.expect).length
   console.log(`profiled ${COLUMNS.length} columns (${negatives} not personal data): ${profile(resolved, (c) => c.expect, '')} as expected`)
+
+  // The same columns as a database may hand them over: CHAR values padded with spaces, and codes of
+  // digits kept as text with zeros on the left. Each must still land where its bare twin does.
+  const TEXT_TYPES = new Set([SQL.char, SQL.varchar, SQL.clob])
+  const paddedColumns = COLUMNS.flatMap((column) => [
+    ...(TEXT_TYPES.has(column.sqlType) ? [{ ...column, how: 'spaces', values: column.values.map((v) => v.padEnd(Math.max(column.length, v.length + 3))) }] : []),
+    ...(TEXT_TYPES.has(column.sqlType) && column.values.every((v) => /^\d+$/.test(v)) ? [{ ...column, how: 'zeros', values: column.values.map((v) => v.padStart(Math.max(column.length, v.length + 2), '0')) }] : []),
+  ])
+  let paddedPassed = 0
+  for (const column of paddedColumns) {
+    const field = { name: column.name, parent: null, sqlType: column.sqlType, length: column.length || null, autoIncrement: false, values: column.values }
+    const result = kit.evaluateField({ classifiers: resolved, field, threshold: preset.profileSet.threshold, readFile })
+    if (result.assigned === column.expect) { paddedPassed++; continue }
+    failures++
+    const ranking = result.ranking.slice(0, 3).map((r) => `${r.domain} ${r.percent}%`).join(', ')
+    console.log(`  ✗ ${column.name} padded with ${column.how}: expected ${column.expect || '(none)'}, got ${result.assigned || '(none)'} — ${ranking}`)
+  }
+  console.log(`profiled ${paddedColumns.length} padded columns: ${paddedPassed} as expected`)
 
   // The essential pack runs only the classifiers of its domains. Its columns must still land where
   // they did, and no other column may be taken for one of its domains.
@@ -437,6 +481,21 @@ const MASKING = {
   AR_L2_SEXO: { inputs: ['F', 'M', 'X', 'Femenino', 'masculino', 'Varón', '1'], same: true },
   AR_L2_LOCALIDAD: { inputs: ['El Chaltén', 'Rosario', 'MAR DEL PLATA', 'Tres Lagos - Santa Cruz', 'Colonia Hocker', 'San José', 'Tilcara', 'Purmamarca'], same: true },
   AR_L2_DEPARTAMENTO: { inputs: ['Ancasti', 'La Matanza', 'Iruya - Salta', 'TORDILLO'], same: true },
+  // A province of the same INDEC region, written as the input was (capitals stay capitals); the ISO
+  // code keeps its AR- prefix. A province may draw itself, so unchanged is allowed one value at a time.
+  AR_L2_PROVINCIA: {
+    inputs: [...Object.keys(PROVINCE_REGION), 'BUENOS AIRES', 'cordoba', 'CÓRDOBA', 'Neuquen', 'CABA', 'Capital Federal', 'C.A.B.A.',
+      'Ciudad de Buenos Aires', 'Tierra del Fuego, Antártida e Islas del Atlántico Sur', 'Rio Negro', 'santa fe', 'Provincia de Buenos Aires', 'AR-B', 'AR-C', 'ar-k', 'AR-V'],
+    check: (i, o) => {
+      const iso = /^ar-/i.test(i)
+      const from = iso ? ISO_PROVINCE[i.slice(3).toUpperCase()] : provinceOf(i)
+      if (!from) return o === i
+      const to = iso ? (o.slice(0, 3) === i.slice(0, 3) ? ISO_PROVINCE[o.slice(3).toUpperCase()] : null) : provinceOf(o)
+      return Boolean(to) && PROVINCE_REGION[from] === PROVINCE_REGION[to] && to !== CABA
+        && (i !== i.toUpperCase() || o === o.toUpperCase())
+    },
+    same: true,
+  },
   AR_L2_CODIGO_GEOGRAFICO: { inputs: ['10014', '06427', '785035', '06357110'], same: true },
   AR_L2_CODIGO_POSTAL: { inputs: ['C1043AAZ', '1636', 'B1636'], check: (i, o) => ({ C1043AAZ: 'C1000AAA', 1636: '1600', B1636: 'B1600' })[i] === o },
   AR_L2_BARRIO: { inputs: ['Barrio Parque Los Andes'], same: true },
@@ -539,7 +598,7 @@ const EXPECT = {
   AR_SALUD_PROCEDIMIENTO: (i, o) => (/^\d+$/.test(i) ? /^\d{6}$/.test(o) : has('ar-procedimientos.txt', o)),
   AR_SALUD_MEDICAMENTO: (i, o) => has('ar-medicamentos.txt', o),
   AR_SALUD_VIH: (i, o) => flag(i, o) ?? o === SUPPRESSED,
-  AR_SALUD_GRUPO_SANGUINEO: (i, o) => has('ar-grupos-sanguineos.txt', o),
+  AR_SALUD_GRUPO_SANGUINEO: (i, o) => BLOOD_GROUPS.has(o),
   AR_SALUD_DISCAPACIDAD: (i, o) => flag(i, o) ?? (/\d/.test(i) ? sameShape(i, o) : has('ar-discapacidades.txt', o)),
   AR_SALUD_OCUPACIONAL: (i, o) => flag(i, o) ?? has('ar-aptitud-laboral.txt', o),
   AR_SALUD_REPRODUCTIVA: (i, o) => flag(i, o) ?? o === SUPPRESSED,
@@ -564,7 +623,25 @@ async function mask(framework, config, input, additionalAlgorithms) {
   return res.json()
 }
 
+// Algorithms that come with the engine (presets/_lib/engine-algorithms.mjs) are not in the set: they
+// run through a chain whose first step changes nothing — a chain takes two — and the runner finds
+// them in its own catalog.
+const ENGINE_IDENTITY = {
+  name: 'VERIFY_IDENTITY', className: 'algorithm.plugin.decompose.RegexDecompose',
+  config: { maskPatterns: [{ regex: '(.*)', actions: [{ type: 'PRESERVE' }] }], fallbackAction: { type: 'PRESERVE' }, requireMask: false },
+}
+const engineRun = (name) => ({ framework: 'algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain', config: { algorithmReferences: [{ name: ENGINE_IDENTITY.name }, { name }] } })
+const withIdentity = (list) => [...list, ENGINE_IDENTITY]
+const BLOOD_GROUPS = new Set(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+
 async function verifyAlgorithms() {
+  // An amount masked by the engine's CM Numeric keeps its number of digits: the same order of magnitude.
+  const digitCount = (v) => String(v).replace(/\D/g, '').length
+  for (const d of preset.domains) {
+    if (d.algorithm !== 'dlpx-core:CM Numeric' || !MASKING[d.name]) continue
+    const own = MASKING[d.name].check
+    MASKING[d.name].check = (i, o) => digitCount(i) === digitCount(o) && (!own || own(i, o))
+  }
   const byName = new Map(preset.algorithms.map((a) => [a.name, a]))
   // Each test sends only what the algorithm reaches, as the tester does.
   const reach = (name, seen = new Set()) => {
@@ -580,7 +657,7 @@ async function verifyAlgorithms() {
   }
   const missing = preset.domains.map((d) => d.name).filter((d) => !MASKING[d])
   if (missing.length) { failures++; console.log(`  ✗ domains with no masking test: ${missing.join(', ')}`) }
-  const run = (algorithmName, input) => { const algo = byName.get(algorithmName); return mask(algo.framework, resolve(algo.config), input, additionalFor(algorithmName)).catch((err) => ({ error: err.message })) }
+  const run = (algorithmName, input) => { const algo = byName.get(algorithmName) ?? engineRun(algorithmName); return mask(algo.framework, resolve(algo.config), input, withIdentity(additionalFor(algorithmName))).catch((err) => ({ error: err.message })) }
 
   const jobs = preset.domains.flatMap((d) => (MASKING[d.name]?.inputs ?? []).map((input) => ({ domain: d, input })))
   for (const a of preset.algorithms) {
@@ -613,6 +690,38 @@ async function verifyAlgorithms() {
   await Promise.all(Array.from({ length: 6 }, worker))
   console.log(lines.sort().join('\n'))
   console.log(`masked ${jobs.length} values: ${passed} as expected`)
+
+  // Padding: a CHAR column fills a value with spaces, and a code kept as text may come with zeros
+  // on the left. The padded value must mask as the bare one does — around the spaces, after the
+  // zeros — so that it still joins its unpadded twin in another table.
+  const same = (bare, out) => out.trim() === bare.trim()
+  // With zeros: the same number as the bare value masks to, as wide as the padded value. A domain
+  // that writes its numbers at full width (a CPF that lost a zero comes back with eleven digits)
+  // gives the same number either way.
+  const sameNumber = (bare, out) => out.replace(/^0+(?=\d)/, '') === bare.replace(/^0+(?=\d)/, '') && out.length >= bare.length
+  const isDomain = new Set(preset.domains.map((d) => d.name))
+  const padded = jobs.filter((j) => !j.placeholder && isDomain.has(j.domain.name) && !TYPED.has(j.domain.name)).flatMap(({ domain, input }) => [
+    { domain, input, value: `${input}   `, fits: same },
+    { domain, input, value: `  ${input}`, fits: same },
+    ...(/^\d{2,}$/.test(input) ? [{ domain, input, value: `00${input}`, fits: sameNumber }] : []),
+  ])
+  let paddedPassed = 0
+  const paddedLines = []
+  let nextPadded = 0
+  async function paddedWorker() {
+    while (nextPadded < padded.length) {
+      const { domain, input, value, fits } = padded[nextPadded++]
+      const algo = byName.get(domain.algorithm) ?? engineRun(domain.algorithm)
+      const run = (x) => mask(algo.framework, resolve(algo.config), x, withIdentity(additionalFor(domain.algorithm))).catch((err) => ({ error: err.message }))
+      const [bare, out] = await Promise.all([run(input), run(value)])
+      if (bare.output != null && out.output != null && fits(bare.output, out.output)) { paddedPassed++; continue }
+      failures++
+      paddedLines.push(`  ✗ padded ${domain.name} ${JSON.stringify(value)} → ${JSON.stringify(out.output ?? out.error)}, bare ${JSON.stringify(input)} → ${JSON.stringify(bare.output ?? bare.error)}`)
+    }
+  }
+  await Promise.all(Array.from({ length: 6 }, paddedWorker))
+  console.log(paddedLines.sort().join('\n'))
+  console.log(`masked ${padded.length} padded values: ${paddedPassed} as their bare value`)
 
   // CUITs stay CUITs: 240 distinct inputs of every type give distinct valid outputs, and some of
   // them had to change type — the remainder 1, where Check Digit alone would be wrong.
@@ -663,6 +772,21 @@ async function verifyAlgorithms() {
   }
   if (agree !== people.length) { failures++; console.log(`  ✗ DNI and CUIL agree for ${agree} of ${people.length} people`) }
   else console.log(`DNI and CUIL of the same person agree: ${agree} of ${people.length}`)
+
+  // Every spelling of a province draws the same one, so a province joins across tables however each
+  // writes it; and not every province keeps its name.
+  const spellings = Object.keys(PROVINCE_REGION).flatMap((p) => [p, fold(p), p.toUpperCase(), fold(p).toLowerCase()])
+    .concat(Object.keys(PROVINCE_ALIAS), Object.keys(PROVINCE_ALIAS).map((a) => a.toUpperCase()))
+  const drawn = new Map()
+  for (const s of spellings) {
+    const { output } = await run('AR_PROVINCIA', s)
+    const key = provinceOf(s)
+    drawn.set(key, [...(drawn.get(key) ?? []), provinceOf(output ?? '')])
+  }
+  const split = [...drawn].filter(([, outs]) => new Set(outs).size !== 1 || !outs[0])
+  const moved = [...drawn].filter(([from, outs]) => outs[0] !== from).length
+  if (split.length || moved < drawn.size / 2) { failures++; console.log(`  ✗ provinces: ${split.map(([p]) => p).join(', ') || 'none'} drew more than one province; ${moved} of ${drawn.size} moved`) }
+  else console.log(`provinces: ${spellings.length} spellings of ${drawn.size} jurisdictions, one draw each; ${moved} moved`)
 }
 
 if (only !== 'algorithms') { verifyClassifiers(); verifyGeneralization() }

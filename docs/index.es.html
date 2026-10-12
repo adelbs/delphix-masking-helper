@@ -113,7 +113,7 @@
       <p class="sec-lede" style="margin-bottom:0">Enmascarar empieza por saber qué columnas guardan datos personales. La herramienta mantiene los dominios, classifiers y profile sets que ejecuta un job de profiling, y prueba un classifier con una columna que describes — su nombre, su tipo, algunos valores de muestra —, mostrando con qué confianza decidiría el profiler y qué dominio asignaría. Nada se ejecuta en la instancia.</p>
     </div>
     <div class="card">
-      <h3>Listo para diez leyes de protección de datos</h3>
+      <h3>Listo para catorce leyes de protección de datos</h3>
       <p>Carga uno y todo lo que necesita se crea de una vez: el profile set, sus classifiers, los dominios que encuentran, los algoritmos que los enmascaran y los archivos que estos leen — el paquete esencial con lo mínimo para la ley, o el extendido con todo. Los identificadores nacionales conservan un dígito verificador válido tras el enmascaramiento. Cada set viene con un PDF que documenta cada elemento, y quitarlo elimina lo que trajo.</p>
       <ul class="presets">
         <li><span class="c">Chile</span><span class="law">Ley 21.719</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/chile-ley-21719/doc.es.pdf">Documentación (PDF)</a></li>
@@ -126,6 +126,10 @@
         <li><span class="c">El Salvador</span><span class="law">Decreto 144 (2024)</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/elsalvador-ley-144/doc.es.pdf">Documentación (PDF)</a></li>
         <li><span class="c">Perú</span><span class="law">Ley 29733</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/peru-ley-29733/doc.es.pdf">Documentación (PDF)</a></li>
         <li><span class="c">Ecuador</span><span class="law">LOPDP (2021)</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/ecuador-lopdp/doc.es.pdf">Documentación (PDF)</a></li>
+        <li><span class="c">Uruguay</span><span class="law">Ley 18.331</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/uruguay-ley-18331/doc.es.pdf">Documentación (PDF)</a></li>
+        <li><span class="c">Costa Rica</span><span class="law">Ley 8968</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/costarica-ley-8968/doc.es.pdf">Documentación (PDF)</a></li>
+        <li><span class="c">España</span><span class="law">RGPD + LOPDGDD</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/spain-lopdgdd/doc.es.pdf">Documentación (PDF)</a></li>
+        <li><span class="c">Jamaica</span><span class="law">Data Protection Act, 2020</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/jamaica-dpa-2020/doc.es.pdf">Documentación (PDF)</a></li>
       </ul>
     </div>
   </div>
@@ -136,7 +140,7 @@
     <div>
       <h2 class="sec">Un asistente que revisa su propio trabajo</h2>
       <p class="sec-lede" style="margin-bottom:0">Describe qué necesitas enmascarar y el asistente elige el framework y lo configura. Antes de guardar nada, ejecuta el algoritmo de verdad con esa configuración — si no funciona, no se guarda nada y se te explica por qué. Una configuración que parece plausible pero falla nunca llega hasta ti.</p>
-      <p class="note-line">Construir requiere un modelo alojado — Claude, Gemini o GitHub Models. El modelo local por defecto lo mantiene todo en tu máquina y aconseja: explica y recomienda, pero no guarda algoritmos.</p>
+      <p class="note-line">Construir requiere un modelo alojado — Claude, Gemini, OpenAI o GitHub Models. El modelo local por defecto lo mantiene todo en tu máquina y aconseja: explica y recomienda, pero no guarda algoritmos.</p>
     </div>
     <div class="card">
       <h3>La referencia de los frameworks</h3>

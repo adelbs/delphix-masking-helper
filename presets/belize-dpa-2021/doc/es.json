@@ -162,7 +162,7 @@
     "BZ_L1_PAYMENT_CARD": {
       "title": "Tarjeta de pago",
       "what": "Números de tarjetas de crédito, débito y prepago.",
-      "masking": "Se reemplaza por otro número de tarjeta que sigue pasando la verificación de Luhn. Los valores sin forma de tarjeta pasan sin cambios en lugar de hacer fallar la fila."
+      "masking": "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
     },
     "BZ_L1_IP_ADDRESS": {
       "title": "Dirección IP",
@@ -397,22 +397,22 @@
     "BZ_FIN_DEBT": {
       "title": "Monto de deuda",
       "what": "Saldos de préstamos, hipotecas y tarjetas, montos en mora, límites de crédito, cuotas.",
-      "masking": "Mapeado a un monto entre BZ$200 y BZ$1.000.000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "BZ_FIN_INCOME": {
       "title": "Salario e ingresos",
       "what": "Salario y jornales, ingresos asegurables, ingreso del hogar.",
-      "masking": "Mapeado a un monto entre BZ$700 y BZ$40.000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "BZ_FIN_ASSETS": {
       "title": "Patrimonio",
       "what": "Valor de inmuebles y terrenos, saldos de ahorro y de cuentas, depósitos a plazo, inversiones y aportaciones en cooperativas, patrimonio neto.",
-      "masking": "Mapeado a un monto entre BZ$20.000 y BZ$5.000.000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "BZ_FIN_PENSION": {
       "title": "Pensión",
       "what": "Montos de pensión de retiro, invalidez y sobrevivencia, la pensión no contributiva, gratificaciones y saldos de fondos de previsión.",
-      "masking": "Mapeado a un monto entre BZ$100 y BZ$10.000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "BZ_FIN_SSB_BENEFIT": {
       "title": "Prestación de seguridad social",

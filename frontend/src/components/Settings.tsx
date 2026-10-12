@@ -17,30 +17,31 @@ interface Props {
   filesDir: string
   onSave: (filesDir: string) => void
   onToggleSidebar: () => void
+  initialTab?: 'profileSets'
 }
 
 type Tab = 'general' | 'ai' | 'delphix' | 'profileSets' | 'files'
 
-export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
+export function Settings({ filesDir, onSave, onToggleSidebar, initialTab }: Props) {
   const { t } = useT()
-  const [tab, setTab] = useState<Tab>('general')
+  const [tab, setTab] = useState<Tab>(initialTab ?? 'general')
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white shrink-0">
         <button onClick={onToggleSidebar} className="text-slate-400 hover:text-slate-600 transition-colors md:hidden">
           <PanelLeftOpen size={18} />
         </button>
         <h2 className="text-sm font-semibold text-slate-800">{t('settings.title')}</h2>
       </div>
 
-      <div className="flex gap-1 px-5 pt-4 flex-shrink-0 border-b border-slate-200 bg-white overflow-x-auto">
+      <div className="flex gap-1 px-5 pt-4 shrink-0 border-b border-slate-200 bg-white overflow-x-auto">
         {(['general', 'ai', 'delphix', 'profileSets', 'files'] as Tab[]).map(id => (
           <button
             key={id}
             onClick={() => setTab(id)}
             className={cn(
-              'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap flex-shrink-0',
+              'px-4 py-2 text-sm font-medium border-b-2 -mb-px transition-colors whitespace-nowrap shrink-0',
               tab === id
                 ? 'border-blue-600 text-blue-600'
                 : 'border-transparent text-slate-500 hover:text-slate-700'
@@ -72,7 +73,7 @@ export function Settings({ filesDir, onSave, onToggleSidebar }: Props) {
   )
 }
 
-function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar'>) {
+function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar' | 'initialTab'>) {
   const { t } = useT()
   const [localDir, setLocalDir] = useState(filesDir)
   const [saving, setSaving] = useState(false)
@@ -92,7 +93,7 @@ function GeneralTab({ filesDir, onSave }: Omit<Props, 'onToggleSidebar'>) {
 
   return (
     <div className="max-w-lg space-y-5">
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {t('settings.filesDir')}
@@ -134,19 +135,19 @@ function AboutCard() {
   if (!version?.display) return null
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-3">
       <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
         {t('settings.about')}
       </h3>
 
       <dl className="space-y-1.5 text-sm">
         <div className="flex items-baseline gap-3">
-          <dt className="text-slate-500 w-20 flex-shrink-0">{t('settings.version')}</dt>
+          <dt className="text-slate-500 w-20 shrink-0">{t('settings.version')}</dt>
           <dd className="font-mono text-slate-800 break-all">{version.display}</dd>
         </div>
         {version.commit && (
           <div className="flex items-baseline gap-3">
-            <dt className="text-slate-500 w-20 flex-shrink-0">{t('settings.commit')}</dt>
+            <dt className="text-slate-500 w-20 shrink-0">{t('settings.commit')}</dt>
             <dd className="font-mono text-slate-800">{version.commit}</dd>
           </div>
         )}
@@ -172,6 +173,7 @@ const PROVIDERS = [
   { id: 'ollama', label: 'Ollama (local)', needsKey: false, hint: 'settings.ai.ollamaHint' },
   { id: 'anthropic', label: 'Claude / Anthropic', needsKey: true, hint: null },
   { id: 'gemini', label: 'Google Gemini', needsKey: true, hint: null },
+  { id: 'openai', label: 'OpenAI', needsKey: true, hint: 'settings.ai.openaiHint' },
   { id: 'copilot', label: 'GitHub Models (Copilot)', needsKey: true, hint: 'settings.ai.copilotHint' },
 ] as const
 
@@ -222,7 +224,7 @@ function AiTab() {
 
   return (
     <div className="max-w-lg space-y-5">
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {t('settings.ai.provider')}
@@ -332,20 +334,20 @@ function AiTab() {
         status?.ok ? 'border-green-200 bg-green-50' : 'border-amber-200 bg-amber-50'
       )}>
         {status?.ok
-          ? <CheckCircle2 size={16} className="text-green-600 flex-shrink-0 mt-0.5" />
-          : <AlertTriangle size={16} className="text-amber-600 flex-shrink-0 mt-0.5" />}
+          ? <CheckCircle2 size={16} className="text-green-600 shrink-0 mt-0.5" />
+          : <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />}
         <div className="flex-1 min-w-0">
           <p className={cn('font-medium', status?.ok ? 'text-green-800' : 'text-amber-800')}>
             {status?.ok ? t('settings.ai.statusOk') : t('settings.ai.statusDown')}
           </p>
           {status && !status.ok && status.error && (
-            <p className="text-xs text-amber-700 mt-0.5 break-words">{status.error}</p>
+            <p className="text-xs text-amber-700 mt-0.5 wrap-break-word">{status.error}</p>
           )}
         </div>
         <button
           onClick={check}
           disabled={checking}
-          className="flex items-center gap-1 flex-shrink-0 text-xs font-medium text-slate-600 hover:text-slate-800 transition-colors"
+          className="flex items-center gap-1 shrink-0 text-xs font-medium text-slate-600 hover:text-slate-800 transition-colors"
         >
           <RefreshCw size={12} className={cn(checking && 'animate-spin')} /> {t('settings.ai.recheck')}
         </button>
@@ -357,6 +359,16 @@ function AiTab() {
 /** SQLite's datetime('now') is UTC without a zone marker. */
 const formatLoadedAt = (value: string, locale: Locale) =>
   new Date(`${value.replace(' ', 'T')}Z`).toLocaleString(locale, { dateStyle: 'short', timeStyle: 'short' })
+
+/**
+ * A preset's version date is a plain day: read it as UTC so it is not shown as the day before. A
+ * value that does not parse is shown as it came, rather than as "Invalid Date".
+ */
+const formatVersionDate = (value: string | null, locale: Locale) => {
+  if (!value) return '—'
+  const day = new Date(`${value}T00:00:00Z`)
+  return Number.isFinite(day.getTime()) ? day.toLocaleDateString(locale, { dateStyle: 'medium', timeZone: 'UTC' }) : value
+}
 
 /**
  * Profile sets shipped with the tool.
@@ -439,7 +451,7 @@ function PresetsTab() {
     <div className="max-w-2xl space-y-4">
       <p className="text-sm text-slate-500">{t('presets.intro')}</p>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         {presets === null ? (
           <div className="flex items-center gap-2 p-4 text-sm text-slate-400">
             <div className="w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-500 animate-spin" />
@@ -457,13 +469,14 @@ function PresetsTab() {
               const working = busy?.id === preset.id
               return (
                 <li key={preset.id} className="flex items-start gap-3 px-4 py-3.5">
-                  <Layers size={16} className="hidden sm:block text-slate-400 mt-0.5 flex-shrink-0" />
+                  <Layers size={16} className="hidden sm:block text-slate-400 mt-0.5 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-slate-800">{text(preset.name)}</p>
                     {summary && <p className="text-xs text-slate-500 mt-0.5">{summary}</p>}
                     <p className="text-xs text-slate-400 mt-1">
                       {t('presets.counts', {
                         version: preset.version ?? '—',
+                        date: formatVersionDate(preset.versionDate, locale),
                         classifiers: preset.packs.extended.classifiers,
                         domains: preset.packs.extended.domains,
                         algorithms: preset.packs.extended.algorithms,
@@ -479,7 +492,7 @@ function PresetsTab() {
                       </p>
                     )}
                     {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
-                      <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version })}</p>
+                      <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version, date: formatVersionDate(preset.versionDate, locale) })}</p>
                     )}
                     {blocked && (
                       <div className="mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
@@ -752,7 +765,7 @@ function FilesTab() {
       </div>
 
       {isCreating && (
-        <div className="bg-white rounded-xl border border-blue-200 shadow-sm p-4 space-y-3">
+        <div className="bg-white rounded-xl border border-blue-200 shadow-xs p-4 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-slate-700">{t('files.newFileTitle')}</span>
             <button onClick={() => setIsCreating(false)} className="text-slate-400 hover:text-slate-600"><X size={16} /></button>
@@ -782,7 +795,7 @@ function FilesTab() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
         {loading ? (
           <div className="flex items-center gap-2 p-4 text-sm text-slate-400">
             <div className="w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-500 animate-spin" />
@@ -798,10 +811,10 @@ function FilesTab() {
                 <li key={f.name} className={cn('flex items-center justify-between px-4 py-2.5 hover:bg-slate-50 transition-colors', editingFile?.name === f.name && 'bg-blue-50')}>
                   <span className="font-mono text-xs text-slate-700">{f.name}</span>
                   <div className="flex gap-1">
-                    <button onClick={() => startEdit(f)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors" title={t('files.editTitle')}>
+                    <button onClick={() => startEdit(f)} className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-sm transition-colors" title={t('files.editTitle')}>
                       <Pencil size={13} />
                     </button>
-                    <button onClick={() => deleteFile(f.name)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors" title={t('files.deleteTitle')}>
+                    <button onClick={() => deleteFile(f.name)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-sm transition-colors" title={t('files.deleteTitle')}>
                       <Trash2 size={13} />
                     </button>
                   </div>
@@ -812,7 +825,7 @@ function FilesTab() {
       </div>
 
       {editingFile && (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-4 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-sm font-semibold text-slate-700 font-mono">{editingFile.name}</span>
             <button onClick={() => setEditingFile(null)} className="text-slate-400 hover:text-slate-600"><X size={16} /></button>
@@ -955,10 +968,10 @@ function DelphixTab() {
 
   return (
     <div className="max-w-lg space-y-5">
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+      <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
         {locked && (
           <p className="flex gap-2 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg p-3">
-            <Lock size={14} className="flex-shrink-0 mt-0.5 text-slate-400" />
+            <Lock size={14} className="shrink-0 mt-0.5 text-slate-400" />
             {t('settings.dlpxLocked')}
           </p>
         )}
@@ -1052,4 +1065,4 @@ function DelphixTab() {
   )
 }
 
-const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
+const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'

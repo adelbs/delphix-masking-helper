@@ -1,5 +1,6 @@
 {
-  "version": 1,
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Ecuador — Ley Orgánica de Protección de Datos Personales",
     "pt-BR": "Equador — Ley Orgánica de Protección de Datos Personales",
@@ -11,8 +12,8 @@
     "es": "Descubre y enmascara datos personales ecuatorianos conforme a la Ley Orgánica de Protección de Datos Personales (Registro Oficial 459 de 2021) y su reglamento de 2023: identificadores directos (cédula y RUC con dígito verificador válido, documentos de extranjeros, nombres, contacto, dirección, cuentas, placas), cuasi-identificadores (fecha de nacimiento, parroquia y código DPA, código postal), los datos sensibles del artículo 4 — etnia, identidad cultural, identidad de género, religión, ideología, filiación política, condición migratoria, orientación sexual, salud, datos biométricos y genéticos —, el pasado judicial que el mismo artículo hace sensible, datos de salud, datos crediticios y procesos penales."
   },
   "profileSet": {
-    "name": "EC - LOPDP - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 4), datos de salud, datos crediticios y pasado judicial, conforme a la Ley Orgánica de Protección de Datos Personales del Ecuador y su reglamento.",
+    "name": "EC - LOPDP - v2",
+    "description": "LOPDP - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "EC_L1_CEDULA - Path",
@@ -61,6 +62,7 @@
       "EC_L1_CONTRATO - Path",
       "EC_L1_USUARIO - Path",
       "EC_L1_CREDENCIAL - Path",
+      "EC_L1_CREDENCIAL - Regex",
       "EC_L1_GEOLOCALIZACION - Path",
       "EC_L1_GEOLOCALIZACION - Regex",
       "EC_L1_TEXTO_LIBRE - Path",
@@ -77,65 +79,66 @@
       "EC_L2_SEXO - Path",
       "EC_L2_SEXO - List",
       "EC_L2_PARROQUIA - Path",
-      "EC_L2_PARROQUIA - List",
+      "EC_L2_PARROQUIA - Values",
       "EC_L2_DPA - Path",
       "EC_L2_DPA - Regex",
       "EC_L2_CIUDADELA - Path",
       "EC_L2_CODIGO_POSTAL - Path",
       "EC_L2_CODIGO_POSTAL - Type",
       "EC_L2_ESTADO_CIVIL - Path",
-      "EC_L2_ESTADO_CIVIL - List",
+      "EC_L2_ESTADO_CIVIL - Values",
       "EC_L2_OCUPACION - Path",
       "EC_L2_EMPLEADOR - Path",
       "EC_L2_NIVEL_INSTRUCCION - Path",
-      "EC_L2_NIVEL_INSTRUCCION - List",
+      "EC_L2_NIVEL_INSTRUCCION - Values",
       "EC_L2_INSTITUCION_EDUCATIVA - Path",
       "EC_L2_PERSONAS_A_CARGO - Path",
       "EC_L2_PERSONAS_A_CARGO - Type",
       "EC_L3_ETNIA - Path",
-      "EC_L3_ETNIA - List",
+      "EC_L3_ETNIA - Values",
       "EC_L3_IDENTIDAD_CULTURAL - Path",
-      "EC_L3_IDENTIDAD_CULTURAL - List",
+      "EC_L3_IDENTIDAD_CULTURAL - Values",
       "EC_L3_LENGUA - Path",
-      "EC_L3_LENGUA - List",
+      "EC_L3_LENGUA - Values",
       "EC_L3_CONDICION_MIGRATORIA - Path",
-      "EC_L3_CONDICION_MIGRATORIA - List",
+      "EC_L3_CONDICION_MIGRATORIA - Values",
       "EC_L3_NACIONALIDAD - Path",
       "EC_L3_NACIONALIDAD - List",
       "EC_L3_RELIGION - Path",
-      "EC_L3_RELIGION - List",
+      "EC_L3_RELIGION - Values",
       "EC_L3_IDEOLOGIA - Path",
-      "EC_L3_IDEOLOGIA - List",
+      "EC_L3_IDEOLOGIA - Values",
       "EC_L3_FILIACION_POLITICA - Path",
-      "EC_L3_FILIACION_POLITICA - List",
+      "EC_L3_FILIACION_POLITICA - Values",
       "EC_L3_AFILIACION_SINDICAL - Path",
-      "EC_L3_AFILIACION_SINDICAL - List",
+      "EC_L3_AFILIACION_SINDICAL - Values",
       "EC_L3_BIOMETRICO - Path",
       "EC_L3_BIOMETRICO - Type",
       "EC_L3_GENETICO - Path",
+      "EC_L3_GENETICO - Regex",
       "EC_L3_ORIENTACION_SEXUAL - Path",
-      "EC_L3_ORIENTACION_SEXUAL - List",
+      "EC_L3_ORIENTACION_SEXUAL - Values",
       "EC_L3_IDENTIDAD_GENERO - Path",
-      "EC_L3_IDENTIDAD_GENERO - List",
+      "EC_L3_IDENTIDAD_GENERO - Values",
       "EC_L3_VICTIMA - Path",
       "EC_SALUD_IDENTIFICADOR - Path",
       "EC_SALUD_COBERTURA - Path",
-      "EC_SALUD_COBERTURA - List",
+      "EC_SALUD_COBERTURA - Values",
       "EC_SALUD_DIAGNOSTICO - Path",
       "EC_SALUD_DIAGNOSTICO - Regex",
       "EC_SALUD_PROCEDIMIENTO - Path",
       "EC_SALUD_MEDICAMENTO - Path",
-      "EC_SALUD_MEDICAMENTO - List",
+      "EC_SALUD_MEDICAMENTO - Values",
       "EC_SALUD_TEXTO_CLINICO - Path",
       "EC_SALUD_TEXTO_CLINICO - Type",
       "EC_SALUD_RESULTADO_EXAMEN - Path",
       "EC_SALUD_VIH - Path",
       "EC_SALUD_GRUPO_SANGUINEO - Path",
-      "EC_SALUD_GRUPO_SANGUINEO - List",
+      "EC_SALUD_GRUPO_SANGUINEO - Values",
       "EC_SALUD_DISCAPACIDAD - Path",
-      "EC_SALUD_DISCAPACIDAD - List",
+      "EC_SALUD_DISCAPACIDAD - Values",
       "EC_SALUD_OCUPACIONAL - Path",
-      "EC_SALUD_OCUPACIONAL - List",
+      "EC_SALUD_OCUPACIONAL - Values",
       "EC_SALUD_REPRODUCTIVA - Path",
       "EC_SALUD_MENTAL - Path",
       "EC_FIN_HISTORIAL_CREDITICIO - Path",
@@ -148,11 +151,11 @@
       "EC_FIN_PENSION - Path",
       "EC_FIN_PENSION - Type",
       "EC_FIN_PROGRAMA_SOCIAL - Path",
-      "EC_FIN_PROGRAMA_SOCIAL - List",
+      "EC_FIN_PROGRAMA_SOCIAL - Values",
       "EC_FIN_REGISTRO_SOCIAL - Path",
-      "EC_FIN_REGISTRO_SOCIAL - List",
+      "EC_FIN_REGISTRO_SOCIAL - Values",
       "EC_FIN_VIVIENDA - Path",
-      "EC_FIN_VIVIENDA - List",
+      "EC_FIN_VIVIENDA - Values",
       "EC_PENAL_ANTECEDENTES - Path",
       "EC_PENAL_EXPEDIENTE - Path",
       "EC_PENAL_EXPEDIENTE - Regex"
@@ -160,7 +163,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la LOPDP: cédula, RUC, documentos de extranjeros, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial de la LOPDP",
       "domains": [
         "EC_L1_CEDULA",
         "EC_L1_RUC",
@@ -182,7 +185,7 @@
       "name": "EC_L1_CEDULA - Path",
       "framework": "PATH",
       "domain": "EC_L1_CEDULA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -234,20 +237,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1\\d|2[0-4]|30)[0-5]\\d{7}",
-            "matchStrength": 0.8,
-            "checksumType": "NONE",
+            "regex": "0*(?:(0[1-9]|1\\d|2[0-4]|30)[0-5]\\d{7})",
+            "matchStrength": 0.9,
+            "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{10}",
+            "regex": "0*(?:\\d{10})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -257,7 +260,7 @@
       "name": "EC_L1_RUC - Path",
       "framework": "PATH",
       "domain": "EC_L1_RUC",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -280,20 +283,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1\\d|2[0-4]|30)[0-9]\\d{7}00\\d",
+            "regex": "0*(?:(0[1-9]|1\\d|2[0-4]|30)[0-9]\\d{7}00\\d)",
             "matchStrength": 0.85,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{13}",
+            "regex": "0*(?:\\d{13})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -303,7 +306,7 @@
       "name": "EC_L1_DOCUMENTO_EXTRANJERO - Path",
       "framework": "PATH",
       "domain": "EC_L1_DOCUMENTO_EXTRANJERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -322,7 +325,7 @@
       "name": "EC_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "EC_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -350,7 +353,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -360,7 +363,7 @@
       "name": "EC_L1_ACTA - Path",
       "framework": "PATH",
       "domain": "EC_L1_ACTA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -379,7 +382,7 @@
       "name": "EC_L1_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "EC_L1_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -398,7 +401,7 @@
       "name": "EC_L1_CODIGO_ESTUDIANTE - Path",
       "framework": "PATH",
       "domain": "EC_L1_CODIGO_ESTUDIANTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -417,7 +420,7 @@
       "name": "EC_L1_REGISTRO_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "EC_L1_REGISTRO_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -436,7 +439,7 @@
       "name": "EC_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "EC_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -480,7 +483,7 @@
       "name": "EC_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "EC_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -516,7 +519,7 @@
       "name": "EC_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "EC_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -572,7 +575,7 @@
       "name": "EC_L1_RAZON_SOCIAL - Path",
       "framework": "PATH",
       "domain": "EC_L1_RAZON_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -591,7 +594,7 @@
       "name": "EC_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "EC_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -631,12 +634,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -646,7 +649,7 @@
       "name": "EC_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "EC_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -669,12 +672,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?593[\\s\\-]?)?0?9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3}",
+            "regex": "0*(?:(\\+?593[\\s\\-]?)?0?9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "\\(?0?[2-7]\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}",
@@ -682,7 +685,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -692,7 +695,7 @@
       "name": "EC_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "EC_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -737,7 +740,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(mz|manzana)\\.?\\s*[a-z0-9]{1,3}\\s*(villa|solar|lote|lt)\\.?\\s*\\d{1,3}.*",
@@ -745,7 +748,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(cdla|ciudadela|urb|urbanizaci[oó]n|barrio|conjunto|lotizaci[oó]n|cooperativa)\\.?\\s+[a-záéíóúñ0-9.' ]{2,40}.*",
@@ -753,7 +756,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)k(m|il[oó]metro)\\.?\\s*\\d{1,3}\\s+(v[ií]a|carretera|autopista).*",
@@ -761,7 +764,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -771,7 +774,7 @@
       "name": "EC_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "EC_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -790,7 +793,7 @@
       "name": "EC_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "EC_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -809,7 +812,7 @@
       "name": "EC_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "EC_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -832,12 +835,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -847,7 +850,7 @@
       "name": "EC_L1_BILLETERA - Path",
       "framework": "PATH",
       "domain": "EC_L1_BILLETERA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -875,7 +878,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -885,7 +888,7 @@
       "name": "EC_L1_IP - Path",
       "framework": "PATH",
       "domain": "EC_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -908,20 +911,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -931,7 +934,7 @@
       "name": "EC_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "EC_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -954,20 +957,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -977,7 +980,7 @@
       "name": "EC_L1_COOKIE - Path",
       "framework": "PATH",
       "domain": "EC_L1_COOKIE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -996,7 +999,7 @@
       "name": "EC_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "EC_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1024,7 +1027,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{2}[\\s\\-]?\\d{3,4}",
@@ -1032,7 +1035,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1042,7 +1045,7 @@
       "name": "EC_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "EC_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1070,7 +1073,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1080,7 +1083,7 @@
       "name": "EC_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "EC_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1099,7 +1102,7 @@
       "name": "EC_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "EC_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1118,7 +1121,7 @@
       "name": "EC_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "EC_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1137,7 +1140,7 @@
       "name": "EC_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "EC_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1153,10 +1156,61 @@
       }
     },
     {
+      "name": "EC_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "EC_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "EC_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "EC_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1192,7 +1246,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(7[5-9]|8[01])\\.\\d{4,}",
@@ -1200,7 +1254,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-?[0-5]\\.\\d{4,}",
@@ -1208,7 +1262,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1218,7 +1272,7 @@
       "name": "EC_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "EC_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1258,12 +1312,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1\\d|2[0-4]|30)[0-5]\\d{7}",
+            "regex": "0*(?:(0[1-9]|1\\d|2[0-4]|30)[0-5]\\d{7})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1271,15 +1325,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "0?9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3}",
+            "regex": "0*(?:0?9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1289,7 +1343,7 @@
       "name": "EC_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "EC_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1332,7 +1386,7 @@
       "name": "EC_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "EC_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1372,7 +1426,7 @@
       "name": "EC_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "EC_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1412,7 +1466,7 @@
       "name": "EC_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "EC_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1455,7 +1509,7 @@
       "name": "EC_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "EC_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1479,10 +1533,14 @@
         "valueLists": [
           {
             "file": "preset-file://ec-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://ec-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1491,7 +1549,7 @@
       "name": "EC_L2_PARROQUIA - Path",
       "framework": "PATH",
       "domain": "EC_L2_PARROQUIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1507,27 +1565,30 @@
       }
     },
     {
-      "name": "EC_L2_PARROQUIA - List",
-      "framework": "LIST",
+      "name": "EC_L2_PARROQUIA - Values",
+      "framework": "REGEX",
       "domain": "EC_L2_PARROQUIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-parroquias.txt",
-            "matchStrength": 0.8
+            "note": "980 — Guaranda · Facundo Vela · Julio E. Moreno Catanahuan Grande · San Lorenzo · San Simón Yacoto · Santa Fe Santa Fe · …",
+            "regex": "(?iu)(?:(?:1(?:0 de agosto|1 de noviembre \\(ilinchisi\\)|2 de diciembre \\(cab\\. en achiotes\\)|6 de agosto)|2(?:4 de mayo|7 de abril \\(cab\\. en la naranja\\)|8 de mayo \\(san jos(?:e de yacuambi\\)|é de yacuambi\\)))|5 de junio \\(cab\\. en uimbi\\)|6 de julio de cuellaje \\(cab\\. en cuellaje\\)|a(?:b(?:a(?:nin|ñin)|d(?:on calderon \\((?:la union\\)|san francisco\\))|ón calderón \\((?:la unión\\)|san francisco\\))))|chupallas|gua(?:rico|s negras)|huano|l(?:a(?:mor|ngasi|ques \\(alaquez\\)|us(?:i|í))|ejandro labaka|fredo baquerizo moreno(?: \\(jujan\\))?|hajuela \\(bajo grande\\)|luriquin|oa(?:g|si)|shi \\(cab en 9 de octubre\\)|to tambo \\(cab en guadual\\))|m(?:a(?:luza|rillos|zonas \\(rosario de cuyes\\))|b(?:at(?:illo|o)|uqui)|erica|érica)|n(?:c(?:hayacu|on(?: \\(pichangal\\) \\(cab\\. en palma real\\)|cito)|ón \\(pichangal\\) \\(cab\\. en palma real\\))|g(?:amarca|el pedro giler \\(la estancilla\\)|ochagua)|tonio (?:ante|jos(?:e holguin \\(santa lucia\\)|é holguin \\(santa lucía\\))|sotomayor \\(cab\\. en playas de vinces\\)))|puela|r(?:a(?:juno|picos)|c(?:apamba|hidona)|enillas|q\\. sixto dur(?:an ballen|án ballen))|s(?:cazubi|unci(?:on(?: \\(asancoto\\))?|ón(?: \\(asancoto\\))?))|t(?:a(?:cames|hualpa(?: \\((?:c(?:ab\\. en camarones\\)|hisalata\\))|habaspamba\\)))?)|untaqui)|ugusto n\\. mart(?:inez \\(mundugleo\\)|ínez \\(mundugleo\\))|vila \\(cab\\. en huiruno\\)|ya(?:cucho|pamba)|zogues)|b(?:a(?:ba(?:hoyo)?|chillero|eza|h(?:ia de caraquez|ía de caraquez)|l(?:ao|sa(?:pamba|s)|zar)|nos(?: de agua santa)?|querizo moreno|r(?:bones \\(sucre\\)|raganete)|ños(?: de agua santa)?)|e(?:l(?:isario quevedo \\(guanailin\\)|la(?:maria|vista))|n(?:itez \\(pachanlica\\)|ítez \\(pachanlica\\))|rmejos)|i(?:bli(?:an|án)|l(?:bao \\(cab\\. en quilluyacu\\)|ovan))|o(?:laspamba|mboiza|rbon|yac(?:a|á))|u(?:ena(?: fe|vista)|lan \\(jos(?:e victor izquierdo\\)|é víctor izquierdo\\))))|c(?:a(?:cha \\(cab\\. en machangara\\)|huasqui|l(?:acali|ceta|der(?:on \\(carapungo\\)|ón \\(carapungo\\))|pi|uma|vas)|m(?:arones \\(cab\\. en san vicente\\)|ilo ponce enr(?:iquez|íquez)|pozano \\(la palma de paj(?:an\\)|án\\)))|n(?:aquemada|chagua|elos|g(?:ahua|onama)|i|oa|uto)|p(?:i(?:ro \\(cab\\. en la capilla de capiro\\)|t(?:an augusto rivadeneyra|án augusto rivadeneyra))|zol)|r(?:acol|cabon|iamanga|los julio arosemena tola|ondelet)|s(?:a(?:cay|nga)|c(?:ales|ol))|ta(?:cocha|mayo(?: \\(la toma\\))?|rama)|yambe|zaderos|ñ(?:aquemada|i))|e(?:badas|lica|ntinela del c(?:ondor|óndor))|h(?:a(?:c(?:arita|ras)|guarpamba|mbo|n(?:duy|gaimina \\(la libertad\\)|t(?:aco|ilin))|quinal|rapoto|ucha|vezpamba)|eca \\((?:chilpa\\)|jidcay\\))|i(?:bunga|ca(?:n(?: \\(guillermo ortega\\)|a)|ña)|gu(?:aza|inda)|lla(?:nes)?|nc(?:a|hipe)|qui(?:cha \\(cab\\. en chiquicha grande\\)|ntad)|rijos|t(?:an de navarrete|o))|o(?:bo|n(?:e|ta(?:duro|marca|punta))|r(?:deleg|ocopte))|u(?:g(?:a|chillan)|m(?:blin|unde)|nchi|pianza|quiribamba|ra \\(chancama\\) \\(cab\\. en el yerbero\\)))|iano|o(?:chapa(?:mba|ta)|ji(?:mies|tambo)|l(?:aisaca|imes|on(?: eloy del maria|che)|ta|umbe|ón eloy del maría)|mpud|n(?:cepci(?:on|ón)|o(?:coto|naco)|stantino fern(?:andez \\(cab\\. en cullitahua\\)|ández \\(cab\\. en cullitahua\\))|vento)|pal|r(?:doncillo|onel marcelino maridue(?:na \\(san carlos\\)|ña \\(san carlos\\)))|sanga|t(?:a(?:cachi|lo)|ogchoa|undo))|r(?:ist(?:obal colon|óbal colón)|nel\\. (?:carlos concha torres \\(cab\\. en huele\\)|lorenzo de garaicoa \\(pedregal\\)|marcelino maridue(?:na|ña))|u(?:cita|zpamba \\(cab en carlos bustamante\\)))|u(?:b(?:e|ijies)|ch(?:aentza|il \\(cutchil\\))|m(?:and(?:a(?: \\(cab en colonia agricola sevilla del oro\\))?|á(?: \\(cab en colonia agricola sevilla del oro\\))?)|b(?:a(?:ratza|ya)|e))|nchibamba|r(?:aray|tincapa)|subamba|tuglahua|y(?:abeno|uja)))|d(?:a(?:niel c(?:ordova toral \\(el oriente\\)|órdova toral \\(el oriente\\))|ule|yuma)|eleg|iez de agosto|octor miguel egas cabezas \\(peguche\\)|u(?:cur|g dug|reno)|éleg)|e(?:cheand(?:ia|ía)|l(?: (?:a(?:iro|ltar|n(?:egado \\(cab\\. en eloy alfaro\\)|gel)|renal)|c(?:a(?:bo|rme(?:lo \\(el pun\\)|n(?: de pijili)?))|h(?:a(?:co|upi)|ical|orro)|isne|oraz(?:on|ón))|dorado(?: de cascales)?|e(?:d(?:en|én)|no|sfuerzo)|g(?:oaltal|u(?:abo|isme))|i(?:deal|ngenio)|l(?:imo \\(mariana de jes(?:us\\)|ús\\))|ucero)|p(?:a(?:n(?:gui)?|ra(?:iso(?: de celen)?|íso(?: de celen)?))|iedrero|lay(?:on de san francisco|ón de san francisco)|orvenir del carmen|rogreso(?: \\(cab\\. en zhota\\))?)|quinche|r(?:e(?:tiro|ventador)|osario(?: \\(rumichaca\\))?)|salitre \\(las ramas\\)|t(?:a(?:bl(?:on|ón)|mbo)|riunfo)|ángel)|oy alfaro(?: \\(dur(?:an\\)|án\\)))?)|m(?:ilio mar(?:ia teran \\(rumipamba\\)|ía terán \\(rumipamba\\))|palme)|nokanqui|sp(?:ejo|indola|índola)|ugenio espejo \\(calpaqui\\))|f(?:a(?:cundo vela|tima)|e(?:bres cordero \\(las juntas\\)|rn(?:andez salvador|ández salvador))|lavio alfaro|undochamba|átima)|g(?:a(?:lera|r(?:c(?:ia moreno(?: \\((?:chumaqui\\)|llurimagua\\)))?|ía moreno(?: \\((?:chumaqui\\)|llurimagua\\)))?)|zareal))|eneral (?:farf(?:an|án)|morales \\(socarte\\)|proa(?:no|ño)|villamil \\(playas\\))|i(?:ma|r(?:on|ón))|nral\\. antonio elizalde|onz(?:a(?:l(?:ez suarez|o (?:d(?:iaz de pineda \\(el bombon\\)|íaz de pineda \\(el bombón\\))|pizarro))|nam(?:a|á))|ol|ález suárez)|ral\\. (?:antonio elizalde \\(bucay\\)|leonidas plaza guti(?:errez|érrez)|pedro j\\. montero \\(boliche\\)|vernaza \\(dos esteros\\))|u(?:a(?:cha(?:nama|pala)|itacama \\(guaytacama\\)|l(?:a(?:ceo|quiza)|e(?:a|l)?|leturo)|m(?:balo \\(huambalo\\)|ote)|n(?:a(?:ndo|zan)|g(?:aje|opolo)|o)|pan|r(?:a(?:inag|nda)|e)|s(?:aganda \\(cab\\. en guasaganda centro\\)|untos)|y(?:a(?:quil|s \\(pueblo nuevo\\))|llabamba|quichuma|zimi))|el|izhagui(?:na|ña)))|h(?:atun sumaku|onorato v(?:asquez \\((?:cab en vasquez\\)|tambo viejo\\))|ásquez \\((?:cab en vásquez\\)|tambo viejo\\)))|u(?:a(?:c(?:a|hi grande)|mb(?:i|oya)|quillas|saga \\(cab en wampuik\\))|ertas|igra))|i(?:lapo|m(?:antag|ba(?:na \\(la victoria de imbana\\)|ya \\(san luis de cobuendo\\)))|n(?:danza|es arango \\(cab\\. en western\\)|gapirca|és arango \\(cab\\. en western\\))|s(?:abela|i(?:dro ayora|nlivi)|la (?:de bejucal|santa mar(?:ia \\(floreana\\) \\(cab\\. en  pto\\. velasco ibarra\\)|ía \\(floreana\\) \\(cab\\. en  pto\\. velasco ibarra\\))))|zamba)|j(?:a(?:dan|m(?:a|beli)|ramij(?:o|ó)|vier loyola \\(chuquipata\\))|e(?:rusal(?:en|én)|s(?:us maria|ús maría))|i(?:jon y caama(?:no \\(cab\\. en rio blanco\\)|ño \\(cab\\. en río blanco\\))|mb(?:illa|ura)|pijapa)|os(?:e(?: luis tamayo \\(muey\\)|guango bajo)|é luis tamayo \\(muey\\))|u(?:an (?:b(?:autista aguirre \\(los tintos\\)|enigno vela)|de velasco \\(pangor\\)|g(?:omez rendon \\(progreso\\)|ómez rendón \\(progreso\\))|montalvo \\(san ignacio de quil\\))|l(?:cuy|io (?:andrade \\(orejuela\\)|e\\. moreno \\(catanahuan grande\\)))|n(?:cal|in|quillal|ín)))|l(?:a(?: (?:avanzada|b(?:elleza|o(?:cana|nita))|c(?:an(?:delaria|ela)|honta|oncordia)|es(?:meralda|peranza)|iberia|joya de los sachas|libertad(?: \\(alizo\\))?|m(?:ana|erced(?: de buenos aires)?)|p(?:az|ea(?:na|ña)|ila|rovidencia)|sof(?:ia|ía)|t(?:ingue|ola|roncal)|uni(?:on|ón)|vi(?:ctoria(?: \\((?:nauza\\)|ñauza\\)))?|llegas))|g(?:arto|o (?:agrio|san pedro))|rama|s(?: (?:golondrinas|lajas|n(?:aves|ieves \\(chaya\\))|pampas)|cano)|tacunga|ur(?:el|o guerrero))|i(?:c(?:an|to)|m(?:on(?: indanza|al|cocha|es)|ón indanza)|nares|ta)|l(?:a(?:cao|gos|no chico)|igua|oa|uzhapa)|o(?:gro(?:no|ðo|ño)|mas de sargentillo|reto|s (?:an(?:des(?: \\(cab\\. en poatug\\))?|geles)|encuentros|lojas \\(enrique baquerizo moreno\\)|ángeles))|u(?:do|is (?:cordero(?: vega)?|galarza orellana \\(cab\\. en delegsol\\)|vargas torres \\(cab\\. en playa de oro\\))|mbaqui|z de am(?:erica|érica)))|m(?:a(?:c(?:a(?:r(?:a|á)|s)|ha(?:chi|l(?:a|illa))|uma)|dre tierra|gdalena \\(chapacoto\\)|jua|l(?:acatos \\(valladolid\\)|chingui|impia|vas)|n(?:g(?:a(?: del cur(?:a|á)|hurco)|laralto)|ta|u(?:el (?:cornejo astorga \\(tandapi\\)|j\\. calle))?)|r(?:c(?:abel(?:i|í)|os espinel \\(chacata\\))|i(?:ano (?:acosta|moreno)|scal sucre(?: \\(huaques\\))?))|t(?:aje \\(cab\\. en santander\\)|us))|e(?:j(?:ia|ía)|mbrill(?:al|o)|r(?:a|cadillo))|i(?:lagro(?:s)?|ndo|ra(?: \\(chontahuasi\\))?)|o(?:c(?:ache|ha)|lleturo|nt(?:alvo \\((?:andoas\\)|cab en horqueta\\))|e(?: olivo|cristi|rrey)|ufar|úfar)|r(?:aspungo|o(?:moro \\(cab\\. en el vado\\)|na)|ro))|u(?:isne|l(?:al(?:illo|o)|liquindil \\(santa ana\\)|titud|uncay grande)))|n(?:a(?:b(?:on|ón)|mbacola|n(?:egal(?:ito)?|garitza)|r(?:anj(?:al|ito)|cisa de jes(?:us|ús))|yon|zon \\(cab\\. en pampa de dom(?:inguez\\)|ínguez\\)))|o(?:bol|no)|u(?:ev(?:a (?:f(?:atima|átima)|loja|tarqui)|o (?:para(?:iso(?: \\(cab\\. en union \\))?|íso(?: \\(cab\\. en unión \\))?)|quito|rocafuerte))|lti))|o(?:ctavio cordero palacios \\(sta\\. rosa\\)|lmedo \\(pesillo\\)|rianga|t(?:avalo|on)|yacachi)|p(?:a(?:blo (?:arenas|sexto)|c(?:ayacu|cha|hicutza|to)|j(?:an|án)|l(?:anda|e(?:nque|stina|tillas)|latanga|m(?:a(?: roja|les|s)|ira)|o(?: quemado|ra(?: \\(metzera\\))?)|tas)|mpanal de bol(?:ivar|ívar)|n(?: de azucar|acocha|cho negro|gu(?:a|intza)|o|saleo)|pallacta|quisha|sa(?:je)?|t(?:a(?:qui|te)|ricia pilar|uca)|ute|ñacocha)|e(?:d(?:ernales|ro (?:carbo|moncayo|pablo g(?:omez|ómez)|vicente maldonado))|lileo|n(?:aherrera|ipe)|rucho|ñaherrera)|i(?:artal|caigua|edras|fo|l(?:a(?:guin \\(pilahuin\\)|lo)|laro)|m(?:ampiro|ocha)|n(?:as|d(?:al|ilig)|guili|llopata|tag)|oter|stishi \\(nariz del diablo\\)|ñas)|la(?:n piloto|yas|za guti(?:errez \\(calvario\\)|érrez \\(calvario\\)))|o(?:alo|m(?:asqui|ona|peya)|rtov(?:elo|iejo)|sorja|zul \\(san juan de pozul\\))|r(?:esidente urbina \\(chagrapamba -patzucul\\)|incipal|ogreso)|u(?:ca(?:pamba|r(?:a|á)|yacu)|e(?:blo(?: nuevo|viejo)|l(?:a|laro)|mbo|rto (?:ayora|b(?:aquerizo moreno|ol(?:ivar \\(puerto montufar\\)|ívar \\(puerto montúfar\\)))|de cayo|el carmen del putumayo|francisco de orellana \\(el coca\\)|l(?:i(?:bre|m(?:on|ón))|opez|ópez)|m(?:isahualli|urialdo)|napo|pechiche|quito|rodr(?:iguez|íguez)|villamil))|jil(?:i|í)|m(?:allacta|puentsa)|n(?:a|gala|in)|runuma \\(eguiguren\\)|tumayo|y(?:ango|o))|íllaro)|qu(?:e(?:ro|vedo)|i(?:jos|langa|miag|n(?:ara|chicoto|g(?:eo|ue \\(olmedo perdomo franco\\))|ind(?:e|é)|saloma)|roga|sapincha \\(quizapincha\\)|to))|r(?:am(?:on campana|ón campaña)|e(?:gulo de mora|migio crespo toral \\(gulag\\))|i(?:caurte|o(?: (?:b(?:lanco|onito)|corrientes|negro|tigre|verde)|bamba|chico \\(r(?:io chico\\)|ío chico\\))|verde))|o(?:berto astudillo \\(cab\\. en cruce de venecia\\)|cafuerte|sa (?:florida|z(?:arate \\(quininde\\)|árate \\(quinindé\\))))|umi(?:pamba|ðahui)|ío (?:b(?:lanco|onito)|corrientes|negro|tigre|verde))|s(?:a(?:b(?:anilla|iango \\(la capilla\\))|capalca|l(?:a(?:ngo|saca|ti)|i(?:ma|tre)|vias)|mborond(?:on|ón)|n(?: (?: fco\\. de sigsipamba|an(?:dr(?:es|és)|tonio(?: (?:\\(cab en san antonio centro\\)|de (?:bayushig|las aradas \\(cab\\. en las aradas\\)|qumbe \\(cumbe\\))))?)|b(?:artolom(?:e(?: de pinllog)?|é(?: de pinllog)?)|las)|c(?:arlos(?: de l(?:as minas|im(?:on|ón)))?|rist(?:obal(?: \\(carlos ordonez lazo\\))?|óbal(?: \\(carlos ordóñez lazo\\))?))|f(?:co\\. de natabuela|e(?:lipe de o(?:na|ña)|rnando(?: \\(pasa san fernando\\))?)|rancisco(?: de(?: (?:borja \\(virgilio d(?:avila\\)|ávila\\))|chinimbimi|novillo \\(cab\\. en novillo\\)|onzole|sageo)|l vergel))?)|g(?:abriel|erardo(?: de pacaicaguan)?|regorio)|isidro(?: de patulu)?|j(?:a(?:cinto(?: de(?: (?:buena fe|wakambeis|yaguachi)|l bua))?|vier de cachavi \\(cab\\. en san javier\\))|o(?:aqu(?:in|ín)|s(?:e(?: de(?: (?:a(?:ncon|yora)|c(?:ayapas|h(?:a(?:ltura|manga)|imbo))|dahuano|guayusa|m(?:inas|orona)|p(?:ayamino|oalo)|quichinche|raranga)|l (?:chazo|tambo \\(tambopamba\\))))?|é(?: de(?: (?:a(?:ncón|yora)|c(?:ayapas|h(?:a(?:ltura|manga)|imbo))|dahuano|guayusa|m(?:inas|orona)|p(?:ayamino|oalo)|quichinche|raranga)|l (?:chazo|tambo \\(tambopamba\\))))?))|uan(?: (?:bosco|de (?:cerro azul|iluman|muyuna|pastocalle)))?)|l(?:orenzo|u(?:cas|is(?: de (?:armenia|el acho \\(cab en el acho\\)|pambil))?))|m(?:a(?:rt(?:in de puzhio|ín de puzhio)|teo)|iguel(?: de (?:c(?:onchay|uyes)|ibarra|los bancos|urcuqu(?:i|í))|ito)?)|p(?:ablo(?: (?:\\((?:cab en pueblo nuevo\\)|san pablo de atenas\\))|de (?:tenta|ushpayacu)))?|edro de (?:huaca|l(?:a bendita|os cofanes)|pelileo|suma|vilcabamba)|lacido)|r(?:afael(?: de sharug)?|oque(?: \\((?:ambrosio maldonado\\)|cab\\. en san vicente\\)))?)|s(?:alvador de ca(?:naribamba|ñaribamba)|ebasti(?:an(?: de(?: yuluc|l coca))?|án(?: de(?: yuluc|l coca))?)|im(?:on \\(yacoto\\)|ón \\(yacoto\\)))|vicente(?: de (?:huaticocha|pusir))?)|g(?:ay \\(cab en nayamanaca\\)|olqui|uillin)|t(?:a (?:ana(?: de vuelta larga)?|b(?:arbara|árbara)|c(?:ecilia|lara|ruz)|fe (?:\\(santa fe\\)|de gal(?:an|án))|isabel(?: \\(chaguarurco\\))?|luc(?:ia(?: de las penas)?|ía(?: de las peñas)?)|mar(?:ia(?: de(?: huiririma|l toachi)|nita (?:\\(boca de pacoche\\)|de jes(?:us|ús)))|tha de cuba|ía de(?: huiririma|l toachi))|r(?:ita|osa(?: de (?:cuzubamba|flandes|sucumb(?:ios|íos)))?|ufina)|teresita)|iago de (?:m(?:endez|éndez)|p(?:ananza|illaro|íllaro)|quito \\(cab\\. en san antonio de quito\\))|o domingo(?: de (?:los colorados|onzole))?))|quisil(?:i|í)|r(?:a(?:cay|guro|yacu)|dinas)|yausi)|e(?:lva alegre(?: \\(cab\\. en san miguel de pamplona\\))?|villa d(?:e oro|on bosco))|h(?:ell|impis|ushufindi)|i(?:bambe|dcay|ete de julio|g(?:chos|sig)|m(?:iatug|on bolivar(?: \\((?:cab\\. en (?:gananzol\\)|mushullacta\\))|julio moreno\\)))?|ón bolívar(?: \\((?:cab\\. en (?:gañanzol\\)|mushullacta\\))|julio moreno\\)))?)|n(?:ai|incay|sao))|ozoranga|ta susana de chiviaza \\(cab en chiviaza\\)|u(?:a \\(cab\\. en la bocana\\)|c(?:re(?: \\(cab\\. en sucre-patate urcu\\))?|ua|úa)|ma(?:co|ypamba)|s(?:cal|udel))|ígsig)|t(?:a(?:b(?:a(?:bela|cundo)|iazo)|c(?:amoros|hina)|day|isha|lag|mbillo|nicuchi|quil \\(miguel riofr(?:io\\)|ío\\))|r(?:a(?:coa \\(nueva esperanza: yuca\\)|poa)|ifa|qui)|ura|yuza)|e(?:l(?:embi|imbela)|n(?:a|dales \\(cab\\. en puerto tendales\\)|guel|iente hugo ortiz))|i(?:mb(?:ara|ire)|ngo|putini|saleo|wintza|xan)|nte\\. maximiliano rodr(?:iguez loaiza|íguez loaiza)|o(?:acaso|bar donoso \\(la bocana de camumbi\\)|cachi|m(?:as de berlanga \\(santo tomas\\)|ebamba|ás de berlanga \\(santo tomás\\))|n(?:chigue|supa)|rata|sagua|toras)|r(?:es de noviembre|iunfo-dorado)|u(?:fi(?:no|ño)|l(?:c(?:an|án)|ulbi \\(cab\\. en ricaurte\\))|mba(?:biro|co)|ndayme|pigachi|r(?:i|upamba)|tupali|utinentza))|u(?:lba|n(?:amuncho|i(?:on milagrena|ón milagreña))|r(?:bina(?: \\(taya\\))?|cuqu(?:i|í)|daneta(?: \\(paquishapa\\))?)|tuana|yumbicho|zhcurrumi)|v(?:a(?:cas galindo \\(el churo\\) \\(cab\\. en san miguel alto\\)|l(?:dez \\(limones\\)|l(?:adolid|e (?:de la virgen|hermoso))|para(?:iso|íso)))|e(?:lasco ibarra \\(cab\\. el empalme\\)|ntanas|racruz \\(indillama\\) \\(cab\\. en indillama\\))|i(?:c(?:entino|he|toria del portete \\(irquis\\))|l(?:cabamba \\(victoria\\)|la la uni(?:on \\(cajabamba\\)|ón \\(cajabamba\\)))|nces|rgen de f(?:atima|átima))|uelta larga)|wilfrido loor moreira \\(maicito\\)|y(?:a(?:cuambi|guachi viejo \\(cone\\)|mana|n(?:ayacu - mochapata \\(cab\\. en yanayacu\\)|gana \\(arsenio castillo\\)|tzaza(?: \\(yanzatza\\))?)|ruqui|suni|upi)|unganza \\(cab en el rosario\\))|z(?:a(?:mbi(?:za)?|p(?:allo|ot(?:al|illo)))|h(?:aglli \\(shaglli \\)|idmad|ud)|u(?:mb(?:a(?:hua)?|i)|na \\(zunac\\)|rmi|ña \\(zuñac\\)))|á(?:ngel pedro giler \\(la estancilla\\)|vila \\(cab\\. en huiruno\\))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L2_DPA - Path",
       "framework": "PATH",
       "domain": "EC_L2_DPA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1550,12 +1611,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1\\d|2[0-4]|90)\\d{2}(\\d{2})?",
+            "regex": "0*(?:(0[1-9]|1\\d|2[0-4]|90)\\d{2}(\\d{2})?)",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1565,7 +1626,7 @@
       "name": "EC_L2_CIUDADELA - Path",
       "framework": "PATH",
       "domain": "EC_L2_CIUDADELA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1584,7 +1645,7 @@
       "name": "EC_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "EC_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1625,7 +1686,7 @@
       "name": "EC_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "EC_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1641,27 +1702,30 @@
       }
     },
     {
-      "name": "EC_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "EC_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "EC_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "20 — Soltero a · Casado a · Unión de hecho · Separado a · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:c(?:asad(?:a|o(?:/a)?)|onviviente)|divorciad(?:a|o(?:/a)?)|s(?:eparad(?:a|o(?:/a)?)|olter(?:a|o(?:/a)?))|uni(?:on (?:de hecho|libre)|ón (?:de hecho|libre))|viud(?:a|o(?:/a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "EC_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1688,7 +1752,7 @@
       "name": "EC_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "EC_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1707,7 +1771,7 @@
       "name": "EC_L2_NIVEL_INSTRUCCION - Path",
       "framework": "PATH",
       "domain": "EC_L2_NIVEL_INSTRUCCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1723,27 +1787,30 @@
       }
     },
     {
-      "name": "EC_L2_NIVEL_INSTRUCCION - List",
-      "framework": "LIST",
+      "name": "EC_L2_NIVEL_INSTRUCCION - Values",
+      "framework": "REGEX",
       "domain": "EC_L2_NIVEL_INSTRUCCION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-nivel-instruccion.txt",
-            "matchStrength": 0.6
+            "note": "20 — Ninguno · Centro de alfabetización · Educación inicial · Educación general básica · Bachillerato · Superior no universitaria · …",
+            "regex": "(?iu)(?:(?:a(?:lfabetizaci(?:on|ón)|nalfabeto)|b(?:a(?:chillerato|sica)|ásica)|centro de alfabetizaci(?:on|ón)|doctorado|educaci(?:on (?:general basica|inicial)|ón (?:general básica|inicial))|inicial|maestr(?:ia|ía)|ninguno|posgrado|superior(?: (?:no universitaria|universitaria))?|universitaria))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L2_INSTITUCION_EDUCATIVA - Path",
       "framework": "PATH",
       "domain": "EC_L2_INSTITUCION_EDUCATIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1762,7 +1829,7 @@
       "name": "EC_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "EC_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1802,7 +1869,7 @@
       "name": "EC_L3_ETNIA - Path",
       "framework": "PATH",
       "domain": "EC_L3_ETNIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1818,31 +1885,48 @@
       }
     },
     {
-      "name": "EC_L3_ETNIA - List",
-      "framework": "LIST",
+      "name": "EC_L3_ETNIA - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_ETNIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-etnia.txt",
-            "matchStrength": 0.9
+            "note": "18 — Mestizo · Montubio · Afroecuatoriano · Negro · Mulato · Indígena · …",
+            "regex": "(?iu)(?:(?:afro(?:descendiente|ecuatoriano)|blanco|ind(?:igena|ígena)|m(?:estizo|ontu(?:bio|vio)|ulato)|negro|otro))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://ec-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_IDENTIDAD_CULTURAL - Path",
       "framework": "PATH",
       "domain": "EC_L3_IDENTIDAD_CULTURAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1858,27 +1942,30 @@
       }
     },
     {
-      "name": "EC_L3_IDENTIDAD_CULTURAL - List",
-      "framework": "LIST",
+      "name": "EC_L3_IDENTIDAD_CULTURAL - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_IDENTIDAD_CULTURAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-nacionalidades-indigenas.txt",
-            "matchStrength": 0.85
+            "note": "54 — Kichwa · Shuar · Achuar · Awá · Chachi · Épera · …",
+            "regex": "(?iu)(?:(?:a(?:'i cof(?:an|án)|chuar|ndwa|w(?:a|á))|c(?:a(?:nari|ñari)|h(?:achi|ibuleo)|o(?:f(?:an|án)|lorado))|epera|huaorani|k(?:a(?:nari|ranki|yambi|ñari)|i(?:chwa|sapincha|tu kara))|n(?:atabuela|inguna)|otavalo|p(?:a(?:lta|nzaleo)|uruh(?:a|á))|quichua|s(?:a(?:lasaka|para|raguro)|ecoya|h(?:iwiar|uar)|i(?:ekopai|ona))|t(?:omabela|s(?:achila|áchila))|wa(?:orani|ranka)|z(?:apara|ápara)|épera))",
+            "matchStrength": 0.85,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_LENGUA - Path",
       "framework": "PATH",
       "domain": "EC_L3_LENGUA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1894,27 +1981,30 @@
       }
     },
     {
-      "name": "EC_L3_LENGUA - List",
-      "framework": "LIST",
+      "name": "EC_L3_LENGUA - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_LENGUA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "25 — Castellano · Kichwa · Shuar chicham · Achuar chicham · Awapit · Cha palaa · …",
+            "regex": "(?iu)(?:(?:a(?:'ingae|chuar chicham|wapit)|c(?:astellano|ha(?:'palaa|palaa))|espa(?:nol|ñol)|ingl(?:es|és)|kichwa|l(?:engua de se(?:nas ecuatoriana|ñas ecuatoriana)|sec)|otra|paicoca|quichua|s(?:apara|h(?:iwiar chicham|uar(?: chicham)?)|ia pedee)|ts(?:a(?:'fiki|fiki)|áfiki)|wao terero))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_CONDICION_MIGRATORIA - Path",
       "framework": "PATH",
       "domain": "EC_L3_CONDICION_MIGRATORIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1930,27 +2020,30 @@
       }
     },
     {
-      "name": "EC_L3_CONDICION_MIGRATORIA - List",
-      "framework": "LIST",
+      "name": "EC_L3_CONDICION_MIGRATORIA - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_CONDICION_MIGRATORIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-condicion-migratoria.txt",
-            "matchStrength": 0.8
+            "note": "19 — Ecuatoriano · Residente permanente · Residente temporal · Visitante temporal · Refugiado · Solicitante de refugio · …",
+            "regex": "(?iu)(?:(?:a(?:p(?:atrida|átrida)|silado)|e(?:cuatoriano|n situaci(?:on irregular|ón irregular))|irregular|persona en movilidad humana|re(?:fugiado|gular|sidente(?: (?:permanente|temporal))?)|solicitante de refugio|turista|visitante(?: temporal)?))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "EC_L3_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -1977,7 +2070,7 @@
             "matchStrength": 0.7
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.4,
         "tokenizationDelimiter": " "
       }
@@ -1986,7 +2079,7 @@
       "name": "EC_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "EC_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2002,27 +2095,30 @@
       }
     },
     {
-      "name": "EC_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "EC_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "24 — Católica · Evangélica · Testigo de Jehová · Iglesia de Jesucristo de los Santos de los Últimos Días · Adventista · Protestante · …",
+            "regex": "(?iu)(?:(?:a(?:dventista|gn(?:ostico|óstico)|teo)|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|ristian(?:a|o))|evang(?:elic(?:a|o)|élic(?:a|o))|iglesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|jud(?:i(?:a|o)|í(?:a|o))|m(?:orm(?:on|ón)|usulm(?:an(?:a)?|án))|ningun(?:a|o)|otra|protestante|testigo de jehov(?:a|á)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_IDEOLOGIA - Path",
       "framework": "PATH",
       "domain": "EC_L3_IDEOLOGIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2038,27 +2134,30 @@
       }
     },
     {
-      "name": "EC_L3_IDEOLOGIA - List",
-      "framework": "LIST",
+      "name": "EC_L3_IDEOLOGIA - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_IDEOLOGIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-ideologias.txt",
-            "matchStrength": 0.7
+            "note": "16 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|ninguno|pr(?:efiere no responder|ogresista)|voto nulo))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_FILIACION_POLITICA - Path",
       "framework": "PATH",
       "domain": "EC_L3_FILIACION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2074,27 +2173,30 @@
       }
     },
     {
-      "name": "EC_L3_FILIACION_POLITICA - List",
-      "framework": "LIST",
+      "name": "EC_L3_FILIACION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_FILIACION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "19 — Revolución Ciudadana · Acción Democrática Nacional · Movimiento CREO · Partido Social Cristiano · Pachakutik · Izquierda Democrática · …",
+            "regex": "(?iu)(?:(?:a(?:cci(?:on democratica nacional|ón democrática nacional)|dn|vanza)|c(?:entro democr(?:atico|ático)|onstruye|reo)|i(?:d|zquierda democr(?:atica|ática))|movimiento creo|p(?:a(?:chakutik|rtido social(?: cristiano|ista ecuatoriano))|s(?:c|p))|r(?:c|evoluci(?:on ciudadana|ón ciudadana))|s(?:in afiliaci(?:on|ón)|ociedad patri(?:otica|ótica))|unidad popular))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "EC_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2110,27 +2212,30 @@
       }
     },
     {
-      "name": "EC_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "EC_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "11 — FUT · CEOSL · CEDOCUT · CTE · UGTE · UNE · …",
+            "regex": "(?iu)(?:(?:afiliado|c(?:e(?:docut|osl)|omit(?:e de empresa|é de empresa)|te)|f(?:enocin|rente unitario de trabajadores|ut)|sindicalizado|u(?:gte|ne)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "EC_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "EC_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2165,7 +2270,7 @@
       "name": "EC_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "EC_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2181,10 +2286,29 @@
       }
     },
     {
+      "name": "EC_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "EC_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "EC_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "EC_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2200,27 +2324,30 @@
       }
     },
     {
-      "name": "EC_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "EC_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "14 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|g(?:ay|lbti)|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbti(?:q\\+)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "EC_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2236,27 +2363,30 @@
       }
     },
     {
-      "name": "EC_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "EC_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "EC_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "17 — Mujer cisgénero · Hombre cisgénero · Mujer trans · Hombre trans · Persona no binaria · Intersexual · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|hombre(?: (?:cisg(?:enero|énero)|trans))?|intersexual|mujer(?: (?:cisg(?:enero|énero)|trans))?|no binari(?:a|o)|otra|p(?:ersona no binaria|refiere no responder)|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_L3_VICTIMA - Path",
       "framework": "PATH",
       "domain": "EC_L3_VICTIMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2275,7 +2405,7 @@
       "name": "EC_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2302,7 +2432,7 @@
       "name": "EC_SALUD_COBERTURA - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_COBERTURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2318,27 +2448,30 @@
       }
     },
     {
-      "name": "EC_SALUD_COBERTURA - List",
-      "framework": "LIST",
+      "name": "EC_SALUD_COBERTURA - Values",
+      "framework": "REGEX",
       "domain": "EC_SALUD_COBERTURA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-cobertura.txt",
-            "matchStrength": 0.8
+            "note": "16 — IESS Seguro General · Seguro Social Campesino · ISSFA · ISSPOL · Ministerio de Salud Pública · Seguro privado con hospitalización · …",
+            "regex": "(?iu)(?:(?:i(?:ess(?: \\(seguro general\\))?|ss(?:fa|pol))|m(?:inisterio de salud p(?:ublica|ública)|sp)|pr(?:epagada|ivado)|s(?:eguro (?:campesino|privado (?:con hospitalizaci(?:on|ón)|sin hospitalizaci(?:on|ón))|social campesino)|in seguro)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2366,7 +2499,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2376,7 +2509,7 @@
       "name": "EC_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2395,7 +2528,7 @@
       "name": "EC_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2411,27 +2544,30 @@
       }
     },
     {
-      "name": "EC_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "EC_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "EC_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "46 — Paracetamol · Ibuprofeno · Diclofenaco · Metformina · Glibenclamida · Losartán · …",
+            "regex": "(?iu)(?:(?:a(?:cido (?:acetilsalicilico|folico|valproico)|lprazolam|m(?:lodipino|oxicilina)|nticonceptivo|torvastatina|zitromicina)|c(?:efalexina|lonazepam|omplejo b)|d(?:iclofenaco|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|o(?:lanzapina|meprazol)|p(?:aracetamol|rednisona)|quetiapina|risperidona|s(?:albutamol|ertralina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "EC_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2467,7 +2603,7 @@
       "name": "EC_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2494,7 +2630,7 @@
       "name": "EC_SALUD_VIH - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_VIH",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2513,7 +2649,7 @@
       "name": "EC_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2529,27 +2665,30 @@
       }
     },
     {
-      "name": "EC_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "EC_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "EC_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2565,27 +2704,30 @@
       }
     },
     {
-      "name": "EC_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "EC_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "EC_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "23 — Física · Auditiva · Visual · Intelectual · Psicosocial · Del lenguaje · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|c(?:eguera|ognitiva)|del lenguaje|f(?:isica|ísica)|intelectual|lenguaje|m(?:ental|otora|ultiple|últiple)|n(?:inguna|o aplica)|psicosocial|sordera|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "EC_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2601,27 +2743,30 @@
       }
     },
     {
-      "name": "EC_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "EC_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "EC_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con restricciones · pendiente · apto con recomendaciones",
+            "regex": "(?iu)(?:(?:apto(?: con re(?:comendaciones|stricciones))?|no apto|pendiente))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "EC_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2640,7 +2785,7 @@
       "name": "EC_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "EC_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2659,7 +2804,7 @@
       "name": "EC_FIN_HISTORIAL_CREDITICIO - Path",
       "framework": "PATH",
       "domain": "EC_FIN_HISTORIAL_CREDITICIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2678,7 +2823,7 @@
       "name": "EC_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "EC_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2713,7 +2858,7 @@
       "name": "EC_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "EC_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2748,7 +2893,7 @@
       "name": "EC_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "EC_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2783,7 +2928,7 @@
       "name": "EC_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "EC_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2818,7 +2963,7 @@
       "name": "EC_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "EC_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2834,31 +2979,48 @@
       }
     },
     {
-      "name": "EC_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "EC_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "EC_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "13 — Bono de Desarrollo Humano · Bono Joaquín Gallegos Lara · Pensión para Adultos Mayores · Pensión para Personas con Discapacidad · Crédito de Desarrollo Humano · Bono 1000 Días · …",
+            "regex": "(?iu)(?:(?:adultos mayores|b(?:dh|ono (?:1000 d(?:ias|ías)|de desarrollo humano|joaqu(?:in gallegos lara|ín gallegos lara)))|cr(?:edito de desarrollo humano|édito de desarrollo humano)|discapacidad|joaqu(?:in gallegos lara|ín gallegos lara)|ninguno|pensi(?:on para (?:adultos mayores|personas con discapacidad)|ón para (?:adultos mayores|personas con discapacidad))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://ec-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_FIN_REGISTRO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "EC_FIN_REGISTRO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2874,27 +3036,30 @@
       }
     },
     {
-      "name": "EC_FIN_REGISTRO_SOCIAL - List",
-      "framework": "LIST",
+      "name": "EC_FIN_REGISTRO_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "EC_FIN_REGISTRO_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-registro-social.txt",
-            "matchStrength": 0.6
+            "note": "18 — Quintil 1 · Quintil 2 · Quintil 3 · Quintil 4 · Quintil 5 · Pobreza extrema · …",
+            "regex": "(?iu)(?:(?:a|b|c(?:\\+|-)|d|no pobre|pobre(?:za(?: extrema)?)?|quintil(?: (?:1|2|3|4|5))?|sin clasificaci(?:on|ón)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "EC_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "EC_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2910,27 +3075,30 @@
       }
     },
     {
-      "name": "EC_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "EC_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "EC_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ec-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "14 — Propia y totalmente pagada · Propia y la está pagando · Propia regalada donada heredada · Prestada o cedida · Por servicios · Arrendada · …",
+            "regex": "(?iu)(?:(?:a(?:nticresis|rr(?:endada|iendo))|cedida|p(?:or servicios|r(?:estada(?: o cedida)?|opia(?: (?:\\(regalada, donada, heredada\\)|y (?:la est(?:a pagando|á pagando)|totalmente pagada)))?))))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "EC_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "EC_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2957,7 +3125,7 @@
       "name": "EC_PENAL_EXPEDIENTE - Path",
       "framework": "PATH",
       "domain": "EC_PENAL_EXPEDIENTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas ecuatorianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas ecuatorianos.",
       "config": {
         "paths": [
           {
@@ -2988,20 +3156,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{5}-\\d{4}-\\d{5}",
+            "regex": "0*(?:\\d{5}-\\d{4}-\\d{5})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,6}-[A-Z]{2,10}-\\d{4}",
+            "regex": "0*(?:\\d{1,6}-[A-Z]{2,10}-\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3279,7 +3447,7 @@
     },
     {
       "name": "EC_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "EC_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "EC_SALUD_DISCAPACIDAD",
@@ -3303,19 +3471,19 @@
     },
     {
       "name": "EC_FIN_DEUDA",
-      "algorithm": "EC_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "EC_FIN_INGRESOS",
-      "algorithm": "EC_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "EC_FIN_PATRIMONIO",
-      "algorithm": "EC_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "EC_FIN_PENSION",
-      "algorithm": "EC_VALOR_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "EC_FIN_PROGRAMA_SOCIAL",
@@ -3353,7 +3521,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "A1234567"
     },
@@ -3365,7 +3534,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "1710034065"
     },
@@ -3378,7 +3548,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "PCA-1234"
     },
@@ -3394,7 +3565,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3623,8 +3795,23 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3708,8 +3895,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "((?:[0-2]\\d|30)[0-5]\\d{7})(00\\d)",
+            "regex": "(0*?)(?:((?:[0-2]\\d|30)[0-5]\\d{7})(00\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3722,8 +3912,11 @@
             ]
           },
           {
-            "regex": "(\\d{2}[69]\\d{10})",
+            "regex": "(0*?)(?:(\\d{2}[69]\\d{10}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
@@ -3747,8 +3940,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "((?:[0-2]\\d|30)[0-5]\\d{7}00\\d)",
+            "regex": "(0*?)(?:((?:[0-2]\\d|30)[0-5]\\d{7}00\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3758,16 +3954,22 @@
             ]
           },
           {
-            "regex": "(\\d{2}[69]\\d{10})",
+            "regex": "(0*?)(?:(\\d{2}[69]\\d{10}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "((?:[0-2]\\d|30)[0-5]\\d{7})",
+            "regex": "(0*?)(?:((?:[0-2]\\d|30)[0-5]\\d{7}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3777,8 +3979,11 @@
             ]
           },
           {
-            "regex": "((?:[0-2]\\d|30)[0-5]\\d{6}[\\s\\-]\\d)",
+            "regex": "(0*?)(?:((?:[0-2]\\d|30)[0-5]\\d{6}[\\s\\-]\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4318,7 +4523,30 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?593[\\s\\-]?)(0?9)([\\s\\-]?)([\\d\\s\\-]{8,12})",
+            "regex": "(0*?)(?:(\\+?593[\\s\\-]?)(0?9)([\\s\\-]?)([\\d\\s\\-]{8,12}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "EC_CM_DIGITOS"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(0?9)([\\s\\-]?)([\\d\\s\\-]{8,12}))",
             "actions": [
               {
                 "type": "PRESERVE"
@@ -4338,25 +4566,11 @@
             ]
           },
           {
-            "regex": "(0?9)([\\s\\-]?)([\\d\\s\\-]{8,12})",
+            "regex": "(0*?)(?:(\\+?593[\\s\\-]?)?(\\(?0?[2-7]\\)?)([\\s\\-]?)([\\d\\s\\-]{6,10}))",
             "actions": [
               {
                 "type": "PRESERVE"
               },
-              {
-                "type": "PRESERVE"
-              },
-              {
-                "type": "APPLY_ALGORITHM",
-                "algorithm": {
-                  "name": "EC_CM_DIGITOS"
-                }
-              }
-            ]
-          },
-          {
-            "regex": "(\\+?593[\\s\\-]?)?(\\(?0?[2-7]\\)?)([\\s\\-]?)([\\d\\s\\-]{6,10})",
-            "actions": [
               {
                 "type": "PRESERVE"
               },
@@ -4402,26 +4616,20 @@
       "input": "Av. Amazonas N34-120 y Av. República"
     },
     {
-      "name": "EC_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4539578763621486"
-    },
-    {
       "name": "EC_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "EC_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -4450,8 +4658,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4611,8 +4822,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4639,8 +4853,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -4648,8 +4865,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4665,8 +4885,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4679,8 +4902,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4849,8 +5075,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4882,7 +5111,7 @@
       "input": "Chavezpamba"
     },
     {
-      "name": "EC_DPA",
+      "name": "EC_DPA_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -4891,6 +5120,34 @@
         "delimiter": "|",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "170158"
+    },
+    {
+      "name": "EC_DPA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "EC_DPA_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "170158"
     },
@@ -4915,8 +5172,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\d{4})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4927,8 +5187,11 @@
             ]
           },
           {
-            "regex": "(\\d{2})(\\d{3})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4994,8 +5257,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5037,8 +5303,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,5})",
+            "regex": "(0*?)(?:(\\d{2,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5121,8 +5390,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5164,16 +5436,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -5236,8 +5514,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5290,8 +5571,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5344,8 +5628,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5398,8 +5685,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5467,8 +5757,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5521,8 +5814,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5575,8 +5871,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5629,8 +5928,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5683,8 +5985,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5737,8 +6042,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,8})",
+            "regex": "(0*?)(?:(\\d{1,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5875,8 +6183,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,6})",
+            "regex": "(0*?)(?:(\\d{4,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5929,8 +6240,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5950,21 +6264,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "EC_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://ec-grupos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "EC_DISCAPACIDAD_LISTA",
@@ -5998,8 +6297,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6052,8 +6354,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6095,8 +6400,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6127,42 +6435,6 @@
         "requireMask": false
       },
       "input": "Reportado en el buró de crédito"
-    },
-    {
-      "name": "EC_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 100,
-        "maxValue": 250000
-      },
-      "input": "8400"
-    },
-    {
-      "name": "EC_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 450,
-        "maxValue": 9000
-      },
-      "input": "1200"
-    },
-    {
-      "name": "EC_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000,
-        "maxValue": 600000
-      },
-      "input": "85000"
-    },
-    {
-      "name": "EC_VALOR_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 200,
-        "maxValue": 3000
-      },
-      "input": "520"
     },
     {
       "name": "EC_PROGRAMA_SOCIAL_LISTA",
@@ -6196,8 +6468,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6265,8 +6540,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6319,8 +6597,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6373,8 +6654,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6401,8 +6685,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{5})(-)(\\d{4})(-)(\\d{5})",
+            "regex": "(0*?)(?:(\\d{5})(-)(\\d{4})(-)(\\d{5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6427,8 +6714,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6470,8 +6760,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6517,31 +6810,10 @@
     "ec-cobertura-salud.txt",
     "ec-condicion-migratoria.txt",
     "ec-detectar-apellidos.txt",
-    "ec-detectar-aptitud-laboral.txt",
-    "ec-detectar-cobertura.txt",
-    "ec-detectar-codigos-banderas.txt",
-    "ec-detectar-condicion-migratoria.txt",
-    "ec-detectar-discapacidades.txt",
-    "ec-detectar-estado-civil.txt",
-    "ec-detectar-etnia.txt",
-    "ec-detectar-grupos-sanguineos.txt",
-    "ec-detectar-identidades-genero.txt",
-    "ec-detectar-ideologias.txt",
-    "ec-detectar-lenguas.txt",
-    "ec-detectar-medicamentos.txt",
-    "ec-detectar-nacionalidades-indigenas.txt",
     "ec-detectar-nacionalidades.txt",
-    "ec-detectar-nivel-instruccion.txt",
     "ec-detectar-nombres.txt",
-    "ec-detectar-orientaciones-sexuales.txt",
-    "ec-detectar-parroquias.txt",
-    "ec-detectar-partidos.txt",
-    "ec-detectar-programas-sociales.txt",
-    "ec-detectar-registro-social.txt",
-    "ec-detectar-religiones.txt",
+    "ec-detectar-sexo-letra.txt",
     "ec-detectar-sexo.txt",
-    "ec-detectar-sindicatos.txt",
-    "ec-detectar-tenencia-vivienda.txt",
     "ec-diagnosticos.txt",
     "ec-direcciones.txt",
     "ec-discapacidades.txt",
@@ -6550,7 +6822,6 @@
     "ec-estado-civil-codigos.txt",
     "ec-estado-civil.txt",
     "ec-estados-credito.txt",
-    "ec-grupos-sanguineos.txt",
     "ec-identidad-cultural.txt",
     "ec-identidades-genero.txt",
     "ec-ideologias.txt",

@@ -67,7 +67,7 @@
       "intro": [
         "Dados que não identificam ninguém sozinhos, mas identificam em combinação. O Censo 2022 conta 2.280 gobiernos locales — municipios, comunas, comisiones de fomento e municipales —; 1.952 têm menos de 20.000 habitantes e mais de mil, menos de 2.000. Uma data de nascimento, um sexo e uma dessas cidades apontam para um punhado de pessoas. Esses atributos são generalizados ou deslocados em vez de substituídos, e o dado conserva seu valor analítico."
       ],
-      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
+      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_PROVINCIA", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
     },
     {
       "id": "L3",
@@ -213,7 +213,7 @@
     "AR_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
-      "masking": ["Payment Card: outro número que passa no algoritmo de Luhn. Só os valores com forma de cartão chegam a ele."]
+      "masking": ["Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
     },
     "AR_L1_IP": {
       "title": "Endereço IP",
@@ -299,6 +299,11 @@
       "title": "Partido e departamento",
       "what": ["O partido da província de Buenos Aires, o departamento das demais províncias ou a comuna da Cidade de Buenos Aires, pelo nome."],
       "masking": ["Um partido ou departamento com menos de 20.000 habitantes vira o mais próximo da mesma província com pelo menos 20.000: `Iruya` vira `Orán`. Os maiores se mantêm."]
+    },
+    "AR_L2_PROVINCIA": {
+      "title": "Província (opcional)",
+      "what": ["A província ou a Cidade Autônoma de Buenos Aires, pelo nome — `Córdoba`, `CORDOBA`, `CABA`, `Capital Federal` — ou pelo código ISO 3166-2 (`AR-X`)."],
+      "masking": ["**Este domínio é opcional e o set não o atribui.** A província se mantém por padrão, porque partidos, localidades e o código postal são generalizados dentro dela. O domínio serve para uma coluna que precise mudar de qualquer jeito, e é atribuído à mão no inventário.", "A província vira outra da sua região estatística do INDEC — Noroeste, Nordeste, Cuyo, Pampeana ou Patagônia —, escolhida por um Secure Lookup com a chave do engine: `Córdoba` pode virar `Entre Ríos` ou `La Pampa`, nunca `Salta`. Uma província pode sortear a si mesma. A Cidade Autônoma de Buenos Aires, que o INDEC agrupa com os partidos do conurbano na Grande Buenos Aires, vai com a Pampeana e não está entre as substitutas.", "Um primeiro passo escreve cada grafia com o nome oficial, então `Cordoba` e `Córdoba`, ou `CABA` e `Capital Federal`, sorteiam a mesma província. As maiúsculas se mantêm; um valor que não é província passa sem mudança.", "Se a província muda e a localidade, o partido ou o código postal da mesma linha não, a linha deixa de ser coerente: `Rosario` e `S2000` ficam com outra província. O código ISO e o nome da mesma província também deixam de corresponder depois do mascaramento."]
     },
     "AR_L2_CODIGO_GEOGRAFICO": {
       "title": "Códigos geográficos do INDEC",
@@ -493,22 +498,22 @@
     "AR_FIN_DEUDA": {
       "title": "Dívidas",
       "what": ["Saldos devedores, valores de empréstimos e parcelas, valores em atraso e limites de compra."],
-      "masking": ["Mapeado para um valor entre 10.000 e 500.000.000 de pesos, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_INGRESOS": {
       "title": "Renda e remuneração",
       "what": ["Salário básico, bruto ou líquido, remuneração tributável, vencimentos, renda familiar e faturamento anual."],
-      "masking": ["Mapeado para um valor entre 300.000 e 30.000.000 de pesos."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": ["Patrimônio, bens pessoais, valores venais e avaliações, saldos em contas e prazos fixos, posições em moeda estrangeira."],
-      "masking": ["Mapeado para um valor entre 1.000.000 e 3.000.000.000 de pesos."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_JUBILACION": {
       "title": "Aposentadorias e benefícios",
       "what": ["O valor da aposentadoria ou pensão, o de um auxílio ou benefício e a pensão alimentícia."],
-      "masking": ["Mapeado para um valor entre 250.000 e 12.000.000 de pesos."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_PROGRAMA_SOCIAL": {
       "title": "Benefícios e programas sociais",
@@ -557,7 +562,7 @@
           "Um **gobierno local** com menos de 20.000 habitantes vira o gobierno local mais próximo da mesma província com pelo menos 20.000. São 1.952, com 7 milhões de habitantes — 15% da população. El Chaltén (Santa Cruz) vira El Calafate; Tilcara (Jujuy), Libertador General San Martín; Ancasti (Catamarca), Valle Viejo.",
           "Uma **localidade** segue o seu gobierno local. As que ficam fora de qualquer gobierno local — zonas rurais de Santiago del Estero, Córdoba ou da Patagônia — também são generalizadas, para o gobierno local grande mais próximo.",
           "Um **partido ou departamento** com menos de 20.000 habitantes vira o mais próximo da mesma província com pelo menos 20.000. São 203, com 2 milhões de habitantes.",
-          "A **província** se mantém. Todas têm pelo menos um gobierno local de 20.000 habitantes.",
+          "A **província** se mantém, e todas têm pelo menos um gobierno local de 20.000 habitantes. Para uma coluna que precise mudar, o set traz o domínio opcional `AR_L2_PROVINCIA`, que ele não atribui sozinho.",
           "A distância é medida entre os centroides do Georef, em linha reta.",
           "Há nomes repetidos — San José, San Martín, Villa Nueva, 25 de Mayo — e outros que só diferem num acento. Um nome só é generalizado quando todos os lugares que o têm são pequenos, e então segue o maior deles. Com a província (`San José - Entre Ríos`, `San José (Entre Ríos)`, `San José, Entre Ríos`) vale a mesma regra dentro da província.",
           "Os **códigos do INDEC** seguem a mesma tabela, e o nome e o código de uma pessoa continuam coincidindo.",
@@ -575,7 +580,7 @@
           "**Uma localidade pequena dentro de um gobierno local grande** se mantém: o censo publica população por gobierno local, não por localidade. Um paraje rural de um partido grande conserva o nome.",
           "**O DNI de sete dígitos** é mascarado com sete dígitos; dentro do CUIL ele tem um zero na frente e é mascarado com oito. O DNI e o CUIL dessa pessoa deixam de coincidir.",
           "**O dígito verificador em coluna própria** não é recalculado: é mascarado e deixa de corresponder ao CUIT mascarado.",
-          "**A província, o banco do CBU e o código de área do telefone se mantêm.**",
+          "**A província, o banco do CBU e o código de área do telefone se mantêm.** A província pode ser mascarada dentro da sua região com o domínio opcional `AR_L2_PROVINCIA`, atribuído à mão.",
           "**Data Cleansing deixa passar o que não conhece**: uma localidade escrita de uma forma que a tabela não tem — abreviada, com erro de grafia — passa sem mudança.",
           "**O texto livre** é redigido palavra por palavra: um celular escrito com espaços não é encontrado, e um nome que também é palavra comum (`Luz`, `Rosa`, `Paz`) é redigido onde aparecer.",
           "**Crianças e adolescentes** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam os 13, 16 ou 18 anos, mas algumas cruzam. Onde importar, divida a regra por faixa etária com Multi-Column Condition.",
@@ -590,9 +595,9 @@
         "Antes da publicação, o set foi conferido fora de um Masking Engine:",
         { "list": [
           "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 160 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "O profiling foi simulado em 166 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "As tabelas que generalizam lugares foram auditadas para os 528 partidos e departamentos e para os 2.280 gobiernos locales e as 4.027 localidades: pelo nome, pelo nome com a província e pelo código.",
-          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 240 CUITs de todos os tipos — inclusive os que mudam de tipo — e 150 CBUs quanto a validade e colisões; 150 DNIs quanto a colisões; e 20 pessoas cujo DNI e CUIL precisam continuar coincidindo. Cada algoritmo também mascarou o seu próprio valor de exemplo."
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 240 CUITs de todos os tipos — inclusive os que mudam de tipo — e 150 CBUs quanto a validade e colisões; 150 DNIs quanto a colisões; 20 pessoas cujo DNI e CUIL precisam continuar coincidindo; e 106 grafias das 24 jurisdições, cada uma das quais precisa sortear uma só província da sua região, como quer que esteja escrita. Cada algoritmo também mascarou o seu próprio valor de exemplo."
         ] },
         "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
       ]
@@ -604,7 +609,7 @@
           "Lei 25.326 de Proteção dos Dados Pessoais e Decreto 1558/2001 (InfoLEG). Constituição Nacional, art. 43. Lei 27.483 (Convenção 108) e Lei 27.699 (Convenção 108+). Código Penal, arts. 117 bis e 157 bis.",
           "Agencia de Acceso a la Información Pública: Resolução 47/2018, medidas de segurança recomendadas (Anexo I, item H); Resolução 126/2024, classificação de infrações e gradação de sanções. Projetos de lei 644-S-2025, 1948-D-2025 e 3397-D-2026. Comissão Europeia, Decisão 2003/490/CE e relatório de revisão de 2024.",
           "Leis 26.529 (direitos do paciente), 26.657 (saúde mental), 27.675 (HIV, hepatites, tuberculose e ISTs), 27.610 (interrupção voluntária da gravidez), 26.743 (identidade de gênero), 26.485 (violência contra as mulheres), 26.364 (tráfico de pessoas), 22.431 (deficiência), 24.557 (riscos do trabalho). Decreto 476/2021 (DNI com X).",
-          "INDEC: Censo Nacional de Población, Hogares y Viviendas 2022, resultados definitivos por departamento e por gobierno local; localidades censais. Serviço de normalização de dados geográficos Georef (datos.gob.ar). RENAPER: nomes de pessoas físicas (datos.gob.ar).",
+          "INDEC: Censo Nacional de Población, Hogares y Viviendas 2022, resultados definitivos por departamento e por gobierno local; localidades censais; regiões estatísticas. Serviço de normalização de dados geográficos Georef (datos.gob.ar). RENAPER: nomes de pessoas físicas (datos.gob.ar).",
           "ARCA (ex-AFIP): CUIT, CUIL e regime simplificado. BCRA: Central de Deudores e classificação de devedores; Clave Bancaria Uniforme e Clave Virtual Uniforme. ANSES: benefícios. Correo Argentino: Código Postal Argentino. Superintendencia de Servicios de Salud: Registro Nacional de Obras Sociales."
         ] }
       ]

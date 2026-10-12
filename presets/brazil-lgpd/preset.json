@@ -1,5 +1,6 @@
 {
-  "version": 1,
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Brazil — LGPD, Lei 13.709/2018 (personal data protection)",
     "pt-BR": "Brasil — LGPD, Lei 13.709/2018 (proteção de dados pessoais)",
@@ -11,8 +12,8 @@
     "es": "Descubre y enmascara datos personales brasileños conforme a la LGPD: identificadores directos (CPF, CNPJ, título electoral, PIS y CNS con dígito verificador válido, RG, CNH, nombres, contacto, clave PIX), cuasi-identificadores (fecha de nacimiento, municipio, CEP), los datos personales sensibles del artículo 5, II — origen racial o étnico, religión, política, sindicato, salud, vida sexual, datos genéticos y biométricos — y datos financieros y antecedentes penales."
   },
   "profileSet": {
-    "name": "BR - LGPD - v1",
-    "description": "Identificadores diretos, quase-identificadores, dados pessoais sensíveis (art. 5º, II), dados de saúde, dados financeiros e de crédito, e antecedentes criminais, segundo a Lei Geral de Proteção de Dados Pessoais (Lei 13.709/2018).",
+    "name": "BR - LGPD - v2",
+    "description": "LGPD - dados pessoais e sensíveis",
     "threshold": 60,
     "classifiers": [
       "BR_L1_CPF - Path",
@@ -68,6 +69,7 @@
       "BR_L1_CONTRATO - Path",
       "BR_L1_USUARIO - Path",
       "BR_L1_CREDENCIAL - Path",
+      "BR_L1_CREDENCIAL - Regex",
       "BR_L1_GEOLOCALIZACAO - Path",
       "BR_L1_GEOLOCALIZACAO - Regex",
       "BR_L1_TEXTO_LIVRE - Path",
@@ -84,7 +86,7 @@
       "BR_L2_SEXO - Path",
       "BR_L2_SEXO - List",
       "BR_L2_MUNICIPIO - Path",
-      "BR_L2_MUNICIPIO - List",
+      "BR_L2_MUNICIPIO - Values",
       "BR_L2_CODIGO_MUNICIPIO - Path",
       "BR_L2_CODIGO_MUNICIPIO - Regex",
       "BR_L2_CEP - Path",
@@ -94,51 +96,52 @@
       "BR_L2_NACIONALIDADE - Path",
       "BR_L2_NACIONALIDADE - List",
       "BR_L2_ESTADO_CIVIL - Path",
-      "BR_L2_ESTADO_CIVIL - List",
+      "BR_L2_ESTADO_CIVIL - Values",
       "BR_L2_OCUPACAO - Path",
       "BR_L2_EMPREGADOR - Path",
       "BR_L2_ESCOLARIDADE - Path",
-      "BR_L2_ESCOLARIDADE - List",
+      "BR_L2_ESCOLARIDADE - Values",
       "BR_L2_ESCOLA - Path",
       "BR_L2_DEPENDENTES - Path",
       "BR_L2_DEPENDENTES - Type",
       "BR_L3_RACA_COR - Path",
-      "BR_L3_RACA_COR - List",
+      "BR_L3_RACA_COR - Values",
       "BR_L3_ETNIA - Path",
-      "BR_L3_ETNIA - List",
+      "BR_L3_ETNIA - Values",
       "BR_L3_RELIGIAO - Path",
-      "BR_L3_RELIGIAO - List",
+      "BR_L3_RELIGIAO - Values",
       "BR_L3_CONVICCAO_ORGANIZACAO - Path",
       "BR_L3_OPINIAO_POLITICA - Path",
-      "BR_L3_OPINIAO_POLITICA - List",
+      "BR_L3_OPINIAO_POLITICA - Values",
       "BR_L3_FILIACAO_PARTIDARIA - Path",
-      "BR_L3_FILIACAO_PARTIDARIA - List",
+      "BR_L3_FILIACAO_PARTIDARIA - Values",
       "BR_L3_FILIACAO_SINDICAL - Path",
-      "BR_L3_FILIACAO_SINDICAL - List",
+      "BR_L3_FILIACAO_SINDICAL - Values",
       "BR_L3_GENETICO - Path",
+      "BR_L3_GENETICO - Regex",
       "BR_L3_BIOMETRICO - Path",
       "BR_L3_BIOMETRICO - Type",
       "BR_L3_ORIENTACAO_SEXUAL - Path",
-      "BR_L3_ORIENTACAO_SEXUAL - List",
+      "BR_L3_ORIENTACAO_SEXUAL - Values",
       "BR_L3_VIDA_SEXUAL - Path",
       "BR_L3_IDENTIDADE_GENERO - Path",
-      "BR_L3_IDENTIDADE_GENERO - List",
+      "BR_L3_IDENTIDADE_GENERO - Values",
       "BR_SAUDE_CNS - Path",
       "BR_SAUDE_CNS - Regex",
       "BR_SAUDE_IDENTIFICADOR - Path",
       "BR_SAUDE_DIAGNOSTICO - Path",
       "BR_SAUDE_DIAGNOSTICO - Regex",
       "BR_SAUDE_MEDICAMENTO - Path",
-      "BR_SAUDE_MEDICAMENTO - List",
+      "BR_SAUDE_MEDICAMENTO - Values",
       "BR_SAUDE_TEXTO_CLINICO - Path",
       "BR_SAUDE_TEXTO_CLINICO - Type",
       "BR_SAUDE_RESULTADO_EXAME - Path",
       "BR_SAUDE_TIPO_SANGUINEO - Path",
-      "BR_SAUDE_TIPO_SANGUINEO - List",
+      "BR_SAUDE_TIPO_SANGUINEO - Values",
       "BR_SAUDE_DEFICIENCIA - Path",
-      "BR_SAUDE_DEFICIENCIA - List",
+      "BR_SAUDE_DEFICIENCIA - Values",
       "BR_SAUDE_OCUPACIONAL - Path",
-      "BR_SAUDE_OCUPACIONAL - List",
+      "BR_SAUDE_OCUPACIONAL - Values",
       "BR_SAUDE_REPRODUTIVA - Path",
       "BR_SAUDE_MENTAL - Path",
       "BR_FIN_CREDITO - Path",
@@ -151,15 +154,15 @@
       "BR_FIN_VALOR_BENEFICIO - Path",
       "BR_FIN_VALOR_BENEFICIO - Type",
       "BR_FIN_BENEFICIO_INSS - Path",
-      "BR_FIN_BENEFICIO_INSS - List",
+      "BR_FIN_BENEFICIO_INSS - Values",
       "BR_FIN_NUMERO_BENEFICIO - Path",
       "BR_FIN_NUMERO_BENEFICIO - Regex",
       "BR_FIN_PROGRAMA_SOCIAL - Path",
-      "BR_FIN_PROGRAMA_SOCIAL - List",
+      "BR_FIN_PROGRAMA_SOCIAL - Values",
       "BR_FIN_FAIXA_RENDA - Path",
-      "BR_FIN_FAIXA_RENDA - List",
+      "BR_FIN_FAIXA_RENDA - Values",
       "BR_FIN_MORADIA - Path",
-      "BR_FIN_MORADIA - List",
+      "BR_FIN_MORADIA - Values",
       "BR_PENAL_ANTECEDENTES - Path",
       "BR_PENAL_PROCESSO - Path",
       "BR_PENAL_PROCESSO - Regex"
@@ -167,7 +170,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Pacote essencial da LGPD: CPF, RG, CNH, passaporte, nomes, contato, endereço, CEP e data de nascimento.",
+      "description": "Pacote essencial da LGPD",
       "domains": [
         "BR_L1_CPF",
         "BR_L1_RG",
@@ -190,7 +193,7 @@
       "name": "BR_L1_CPF - Path",
       "framework": "PATH",
       "domain": "BR_L1_CPF",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -242,20 +245,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+            "regex": "0*(?:\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{11}",
+            "regex": "0*(?:\\d{11})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -265,7 +268,7 @@
       "name": "BR_L1_CNPJ - Path",
       "framework": "PATH",
       "domain": "BR_L1_CNPJ",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -309,20 +312,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2}",
+            "regex": "0*(?:[0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Z]{12}\\d{2}",
+            "regex": "0*(?:[0-9A-Z]{12}\\d{2})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -332,7 +335,7 @@
       "name": "BR_L1_RG - Path",
       "framework": "PATH",
       "domain": "BR_L1_RG",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -355,12 +358,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,2}\\.\\d{3}\\.\\d{3}-[\\dxX]",
+            "regex": "0*(?:\\d{1,2}\\.\\d{3}\\.\\d{3}-[\\dxX])",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{2}-?\\d{1,2}\\.?\\d{3}\\.?\\d{3}",
@@ -368,7 +371,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -378,7 +381,7 @@
       "name": "BR_L1_CNH - Path",
       "framework": "PATH",
       "domain": "BR_L1_CNH",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -397,7 +400,7 @@
       "name": "BR_L1_TITULO_ELEITOR - Path",
       "framework": "PATH",
       "domain": "BR_L1_TITULO_ELEITOR",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -420,12 +423,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{4}\\s?\\d{4}\\s?\\d{4}",
+            "regex": "0*(?:\\d{4}\\s?\\d{4}\\s?\\d{4})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -435,7 +438,7 @@
       "name": "BR_L1_PIS_NIS - Path",
       "framework": "PATH",
       "domain": "BR_L1_PIS_NIS",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -458,20 +461,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}\\.\\d{5}\\.\\d{2}-\\d",
+            "regex": "0*(?:\\d{3}\\.\\d{5}\\.\\d{2}-\\d)",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{11}",
+            "regex": "0*(?:\\d{11})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -481,7 +484,7 @@
       "name": "BR_L1_CTPS - Path",
       "framework": "PATH",
       "domain": "BR_L1_CTPS",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -500,7 +503,7 @@
       "name": "BR_L1_PASSAPORTE - Path",
       "framework": "PATH",
       "domain": "BR_L1_PASSAPORTE",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -528,7 +531,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -538,7 +541,7 @@
       "name": "BR_L1_DOCUMENTO_ESTRANGEIRO - Path",
       "framework": "PATH",
       "domain": "BR_L1_DOCUMENTO_ESTRANGEIRO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -557,7 +560,7 @@
       "name": "BR_L1_CERTIDAO - Path",
       "framework": "PATH",
       "domain": "BR_L1_CERTIDAO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -580,12 +583,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{6}\\s?\\d{2}\\s?\\d{2}\\s?\\d{4}\\s?\\d\\s?\\d{5}\\s?\\d{3}\\s?\\d{7}\\s?\\d{2}",
+            "regex": "0*(?:\\d{6}\\s?\\d{2}\\s?\\d{2}\\s?\\d{4}\\s?\\d\\s?\\d{5}\\s?\\d{3}\\s?\\d{7}\\s?\\d{2})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -595,7 +598,7 @@
       "name": "BR_L1_REGISTRO_PROFISSIONAL - Path",
       "framework": "PATH",
       "domain": "BR_L1_REGISTRO_PROFISSIONAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -614,7 +617,7 @@
       "name": "BR_L1_NOME - Path",
       "framework": "PATH",
       "domain": "BR_L1_NOME",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -658,7 +661,7 @@
       "name": "BR_L1_SOBRENOME - Path",
       "framework": "PATH",
       "domain": "BR_L1_SOBRENOME",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -694,7 +697,7 @@
       "name": "BR_L1_NOME_COMPLETO - Path",
       "framework": "PATH",
       "domain": "BR_L1_NOME_COMPLETO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -734,11 +737,11 @@
         "valueLists": [
           {
             "file": "preset-file://br-detectar-nomes.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://br-detectar-sobrenomes.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -750,7 +753,7 @@
       "name": "BR_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "BR_L1_EMAIL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -790,12 +793,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -805,7 +808,7 @@
       "name": "BR_L1_TELEFONE - Path",
       "framework": "PATH",
       "domain": "BR_L1_TELEFONE",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -828,28 +831,28 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?55\\s?)?\\(?0?[1-9]\\d\\)?\\s?9\\d{4}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?55\\s?)?\\(?0?[1-9]\\d\\)?\\s?9\\d{4}[\\s\\-]?\\d{4})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?55\\s?)?\\(?0?[1-9]\\d\\)?\\s?[2-5]\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?55\\s?)?\\(?0?[1-9]\\d\\)?\\s?[2-5]\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "9\\d{4}-\\d{4}",
+            "regex": "0*(?:9\\d{4}-\\d{4})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -859,7 +862,7 @@
       "name": "BR_L1_ENDERECO - Path",
       "framework": "PATH",
       "domain": "BR_L1_ENDERECO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -904,7 +907,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*,\\s*\\d+.*",
@@ -912,7 +915,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -922,7 +925,7 @@
       "name": "BR_L1_ENDERECO_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "BR_L1_ENDERECO_COMPLEMENTO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -941,7 +944,7 @@
       "name": "BR_L1_CONTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "BR_L1_CONTA_BANCARIA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -960,7 +963,7 @@
       "name": "BR_L1_CARTAO - Path",
       "framework": "PATH",
       "domain": "BR_L1_CARTAO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -983,12 +986,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -998,7 +1001,7 @@
       "name": "BR_L1_CHAVE_PIX - Path",
       "framework": "PATH",
       "domain": "BR_L1_CHAVE_PIX",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1021,12 +1024,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}",
+            "regex": "0*(?:[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -1036,7 +1039,7 @@
       "name": "BR_L1_IP - Path",
       "framework": "PATH",
       "domain": "BR_L1_IP",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1059,20 +1062,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1082,7 +1085,7 @@
       "name": "BR_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "BR_L1_DISPOSITIVO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1105,20 +1108,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1128,7 +1131,7 @@
       "name": "BR_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "BR_L1_PLACA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1156,7 +1159,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{3}-?\\d{4}",
@@ -1164,7 +1167,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1174,7 +1177,7 @@
       "name": "BR_L1_RENAVAM - Path",
       "framework": "PATH",
       "domain": "BR_L1_RENAVAM",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1193,7 +1196,7 @@
       "name": "BR_L1_CHASSI - Path",
       "framework": "PATH",
       "domain": "BR_L1_CHASSI",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1221,7 +1224,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1231,7 +1234,7 @@
       "name": "BR_L1_IMOVEL - Path",
       "framework": "PATH",
       "domain": "BR_L1_IMOVEL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1250,7 +1253,7 @@
       "name": "BR_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "BR_L1_CONTRATO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1269,7 +1272,7 @@
       "name": "BR_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "BR_L1_USUARIO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1288,7 +1291,7 @@
       "name": "BR_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "BR_L1_CREDENCIAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1304,10 +1307,61 @@
       }
     },
     {
+      "name": "BR_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "BR_L1_CREDENCIAL",
+      "description": "Formato dos valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "BR_L1_GEOLOCALIZACAO - Path",
       "framework": "PATH",
       "domain": "BR_L1_GEOLOCALIZACAO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1343,7 +1397,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(3[4-9]|[4-6]\\d|7[0-4])\\.\\d{4,}",
@@ -1351,7 +1405,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-?([0-2]?\\d|3[0-3])\\.\\d{4,}",
@@ -1359,7 +1413,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1369,7 +1423,7 @@
       "name": "BR_L1_TEXTO_LIVRE - Path",
       "framework": "PATH",
       "domain": "BR_L1_TEXTO_LIVRE",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1409,12 +1463,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}",
+            "regex": "0*(?:\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1422,7 +1476,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "\\(?\\d{2}\\)?\\s?9\\d{4}-\\d{4}",
@@ -1430,7 +1484,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1440,7 +1494,7 @@
       "name": "BR_L2_DATA_NASCIMENTO - Path",
       "framework": "PATH",
       "domain": "BR_L2_DATA_NASCIMENTO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1483,7 +1537,7 @@
       "name": "BR_L2_ANO_NASCIMENTO - Path",
       "framework": "PATH",
       "domain": "BR_L2_ANO_NASCIMENTO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1523,7 +1577,7 @@
       "name": "BR_L2_IDADE - Path",
       "framework": "PATH",
       "domain": "BR_L2_IDADE",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1563,7 +1617,7 @@
       "name": "BR_L2_DATA_EVENTO - Path",
       "framework": "PATH",
       "domain": "BR_L2_DATA_EVENTO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1606,7 +1660,7 @@
       "name": "BR_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "BR_L2_SEXO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1630,10 +1684,14 @@
         "valueLists": [
           {
             "file": "preset-file://br-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://br-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1642,7 +1700,7 @@
       "name": "BR_L2_MUNICIPIO - Path",
       "framework": "PATH",
       "domain": "BR_L2_MUNICIPIO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1658,27 +1716,39 @@
       }
     },
     {
-      "name": "BR_L2_MUNICIPIO - List",
-      "framework": "LIST",
+      "name": "BR_L2_MUNICIPIO - Values",
+      "framework": "REGEX",
       "domain": "BR_L2_MUNICIPIO",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-municipios.txt",
-            "matchStrength": 0.8
+            "note": "5165 — Acrelândia · Assis Brasil · Brasiléia · Bujari · Capixaba · Cruzeiro do Sul · …",
+            "regex": "(?iu)(?:(?:a(?:b(?:a(?:di(?:a(?: d(?:e goi(?:as|ás)|os dourados)|nia)|ânia)|et(?:e(?:tuba)?|é)|i(?:ara|ra)|r(?:e|é)|ti(?:a|á)|íra)|don batista|el(?: figueiredo|ardo luz)|re(?: campo|u(?: e lima|l(?:andia|ândia))))|c(?:a(?:i(?:aca|landia)|jutiba|r(?:a(?:pe|u|ú)?|i|á)|u(?:a|ã))|egu(?:a|á)|o(?:piara|rizal)|re(?:l(?:andia|ândia)|una|úna)|u(?:cena)?)|d(?:amantina|el(?:andia|ândia)|olfo|rian(?:opolis|ópolis)|ustina)|f(?:o(?:gados da ingazeira|nso (?:bezerra|c(?:l(?:audio|áudio)|unha)))|r(?:anio|ânio)|u(?:a|á))|g(?:r(?:estina|icol(?:andia|ândia)|o(?:l(?:andia|ândia)|n(?:omica|ômica)))|u(?:a(?: (?:azul do norte|b(?:oa|ranca)|c(?:lara|omprida)|doce(?: do (?:maranhao|norte))?|fria(?: de goias)?|limpa|nova|preta|santa)|i|nil|s (?:belas|d(?:a prata|e (?:chapeco|lindoia|sa(?:nta barbara|o pedro)))|f(?:ormosas|rias)|lindas de goias|mornas|vermelhas)|í)|do(?:s(?: do sul)?)?|ia(?: branca|rn(?:opolis|ópolis))))|i(?:mor(?:es|és)|quara|u(?:aba|ruoca))|juricaba|l(?:a(?:go(?:a(?: (?:grande|nova))?|inha(?: do piau(?:i|í)|s)?)|mbari)|bertina|c(?:ant(?:aras|il)|in(?:opolis|ópolis)|oba(?:ca|ça)|ântaras)|deias altas|e(?:crim|gr(?:e(?:te(?: do piau(?:i|í))?)?|ia)|m paraiba|nquer|x(?:an(?:dria|ia)|ânia))|f(?:enas|redo (?:chaves|marcondes|vasconcelos|wagner))|god(?:ao de jandaira|ão de jandaíra)|handra|ian(?:ca(?: do tocantins)?|ça(?: do tocantins)?)|m(?:a(?:dina|s)|e(?:irim|nara)|i(?:no afonso|rante tamandar(?:e(?: do sul)?|é(?: do sul)?)))|o(?:andia|ândia)|p(?:e(?:rcata|stre)|in(?:opolis|ópolis))|t(?:a(?: floresta(?: d'oeste)?|mira(?: do (?:maranh(?:ao|ão)|paran(?:a|á)))?|neira)|erosa|in(?:ho|opolis|ópolis)|o(?: (?:a(?:legre(?: do(?: (?:maranh(?:ao|ão)|pindar(?:e|é))|s parecis))?|raguaia)|b(?:ela vista|oa vista)|capara(?:o|ó)|do rodrigues|feliz|gar(?:cas|ças)|horizonte|jequitib(?:a|á)|long(?:a|á)|p(?:ar(?:a(?:guai|iso(?: de goias)?|n(?:a|á)|íso(?: de goiás)?)|na(?:iba|íba))|iquiri)|rio (?:doce|novo)|santo|taquari)|nia|s)|ônia)|um(?:inio|ínio)|v(?:ar(?:aes|es (?:florence|machado)|o de carvalho|ães)|in(?:l(?:andia|ândia)|opolis|ópolis)|orada(?: d(?:'oeste|e minas|o (?:gurgu(?:eia|éia)|norte|sul)))?)|ém paraíba)|m(?:a(?:jari|mbai|p(?:a do maranhao|or(?:a|ã)|á do maranhão)|r(?:a(?:ji|l(?: ferrador|ina)|nte(?: do maranh(?:ao|ão))?)|gosa)|tur(?:a|á))|e(?:lia rodrigues|ric(?:a(?: dourada|n(?:a|o do brasil))|o (?:brasiliense|de campos))|tista do sul)|o(?:ntada|rin(?:opolis|ópolis))|p(?:aro(?: d(?:e s(?:ao francisco|ão francisco)|o s(?:ao francisco|erra|ão francisco)))?|ere|ére)|é(?:lia rodrigues|ric(?:a dourada|o (?:brasiliense|de campos))))|n(?:a(?:dia|g(?:e|é)|hy|j(?:a(?:s|tuba)|ás)|l(?:andia|ândia)|m(?:a|ã)|n(?:as|indeua|ás)|p(?:olis|u(?:rus)?)|uril(?:andia|ândia))|chieta|d(?:ara(?:i|í)|ir(?:a|á)|orinha|r(?:ad(?:as|ina)|e(?: da rocha|l(?:andia|ândia))|é da rocha))|g(?:atuba|el(?:andia|im|ândia)|ic(?:al(?: do piau(?:i|í))?|o(?:s)?)|ra dos reis|u(?:era|lo))|h(?:anguera|embi|umas)|i(?:cuns|sio de abreu|t(?:a(?: garibaldi|polis)|ápolis))|ori|t(?:a(?: gorda|s)|oni(?:na(?: do norte)?|o (?:almeida|car(?:doso|los)|dias|goncalves|joao|martins|olinto|prado(?: de minas)?))|ônio (?:almeida|car(?:doso|los)|dias|gonçalves|joão|martins|olinto|prado(?: de minas)?))|ápolis|ísio de abreu)|p(?:arecida d(?:'oeste|e goi(?:ania|ânia)|o (?:rio (?:doce|negro)|taboado))|erib(?:e|é)|i(?:a(?:c(?:a(?:s)?|á(?:s)?)|i|í)|cum-a(?:cu|çu)|una|úna)|o(?:di|r(?:a|e|á|é))|u(?:arema|carana|i(?:ar(?:es|és))?|í))|qui(?:da(?:b(?:a|ã)|uana)|raz)|r(?:a(?:but(?:a|ã)|c(?:a(?:gi|i|ju|riguama|s|t(?:i|u(?:ba)?))|i(?:taba)?|oiaba(?: da serra)?|ruz|u(?:ai)?)|g(?:ar(?:cas|ças)|o(?:i(?:ania|ânia)|minas)|ua(?:c(?:ema|u)|i(?:ana|n(?:a|ha))|n(?:a|ã)|paz|ri|tins|çu|ína))|ioses|l moreira|m(?:ari|bar(?:e|é)|e|ina)|n(?:du|tina)|p(?:e(?:i|í)|iraca|o(?:ema|nga(?:s)?|r(?:a|ã)|ti)|u(?:a|tanga|á|ã))|quari|r(?:a(?:ngu(?:a|á)|quara|s)?|end(?:a|á)|i(?:c(?:a|á)|p(?:e|ina))?|u(?:ama|na))|t(?:aca|iba|u(?:ba|ipe|ípe))|u(?:a|c(?:aria|ária)|jos|á)|x(?:a|á)|ç(?:a(?:gi|riguama|s|tuba|í)|oiaba(?: da serra)?|u(?:aí)?|ás)|újos)|c(?:eburgo|o(?:-(?:iris|íris)|s|verde))|e(?:a(?:do|l(?:va)?)|i(?:a(?: (?:branca|de bara(?:unas|únas))|l|s)?|opolis|ópolis)|n(?:apolis|opolis|ápolis|ópolis)|s|z)|girita|i(?:canduva|nos|puan(?:a|ã)|quemes|ranha(?: do iva(?:i|í))?)|ma(?:cao dos buzios|z(?:em|ém)|ção dos búzios)|neiroz|o(?:azes|eiras(?: do itaim)?)|r(?:aia(?:l(?: do cabo)?|s)|oio (?:do(?: (?:meio|padre|sal|tigre)|s ratos)|grande|trinta))|tur nogueira|u(?:an(?:a|ã)|j(?:a|á))|vore(?:do|zinha)|ês)|s(?:curra|p(?:asia|ásia)|s(?:a(?:i|r(?:e|é)|í)|is (?:brasil|chateaubriand)|u(?:n(?:cao do piaui|ção do piauí))?|ú)|to(?:lfo dutra|rga))|t(?:al(?:a(?:ia(?: do norte)?|nta)|eia|éia)|i(?:baia|lio vivacqua)|ílio vivácqua)|u(?:gust(?:in(?:opolis|ópolis)|o (?:corr(?:ea|êa)|de lima|pestana|severo \\(campo grande\\)))|r(?:e(?:a|lino leal)|i(?:flama|l(?:andia|ândia))|ora do (?:par(?:a|á)|tocantins))|tazes)|v(?:a(?:i|nhandava|r(?:e|é)|í)|e(?:iro|lin(?:o(?: lopes|polis)|ópolis)))|xix(?:a(?: do tocantins)?|á(?: do tocantins)?)|ç(?:ailândia|u(?:cena)?))|b(?:a(?:ba(?:culandia|çulândia)|c(?:ab(?:al|eira)|uri(?:tuba)?)|dy bassitt|ependi|g(?:e|re|é)|i(?:a(?: (?:da traicao|formosa)|n(?:opolis|ópolis)|o)|x(?:a grande(?: do ribeiro)?|io|o guandu)|ão)|l(?:binos|dim|iza|ne(?:ario (?:arroio do silva|barra do sul|camboriu|gaivota|pi(?:carras|nhal)|rincao)|ário (?:arroio do silva|barra do sul|camboriú|gaivota|pi(?:nhal|çarras)|rincão))|sa(?: nova|mo|s))|mbu(?:i|í)|n(?:a(?:bui(?:u|ú)|n(?:al|eiras))|deira(?: do sul|nte(?:s(?: do tocantins)?)?)|nach|za(?:e|ê))|r(?:a(?:o(?: d(?:e (?:antonina|co(?:cais|tegipe)|grajau|m(?:elgaco|onte alto))|o (?:monte alto|triunfo)))?|una|úna)|b(?:a(?:cena|lha)|osa ferraz)|c(?:arena|elona)|iri|r(?:a(?: (?:bonita|d(?:'alc(?:antara|ântara)|a estiva|e (?:guabiraba|s(?:a(?:nt(?:a(?: rosa|na)|o ant(?:onio|ônio))|o (?:francisco|miguel))|ão (?:francisco|miguel)))|o(?: (?:bugres|c(?:h(?:ap(?:eu|éu)|o(?:ca|ça))|orda)|g(?:ar(?:cas|ças)|uarita)|jacar(?:e|é)|mendes|ouro|pira(?:i|í)|quara(?:i|í)|r(?:i(?:beiro|o azul)|ocha)|turvo)|s coqueiros))|funda|longa|mansa|velha)|c(?:ao|ão)|s)?|e(?:ir(?:a(?:s(?: do piau(?:i|í))?)?|inha(?:s)?|os)|tos)|inha|o(?: (?:alto|duro|preto)|cas|l(?:andia|ândia)|quinha|s cassal)?)|ueri|ão(?: d(?:e (?:antonina|co(?:cais|tegipe)|grajaú|m(?:elgaço|onte alto))|o (?:monte alto|triunfo)))?)|t(?:a(?:guassu|tais|ypor(?:a|ã))|urit(?:e|é))|uru|yeux|ía (?:da traição|formosa))|e(?:be(?:douro|ribe)|l(?:a(?: (?:cruz|vista(?: d(?:a caroba|e (?:goi(?:as|ás)|minas)|o (?:maranh(?:ao|ão)|p(?:ara(?:iso|íso)|iau(?:i|í))|toldo)))?)|gua)|em d(?:e maria|o (?:brejo do cruz|piaui|sao francisco))|ford roxo|m(?:iro braga|onte)|o (?:campo|horizonte|jardim|monte|oriente|vale)|terra|água|ém d(?:e maria|o (?:brejo do cruz|piauí|são francisco)))|n(?:edit(?:inos|o (?:leite|novo))|jamin constant(?: do sul)?|to (?:de abreu|fernandes|gon(?:calves|çalves)))|quim(?:ao|ão)|r(?:i(?:lo|zal)|nard(?:ino (?:batista|de campos)|o (?:do mearim|say(?:ao|ão)))|t(?:ioga|o(?:l(?:inia|ínia)|polis)|ópolis)|uri)|t(?:ania(?: do piaui)?|im|ânia(?: do piauí)?)|zerros)|i(?:as fortes|cas|gua(?:cu|çu)|lac|quinhas|ri(?:gui|ti(?:ba(?: mirim|-mirim)|nga))|turuna)|lumenau|o(?:a (?:esperan(?:ca(?: do (?:iguacu|sul))?|ça(?: do (?:iguaçu|sul))?)|hora|nova|v(?:entura(?: de s(?:ao roque|ão roque))?|i(?:agem|sta(?: d(?:a(?: aparecida|s miss(?:oes|ões))|o (?:buric(?:a|á)|cadeado|gurupi|incra|ramos|sul|tupim)))?)))|ca(?: d(?:a mata|o acre)|i(?:na(?: d(?:e minas|o sul))?|uva(?: do sul)?|úva(?: do sul)?))|d(?:o(?:c(?:o|ó)|quena)?|ó)|fete|ituva|m(?: (?:conselho|despacho|j(?:ardim(?: d(?:a serra|e (?:goi(?:as|ás)|minas)))?|esus(?: d(?:a(?: (?:lapa|penha|serra)|s selvas)|e goi(?:as|ás)|o(?: (?:a(?:mparo|raguaia)|galho|itabapoana|norte|oeste|sul|tocantins)|s perd(?:oes|ões))))?)|lugar|pr(?:inc(?:ipio(?: do piaui)?|ípio(?: do piauí)?)|ogresso)|re(?:pouso|tiro(?: do sul)?)|sucesso(?: d(?:e itarar(?:e|é)|o sul))?)|binhas)|n(?:fi(?:m do piau(?:i|í)|n(?:opolis(?: de minas)?|ópolis(?: de minas)?))|i(?:nal|to(?: de (?:minas|santa f(?:e|é)))?)|opolis|ópolis)|qu(?:eir(?:ao(?: do (?:leao|piaui))?|ão(?: do (?:leão|piauí))?)|i(?:m|ra))|r(?:a(?:c(?:eia|éia))?|borema|da da mata|ebi|raz(?:opolis|ópolis)|á)|ssoroca|t(?:elhos|u(?:catu|mirim|por(?:a|ã)|ver(?:a|á)))|zano)|r(?:a(?:co do (?:norte|trombudo)|gan(?:ca(?: paulista)?|ey|ça(?: paulista)?)|nquinha|s(?: pires|il(?: novo|andia(?: d(?:e minas|o (?:sul|tocantins)))?|ei(?:a|ra)|ia(?: de minas)?|ândia(?: d(?:e minas|o (?:sul|tocantins)))?|éia)|norte|ília(?: de minas)?)|una(?:s)?|z(?:abrantes|opolis|ópolis)|ço do (?:norte|trombudo)|úna(?:s)?)|e(?:j(?:ao|etuba|inho(?: de nazar(?:e|é))?|o(?: (?:alegre|d(?:a madre de deus|e areia|o(?: (?:cruz|piau(?:i|í))|s santos))|grande(?: do araguaia)?|santo)|es|l(?:andia|ândia))?|ão|ões)|u branco|ves)|it(?:ania|ânia)|o(?:chier|dowski|tas(?: de maca(?:ubas|úbas))?)|u(?:mad(?:inho|o)|n(?:opolis|ópolis)|sque)|ás pires)|u(?:e(?:n(?:o(?: brand(?:ao|ão)|polis|s aires)|ópolis)|rarema)|gre|ique|jar(?:i|u)|ri(?:t(?:ama|i(?: (?:alegre|bravo|d(?:e goi(?:as|ás)|o(?: tocantins|s (?:lopes|montes))))|cupu|n(?:opolis|ópolis)|ra(?:ma|na)|s|z(?:al|eiro))?))?|ti(?:a|á)|íque)|álsamo)|c(?:a(?:a(?:p(?:iranga|or(?:a|ã))|rap(?:o|ó)|tiba)|b(?:aceiras(?: do paragua(?:cu|çu))?|e(?:ceira(?: grande|s(?: do piau(?:i|í))?)|delo)|ixi|o (?:de santo agostinho|frio|verde)|r(?:alia paulista|e(?:uva|úva)|ob(?:o|ó)|ália paulista))|c(?:a(?:dor|pava(?: do sul)?|ul(?:andia|ândia))|e(?:qui|res)|hoeir(?:a(?: (?:alta|d(?:a prata|e (?:goi(?:as|ás)|minas|paje(?:u|ú))|o(?: (?:arari|piri(?:a|á)|sul)|s (?:indios|índios)|urada))|grande|paulista)|s de macacu)?|inha|o de itapemirim)|i(?:mb(?:a(?: de (?:areia|dentro)|s)|inhas)|que doble)|o(?:al|nde)|u(?:l(?:e|é))?)|e(?:m|t(?:an(?:o(?:polis|s)|ópolis)|e(?:s)?|it(?:e|é)|é(?:s)?))|f(?:arnaum|e(?:ara|l(?:andia|ândia)|zal do sul))|i(?:a(?:bu|na|p(?:onia|ônia))|b(?:at(?:e|é)|i)|c(?:ara(?: do (?:norte|rio do vento))?|o|ó)|eiras|ru|u(?:a|á)|çara(?: do (?:norte|rio do vento))?)|j(?:a(?:mar|pi(?:o|ó)|ri|ti|zeir(?:as(?: do piau(?:i|í))?|inhas))|obi|u(?:eiro(?: da praia)?|r(?:i|u)))|l(?:c(?:ado|oene)|d(?:a(?:s (?:brand(?:ao|ão)|novas)|zinha)|eir(?:ao grande(?: do piaui)?|ão grande(?: do piauí)?))|if(?:ornia|órnia)|mon|umbi|ç(?:ado|oene))|m(?:a(?:c(?:a(?:n|ri)|ho)|la(?:u|ú)|mu|nducaia|pu(?:a|ã)|qu(?:a|ã)|ragibe|çari)|b(?:ar(?:a(?: do sul)?|á(?: do sul)?)|e|ira|ori(?:u|ú)|u(?:ci|i|quira|í)|é)|et(?:a|á)|ocim(?: de s(?:ao felix|ão félix))?|p(?:an(?:ario|ha|ário)|estre(?: d(?:a serra|e goi(?:as|ás)|o maranh(?:ao|ão)))?|in(?:a(?: (?:d(?:a(?: lagoa|s miss(?:oes|ões))|o (?:monte alegre|sim(?:ao|ão)))|grande(?: do sul)?|verde)|cu|polis|s(?: do (?:piau(?:i|í)|sul))?|çu)|orte|ápolis)|o(?: (?:a(?:legre(?: d(?:e (?:goi(?:as|ás)|lourdes)|o fidalgo))?|zul)|b(?:elo(?: do sul)?|o(?:m|nito))|do (?:brito|meio|tenente)|er(?:e|ê)|f(?:lorido|ormoso)|grande(?: do piau(?:i|í))?|l(?:argo(?: do piau(?:i|í))?|impo (?:de goi(?:as|ás)|paulista))|m(?:a(?:gro|ior)|our(?:ao|ão))|novo(?: d(?:e rond(?:onia|ônia)|o parecis))?|redondo|verde)|s (?:altos|b(?:elos|orges)|d(?:e j(?:ulio|úlio)|o(?: jord(?:ao|ão)|s goytacazes))|gerais|lindos|novos(?: paulista)?|sales|verdes)))|utanga)|n(?:a(?: verde|a(?: dos carajas)?|brava do norte|n(?:eia|éia)|p(?:i|olis)|rana|s|vieira(?:s)?|ã(?: dos carajás)?)|d(?:e(?:al|ias(?: do jamari)?|l(?:aria|ária))|i(?:ba|do (?:de abreu|godoi|m(?:endes|ota)|rodrigues|sales)|ota)|oi|ói)|el(?:a|inha)|gu(?:aretama|cu|çu)|ho(?:ba|tinho)|i(?:nd(?:e(?: de sao francisco)?|é(?: de são francisco)?)|tar)|o(?:as|inhas)|san(?:cao|ção)|t(?:a(?:galo|nhede)?|o do buriti|á)|u(?:dos(?: do vale)?|tama)|ápolis)|p(?:a(?:nema|o (?:alto|bonito(?: do sul)?|d(?:a canoa|o (?:cipo|leao)))|ra(?:o|ó))|e(?:l(?:a(?: (?:d(?:e santana|o alto(?: alegre)?)|nova))?|inha)|tinga)|i(?:m(?: (?:branco|grosso))?|n(?:opolis|zal(?: do norte)?|ópolis)|strano|t(?:ao(?: (?:andrade|de campos|eneas|gervasio oliveira|leonidas marques|poco))?|olio|ão(?: (?:andrade|de campos|enéas|gervásio oliveira|leônidas marques|poço))?|ólio)|vari(?: d(?:e baixo|o sul))?|xaba)|oeiras|utira|ão (?:alto|bonito(?: do sul)?|d(?:a canoa|o (?:cipó|leão))))|r(?:a(?:a|c(?:ara(?:i|í)|ol)|guatatuba|i(?:bas)?|mbe(?:i|í)|n(?:a(?:iba|íba)|da(?:i|í)|gola)|p(?:ebus|icu(?:iba|íba))|tinga|u(?:ari|bas(?: do piaui)?)|velas|zinho|á|í(?:bas)?|úbas(?: do piauí)?)|bonita|d(?:eal da silva|oso moreira)|e(?:a(?:cu|çu)|iro(?: da v(?:arzea|árzea))?)|i(?:acica|dade(?: do piau(?:i|í))?|nhanha|r(?:a|e|i(?: do tocantins|a(?:cu|çu))|é)|us|ús)|l(?:inda|o(?:polis|s (?:barbosa|chagas|gomes))|ópolis)|m(?:esia|o(?: d(?:a (?:cachoeira|mata)|e minas|o (?:cajuru|parana(?:iba|íba)|rio (?:claro|verde)))|l(?:andia|ândia)|polis(?: de minas)?)|ésia|ópolis(?: de minas)?)|n(?:a(?:iba|ub(?:a(?: dos dantas|is|l)|eira da penha)|íba|úba dos dantas)|eir(?:inho|os))|oebe|pina|ra(?:ncas|pateira|sco bonito)|u(?:aru|tapera)|valh(?:o(?:polis|s)|ópolis))|s(?:a (?:branca|grande|nova)|ca(?:lho rico|vel)?|e(?:ara|iros)|i(?:miro de abreu|nhas)|s(?:erengue|i(?:a dos coqueiros|l(?:andia|ândia)))|t(?:anh(?:al|eira(?:s)?)|el(?:andia|o do piau(?:i|í)|ândia)|ro alves))|t(?:a(?:guases|l(?:ao|ão)|nduva(?:s)?|s altas(?: da noruega)?)|ende|i(?:gu(?:a|á)|ngueira)|ol(?:andia|e do rocha|ândia|é do rocha)|u(?:ipe|ji|nda|r(?:a(?:i|ma|í)|it(?:e|é))|ti|ípe)?)|ucaia|x(?:ambu(?: do sul)?|i(?:as(?: do sul)?|ng(?:o|ó)))|ç(?:a(?:dor|pava(?: do sul)?)|u)|ém)|e(?:ar(?:a-mirim|á-mirim)|dr(?:al|o(?: d(?:e s(?:ao joao|ão joão)|o abaet(?:e|é)))?)|lso ramos|nt(?:en(?:ario(?: do sul)?|ário(?: do sul)?)|r(?:al(?: d(?:e minas|o maranh(?:ao|ão))|ina)?|o (?:do guilherme|novo do maranh(?:ao|ão))))|r(?:e(?:jeiras|s)|qu(?:eira c(?:esar|ésar)|ilho)|r(?:ito|o (?:azul|branco|cor(?:a|á)|grande(?: do sul)?|largo|negro)))|s(?:ario lange|ário lange)|u azul|zarina)|h(?:a(?: (?:de alegria|grande|preta)|cara|l(?:e|é)|p(?:ad(?:a(?: (?:d(?:a natividade|e areia|o(?: norte|s guimar(?:aes|ães)))|ga(?:ucha|úcha))|o do (?:ceu|lageado|sul))?|inha|ão do (?:céu|lageado|sul))|ec(?:o|ó))|r(?:queada(?:s)?|rua)|va(?:l|ntes))|ia(?:dor|petta)|o(?:pinzinho|r(?:o(?:zinho)?|roch(?:o|ó)|ó))|u(?:i|pinguaia|visca|í)|ácara|ã (?:de alegria|grande|preta))|i(?:anorte|cero dantas|d(?:ade (?:ga(?:ucha|úcha)|ocidental)|el(?:andia|ândia)|reira)|p(?:o(?:t(?:anea|ânea))?|ó)|r(?:iaco|íaco))|l(?:ar(?:aval|o dos po(?:coes|ções))|e(?:mentina|vel(?:andia|ândia)))|o(?:ar(?:aci|i)|c(?:al(?: d(?:e telha|o(?: sul|s alves))|inho|zinho de goi(?:as|ás))?|os)|d(?:aj(?:as|ás)|o|ó)|elho neto|i(?:t(?:e do noia|é do nóia)|varas)|l(?:atina|i(?:der|na(?:s(?: do (?:sul|tocantins))?)?)|m(?:eia|éia)|niza|o(?:mb(?:ia|o)|nia (?:do (?:gurgueia|piaui)|leopoldina)|rado(?: do oeste)?)|una|íder|ô(?:mbia|nia (?:do (?:gurguéia|piauí)|leopoldina)))|m(?:binado|e(?:ndador (?:gomes|levy gasparian)|rcinho)|odoro)|n(?:c(?:ei(?:cao d(?:a(?: (?:aparecida|barra(?: de minas)?|feira)|s (?:alagoas|pedras))|e (?:ipanema|macabu)|o(?: (?:a(?:lmeida|raguaia)|c(?:a(?:ninde|stelo)|oite)|jacuipe|lago-acu|mato dentro|para|rio verde|tocantins)|s ouros))|ção d(?:a(?: (?:aparecida|barra(?: de minas)?|feira)|s (?:alagoas|pedras))|e (?:ipanema|macabu)|o(?: (?:a(?:lmeida|raguaia)|c(?:a(?:nindé|stelo)|oité)|jacuípe|lago-açu|mato dentro|pará|rio verde|tocantins)|s ouros)))|ha(?:l|s)|ordia(?: do para)?|órdia(?: do pará)?)|d(?:ado|e(?:uba|úba)?|or)|ego marinho|f(?:ins|resa)|go(?:nh(?:a(?:l|s(?: do norte)?)|inhas))?|quista(?: d'oeste)?|s(?:elheiro (?:lafaiete|mairinck|pena)|ola(?:cao|ção)|tantina)|t(?:agem|enda(?:s do sincor(?:a|á))?))|queir(?:al|o(?: (?:baixo|seco)|s do sul))|r(?:a(?:cao de (?:jesus|maria)|ção de (?:jesus|maria))|b(?:elia|élia)|d(?:eir(?:o(?:polis|s)|ópolis)|i(?:lheira alta|s(?:burgo|l(?:andia|ândia))))|e(?:a(?:u|ú)|mas)|guinho|i(?:be|nto)|n(?:elio procopio|élio procópio)|o(?:a(?:ci|dos|t(?:a|á))|mandel|nel (?:b(?:arros|icaco)|domingos soares|ezequiel|f(?:abriciano|reitas)|jo(?:ao (?:pessoa|sa)|s(?:e dias|é dias)|ão (?:pessoa|sá))|m(?:a(?:cedo|rtins)|urta)|p(?:acheco|ilar)|sapucaia|vivida|xavier chaves))|re(?:go (?:d(?:anta|o (?:bom jesus|ouro))|fundo|novo)|ia pinto|nt(?:e(?:s)?|ina))|u(?:mb(?:a(?: de goias|iba|ta(?:i(?: do sul)?|í(?: do sul)?)|íba)?|iara|á(?: de goiás)?)|p(?:a|á)|ripe))|s(?:m(?:o(?:polis|rama)|ópolis)|ta (?:marques|rica))|t(?:egipe|i(?:a|por(?:a|ã))|rigua(?:cu|çu))|uto (?:de magalh(?:aes de minas|ães de minas)|magalh(?:aes|ães))|xi(?:lha|m|xola))|r(?:a(?:ibas|t(?:e(?:us|ús)|o)|v(?:inhos|ol(?:andia|ândia))|íbas)|i(?:ci(?:uma|úma)|s(?:o(?:lita|polis)|siumal|t(?:a(?:is(?: paulista)?|l(?: do sul|andia(?: do piaui)?|i(?:a|na)|ândia(?: do piauí)?)?)|i(?:an(?:o(?: otoni|polis)|ópolis)|n(?:apolis|o castro|ápolis))|opolis|ália|ópolis)|ó(?:lita|polis))|x(?:as(?: do tocantins)?|ás(?: do tocantins)?))|o(?:at(?:a|á)|m(?:inia|ínia))|u(?:cil(?:andia|ândia)|z(?: (?:alta|d(?:as almas|o esp(?:irito santo|írito santo))|machado)|al(?:ia|tense)|e(?:iro(?: d(?:a fortaleza|o (?:igua(?:cu|çu)|oeste|sul)))?|ta)|ilia|maltina|ália|ília)))|u(?:bat(?:ao|i|ão)|i(?:ab(?:a|á)|t(?:e(?: de mamanguape|gi)?|é(?: de mamanguape)?))|jubim|m(?:ar(?:i|u(?: do norte)?)|be)|nha(?: por(?:a|ã)|ta(?:i|í))|p(?:araque|ira)|r(?:a(?:ca|çá)|i(?:mat(?:a|á)|on(?:opolis|ópolis)|tiba(?:nos)?|uva|úva)|ra(?:is(?: novos)?|l(?: (?:de (?:cima|dentro)|novo do piau(?:i|í)|velho)|inho(?:s)?))|u(?:a|ca|rupu|á|çá)|vel(?:andia|o|ândia))|st(?:odia|ódia)|tias)|á(?:ceres|ssia dos coqueiros)|ândido (?:de abreu|godói|m(?:endes|ota)|rodrigues|sales)|éu azul|ícero dantas|órrego (?:d(?:anta|o (?:bom jesus|ouro))|fundo|novo)|ônego marinho)|d(?:a(?:m(?:ian(?:opolis|ópolis)|ol(?:andia|ândia))|r(?:cin(?:opolis|ópolis)|io meira)|tas|vi(?:d canabarro|n(?:opolis|ópolis)))|e(?:l(?:fi(?:m moreira|n(?:opolis|ópolis))|miro gouveia|ta)|merval lob(?:ao|ão)|od(?:apolis|ápolis)|putado irapuan pinheiro|rrubadas|s(?:c(?:a(?:lvado|nso)|oberto)|terro(?: d(?:e entre rios|o melo))?)|zesseis de novembro)|i(?:a(?:dema|mant(?:e(?: d(?:'oeste|o (?:norte|sul)))?|in(?:a|o))|n(?:opolis|ópolis)|s d'(?:avila|ávila))|lermando de aguiar|o(?:go de vasconcelos|n(?:isio cerqueira|ísio cerqueira)|rama)|rce(?: reis|u arcoverde)|vi(?:n(?:a pastora|esia|o(?: d(?:as laranjeiras|e s(?:ao lourenco|ão lourenço))|l(?:andia(?: de minas)?|ândia(?: de minas)?)|polis(?: d(?:e goias|o tocantins))?)|ésia|ópolis(?: d(?:e goiás|o tocantins))?)|s(?:a (?:alegre|nova)|opolis|ópolis)))|o(?:brada|is (?:c(?:orregos|órregos)|irm(?:aos(?: d(?:as missoes|o (?:buriti|tocantins)))?|ãos(?: d(?:as missões|o (?:buriti|tocantins)))?)|lajeados|riachos|vizinhos)|lcin(?:opolis|ópolis)|m(?: (?:aquino|b(?:as(?:ilio|ílio)|osco)|cavati|e(?:liseu|xpedito lopes)|feliciano|inoc(?:encio|êncio)|joaquim|macedo costa|pedr(?:ito|o(?: de alc(?:antara|ântara))?)|silv(?:erio|ério)|vi(?:coso|çoso))|ingos m(?:artins|our(?:ao|ão)))|na (?:e(?:mma|u(?:s(?:ebia|ébia)|z(?:ebia|ébia)))|francisca|in(?:es|ês))|r(?:es(?: d(?:e (?:campos|guanh(?:aes|ães))|o (?:indai(?:a|á)|rio preto|turvo))|opolis|ópolis)|mentes)|u(?:rad(?:ina|o(?:quara|s))|tor (?:camargo|maur(?:icio cardoso|ício cardoso)|pedrinho|ricardo|severiano|ulysses))|verl(?:andia|ândia))|racena|u(?:a(?:rtina|s (?:barras|estradas))|er(?:e|é)|mont|que (?:bacelar|de caxias)|rand(?:e|é))|ário meira)|e(?:c(?:hapor(?:a|ã)|oporanga)|d(?:e(?:alina|ia)|éia)|irunep(?:e|é)|l(?:dorado(?: do (?:caraj(?:as|ás)|sul))?|esb(?:ao veloso|ão veloso)|i(?:as fausto|s(?:eu martins|i(?:ario|o medrado|ário)))|oi mendes|ísio medrado|ói mendes)|m(?:as|b(?:a(?:uba|úba)|u(?: das artes|-gua(?:cu|çu)))|ilian(?:opolis|ópolis))|n(?:c(?:ant(?:ado|o)|ruzilhada(?: do sul)?)|eas marques|genh(?:eiro (?:beltr(?:ao|ão)|c(?:aldas|oelho)|navarro|paulo de frontin)|o velho)|tre(?: (?:folhas|rios(?: d(?:e minas|o (?:oeste|sul)))?)|-iju(?:is|ís))|vira|éas marques)|pitaciol(?:andia|ândia)|quador|r(?:e(?:bango|chim|r(?:e|é|ê))|ico cardoso|mo|nestina|v(?:al(?: (?:grande|seco|velho)|ia)|ália))|s(?:cada|meralda(?:s)?|p(?:era(?: feliz|n(?:ca(?: (?:do sul|nova))?|tin(?:a|opolis|ópolis)|ça(?: (?:do sul|nova))?))|i(?:g(?:ao (?:alto do iguacu|d'oeste)|ão (?:alto do iguaçu|d'oeste))|nosa|rito santo do (?:dourado|pinhal|turvo))|lanada|umoso|írito santo do (?:dourado|pinhal|turvo))|t(?:a(?:cao|ncia(?: velha)?|ção)|eio|iva(?: gerbi)?|re(?:ito|la (?:d(?:'oeste|alva|e alagoas|o (?:indai(?:a|á)|norte|sul))|velha))|ância(?: velha)?))|u(?:clides da cunha(?: paulista)?|g(?:en(?:io de castro|opolis|ópolis)|ênio de castro)|n(?:apolis|ápolis)|s(?:ebio|ébio))|wbank da c(?:amara|âmara)|x(?:trem(?:a|oz)|u))|f(?:a(?:gundes varela|ina|ma|r(?:ia(?: lemos|s brito)|o(?:l)?|roupilha|tura(?: do piau(?:i|í))?)|tima do sul|xinal(?: do(?: soturno|s guedes)|zinho)?|zenda (?:nova|rio grande|vilanova))|e(?:ira (?:d(?:a mata|e santana)|grande|nova(?: do maranh(?:ao|ão))?)|l(?:i(?:cio dos santos|pe guerra|sburgo|xl(?:andia|ândia)|z(?: (?:deserto|natal))?)|ício dos santos)|nix|r(?:n(?:a(?:nd(?:es (?:pinheiro|tourinho)|o(?: (?:de noronha|falc(?:ao|ão)|p(?:edroza|restes))|polis)|ópolis)|o)|ão)|r(?:az de vasconcelos|eir(?:a gomes|os)|os)|vedouro))|i(?:gueir(?:ao|opolis(?: d'oeste)?|ão|ópolis(?: d'oeste)?)|lad(?:elfia|élfia)|rmin(?:o(?: alves|polis)|ópolis))|l(?:exeiras|or(?: d(?:a serra do sul|o sert(?:ao|ão))|a(?: rica|i|nia|í)|e(?:al|s(?: d(?:a cunha|e goi(?:as|ás)|o piau(?:i|í))|t(?:a(?: (?:azul|do (?:araguaia|piau(?:i|í)))|l)?|opolis|ópolis)))|i(?:an(?:o(?: peixoto|polis)|ópolis)|da(?: paulista)?|n(?:ea|ia))|ânia|ín(?:ea|ia))|órida(?: paulista)?)|o(?:nt(?:e boa|oura xavier)|r(?:m(?:ig(?:a|ueiro)|os(?:a(?: d(?:a serra negra|o (?:oeste|rio preto|sul)))?|o(?: do araguaia)?))|qu(?:etinha|ilh(?:a|inha))|t(?:aleza(?: d(?:e minas|o(?: taboc(?:ao|ão)|s (?:nogueiras|valos))))?|im|una(?: de minas)?))|z do (?:igua(?:cu|çu)|jord(?:ao|ão)))|r(?:a(?:iburgo|nc(?:i(?:n(?:opolis|ópolis)|sc(?:o(?: (?:a(?:lves|yres)|b(?:adar(?:o|ó)|eltr(?:ao|ão))|d(?:antas|umont)|m(?:acedo|orato)|s(?:a(?:ntos)?|á))|polis)|ópolis))|o da rocha))|e(?:cheirinha|derico westphalen|i (?:gaspar|inoc(?:encio|êncio)|lagonegro|m(?:artinho|iguelinho)|paulo|rog(?:erio|ério)))|onteira(?: dos vales|s)?|ut(?:a(?: de leite|l)|uoso gomes))|un(?:d(?:ao|ão)|il(?:andia|ândia))|átima do sul|ênix)|g(?:a(?:briel monteiro|do bravo|li(?:a|l(?:eia|éia)|nhos)|meleira(?: de goi(?:as|ás)|s)?|ndu|r(?:a(?:nhuns|ru)|ca|ibaldi|opaba|r(?:af(?:ao do norte|ão do norte)|uchos)|uva|ça)|st(?:ao vidigal|ão vidigal)|u(?:cha do norte|rama)|vi(?:ao(?: peixoto)?|ão(?: peixoto)?)|úcha do norte)|e(?:miniano|n(?:eral (?:c(?:a(?:mara|rneiro)|âmara)|maynard|sa(?:lgado|mpaio))|ti(?:l|o do ouro))|t(?:uli(?:na|o vargas)|úlio vargas))|i(?:lbu(?:es|és)|r(?:au do ponciano|u(?:a|á)))|l(?:aucil(?:andia|ândia)|ic(?:erio|ério)|ori(?:a d(?:'oeste|e dourados|o goita)|nha)|ória d(?:'oeste|e dourados|o goitá))|o(?:do(?:fredo viana|y moreira)|i(?:a(?:beira|n(?:a(?:polis)?|dira|esia(?: do para)?|i(?:a|nha|ra)|orte|á(?:polis)?|ésia(?: do pará)?)|t(?:ins|uba))|o(?:er(?:e|ê)|xim)|ânia)|n(?:calves dias|gogi|çalves dias)|uvel(?:andia|ândia)|vernador (?:archer|celso ramos|dix-sept rosado|e(?:dison lob(?:ao|ão)|ug(?:enio barros|ênio barros))|jorge teixeira|l(?:indenberg|uiz rocha)|mangabeira|n(?:ewton bello|unes freire)|valadares))|r(?:a(?:c(?:a(?: aranha)?|cho cardoso|ho cardoso)|ja(?:u|ú)|mado(?: (?:dos loureiros|xavier))?|n(?:des rios|ito|j(?:a|eiro))|o(?: (?:mogol|para)|-para)|vat(?:a(?:i|l|í)?|á)|ça(?: aranha)?)|o(?:a(?:iras|íras)|ssos)|upiara|ão(?: (?:mogol|pará)|-pará))|u(?:a(?:bi(?:ju|ruba)|cui|dalupe|i(?:ba|cara|mb(?:e|ê)|ra(?:ca|çá)?|uba|çara|úba)|j(?:ar(?:a(?:-mirim)?|á(?:-mirim)?)|eru)|m(?:ar(?:e|é)|iranga)|n(?:ambi|h(?:aes|ães))|p(?:e|i(?:a(?:cu|ra|çu)|mirim|rama)|o(?:r(?:e(?:ma)?|é))?|é|ó)|r(?:a(?:bira|c(?:ai|i(?:a(?:ba(?: do norte)?|ma))?)|i(?:ta)?|mir(?:anga|im)|n(?:esia|i(?: d(?:'oeste|as miss(?:oes|ões)|e goi(?:as|ás))|a(?:cu|çu))?|t(?:a(?: do norte)?|ã(?: do norte)?)|ésia)|p(?:ari|uava)|que(?:caba|çaba)|r(?:a(?:pes)?|ema|á)|t(?:ing(?:a|uet(?:a|á))|uba)|çaí|í(?:ta)?)?|da-mor|e(?:i|í)|i(?:ba(?:s)?|nos)|u(?:j(?:a(?: do sul)?|á(?: do sul)?)|lhos)|á)|ta(?:mb(?:u|ú)|par(?:a|á))|xup(?:e|é)|çuí|í(?:ba|ra))|i(?:a lopes da laguna|doval|mar(?:ania|ânia)|r(?:atinga|icema))|r(?:inh(?:at(?:a|ã)|em|ém)|j(?:ao|ão)|up(?:a|i|á))|zol(?:andia|ândia))|ália)|i(?:a(?:c(?:anga|iara|ri|u)|pu|ras|ti|çu)|b(?:a(?:iti|r(?:ama|etama)|t(?:e(?:guara)?|iba|é))|e(?:ma|rtioga)|i(?:a(?:ca|i|m|pina|ra|ssuc(?:e|ê)|çá|í)?|c(?:ar(?:a(?:i|í)|e|é)|oara|u(?:i(?:tinga)?|í))|mirim|p(?:eba|itanga|or(?:a|ã))|quera|r(?:a(?:c(?:atu|i|u)|iaras|juba|ma|p(?:itanga|u(?:a|it(?:a|ã)|ã))|rema|taia|çu)?|it(?:e|é)|ub(?:a|á)|á)|t(?:i(?:ara|nga|rama|t(?:a|á)|ura de minas|úra de minas)|uruna)|una|á|úna)|otirama)|c(?:a(?:pu(?:i|í)|ra(?:i(?: de minas|ma)|í(?: de minas|ma))?|tu)|em|hu|o(?:nha)?|ém|ó)|e(?:lmo marinho|p(?:e|ê))|g(?:a(?:ci|por(?:a|ã)|ra(?:c(?:u do tiete|y)|p(?:ava|e(?: (?:do meio|grande)|-(?:acu|miri))?|é(?: (?:do meio|grande)|-(?:açu|miri))?)|ssu|t(?:a|inga|á)|çu do tietê))|r(?:api(?:una|úna)|ej(?:a nova|inha))|ua(?:ba grande|i|pe|ra(?:c(?:u|y)|çu)|t(?:ama|emi|u)|í))|j(?:aci|u(?:i|í))|l(?:h(?:a(?: (?:comprida|d(?:as flores|e itamarac(?:a|á))|grande|solteira)|bela)|eus|ota|éus)|ic(?:inea|ínea)|opolis|ópolis)|m(?:a(?:culada|ru(?:i|í))|b(?:a(?:u|ú)|e(?: de minas)?|itu(?:ba|va)|uia|é(?: de minas)?)|igrante|peratriz)|n(?:a(?:cio(?: martins|l(?:andia|ândia))|j(?:a|á))|confidentes|d(?:aia(?:bira|l|tuba)|epend(?:encia|ência)|ia(?:n(?:a|opolis|ópolis)|por(?:a|ã)|r(?:a|oba)|va(?:i|í)))|g(?:a(?:i|zeira|í)?|á)|h(?:a(?:cor(?:a|á)|mbupe|ngapi|pi(?:m)?|uma|úma)|uma(?:s)?)|imutaba|oc(?:encia|ência)|ubia paulista|ácio martins|úbia paulista)|omer(?:e|ê)|p(?:a(?:ba|meri|n(?:ema|gua(?:cu|çu))|poranga|tinga|u(?:mirim|ssu))|e(?:caet(?:a|á)|r(?:o|ó)|una|úna)?|i(?:a(?:cu|u|çu|ú)|gu(?:a|á)|r(?:a(?:nga(?: d(?:e goi(?:as|ás)|o (?:norte|piau(?:i|í)|sul)))?)?|á)|xuna(?: do par(?:a|á))?)|o(?:juca|r(?:a(?: do oeste|nga)?|á|ã(?: do oeste)?))|u(?:a(?:cu|çu)?|bi|eira(?:s)?|i(?:una|úna)|mirim|piara|ã)?|ê)|r(?:a(?:cem(?:a(?: do oeste|polis)|inha|ápolis)|i(?: de minas)?|juba|maia|n(?:duba|i)|pu(?:a|ru|ã)|quara|r(?:a|á)|ti|u(?:cuba|çuba)|í(?: de minas)?)|e(?:c(?:e|ê)|tama)|i(?:ne(?:opolis|ópolis)|tuia)|upi)|s(?:a(?:ias coelho|ías coelho)|rael(?:andia|ândia))|t(?:a(?:ara|b(?:aian(?:a|inha)|e(?:la|r(?:a(?:ba|i|í)?|á))|i(?:r(?:a|i(?:nha|to)))?|ora(?:i|í)|una)|c(?:a(?:j(?:a|á)|mbira|r(?:ambi|e|é))|oatiara|urub(?:a|i))|et(?:e|é)|g(?:i(?:b(?:a|á)|mirim)?|ua(?:cu(?: da bahia)?|i|j(?:e|é)|r(?:a|i|u)|tins|çu(?: da bahia)?|í))|i(?:ba|caba|n(?:opolis|ópolis)|opolis|p(?:ava do graja(?:u|ú)|e|ul(?:andia|ândia)|é)|t(?:inga|uba)|çaba|ópolis)?|j(?:a(?:i|í)?|obi|u(?: do col(?:onia|ônia)|b(?:a|á)|ipe|ípe)?|á)|lva|m(?:ar(?:a(?:ju|ndiba|ti(?: de minas)?)|i)|b(?:a(?:curi|rac(?:a|á))|e(?: do mato dentro)?|é(?: do mato dentro)?)|o(?:gi|nte))|n(?:agra|h(?:a(?:em|n(?:du|g(?:a|á))|ém)|em|omi|ém))|o(?:bim|ca(?:ra)?)|p(?:a(?:ci|gipe|j(?:e|é)|rica)|e(?:bi|c(?:erica(?: da serra)?|uru mirim)|jara d'oeste|m(?:a|irim)|ru(?:cu|na|çu)|ti(?:m|n(?:ga|inga))|v(?:a|i))?|i(?:curu|poca|ra(?:nga|pu(?:a(?: paulista)?|ã(?: paulista)?)|tins)?|ssuma|tanga|una|úna)|o(?:a|lis|r(?:a(?: do tocantins|nga(?: d'ajuda)?)?|oroca|ã(?: do tocantins)?)|á)|u(?:a do oeste|ca|i|ra(?:nga)?|ã do oeste|í)|é)|qu(?:a(?:quecetuba|ra)|i(?:ra(?:i|í)|tinga)?)|r(?:a(?:n(?:a|tim)|r(?:e|é))|ema|iri|um(?:a|ã))|t(?:i(?:ai(?:a|u(?:cu|çu))|ba(?: do sul)?|m|nga|ra)?|uba)|u(?: de minas|ba(?:l)?|cu|eira|na(?: do sul)?|çu)?|verava|í(?:ba)?|óca|ú(?: de minas|ba|na(?: do sul)?)?)?|i(?:nga(?: do maranh(?:ao|ão))?|quira|r(?:ap(?:ina|u(?:a|ã))|u(?:cu|çu))|uba|úba)|o(?:bi|ror(?:o|ó))|u(?:a(?:cu|çu)|ber(?:a|á)|eta|iutaba|m(?:biara|irim)|p(?:eva|iranga|oranga)|rama|tinga|verava)?|á(?:polis)?)|u(?:i(?:u|ú)|na)|v(?:a(?:i(?:por(?:a|ã))?|t(?:e|uba|é)|í)|inhema|o(?:l(?:andia|ândia)|r(?:a|á)|ti))|çara|úna)|j(?:a(?:bo(?:at(?:ao dos guararapes|ão dos guararapes)|r(?:a(?:ndi)?|á)|ti(?:ca(?:ba(?:l)?|tubas))?)|c(?:a(?:na|r(?:a(?:ci|u|ú)|e(?: dos homens|acanga|i|zinho|í)|é dos homens))|i(?:ara|nto machado)?|obina(?: do piau(?:i|í))?|u(?:i(?:pe|zinho)?|nd(?:a|á)|piranga|tinga|í(?:pe)?))|gua(?:pit(?:a|ã)|quara|r(?:a(?:cu|o|ri|çu)|e(?:tama)?|i(?:a(?:iva|íva)|b(?:ara|e)|pe|una|úna)?|u(?:ana|na)|ão|é))|i(?:ba|c(?:os|ós))|les|m(?:beiro|pruca)|n(?:a(?:uba|úba)|d(?:a(?:i(?:a(?: do sul)?|ra)|íra)|u(?:is|ís))|gada|i(?:opolis|ópolis)|u(?:ari(?:a|o cicco(?: \\(boa saude\\))?)|ári(?:a|o cicco(?: \\(boa saúde\\))?)))|p(?:ara(?:iba|t(?:inga|uba)|íba)|eri|i(?:ra)?|o(?:at(?:a|ã)|nvar|r(?:a|ã))|ur(?:a|á))|qu(?:eira|irana)|r(?:a(?:gu(?:a(?: do sul|ri)?|á(?: do sul)?)|mataia)|di(?:m (?:alegre|d(?:e (?:angicos|piranhas)|o (?:mulato|serid(?:o|ó)))|olinda)|n(?:opolis|ópolis))|i(?:nu)?|u)|t(?:a(?:i(?:zinho)?|uba|í|úba)|e(?:i|í)|i|ob(?:a(?: do piaui)?|á(?: do piauí)?))|u(?: do tocantins|paci|ru)?|çanã|íba|ú(?: do tocantins)?)|e(?:ceaba|nipapo d(?:e minas|os vieiras)|qu(?:eri|i(?:a da praia|e|t(?:a(?:i|í)|i(?:b(?:a|á)|nhonha))|á da praia|é))|r(?:emoabo|i(?:c(?:o|ó)|quara)|onimo monteiro|umenha|ônimo monteiro)|s(?:u(?:ania|itas|polis|ânia|ítas)|úpolis))|i(?:-paran(?:a|á)|joca de jericoacoara|quiri(?:ca|çá)|ta(?:una|úna))|o(?:a(?:caba|ima|n(?:esia|opolis|ésia|ópolis)|o (?:alfredo|c(?:amara|osta)|d(?:ias|ourado)|lisboa|monlevade|neiva|p(?:essoa|inheiro)|ramalho)|quim (?:fel(?:icio|ício)|gomes|nabuco|pires|t(?:avora|ávora))|çaba|íma)|ca (?:claudino|marques)|i(?:a|nville)|rd(?:ania|ânia)|s(?:e(?: (?:bo(?:iteux|nifacio)|d(?:a penha|e freitas)|goncalves de minas|raydan)|l(?:andia|ândia)|n(?:opolis|ópolis))|é (?:bo(?:iteux|nifácio)|d(?:a penha|e freitas)|gonçalves de minas|raydan))|vi(?:ania|ânia)|ão (?:alfredo|c(?:osta|âmara)|d(?:ias|ourado)|lisboa|monlevade|neiva|p(?:essoa|inheiro)|ramalho))|u(?:a(?:r(?:a|ez t(?:avora|ávora)|ina)|tuba|zeir(?:inho|o(?: do (?:norte|piau(?:i|í)))?))|c(?:a(?:s|ti)|uru(?:cu|tu|çu)|ás)|i(?:na|z de fora)|lio (?:borges|de castilhos|mesquita)|mirim|n(?:co do (?:maranh(?:ao|ão)|serid(?:o|ó))|di(?:a(?:i(?: do sul)?|í(?: do sul)?)?|á)|queir(?:o(?:polis)?|ópolis))|pi(?:a|á)?|qui(?:a|tiba|á)|r(?:a(?:mento|nda)|ema|ipiranga|u(?:a(?:ia)?|ena|ti|á)?)|s(?:cimeira|s(?:ari|iape))|t(?:a(?:i|í)|i)|ven(?:ilia|ília)|ína)|óia|úlio (?:borges|de castilhos|mesquita))|l(?:a(?:brea|cerd(?:opolis|ópolis)|d(?:a(?:inha|rio)|ário)|faiete coutinho|g(?:a(?:mar|rto)|es|o(?: (?:d(?:a pedra|o(?: junco|s rodrigues))|verde)|a(?: (?:alegre|bonita do sul|d(?:'anta|a (?:c(?:anoa|onfus(?:ao|ão))|prata)|e (?:dentro|itaenga|pedras|s(?:ao francisco|ão francisco)|velhos)|o(?: (?:barro do piau(?:i|í)|carro|mato|ouro|piau(?:i|í)|s(?:itio|ítio)|tocantins)|s (?:gatos|patos|tr(?:es cantos|ês cantos))|urada))|formosa|grande(?: do maranh(?:ao|ão))?|nova|real|s(?:a(?:lgada|nta)|eca)|vermelha)|o)?|inha(?: do piau(?:i|í))?|ão)|una(?: carap(?:a|ã))?)|j(?:e(?: do muria(?:e|é)|ado(?: (?:do bugre|grande|novo))?|d(?:ao|inho|o(?: do tabocal)?|ão)|s(?: pintadas)?)?|inha)|m(?:ar(?:ao|ão)|bari(?: d'oeste)?|im)|ndri sales|p(?:a(?:o)?|ão)|ranj(?:a(?: da terra|l(?: (?:do jari|paulista))?)|eiras(?: do sul)?)|s(?:sance|tro)|uro (?:de freitas|m(?:uller|üller))|v(?:andeira|r(?:as(?: d(?:a mangabeira|o sul))?|inhas)))|e(?:andro ferreira|bon r(?:egis|égis)|me do prado|n(?:cois(?: paulista)?|çóis(?: paulista)?)|o(?:berto leal|pol(?:d(?:ina|o de bulh(?:oes|ões))|is))|ópolis)|i(?:ber(?:ato salzano|dade)|c(?:inio de almeida|ínio de almeida)|dian(?:opolis|ópolis)|m(?:a (?:campos|duarte)|eira(?: do oeste)?|oeiro(?: d(?:e anadia|o (?:ajuru|norte)))?)|n(?:d(?:o(?:este|ia(?: do sul)?|lfo collor)|óia(?: do sul)?)|ha nova)|vramento(?: de nossa senhora)?|zarda)|o(?:anda|gradouro|n(?:drina|tra(?:s)?)|reto|uveira)|u(?:c(?:as do rio verde|elia|ia(?:n(?:opolis|ópolis)|ra)|r(?:ecia|écia)|élia)|i(?:s(?: (?:antonio|correia|domingues|eduardo magalhaes|gomes)|burgo|l(?:andia|ândia))|z(?: alves|i(?:an(?:a|ia)|ânia)))|min(?:arias|árias)|nardelli|p(?:ercio|ion(?:opolis|ópolis)|ércio)|t(?:ecia|écia)|z(?:erna|i(?:ania|l(?:andia|ândia)|n(?:opolis|ópolis)|ânia))|ís (?:antônio|correia|domingues|eduardo magalhães|gomes))|ábrea)|m(?:a(?:c(?:a(?:e|iba|juba|mb(?:ara|ira)|p(?:a(?:rana)?|á)|rani|tuba|u(?:ba(?:l|s))?|é|íba|úbas)|e(?:d(?:onia|ônia)|i(?:o|ó))|ha(?:calis|d(?:inho(?: d'oeste)?|os))|ieira|u(?:co|rur(?:e|é)))|d(?:eiro|re de deus(?: de minas)?)|e(?: d(?:'agua|o rio)|tinga)|g(?:alh(?:aes (?:barata|de almeida)|ães (?:barata|de almeida))|e|é)|i(?:quinique|ri(?:nque|po(?:r(?:a|ã)|taba))?)|jor (?:gercino|isidoro|sales|vieira)|l(?:acacheta|had(?:a(?: d(?:e pedras|os bois))?|or)|let)|m(?:anguape|b(?:a(?:i|í)|or(?:e|ê))|onas|pituba)|n(?:a(?:capuru|ira|quiri|ri|us|íra)|cio lima|d(?:agua(?:cu|ri|çu)|irituba|uri)|frin(?:opolis|ópolis)|g(?:a(?:ratiba)?|ueirinha)|hu(?:a(?:cu|çu)|mirim)|icor(?:e|é)|oel (?:em(?:idio|ídio)|ribas|urbano|vi(?:ana|torino))|sid(?:ao|ão)|ten(?:a|opolis|ópolis))|quin(?:e|é)|r(?: (?:de espanha|vermelho)|a(?: rosa|a|b(?:a(?: paulista)?|á(?: paulista)?)|c(?:a(?:cume|i|j(?:a|u|á)|n(?:a(?:u|ú)?|ã)|s|çumé|í)|ás)|gogi(?:pe)?|ial|j(?:a do sena|á do sena)|n(?:guape|h(?:aozinho|ãozinho))|p(?:anim|oama)|t(?:a(?:izes|ízes)?|á)|u|vilha(?:s)?|ã|ú)|c(?:a(?:cao|ção)|el(?:andia|ino (?:ramos|vieira)|ândia)|ion(?:ilio souza|ílio souza)|o(?:l(?:andia|ândia)|s parente))|e(?:chal (?:c(?:andido rondon|ândido rondon)|deodoro|floriano|thaumaturgo)|ma)|i(?:a(?: (?:da f(?:e|é)|helena)|lva|n(?:a pimentel|o(?: moro|polis do tocantins)|ópolis do tocantins)|polis)|bondo|c(?:a|á)|l(?:a(?:c|ndia(?: do sul)?)|ena|uz|ândia(?: do sul)?)|n(?:g(?:a|á)|opolis|ópolis)|o(?: campos|polis)|p(?:a(?: de minas)?|á(?: de minas)?)|tuba|z(?:opolis|ópolis)|ápolis|ópolis)?|li(?:eria|éria)|mel(?:eiro|opolis|ópolis)|qu(?:es de souza|inho)|tin(?:ho campos|opol(?:e|is)|s soares|ópol(?:e|is))|u(?:im|mbi)|zag(?:ao|ão))|s(?:cote|sa(?:p(?:e(?: do piaui)?|ê(?: do piauí)?)|randuba))|t(?:a(?: (?:de s(?:ao joao|ão joão)|grande|roma|verde)|o|raca)|e(?:iros|l(?:andia|ândia)|rl(?:andia|ândia)|us leme)|hias lobato|i(?:as (?:barbosa|cardoso|ol(?:impio|ímpio))|n(?:a|h(?:a(?:s)?|os))|p(?:o|ó))|o(?: (?:castelhano|leit(?:ao|ão)|queimado|rico|verde)|es(?: do norte)?|s costa|zinhos)|ri(?:nch(?:a|ã)|z de camaragibe)|u(?:p(?:a|á)|r(?:eia|éia)|tina)|ão|ões(?: do norte)?)|u(?:a(?: da serra)?|es|ri(?:l(?:andia(?: do tocantins)?|ândia(?: do tocantins)?)|ti)|á(?: da serra)?|és)|x(?:aranguape|imiliano de almeida)|zag(?:ao|ão)|çambará)|e(?:d(?:eiros neto|i(?:aneira|cil(?:andia|ândia)))|l(?:eiro|ga(?:co|ço))|ndes pimentel|r(?:cedes|idiano|uoca)|s(?:opolis|sias targino|ópolis))|i(?:guel(?: (?:alves|calmon|le(?:ao|ão)|pereira)|opolis|ópolis)|l(?:agres(?: do maranh(?:ao|ão))?|h(?:a|ã)|ton brand(?:ao|ão))|moso d(?:e goi(?:as|ás)|o sul)|n(?:a(?:cu|dor do negr(?:ao|ão)|s (?:do le(?:ao|ão)|novas)|çu)|duri|eiros(?: do tiet(?:e|ê))?|istro andreazza)|r(?:a(?: estrela|bela|c(?:atu|ema(?: do tocantins)?)|do(?:r|uro)|gua(?:i|í)|i(?:ma)?|n(?:d(?:a do norte|iba|opolis|ópolis)|gaba|orte|te(?: d(?:a serra|o paranapanema))?)|s(?:elva|sol(?: d'oeste|andia|ândia)?)|v(?:ania|ânia)|í(?:ma)?)|i(?:m doce|nzal))|ss(?:a(?:l|o velha)|ão velha))|o(?:c(?:ajuba|oca)|delo|e(?:da|ma)|g(?:eiro|i (?:das cruzes|gua(?:cu|çu)|mirim))|i(?:por(?:a|á)|ta bonita)|ju(?:i dos campos|í dos campos)?|mb(?:a(?:ca|ça)|uca)|n(?:c(?:ao|oes)|da(?:i|í)|gagu(?:a|á)|jolos|senhor (?:gil|hip(?:olito|ólito)|paulo|tabosa)|t(?:a(?:das|lv(?:ania|ânia)|nha(?:s)?|uri)|e(?: (?:a(?:l(?:egre(?: d(?:e (?:goi(?:as|ás)|minas|sergipe)|o(?: (?:piau(?:i|í)|sul)|s campos)))?|to)|praz(?:ivel|ível)|zul(?: paulista)?)|belo(?: do sul)?|ca(?:r(?:lo|melo)|stelo)|d(?:as gameleiras|o carmo)|formoso|horebe|mor|negro|s(?:anto(?: d(?:e minas|o tocantins))?|i(?:ao|ão)))|ir(?:o(?: lobato|polis)|ópolis)|negro|s (?:altos|claros(?: de goi(?:as|ás))?)|zuma)|ividiu(?: do norte)?)|ç(?:ão|ões))|r(?:a(?:da nova(?: de minas)?|ujo|újo)|ei(?:l(?:andia|ândia)|ra sales)|ma(?:co|ço)|par(?:a|á)|r(?:etes|inhos(?: do sul)?|o(?: (?:agudo(?: de goi(?:as|ás))?|cabe(?:ca no tempo|ça no tempo)|d(?:a (?:fuma(?:ca|ça)|gar(?:ca|ça))|o (?:chap(?:eu(?: do piaui)?|éu(?: do piauí)?)|pilar))|grande|re(?:dondo|uter))|s))|tugaba|ungaba)|s(?:s(?:amedes|or(?:o|ó)|âmedes)|tardas)|tuca|zarl(?:andia|ândia))|u(?:an(?:a|á)|c(?:a(?:ja(?:i|í)|mbo)|u(?:g(?:e|ê)|m|ri(?:ci)?))|itos cap(?:oes|ões)|l(?:iterno|ungu(?: do morro)?)|n(?:do novo|hoz de melo|iz f(?:erreira|reire))|qu(?:em d(?:e sao francisco|o sao francisco)|i|ém d(?:e são francisco|o são francisco))|r(?:i(?:a(?:e|é)|beca|ci(?: dos portelas|l(?:andia|ândia))?|tiba)|utinga do sul)|tu(?:ipe|m|n(?:opolis|ópolis)|ípe)|zambinho|çum)|ário campos|âncio lima|ãe d(?:'água|o rio))|p(?:a(?:c(?:a(?:embu|j(?:a|us|á)|raima|tuba)|o(?: do lumiar|ti)|uj(?:a|á))|dre (?:bernardo|carvalho|marcos|para(?:iso|íso))|es landim|i(?: pedro|al|candu|m filho|n(?:e(?:iras|l)|s)|çandu)|je(?:u do piaui|ú do piauí)|l(?:estina(?: d(?:e goi(?:as|ás)|o par(?:a|á)))?|h(?:ano|o(?:ca|ça))|m(?:a(?: sola|cia|res(?: (?:do sul|paulista))?|s(?: de monte alto)?)|e(?:ir(?:a(?: d(?:'oeste|as miss(?:oes|ões)|o(?: piau(?:i|í)|s (?:indios|índios)))|is|n(?:dia|te)|s(?: d(?:e goi(?:as|ás)|o tocantins))?)|ina|opolis|ândia|ópolis)|lo)|i(?:n(?:opolis|ópolis)|t(?:al|inho|os))|opolis|ácia|ópolis)|otina)|n(?:am(?:a|bi|á)|cas|elas|orama|tano grande)|o de acucar|pa(?:gaios|nduva)|quet(?:a|á)|r(?:a(?: de minas|c(?:a(?:mbi|tu)|uru)|g(?:ominas|ua(?:cu(?: paulista)?|çu(?: paulista)?))|i(?:b(?:a(?: do sul|no)|una)|paba|s(?:o(?: d(?:as aguas|o (?:norte|sul|tocantins))|polis)?|ópolis))?|m(?:bu|irim|oti)|n(?:a(?:city|gu(?:a|á)|i(?:ba|guara|ta)|p(?:anema|oema|u(?:a|ã))|t(?:ama|inga)|va(?:i|í)|í(?:ba|ta))|hos)|opeba|pu(?:a|ã)|ri|t(?:inga|y)|u(?:apebas|na)?|zinho|í(?:ba do sul|so(?: d(?:as águas|o (?:norte|sul|tocantins)))?)?|ú(?:na)?)|dinho|e(?:ci(?: novo|s)|lhas)|i(?:conha|ntins|p(?:iranga|ueira)|quera-a(?:cu|çu)|si)|na(?:gu(?:a|á)|iba|mirim|rama|íba)|ob(?:e|é)|á de minas)|s(?:s(?:a(?: (?:e fica|quatro|sete|tempo|vinte)|-vinte|b(?:em|ém)|gem(?: franca(?: do piau(?:i|í))?)?)|ira|o(?: (?:d(?:e (?:camaragibe|torres)|o sobrado)|fundo)|s maia))|tos bons)|t(?:is|o(?: bra(?:gado|nco)|s(?: d(?:e minas|o piau(?:i|í)))?)|roc(?:inio(?: (?:do muriae|paulista))?|ínio(?: (?:do muriaé|paulista))?)|u|y do alferes)|u(?: (?:brasil|d(?:'arco(?: do piau(?:i|í))?|os ferros))|dalho|ini|l(?:a (?:c(?:andido|ândido)|freitas)|i(?:c(?:eia|éia)|n(?:ia|o neves)|st(?:a(?:n(?:a|ia)|s)?|ânia))|o (?:afonso|bento|de faria|frontin|jacinto|lopes|ramos)|ínia))|v(?:ao|erama|ussu|ão)|ço do lumiar)|e(?: de serra|abiru|canha|d(?:erneiras|r(?:a(?: (?:azul|b(?:ela|onita|ranca(?: do amapari)?)|do(?: (?:anta|indai(?:a|á))|urada)|grande|lavrada|mole|preta)|lva|n(?:opolis|ópolis)|o|s (?:altas|de (?:fogo|maria da cruz)|grandes))?|e(?:gulho|ira(?:s)?)|in(?:has(?: paulista)?|opolis|ópolis)|o (?:a(?:fonso|lexandre|velino)|can(?:ario|ário)|d(?:e toledo|o ros(?:ario|ário))|gomes|ii|l(?:aurentino|eopoldo)|os(?:orio|ório)|r(?:egis|égis)|teixeira|velho)|ão))|ix(?:e(?:-boi)?|oto de azevedo)|ju(?:cara|çara)|lotas|n(?:a(?:forte|lva|polis)|d(?:encias|ências)|edo|ha|tecoste|ápolis)|qu(?:eri|i(?:zeiro)?)|r(?:d(?:i(?:g(?:ao|ão)|zes)|oes|ões)|eir(?:a(?: barreto|s)|o)|i(?: mirim|quito|t(?:iba|or(?:o|ó)))|o(?:bal|l(?:a(?: d'oeste|ndia)?|ândia))|u(?:ibe|íbe))|s(?:ca(?:dor|ria brava)|queira)|tr(?:o(?:l(?:andia|ina(?: de goi(?:as|ás))?|ândia)|polis)|ópolis)|çanha)|i(?:a(?:ca(?:bucu|tu)|nc(?:o|ó)|t(?:a|ã)|u|çabuçu)|c(?:a(?:da caf(?:e|é)|rra)|os|u(?:i|í))|e(?:dade(?: d(?:e (?:caratinga|ponte nova)|o(?: rio grande|s gerais)))?|n)|l(?:a(?:o arcado|r(?: d(?:e goi(?:as|ás)|o sul))?)|oe(?:s|zinhos)|ão arcado|õe(?:s|zinhos))|ment(?:a bueno|eiras(?: do oeste)?)|n(?:d(?:a(?:i|monhangaba|r(?:e-mirim|é-mirim)|í)|o(?:ba(?:cu|çu)?|r(?:ama(?: do tocantins)?|etama)))|go-d'(?:agua|água)|h(?:a(?:is|l(?: (?:d(?:a serra|e s(?:ao bento|ão bento))|grande)|ao|zinho|ão)?|o)|eir(?:al|inho do vale|o(?: (?:machado|preto)|s))|ão)|t(?:adas|o(?: bandeira|polis)|ópolis))|o (?:ix|xii)|que(?:robi|t(?: carneiro|e))|r(?:a(?:c(?:a(?:ia|njuba)|ema|icaba|uruca)|i(?: do (?:norte|sul))?|ju(?:ba|i|í)?|mbu|n(?:g(?:a|i|u(?:cu|inho|çu))|has)|p(?:e(?:mas|tinga)|o(?:ra(?: do bom jesus)?|zinho)?|ó)|qu(?:ara|e|ê)|ssununga|t(?:ini(?:nga)?|uba)|uba|í(?: do (?:norte|sul))?|úba)|e(?:n(?:opolis|ópolis)|s (?:do rio|ferreira))|i(?:p(?:a|iri|á)|tiba)|pirituba)|t(?:ang(?:a|u(?:eiras|i))|imbu)|um(?:a|hi)?|çarra|ên|úma)|l(?:a(?:c(?:as|ido de castro)|n(?:alt(?:in(?:a(?: do paran(?:a|á))?|o)|o(?: (?:alegre|da serra))?)|ura)|tina)|ácido de castro)|o(?:a|c(?:ao(?: de pedras)?|inhos|o(?: (?:branco|d(?:a(?:ntas|s (?:antas|trincheiras))|e jose de moura)|fundo|redondo|verde)|es|n(?:e|é)|s de caldas)|rane)|juca|loni|m(?:b(?:al|os)|erode|p(?:e(?:ia|u)|é(?:ia|u)))|n(?:ga(?:i|í)|t(?:a(?: (?:de pedras|grossa|por(?:a|ã))|l(?: do (?:araguaia|paran(?:a|á))|in(?:a|da))?|o)|e(?: (?:alta(?: do (?:bom jesus|norte|tocantins))?|branca|nova|preta|serrada)|s (?:e lacerda|gestal))|o (?:belo|chique|dos volantes|novo)|ão))|pulina|r(?:anga(?:ba|tu)?|ci(?:uncula|úncula)|ecatu|t(?:a(?:legre|o)|e(?:ir(?:a(?:o|s)|inha|ão)|l(?:andia|ândia)?)|o (?:a(?:cre|legre(?: do (?:norte|piau(?:i|í)|tocantins))?|mazonas)|b(?:arreiro|elo)|calvo|d(?:a folha|e (?:moz|pedras)|o(?: mangue|s ga(?:uchos|úchos)))|es(?:peridi(?:ao|ão)|trela)|f(?:e(?:liz|rreira)|irme|ranco)|grande|lucena|m(?:au(?:a|á)|urtinho)|nacional|r(?:eal(?: do col(?:egio|égio))?|ico(?: do maranh(?:ao|ão))?)|seguro|uni(?:ao|ão)|v(?:e(?:lho|ra cruz)|it(?:oria|ória))|walter|xavier)|ão))|sse|t(?:e(?:ngi)?|i(?:m|r(?:agu(?:a|á)|e(?:ndaba|tama)))|é)|uso (?:al(?:egre|to)|novo|redondo)|xor(?:eu|éu)|á|ç(?:o(?: (?:branco|d(?:a(?:ntas|s (?:antas|trincheiras))|e josé de moura)|fundo|redondo|verde)|s de caldas)|ão(?: de pedras)?|ões))|r(?:a(?:c(?:inha|u(?:uba|úba))|d(?:o(?: ferreira|polis|s)|ópolis)|i(?:a (?:grande|norte)|nha)|nchita|t(?:a(?: do piau(?:i|í)|nia|polis)|inha|ápolis|ânia))|esidente (?:alves|bernardes|castel(?:lo branco|o branco)|dutra|epit(?:acio|ácio)|figueiredo|get(?:ulio|úlio)|j(?:anio quadros|uscelino|ânio quadros)|k(?:ennedy|ubitschek)|lucena|m(?:edici|édici)|nereu|oleg(?:ario|ário)|prudente|sarney|tancredo neves|v(?:argas|enceslau))|i(?:m(?:avera(?: d(?:e rond(?:onia|ônia)|o leste))?|eir(?:a cruz|o de maio))|ncesa(?: isabel)?)|o(?:fessor jamil|gresso|miss(?:ao|ão)|pri(?:a|á)|t(?:asio alves|ásio alves))|udent(?:e de morais|opolis|ópolis))|u(?:gmil|reza|tinga|xinan(?:a|ã))|ão de açúcar|é(?: de serra|rola(?: d'oeste)?))|r(?:a(?:fa(?:el (?:fernandes|godeiro|jambeiro)|rd)|mil(?:andia|ândia)|nch(?:aria|o (?:alegre(?: d'oeste)?|queimado))|pos(?:a|os)|ul soares)|e(?:aleza|c(?:ife|reio|ursol(?:andia|ândia))|d(?:en(?:cao(?: d(?:a serra|o gurgueia))?|tora|ção(?: d(?:a serra|o gurguéia))?)|uto)|g(?:en(?:era(?:cao|ção)|te feij(?:o|ó))|i(?:n(?:opolis|ópolis)|stro))|lvado|m(?:anso|igio|ígio)|nascen(?:ca|ça)|riutaba|s(?:e(?:nde costa|rva(?: do (?:caba(?:cal|çal)|igua(?:cu|çu)))?)|plendor|saquinha|tinga(?: s(?:eca|êca))?)|tirol(?:andia|ândia))|i(?:a(?:ch(?:ao(?: d(?:as neves|o (?:bacamarte|dantas|jacuipe|poco)))?|inho|o (?:d(?:a(?: cruz|s almas)|e sant(?:ana|o ant(?:onio|ônio))|os (?:cavalos|machados))|frio)|uelo|ão(?: d(?:as neves|o (?:bacamarte|dantas|jacuípe|poço)))?)|lma|n(?:apolis|ápolis))|b(?:a(?:mar fiquene|s do rio pardo)|eir(?:a(?: do (?:amparo|p(?:iau(?:i|í)|ombal))|o(?: (?:b(?:onito|ranco)|c(?:ascalheira|laro|orrente)|d(?:as neves|o(?: (?:largo|pinhal|sul)|s indios))|grande|p(?:ires|reto)|vermelho)|zinho)?)?|o(?: gon(?:calves|çalves)|polis)|ão(?: (?:b(?:onito|ranco)|c(?:ascalheira|laro|orrente)|d(?:as neves|o(?: (?:largo|pinhal|sul)|s índios))|grande|p(?:ires|reto)|vermelho)|zinho)?|ópolis))|faina|n(?:c(?:ao|ão)|opolis|ópolis)|o(?: (?:a(?:cima|zul)|b(?:ananal|o(?:m|nito(?: do igua(?:cu|çu))?)|r(?:anco(?: do (?:iva(?:i|í)|sul))?|ilhante))|c(?:asca|laro|respo)|d(?:a(?: concei(?:cao|ção)|s (?:antas|flores|ostras|pedras))|e contas|o(?: (?:ant(?:onio|ônio)|campo|fogo|oeste|p(?:ires|rado)|sul)|ce|s (?:bois|cedros|indios|índios)))|espera|for(?:moso|tuna)|grande(?: d(?:a serra|o piau(?:i|í)))?|largo|ma(?:nso|ria)|n(?:egr(?:inho|o)|ovo(?: do sul)?)|p(?:ar(?:ana(?:iba|íba)|do(?: de minas)?)|iracicaba|omba|reto(?: da eva)?)|quente|r(?:eal|ufino)|sono|tinto|ver(?:de(?: de mato grosso)?|melho))|l(?:andia|ândia)|zinho)|queza|t(?:apolis|ápolis)|versul)|o(?:c(?:a sales|hedo(?: de minas)?)|d(?:e(?:i(?:o(?: bonito)?|ro)|las)|olfo fernandes|rigues alves)|l(?:a(?:dor|n(?:dia|te))|im de moura|ândia)|m(?:aria|el(?:andia|ândia))|n(?:cador|d(?:a alta|inha|o(?:l(?:andia|ândia)|n(?: do par(?:a|á)|opolis|ópolis)?)))|que gonzales|rain(?:opolis|ópolis)|s(?:ario (?:d(?:a limeira|o (?:catete|ivai|sul))|oeste)|eira|ário (?:d(?:a limeira|o (?:catete|ivaí|sul))|oeste))|teiro)|u(?:b(?:elita|i(?:a(?:cea|taba)|m|n(?:eia|éia)|ácea))|r(?:opolis|ópolis)|ssas|y barbosa))|s(?:a(?:b(?:a(?:r(?:a|á)|udia)|in(?:opolis|ópolis)|oeiro|áudia)|cramento|gr(?:ada fam(?:ilia|ília)|es)|ir(?:e|é)|l(?:danha marinho|es(?: oliveira|opolis|ópolis)|g(?:ad(?:inho|o (?:de s(?:ao felix|ão félix)|filho))|ueiro)|i(?:n(?:as(?: da margarida)?|opolis|ópolis)|tre)|mour(?:ao|ão)|o(?:a|á)|t(?:inho|o(?: (?:d(?:a divisa|e pirapora|o (?:c(?:eu|éu)|itarar(?:e|é)|jacu(?:i|í)|lontra))|grande|veloso))?)|va(?:dor d(?:as miss(?:oes|ões)|o sul)|terra))|mba(?:iba|íba)|n(?:anduva|clerl(?:andia|ândia)|do(?:l(?:andia|ândia)|valina)|g(?:ao|ão)|har(?:o|ó)|t(?:'ana do livramento|a(?: (?:a(?:d(?:elia|élia)|lbertina|m(?:elia|élia))|b(?:arbara(?: d(?:'oeste|e goias|o (?:leste|monte verde|para|sul|tugurio)))?|r(?:anca|igida|ígida)|árbara(?: d(?:'oeste|e goiás|o (?:leste|monte verde|pará|sul|tugúrio)))?)|c(?:armem|ec(?:ilia(?: do (?:pavao|sul))?|ília(?: do (?:pavão|sul))?)|lara d(?:'oeste|o sul)|ruz(?: (?:cabr(?:alia|ália)|d(?:a(?: (?:baixa verde|concei(?:cao|ção)|esperan(?:ca|ça)|vit(?:oria|ória))|s palmeiras)|e (?:goi(?:as|ás)|m(?:inas|onte castelo)|salinas)|o(?: (?:arari|capibaribe|escalvado|piau(?:i|í)|rio pardo|sul|xingu)|s milagres))))?)|e(?:fig(?:enia de minas|ênia de minas)|rnestina)|f(?:e(?: d(?:e (?:goias|minas)|o (?:araguaia|sul)))?|ilomena(?: do maranh(?:ao|ão))?|é(?: d(?:e (?:goiás|minas)|o (?:araguaia|sul)))?)|gertrudes|helena(?: de (?:goi(?:as|ás)|minas))?|i(?:n(?:es|ês)|sabel(?: do (?:iva(?:i|í)|rio negro))?|zabel do (?:oeste|par(?:a|á)))|juliana|l(?:eopoldina|u(?:cia|z(?:ia(?: d(?:'oeste|o (?:itanhy|norte|par(?:a|u(?:a|á)|á))))?)?)|úcia)|m(?:ar(?:garida(?: do sul)?|ia(?: (?:d(?:a(?: (?:boa vista|serra|vit(?:oria|ória))|s barreiras)|e (?:itabira|jetib(?:a|á))|o (?:cambuc(?:a|á)|herval|oeste|par(?:a|á)|s(?:alto|ua(?:cui|çuí))|tocantins))|madalena)|na)?)|ercedes|onica|ônica)|quit(?:eria(?: do maranhao)?|éria(?: do maranhão)?)|r(?:ita(?: d(?:'oeste|e (?:c(?:a(?:ldas|ssia)|ássia)|ibitipoca|jacutinga|minas)|o (?:araguaia|itueto|novo destino|pa(?:rdo|ssa quatro)|sapuca(?:i|í)|t(?:ocantins|rivelato))))?|osa(?: d(?:a serra|e (?:goi(?:as|ás)|lima|viterbo)|o (?:p(?:iau(?:i|í)|urus)|sul|tocantins)))?)|salete|tere(?:s(?:a|inha)|z(?:a(?: d(?:e goi(?:as|ás)|o (?:oeste|tocantins)))?|inha(?: d(?:e (?:goi(?:as|ás)|itaipu)|o (?:progresso|tocantins)))?))|vit(?:oria(?: do palmar)?|ória(?: do palmar)?))|luz|n(?:a d(?:a (?:boa vista|ponte pensa|vargem)|e (?:cataguases|mangueira|p(?:arna(?:iba|íba)|irapama))|o(?: (?:a(?:cara(?:u|ú)|raguaia)|cariri|deserto|garamb(?:eu|éu)|i(?:panema|tarar(?:e|é))|jacar(?:e|é)|m(?:a(?:nhua(?:cu|çu)|ranh(?:ao|ão)|tos)|unda(?:u|ú))|p(?:ara(?:iso|íso)|iau(?:i|í))|riacho|s(?:ao francisco|erid(?:o|ó)|ão francisco))|s (?:garrotes|montes)))|opolis|ópolis)|r(?:em(?: novo)?|ém(?: novo)?))|iago do sul|o(?: (?:a(?:fonso|maro(?: d(?:a(?: imperatriz|s brotas)|o maranh(?:ao|ão)))?|n(?:ast(?:acio|ácio)|dr(?:e|é)|gelo|t(?:onio(?: d(?:a(?: (?:alegria|barra|p(?:atrulha|latina))|s missoes)|e (?:goias|jesus|l(?:everger|isboa)|p(?:adua|osse))|o(?: (?:a(?:mparo|racangua|ventureiro)|caiua|descoberto|grama|i(?:ca|tambe)|ja(?:cinto|rdim)|le(?:ste|verger)|monte|p(?:a(?:lma|raiso)|inhal|lanalto)|r(?:etiro|io abaixo)|sudoeste|taua)|s (?:lopes|milagres))))?|ônio(?: d(?:a(?: (?:alegria|barra|p(?:atrulha|latina))|s missões)|e (?:goiás|jesus|l(?:everger|isboa)|p(?:osse|ádua))|o(?: (?:a(?:mparo|racanguá|ventureiro)|caiuá|descoberto|grama|i(?:també|çá)|ja(?:cinto|rdim)|le(?:ste|verger)|monte|p(?:a(?:lma|raíso)|inhal|lanalto)|r(?:etiro|io abaixo)|sudoeste|tauá)|s (?:lopes|milagres))))?))|ugusto)|cristo|e(?:st(?:evao|êvão)|xpedito(?: do sul)?)|hip(?:olito|ólito)|in(?:acio(?: do piaui)?|ácio(?: do piauí)?)|ângelo)|polis do aguapei|s dumont)|ópolis do aguapeí))|o (?:b(?:e(?:n(?:edito(?: do (?:rio preto|sul))?|t(?:inho|o(?: (?:abade|do (?:norte|s(?:apucai|ul)|t(?:ocantins|rairi)|una)))?))|rnard(?:ino|o(?: do campo)?))|o(?:nifacio|rja)|ra(?:s(?: do suacui)?|z do piaui))|c(?:a(?:etano(?: d(?:e odivelas|o sul))?|itano|rlos(?: do ivai)?)|ristovao(?: do sul)?)|d(?:esiderio|omingos(?: d(?:as dores|o (?:a(?:raguaia|zeitao)|ca(?:pim|riri)|maranhao|norte|prata|sul)))?)|f(?:e(?:li(?:pe(?: d'oeste)?|x(?: d(?:e (?:balsas|minas)|o (?:araguaia|coribe|piaui|tocantins|xingu)))?)|rnando)|idelis|rancisco(?: d(?:e (?:assis(?: do piaui)?|goias|itabapoana|paula|sales)|o (?:brejao|conde|g(?:loria|uapore)|maranhao|oeste|p(?:ara|iaui)|sul)))?)|g(?:abriel(?: d(?:a (?:cachoeira|palha)|o oeste))?|eraldo(?: d(?:a piedade|o (?:araguaia|baixio)))?|o(?:ncalo(?: do(?: (?:a(?:baete|marante)|gurgueia|p(?:ara|iaui)|rio (?:abaixo|preto)|sapucai)|s campos))?|tardo))|j(?:eronimo(?: da serra)?|o(?:a(?:o(?: (?:batista(?: do gloria)?|d(?:'alianca|a(?: (?:b(?:a(?:liza|rra)|oa vista)|canabrava|fronteira|lagoa|mata|p(?:arauna|ont(?:a|e))|serra|urtiga|varjota)|s (?:duas pontes|missoes))|e(?: (?:iracema|meriti|pirabas)|l rei)|o(?: (?:ar(?:aguaia|raial)|ca(?:iua|r(?:iri|u))|i(?:taperiu|vai)|jaguaribe|man(?:huacu|teninha)|o(?:este|riente)|p(?:a(?:cui|raiso|u d'alho)|iaui|olesine)|rio do peixe|s(?:abugi|oter|ul)|t(?:igre|riunfo))|s patos))|evangelista|nepomuceno))?|quim(?: d(?:a barra|e bicas|o monte))?)|rge(?: d(?:'oeste|o (?:ivai|patrocinio)))?|se(?: d(?:a(?: (?:b(?:arra|ela vista|oa vista)|coroa grande|la(?:goa tapada|je|pa)|safira|tapera|v(?:arginha|itoria))|s (?:missoes|palmeiras))|e (?:caiana|espinharas|mipibu|p(?:iranhas|rincesa)|ribamar|uba)|o(?: (?:alegre|b(?:arreiro|elmonte|onfim|rejo do cruz)|c(?:a(?:lcado|mpestre)|e(?:dro|rrito))|divino|egito|goiabal|h(?:erval|ortencio)|inhacora|jacu(?:ipe|ri)|mantimento|norte|ouro|p(?:eixe|iaui|ovo)|rio (?:claro|p(?:ardo|reto))|s(?:abugi|erido|ul)|vale do rio preto|xingu)|s (?:ausentes|basilios|c(?:ampos|ordeiros)|pinhais|quatro marcos|ramos))))?)|uliao)|l(?:eopoldo|ourenco(?: d(?:a (?:mata|serra)|o (?:oeste|piaui|sul)))?|u(?:dgero|i(?:s(?: (?:d(?:e montes belos|o (?:curu|piaui|quitunde))|gonzaga do maranhao))?|z(?: (?:do (?:anaua|norte|paraitinga)|gonzaga))?)))|m(?:a(?:mede|n(?:oel do parana|uel)|r(?:cos|tinho(?: da serra)?)|teus(?: do (?:maranhao|sul))?)|iguel(?: (?:arcanjo|d(?:a(?: b(?:aixa grande|oa vista)|s m(?:atas|issoes))|e taipu|o(?: (?:a(?:leixo|nta|raguaia)|fidalgo|g(?:ostoso|ua(?:ma|pore))|iguacu|oeste|passa quatro|t(?:apuio|ocantins))|s (?:campos|milagres)))))?)|nicolau|p(?:a(?:tricio|ulo d(?:as missoes|e olivenca|o potengi))|edro(?: d(?:a(?: (?:a(?:gua branca|ldeia)|cipa|serra|uniao)|s missoes)|e alcantara|o(?: (?:butia|i(?:guacu|vai)|p(?:arana|iaui)|su(?:acui|l)|turvo)|s (?:crentes|ferros))))?)|r(?:a(?:fael|imundo (?:d(?:as mangabeiras|o doca bezerra)|nonato))|o(?:berto|mao|que(?: d(?:e minas|o canaa))?))|s(?:alvador do tocantins|e(?:bastiao(?: d(?:a (?:amoreira|b(?:ela vista|oa vista)|grama|vargem alegre)|e lagoa de roca|o (?:a(?:lto|nta)|cai|maranhao|oeste|pa(?:raiso|sse)|rio (?:preto|verde)|tocantins|u(?:atuma|mbuzeiro))))?|pe)|imao)|t(?:home das letras|iago|om(?:as de aquino|e(?: das letras)?))|v(?:ale(?:ntim(?: do sul)?|rio(?: do sul)?)|endelino|icente(?: (?:d(?:e minas|o s(?:erido|ul))|ferrer))?))|p(?:e(?:a(?:cu|çu)|zal)?|iranga|opema|uca(?:i(?:-mirim|a(?: do sul)?)|í-mirim)|é)|quarema|r(?:a(?:ndi|pu(?:i|í))|do(?:a|á)|utai(?:a|á)|zedo)|t(?:iro dias|ub(?:a|inha))|u(?:bara|d(?:ade(?: do igua(?:cu|çu)|s)|e))|úde)|chroeder|e(?:ara|b(?:asti(?:a(?:n(?:opolis do sul|ópolis do sul)|o (?:barros|l(?:aranjeiras|eal)))|ão (?:barros|l(?:aranjeiras|eal)))|eri)|de nova|gredo|l(?:bach|v(?:iria|íria))|m-peixe|n(?:a(?: madureira|dor (?:a(?:lexandre costa|maral)|c(?:anedo|ortes)|el(?:oi de souza|ói de souza)|firmino|g(?:eorgino avelino|uiomard)|jos(?:e (?:bento|porfirio)|é (?:bento|porfírio))|la rocque|modestino gon(?:calves|çalves)|pompeu|rui palmeira|s(?:a(?:lgado filho)?|á)))|g(?:es|és)|hor(?: do bonfim|a d(?:e oliveira|o(?: porto|s rem(?:edios|édios))))|t(?:inela do sul|o s(?:e|é)))|r(?:afina corr(?:ea|êa)|i(?:cita|ngueiras|o|tinga)|op(?:edica|édica)|r(?:a(?: (?:a(?:lta|zul(?: de minas)?)|branca|caiada|d(?:a (?:raiz|saudade)|e s(?:ao bento|ão bento)|o(?: (?:mel|navio|ramalho|salitre)|s aimor(?:es|és)|urada))|grande|n(?:egra(?: do norte)?|ova dourada)|preta|redonda|talhada)|n(?:a|ia|o(?: do maranh(?:ao|ão)|polis(?: d(?:e minas|o iguacu))?|s)|ópolis(?: d(?:e minas|o iguaçu))?)|ria)|i(?:nha(?: dos pintos)?|ta)|o(?:l(?:andia|ândia))?)|t(?:a(?:n(?:eja|ia|opolis|ópolis)|o(?: santana|zinho)?)|ânia|ão(?: santana|zinho)?))|t(?:e (?:barras|de setembro|lagoas|quedas)|ubinha)|ver(?:i(?:ano (?:de almeida|melo)|nia)|ínia))|i(?:d(?:er(?:opolis|ópolis)|rol(?:andia|ândia))|gefredo pacheco|lv(?:a(?: jardim|n(?:opolis|ópolis))|e(?:ir(?:a(?: martins|nia|s)|ânia)|s)|ian(?:opolis|ópolis))|m(?:ao (?:dias|pereira)|o(?:es filho|l(?:andia|ândia)|n(?:esia|ésia))|pl(?:icio mendes|ício mendes)|ão (?:dias|pereira)|ões filho)|n(?:imbu|op)|queira campos|ri(?:nha(?:em|ém)|ri)|tio (?:d(?:'abadia|o (?:mato|quinto))|novo(?: do tocantins)?))|o(?:br(?:a(?:d(?:inho|o)|lia)|ália)|corro(?: do piau(?:i|í))?|l(?:anea|edade(?: de minas)?|id(?:ao|ão)|on(?:opole|ópole)|ânea)|mbrio|nora|oretama|r(?:ocaba|riso)|ss(?:ego|êgo)|u(?:re|to soares))|u(?:cupira(?: do (?:norte|riach(?:ao|ão)))?|d mennucci|l(?: brasil|ina)|m(?:ar(?:e|é)|e|idouro|é)|rubim|ssuapara|zan(?:apolis|o|ápolis))|átiro dias|ão (?:b(?:e(?:n(?:edito(?: do (?:rio preto|sul))?|t(?:inho|o(?: (?:abade|do (?:norte|s(?:apucaí|ul)|t(?:ocantins|rairí)|una)))?))|rnard(?:ino|o(?: do campo)?))|o(?:nifácio|rja)|r(?:az do piauí|ás(?: do suaçuí)?))|c(?:a(?:etano(?: d(?:e odivelas|o sul))?|itano|rlos(?: do ivaí)?)|rist(?:ovão do sul|óvão(?: do sul)?))|d(?:esidério|omingos(?: d(?:as dores|o (?:a(?:raguaia|zeitão)|ca(?:pim|riri)|maranhão|norte|prata|sul)))?)|f(?:e(?:lipe(?: d'oeste)?|rnando)|idélis|rancisco(?: d(?:e (?:assis(?: do piauí)?|goiás|itabapoana|paula|sales)|o (?:brejão|conde|g(?:lória|uaporé)|maranhão|oeste|p(?:ará|iauí)|sul)))?|élix(?: d(?:e (?:balsas|minas)|o (?:araguaia|coribe|piauí|tocantins|xingu)))?)|g(?:abriel(?: d(?:a (?:cachoeira|palha)|o oeste))?|eraldo(?: d(?:a piedade|o (?:araguaia|baixio)))?|o(?:nçalo(?: do(?: (?:a(?:baeté|marante)|gurguéia|p(?:ará|iauí)|rio (?:abaixo|preto)|sapucaí)|s campos))?|tardo))|j(?:erônimo(?: da serra)?|o(?:aquim(?: d(?:a barra|e bicas|o monte))?|rge(?: d(?:'oeste|o (?:ivaí|patrocínio)))?|sé(?: d(?:a(?: (?:b(?:arra|ela vista|oa vista)|coroa grande|la(?:goa tapada|je|pa)|safira|tapera|v(?:arginha|itória))|s (?:missões|palmeiras))|e (?:caiana|espinharas|mipibu|p(?:iranhas|rincesa)|ribamar|ubá)|o(?: (?:alegre|b(?:arreiro|elmonte|onfim|rejo do cruz)|c(?:a(?:lçado|mpestre)|e(?:dro|rrito))|divino|egito|goiabal|h(?:erval|ortêncio)|inhacorá|jacu(?:ri|ípe)|mantimento|norte|ouro|p(?:eixe|iauí|ovo)|rio (?:claro|p(?:ardo|reto))|s(?:abugi|eridó|ul)|vale do rio preto|xingu)|s (?:ausentes|basílios|c(?:ampos|ordeiros)|pinhais|quatro marcos|ramos))))?|ão(?: (?:batista(?: do glória)?|d(?:'aliança|a(?: (?:b(?:a(?:liza|rra)|oa vista)|canabrava|fronteira|lagoa|mata|p(?:araúna|ont(?:a|e))|serra|urtiga|varjota)|s (?:duas pontes|missões))|e(?: (?:iracema|meriti|pirabas)|l rei)|o(?: (?:ar(?:aguaia|raial)|ca(?:iuá|r(?:iri|ú))|i(?:taperiú|vaí)|jaguaribe|man(?:huaçu|teninha)|o(?:este|riente)|p(?:a(?:cuí|raíso|u d'alho)|iauí|olêsine)|rio do peixe|s(?:abugi|oter|ul)|t(?:igre|riunfo))|s patos))|evangelista|nepomuceno))?)|ulião)|l(?:eopoldo|ourenço(?: d(?:a (?:mata|serra)|o (?:oeste|piauí|sul)))?|u(?:dgero|i(?:s do piauí|z(?: (?:do (?:anauá|norte|paraitinga)|gonzaga))?)|ís(?: (?:d(?:e montes belos|o (?:curu|quitunde))|gonzaga do maranhão))?))|m(?:a(?:mede|n(?:oel do paraná|uel)|r(?:cos|tinho(?: da serra)?)|teus(?: do (?:maranhão|sul))?)|iguel(?: (?:arcanjo|d(?:a(?: b(?:aixa grande|oa vista)|s m(?:atas|issões))|e taipu|o(?: (?:a(?:leixo|nta|raguaia)|fidalgo|g(?:ostoso|ua(?:má|poré))|iguaçu|oeste|passa quatro|t(?:apuio|ocantins))|s (?:campos|milagres)))))?)|nicolau|p(?:a(?:trício|ulo d(?:as missões|e olivença|o potengi))|edro(?: d(?:a(?: (?:aldeia|cipa|serra|união|água branca)|s missões)|e alcântara|o(?: (?:butiá|i(?:guaçu|vaí)|p(?:araná|iauí)|su(?:açuí|l)|turvo)|s (?:crentes|ferros))))?)|r(?:a(?:fael|imundo (?:d(?:as mangabeiras|o doca bezerra)|nonato))|o(?:berto|mão|que(?: d(?:e minas|o canaã))?))|s(?:alvador do tocantins|e(?:bastião(?: d(?:a (?:amoreira|b(?:ela vista|oa vista)|grama|vargem alegre)|e lagoa de roça|o (?:a(?:lto|nta)|caí|maranhão|oeste|pa(?:raíso|ssé)|rio (?:preto|verde)|tocantins|u(?:atumã|mbuzeiro))))?|pé)|imão)|t(?:homé das letras|iago|om(?:ás de aquino|é(?: das letras)?))|v(?:al(?:entim(?: do sul)?|ério(?: do sul)?)|endelino|icente(?: (?:d(?:e minas|o s(?:eridó|ul))|f(?:errer|érrer)))?))|ério|ítio (?:d(?:'abadia|o (?:mato|quinto))|novo(?: do tocantins)?))|t(?:a(?:b(?:a(?:i|p(?:or(?:a|ã)|u(?:a|ã))|tinga|í)|ira|o(?:ao da serra|c(?:a(?:o|s do brejo velho)|ão)|leiro grande|ão da serra)|uleiro(?: do norte)?)|c(?:a(?:imb(?:o|ó)|ratu)|i(?:ba|ma)|uru)|gua(?:i|tinga|í)|i(?:a(?:cu|çu)|l(?:andia|ândia)|o(?:beiras)?|p(?:as do tocantins|u)|uva|ó|úva)|lism(?:a|ã)|m(?:a(?:ndar(?:e|é)|rana)|b(?:a(?:u|ú)|o(?:ara|ril(?: do piau(?:i|í))?)))|n(?:abi|g(?:ar(?:a(?: da serra)?|á(?: da serra)?)|u(?:a|á))|ha(?:cu|çu)|qu(?:e (?:d(?:'arca|o piau(?:i|í))|novo)|inho))|p(?:a(?:ruba|u(?:a|á))|e(?:jara|r(?:a|o(?:a|á))|s)|ira(?:i|mut(?:a|á)|tiba|í)?|urah)|quar(?:a(?:cu de minas|l(?: de goi(?:as|ás))?|na|çu de minas)?|i(?:t(?:inga(?: do norte)?|uba)|va(?:i|í))?|u(?:cu do sul|ssu|çu do sul))|r(?:a(?:bai|uac(?:a|á))|rafas|tarugalzinho|um(?:a|irim|ã))|sso fragoso|tu(?:i|í)|u(?:a|bat(?:e|é)|á))|e(?:f(?:e|é)|ixeir(?:a(?: (?:de freitas|soares)|s)|opolis|ópolis)|ju(?:cuoca|p(?:a|á)|çuoca)|l(?:emaco borba|ha|êmaco borba)|nente (?:ananias|laurentino cruz|portela)|o(?:doro sampaio|fil(?:andia|o otoni|ândia)|l(?:andia|ândia)|t(?:onio vilela|ônio vilela))|r(?:e(?:nos|s(?:ina(?: de goi(?:as|ás))?|opolis|ópolis)|z(?:opolis de goias|ópolis de goiás))|ra (?:alta|boa|de areia|nova(?: do norte)?|r(?:ica|oxa)|santa))|souro|ut(?:onia|ônia)|ófilo otoni)|heobroma|i(?:angu(?:a|á)|ba(?:gi|u(?: do sul)?)|et(?:e|ê)|grinhos|jucas(?: do sul)?|m(?:b(?:a(?:uba(?: dos batistas)?|úba(?: dos batistas)?)|e do sul|iras|o(?: grande)?|uri|é do sul|ó(?: grande)?)|on)|o hugo|r(?:adentes(?: do sul)?|os))|o(?:bias barreto|c(?:ant(?:in(?:ia|opolis|ópolis)|ínia)|os do moji)|m(?:a(?:r do geru|zina)|bos|e-acu|é-açu)|nantins|r(?:i(?:tama|xor(?:eu|éu))|opi|r(?:e de pedra|inha))|uros)|r(?:a(?:biju|cu(?:ateua|nha(?:em|ém))|i(?:pu|r(?:ao|i|ão))|jano de moraes|manda(?:i|í)|vesseiro)|e(?:me(?:dal|mb(?:e|é))|s (?:arroios|barras(?: do parana)?|c(?:achoeiras|or(?:acoes|oas))|de maio|f(?:orquilhas|ronteiras)|lagoas|marias|p(?:a(?:lmeiras|ssos)|ontas)|r(?:anchos|ios))|viso|ze (?:de maio|t(?:ilias|ílias)))|i(?:ndade do sul|unfo(?: potiguar)?|zidela do vale)|omb(?:as|udo central)|ês (?:arroios|barras(?: do paraná)?|c(?:achoeiras|or(?:ações|oas))|de maio|f(?:orquilhas|ronteiras)|lagoas|marias|p(?:a(?:lmeiras|ssos)|ontas)|r(?:anchos|ios)))|u(?:bar(?:ao|ão)|c(?:ano|u(?:m(?:a|ã)|nduva|ru(?:i|í)))|fil(?:andia|ândia)|iuti|miritinga|n(?:a(?:polis|s(?: do paran(?:a|á))?)|eiras do oeste|tum|ápolis)|p(?:a(?:ciguara|n(?:atinga|ci(?: do sul|ret(?:a|ã))|di)|re(?:ndi|tama)|ssi)?|i(?: paulista|ra(?:ma|tins))|ã(?:ssi)?)|r(?:i(?:a(?:cu|çu)|l(?:andia|ândia)|uba|úba)|malina|u(?:cu|ru|çu)|v(?:ania|el(?:andia|ândia)|o(?:l(?:andia|ândia))?|ânia))|t(?:oia|óia)))|x(?:a(?:mb(?:io(?:a|á)|r(?:e|ê))|n(?:gri-l(?:a|á)|xer(?:e|ê))|puri|vantina|xim)|ex(?:eu|éu)|i(?:nguara|que-xique))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "5165 — Acrelândia · Assis Brasil · Brasiléia · Bujari · Capixaba · Cruzeiro do Sul · …",
+            "regex": "(?iu)(?:(?:h(?:armonia|e(?:itora(?:i|í)|li(?:o(?:dora|polis)|ópolis)|r(?:cul(?:andia|ândia)|v(?:al(?: d'oeste)?|eiras)))|idrol(?:andia|ina|ândia)|o(?:lambra|n(?:orio serpa|ório serpa)|r(?:izont(?:e|ina)|tol(?:andia|ândia)))|u(?:go napole(?:ao|ão)|lha negra|m(?:ait(?:a|á)|berto de campos)))|kalor(?:e|é)|n(?:a(?:cip raydan|n(?:tes|uque)|o-me-toque|que|randiba|t(?:al(?:andia|ândia)?|ercia|ividade(?: da serra)?|uba|ércia)|v(?:egantes|ira(?:i|í))|z(?:ar(?:e(?: (?:d(?:a mata|o piaui)|paulista)|no|zinho)?|ia|é(?: (?:d(?:a mata|o piauí)|paulista))?)|ária))|e(?:opolis|pomuceno|r(?:opolis|ópolis)|ves paulista|ópolis)|ha(?:mund(?:a|á)|ndeara)|i(?:colau vergueiro|l(?:o(?: pe(?:canha|çanha)|polis)|ópolis)|n(?:a rodrigues|heira)|oaque|po(?:a|ã)|quel(?:andia|ândia)|sia floresta|ter(?:oi|ói))|o(?:bres|noai|r(?:destina|mandia|tel(?:andia|ândia))|ssa senhora (?:aparecida|d(?:a(?: gl(?:oria|ória)|s (?:dores|gra(?:cas|ças)))|e (?:lourdes|nazar(?:e|é))|o(?: (?:livramento|socorro)|s rem(?:edios|édios))))|v(?:a (?:a(?:l(?:ian(?:ca(?: do ivai)?|ça(?: do ivaí)?)|vorada(?: do sul)?)|m(?:erica(?: da colina)?|érica(?: da colina)?)|ndradina|ra(?:ca|çá)|urora)|b(?:a(?:ndeirantes|ssano)|el(?:em|ém)|oa vista|r(?:asil(?:andia(?: d'oeste)?|ândia(?: d'oeste)?)|escia|éscia))|c(?:a(?:mpina|n(?:a(?:a(?: (?:do norte|paulista))?|ã(?: (?:do norte|paulista))?)|del(?:aria|ária)|tu)|stilho)|olinas|r(?:ix(?:as|ás)|uz))|e(?:r(?:a|echim)|speran(?:ca(?: do (?:piria|su(?:doeste|l)))?|ça(?: do (?:piriá|su(?:doeste|l)))?)|uropa)|f(?:atima|loresta|riburgo|átima)|g(?:l(?:oria|ória)|ranada|ua(?:rita|taporanga))|hartz|i(?:bi(?:a|á)|gua(?:cu(?: de goias)?|çu(?: de goiás)?)|ndepend(?:encia|ência)|orque|pixuna|ta(?:beraba|rana))|l(?:a(?:cerda|ranjeiras)|ima|ondrina|uzit(?:ania|ânia))|m(?:a(?:mor(?:e|é)|ri(?:l(?:andia|ândia)|ng(?:a|á)))|o(?:dica|nte verde)|utum|ódica)|nazar(?:e|é)|o(?:dessa|l(?:i(?:mpia|nda(?: do (?:maranh(?:ao|ão)|norte))?)|ímpia))|p(?:a(?:dua|lm(?:a|eira))|etr(?:opolis|ópolis)|o(?:nte|rteirinha)|rata(?: do igua(?:cu|çu))?|ádua)|r(?:amada|e(?:den(?:cao|ção)|sende)|o(?:ma(?: do sul)?|sal(?:andia|ândia))|ussas)|s(?:anta (?:b(?:arbara|árbara)|helena|r(?:ita|osa))|errana|oure)|t(?:ebas|imboteua|rento)|u(?:birat(?:a|ã)|ni(?:ao|ão))|v(?:en(?:e(?:cia|za)|écia)|i(?:cosa|çosa))|xavantina)|o(?: (?:a(?:cordo|ir(?:ao|ão)|legre|ripuan(?:a|ã))|b(?:arreiro|rasil)|c(?:abrais|ruzeiro)|gama|h(?:amburgo|orizonte(?: do (?:norte|oeste|sul))?)|itacolomi|jardim|lino|m(?:achado|undo)|oriente(?: d(?:e minas|o piau(?:i|í)))?|p(?:lanalto|rogresso)|repartimento|s(?:a(?:nto ant(?:onio|ônio)|o joaquim)|ão joaquim)|t(?:iradentes|riunfo)|xingu)|rizonte)))|uporanga|ão-me-toque|ísia floresta)|o(?:bidos|ca(?:ra|u(?:cu|çu))|eiras(?: do par(?:a|á))?|iapoque|l(?:aria|eo|ho(?: d'(?:agua(?: (?:d(?:as (?:cunhas|flores)|o (?:borges|casado|piaui))|grande))?|água(?: (?:d(?:as (?:cunhãs|flores)|o (?:borges|casado|piauí))|grande))?)|-d'(?:agua do borges|água do borges)|s(?: d'(?:agua|água)|-d'(?:agua|água)))|i(?:mpi(?:a|o noronha)|nd(?:a(?: nova do maranh(?:ao|ão))?|ina)|ve(?:dos|ira (?:d(?:e f(?:atima|átima)|os brejinhos)|fortes)|n(?:ca|ça)))|ímpi(?:a|o noronha))|n(?:ca de pitangui|da verde|ça de pitangui)|r(?:at(?:orios|órios)|i(?:ente|ndi(?:uva|úva)|ximin(?:a|á)|z(?:ania|ona|ânia))|l(?:andia|eans|ândia)|o(?:b(?:o|ó)|c(?:o|ó)|s)|tigueira|ós)|s(?:asco|car bressane|orio|valdo cruz|ório)|tac(?:ilio costa|ílio costa)|u(?:r(?:em|i(?:c(?:angas|uri)|l(?:andia do norte|ândia do norte)|nhos|zona|çangas)|o(?: (?:branco|fino|preto(?: do oeste)?|ve(?:lho|rde(?: d(?:e (?:goi(?:as|ás)|minas)|o oeste))?))|este|l(?:andia|ândia))?|ém)|vidor))|qu(?:a(?:dra|r(?:a(?:i|í)|t(?:el geral|o centen(?:ario|ário)))|t(?:a|i(?:gu(?:a|á)|puru|s)|ro (?:barras|irm(?:aos|ãos)|pontes)|á))|e(?:brangulo|das do igua(?:cu|çu)|imad(?:a(?: nova|s)|os)|luz(?:ito)?|r(?:encia(?: do norte)?|ência(?: do norte)?)|vedos)|i(?:jingue|lombo|n(?:ta(?: do sol|na)|ze de novembro)|pap(?:a|á)|rin(?:opolis|ópolis)|ssam(?:a|ã)|t(?:andinha|erian(?:opolis|ópolis))|x(?:a(?:b(?:a|eira|á)|d(?:a|á))|e(?:l(?:o|ô)|r(?:amobim|e|é)))))|u(?:a(?:rini|u(?:a|á))|b(?:a(?:i(?:ra|taba)?|jara|poranga|rana|t(?:a|uba|ã)|í(?:ra)?)?|er(?:aba|l(?:andia|ândia))|ir(?:a(?:jara|t(?:a|ã))|etama)|á)|i(?:ba(?:i|í)|ra(?:mut(?:a|ã)|puru|una|úna))|lian(?:opolis|ópolis)|m(?:ari(?:zal)?|b(?:a(?:uba|úba)|u(?:ra(?:nas|tiba)|zeiro))|irim|uarama)|n(?:a(?:i|í)?|i(?:ao(?: (?:d(?:a (?:serra|vitoria)|e minas|o(?: (?:oeste|sul)|s palmares))|paulista))?|flor|stalda|ão(?: (?:d(?:a (?:serra|vitória)|e minas|o(?: (?:oeste|sul)|s palmares))|paulista))?))|panema|r(?:a(?:i|n(?:di|ia)|í)|bano santos|u(?:a(?:cu|na(?: de minas)?|r(?:a|á)|çu)|b(?:ici|uretama)|c(?:a(?:nia|r(?:a|á))|u(?:ca|i(?:a)?|rituba)|ânia)|guaiana|oca|p(?:a|e(?:ma|s)|á|ês)|ssanga|ta(?:i|í)|çu(?:ca|í))?|ânia)|tinga)|v(?:a(?:caria|l(?:e(?: (?:d(?:e s(?:ao domingos|ão domingos)|o (?:anari|para(?:iso|íso)|sol))|real|verde)|n(?:ca(?: do piaui)?|tim gentil|ça(?: do piauí)?))|inhos|para(?:iso(?: de goias)?|íso(?: de goiás)?))|nini|r(?:g(?:e(?:ao|m(?: (?:al(?:egre|ta)|bonita|grande(?: (?:do (?:rio pardo|sul)|paulista))?))?|ão)|inha)|j(?:ao(?: de minas)?|ota|ão(?: de minas)?)|re-sai|ze(?:a(?: (?:alegre|branca|d(?:a (?:palma|roca)|o poco)|grande|nova|paulista))?|do|l(?:andia|ândia)))|ssouras|zante)|e(?:n(?:ancio aires|da nova do imigrante|ha-ver|t(?:ania|urosa)|âncio aires)|r(?:a(?: (?:cruz(?: do oeste)?|mendes)|n(?:opolis|ópolis))|de(?:jante|l(?:andia|ândia))|e(?:d(?:a|inha))?|melho novo|tente(?: do l(?:erio|ério)|s)|ê)|spasiano(?: corr(?:ea|êa))?)|i(?:a(?:dutos|m(?:ao|ão)|n(?:opolis|ópolis))|c(?:en(?:cia|t(?:e dutra|in(?:a|opolis|ópolis)))|osa(?: do ceara)?|tor graeff|ência)|d(?:al ramos|eira)|eir(?:as|opolis|ópolis)|gia|la (?:b(?:ela da sant(?:issima trindade|íssima trindade)|oa)|flor(?:es)?|l(?:angaro|ângaro)|maria|nova do(?: (?:piau(?:i|í)|sul)|s mart(?:irios|írios))|p(?:av(?:ao|ão)|rop(?:icio|ício))|rica|v(?:al(?:erio|ério)|elha))|nhedo|r(?:adouro|g(?:em da lapa|in(?:opolis|ópolis)|ol(?:andia|ândia))|mond)|s(?:conde do rio branco|eu|ta (?:alegre(?: do (?:alto|prata))?|ga(?:ucha|úcha)|serrana))|t(?:or(?: meireles|i(?:a (?:brasil|d(?:a(?: conquista|s missoes)|e santo antao|o (?:jari|mearim|xingu)))|no freire))|ória (?:brasil|d(?:a(?: conquista|s missões)|e santo antão|o (?:jari|mearim|xingu))))|çosa(?: do ceará)?)|o(?:lta (?:grande|redonda)|t(?:orantim|uporanga))|árzea(?: (?:alegre|branca|d(?:a (?:palma|roça)|o poço)|grande|nova|paulista))?)|w(?:a(?:ll ferraz|nderl(?:andia|ey|ândia))|e(?:nceslau (?:braz|guimar(?:aes|ães))|stf(?:alia|ália))|itmarsum)|z(?:abel(?:e|ê)|e doca|ort(?:ea|éa)|é doca)|á(?:gu(?:a(?: (?:azul do norte|b(?:oa|ranca)|c(?:lara|omprida)|doce(?: do (?:maranhão|norte))?|fria(?: de goiás)?|limpa|nova|preta|santa)|s (?:belas|d(?:a prata|e (?:chapecó|lindóia|s(?:anta bárbara|ão pedro)))|f(?:ormosas|rias)|lindas de goiás|mornas|vermelhas))|ia branca)|lvar(?:es (?:florence|machado)|o de carvalho)|urea)|ângulo|érico cardoso|ó(?:bidos|leo)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L2_CODIGO_MUNICIPIO - Path",
       "framework": "PATH",
       "domain": "BR_L2_CODIGO_MUNICIPIO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1701,12 +1771,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(1[1-7]|2[1-9]|3[1-35]|4[1-3]|5[0-3])\\d{4,5}",
+            "regex": "0*(?:(1[1-7]|2[1-9]|3[1-35]|4[1-3]|5[0-3])\\d{4,5})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1716,7 +1786,7 @@
       "name": "BR_L2_CEP - Path",
       "framework": "PATH",
       "domain": "BR_L2_CEP",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1739,20 +1809,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{5}-\\d{3}",
+            "regex": "0*(?:\\d{5}-\\d{3})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{2}\\.\\d{3}-\\d{3}",
+            "regex": "0*(?:\\d{2}\\.\\d{3}-\\d{3})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1762,7 +1832,7 @@
       "name": "BR_L2_BAIRRO - Path",
       "framework": "PATH",
       "domain": "BR_L2_BAIRRO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1781,7 +1851,7 @@
       "name": "BR_L2_ZONA_SECAO_ELEITORAL - Path",
       "framework": "PATH",
       "domain": "BR_L2_ZONA_SECAO_ELEITORAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1800,7 +1870,7 @@
       "name": "BR_L2_NACIONALIDADE - Path",
       "framework": "PATH",
       "domain": "BR_L2_NACIONALIDADE",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1827,7 +1897,7 @@
             "matchStrength": 0.7
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.4,
         "tokenizationDelimiter": " "
       }
@@ -1836,7 +1906,7 @@
       "name": "BR_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "BR_L2_ESTADO_CIVIL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1852,27 +1922,30 @@
       }
     },
     {
-      "name": "BR_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "BR_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "BR_L2_ESTADO_CIVIL",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "21 — Solteiro a · Casado a · União estável · Divorciado a · Separado a · Viúvo a · …",
+            "regex": "(?iu)(?:(?:amasiado|c(?:asad(?:a|o(?:\\(a\\))?)|ompanheir(?:a|o))|d(?:esquitado|ivorciad(?:a|o(?:\\(a\\))?))|s(?:eparad(?:a|o(?:\\(a\\))?)|olteir(?:a|o(?:\\(a\\))?))|uni(?:ao estavel|ão estável)|vi(?:uv(?:a|o(?:\\(a\\))?)|úvo\\(a\\))))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L2_OCUPACAO - Path",
       "framework": "PATH",
       "domain": "BR_L2_OCUPACAO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1899,7 +1972,7 @@
       "name": "BR_L2_EMPREGADOR - Path",
       "framework": "PATH",
       "domain": "BR_L2_EMPREGADOR",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1918,7 +1991,7 @@
       "name": "BR_L2_ESCOLARIDADE - Path",
       "framework": "PATH",
       "domain": "BR_L2_ESCOLARIDADE",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1934,27 +2007,30 @@
       }
     },
     {
-      "name": "BR_L2_ESCOLARIDADE - List",
-      "framework": "LIST",
+      "name": "BR_L2_ESCOLARIDADE - Values",
+      "framework": "REGEX",
       "domain": "BR_L2_ESCOLARIDADE",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-escolaridade.txt",
-            "matchStrength": 0.6
+            "note": "22 — Sem instrução · Fundamental incompleto · Fundamental completo · Médio incompleto · Médio completo · Superior incompleto · …",
+            "regex": "(?iu)(?:(?:analfabeto|doutorado|e(?:nsino (?:fundamental|m(?:edio|édio))|specializa(?:cao|ção))|fundamental(?: (?:completo|incompleto))?|gradua(?:cao|ção)|m(?:e(?:dio(?: (?:completo|incompleto))?|strado)|édio(?: (?:completo|incompleto))?)|p(?:os-graduacao|ós-graduação)|s(?:em instru(?:cao|ção)|uperior(?: (?:completo|incompleto))?)|t(?:ecnico|écnico)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L2_ESCOLA - Path",
       "framework": "PATH",
       "domain": "BR_L2_ESCOLA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -1973,7 +2049,7 @@
       "name": "BR_L2_DEPENDENTES - Path",
       "framework": "PATH",
       "domain": "BR_L2_DEPENDENTES",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2013,7 +2089,7 @@
       "name": "BR_L3_RACA_COR - Path",
       "framework": "PATH",
       "domain": "BR_L3_RACA_COR",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2029,31 +2105,39 @@
       }
     },
     {
-      "name": "BR_L3_RACA_COR - List",
-      "framework": "LIST",
+      "name": "BR_L3_RACA_COR - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_RACA_COR",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-raca-cor.txt",
-            "matchStrength": 0.9
+            "note": "19 — Branca · Preta · Parda · Amarela · Indígena · Não declarada · …",
+            "regex": "(?iu)(?:(?:amarel(?:a|o)|branc(?:a|o)|i(?:gnorado|nd(?:igena|ígena))|m(?:oren(?:a|o)|ulato)|n(?:ao (?:declarada|informada)|egr(?:a|o)|ão (?:declarada|informada))|p(?:ard(?:a|o)|ret(?:a|o))|sem declara(?:cao|ção)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://br-detectar-codigos-raca-cor.txt",
-            "matchStrength": 0.3
+            "note": "7 — 1 · 2 · 3 · 4 · 5 · 6 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6|9))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L3_ETNIA - Path",
       "framework": "PATH",
       "domain": "BR_L3_ETNIA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2069,31 +2153,48 @@
       }
     },
     {
-      "name": "BR_L3_ETNIA - List",
-      "framework": "LIST",
+      "name": "BR_L3_ETNIA - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_ETNIA",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-etnias.txt",
-            "matchStrength": 0.9
+            "note": "47 — Tikúna · Kokama · Makuxí · Guarani Kaiowá · Guajajara · Terena · …",
+            "regex": "(?iu)(?:(?:baniwa|c(?:aiov(?:a|á)|igan(?:a|o))|fulni-(?:o|ô)|gua(?:jajara|rani(?: (?:kaiow(?:a|á)|mbya|nhandeva))?)|i(?:anomami|nd(?:igena|ígena))|k(?:a(?:i(?:ap(?:o|ó)|ngang|owa)|raj(?:a|á)|yap(?:o|ó))|okama)|m(?:a(?:cuxi|kux(?:i|í))|u(?:nduruku|ra))|n(?:ao (?:indigena|pertence)|ão (?:indígena|pertence))|p(?:a(?:nkararu|tax(?:o|ó))|otiguara)|quilombola|ribeirinh(?:a|o)|sater(?:e-mawe|é-mawé)|t(?:erena|i(?:cuna|k(?:una|úna))|u(?:kano|pinamb(?:a|á)))|wapichana|x(?:a(?:kriab(?:a|á)|vante)|u(?:curu|kuru))|yanom(?:ami|ámi)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://br-detectar-flag.txt",
-            "matchStrength": 0.3
+            "note": "7 — s · n · sim · não · y · 0 · …",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "7 — s · n · sim · não · y · 0 · …",
+            "regex": "(?iu)(?:(?:n(?:ao|ão)?|s(?:im)?|y))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L3_RELIGIAO - Path",
       "framework": "PATH",
       "domain": "BR_L3_RELIGIAO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2109,27 +2210,30 @@
       }
     },
     {
-      "name": "BR_L3_RELIGIAO - List",
-      "framework": "LIST",
+      "name": "BR_L3_RELIGIAO - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_RELIGIAO",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-religioes.txt",
-            "matchStrength": 0.9
+            "note": "45 — Católica Apostólica Romana · Evangélica · Evangélica pentecostal · Evangélica de missão · Espírita · Umbanda · …",
+            "regex": "(?iu)(?:(?:a(?:dventista|gn(?:ostico|óstico)|ssembleia de deus|teu)|b(?:atista|udista)|c(?:a(?:ndombl(?:e|é)|t(?:olic(?:a(?: apostolica romana)?|o)|ólic(?:a(?: apostólica romana)?|o)))|ongrega(?:cao crista|ção cristã)|rist(?:a(?:o)?|ã(?:o)?))|e(?:sp(?:irita|írita)|vang(?:elic(?:a(?: (?:de missao|pentecostal))?|o)|élic(?:a(?: (?:de missão|pentecostal))?|o)))|isl(?:amica|âmica)|jud(?:aica|eu)|kardecista|luterana|m(?:atriz africana|etodista|ormon|u(?:culmano|çulmano)|órmon)|nenhuma|outra religiosidade|p(?:entecostal|r(?:esbiteriana|otestante))|sem religi(?:ao|ão)|testemunha de jeov(?:a|á)|u(?:mbanda|niversal)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L3_CONVICCAO_ORGANIZACAO - Path",
       "framework": "PATH",
       "domain": "BR_L3_CONVICCAO_ORGANIZACAO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2148,7 +2252,7 @@
       "name": "BR_L3_OPINIAO_POLITICA - Path",
       "framework": "PATH",
       "domain": "BR_L3_OPINIAO_POLITICA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2164,27 +2268,30 @@
       }
     },
     {
-      "name": "BR_L3_OPINIAO_POLITICA - List",
-      "framework": "LIST",
+      "name": "BR_L3_OPINIAO_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_OPINIAO_POLITICA",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-opinioes-politicas.txt",
-            "matchStrength": 0.7
+            "note": "21 — Esquerda · Centro-esquerda · Centro · Centro-direita · Direita · Sem preferência · …",
+            "regex": "(?iu)(?:(?:antipetista|b(?:olsonarista|ranco)|c(?:entro(?:-(?:direita|esquerda))?|onservador)|direita|esquerda|indeciso|l(?:iberal|ulista)|n(?:enhum|ulo)|p(?:etista|r(?:efere n(?:ao responder|ão responder)|ogressista))|sem prefer(?:encia|ência)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L3_FILIACAO_PARTIDARIA - Path",
       "framework": "PATH",
       "domain": "BR_L3_FILIACAO_PARTIDARIA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2200,27 +2307,30 @@
       }
     },
     {
-      "name": "BR_L3_FILIACAO_PARTIDARIA - List",
-      "framework": "LIST",
+      "name": "BR_L3_FILIACAO_PARTIDARIA - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_FILIACAO_PARTIDARIA",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "69 — MDB · Movimento Democrático Brasileiro · PDT · Partido Democrático Trabalhista · PT · Partido dos Trabalhadores · …",
+            "regex": "(?iu)(?:(?:a(?:gir|vante)|cidadania|d(?:c|em(?:ocra(?:cia crist(?:a|ã)|ta))?)|m(?:db|iss(?:ao|ão)|o(?:biliza(?:cao nacional|ção nacional)?|vimento democr(?:atico brasileiro|ático brasileiro)))|novo|p(?:artido (?:comunista (?:brasileiro|do brasil)|d(?:a (?:causa oper(?:aria|ária)|social democracia brasileira)|emocr(?:atico trabalhista|ático trabalhista)|os trabalhadores)|liberal|miss(?:ao|ão)|novo|renova(?:cao democratica|dor trabalhista brasileiro|ção democrática)|social(?: democr(?:atico|ático)|is(?:mo e liberdade|ta (?:brasileiro|dos trabalhadores unificado)))|verde)|c(?:b|dob|o)|dt|l|m(?:db|n)|ode(?:mos)?|p|r(?:d|o(?:gressistas|s)|tb)|s(?:b|c|d(?:b)?|l|ol|tu)|t(?:b)?|v)|re(?:de(?: sustentabilidade)?|publicanos)|s(?:em (?:filia(?:cao|ção)|partido)|olidariedade)|u(?:ni(?:ao(?: brasil)?|dade popular|ão(?: brasil)?)|p)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L3_FILIACAO_SINDICAL - Path",
       "framework": "PATH",
       "domain": "BR_L3_FILIACAO_SINDICAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2236,27 +2346,30 @@
       }
     },
     {
-      "name": "BR_L3_FILIACAO_SINDICAL - List",
-      "framework": "LIST",
+      "name": "BR_L3_FILIACAO_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_FILIACAO_SINDICAL",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "23 — CUT · Força Sindical · UGT · CTB · NCST · CSB · …",
+            "regex": "(?iu)(?:(?:a(?:peoesp|ssociado ao sindicato)|c(?:entral (?:dos (?:sindicatos brasileiros|trabalhadores e trabalhadoras do brasil)|unica dos trabalhadores|única dos trabalhadores)|s(?:b|p-conlutas)|tb|ut)|for(?:ca sindical|ça sindical)|intersindical|n(?:cst|ova central sindical de trabalhadores)|sin(?:d(?:ica(?:lizado|to dos (?:banc(?:arios|ários)|comerci(?:arios|ários)|metal(?:urgicos|úrgicos)))|sep)|t(?:ep|rajud|ufrj))|u(?:gt|ni(?:ao geral dos trabalhadores|ão geral dos trabalhadores))))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BR_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "BR_L3_GENETICO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2272,10 +2385,29 @@
       }
     },
     {
+      "name": "BR_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "BR_L3_GENETICO",
+      "description": "Formato dos valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "BR_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "BR_L3_BIOMETRICO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2310,7 +2442,7 @@
       "name": "BR_L3_ORIENTACAO_SEXUAL - Path",
       "framework": "PATH",
       "domain": "BR_L3_ORIENTACAO_SEXUAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2326,27 +2458,30 @@
       }
     },
     {
-      "name": "BR_L3_ORIENTACAO_SEXUAL - List",
-      "framework": "LIST",
+      "name": "BR_L3_ORIENTACAO_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_ORIENTACAO_SEXUAL",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-orientacoes-sexuais.txt",
-            "matchStrength": 0.8
+            "note": "15 — Heterossexual · Gay · Lésbica · Bissexual · Pansexual · Assexual · …",
+            "regex": "(?iu)(?:(?:assexual|bissexual|gay|h(?:etero(?:ssexual)?|omo(?:ssexual)?)|l(?:esbica|gbt(?:qia\\+)?|ésbica)|n(?:ao informado|ão informado)|outra|p(?:ansexual|refere n(?:ao informar|ão informar))|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "BR_L3_VIDA_SEXUAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2365,7 +2500,7 @@
       "name": "BR_L3_IDENTIDADE_GENERO - Path",
       "framework": "PATH",
       "domain": "BR_L3_IDENTIDADE_GENERO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2381,27 +2516,30 @@
       }
     },
     {
-      "name": "BR_L3_IDENTIDADE_GENERO - List",
-      "framework": "LIST",
+      "name": "BR_L3_IDENTIDADE_GENERO - Values",
+      "framework": "REGEX",
       "domain": "BR_L3_IDENTIDADE_GENERO",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "19 — Mulher cisgênero · Homem cisgênero · Mulher trans · Homem trans · Travesti · Não binário · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|ênero))?|feminino|homem(?: (?:cisg(?:enero|ênero)|trans))?|m(?:asculino|ulher(?: (?:cisg(?:enero|ênero)|trans))?)|n(?:ao(?: binario|-binario)|ão(?: binário|-binário))|outra|prefere n(?:ao informar|ão informar)|tra(?:ns(?:exual|g(?:enero|ênero))?|vesti)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_SAUDE_CNS - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_CNS",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2424,12 +2562,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[12789]\\d{2}\\s?\\d{4}\\s?\\d{4}\\s?\\d{4}",
+            "regex": "0*(?:[12789]\\d{2}\\s?\\d{4}\\s?\\d{4}\\s?\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2439,7 +2577,7 @@
       "name": "BR_SAUDE_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_IDENTIFICADOR",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2466,7 +2604,7 @@
       "name": "BR_SAUDE_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_DIAGNOSTICO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2494,7 +2632,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2504,7 +2642,7 @@
       "name": "BR_SAUDE_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_MEDICAMENTO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2520,27 +2658,30 @@
       }
     },
     {
-      "name": "BR_SAUDE_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "BR_SAUDE_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "BR_SAUDE_MEDICAMENTO",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "53 — Losartana potássica · Metformina · Omeprazol · Sinvastatina · Hidroclorotiazida · Dipirona · …",
+            "regex": "(?iu)(?:(?:a(?:cido (?:acetilsalicilico|folico|valproico)|lprazolam|moxicilina|n(?:lodipino|ticoncepcional)|tenolol|zitromicina)|c(?:a(?:ptopril|rbonato de l(?:itio|ítio))|efalexina|lonazepam|omplexo vitam(?:inico|ínico))|d(?:exametasona|i(?:azepam|pirona(?: s(?:odica|ódica))?)|olutegravir)|e(?:favirenz|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:amivudina|ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ratadina|sartana(?: pot(?:assica|ássica))?)|ítio)|m(?:et(?:formina|ilfenidato)|isoprostol)|o(?:lanzapina|meprazol)|p(?:aracetamol|rednisona)|quetiapina|ri(?:speridona|talina|votril)|s(?:albutamol|ertralina|invastatina|ulfato ferroso)|tenofovir|varfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BR_SAUDE_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_TEXTO_CLINICO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2576,7 +2717,7 @@
       "name": "BR_SAUDE_RESULTADO_EXAME - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_RESULTADO_EXAME",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2603,7 +2744,7 @@
       "name": "BR_SAUDE_TIPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_TIPO_SANGUINEO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2619,27 +2760,30 @@
       }
     },
     {
-      "name": "BR_SAUDE_TIPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "BR_SAUDE_TIPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "BR_SAUDE_TIPO_SANGUINEO",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-tipos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_SAUDE_DEFICIENCIA - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_DEFICIENCIA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2655,27 +2799,30 @@
       }
     },
     {
-      "name": "BR_SAUDE_DEFICIENCIA - List",
-      "framework": "LIST",
+      "name": "BR_SAUDE_DEFICIENCIA - Values",
+      "framework": "REGEX",
       "domain": "BR_SAUDE_DEFICIENCIA",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-deficiencias.txt",
-            "matchStrength": 0.6
+            "note": "23 — Física · Visual · Auditiva · Intelectual · Mental ou psicossocial · Múltipla · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|baixa vis(?:ao|ão)|cegueira|f(?:isica|ísica)|intelectual|m(?:ental(?: ou psicossocial)?|otora|ultipla|últipla)|n(?:ao possui|enhuma|ão possui)|psicossocial|reabilitado|surdez|tea|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BR_SAUDE_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_OCUPACIONAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2691,27 +2838,30 @@
       }
     },
     {
-      "name": "BR_SAUDE_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "BR_SAUDE_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "BR_SAUDE_OCUPACIONAL",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-aptidao.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · inapto · apto com restrições · apto com restricao · inapto temporariamente",
+            "regex": "(?iu)(?:(?:apto(?: com restri(?:c(?:ao|oes)|ções))?|inapto(?: temporariamente)?))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BR_SAUDE_REPRODUTIVA - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_REPRODUTIVA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2730,7 +2880,7 @@
       "name": "BR_SAUDE_MENTAL - Path",
       "framework": "PATH",
       "domain": "BR_SAUDE_MENTAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2749,7 +2899,7 @@
       "name": "BR_FIN_CREDITO - Path",
       "framework": "PATH",
       "domain": "BR_FIN_CREDITO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2768,7 +2918,7 @@
       "name": "BR_FIN_DIVIDA - Path",
       "framework": "PATH",
       "domain": "BR_FIN_DIVIDA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2803,7 +2953,7 @@
       "name": "BR_FIN_RENDA - Path",
       "framework": "PATH",
       "domain": "BR_FIN_RENDA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2838,7 +2988,7 @@
       "name": "BR_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "BR_FIN_PATRIMONIO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2873,7 +3023,7 @@
       "name": "BR_FIN_VALOR_BENEFICIO - Path",
       "framework": "PATH",
       "domain": "BR_FIN_VALOR_BENEFICIO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2908,7 +3058,7 @@
       "name": "BR_FIN_BENEFICIO_INSS - Path",
       "framework": "PATH",
       "domain": "BR_FIN_BENEFICIO_INSS",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2924,31 +3074,39 @@
       }
     },
     {
-      "name": "BR_FIN_BENEFICIO_INSS - List",
-      "framework": "LIST",
+      "name": "BR_FIN_BENEFICIO_INSS - Values",
+      "framework": "REGEX",
       "domain": "BR_FIN_BENEFICIO_INSS",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-beneficios-inss.txt",
-            "matchStrength": 0.8
+            "note": "27 — Aposentadoria por idade · Aposentadoria por tempo de contribuição · Aposentadoria especial · Aposentadoria por incapacidade permanente · Auxílio por incapacidade temporária · Auxílio-acidente · …",
+            "regex": "(?iu)(?:(?:a(?:posentadoria(?: (?:especial|por (?:i(?:dade|n(?:capacidade permanente|validez))|tempo de contribui(?:cao|ção))))?|ux(?:ilio(?: (?:doenca|por incapacidade temporaria)|-(?:acidente|doenca|reclusao))|ílio(?: por incapacidade temporária|-(?:acidente|doença|reclusão))))|b(?:31|4(?:1|2)|8(?:7|8)|91|pc(?: (?:a(?: pessoa com deficiencia|o idoso)|à pessoa com deficiência))?)|loas|nenhum|pens(?:ao por morte|ão por morte)|sal(?:ario(?: maternidade|-maternidade)|ário(?: maternidade|-maternidade))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://br-detectar-codigos-beneficios-inss.txt",
-            "matchStrength": 0.5
+            "note": "14 — 21 · 31 · 32 · 36 · 41 · 42 · …",
+            "regex": "0*(?:(?:21|3(?:1|2|6)|4(?:1|2|6)|8(?:0|7|8)|9(?:1|2|3|4)))",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_FIN_NUMERO_BENEFICIO - Path",
       "framework": "PATH",
       "domain": "BR_FIN_NUMERO_BENEFICIO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -2971,12 +3129,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}\\.\\d{3}\\.\\d{3}-\\d",
+            "regex": "0*(?:\\d{3}\\.\\d{3}\\.\\d{3}-\\d)",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2986,7 +3144,7 @@
       "name": "BR_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "BR_FIN_PROGRAMA_SOCIAL",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -3002,31 +3160,48 @@
       }
     },
     {
-      "name": "BR_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "BR_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "BR_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-programas-sociais.txt",
-            "matchStrength": 0.8
+            "note": "20 — Bolsa Família · Benefício de Prestação Continuada · Auxílio Gás dos Brasileiros · Pé-de-Meia · Tarifa Social de Energia Elétrica · Minha Casa Minha Vida · …",
+            "regex": "(?iu)(?:(?:aux(?:ilio (?:brasil|emergencial|gas(?: dos brasileiros)?)|ílio (?:brasil|emergencial|gás(?: dos brasileiros)?))|b(?:enef(?:icio de prestacao continuada|ício de prestação continuada)|olsa fam(?:ilia|ília)|pc)|cad(?:unico|único)|garantia-safra|loas|m(?:cmv|inha casa, minha vida)|nenhum|p(?:e(?: de meia|-de-meia)|é(?: de meia|-de-meia))|seguro-defeso|tarifa social(?: de energia el(?:etrica|étrica))?))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://br-detectar-flag.txt",
-            "matchStrength": 0.3
+            "note": "7 — s · n · sim · não · y · 0 · …",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "7 — s · n · sim · não · y · 0 · …",
+            "regex": "(?iu)(?:(?:n(?:ao|ão)?|s(?:im)?|y))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BR_FIN_FAIXA_RENDA - Path",
       "framework": "PATH",
       "domain": "BR_FIN_FAIXA_RENDA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -3042,27 +3217,30 @@
       }
     },
     {
-      "name": "BR_FIN_FAIXA_RENDA - List",
-      "framework": "LIST",
+      "name": "BR_FIN_FAIXA_RENDA - Values",
+      "framework": "REGEX",
       "domain": "BR_FIN_FAIXA_RENDA",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-faixas-renda.txt",
-            "matchStrength": 0.4
+            "note": "15 — extrema pobreza · pobreza · baixa renda · acima de meio salário mínimo · classe a · classe b · …",
+            "regex": "(?iu)(?:(?:a(?:cima de meio sal(?:ario minimo|ário mínimo))?|b(?:1|2|aixa renda)|c(?:1|2|lasse (?:a|b|c|d|e))|de|extrema pobreza|pobreza))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BR_FIN_MORADIA - Path",
       "framework": "PATH",
       "domain": "BR_FIN_MORADIA",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -3078,27 +3256,30 @@
       }
     },
     {
-      "name": "BR_FIN_MORADIA - List",
-      "framework": "LIST",
+      "name": "BR_FIN_MORADIA - Values",
+      "framework": "REGEX",
       "domain": "BR_FIN_MORADIA",
       "description": "Valores conhecidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://br-detectar-moradia.txt",
-            "matchStrength": 0.6
+            "note": "18 — Próprio quitado · Próprio em pagamento · Alugado · Cedido · Ocupação · Outra · …",
+            "regex": "(?iu)(?:(?:alug(?:ad(?:a|o)|uel)|cedid(?:a|o)|financiad(?:a|o)|invas(?:ao|ão)|o(?:cupa(?:cao|ção)|utra)|pr(?:opri(?:a|o(?: (?:em pagamento|quitado))?)|ópri(?:a|o(?: (?:em pagamento|quitado))?))|situa(?:cao de rua|ção de rua)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BR_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "BR_PENAL_ANTECEDENTES",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -3125,7 +3306,7 @@
       "name": "BR_PENAL_PROCESSO - Path",
       "framework": "PATH",
       "domain": "BR_PENAL_PROCESSO",
-      "description": "Nome da coluna (e variantes usadas em sistemas brasileiros).",
+      "description": "Nome da coluna e variantes usadas em sistemas brasileiros.",
       "config": {
         "paths": [
           {
@@ -3156,12 +3337,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{7}-\\d{2}\\.\\d{4}\\.\\d\\.\\d{2}\\.\\d{4}",
+            "regex": "0*(?:\\d{7}-\\d{2}\\.\\d{4}\\.\\d\\.\\d{2}\\.\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3439,7 +3620,7 @@
     },
     {
       "name": "BR_SAUDE_TIPO_SANGUINEO",
-      "algorithm": "BR_TIPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "BR_SAUDE_DEFICIENCIA",
@@ -3463,19 +3644,19 @@
     },
     {
       "name": "BR_FIN_DIVIDA",
-      "algorithm": "BR_VALOR_DIVIDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BR_FIN_RENDA",
-      "algorithm": "BR_RENDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BR_FIN_PATRIMONIO",
-      "algorithm": "BR_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BR_FIN_VALOR_BENEFICIO",
-      "algorithm": "BR_VALOR_BENEFICIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BR_FIN_BENEFICIO_INSS",
@@ -3521,7 +3702,8 @@
           "áéíóúâêôãõà"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "MG-12.345.678"
     },
@@ -3533,7 +3715,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "12.345.678-X"
     },
@@ -3546,7 +3729,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "12ABC345"
     },
@@ -3562,7 +3746,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3791,8 +3976,23 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3814,114 +4014,17 @@
       "input": "Transtorno depressivo recorrente"
     },
     {
-      "name": "BR_CPF_DV1",
-      "framework": "algorithm.plugin.checkdigit.Checkdigit",
+      "name": "BR_CM_DIGITOS_LETRAS_LARGURA_FIXA",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
       "config": {
-        "weightList": [
-          10,
-          9,
-          8,
-          7,
-          6,
-          5,
-          4,
-          3,
-          2
+        "characterGroups": [
+          "0123456789",
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
-        "modulusNumber": 11,
-        "checkDigitIndex": 9,
-        "numDigitsForCheckdigitCalculation": 9,
-        "calculateChecksumRightToLeft": false,
-        "numericAlgorithm": {
-          "name": "BR_CM_DIGITOS"
-        },
-        "alphaNumericAlgorithm": {
-          "name": "BR_CM_DIGITOS"
-        },
-        "preserveRegex": "[.\\-/]",
-        "inputHandlingConfig": {
-          "characterHandling": "STANDARD",
-          "invalidInputHandling": "ERROR",
-          "shortInputHandling": "FALLBACK",
-          "padCharacter": "0",
-          "trimWhitespace": true
-        }
+        "caseSensitive": true,
+        "minMaskedPositions": 0
       },
-      "input": "5299822472"
-    },
-    {
-      "name": "BR_CPF_VALIDO",
-      "framework": "algorithm.plugin.checkdigit.Checkdigit",
-      "config": {
-        "weightList": [
-          11,
-          10,
-          9,
-          8,
-          7,
-          6,
-          5,
-          4,
-          3,
-          2
-        ],
-        "modulusNumber": 11,
-        "checkDigitIndex": 10,
-        "numDigitsForCheckdigitCalculation": 10,
-        "calculateChecksumRightToLeft": false,
-        "numericAlgorithm": {
-          "name": "BR_CPF_DV1"
-        },
-        "alphaNumericAlgorithm": {
-          "name": "BR_CPF_DV1"
-        },
-        "preserveRegex": "[.\\-/]",
-        "inputHandlingConfig": {
-          "characterHandling": "STANDARD",
-          "invalidInputHandling": "ERROR",
-          "shortInputHandling": "FALLBACK",
-          "padCharacter": "0",
-          "trimWhitespace": true
-        }
-      },
-      "input": "529.982.247-25"
-    },
-    {
-      "name": "BR_CPF_VALIDO_ZEROS",
-      "framework": "algorithm.plugin.checkdigit.Checkdigit",
-      "config": {
-        "weightList": [
-          11,
-          10,
-          9,
-          8,
-          7,
-          6,
-          5,
-          4,
-          3,
-          2
-        ],
-        "modulusNumber": 11,
-        "checkDigitIndex": 10,
-        "numDigitsForCheckdigitCalculation": 10,
-        "calculateChecksumRightToLeft": false,
-        "numericAlgorithm": {
-          "name": "BR_CPF_DV1"
-        },
-        "alphaNumericAlgorithm": {
-          "name": "BR_CPF_DV1"
-        },
-        "preserveRegex": "[.\\-/]",
-        "inputHandlingConfig": {
-          "characterHandling": "STANDARD",
-          "invalidInputHandling": "ERROR",
-          "shortInputHandling": "PAD_LEFT",
-          "padCharacter": "0",
-          "trimWhitespace": true
-        }
-      },
-      "input": "1234567890"
+      "input": "12ABC345"
     },
     {
       "name": "BR_CNPJ_RAIZ",
@@ -3934,7 +4037,7 @@
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "BR_CM_DIGITOS_LETRAS"
+                  "name": "BR_CM_DIGITOS_LETRAS_LARGURA_FIXA"
                 }
               },
               {
@@ -4076,30 +4179,39 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2})",
+            "regex": "(0*?)(?:(\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "BR_CPF_VALIDO"
+                  "name": "dlpx-core:Brazil CPF"
                 }
               }
             ]
           },
           {
-            "regex": "(\\d{3,10})",
+            "regex": "(0*?)(?:(\\d{3,10}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "BR_CPF_VALIDO_ZEROS"
+                  "name": "dlpx-core:Brazil CPF"
                 }
               }
             ]
           },
           {
-            "regex": "([0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2})",
+            "regex": "(0*?)(?:([0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4109,8 +4221,11 @@
             ]
           },
           {
-            "regex": "([0-9A-Z]{12}\\d{2})",
+            "regex": "(0*?)(?:([0-9A-Z]{12}\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4120,8 +4235,11 @@
             ]
           },
           {
-            "regex": "(\\d{12,13})",
+            "regex": "(0*?)(?:(\\d{12,13}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4148,8 +4266,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2})",
+            "regex": "(0*?)(?:([0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4159,8 +4280,11 @@
             ]
           },
           {
-            "regex": "([0-9A-Z]{12}\\d{2})",
+            "regex": "(0*?)(?:([0-9A-Z]{12}\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4170,19 +4294,25 @@
             ]
           },
           {
-            "regex": "(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{9}-\\d{2})",
+            "regex": "(0*?)(?:(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{9}-\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "BR_CPF_VALIDO"
+                  "name": "dlpx-core:Brazil CPF"
                 }
               }
             ]
           },
           {
-            "regex": "(\\d{3,13})",
+            "regex": "(0*?)(?:(\\d{3,13}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4612,8 +4742,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{12})",
+            "regex": "(0*?)(?:(\\d{12}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4623,8 +4756,11 @@
             ]
           },
           {
-            "regex": "(\\d{11})",
+            "regex": "(0*?)(?:(\\d{11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4634,8 +4770,11 @@
             ]
           },
           {
-            "regex": "(\\d{10})",
+            "regex": "(0*?)(?:(\\d{10}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4764,8 +4903,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3}\\.?\\d{5}\\.?\\d{2}-?\\d)",
+            "regex": "(0*?)(?:(\\d{3}\\.?\\d{5}\\.?\\d{2}-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4775,8 +4917,11 @@
             ]
           },
           {
-            "regex": "(\\d{9,10})",
+            "regex": "(0*?)(?:(\\d{9,10}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4820,8 +4965,11 @@
             ]
           },
           {
-            "regex": "(\\d[\\d.\\-]*)(\\s*[-/]?\\s*[A-Za-z]{2})",
+            "regex": "(0*?)(?:(\\d[\\d.\\-]*)(\\s*[-/]?\\s*[A-Za-z]{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5336,8 +5484,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?55\\s?)?(\\(?0?\\d{2}\\)?\\s?)(9)(\\d{4})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?55\\s?)?(\\(?0?\\d{2}\\)?\\s?)(9)(\\d{4})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5365,8 +5516,11 @@
             ]
           },
           {
-            "regex": "(\\+?55\\s?)?(\\(?0?\\d{2}\\)?\\s?)([2-5])(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?55\\s?)?(\\(?0?\\d{2}\\)?\\s?)([2-5])(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5394,8 +5548,11 @@
             ]
           },
           {
-            "regex": "(9)(\\d{4})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(9)(\\d{4})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5417,8 +5574,11 @@
             ]
           },
           {
-            "regex": "([2-5])(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:([2-5])(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5467,26 +5627,20 @@
       "input": "Av. Paulista, 1578, 12º andar - Bela Vista"
     },
     {
-      "name": "BR_CARTAO_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "5162306219378829"
-    },
-    {
       "name": "BR_CARTAO",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "BR_CARTAO_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -5517,8 +5671,11 @@
             ]
           },
           {
-            "regex": "(\\+55\\d{10,11})",
+            "regex": "(0*?)(?:(\\+55\\d{10,11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5528,8 +5685,11 @@
             ]
           },
           {
-            "regex": "(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{11})",
+            "regex": "(0*?)(?:(\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}|\\d{11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5539,8 +5699,11 @@
             ]
           },
           {
-            "regex": "([0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2}|[0-9A-Z]{12}\\d{2})",
+            "regex": "(0*?)(?:([0-9A-Z]{2}\\.[0-9A-Z]{3}\\.[0-9A-Z]{3}/[0-9A-Z]{4}-\\d{2}|[0-9A-Z]{12}\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5550,8 +5713,11 @@
             ]
           },
           {
-            "regex": "([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})",
+            "regex": "(0*?)(?:([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5587,8 +5753,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5677,6 +5846,18 @@
       "input": "BRA2E19"
     },
     {
+      "name": "BR_CM_DIGITOS_LARGURA_FIXA",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "12.345.678-X"
+    },
+    {
       "name": "BR_RENAVAM_VALIDO",
       "framework": "algorithm.plugin.checkdigit.Checkdigit",
       "config": {
@@ -5697,10 +5878,10 @@
         "numDigitsForCheckdigitCalculation": 10,
         "calculateChecksumRightToLeft": false,
         "numericAlgorithm": {
-          "name": "BR_CM_DIGITOS"
+          "name": "BR_CM_DIGITOS_LARGURA_FIXA"
         },
         "alphaNumericAlgorithm": {
-          "name": "BR_CM_DIGITOS"
+          "name": "BR_CM_DIGITOS_LARGURA_FIXA"
         },
         "preserveRegex": "[.\\-/]",
         "inputHandlingConfig": {
@@ -5719,8 +5900,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{9,11})",
+            "regex": "(0*?)(?:(\\d{9,11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5874,8 +6058,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5902,8 +6089,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -5911,8 +6101,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5928,8 +6121,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5942,8 +6138,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6112,8 +6311,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6145,7 +6347,7 @@
       "input": "Monteiro Lobato"
     },
     {
-      "name": "BR_CODIGO_MUNICIPIO",
+      "name": "BR_CODIGO_MUNICIPIO_TABELA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -6158,13 +6360,44 @@
       "input": "3531209"
     },
     {
+      "name": "BR_CODIGO_MUNICIPIO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "BR_CODIGO_MUNICIPIO_TABELA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "3531209"
+    },
+    {
       "name": "BR_CEP",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\.?)(\\d)(\\d{2})(-?)(\\d{3})",
+            "regex": "(0*?)(?:(\\d{2})(\\.?)(\\d)(\\d{2})(-?)(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6188,8 +6421,11 @@
             ]
           },
           {
-            "regex": "(\\d{2})(\\d{2})(\\d{3})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{2})(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6289,8 +6525,25 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)(1|2|3|4|5)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "BR_ESTADO_CIVIL_CODIGO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6347,8 +6600,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{6})",
+            "regex": "(0*?)(?:(\\d{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6358,8 +6614,11 @@
             ]
           },
           {
-            "regex": "(\\d{4})-(\\d{2})",
+            "regex": "(0*?)(?:(\\d{4})-(\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6448,8 +6707,25 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)(01|02|03|04|05|06|07|08|09|10|11|12)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "BR_ESCOLARIDADE_CODIGO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6491,16 +6767,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -6563,8 +6845,25 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)(1|2|3|4|5|9)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "BR_RACA_COR_CODIGO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6617,8 +6916,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6671,8 +6973,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6725,8 +7030,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6809,8 +7117,11 @@
             ]
           },
           {
-            "regex": "([1-9]\\d)",
+            "regex": "(0*?)(?:([1-9]\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6874,8 +7185,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6928,8 +7242,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7291,8 +7608,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([12]\\d{14})",
+            "regex": "(0*?)(?:([12]\\d{14}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7302,8 +7622,11 @@
             ]
           },
           {
-            "regex": "([789])(\\d{14})",
+            "regex": "(0*?)(?:([789])(\\d{14}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -7454,8 +7777,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7475,21 +7801,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "BR_TIPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://br-tipos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "BR_DEFICIENCIA_LISTA",
@@ -7523,8 +7834,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7577,8 +7891,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7620,8 +7937,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7652,42 +7972,6 @@
         "requireMask": false
       },
       "input": "Negativado no Serasa"
-    },
-    {
-      "name": "BR_VALOR_DIVIDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 200,
-        "maxValue": 1000000
-      },
-      "input": "8500"
-    },
-    {
-      "name": "BR_RENDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1500,
-        "maxValue": 50000
-      },
-      "input": "3200"
-    },
-    {
-      "name": "BR_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 20000,
-        "maxValue": 5000000
-      },
-      "input": "185000"
-    },
-    {
-      "name": "BR_VALOR_BENEFICIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1500,
-        "maxValue": 8000
-      },
-      "input": "1800"
     },
     {
       "name": "BR_BENEFICIO_INSS_LISTA",
@@ -7736,8 +8020,25 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)(21|31|32|36|41|42|46|80|87|88|91|92|93|94)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "BR_BENEFICIO_INSS_CODIGO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(\\d{1,6}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7790,8 +8091,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7893,8 +8197,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([1-5])",
+            "regex": "(0*?)(?:([1-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7904,8 +8211,11 @@
             ]
           },
           {
-            "regex": "([6-9]|10)",
+            "regex": "(0*?)(?:([6-9]|10))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8000,8 +8310,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8054,8 +8367,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8082,8 +8398,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{7})(-?)(\\d{2})(\\.?\\d{4}\\.?\\d\\.?\\d{2}\\.?\\d{4})",
+            "regex": "(0*?)(?:(\\d{7})(-?)(\\d{2})(\\.?\\d{4}\\.?\\d\\.?\\d{2}\\.?\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8138,32 +8457,11 @@
     "br-decil-alto.txt",
     "br-decil.txt",
     "br-deficiencias.txt",
-    "br-detectar-aptidao.txt",
-    "br-detectar-beneficios-inss.txt",
-    "br-detectar-codigos-beneficios-inss.txt",
-    "br-detectar-codigos-raca-cor.txt",
-    "br-detectar-deficiencias.txt",
-    "br-detectar-escolaridade.txt",
-    "br-detectar-estado-civil.txt",
-    "br-detectar-etnias.txt",
-    "br-detectar-faixas-renda.txt",
-    "br-detectar-flag.txt",
-    "br-detectar-identidades-genero.txt",
-    "br-detectar-medicamentos.txt",
-    "br-detectar-moradia.txt",
-    "br-detectar-municipios.txt",
     "br-detectar-nacionalidades.txt",
     "br-detectar-nomes.txt",
-    "br-detectar-opinioes-politicas.txt",
-    "br-detectar-orientacoes-sexuais.txt",
-    "br-detectar-partidos.txt",
-    "br-detectar-programas-sociais.txt",
-    "br-detectar-raca-cor.txt",
-    "br-detectar-religioes.txt",
+    "br-detectar-sexo-letra.txt",
     "br-detectar-sexo.txt",
-    "br-detectar-sindicatos.txt",
     "br-detectar-sobrenomes.txt",
-    "br-detectar-tipos-sanguineos.txt",
     "br-diagnosticos.txt",
     "br-empregadores.txt",
     "br-enderecos.txt",
@@ -8206,7 +8504,6 @@
     "br-situacoes-credito.txt",
     "br-sobrenomes.txt",
     "br-texto-nomes.txt",
-    "br-tipos-sanguineos.txt",
     "br-titulo-dv-1.txt",
     "br-titulo-dv-2.txt",
     "br-titulo-dv-3.txt",

@@ -92,13 +92,13 @@ export function ReferencePicker({
   if (typed && exact) {
     status = (
       <p className={cn('mt-1 flex gap-1 text-xs', exact.source === 'engine' && engineNotRunnable ? 'text-amber-700' : 'text-emerald-700')}>
-        <Check size={12} className="mt-0.5 flex-shrink-0" />{foundText(exact)}
+        <Check size={12} className="mt-0.5 shrink-0" />{foundText(exact)}
       </p>
     )
   } else if (misfitHit && misfit) {
     status = (
       <p className="mt-1 flex gap-1.5 text-xs text-amber-700">
-        <AlertTriangle size={12} className="mt-0.5 flex-shrink-0" />
+        <AlertTriangle size={12} className="mt-0.5 shrink-0" />
         <span>{t(misfit.message)}</span>
       </p>
     )
@@ -122,7 +122,7 @@ export function ReferencePicker({
       : engineState === 'unavailable' ? t('reference.engineUnavailable') : null
     status = (
       <p className="mt-1 flex gap-1.5 text-xs text-amber-700">
-        <AlertTriangle size={12} className="mt-0.5 flex-shrink-0" />
+        <AlertTriangle size={12} className="mt-0.5 shrink-0" />
         <span>
           {t(kind === 'algorithm' ? 'reference.notFoundAlgorithm' : 'reference.notFoundDomain')}
           {unchecked && ` ${t('reference.engineNotChecked', { reason: unchecked })}`}
@@ -178,7 +178,7 @@ export function ReferencePicker({
                   i === active ? 'bg-blue-50 text-blue-900' : 'text-slate-700')}
               >
                 <span className="truncate">{o.value}</span>
-                {o.detail && <span className="ml-auto flex-shrink-0 text-xs text-slate-400">{o.detail}</span>}
+                {o.detail && <span className="ml-auto shrink-0 text-xs text-slate-400">{o.detail}</span>}
               </button>
             </Fragment>
           ))}

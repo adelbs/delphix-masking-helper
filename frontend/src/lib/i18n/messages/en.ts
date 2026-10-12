@@ -257,7 +257,7 @@ export const en = {
   'presets.loading': 'Loading profile sets…',
   'presets.listError': 'Could not list the pre-configured profile sets.',
   'presets.empty': 'No pre-configured profile sets yet.',
-  'presets.counts': 'Version {version} · Classifiers {classifiers} · Domains {domains} · Algorithms {algorithms}',
+  'presets.counts': 'Version {version} of {date} · Classifiers {classifiers} · Domains {domains} · Algorithms {algorithms}',
   'presets.loadedAt': '{pack} loaded {date}',
   'presets.pack.essential': 'Essential pack',
   'presets.pack.extended': 'Extended pack',
@@ -272,7 +272,7 @@ export const en = {
   'presets.switched': '"{name}" switched to the {pack}.',
   'presets.unloaded': '"{name}" unloaded: {n} items removed.',
   'presets.kept': 'Kept because something else here uses them: {names}.',
-  'presets.newVersion': 'Version {version} is available — reset to apply it.',
+  'presets.newVersion': 'Version {version} of {date} is available — reset to apply it.',
   'presets.doc': 'Documentation',
   'presets.noDoc': 'No documentation for this profile set yet.',
   'presets.load': 'Load',
@@ -306,6 +306,7 @@ export const en = {
   'settings.ai.recheck': 'Check again',
   'settings.ai.ollamaHint': 'Runs fully offline. Install Ollama and pull a model, e.g. `ollama pull llama3.1`. A local model advises but does not build algorithms, and on problems with a fine constraint it is unreliable — measured on 8B-class models. Prefer a hosted provider when the assistant is meant to be a source of decisions.',
   'settings.ai.copilotHint': 'Uses GitHub Models with a GitHub token (models:read). GitHub Copilot has no public chat API for third-party apps.',
+  'settings.ai.openaiHint': 'Uses the OpenAI API. The API key is stored locally and can also be supplied with DLPX_AI_OPENAI_KEY.',
   'settings.ai.installedModels': 'Installed models: {models}',
 
   // Settings — files
@@ -618,6 +619,7 @@ export const en = {
   // ── Profile sets ──────────────────────────────────────────────────────────
   'profileSet.new': 'New profile set',
   'profileSet.newTitle': 'New profile set',
+  'profileSet.loadPreset': 'Load pre-configured profile set',
   'profileSet.actions': 'Profile set actions',
   'profileSet.empty': 'No profile set yet. Create one, or import the engine’s.',
   'profileSet.local': 'Only on this machine',

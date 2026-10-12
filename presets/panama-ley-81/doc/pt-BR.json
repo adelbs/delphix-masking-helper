@@ -153,7 +153,7 @@
     "PA_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": "Números de cartão de crédito, débito e pré-pago, inclusive a Tarjeta Clave Social com que o MIDES paga seus programas.",
-      "masking": "É trocado por outro número de cartão que continua passando na verificação de Luhn. Valores sem forma de cartão passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "PA_L1_IP": {
       "title": "Endereço IP",
@@ -408,22 +408,22 @@
     "PA_FIN_MONTO_DEUDA": {
       "title": "Valor de dívida",
       "what": "Saldos de empréstimos, cartões e hipotecas, valores em atraso, limites de crédito, parcelas.",
-      "masking": "Mapeado para um valor entre B/.100 e B/.500.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_INGRESO_MENSUAL": {
       "title": "Salário e renda",
       "what": "Salário, décimo terceiro, renda do domicílio.",
-      "masking": "Mapeado para um valor entre B/.350 e B/.25.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": "Valor cadastral ou de mercado de imóveis e veículos, poupança, aplicações a prazo, patrimônio.",
-      "masking": "Mapeado para um valor entre B/.10.000 e B/.3.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_PENSION": {
       "title": "Pensão e conta individual",
       "what": "Valor de aposentadoria ou pensão da CSS, saldo da conta individual, do SIACAP ou do fundo de cesantía.",
-      "masking": "Mapeado para um valor entre B/.120 e B/.6.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_SEGURO_SOCIAL": {
       "title": "Cobertura da seguridade social",

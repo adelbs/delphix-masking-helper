@@ -11,8 +11,8 @@ consent, and criminal records.
 
 | | |
 |---|---|
-| Profile set | `PA - Ley 81 de 2019 - v2`, assignment threshold 60 |
-| Extended pack | 76 domains, 135 classifiers, 142 algorithms, 79 files — everything below |
+| Profile set | `PA - Ley 81 de 2019 - v3`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 76 domains, 137 classifiers, 138 algorithms, 57 files — everything below |
 | Essential pack | 12 domains, 27 classifiers, 59 algorithms, 10 files — cédula, RUC, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
@@ -47,12 +47,25 @@ blood groups, religions, parties, social security coverage and social programs. 
 **Type** classifiers rule domains out where the column cannot hold the data: a cédula is text of at
 least 5 characters, a birth date a date, timestamp or text.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in
 every table and every job. Placeholders such as `N/D` or `-` do not fail a row: where there is
 nothing to mask they pass through, and text in a key column that does not have the expected shape
 is masked character by character instead of being left as it was.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### L1 — Direct identifiers
 
@@ -66,7 +79,7 @@ is masked character by character instead of being left as it was.
 | `PA_L1_EMAIL` | Name and domain mapped character by character, top-level domain `.test` |
 | `PA_L1_TELEFONO` | `+507` and the first digit kept, the rest masked; 7-digit landlines and 8-digit mobiles |
 | `PA_L1_DIRECCION` | A fictitious Panamanian address: building, floor and apartment, or barriada and house |
-| `PA_L1_TARJETA` | Payment Card (Luhn stays valid), including the MIDES Tarjeta Clave Social |
+| `PA_L1_TARJETA` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept), including the MIDES Tarjeta Clave Social |
 | `PA_L1_IP` | Each IPv4 octet mapped to 1–254 |
 | `PA_L1_PLACA` | Serial letters and digits mapped, category letters (`T` taxi, `CD` diplomatic…) kept |
 | `PA_L1_GEOLOCALIZACION` | Integer part and first decimal kept (about 11 km), the rest masked |
@@ -109,7 +122,7 @@ become `X`.
 ### FIN — Economic and credit data (art. 8, 3; Law 24 of 2002)
 
 APC credit references (scores keep their digits' shape, statuses are replaced), debt, salary,
-assets and pensions (mapped into plausible ranges in balboas), Social Security Fund coverage, MIDES
+assets and pensions (masked by the engine's own CM Numeric, which keeps the order of magnitude), Social Security Fund coverage, MIDES
 and IFARHU programs, poverty status and income quintiles, and housing tenure.
 
 ### PENAL — Criminal records (art. 30)
@@ -165,12 +178,17 @@ node presets/_doc/build.mjs panama-ley-81
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
 `verify.mjs` first checks its own DV computation against the published algorithm's examples. It
-reviews every classifier configuration, profiles 138 columns with the whole set at its threshold —
+reviews every classifier configuration, profiles 144 columns with the whole set at its threshold —
 well named, badly named and 24 columns that are not personal data — and masks 255 sample values
 and 210 placeholders through the running app (`DLPX_URL`, default `http://localhost:3000`),
 including RUCs in the four separators and five letter types, each checked for a valid DV. It then
 masks 150 cédulas and 150 RUCs to check that none collide and every RUC keeps a valid DV, and 20
 cédula and RUC pairs of the same person to check they still agree. Each value forks a JVM.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 
