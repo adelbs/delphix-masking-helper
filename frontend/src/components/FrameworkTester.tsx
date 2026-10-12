@@ -345,7 +345,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white shrink-0">
         <button onClick={onToggleSidebar} className="text-slate-400 hover:text-slate-600 transition-colors">
           <PanelLeftOpen size={18} />
         </button>
@@ -363,7 +363,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
         </div>
 
         {algorithm && (
-          <div className="flex items-center gap-1.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={() => setDuplicating(v => !v)}
               title={t('saved.duplicate')}
@@ -391,13 +391,13 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
         )}
       </div>
       {sending && job?.progress && (
-        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white shrink-0">
           <ImportProgressBar progress={job.progress} />
         </div>
       )}
 
       {duplicating && algorithm && (
-        <div className="px-5 py-3 border-b border-slate-200 bg-white flex-shrink-0">
+        <div className="px-5 py-3 border-b border-slate-200 bg-white shrink-0">
           <DuplicatePrompt
             suggested={`${algorithm.name} (2)`}
             onCancel={() => setDuplicating(false)}
@@ -411,7 +411,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
       )}
 
       {/* Tabs */}
-      <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-1 px-5 border-b border-slate-200 bg-white shrink-0">
         {([
           { id: 'test', label: t('tester.tabTest'), Icon: FlaskConical },
           { id: 'doc', label: t('tester.tabDoc'), Icon: BookOpen },
@@ -441,7 +441,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
       <>
       {/* Info bar */}
       {meta && (
-        <div className="px-5 py-3 bg-blue-50 border-b border-blue-100 flex-shrink-0">
+        <div className="px-5 py-3 bg-blue-50 border-b border-blue-100 shrink-0">
           <p className="text-sm text-blue-800">{meta.description}</p>
           {meta.inputFormat && (
             <p className="text-xs text-blue-600 mt-1">
@@ -454,8 +454,8 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
       {/* Non-determinism warning — depends on the current configuration, so it appears
           and disappears as the user edits the parameter that controls it. */}
       {nonDetKey && (
-        <div className="px-5 py-2.5 bg-amber-50 border-b border-amber-200 flex items-start gap-2 flex-shrink-0">
-          <AlertTriangle size={15} className="text-amber-600 flex-shrink-0 mt-px" />
+        <div className="px-5 py-2.5 bg-amber-50 border-b border-amber-200 flex items-start gap-2 shrink-0">
+          <AlertTriangle size={15} className="text-amber-600 shrink-0 mt-px" />
           <p className="text-xs text-amber-900">
             <span className="font-semibold">{t('tester.nonDeterministic')}. </span>
             {t(nonDetKey)}
@@ -468,7 +468,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 h-full">
 
           {/* Config card */}
-          <div className="bg-white rounded-xl border border-slate-200 flex flex-col shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 flex flex-col shadow-xs">
             <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
               <span className="text-sm font-semibold text-slate-700">{t('tester.configuration')}</span>
               <div className="flex items-center gap-2">
@@ -499,7 +499,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
                   value={rawJson}
                   onChange={(e) => setRawJson(e.target.value)}
                   rows={14}
-                  className="w-full font-mono text-xs bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  className="w-full font-mono text-xs bg-slate-50 border border-slate-200 rounded-lg p-3 focus:outline-hidden focus:ring-2 focus:ring-blue-500 resize-none"
                   placeholder="{}"
                 />
               ) : (
@@ -509,7 +509,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
           </div>
 
           {/* Execution card */}
-          <div className="bg-white rounded-xl border border-slate-200 flex flex-col shadow-sm">
+          <div className="bg-white rounded-xl border border-slate-200 flex flex-col shadow-xs">
             <div className="px-4 py-3 border-b border-slate-100">
               <span className="text-sm font-semibold text-slate-700">{t('tester.execution')}</span>
             </div>
@@ -525,7 +525,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
                         <select
                           value={mcAddName}
                           onChange={e => setMcAddName(e.target.value)}
-                          className="text-xs border border-slate-200 rounded-md px-2 py-1 bg-white text-slate-600 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                          className="text-xs border border-slate-200 rounded-md px-2 py-1 bg-white text-slate-600 focus:outline-hidden focus:ring-1 focus:ring-blue-400"
                         >
                           <option value="">{t('tester.selectColumn')}</option>
                           {MC_COL_OPTIONS.filter(o => !mcColumns.some(c => c.name === o.name)).map(o => (
@@ -565,7 +565,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
                                 <select
                                   value={col.type}
                                   onChange={e => setMcColumns(cols => cols.map((c, j) => j === i ? { ...c, type: e.target.value } : c))}
-                                  className="text-xs border border-slate-200 rounded px-1.5 py-0.5 bg-white text-slate-600 focus:outline-none"
+                                  className="text-xs border border-slate-200 rounded-sm px-1.5 py-0.5 bg-white text-slate-600 focus:outline-hidden"
                                 >
                                   <option value="STRING">STRING</option>
                                   <option value="NUMERIC">NUMERIC</option>
@@ -576,7 +576,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
                                 <input
                                   value={col.value}
                                   onChange={e => setMcColumns(cols => cols.map((c, j) => j === i ? { ...c, value: e.target.value } : c))}
-                                  className="w-full text-sm font-mono bg-transparent border-0 outline-none focus:ring-1 focus:ring-blue-400 rounded px-1 py-0.5"
+                                  className="w-full text-sm font-mono bg-transparent border-0 outline-hidden focus:ring-1 focus:ring-blue-400 rounded-sm px-1 py-0.5"
                                   placeholder={col.type === 'DATE' ? '2024-01-15T00:00:00' : col.type === 'NUMERIC' ? '0' : t('tester.valuePlaceholder')}
                                 />
                               </td>
@@ -597,10 +597,10 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
                     </div>
                     <p className="text-xs text-slate-400 mt-1.5">
                       {tx('tester.mcHint', {
-                        key: <code className="bg-slate-100 px-1 rounded">key</code>,
-                        strings: <code className="bg-slate-100 px-1 rounded">string1…string10</code>,
-                        numerics: <code className="bg-slate-100 px-1 rounded">numeric1…3</code>,
-                        dates: <code className="bg-slate-100 px-1 rounded">date1…3</code>,
+                        key: <code className="bg-slate-100 px-1 rounded-sm">key</code>,
+                        strings: <code className="bg-slate-100 px-1 rounded-sm">string1…string10</code>,
+                        numerics: <code className="bg-slate-100 px-1 rounded-sm">numeric1…3</code>,
+                        dates: <code className="bg-slate-100 px-1 rounded-sm">date1…3</code>,
                       })}
                     </p>
                   </div>
@@ -701,7 +701,7 @@ export function FrameworkTester({ framework, algorithm, initialConfig, initialIn
                                   <input
                                     value={row}
                                     onChange={e => setBatchRows(rows => rows.map((r, j) => j === i ? e.target.value : r))}
-                                    className="w-full text-sm font-mono bg-transparent border-0 outline-none focus:ring-1 focus:ring-blue-400 rounded px-1 py-0.5"
+                                    className="w-full text-sm font-mono bg-transparent border-0 outline-hidden focus:ring-1 focus:ring-blue-400 rounded-sm px-1 py-0.5"
                                     placeholder={t('tester.valuePlaceholder')}
                                   />
                                 </td>
@@ -1004,4 +1004,4 @@ const MC_COL_OPTIONS: Array<{ name: string; type: 'STRING' | 'NUMERIC' | 'DATE' 
 ]
 
 const btnSm = 'flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md border transition-colors'
-const fieldInput = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'
+const fieldInput = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow'

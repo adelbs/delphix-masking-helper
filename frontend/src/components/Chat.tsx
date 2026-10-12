@@ -93,12 +93,12 @@ export function Chat({ onOpenAlgorithm, onOpenSettings }: Props) {
     <div className="flex flex-col h-full min-h-0">
       {status?.provider === 'ollama' && (
         <div className="flex items-start gap-2 mx-auto w-full max-w-3xl mb-3 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
-          <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
+          <AlertTriangle size={14} className="shrink-0 mt-0.5" />
           <div className="flex-1">
             <span className="font-medium">{t('chat.localLimits')}</span>{' '}
             {t('chat.localLimitsHint')}
           </div>
-          <button onClick={onOpenSettings} className="flex items-center gap-1 flex-shrink-0 font-medium hover:underline">
+          <button onClick={onOpenSettings} className="flex items-center gap-1 shrink-0 font-medium hover:underline">
             <Settings2 size={12} /> {t('chat.configure')}
           </button>
         </div>
@@ -106,7 +106,7 @@ export function Chat({ onOpenAlgorithm, onOpenSettings }: Props) {
 
       {warming && (
         <div className="flex items-start gap-2 mx-auto w-full max-w-3xl mb-3 px-3 py-2 rounded-lg bg-blue-50 border border-blue-200 text-xs text-blue-800">
-          <Loader2 size={14} className="flex-shrink-0 mt-0.5 animate-spin" />
+          <Loader2 size={14} className="shrink-0 mt-0.5 animate-spin" />
           <div className="flex-1">
             <span className="font-medium">
               {t('chat.warming', { model: status?.warm?.model ?? '', seconds: String(status?.warm?.elapsedSec ?? 0) })}
@@ -118,12 +118,12 @@ export function Chat({ onOpenAlgorithm, onOpenSettings }: Props) {
 
       {status && !status.ok && (
         <div className="flex items-start gap-2 mx-auto w-full max-w-3xl mb-3 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-800">
-          <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
+          <AlertTriangle size={14} className="shrink-0 mt-0.5" />
           <div className="flex-1">
             <span className="font-medium">{t('chat.providerDown', { provider: status.provider })}</span>{' '}
             {status.error}
           </div>
-          <button onClick={onOpenSettings} className="flex items-center gap-1 flex-shrink-0 font-medium hover:underline">
+          <button onClick={onOpenSettings} className="flex items-center gap-1 shrink-0 font-medium hover:underline">
             <Settings2 size={12} /> {t('chat.configure')}
           </button>
         </div>
@@ -161,7 +161,7 @@ export function Chat({ onOpenAlgorithm, onOpenSettings }: Props) {
             onKeyDown={onKeyDown}
             rows={2}
             placeholder={t('chat.placeholder')}
-            className="flex-1 resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="flex-1 resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           {busy ? (
             <button onClick={() => abortRef.current?.abort()} title={t('chat.stop')} className="p-2.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors">
@@ -206,7 +206,7 @@ function Bubble({ turn, streaming, onOpenAlgorithm }: { turn: Turn; streaming: b
 
   return (
     <div className="flex gap-2.5">
-      <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+      <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 mt-0.5">
         <Sparkles size={13} className="text-blue-600" />
       </div>
       <div className="flex-1 min-w-0 space-y-2">

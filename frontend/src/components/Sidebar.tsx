@@ -236,7 +236,7 @@ export function Sidebar({
   return (
     <div className="flex flex-col h-full bg-slate-900">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-4 flex-shrink-0">
+      <div className="flex items-center justify-between px-4 py-4 shrink-0">
         <button
           onClick={onGoHome}
           title={t('sidebar.home')}
@@ -255,7 +255,7 @@ export function Sidebar({
       {/* Two filters, and they narrow together. The text one reaches every section — a name is
           found without knowing which one it lives in — and the profile set one keeps only what
           that set reaches, all the way out to the frameworks behind it. */}
-      <div className="px-3 pb-2 flex-shrink-0 space-y-1.5">
+      <div className="px-3 pb-2 shrink-0 space-y-1.5">
         <div className="relative">
           <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
@@ -263,7 +263,7 @@ export function Sidebar({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t('sidebar.search')}
-            className="w-full pl-7 pr-3 py-1.5 text-sm bg-slate-800 text-slate-200 border border-slate-700 rounded-lg placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-7 pr-3 py-1.5 text-sm bg-slate-800 text-slate-200 border border-slate-700 rounded-lg placeholder:text-slate-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         {profileSets.length > 0 && (
@@ -275,7 +275,7 @@ export function Sidebar({
               title={t('sidebar.profileSetFilter')}
               className={cn(
                 'w-full pl-7 pr-3 py-1.5 text-sm bg-slate-800 border border-slate-700 rounded-lg appearance-none',
-                'focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500',
+                'focus:outline-hidden focus:ring-1 focus:ring-blue-500 focus:border-blue-500',
                 setFilter === null ? 'text-slate-500' : 'text-slate-200'
               )}
             >
@@ -416,7 +416,7 @@ export function Sidebar({
       </nav>
 
       {/* Footer */}
-      <div className="px-3 py-3 border-t border-slate-800 flex-shrink-0 space-y-1">
+      <div className="px-3 py-3 border-t border-slate-800 shrink-0 space-y-1">
         <button
           onClick={() => onOpenSettings()}
           className="flex items-center gap-2 w-full px-3 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
@@ -488,10 +488,10 @@ function SectionHeader({ id, open, disabled, count, onToggle, actions }: {
         )}
       >
         {disabled
-          ? <span className="w-3 flex-shrink-0" />
+          ? <span className="w-3 shrink-0" />
           : open
-            ? <ChevronDown size={12} className="flex-shrink-0 text-blue-400" />
-            : <ChevronRight size={12} className="flex-shrink-0" />}
+            ? <ChevronDown size={12} className="shrink-0 text-blue-400" />
+            : <ChevronRight size={12} className="shrink-0" />}
         <span className="truncate">{t(`section.${id}`)}</span>
         {count !== null && count > 0 && (
           <span className={cn('ml-auto text-[10px] font-normal tabular-nums',
@@ -547,7 +547,7 @@ function FrameworkList({ frameworks, loadError, buckets, mode, open, onToggleGro
     return (
       <div className="mx-1 my-2 px-3 py-2 rounded-lg bg-red-950 border border-red-900 text-xs text-red-200">
         <p className="font-medium">{t('sidebar.loadFailed')}</p>
-        <p className="mt-1 text-red-300 break-words">{loadError}</p>
+        <p className="mt-1 text-red-300 wrap-break-word">{loadError}</p>
       </div>
     )
   }
@@ -657,7 +657,7 @@ function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, 
       <button
         onClick={show}
         title={title}
-        className="p-1 mr-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded transition-colors"
+        className="p-1 mr-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded-sm transition-colors"
       >
         <MoreHorizontal size={14} />
       </button>
@@ -696,7 +696,7 @@ function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, 
                 >
                   {mode === grouping.mode
                     ? <Check size={13} className="text-blue-400" />
-                    : <span className="w-[13px] flex-shrink-0" />}
+                    : <span className="w-[13px] shrink-0" />}
                   {t(`sidebar.group.${mode}` as MessageKey)}
                 </button>
               ))}
@@ -784,8 +784,8 @@ function Group({ label, upper = true, count, open, onToggle, children }: {
         )}
       >
         {open
-          ? <ChevronDown size={11} className="flex-shrink-0" />
-          : <ChevronRight size={11} className="flex-shrink-0" />}
+          ? <ChevronDown size={11} className="shrink-0" />
+          : <ChevronRight size={11} className="shrink-0" />}
         <span className="truncate">{label}</span>
         <span className="ml-auto text-[10px] font-normal text-slate-400 tabular-nums">{count}</span>
       </button>

@@ -6,7 +6,7 @@ Frontend do Delphix Masking Helper. **Não rode comandos diretamente aqui** — 
 
 - **React 19** + **TypeScript**
 - **Vite 8** (bundler + dev server)
-- **Tailwind CSS v3** (estilização)
+- **Tailwind CSS v4** (estilização, pelo plugin `@tailwindcss/vite`; sem `tailwind.config.js` nem PostCSS)
 - **lucide-react** (ícones)
 - **sonner** (toasts)
 
@@ -16,7 +16,7 @@ Frontend do Delphix Masking Helper. **Não rode comandos diretamente aqui** — 
 src/
 ├── App.tsx                     # Raiz: estado global, roteamento de views, layout sidebar+main
 ├── types.ts                    # Interfaces TypeScript
-├── index.css                   # Tailwind base + scrollbar customizada
+├── index.css                   # Tailwind, compatibilidade com os padrões da v3 + scrollbar customizada
 ├── lib/
 │   ├── api.ts                  # Chamadas à API do Express (/api/*), incluindo chat e sincronização via SSE
 │   ├── utils.ts                # cn() — merge de classes Tailwind com tailwind-merge
