@@ -37,6 +37,10 @@ function detectVersion() {
   const git = (...args) => execFileSync('git', ['-C', __dirname, ...args],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 3000 }).trim();
 
+  // OCI/package deployments intentionally do not include the Git checkout. In that mode,
+  // package.json is the release metadata supplied by the image or package builder.
+  const packagedRelease = process.env.DLPX_PACKAGED_RELEASE === 'true';
+
   try {
     const commit = git('rev-parse', '--short', 'HEAD');
 
@@ -56,7 +60,7 @@ function detectVersion() {
     return { display: described || commit, commit, channel: 'dev' };
   } catch {
     // No git, or not a checkout: a zip download, or git missing from PATH at runtime.
-    return { display: pkgVersion, commit: null, channel: 'unknown' };
+    return { display: pkgVersion, commit: null, channel: packagedRelease ? 'release' : 'unknown' };
   }
 }
 
