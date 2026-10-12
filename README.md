@@ -228,7 +228,7 @@ npm run build
 The home screen has a chat that helps you two ways: explaining how a framework works and which
 one fits a situation, and **building a ready-to-use algorithm** from a problem you describe in
 plain language. You do not need to know which framework to use — that is what it works out.
-Building takes a hosted provider — Claude, Gemini or GitHub Models; a local model only advises
+Building takes a hosted provider — Claude, Gemini, OpenAI or GitHub Models; a local model only advises
 (see [A local model advises](#a-local-model-advises)).
 
 For example:
@@ -257,6 +257,7 @@ tells you whether the provider is reachable.
 | **Ollama (local)** — default | `http://localhost:11434` | none | `llama3.1` |
 | Claude / Anthropic | — (official SDK) | API key from [console.anthropic.com](https://console.anthropic.com) | `claude-opus-5` |
 | Google Gemini | `https://generativelanguage.googleapis.com` | API key from Google AI Studio | `gemini-2.5-pro` |
+| OpenAI | `https://api.openai.com/v1` | API key from [platform.openai.com](https://platform.openai.com) | `gpt-5.6-sol` |
 | GitHub Models (Copilot) | `https://models.github.ai/inference` | GitHub token with the `models:read` scope | `gpt-4o` |
 
 The default is Ollama, which runs entirely on your machine — nothing leaves it. To use it:

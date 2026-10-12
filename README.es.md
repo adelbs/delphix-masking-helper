@@ -231,7 +231,7 @@ npm run build
 La pantalla de inicio tiene un chat que ayuda de dos formas: explicando cómo funciona un algoritmo
 y cuál encaja en cada situación, y **construyendo un algoritmo listo para usar** a partir de un
 problema descrito en lenguaje natural. No necesitas saber qué framework usar — de eso se encarga
-él. Construir requiere un proveedor alojado — Claude, Gemini o GitHub Models; un modelo local solo
+él. Construir requiere un proveedor alojado — Claude, Gemini, OpenAI o GitHub Models; un modelo local solo
 aconseja (consulta [Un modelo local aconseja](#un-modelo-local-aconseja)).
 
 Por ejemplo:
@@ -261,6 +261,7 @@ abajo indica si el proveedor está accesible.
 | **Ollama (local)** — por defecto | `http://localhost:11434` | ninguna | `llama3.1` |
 | Claude / Anthropic | — (SDK oficial) | clave de API de [console.anthropic.com](https://console.anthropic.com) | `claude-opus-5` |
 | Google Gemini | `https://generativelanguage.googleapis.com` | clave de API de Google AI Studio | `gemini-2.5-pro` |
+| OpenAI | `https://api.openai.com/v1` | clave de API de [platform.openai.com](https://platform.openai.com) | `gpt-5.6-sol` |
 | GitHub Models (Copilot) | `https://models.github.ai/inference` | token de GitHub con el permiso `models:read` | `gpt-4o` |
 
 El valor por defecto es Ollama, que se ejecuta enteramente en tu máquina — nada sale de ella:
