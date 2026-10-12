@@ -86,7 +86,7 @@ export const T = {
     ],
     assistantTitle: 'An assistant that checks its own work',
     assistantP: 'Describe what you need to mask and the assistant picks the framework and configures it. Before anything is saved it actually runs the algorithm with that configuration — if it does not work, nothing is saved and you are told why. A configuration that looks plausible but fails never reaches you.',
-    assistantNote: 'Building takes a hosted model — Claude, Gemini or GitHub Models. The default local model keeps everything on your machine and advises: it explains and recommends, but does not save algorithms.',
+    assistantNote: 'Building takes a hosted model — Claude, Gemini, OpenAI or GitHub Models. The default local model keeps everything on your machine and advises: it explains and recommends, but does not save algorithms.',
 
     guideTitle: 'The framework reference',
     guideP: 'Every framework documented in full — behaviour, input format, worked input → output examples and every configuration parameter — plus the classifiers behind sensitive data discovery. Each example was produced by actually running the framework, never estimated.',
@@ -162,7 +162,7 @@ export const T = {
     ],
     assistantTitle: 'Um assistente que confere o próprio trabalho',
     assistantP: 'Descreva o que precisa mascarar e o assistente escolhe o framework e configura. Antes de salvar qualquer coisa, ele executa o algoritmo de verdade com aquela configuração — se não funcionar, nada é salvo e você é avisado do motivo. Uma configuração que parece plausível mas falha nunca chega até você.',
-    assistantNote: 'Construir exige um modelo hospedado — Claude, Gemini ou GitHub Models. O modelo local padrão mantém tudo na sua máquina e aconselha: explica e recomenda, mas não salva algoritmos.',
+    assistantNote: 'Construir exige um modelo hospedado — Claude, Gemini, OpenAI ou GitHub Models. O modelo local padrão mantém tudo na sua máquina e aconselha: explica e recomenda, mas não salva algoritmos.',
 
     guideTitle: 'A referência dos frameworks',
     guideP: 'Todos os frameworks documentados por inteiro — comportamento, formato de entrada, exemplos de entrada → saída e cada parâmetro de configuração — e mais os classifiers por trás da descoberta de dado sensível. Cada exemplo foi produzido executando o framework de verdade, nunca estimado.',
@@ -238,7 +238,7 @@ export const T = {
     ],
     assistantTitle: 'Un asistente que revisa su propio trabajo',
     assistantP: 'Describe qué necesitas enmascarar y el asistente elige el framework y lo configura. Antes de guardar nada, ejecuta el algoritmo de verdad con esa configuración — si no funciona, no se guarda nada y se te explica por qué. Una configuración que parece plausible pero falla nunca llega hasta ti.',
-    assistantNote: 'Construir requiere un modelo alojado — Claude, Gemini o GitHub Models. El modelo local por defecto lo mantiene todo en tu máquina y aconseja: explica y recomienda, pero no guarda algoritmos.',
+    assistantNote: 'Construir requiere un modelo alojado — Claude, Gemini, OpenAI o GitHub Models. El modelo local por defecto lo mantiene todo en tu máquina y aconseja: explica y recomienda, pero no guarda algoritmos.',
 
     guideTitle: 'La referencia de los frameworks',
     guideP: 'Todos los frameworks documentados por completo — comportamiento, formato de entrada, ejemplos de entrada → salida y cada parámetro de configuración — y además los classifiers detrás del descubrimiento de dato sensible. Cada ejemplo se produjo ejecutando el framework de verdad, nunca estimado.',
