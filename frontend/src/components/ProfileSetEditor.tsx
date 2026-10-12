@@ -10,12 +10,12 @@ import { isSending, startObjectExport, useSyncJob } from '@/lib/sync-job'
 import { ImportProgressBar } from '@/components/ImportProgressBar'
 import type { Classifier, ProfileSet } from '@/types'
 
-const cardCls = 'bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4'
+const cardCls = 'bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4'
 const labelCls = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5'
 const helpCls = 'text-xs text-slate-400 mt-1'
 /** How much of a set's description the engine keeps; the rest stays here and goes up shortened. */
 const ENGINE_DESCRIPTION_MAX = 50
-const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent'
 
 /**
  * A profile set: which classifiers a profiling job runs, and how sure it has to be.
@@ -108,11 +108,11 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white shrink-0">
         <button onClick={onToggleSidebar} className="text-slate-400 hover:text-slate-600 transition-colors">
           <PanelLeftOpen size={18} />
         </button>
-        <Layers size={16} className="text-slate-500 flex-shrink-0" />
+        <Layers size={16} className="text-slate-500 shrink-0" />
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-semibold text-slate-800 truncate">
             {editing ? profileSet.name : t('profileSet.newTitle')}
@@ -124,7 +124,7 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
           </p>
         </div>
         {editing && (
-          <div className="flex items-center gap-1.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={sendToEngine}
               disabled={job !== null}
@@ -144,7 +144,7 @@ export function ProfileSetEditor({ profileSet: opened, onToggleSidebar, onDelete
         )}
       </div>
       {sending && job?.progress && (
-        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white shrink-0">
           <ImportProgressBar progress={job.progress} />
         </div>
       )}

@@ -17,11 +17,11 @@ export function WelcomeScreen({
   const { t } = useT()
   return (
     <div className="flex flex-col h-full min-h-0">
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white shrink-0">
         <button onClick={onOpenSidebar} className="text-slate-400 hover:text-slate-600 transition-colors md:hidden">
           <PanelLeftOpen size={18} />
         </button>
-        <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+        <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
           <ShieldCheck size={16} className="text-blue-600" />
         </div>
         <div className="min-w-0">
@@ -33,9 +33,9 @@ export function WelcomeScreen({
       {/* The sidebar has just opened Frameworks; this says why, and names the other way in — the
           assistant is right underneath, and it builds an algorithm out of a description. */}
       {pickFramework && (
-        <div className="px-5 pt-4 flex-shrink-0">
+        <div className="px-5 pt-4 shrink-0">
           <div className="flex gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
-            <Boxes size={16} className="text-blue-600 flex-shrink-0 mt-0.5" />
+            <Boxes size={16} className="text-blue-600 shrink-0 mt-0.5" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-blue-900">{t('welcome.pickTitle')}</p>
               <p className="text-sm text-blue-800 mt-1">{t('welcome.pickBody')}</p>
@@ -43,7 +43,7 @@ export function WelcomeScreen({
             <button
               onClick={onDismissPick}
               title={t('welcome.pickDismiss')}
-              className="text-blue-400 hover:text-blue-700 transition-colors flex-shrink-0"
+              className="text-blue-400 hover:text-blue-700 transition-colors shrink-0"
             >
               <X size={16} />
             </button>

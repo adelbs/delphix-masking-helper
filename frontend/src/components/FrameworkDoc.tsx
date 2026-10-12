@@ -51,7 +51,7 @@ export function FrameworkDoc({ className }: { className: string }) {
   }
 
   return (
-    <article className="framework-doc bg-white rounded-xl border border-slate-200 shadow-sm p-6 max-w-4xl">
+    <article className="framework-doc bg-white rounded-xl border border-slate-200 shadow-xs p-6 max-w-4xl">
       <header className="mb-5 pb-4 border-b border-slate-100">
         <div className="flex items-baseline gap-2.5">
           <span className="text-xs font-semibold text-slate-400 tabular-nums">{entry.number}</span>
@@ -63,7 +63,7 @@ export function FrameworkDoc({ className }: { className: string }) {
             <span
               key={tag.kind + tag.label}
               className={cn(
-                'text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded',
+                'text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded-sm',
                 TAG_STYLE[tag.kind] ?? 'bg-slate-100 text-slate-600'
               )}
             >

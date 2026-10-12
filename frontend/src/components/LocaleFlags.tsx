@@ -69,8 +69,8 @@ export function LocaleFlags({ pref, onChange }: Props) {
               ? t('sidebar.languageAuto', { locale: LOCALE_NAMES[l] })
               : LOCALE_NAMES[l]}
             className={cn(
-              'w-7 h-5 rounded-sm overflow-hidden transition-all',
-              'focus:outline-none focus:ring-1 focus:ring-blue-500',
+              'w-7 h-5 rounded-xs overflow-hidden transition-all',
+              'focus:outline-hidden focus:ring-1 focus:ring-blue-500',
               isActive
                 ? cn('ring-2 ring-offset-1 ring-offset-slate-900 opacity-100',
                      pref === 'auto' ? 'ring-slate-500' : 'ring-blue-500')

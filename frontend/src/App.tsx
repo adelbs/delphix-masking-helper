@@ -214,13 +214,13 @@ export default function App() {
 
       <div className="flex h-full overflow-hidden bg-slate-50">
 
-        <aside className="hidden md:flex md:w-64 md:flex-shrink-0 flex-col">
+        <aside className="hidden md:flex md:w-64 md:shrink-0 flex-col">
           <Sidebar {...sidebarProps} />
         </aside>
 
         <div className={cn('fixed inset-0 z-50 md:hidden transition-all duration-300', sidebarOpen ? 'pointer-events-auto' : 'pointer-events-none')}>
           <div
-            className={cn('absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300', sidebarOpen ? 'opacity-100' : 'opacity-0')}
+            className={cn('absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300', sidebarOpen ? 'opacity-100' : 'opacity-0')}
             onClick={() => setSidebarOpen(false)}
           />
           <aside className={cn('absolute inset-y-0 left-0 w-72 flex flex-col shadow-2xl transition-transform duration-300 ease-in-out', sidebarOpen ? 'translate-x-0' : '-translate-x-full')}>

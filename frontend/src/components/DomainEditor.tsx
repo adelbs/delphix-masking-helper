@@ -95,11 +95,11 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white flex-shrink-0">
+      <div className="flex items-center gap-3 px-5 py-3.5 border-b border-slate-200 bg-white shrink-0">
         <button onClick={onToggleSidebar} className="text-slate-400 hover:text-slate-600 transition-colors">
           <PanelLeftOpen size={18} />
         </button>
-        <Tags size={16} className="text-slate-500 flex-shrink-0" />
+        <Tags size={16} className="text-slate-500 shrink-0" />
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-semibold text-slate-800 truncate">
             {editing ? domain.name : t('domain.newTitle')}
@@ -109,7 +109,7 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
           </p>
         </div>
         {editing && (
-          <div className="flex items-center gap-1.5 flex-shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
               onClick={sendToEngine}
               disabled={job !== null}
@@ -129,14 +129,14 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
         )}
       </div>
       {sending && job?.progress && (
-        <div className="px-5 py-2.5 border-b border-slate-200 bg-white flex-shrink-0">
+        <div className="px-5 py-2.5 border-b border-slate-200 bg-white shrink-0">
           <ImportProgressBar progress={job.progress} />
         </div>
       )}
 
       <div className="flex-1 overflow-auto p-5 bg-slate-50">
         <div className="max-w-lg space-y-5">
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 shadow-xs p-5 space-y-4">
             <div>
               <label className={labelCls}>{t('domain.name')}</label>
               {editing ? (
@@ -205,4 +205,4 @@ export function DomainEditor({ domain: opened, onToggleSidebar, onDeleted, onCre
 }
 
 const labelCls = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5'
-const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent'

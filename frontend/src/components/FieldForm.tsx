@@ -9,7 +9,7 @@ const k = (key: string) => key as MessageKey
 
 const labelCls = 'block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5'
 const helpCls = 'text-xs text-slate-400 mt-1'
-const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+const fieldCls = 'w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent'
 
 /** The inputs for that description. Its state comes from `useFieldForm`. */
 export function FieldForm({ form, catalog }: { form: FieldFormState; catalog: ClassifierCatalog | null }) {

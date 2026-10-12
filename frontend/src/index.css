@@ -1,8 +1,26 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
+/* Line heights as Tailwind 3 had them: absolute, so a `text-[10px]` line inside a `text-sm` block
+   keeps the 20px it was laid out with. Tailwind 4 makes them ratios, which shrink with the font. */
+@theme {
+  --text-xs--line-height: 1rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl--line-height: 2.25rem;
+  --text-4xl--line-height: 2.5rem;
+}
+
+/* Tailwind 4 changed three preflight defaults that the screens were drawn against; these put the
+   v3 ones back. Borders without a color class were gray-200 (now currentColor), placeholders
+   gray-400 (now the text color at half opacity), and buttons showed the pointer (now the arrow). */
 @layer base {
+  *, ::after, ::before, ::backdrop, ::file-selector-button { border-color: var(--color-gray-200, currentcolor); }
+  input::placeholder, textarea::placeholder { color: var(--color-gray-400); }
+  button:not(:disabled), [role="button"]:not(:disabled) { cursor: pointer; }
+
   *, *::before, *::after { box-sizing: border-box; }
   html, body, #root { height: 100%; margin: 0; padding: 0; }
   body { font-family: system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; }

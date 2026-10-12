@@ -89,7 +89,7 @@ function FieldInput({ fieldKey, schema, value, onChange }: FieldProps) {
           type="checkbox"
           checked={Boolean(value)}
           onChange={(e) => onChange(e.target.checked)}
-          className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+          className="w-4 h-4 rounded-sm border-slate-300 text-blue-600 focus:ring-blue-500"
         />
         <span className="text-sm text-slate-600">{t('form.enabled')}</span>
       </label>
@@ -202,7 +202,7 @@ function ConditionArrayField({ value, onChange }: { value: unknown; onChange: (v
               <button
                 type="button"
                 onClick={e => { e.stopPropagation(); removeCondition(idx) }}
-                className="p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+                className="p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-sm transition-colors"
               >
                 <X size={14} />
               </button>
@@ -304,7 +304,7 @@ function ConditionSlotField({ slot, value, onChange, onRemove }: {
         <button
           type="button"
           onClick={onRemove}
-          className="ml-auto p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+          className="ml-auto p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-sm transition-colors"
         >
           <X size={12} />
         </button>
@@ -413,7 +413,7 @@ function ArrayField({ schema, value, onChange }: FieldProps) {
           <button
             type="button"
             onClick={() => removeItem(idx)}
-            className="mt-1 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+            className="mt-1 p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-sm transition-colors"
           >
             <X size={14} />
           </button>
@@ -536,7 +536,7 @@ function MapField({ value, onChange }: MapFieldProps) {
           <button
             type="button"
             onClick={() => update(pairs.filter((_, i) => i !== idx))}
-            className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors"
+            className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-sm transition-colors"
           >
             <X size={14} />
           </button>
@@ -671,5 +671,5 @@ function AlgorithmRefField({ value, onChange }: { value: unknown; onChange: (val
 
 const inputCls =
   'w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 ' +
-  'placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ' +
+  'placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent ' +
   'transition-shadow'
