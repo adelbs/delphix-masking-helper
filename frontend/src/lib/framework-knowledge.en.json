@@ -106,7 +106,7 @@
     }
   },
   "StringAlgorithmChain": {
-    "description": "Chains several algorithms in sequence: each one’s output is the next one’s input. At least 2 algorithms. The names must be instances from the built-in catalog (e.g. \"dlpx-core:FirstName\") or from the Masking Engine.",
+    "description": "Chains several algorithms in sequence: each one’s output is the next one’s input. At least 2 algorithms. The names must be instances from the built-in catalog (e.g. \"dlpx-core:FirstName\") or from the Continuous Compliance Engine.",
     "inputFormat": "Text string compatible with the first algorithm in the chain. The example chains names: FirstName → LastName.",
     "params": {
       "algorithmReferences": "Array of algorithm references by instance name. Minimum: 2 entries. E.g. [{ name: \"dlpx-core:FirstName\" }, { name: \"dlpx-core:LastName\" }]."
@@ -286,20 +286,20 @@
     }
   },
   "NullSecureLookup": {
-    "description": "A Secure Lookup variant that handles null values. It has no configurable parameters — it uses the lookup file embedded in the plugin. In the standalone runner it returns null for any input (expected behavior without the Masking Engine context).",
-    "inputFormat": "Any string. In the standalone runner the output is always null (no engine context). In the Masking Engine, a null input returns null; otherwise the configured lookup applies."
+    "description": "A Secure Lookup variant that handles null values. It has no configurable parameters — it uses the lookup file embedded in the plugin. In the standalone runner it returns null for any input (expected behavior without the Continuous Compliance Engine context).",
+    "inputFormat": "Any string. In the standalone runner the output is always null (no engine context). In the Continuous Compliance Engine, a null input returns null; otherwise the configured lookup applies."
   },
   "Mapping": {
     "description": "Maintains a persistent one-to-one mapping from originals to substitutes, guaranteeing referential consistency: the same original value always gets the same substitute across every table. Requires the mapping database — it does not work in the standalone runner.",
     "inputFormat": "Any string. The algorithm looks up (or creates) a record in the mapping set and always returns the same substitute for a given original value.",
     "params": {
       "mappingSet": "Required. Reference to the mapping set that stores the correspondences. In the standalone runner that database is unavailable and the algorithm will fail.",
-      "mappingSet.algorithmName": "Required. Name of the mapping set in the Masking Engine — identifies which set of mappings to use. E.g. \"client-name-mapping\".",
-      "mappingSet.host": "Host of the database holding the mapping set. Used when the mapping set lives on a remote Masking Engine instance.",
+      "mappingSet.algorithmName": "Required. Name of the mapping set in the Continuous Compliance Engine — identifies which set of mappings to use. E.g. \"client-name-mapping\".",
+      "mappingSet.host": "Host of the database holding the mapping set. Used when the mapping set lives on a remote Continuous Compliance Engine instance.",
       "mappingSet.port": "Port of the remote mapping-set database.",
       "mappingSet.database": "Database name of the remote mapping set.",
       "mappingSet.schema": "Database schema of the remote mapping set.",
-      "mappingSet.isRemote": "If true, the mapping set lives on a remote Masking Engine instance (using the host/port/database/schema above). If false, the local instance is used.",
+      "mappingSet.isRemote": "If true, the mapping set lives on a remote Continuous Compliance Engine instance (using the host/port/database/schema above). If false, the local instance is used.",
       "mappingSet.mappingLookupKey": "Extra key used to partition the mapping set. Lets one mapping set serve several isolated contexts.",
       "mappingSet.propertiesRef": "Properties file with the connection settings for the remote mapping-set database (an alternative to setting host/port/database/schema individually).",
       "ignoreCharacters": "ASCII codes of the characters to strip from the input before looking it up in the mapping set. E.g. 45 = dash, 46 = dot. Useful for mapping formatted and unformatted IDs to the same entry."

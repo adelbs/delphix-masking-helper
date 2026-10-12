@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "central-america",
+  "country": "SV",
   "name": {
     "en": "El Salvador — Ley para la Protección de Datos Personales (Decreto 144)",
     "pt-BR": "El Salvador — Ley para la Protección de Datos Personales (Decreto 144)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales salvadoreños conforme a la Ley para la Protección de Datos Personales (Decreto Legislativo 144 de 2024): identificadores directos (DUI y NIT con dígito verificador válido, NRC, nombres, contacto, dirección, cuentas, billeteras, placas), cuasi-identificadores (fecha de nacimiento, distrito, código postal), los datos sensibles del artículo 4 g) — origen étnico, convicciones religiosas, espirituales o filosóficas, afiliación política, sindicatos, preferencias sexuales, salud, datos biométricos y genéticos, situación moral y familiar, hábitos personales —, la nacionalidad (art. 59 b), datos financieros y antecedentes penales."
   },
   "profileSet": {
-    "name": "SV - Decreto 144 - v2",
+    "name": "SV - Decreto 144 - v3",
     "description": "Decreto 144 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

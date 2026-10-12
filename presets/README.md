@@ -1,8 +1,8 @@
-# Pre-configured profile sets
+# Pre-configured discovery policies
 
-Each folder here is one profile set shipped with the tool, listed under
-**Settings → Profile Sets**. Loading it creates the set and everything it leans on — its
-classifiers, their domains, those domains' algorithms and the files they read — as one of two
+Each folder here is one discovery policy shipped with the tool, listed under
+**Settings → Discovery Policies**. Loading it creates the policy and everything it leans on — its
+classifiers, their data classes, those data classes' algorithms and the files they read — as one of two
 packs: the **essential pack**, the minimum for its law, or the **extended pack**, all of it. Loading
 it again is a **reset**: the same rows are found and put back the way they ship, never duplicated.
 **Unload** removes what it brought.
@@ -24,12 +24,12 @@ The documentation button serves the PDF in the interface language, falling back 
 then to whichever exists.
 
 The app reads nothing else in the folder, so a preset can keep whatever produces it next to the
-output. The fourteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
+output. The fifteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
 its own definitions and the raw lists in `source/`, and `verify.mjs` checks the result — reviewing
-every classifier, profiling sample columns with the local evaluator in `classifiers/` and masking
+every classifier, discovery sample columns with the local evaluator in `classifiers/` and masking
 sample values through the running app. Each folder's `README.md` explains the design of its set.
 
-| Folder | Profile set |
+| Folder | Discovery policy |
 |---|---|
 | [`chile-ley-21719/`](chile-ley-21719/) | Chile — Ley 21.719 |
 | [`mexico-lfpdppp/`](mexico-lfpdppp/) | Mexico — LFPDPPP (2025) |
@@ -45,6 +45,7 @@ sample values through the running app. Each folder's `README.md` explains the de
 | [`costarica-ley-8968/`](costarica-ley-8968/) | Costa Rica — Ley 8968 |
 | [`spain-lopdgdd/`](spain-lopdgdd/) | Spain — GDPR and Ley Orgánica 3/2018 (LOPDGDD) |
 | [`jamaica-dpa-2020/`](jamaica-dpa-2020/) | Jamaica — Data Protection Act, 2020 |
+| [`uk-gdpr-dpa-2018/`](uk-gdpr-dpa-2018/) | United Kingdom — UK GDPR and Data Protection Act 2018 |
 
 ## Writing a preset
 
@@ -52,7 +53,7 @@ Start from the preset closest to the new one — same language, same kind of ide
 copy its `build.mjs` and `verify.mjs`. What the existing ones learned the hard way is in `_lib/`, and
 a new preset should use it rather than solve it again:
 
-- **Padded values** ([`_lib/detect.mjs`](_lib/detect.mjs)). The profiler tests values as the database
+- **Padded values** ([`_lib/detect.mjs`](_lib/detect.mjs)). Discovery tests values as the database
   hands them over: a CHAR column pads with spaces, a code kept as text with zeros on the left. Every
   Regex pattern takes `cleaning()`, which strips the spaces, and `zeroPadded()`, which lets a pattern
   that starts with a digit take zeros on the left. A List classifier compares the whole value,
@@ -60,7 +61,7 @@ a new preset should use it rather than solve it again:
   and turns multi-word lists into a Regex classifier (`… - Values`) with `valuePatterns()`. Patterns
   for accented words use `(?iu)`: the engine's case-insensitive flag alone folds ASCII only.
 - **Padding stays in place when masking.** The Character Mappings run with `preserveLeadingZeros`.
-  The patterns of the Regex Decompose at the **top** of each domain get `keepingZeros()`, which sets
+  The patterns of the Regex Decompose at the **top** of each data class get `keepingZeros()`, which sets
   the zeros on the left apart in a group of their own — in a loop at the end of `build.mjs`, and
   only there: inside a chain, a step may read a digit at a fixed position, and an optional zero would
   shift it. Where a zero is a digit and not padding — the body of a number fed to a Check Digit, a
@@ -70,25 +71,27 @@ a new preset should use it rather than solve it again:
   the code up without its zeros on the left and keeps them where they were; the build fails if two
   codes become the same once stripped. It is opt-in: a check-digit table must not use it, because
   there the zeros count.
-- **What the engine refuses** ([`_lib/engine-text.mjs`](_lib/engine-text.mjs)). The names and
-  descriptions of profile sets, classifiers and domains cannot hold any of
-  ``~!@#$%^&*()"?:;,/\`+=[]{}|<>'``, and a profile set description is at most 50 characters. Every
-  `build.mjs` calls `engineTextProblems()` and fails before writing, so a set that would not load on
+- **What an engine refuses** ([`_lib/engine-text.mjs`](_lib/engine-text.mjs)). On a Continuous
+  Compliance Engine, the names and descriptions of profile sets, classifiers and domains (discovery
+  policies, classifiers and data classes in DCT terms) cannot hold any of
+  ``~!@#$%^&*()"?:;,/\`+=[]{}|<>'``, and a profile set description is at most 50 characters. Data
+  Control Tower has neither limit, but a preset has to load on both. Every
+  `build.mjs` calls `engineTextProblems()` and fails before writing, so a policy that would not load on
   an engine is never generated.
 - **Algorithms that come with the engine** ([`_lib/engine-algorithms.mjs`](_lib/engine-algorithms.mjs)).
   Before building an algorithm, check whether the engine already has one that does the job:
   **CM Numeric** for amounts, **Credit Card** for card numbers, **BloodType SL** for blood groups,
-  **Brazil CPF**. A domain names it as `ENGINE.CM_NUMERIC` and so on (`dlpx-core:<name>`): it is not
+  **Brazil CPF**. A data class names it as `ENGINE.CM_NUMERIC` and so on (`dlpx-core:<name>`): it is not
   shipped in `preset.json`, the documentation names it as the engine's own, and `verify.mjs` runs it
   through the runner's catalog. The file also records the built-ins that were compared and left
   aside, and why — check there before trying one again.
-- **Columns with names that say nothing.** Give every domain whose values have a distinctive shape
+- **Columns with names that say nothing.** Give every data class whose values have a distinctive shape
   a value classifier, so a column called `FIELD1` or `PFNOM` is still found. In `verify.mjs`, add new
   test columns **at the end** of `COLUMNS`: the test values come from a seeded generator, and a column
   inserted in the middle changes the values of every column after it.
 
 Then run `build.mjs`, `verify.mjs` and `_doc/build.mjs <id>` (with the app running), and bump
-`VERSION` and `VERSION_DATE` together whenever a set that has shipped changes.
+`VERSION` and `VERSION_DATE` together whenever a policy that has shipped changes.
 
 ## Checking every preset
 
@@ -115,23 +118,23 @@ presets/verify-all.sh chile peru --mode full --build --jobs 3
 ## Documentation
 
 Every preset ships a PDF per language that lists everything in it and explains it. The PDF is for
-anyone running a Delphix Masking Engine, with or without this tool: it describes the set in the
-engine's own terms — profile set, classifiers and their frameworks, domains, algorithms, rule sets,
-inventory, profiling and masking jobs — and names nothing of this tool, neither its screens nor its
+anyone running Delphix — Data Control Tower or a Continuous Compliance Engine — with or without this tool: it describes the policy in
+Delphix's own terms — discovery policy, classifiers and their frameworks, data classes, algorithms, rule sets,
+discovery and masking jobs — and names nothing of this tool, neither its screens nor its
 scripts. The builder refuses text that does. The PDF is generated, and most of it comes from
-`preset.json` itself, so it cannot drift from the set:
+`preset.json` itself, so it cannot drift from the policy:
 
-- the cover and contents, with the set's counts, version and threshold;
+- the cover and contents, with the policy's counts, version and threshold;
 - how discovery and masking work, common to every preset;
-- the essential and extended packs, with their counts and the essential domains, which are also
-  marked in the domain table and chapters;
-- a table of all domains, how each is found and which algorithm masks it;
-- a chapter per domain group, and in it every domain: **what it is** and **how it is masked**
+- the essential and extended packs, with their counts and the essential data classes, which are also
+  marked in the data class table and chapters;
+- a table of all data classes, how each is found and which algorithm masks it;
+- a chapter per data class group, and in it every data class: **what it is** and **how it is masked**
   (written), every classifier with its rules (generated — column-name alternatives, accepted
   types, value patterns, lists with sizes and first values), the tree of algorithms it uses
   (generated), and examples masked by the running app;
 - appendices with every algorithm and its full configuration, every file, the column-name
-  exclusion lists, and every classifier of the profile set.
+  exclusion lists, and every classifier of the discovery policy.
 
 What only a person can write lives in `doc/`:
 
@@ -153,9 +156,9 @@ doc/
 ```
 
 - `sections` come before the explanation of discovery and masking (purpose, legal context);
-  `closing` after the domain chapters (design notes, limits, verification, sources). There is no
-  section on using the set in this tool: how to load it belongs in the tool's own documentation.
-- Every domain of the set must be in exactly one group and have `title`, `what` and `masking`, in
+  `closing` after the data class chapters (design notes, limits, verification, sources). There is no
+  section on using the policy in this tool: how to load it belongs in the tool's own documentation.
+- Every data class of the policy must be in exactly one group and have `title`, `what` and `masking`, in
   every language, and have at least one example — the builder refuses otherwise.
 - A body is a list of paragraphs. A string is a paragraph; `{ "list": [...] }`, `{ "note": "…" }`,
   `{ "tip": "…" }` and `{ "table": { "head": [...], "rows": [[...]] } }` are the other blocks.
@@ -206,22 +209,22 @@ guide in `docs/`; the shared wording and how each framework's configuration read
 ```
 
 - **`version`** — bump it with every change or improvement. The settings tab shows it on the card,
-  a set loaded from an older version says a new one is available, and resetting applies it.
+  a policy loaded from an older version says a new one is available, and resetting applies it.
 - **`versionDate`** — the day that version was built, written `YYYY-MM-DD`. It is what says how old
-  a set is, so bump it together with the version; the card and the cover of the PDF show it beside
-  the version number. It is optional, so a preset that does not say still loads, but all fourteen
+  a policy is, so bump it together with the version; the card and the cover of the PDF show it beside
+  the version number. It is optional, so a preset that does not say still loads, but all fifteen
   that ship carry it. In a `build.mjs` it sits next to the version as `VERSION_DATE`.
 - **`name.en`** is required; the other languages fall back to it.
-- **`profileSet.name`** is what gets saved and sent to Delphix. The fourteen that ship name the
-  country, the law (or its number) and the version: `CL - Ley 21.719 - v3`. The set is found by
+- **`profileSet.name`** is what gets saved and sent to Delphix. The fifteen that ship name the
+  country, the law (or its number) and the version: `CL - Ley 21.719 - v3`. The policy is found by
   the preset it came from, not by name, so a new version renames it and keeps its link to the engine.
-- **`packs.essential`** — the domains of the essential pack. Loading it brings those domains, the
+- **`packs.essential`** — the data classes of the essential pack. Loading it brings those data classes, the
   classifiers that vote for them, the algorithms they reach through references and the files all
-  of that reads; its `description`, when given, replaces the profile set's. Without it, the preset
+  of that reads; its `description`, when given, replaces the discovery policy's. Without it, the preset
   only loads as the extended pack, which is everything.
 - **`profileSet.classifiers`** names classifiers from the `classifiers` list, and every
-  classifier's `domain` must be one of the `domains`: what a set leans on ships with it, the same
-  rule the engine sync follows. A domain's `algorithm` and `tokenization` are plain names and may
+  classifier's `domain` must be one of the `domains`: what a policy leans on ships with it, the same
+  rule the engine sync follows. A data class's `algorithm` and `tokenization` are plain names and may
   point at a plugin built-in (`dlpx-core:CM Digits`) instead of an algorithm listed here.
 - **`config`** is exactly what the tool stores and sends to Delphix: the classifier and framework
   configurations as the engine defines them.
@@ -243,11 +246,11 @@ Everything is written in one transaction, and each row is tagged with the preset
   import, another preset — is a conflict. Loading lists the conflicts and asks before replacing
   them. Files are only a conflict the first time, when one with the same name and different
   content is already in the files folder.
-- The link to a Delphix engine is kept, so sending the set after a reset updates what is there.
+- The link to a Delphix engine is kept, so sending the policy after a reset updates what is there.
 - What the preset brought before and the chosen pack does not carry — the other pack's items, or
   items a newer version dropped — is removed, and so are its files. Something that did not come
   from the preset and still uses one of them keeps it: a saved algorithm of yours inside a chain, a
-  domain another classifier votes for, a classifier in another set. What stays loses the tag.
+  data class another classifier votes for, a classifier in another policy. What stays loses the tag.
 
 ## Unloading
 
@@ -255,3 +258,16 @@ Everything is written in one transaction, and each row is tagged with the preset
 uses stays, untagged, and is named. A file goes when nothing here reads it any more and it still
 holds what the preset ships — one you edited in the files tab stays. The engine is not touched:
 what was sent to Delphix stays there.
+
+## Region and the download package
+
+`build.mjs` writes two optional fields into the manifest: `region` (one of `north-america`,
+`central-america`, `caribbean`, `south-america`, `europe`, `africa`, `asia`, `oceania`) and
+`country` (ISO 3166 alpha-2). The list in *Settings → Discovery Policies* is grouped by the first
+and shows the flag of the second; a preset without them lands under *Other*.
+
+`GET /api/presets/<id>/bundle` builds the download package (`preset-bundle.js`): the PDFs, the two
+import scripts from [`_bundle/`](_bundle/) and every object written as a template for each API, with
+tokens (`{{ALG:…}}`, `{{FILE:…}}`, `{{FW:…}}`…) that the script swaps for what only the target knows —
+ids, upload addresses. The scripts know nothing of any preset; changing one changes every package.
+`import.ps1` must keep to what Windows PowerShell 5.1 parses, and ships with a BOM and CRLF.

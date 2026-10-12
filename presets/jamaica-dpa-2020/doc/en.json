@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Jamaican personal data: the TRN and other identity numbers, names and contact, quasi-identifiers, the sensitive personal data of section 2 — biometric data, filiation, beliefs, health, sex life and offences among them — and financial data.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Jamaican database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
-        "Masking only names and TRNs does not get there: a birth date, a sex and a town of a few thousand people are enough to point at one person. The set works on the layers where the risk is:",
+        "This discovery policy finds the personal data in a Jamaican database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
+        "Masking only names and TRNs does not get there: a birth date, a sex and a town of a few thousand people are enough to point at one person. The policy works on the layers where the risk is:",
         {
           "list": [
             "**Direct identifiers** — TRN, NIS number, passport, voter ID, driver's licence, immigration documents, civil registry entries, names, contact, accounts and cards, land titles, devices, vehicles, free text.",
@@ -17,7 +17,7 @@
             "**Offences and proceedings** — records, charges, outcomes and case numbers: section 2 makes the alleged commission of an offence sensitive, not only a conviction."
           ]
         },
-        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration. Some domains use algorithms that come with the Masking Engine — CM Numeric, Credit Card, BloodType SL — and those are named but not included.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration. Some data classes use algorithms that come with Delphix — CM Numeric, Credit Card, BloodType SL — and those are named but not included.",
         "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NAME`, `RESULT`, `CITY` — needs the values to agree. A column with a meaningless name (`FIELD1`, `PFNOM`, `REMARKS`) is still found when its values have a recognizable shape or vocabulary: a TRN, an 876 phone number, a plate, a town, a full name.",
         "Column names are recognized in English and in the abbreviations of Jamaican systems (`TRN`, `NIS_NO`, `NIN`, `NHF_CARD_NO`, `NHT_NUMBER`, `DOB`).",
         {
@@ -47,9 +47,9 @@
           ]
         },
         "A test environment with production data is processing for purposes the data was not collected for, by people who have no need to see it, and it holds sensitive data — biometric, health and criminal data among them — outside the controls built for it. Masking is the pseudonymisation the seventh standard names: what goes to the test environment no longer identifies anyone without the key, and using means to break it is an offence of its own.",
-        "The list of sensitive data in section 2 is closed, but the set goes further where the risk is the same: it treats gender identity with the same care as sex life, and masks financial data, which banks and credit bureaus must keep confidential under other laws.",
+        "The list of sensitive data in section 2 is closed, but the policy goes further where the risk is the same: it treats gender identity with the same care as sex life, and masks financial data, which banks and credit bureaus must keep confidential under other laws.",
         {
-          "note": "The definition of personal data counts what the controller holds or is likely to hold. Masking is deterministic for the engine key, so whoever has both the production data and the key can link a masked row back to its source. Keep the key, and access to production, away from the people who use the masked copy. Whether a copy counts as anonymised is a legal assessment of the whole environment, not of the profile set alone."
+          "note": "The definition of personal data counts what the controller holds or is likely to hold. Masking is deterministic for the engine key, so whoever has both the production data and the key can link a masked row back to its source. Keep the key, and access to production, away from the people who use the masked copy. Whether a copy counts as anonymised is a legal assessment of the whole environment, not of the discovery policy alone."
         }
       ]
     }
@@ -117,7 +117,7 @@
       "id": "L3",
       "title": "Sensitive personal data",
       "intro": [
-        "The categories of section 2 that are not health or offences — which have groups of their own: genetic and biometric data, filiation, racial or ethnic origin, political opinions, religious, philosophical and similar beliefs, trade union membership and sex life — and, beyond the list, gender identity. The Jamaican definition of biometric data is unusually wide: besides prints and scans it names the photograph, height, eye colour and blood type, so the set gives height and eye colour domains of their own. Categorical columns keep their shape: a yes/no flag stays a flag, a numeric code gets other digits and any other value is replaced by one from its category's list. Where the values share no vocabulary, they are suppressed to `Not stated`."
+        "The categories of section 2 that are not health or offences — which have groups of their own: genetic and biometric data, filiation, racial or ethnic origin, political opinions, religious, philosophical and similar beliefs, trade union membership and sex life — and, beyond the list, gender identity. The Jamaican definition of biometric data is unusually wide: besides prints and scans it names the photograph, height, eye colour and blood type, so the policy gives height and eye colour data classes of their own. Categorical columns keep their shape: a yes/no flag stays a flag, a numeric code gets other digits and any other value is replaced by one from its category's list. Where the values share no vocabulary, they are suppressed to `Not stated`."
       ],
       "domains": [
         "JM_L3_GENETIC",
@@ -263,7 +263,7 @@
     "JM_L1_PAYMENT_CARD": {
       "title": "Payment card",
       "what": "Credit, debit and prepaid card numbers.",
-      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "JM_L1_IP_ADDRESS": {
       "title": "IP address",
@@ -483,7 +483,7 @@
     "JM_HEALTH_BLOOD_GROUP": {
       "title": "Blood group",
       "what": "ABO group and Rh factor — health data, and biometric data by name in section 2.",
-      "masking": "BloodType SL, which comes with the Masking Engine: replaced by another of the eight groups."
+      "masking": "BloodType SL, which comes with Delphix: replaced by another of the eight groups."
     },
     "JM_HEALTH_DISABILITY": {
       "title": "Disability",
@@ -508,22 +508,22 @@
     "JM_FIN_DEBT": {
       "title": "Debt amount",
       "what": "Loan, mortgage and card balances, amounts in arrears, credit limits, instalments.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "JM_FIN_INCOME": {
       "title": "Income",
       "what": "Salary, wages, emoluments, insurable earnings, household income.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "JM_FIN_ASSETS": {
       "title": "Assets",
       "what": "Property and land values, savings and deposit balances, investments, unit trusts, net worth.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "JM_FIN_PENSION": {
       "title": "Pension amount",
       "what": "NIS pensions, occupational and superannuation pensions, survivors' and invalidity pensions, gratuities.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "JM_FIN_NIS_BENEFIT": {
       "title": "NIS benefit",
@@ -560,7 +560,7 @@
     {
       "title": "Where people live: towns",
       "body": [
-        "With the towns of the 2022 Population and Housing Census and their populations, the set knows the size and parish of all 140 towns the census list counts.",
+        "With the towns of the 2022 Population and Housing Census and their populations, the policy knows the size and parish of all 140 towns the census list counts.",
         {
           "list": [
             "A **town** under 10,000 inhabitants becomes the **capital of its parish**: Kingston; Half Way Tree for St. Andrew; Spanish Town; May Pen; Mandeville; Black River; Savanna-la-Mar; Lucea; Montego Bay; Falmouth; St. Ann's Bay; Port Maria; Port Antonio; Morant Bay. 111 of the 140 towns are generalized.",
@@ -596,16 +596,16 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication the set was checked outside a Masking Engine:",
+        "Before publication the policy was checked outside Delphix:",
         {
           "list": [
-            "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-            "Profiling was simulated on 157 columns with the whole set at its assignment threshold — well named, badly named, eight with the short names of packaged systems and 33 columns that are not personal data — again on 148 of them padded with spaces or zeros, and again with the classifiers of the essential pack alone.",
+            "Every classifier configuration was reviewed against what Delphix accepts.",
+            "Discovery was simulated on 157 columns with the whole policy at its assignment threshold — well named, badly named, eight with the short names of packaged systems and 33 columns that are not personal data — again on 148 of them padded with spaces or zeros, and again with the classifiers of the essential pack alone.",
             "The table that generalizes towns was audited for all 140 towns.",
             "The algorithms, run with the Delphix algorithm plugin, masked 153 sample values and 204 placeholders such as `N/A`, checking each output against its vocabulary; the same values again padded with spaces or zeros (314), which had to mask as their bare value; 150 TRNs for collisions, and twenty TRNs as driver's licence numbers, which had to mask alike. Each of the 83 algorithms also masked its own sample input."
           ]
         },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

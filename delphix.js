@@ -28,8 +28,8 @@
 // and two references, nothing more. domainName is the identity and travels in the path, so
 // it cannot be renamed, exactly like algorithmName.
 
-const https = require('node:https');
 const zlib = require('node:zlib');
+const { request, plainError } = require('./http-client');
 
 // Generated from the plugin JAR: MaskingComponent.getName() per framework class.
 // These are the frameworkName values the Masking Engine reports in GET /algorithm/frameworks/.
@@ -87,16 +87,23 @@ function classNameFor(frameworkName) {
 // ── Settings ──────────────────────────────────────────────────────────────────
 
 const DEFAULTS = {
+  // Where the integration points: a Continuous Compliance engine, or Data Control Tower. One or
+  // the other, never both — the rows here mirror one of them.
+  'delphix.target': 'engine',
   'delphix.baseUrl': '',
   'delphix.username': '',
   'delphix.password': '',
   // Lab engines commonly serve a self-signed certificate; opting out of verification is a
   // deliberate, per-instance choice rather than a silent default.
   'delphix.allowSelfSigned': 'false',
+  // DCT authenticates with an API key instead of a username and password.
+  'delphix.apiKey': '',
 };
 
 function settings(config) {
   return {
+    target: config['delphix.target'] === 'dct' ? 'dct' : 'engine',
+    apiKey: config['delphix.apiKey'] || '',
     baseUrl: String(config['delphix.baseUrl'] || '').replace(/\/+$/, ''),
     username: config['delphix.username'] || '',
     password: config['delphix.password'] || '',
@@ -104,7 +111,8 @@ function settings(config) {
   };
 }
 
-const isConfigured = (cfg) => Boolean(cfg.baseUrl && cfg.username && cfg.password);
+const isConfigured = (cfg) => Boolean(cfg.baseUrl
+  && (cfg.target === 'dct' ? cfg.apiKey : cfg.username && cfg.password));
 
 // ── Text the engine refuses ───────────────────────────────────────────────────
 //
@@ -172,31 +180,27 @@ class DelphixError extends Error {
  */
 async function call(cfg, method, path, { token, body, form, binary } = {}) {
   const url = `${apiRoot(cfg.baseUrl)}${path}`;
-  const opts = {
-    method,
-    headers: { Accept: binary ? '*/*' : 'application/json' },
-    signal: AbortSignal.timeout(form || binary ? 300000 : 30000),
-  };
-  if (token) opts.headers.Authorization = token;
+  const headers = { Accept: binary ? '*/*' : 'application/json' };
+  if (token) headers.Authorization = token;
+  let payload;
   if (form) {
-    opts.body = form;   // fetch writes the multipart boundary into Content-Type itself
+    payload = form;   // the multipart boundary is written into Content-Type by the client
   } else {
-    opts.headers['Content-Type'] = 'application/json';
-    if (body !== undefined) opts.body = JSON.stringify(body);
-  }
-  if (cfg.allowSelfSigned && url.startsWith('https:')) {
-    opts.agent = new https.Agent({ rejectUnauthorized: false });
+    headers['Content-Type'] = 'application/json';
+    if (body !== undefined) payload = JSON.stringify(body);
   }
 
   let res;
   try {
-    res = await fetch(url, opts);
+    res = await request(url, {
+      method, headers, body: payload, insecure: cfg.allowSelfSigned, timeoutMs: form || binary ? 300000 : 30000,
+    });
   } catch (err) {
     throw new DelphixError(
-      `Could not reach the Delphix engine at ${apiRoot(cfg.baseUrl)} — ${err.message}`, 0);
+      `Could not reach the Delphix engine at ${apiRoot(cfg.baseUrl)} — ${err.cause?.code ?? err.cause?.message ?? err.message}`, 0);
   }
 
-  const raw = Buffer.from(await res.arrayBuffer());
+  const raw = res.buffer;
   if (binary && res.ok) return raw;
   const text = raw.toString('utf8');
   let data = null;
@@ -206,7 +210,7 @@ async function call(cfg, method, path, { token, body, form, binary } = {}) {
     // The engine reports failures as {errorMessage} and, for validation, {errors:[…]}.
     const detail = data?.errorMessage
       || (Array.isArray(data?.errors) ? data.errors.join('; ') : null)
-      || (text ? text.slice(0, 300) : `HTTP ${res.status}`);
+      || plainError(text, res.status);
     throw new DelphixError(detail, res.status);
   }
   return data;
@@ -756,14 +760,42 @@ async function saveProfileSet(cfg, { name, description, threshold, classifierIds
   return { mode: 'created', id: result?.profileSetId ?? null, name, result, descriptionCut };
 }
 
-module.exports = {
-  DEFAULTS, settings, isConfigured, apiRoot, probe, toEngineText, fromEngineText, engineSetDescription,
-  frameworks, coreFrameworkId, listAlgorithms, getAlgorithm, saveAlgorithm,
+// ── Engine or DCT ─────────────────────────────────────────────────────────────
+//
+// Everything that talks to the other side takes the settings first, and the settings say which
+// side it is. Data Control Tower answers in the engine's shapes (see dct.js), so the callers do
+// not need to know which one they are talking to.
+
+const dct = require('./dct');
+
+const ENGINE = {
+  probe, frameworks, listAlgorithms, getAlgorithm, saveAlgorithm,
   listDomains, getDomain, saveDomain, deleteDomain,
   classifierFrameworks, listClassifiers, getClassifier, saveClassifier,
   listProfileSets, getProfileSet, saveProfileSet,
+  uploadFile, uploadedFiles, classifierFiles, lookupFile,
+};
+
+const dispatch = Object.fromEntries(Object.entries(ENGINE).map(([name, engineFn]) => [
+  name, (cfg, ...args) => (cfg?.target === 'dct' ? dct[name] : engineFn)(cfg, ...args),
+]));
+
+/**
+ * What identifies the instance a row came from or went to: the API root, which differs between
+ * an engine (`/masking/api`) and DCT (`/dct/v3`) on the same host.
+ */
+const origin = (cfg) => (cfg.target === 'dct' ? dct.apiRoot(cfg.baseUrl) : apiRoot(cfg.baseUrl));
+
+/** Whether one uploaded file may serve several objects there. DCT ties an upload to one algorithm. */
+const sharesUploads = (cfg) => cfg.target !== 'dct';
+
+module.exports = {
+  DEFAULTS, settings, isConfigured, apiRoot, origin, sharesUploads, toEngineText, fromEngineText, engineSetDescription,
+  ...dispatch, coreFrameworkId,
+  listHookTemplates: (cfg) => dct.listHookTemplates(cfg),
+  saveHookTemplate: (cfg, hook) => dct.saveHookTemplate(cfg, hook),
   frameworkNameFor, classNameFor, FRAMEWORK_BY_CLASS,
   engineFileName, engineFileNames, configStrings,
-  waitForTask, uploadFile, uploadedFiles, classifierFiles, lookupFile, readZip,
+  waitForTask, readZip,
   algorithmReferenceNames, rewriteConfig,
 };

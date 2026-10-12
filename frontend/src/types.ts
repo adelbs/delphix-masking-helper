@@ -45,7 +45,7 @@ export interface MaskResult {
   error?: string
 }
 
-export type View = 'welcome' | 'tester' | 'domain' | 'classifier' | 'profileSet' | 'settings'
+export type View = 'welcome' | 'tester' | 'domain' | 'classifier' | 'profileSet' | 'hook' | 'settings'
 
 export interface ServerFile {
   name: string
@@ -126,11 +126,19 @@ export interface PresetCounts { classifiers: number; domains: number; algorithms
  * A profile set shipped with the tool, together with everything it leans on — its classifiers,
  * their domains, those domains' algorithms and the files they read. Loaded from Settings.
  */
+/** The regions pre-configured discovery policies are grouped by, in display order. */
+export const PRESET_REGIONS = ['north-america', 'central-america', 'caribbean', 'south-america', 'europe', 'africa', 'asia', 'oceania'] as const
+export type PresetRegion = typeof PRESET_REGIONS[number]
+
 export interface ProfileSetPreset {
   id: string
   version: number | null
   /** The day that version was built, `YYYY-MM-DD`; null for a preset that does not say. */
   versionDate: string | null
+  /** Where the law applies, for grouping the list; null when the preset does not say. */
+  region: PresetRegion | null
+  /** ISO 3166 code of the country, when the preset says. */
+  country: string | null
   /** By locale; `en` is always present. */
   name: Partial<Record<Locale, string>>
   summary: Partial<Record<Locale, string>>
@@ -356,4 +364,33 @@ export interface ChatHandlers {
   onSaved: (saved: AssistantAlgorithm) => void
   onSaveError: (message: string) => void
   onError: (message: string) => void
+}
+
+/** The shells DCT runs a hook with: bash, sh, expect, PowerShell, delegated PowerShell. */
+export type HookShell = 'bash' | 'shell' | 'expect' | 'ps' | 'psd'
+
+/** A hook saved here: a script, what it is for, and how to try it. */
+export interface Hook {
+  id: number
+  name: string
+  description: string
+  shell: HookShell
+  command: string
+  /** Base names of the credential variables DCT sets (<BASE>_USER, <BASE>_PASSWORD…). */
+  credentials: string[]
+  /** Test values for a run on this machine. Never a credential's. */
+  variables: Array<{ name: string; value: string }>
+  /** The ready-made hook it started from, if any. */
+  template: string | null
+  delphix_id: string | null
+  delphix_origin: string | null
+  created_at: string
+  updated_at: string
+}
+
+/** Which interpreters this machine has, by shell; null where a shell cannot run here. */
+export interface HookRuntime {
+  platform: string
+  native: HookShell
+  shells: Record<HookShell, string | null>
 }

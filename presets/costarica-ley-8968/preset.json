@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "central-america",
+  "country": "CR",
   "name": {
     "en": "Costa Rica — Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales",
     "pt-BR": "Costa Rica — Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales costarricenses conforme a la Ley 8968 y su reglamento (Decreto 37554-JP, reformado en 2016 y 2019): identificadores directos (cédula de identidad, DIMEX, NITE, nombres, contacto, la dirección por señas del art. 9.3, el IBAN con dígitos de control válidos, tarjetas, placas, inmuebles), cuasi-identificadores (fecha de nacimiento, distrito y cantón, el código de distrito que también es el código postal, barrio), los datos sensibles que el art. 9.1 prohíbe tratar a un particular — origen racial o étnico, opiniones políticas, convicciones religiosas, espirituales o filosóficas, salud, vida y orientación sexual —, datos de salud, los datos económicos que el art. 3 e) llama condición socioeconómica y que el art. 1 extiende a los bienes de la persona, y antecedentes penales."
   },
   "profileSet": {
-    "name": "CR - Ley 8968 - v2",
+    "name": "CR - Ley 8968 - v3",
     "description": "Ley 8968 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

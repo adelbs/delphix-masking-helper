@@ -7,20 +7,23 @@
 Um companheiro local para o plugin de mascaramento do Delphix, cobrindo a vida inteira de um
 algoritmo. Ajuda a **entender** como cada um dos 31 frameworks de mascaramento se comporta,
 **testar** um algoritmo contra valores reais, **construir** um algoritmo já configurado a partir
-de um problema descrito em linguagem natural e **sincronizar** com um Masking Engine — trazendo os
-algoritmos dele para trabalhar e devolvendo os seus. Tudo sem precisar criar um Rule Set nem
+de um problema descrito em linguagem natural e **sincronizar** com o Delphix — o **Data Control Tower**
+ou um **Continuous Compliance Engine**, um ou outro — trazendo os algoritmos de lá para trabalhar e
+devolvendo os seus. Tudo sem precisar criar um Rule Set nem
 executar um masking job.
 
-Cobre também a descoberta de dado sensível: os **domínios** a que uma coluna pode pertencer, os
-**classifiers** que decidem isso — cada um testável contra uma coluna que você descreve — e os
-**profile sets** que um job de profiling roda. Profile sets prontos para as leis de proteção de
-dados do **Chile, México, Panamá, Belize, Brasil, Colômbia, Argentina, El Salvador, Peru, Equador, Uruguai, Costa Rica, Espanha e Jamaica** vêm com a ferramenta, cada um carregado com um clique
-e documentado em PDF.
+Cobre também a descoberta de dado sensível: as **classes de dados** a que uma coluna pode pertencer, os
+**classifiers** que decidem isso — cada um testável contra uma coluna que você descreve — e as
+**políticas de descoberta** que um job de descoberta roda. Políticas de descoberta prontas para as leis de proteção de
+dados do **Chile, México, Panamá, Belize, Brasil, Colômbia, Argentina, El Salvador, Peru, Equador, Uruguai, Costa Rica, Espanha e Jamaica** vêm com a ferramenta, cada uma carregada com um clique
+e documentada em PDF.
 
-> **A nomenclatura segue a da Delphix.** Um **framework** é uma técnica de mascaramento que o
-> plugin oferece — Secure Lookup, Character Mapping, Date Shift. Configurar um produz um
-> **algoritmo**: com nome, salvo e pronto para usar. A barra lateral lista frameworks; o que você
-> salva é um algoritmo.
+> **A nomenclatura segue a da Delphix, e a do Data Control Tower.** Um **framework** é uma técnica
+> de mascaramento que o plugin oferece — Secure Lookup, Character Mapping, Date Shift. Configurar
+> um produz um **algoritmo**: com nome, salvo e pronto para usar. A barra lateral lista
+> frameworks; o que você salva é um algoritmo. Na descoberta, os nomes são os do DCT: **classe de
+> dados** (*data class*) e **política de descoberta** (*discovery policy*) — num Continuous
+> Compliance Engine usado sozinho, os mesmos objetos se chamam domínio e profile set.
 
 > ### Projeto independente, e exige licença Delphix ativa
 >
@@ -34,10 +37,10 @@ e documentado em PDF.
 > com a Delphix, normalmente por meio de uma licença ativa e do seu time de conta. Coloque quinze
 > jars em `lib/` — veja [Bibliotecas do Delphix](#bibliotecas-do-delphix) abaixo. Referência: [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
 
-![Um algoritmo sendo testado, um classifier testado contra uma coluna descrita, os profile sets que vêm com a ferramenta, e uma instância Delphix conectada](docs/demo.gif)
+![Um algoritmo sendo testado, um classifier testado contra uma coluna descrita, as políticas de descoberta que vêm com a ferramenta, e uma instância Delphix conectada](docs/demo.gif)
 
 <sub>Quatro coisas, nesta ordem: executar um algoritmo com um valor real; testar um classifier
-contra uma coluna descrita na tela e ver qual domínio o profiling atribuiria; os profile sets que
+contra uma coluna descrita na tela e ver qual classe de dados a descoberta atribuiria; as políticas de descoberta que
 vêm com a ferramenta; e a integração com uma instância Delphix, com um algoritmo que veio dela.
 Todos os valores mascarados são saída real do plugin, toda pontuação vem do avaliador local de
 classifiers, e a instância é real.</sub>
@@ -54,8 +57,8 @@ Cada framework abre com duas abas: **Testar** e **Documentação**. A aba de doc
 seção daquele framework no guia de referência, no idioma da interface — o mesmo conteúdo dos PDFs
 abaixo, lido da mesma fonte, então os dois nunca divergem.
 
-A tela de classifiers tem a mesma aba **Documentação**: ela abre com como o profiling decide um
-domínio, seguida da seção do framework de classifier em questão.
+A tela de classifiers tem a mesma aba **Documentação**: ela abre com como a descoberta decide uma
+classe de dados, seguida da seção do framework de classifier em questão.
 
 O diretório [`docs/`](docs/) contém um guia de referência dos 31 frameworks do plugin, em três idiomas:
 
@@ -65,7 +68,7 @@ O diretório [`docs/`](docs/) contém um guia de referência dos 31 frameworks d
 | English | [`docs/delphix-frameworks-guide.en.pdf`](docs/delphix-frameworks-guide.en.pdf) |
 | Español | [`docs/delphix-frameworks-guide.es.pdf`](docs/delphix-frameworks-guide.es.pdf) |
 
-Para cada framework o guia traz o que ele faz, exemplos de entrada → saída, e a explicação de todos os parâmetros de configuração. Os frameworks são agrupados pelas mesmas categorias da barra lateral da UI. A Parte 10 trata da descoberta de dado sensível: como um domínio é decidido, e os frameworks de classifier `PATH`, `TYPE`, `REGEX` e `LIST`. Há ainda três apêndices: conceitos transversais (determinismo, papel da chave, frameworks que podem não mascarar nada), o catálogo dos 59 algoritmos `dlpx-core:` embutidos no plugin, e as limitações do runner standalone.
+Para cada framework o guia traz o que ele faz, exemplos de entrada → saída, e a explicação de todos os parâmetros de configuração. Os frameworks são agrupados pelas mesmas categorias da barra lateral da UI. A Parte 10 trata da descoberta de dado sensível: como uma classe de dados é decidida, e os frameworks de classifier `PATH`, `TYPE`, `REGEX` e `LIST`. Há ainda três apêndices: conceitos transversais (determinismo, papel da chave, frameworks que podem não mascarar nada), o catálogo dos 59 algoritmos `dlpx-core:` embutidos no plugin, e as limitações do runner standalone.
 
 Todos os pares entrada → saída foram gerados executando os frameworks no `AlgorithmRunner` — não são ilustrativos.
 
@@ -86,7 +89,7 @@ O tester executa os algoritmos de verdade do plugin de mascaramento do Delphix, 
 alguns jars do produto. **Eles não são distribuídos neste repositório** — são arquivos
 licenciados da Delphix. Você fornece uma vez, na sua máquina.
 
-1. Solicite à Delphix o **Masking Devkit (SDK)** correspondente à sua versão do Masking Engine,
+1. Solicite à Delphix o **Masking Devkit (SDK)** correspondente à sua versão do Continuous Compliance Engine,
    pelo seu time de conta ou pelo portal de suporte. A Delphix documenta o SDK aqui:
    [Compliance Algorithm SDK](https://portal.perforce.com/s/article/Compliance-Algorithm-SDK-for-Guidewire-1728062704114).
 2. Descompacte e copie estes quinze jars de `sdkTools/lib/` para [`lib/`](lib/):
@@ -298,9 +301,9 @@ errar a escolha do framework. Prefira um modelo com contexto grande.
 Dois filtros, e eles estreitam juntos. A **caixa de texto** alcança todas as sessões de uma vez —
 um nome é achado sem precisar saber em qual delas ele mora — e os resultados saem em lista plana,
 para que um acerto nunca fique escondido atrás de um cabeçalho que você teria de abrir antes. A
-**caixa de profile set** deixa só o que um set alcança, seguido para fora do jeito que a
-sincronização segue: os classifiers dele, os domínios em que eles votam, os algoritmos desses
-domínios e os frameworks por trás deles. Escolher um set transforma a barra inteira no conjunto de
+**caixa de política de descoberta** deixa só o que uma política alcança, seguido para fora do jeito que a
+sincronização segue: os classifiers dela, as classes de dados em que eles votam, os algoritmos dessas
+classes de dados e os frameworks por trás deles. Escolher uma política transforma a barra inteira no conjunto de
 trabalho de uma regra de conformidade.
 
 O `⋯` de cada sessão também escolhe como ela organiza os itens, e a escolha é lembrada:
@@ -308,112 +311,166 @@ O `⋯` de cada sessão também escolhe como ela organiza os itens, e a escolha 
 | Sessão | Agrupar por |
 |---|---|
 | Frameworks | categoria, ou nada |
-| Algoritmos | categoria do framework, domínio, profile set, ou nada |
-| Domínios | categoria do framework, profile set, ou nada |
-| Classifiers | domínio, framework do algoritmo do domínio, framework do classifier, profile set, ou nada |
+| Algoritmos | categoria do framework, classe de dados, política de descoberta, ou nada |
+| Classes de dados | categoria do framework, política de descoberta, ou nada |
+| Classifiers | classe de dados, framework do algoritmo da classe de dados, framework do classifier, política de descoberta, ou nada |
 
 Agrupar é uma visão, não uma classificação. Um item pode aparecer sob mais de um cabeçalho — um
-classifier pertence a todo profile set que o roda — e o que não cai em nenhum fica em **Outros**,
+classifier pertence a toda política de descoberta que o roda — e o que não cai em nenhum fica em **Outros**,
 que é uma resposta de verdade, não um erro.
 
-## Sincronizar com um Masking Engine
+## Sincronizar com o Delphix
 
-**Uma instância, espelhada.** Conectar uma instância em *Configurações → Delphix* traz o engine
-inteiro de uma vez — todos os profile sets, classifiers, domínios e algoritmos — e os campos da
-conexão então travam. Não há nada de útil em editar uma URL debaixo de um espelho da instância que
-aquela URL não nomeia mais, então trocar de engine é excluir a integração e configurar a outra.
+**Data Control Tower ou um engine — um ou outro.** Em *Configurações → Delphix* você escolhe com o
+que integrar:
+
+- **Data Control Tower (DCT)** — onde a Delphix passou a centralizar o Continuous Compliance:
+  algoritmos, classes de dados, classifiers e políticas de descoberta ficam no DCT e rodam nos
+  compliance nodes dele. A ferramenta fala com a API `/dct/v3` e autentica com uma chave de API.
+- **Continuous Compliance Engine** — um engine sozinho, pela Masking API dele, com usuário e senha.
+  Lá os mesmos objetos se chamam domínios e profile sets.
+
+Nunca os dois ao mesmo tempo: o que fica guardado aqui espelha uma instância só. A nomenclatura da
+ferramenta é a do DCT nos dois casos.
+
+**Uma instância, espelhada.** Conectar traz tudo de uma vez — todas as políticas de descoberta,
+classifiers, classes de dados e algoritmos — e os campos da conexão então travam. Não há nada de útil
+em editar uma URL debaixo de um espelho da instância que aquela URL não nomeia mais, então trocar de
+instância, ou de engine para o DCT, é excluir a integração e configurar a outra.
 
 Três botões mantêm o espelho em dia:
 
 - **Atualizar do Delphix** traz tudo de novo, atualizando o que já está aqui.
 - **Enviar tudo para o Delphix** empurra no sentido contrário, em ordem de dependência —
-  algoritmos, depois os domínios que os nomeiam, depois os classifiers que votam neles, depois os
-  sets que rodam os classifiers. Cada objeto continua com o seu **Enviar ao Delphix** no editor.
-- **Excluir integração** esquece a conexão e apaga toda linha vinculada àquele engine.
+  algoritmos, depois as classes de dados que os nomeiam, depois os classifiers que votam nelas,
+  depois as políticas que rodam os classifiers. Cada objeto continua com o seu **Enviar ao Delphix**
+  no editor.
+- **Excluir integração** esquece a conexão e apaga toda linha vinculada àquela instância.
   "Vinculada" inclui o que você criou aqui e enviou para lá, e o diálogo diz isso com todas as
   letras: `delphix_origin` é o único registro da ligação, e os dois sentidos o gravam. Os arquivos
   já baixados continuam na pasta de arquivos.
 
-As instâncias de plugin da própria instância (`dlpx-core:`) não descem. Esta ferramenta tem o mesmo
-plugin, então uma cópia salva de uma delas seria uma linha que não responde por nada.
+Os algoritmos de fábrica do plugin (`dlpx-core:`) não descem. Esta ferramenta tem o mesmo plugin,
+então uma cópia salva de um deles seria uma linha que não responde por nada. No DCT, os objetos de
+fábrica — algoritmos, classes de dados, classifiers e a política ASDD Standard — também ficam de fora
+e nunca são alterados; o DCT os lista sem o prefixo (`CM Digits`, `CreditCard`), e a ferramenta casa
+um nome com o outro.
 
-Aponte a ferramenta para uma instância Delphix em **Configurações → Delphix** — endereço, usuário
-e senha — e clique em **Testar conexão**; ele responde antes de você salvar qualquer coisa.
+**O que muda com o DCT.**
 
-### Domínios
+- Só vai e vem o que o DCT gerencia. Os objetos que o DCT apenas espelha dos engines conectados ficam
+  de fora — eles pertencem ao engine, e se integram pelo engine.
+- No DCT a identidade de todo objeto é um id, e o nome pode repetir. A ferramenta atualiza o objeto
+  seu com aquele nome em vez de criar outro ao lado.
+- Uma configuração do DCT nomeia outro algoritmo pelo id dele. A ferramenta traduz nos dois
+  sentidos, e a linha daqui continua com nomes — que é o que roda localmente.
+- Um arquivo enviado ao DCT pertence ao algoritmo que o nomeou, então cada algoritmo leva o seu.
+- O DCT não oferece download de arquivos enviados: ao importar, arquivos de lookup e listas vêm só
+  como referência e aparecem no resumo do que falta; o objeto é importado do mesmo jeito.
+- O DCT aceita qualquer caractere em nomes e descrições, e guarda a descrição inteira de uma
+  política; um engine recusa alguns caracteres e corta essa descrição em 50.
+- Reenviar um objeto que já está igual lá não o reescreve. O DCT responde HTTP 500 a qualquer
+  atualização de um algoritmo Checkdigit, então um Checkdigit que mudou precisa ser apagado no DCT e
+  enviado de novo — a mensagem de erro diz isso.
 
-A sessão **Domínios** da barra lateral guarda os domínios de dado sensível — na instância um
-domínio é um nome e duas referências a algoritmo, e é exatamente isso que fica guardado aqui. Crie
-um em *Domínios → ⋯ → Novo domínio*; cada um
-tem o botão **Enviar ao Delphix**, que cria lá, ou atualiza quando o nome já existe.
+Aponte a ferramenta para o Delphix em **Configurações → Delphix** e clique em **Testar conexão**; ele
+responde antes de você salvar qualquer coisa. Para não guardar o segredo em disco, defina
+`DLPX_DCT_API_KEY` (DCT) ou `DLPX_ENGINE_PASSWORD` (engine) no ambiente — eles têm precedência e o
+campo passa a aparecer somente leitura.
 
-Enviar um domínio **envia antes os algoritmos para os quais ele aponta** — a instância recusa um
-domínio cujo algoritmo ela não conhece. Algoritmos que já são da instância, como os built-in
-`dlpx-core:`, não são tocados: lá eles são somente leitura e já estão certos. Se um algoritmo não
-puder ser enviado, o domínio também não vai, e a mensagem diz qual algoritmo falhou.
+### Classes de dados
 
-Os domínios são agrupados pelo framework do algoritmo para o qual apontam, nas mesmas categorias
-do resto. Entre um domínio e sua categoria há duas buscas, e qualquer uma pode falhar — o
-algoritmo pode ser um built-in que esta máquina não tem, e nem todo algoritmo de uma instância é
-baseado em framework. Esses caem em **Outros**, que numa instância padrão é cerca de um quinto.
+A sessão **Classes de dados** da barra lateral guarda as classes de dados sensíveis — uma classe de
+dados é um nome e duas referências a algoritmo, a padrão e a de tokenização, e é exatamente isso que
+fica guardado aqui. Crie uma em *Classes de dados → ⋯ → Nova classe de dados*; cada uma tem o botão
+**Enviar ao Delphix**, que cria lá, ou atualiza quando o nome já existe.
+
+Enviar uma classe de dados **envia antes os algoritmos para os quais ela aponta** — o Delphix recusa
+uma classe de dados cujo algoritmo ele não conhece. Algoritmos que já são do Delphix, como os de
+fábrica `dlpx-core:`, não são tocados: lá eles são somente leitura e já estão certos. Se um algoritmo
+não puder ser enviado, a classe de dados também não vai, e a mensagem diz qual algoritmo falhou.
+
+As classes de dados são agrupadas pelo framework do algoritmo para o qual apontam, nas mesmas
+categorias do resto. Entre uma classe de dados e sua categoria há duas buscas, e qualquer uma pode
+falhar — o algoritmo pode ser um de fábrica que esta máquina não tem, e nem todo algoritmo de uma
+instância é baseado em framework. Essas caem em **Outros**, que num engine padrão é cerca de um
+quinto.
 
 ### Classifiers
 
-Classifiers são o que o profiling usa para decidir a que domínio uma coluna ou campo pertence.
-Cada um é construído sobre um de quatro frameworks — **PATH** (o nome do campo e da sua tabela ou
-arquivo), **TYPE** (o tipo e o tamanho), **REGEX** e **LIST** (uma amostra dos valores) — e vota em
-um domínio. A sessão **Classifiers** da barra lateral os lista por domínio; crie um em
-*Classifiers → ⋯ → Novo classifier*.
+Classifiers são o que a descoberta usa para decidir a que classe de dados uma coluna ou campo
+pertence. Cada um é construído sobre um de quatro frameworks — **PATH** (o nome do campo e da sua
+tabela ou arquivo), **TYPE** (o tipo e o tamanho; *Data type* no DCT), **REGEX** e **LIST** (uma
+amostra dos valores) — e vota em uma classe de dados. A sessão **Classifiers** da barra lateral os
+lista por classe de dados; crie um em *Classifiers → ⋯ → Novo classifier*.
 
 O editor explica cada parâmetro do framework escolhido, e o painel **Teste** descreve um campo —
-nome, tabela, tipo SQL, tamanho, valores de amostra — e mostra o que o profiling concluiria: a
-confiança deste classifier (qual caminho, tipo, padrão ou lista decidiu, valor a valor) e a do
-domínio, pesado junto com os outros classifiers salvos para ele, contra o limiar do profile set. Ele
-testa o que está na tela, então dá para experimentar uma mudança antes de salvar. Nada roda na
-instância: a ferramenta avalia os classifiers localmente, lendo as expressões regulares como o Java
-lê. As poucas construções Java que ela não reproduz com exatidão são avisadas em vez de aproximadas.
+nome, tabela, tipo SQL, tamanho, valores de amostra — e mostra o que a descoberta concluiria: a
+confiança deste classifier (qual caminho, tipo, padrão ou lista decidiu, valor a valor) e a da classe
+de dados, pesada junto com os outros classifiers salvos para ela, contra o limiar da política de
+descoberta. Ele testa o que está na tela, então dá para experimentar uma mudança antes de salvar.
+Nada roda no Delphix: a ferramenta avalia os classifiers localmente, lendo as expressões regulares
+como o Java lê. As poucas construções Java que ela não reproduz com exatidão são avisadas em vez de
+aproximadas.
 
-**Enviar ao Delphix** cria o classifier na instância ou o atualiza; renomear não é problema, porque
-a instância renomeia classifiers no lugar. O que um classifier usa vai junto: a instância recusa um
-classifier cujo domínio ela não tem, então o domínio vai antes quando esta máquina o tem — junto
-com os algoritmos dele — e os arquivos de valores de um classifier LIST são enviados quando a
-instância não os tem. Importar faz o mesmo no sentido inverso: o classifier vem com o domínio, os
-algoritmos desse domínio e os arquivos de valores.
+**Enviar ao Delphix** cria o classifier lá ou o atualiza; renomear não é problema, porque o Delphix
+renomeia classifiers no lugar. O que um classifier usa vai junto: o Delphix recusa um classifier cuja
+classe de dados ele não tem, então a classe de dados vai antes quando esta máquina a tem — junto com
+os algoritmos dela — e os arquivos de valores de um classifier LIST são enviados quando o Delphix
+não os tem. Importar faz o mesmo no sentido inverso: o classifier vem com a classe de dados, os
+algoritmos dela e os arquivos de valores.
 
-### Profile sets
+### Políticas de descoberta
 
-Um profile set é o que um job de profiling de fato roda: os classifiers que ele deve tentar e o
-**limiar de atribuição** — a confiança que um domínio precisa alcançar para o job atribuí-lo. A
-sessão **Profile Sets** da barra lateral os lista com o tamanho e o limiar; crie um em *Profile
-Sets → ⋯ → Novo profile set*.
+Uma política de descoberta é o que um job de descoberta de fato roda: os classifiers que ele deve
+tentar e o **limiar de atribuição** — a confiança que uma classe de dados precisa alcançar para o job
+atribuí-la. A sessão **Políticas de descoberta** da barra lateral as lista com o tamanho e o limiar;
+crie uma em *Políticas de descoberta → ⋯ → Nova política de descoberta*.
 
-O editor escolhe os membros entre os classifiers guardados aqui, filtrando por nome ou domínio. Não
-há o que testar num set: quem decide o domínio são os classifiers, e eles são configurados e
-testados no editor deles.
+O editor escolhe os membros entre os classifiers guardados aqui, filtrando por nome ou classe de
+dados. Não há o que testar numa política: quem decide a classe de dados são os classifiers, e eles
+são configurados e testados no editor deles.
 
-Tudo em que um set se apoia viaja junto com ele. Importar um traz os classifiers que ele nomeia e,
-através deles, os domínios, os algoritmos desses domínios e os arquivos de valores. **Enviar ao
-Delphix** faz o inverso: cada membro vai primeiro, e o set é então criado ou atualizado nomeando-os
-pelos ids que a instância devolveu — um set só pode referenciar classifiers que a instância já tem.
+Tudo em que uma política se apoia viaja junto com ela. Importar uma traz os classifiers que ela nomeia
+e, através deles, as classes de dados, os algoritmos dessas classes e os arquivos de valores.
+**Enviar ao Delphix** faz o inverso: cada membro vai primeiro, e a política é então criada ou
+atualizada nomeando-os pelos ids que o Delphix devolveu — uma política só pode referenciar
+classifiers que o Delphix já tem.
 
-**Profile sets pré-configurados.** *Configurações → Profile Sets* lista profile sets que já vêm com
-a ferramenta, cada um com a documentação em PDF e tudo de que precisa. **Carregar** pergunta o
-pacote: o **pacote essencial** é o mínimo para a lei — documentos de identidade, nomes, contato,
-endereço e data de nascimento — e o **pacote estendido** é o set completo. Qualquer um cria de uma
-vez o profile set, os classifiers, os domínios, os algoritmos e os arquivos. Carregar de novo não
-duplica nada: o botão vira **Resetar**, que devolve cada item ao estado original e descarta as
-alterações feitas nele, e escolher ali o outro pacote troca um pelo outro, removendo o que o novo
-pacote não inclui. **Descarregar** remove o que o set trouxe, exceto o que algo seu ainda usa; o que
-foi enviado ao Delphix continua lá. Se um nome usado pelo set já pertence a algo que não veio dele, a
-ferramenta lista o que seria substituído e pergunta antes. O profile set leva o país, a lei e a
-versão no nome (`CL - Ley 21.719 - v3`), e o cartão mostra a versão que vem com a ferramenta **e a
-data em que essa versão foi gerada**, para dar para ver se um set está velho sem precisar abri-lo. O
-formato está em `presets/README.md`.
+**Políticas de descoberta pré-configuradas.** *Configurações → Políticas de descoberta* lista as
+políticas que já vêm com a ferramenta, cada uma com a documentação em PDF e tudo de que precisa.
+**Carregar** pergunta o pacote: o **pacote essencial** é o mínimo para a lei — documentos de
+identidade, nomes, contato, endereço e data de nascimento — e o **pacote estendido** é a política
+completa. Qualquer um cria de uma vez a política de descoberta, os classifiers, as classes de dados,
+os algoritmos e os arquivos. Carregar de novo não duplica nada: o botão vira **Resetar**, que devolve
+cada item ao estado original e descarta as alterações feitas nele, e escolher ali o outro pacote
+troca um pelo outro, removendo o que o novo pacote não inclui. **Descarregar** remove o que a
+política trouxe, exceto o que algo seu ainda usa; o que foi enviado ao Delphix continua lá. Se um
+nome usado pela política já pertence a algo que não veio dela, a ferramenta lista o que seria
+substituído e pergunta antes. A política leva o país, a lei e a versão no nome
+(`CL - Ley 21.719 - v3`), e o cartão mostra a versão que vem com a ferramenta **e a data em que essa
+versão foi gerada**, para dar para ver se uma política está velha sem precisar abri-la. O formato
+está em `presets/README.md`.
 
-Hoje são catorze, um por país, todos com limiar de 60 no profile set. Os números abaixo são do pacote
-estendido; cada pacote essencial tem de 11 a 13 domínios:
+A lista é agrupada por região — América do Norte, América Central, Caribe, América do Sul, Europa —
+e estreitada por uma caixa de filtro (país, lei, número; acentos são ignorados), pelos botões de
+região e por *Só as carregadas aqui*.
 
-| Profile set | Lei | Domínios | Classifiers | Algoritmos | Documentação |
+**Baixar pacote.** Cada política também pode ser baixada como um `.zip` que a carrega no Delphix
+sem esta ferramenta: a documentação nos três idiomas, `import.sh` (Linux e macOS: bash, curl, jq) e
+`import.ps1` (Windows PowerShell 5.1, que vem com o Windows, ou PowerShell 7), e cada objeto já no
+formato da API do Data Control Tower e da Masking API de um engine, com os arquivos de lookup e de
+listas. O script pergunta primeiro o idioma das mensagens, depois DCT ou engine, o endereço e as
+credenciais, se aceita certificado autoassinado, e o pacote. Antes de alterar qualquer coisa ele
+lista os objetos que já existem lá com os mesmos nomes e pede confirmação: esses são apagados antes
+da importação, e o que o Delphix se recusar a apagar — porque algo mais o usa — é atualizado em vez
+disso. Cada passo vai para `import-<data>.log` ao lado do script; segredos, nunca. Rodar de novo
+retoma de onde parou.
+
+Hoje são quinze, uma por país, todas com limiar de 60. Os números abaixo são do pacote
+estendido; cada pacote essencial tem de 11 a 13 classes de dados:
+
+| Política de descoberta | Lei | Classes de dados | Classifiers | Algoritmos | Documentação |
 |---|---|---|---|---|---|
 | [Chile](presets/chile-ley-21719/) | Ley 21.719 | 73 | 134 | 97 | [pt-BR](presets/chile-ley-21719/doc.pt-BR.pdf) · [en](presets/chile-ley-21719/doc.en.pdf) · [es](presets/chile-ley-21719/doc.es.pdf) |
 | [México](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 155 | 148 | [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [en](presets/mexico-lfpdppp/doc.en.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
@@ -429,33 +486,34 @@ estendido; cada pacote essencial tem de 11 a 13 domínios:
 | [Costa Rica](presets/costarica-ley-8968/) | Ley 8968 | 81 | 143 | 168 | [pt-BR](presets/costarica-ley-8968/doc.pt-BR.pdf) · [en](presets/costarica-ley-8968/doc.en.pdf) · [es](presets/costarica-ley-8968/doc.es.pdf) |
 | [Espanha](presets/spain-lopdgdd/) | RGPD + LOPDGDD | 83 | 149 | 341 | [pt-BR](presets/spain-lopdgdd/doc.pt-BR.pdf) · [en](presets/spain-lopdgdd/doc.en.pdf) · [es](presets/spain-lopdgdd/doc.es.pdf) |
 | [Jamaica](presets/jamaica-dpa-2020/) | Data Protection Act, 2020 | 74 | 129 | 83 | [pt-BR](presets/jamaica-dpa-2020/doc.pt-BR.pdf) · [en](presets/jamaica-dpa-2020/doc.en.pdf) · [es](presets/jamaica-dpa-2020/doc.es.pdf) |
+| [Reino Unido](presets/uk-gdpr-dpa-2018/) | UK GDPR + DPA 2018 | 73 | 130 | 105 | [pt-BR](presets/uk-gdpr-dpa-2018/doc.pt-BR.pdf) · [en](presets/uk-gdpr-dpa-2018/doc.en.pdf) · [es](presets/uk-gdpr-dpa-2018/doc.es.pdf) |
 
 A descoberta não depende só do nome da coluna. Bancos de dados completam os valores — uma coluna CHAR
-os preenche com espaços, um código guardado como texto muitas vezes vem com zeros à esquerda — e o
-profiler os testa como chegam; por isso todo set tira o preenchimento antes de comparar, e o
+os preenche com espaços, um código guardado como texto muitas vezes vem com zeros à esquerda — e a
+descoberta os testa como chegam; por isso toda política tira o preenchimento antes de comparar, e o
 mascaramento o mantém no lugar: `0012345678` vira `00` seguido do que `12345678` vira. Quando o nome
 da coluna não diz nada — `CAMPO1`, `FLD_07`, os nomes curtos de sistemas empacotados — os valores
 sozinhos encontram o dado sempre que o formato deles é distintivo: documentos com dígito verificador,
 e-mails, telefones, cartões, lugares, nomes.
 
-Cada um agrupa os domínios em identificadores diretos, quase-identificadores e os dados sensíveis
+Cada uma agrupa as classes de dados em identificadores diretos, quase-identificadores e os dados sensíveis
 que a sua lei nomeia, e mascara os identificadores nacionais com dígito verificador válido onde o
 número tem um — o RUT do Chile, o CURP e o RFC do México, o RUC de pessoa natural no Panamá, o CPF, o CNPJ (inclusive o alfanumérico), o PIS, o título de eleitor e o CNS no Brasil, o NIT na Colômbia, o CUIT, o CUIL, o CBU e o CVU na Argentina, o DUI e o NIT em El Salvador, o DNI e o RUC no Peru, a cédula e o RUC no Equador, a cédula de identidad e o RUT no Uruguai, e os dois dígitos de controle do IBAN costarriquenho — o único número da Costa Rica que tem algum —, e na Espanha a letra do DNI e do NIE, o número da Seguridad Social, os dígitos da conta e do IBAN, a referencia catastral e o CUPS. O
-README de cada pasta explica o desenho e os limites; o PDF lista cada domínio, classifier,
+README de cada pasta explica o desenho e os limites; o PDF lista cada classe de dados, classifier,
 algoritmo e arquivo, com exemplos mascarados.
 
-Onde o Masking Engine já tem um algoritmo que faz o trabalho, os sets usam o dele em vez de trazer
+Onde o Delphix já tem um algoritmo que faz o trabalho, as políticas usam o dele em vez de trazer
 um próprio: CM Numeric para valores, Credit Card para números de cartão, BloodType SL para grupos
-sanguíneos e Brazil CPF. `presets/verify-all.sh` confere todos os sets — ou os que você escolher —
+sanguíneos e Brazil CPF. `presets/verify-all.sh` confere todas as políticas — ou as que você escolher —
 pela linha de comando e guarda um log; o `presets/README.md` o explica, e também o que um preset novo
 deve reaproveitar.
 
-**Importar.** Não há importação por objeto: conectar a integração traz o engine inteiro, e
+**Importar.** Não há importação por objeto: conectar a integração traz a instância inteira, e
 **Atualizar do Delphix** traz de novo. Um algoritmo sobre um framework que a ferramenta não
 consegue executar não é copiado — assim você nunca fica com um algoritmo salvo que não dá para
 testar — e aparece no resumo do que ficou de fora. O que um objeto referencia vem junto: os
-algoritmos que uma configuração nomeia, o arquivo de lookup, os algoritmos de um domínio, os
-classifiers de um set.
+algoritmos que uma configuração nomeia, o arquivo de lookup, os algoritmos de uma classe de dados, os
+classifiers de uma política.
 
 **Arquivos de lookup.** Um arquivo enviado para a instância fica no armazenamento dela: o
 algoritmo carrega só uma referência (`delphix-file://upload/…/NOMES.txt`). Importar baixa o arquivo
@@ -492,8 +550,29 @@ ferramenta segue a mesma regra: nomes não são editáveis. Para trabalhar com o
 Se o plugin de mascaramento da instância for mais antigo que o de `lib/`, alguns frameworks não
 existirão lá; exportar um algoritmo desses falha com uma mensagem explicando.
 
-Se preferir não guardar a senha em disco, defina `DLPX_ENGINE_PASSWORD` no ambiente — ela tem
-precedência e o campo passa a aparecer somente leitura.
+## Hooks
+
+A sessão **Hooks** da barra lateral é para os scripts que o Delphix roda em pontos da vida de um
+dataset — Configure Clone, Pre-/Post-refresh, Pre-/Post-snapshot, Pre-/Post-start… —, que o Data
+Control Tower guarda como **hook templates**. Um hook aqui tem nome, uma **descrição** do que ele
+faz, um shell (bash, sh, expect, PowerShell ou PowerShell delegado), o script e os nomes base das
+variáveis de credencial que o DCT entrega a ele (`<BASE>_USER`, `<BASE>_PASSWORD`).
+
+- **Hooks prontos**: *Rodar um job de mascaramento (DCT)* e *Rodar uma job collection (DCT)*, em
+  bash e em PowerShell (compatível com o Windows PowerShell 5.1). Os dois iniciam o job pelo DCT,
+  acompanham até o fim e fazem o hook falhar quando ele falha — no Configure Clone, uma VDB só é
+  entregue mascarada.
+- **Rodar nesta máquina**: o script da tela roda aqui — bash ou sh no Linux e macOS, PowerShell no
+  Windows (ou PowerShell 7 onde estiver instalado) — com valores de teste para as variáveis, a saída
+  aparecendo enquanto é impressa, limite de tempo e botão Parar. Valores de credencial são digitados
+  a cada execução e nunca salvos; os segredos da própria ferramenta ficam fora do ambiente do script.
+- **O que um hook pode ler**: as variáveis de ambiente que o Delphix documenta para hooks (Oracle,
+  SQL Server, AppData/DB2, credenciais), cada uma inserida no cursor com um clique.
+- **Baixar script** salva como `.sh` ou `.ps1` para testar em outro servidor.
+- **Enviar ao Delphix** cria ou atualiza o hook template no DCT, e *Atualizar do Delphix* traz os
+  hook templates do DCT. Credenciais nunca viajam: adicione as variáveis de credencial no template
+  no DCT. Um Continuous Compliance Engine não tem hook templates, então isso exige a integração com
+  o DCT.
 
 ## Idioma da interface
 

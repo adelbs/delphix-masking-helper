@@ -220,7 +220,7 @@ export function ClassifierEditor({ classifier: opened, onToggleSidebar, onDelete
       {tab === 'doc' ? (
         /* How profiling settles a domain, then the framework this classifier is built on. */
         <div className="flex-1 overflow-auto p-5 bg-slate-50 space-y-5">
-          <FrameworkDoc className="Profiling" />
+          <FrameworkDoc className="Discovery" />
           <FrameworkDoc className={framework} />
         </div>
       ) : (

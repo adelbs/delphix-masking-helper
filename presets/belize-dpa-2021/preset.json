@@ -1,6 +1,8 @@
 {
-  "version": 3,
-  "versionDate": "2026-10-11",
+  "version": 4,
+  "versionDate": "2026-10-12",
+  "region": "central-america",
+  "country": "BZ",
   "name": {
     "en": "Belize — Data Protection Act, 2021 (personal data protection)",
     "pt-BR": "Belize — Data Protection Act, 2021 (proteção de dados pessoais)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales de Belice conforme a la Data Protection Act, 2021: identificadores directos (número de seguridad social, TIN, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, ciudad o aldea), los datos personales sensibles de la sección 2 — incluidos el historial o la situación financiera y los procesos penales — y registros de salud."
   },
   "profileSet": {
-    "name": "BZ - Data Protection Act 2021 - v3",
+    "name": "BZ - Data Protection Act 2021 - v4",
     "description": "Data Protection Act 2021 - personal data",
     "threshold": 60,
     "classifiers": [

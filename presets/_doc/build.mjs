@@ -562,7 +562,7 @@ function render(locale, content, examples, masked, displayNames) {
     + `<div><span class="cover-fact-n">${preset.classifiers.length}</span><span class="cover-fact-l">${t.facts.classifiers}</span></div>`
     + `<div><span class="cover-fact-n">${preset.algorithms.length}</span><span class="cover-fact-l">${t.facts.algorithms}</span></div>`
     + '</div>'
-    + `<div class="cover-meta"><span>Profile set ${code(preset.profileSet.name)}</span><span>${
+    + `<div class="cover-meta"><span>${t.policyLabel} ${code(preset.profileSet.name)}</span><span>${
       preset.versionDate ? t.versionOf(preset.version, day(preset.versionDate)) : `${t.version} ${esc(preset.version)}`
     } · ${t.threshold} ${preset.profileSet.threshold}%</span></div></div>`
 

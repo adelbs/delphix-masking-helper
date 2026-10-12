@@ -3,10 +3,10 @@
   "subtitle": "Discovering and masking Chilean personal data: direct identifiers, quasi-identifiers and the sensitive data of article 2 — socioeconomic situation included.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Chilean database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
-        "Ley 21.719 does not apply to anonymized data. That is why the set does not stop at direct identifiers: it also generalizes the quasi-identifiers that re-identify people in combination, and covers every sensitive category of article 2. Its domains are organized in the same layers:",
+        "This discovery policy finds the personal data in a Chilean database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
+        "Ley 21.719 does not apply to anonymized data. That is why the policy does not stop at direct identifiers: it also generalizes the quasi-identifiers that re-identify people in combination, and covers every sensitive category of article 2. Its data classes are organized in the same layers:",
         { "list": [
           "**Direct identifiers** — RUT, names, contact details, documents, accounts, devices, vehicles, free text.",
           "**Quasi-identifiers** — birth date, age, sex, comuna, postal code, occupation, employer and similar attributes.",
@@ -14,9 +14,9 @@
           "**Socioeconomic situation** — FONASA tier and ISAPRE, Registro Social de Hogares, state benefits, commercial debt, income, pension fund, housing, student aid.",
           "**Criminal records** — convictions and court case numbers."
         ] },
-        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary.",
-        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). The algorithms of this set work on text, numbers and dates: a scanned ID card stored in a BLOB keeps its RUT readable. Report those columns as residual risk." }
+        { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). The algorithms of this policy work on text, numbers and dates: a scanned ID card stored in a BLOB keeps its RUT readable. Report those columns as residual risk." }
       ]
     },
     {
@@ -24,8 +24,8 @@
       "body": [
         "Ley 21.719 regulates the protection and processing of personal data and creates the Agencia de Protección de Datos Personales. Its article 2 defines as **sensitive** the data that reveal ethnic or racial origin, political, union or professional affiliation, socioeconomic situation, ideological or philosophical convictions, religious beliefs, health and human biological profile, biometric data, and sexual life, sexual orientation and gender identity.",
         "Socioeconomic situation is a category of Chilean law: data that are ordinary elsewhere — a FONASA tier, an ISAPRE, a Registro Social de Hogares percentile, a DICOM record — are sensitive in Chile, and templates built for GDPR do not cover them.",
-        "The law takes effect on 1 December 2026. On 31 August 2026 the Government sent the Senate a bill (Boletín 18.623-07) that would move that date to 1 December 2027; check its status. The date does not change this set.",
-        { "note": "This document describes technical controls. Whether a copy of the data counts as anonymized is a legal assessment of the whole environment — its access, its retention, what else is joined to it — and not of the profile set alone." }
+        "The law takes effect on 1 December 2026. On 31 August 2026 the Government sent the Senate a bill (Boletín 18.623-07) that would move that date to 1 December 2027; check its status. The date does not change this policy.",
+        { "note": "This document describes technical controls. Whether a copy of the data counts as anonymized is a legal assessment of the whole environment — its access, its retention, what else is joined to it — and not of the discovery policy alone." }
       ]
     }
   ],
@@ -135,7 +135,7 @@
     "CL_L1_TARJETA": {
       "title": "Payment card",
       "what": "Credit and debit card numbers, with or without spaces.",
-      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "CL_L1_IP": {
       "title": "IP address",
@@ -390,12 +390,12 @@
     "CL_L3_SOCIOEC_MONTO_DEUDA": {
       "title": "Debt amounts",
       "what": "Debt, arrears and outstanding balances.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "CL_L3_SOCIOEC_INGRESOS": {
       "title": "Income and salary",
       "what": "Salaries, taxable income, household and per capita income, assets.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "CL_L3_SOCIOEC_PREVISION_AFP": {
       "title": "Pension fund",
@@ -405,7 +405,7 @@
     "CL_L3_SOCIOEC_SALDO_PREVISIONAL": {
       "title": "Pension balances",
       "what": "Individual account balances, contributions, voluntary savings (APV) and pension amounts.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "CL_L3_SOCIOEC_VIVIENDA": {
       "title": "Housing situation",
@@ -457,13 +457,13 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication the set was checked outside a Masking Engine:",
+        "Before publication the policy was checked outside Delphix:",
         { "list": [
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 129 columns with the whole set at its assignment threshold — well named, badly named, and 21 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 129 columns with the whole policy at its assignment threshold — well named, badly named, and 21 columns that are not personal data — and again with the classifiers of the essential pack alone.",
           "The algorithms, run with the Delphix algorithm plugin, masked 184 sample values and 204 placeholders such as `S/I`, checking that each masked value comes from the right vocabulary, and 60 random RUTs for a valid check digit. Each of the 101 algorithms also masked its own sample input."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

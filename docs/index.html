@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Delphix Masking Helper — Build, test and maintain Delphix masking algorithms — on your own machine.</title>
-<meta name="description" content="Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.">
+<meta name="description" content="Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to Delphix — Data Control Tower or a Continuous Compliance Engine — without creating a Rule Set or waiting on a masking job.">
 <meta property="og:title" content="Delphix Masking Helper — Build, test and maintain Delphix masking algorithms — on your own machine.">
-<meta property="og:description" content="Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.">
+<meta property="og:description" content="Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to Delphix — Data Control Tower or a Continuous Compliance Engine — without creating a Rule Set or waiting on a masking job.">
 <meta property="og:type" content="website">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="site.css">
@@ -27,15 +27,15 @@
 <div class="hero"><div class="wrap">
   <h1>Delphix Masking Helper</h1>
   <p class="tagline">Build, test and maintain Delphix masking algorithms — on your own machine.</p>
-  <p class="lede">Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to your engine — without creating a Rule Set or waiting on a masking job.</p>
+  <p class="lede">Work out which masking framework fits your data, try it against real values, build a ready-to-use configuration and push it straight to Delphix — Data Control Tower or a Continuous Compliance Engine — without creating a Rule Set or waiting on a masking job.</p>
   <div class="cta">
     <a class="btn btn-primary" href="#install">Install it</a>
     <a class="btn btn-ghost" href="frameworks.html">Browse the frameworks</a>
     <a class="btn btn-ghost" href="https://github.com/adelbs/delphix-masking-helper">View on GitHub</a>
   </div>
   <figure class="shot">
-    <img src="demo.gif" alt="An algorithm being tested, a classifier tested against a described column, the profile sets that ship with the tool, and a connected Delphix engine" loading="lazy" width="1200">
-    <figcaption>Four things, in order: running an algorithm against a real value; testing a classifier against a column described on screen, and seeing which domain profiling would assign; the profile sets that ship with the tool; and the integration with a Delphix engine, with an algorithm that came down from it. Every masked value is real output from the plugin.</figcaption>
+    <img src="demo.gif" alt="An algorithm being tested, a classifier tested against a described column, the discovery policies that ship with the tool, and a connected Delphix instance" loading="lazy" width="1200">
+    <figcaption>Four things, in order: running an algorithm against a real value; testing a classifier against a column described on screen, and seeing which data class discovery would assign; the discovery policies that ship with the tool; and the integration with Delphix, with an algorithm that came down from it. Every masked value is real output from the plugin.</figcaption>
   </figure>
 </div></div>
 
@@ -66,7 +66,7 @@
       <div class="card">
         <span class="n">04</span>
         <h3>Sync</h3>
-        <p>Connect to a Masking Engine and mirror it here — algorithms, domains, classifiers and profile sets — or push your work up. What came from the engine is updated there, not duplicated beside it.</p>
+        <p>Connect to Data Control Tower or to a Continuous Compliance Engine and mirror it here — algorithms, data classes, classifiers and discovery policies — or push your work up. What came from Delphix is updated there, not duplicated beside it.</p>
       </div>
   </div>
 </div></section>
@@ -101,8 +101,8 @@
 </div></section>
 
 <section class="alt"><div class="wrap narrow">
-  <h2 class="sec">Connected to your engine</h2>
-  <p class="sec-lede" style="margin-bottom:0">Connect a Masking Engine and the whole of it comes down to work on: its algorithms, domains, classifiers and profile sets. Change what you need, run it against real values until it does what it should, and send it back. The engine gets an update, not a second copy — the tool remembers where everything came from, and whatever an object relies on travels with it. Anything you build from scratch goes up as new.</p>
+  <h2 class="sec">Connected to Delphix</h2>
+  <p class="sec-lede" style="margin-bottom:0">Connect Data Control Tower — or a single Continuous Compliance Engine; one or the other — and the whole of it comes down to work on: its algorithms, data classes, classifiers and discovery policies. Change what you need, run it against real values until it does what it should, and send it back. Delphix gets an update, not a second copy — the tool remembers where everything came from, and whatever an object relies on travels with it. Anything you build from scratch goes up as new.</p>
   <p class="note-line">Nothing is sent anywhere until you ask for it.</p>
 </div></section>
 
@@ -110,11 +110,11 @@
   <div class="split">
     <div>
       <h2 class="sec">Find the sensitive data before you mask it</h2>
-      <p class="sec-lede" style="margin-bottom:0">Masking starts with knowing which columns hold personal data. The tool keeps the domains, classifiers and profile sets a profiling job runs, and tests a classifier against a column you describe — its name, its type, a few sample values — showing how confident the profiler would be and which domain it would assign. Nothing runs on the engine.</p>
+      <p class="sec-lede" style="margin-bottom:0">Masking starts with knowing which columns hold personal data. The tool keeps the data classes, classifiers and discovery policies a discovery job runs, and tests a classifier against a column you describe — its name, its type, a few sample values — showing how confident discovery would be and which data class it would assign. Nothing runs on Delphix.</p>
     </div>
     <div class="card">
-      <h3>Ready-made for fourteen data protection laws</h3>
-      <p>Load one and everything it needs is created in one go: the profile set, its classifiers, the domains they find, the algorithms that mask them and the files those read — the essential pack with the minimum for the law, or the extended pack with all of it. National identifiers keep a valid check digit after masking. Every set comes with a PDF documenting each item, and unloading removes what it brought.</p>
+      <h3>Ready-made for fifteen data protection laws</h3>
+      <p>Load one and everything it needs is created in one go: the discovery policy, its classifiers, the data classes they find, the algorithms that mask them and the files those read — the essential pack with the minimum for the law, or the extended pack with all of it. National identifiers keep a valid check digit after masking. Every policy comes with a PDF documenting each item, and unloading removes what it brought.</p>
       <ul class="presets">
         <li><span class="c">Chile</span><span class="law">Ley 21.719</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/chile-ley-21719/doc.en.pdf">Documentation (PDF)</a></li>
         <li><span class="c">Mexico</span><span class="law">LFPDPPP (2025)</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/mexico-lfpdppp/doc.en.pdf">Documentation (PDF)</a></li>
@@ -130,6 +130,7 @@
         <li><span class="c">Costa Rica</span><span class="law">Ley 8968</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/costarica-ley-8968/doc.en.pdf">Documentation (PDF)</a></li>
         <li><span class="c">Spain</span><span class="law">GDPR + LOPDGDD</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/spain-lopdgdd/doc.en.pdf">Documentation (PDF)</a></li>
         <li><span class="c">Jamaica</span><span class="law">Data Protection Act, 2020</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/jamaica-dpa-2020/doc.en.pdf">Documentation (PDF)</a></li>
+        <li><span class="c">United Kingdom</span><span class="law">UK GDPR + DPA 2018</span><a href="https://github.com/adelbs/delphix-masking-helper/blob/main/presets/uk-gdpr-dpa-2018/doc.en.pdf">Documentation (PDF)</a></li>
       </ul>
     </div>
   </div>

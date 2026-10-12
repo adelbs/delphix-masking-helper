@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Belizean personal data: identity numbers and names, quasi-identifiers, the sensitive personal data of section 2 — including financial record or position and criminal proceedings — and health records.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Belizean database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
-        "Masking only names and social security numbers does not get there: a birth date, a sex and a village of a few hundred people are enough to point at one person. The set works on the layers where the risk is:",
+        "This discovery policy finds the personal data in a Belizean database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
+        "Masking only names and social security numbers does not get there: a birth date, a sex and a village of a few hundred people are enough to point at one person. The policy works on the layers where the risk is:",
         { "list": [
           "**Direct identifiers** — social security number, TIN, passport, voter ID, driver's licence, immigration permits, civil registry entries, names, contact, accounts and cards, land parcels, devices, vehicles, free text.",
           "**Quasi-identifiers** — birth date, age, sex, town or village, neighbourhood, nationality, marital status, occupation, employer, education.",
@@ -15,7 +15,7 @@
           "**Financial record or position** — credit references, debt, income, assets, pensions, social security benefits, social programmes, poverty and housing tenure. Section 2 makes them sensitive.",
           "**Criminal record and proceedings** — records, charges, outcomes and case numbers, also sensitive under section 2."
         ] },
-        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NAME`, `RESULT`, `CITY` — needs the values to agree. A column with a meaningless name (`FIELD1`, `REMARKS`) is still found when its values have a recognizable shape or vocabulary: a social security number, a Belizean phone number, a plate, a village.",
         "Column names are recognized in English, in the abbreviations of Belizean systems (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) and in Spanish, which a large part of the country speaks.",
         { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a scan of the social security card or passport: the number is still readable in the image. Report those columns as residual risk." }
@@ -25,7 +25,7 @@
       "title": "The Data Protection Act, 2021 at a glance",
       "body": [
         "The Data Protection Act, 2021 — Act No. 45 of 2021 — was assented to on 29 November 2021 and gazetted on 30 November 2021. It regulates the collection, keeping, use and dissemination of personal data and protects the privacy of individuals in relation to it.",
-        "**Commencement.** The Act comes into force on a day appointed by the Minister by Order published in the Gazette, and different days may be appointed for different provisions (s. 97). In the public sources consulted in September 2026 no commencement Order was found, and secondary sources disagree on whether and when the Act took effect. Confirm the status with the Ministry before relying on a date; the design of the set does not depend on it.",
+        "**Commencement.** The Act comes into force on a day appointed by the Minister by Order published in the Gazette, and different days may be appointed for different provisions (s. 97). In the public sources consulted in September 2026 no commencement Order was found, and secondary sources disagree on whether and when the Act took effect. Confirm the status with the Ministry before relying on a date; the design of the policy does not depend on it.",
         "What matters for a copy of production data:",
         { "list": [
           "**Personal data** is data which relates to an individual who can be identified from that data, or from that data together with other information which is in the possession of, or is likely to come into the possession of, the data controller (s. 2). Data from which no individual can be identified, even with that other information, is not personal data.",
@@ -39,9 +39,9 @@
           "**Research and statistics.** Processing only for research, statistical or historical purposes is compatible with the original purpose when results are not made available in a form which identifies data subjects (s. 36).",
           "**Supervision.** The Data Protection Commissioner, a public officer in the Ministry responsible for digital transformation and e-governance who acts independently, administers the Act (s. 68); appeals go to the Data Protection Tribunal (s. 88)."
         ] },
-        "A test environment with production data is processing for purposes the data was not collected for, and it holds sensitive data — financial and criminal data among them — outside the controls built for it. A copy from which individuals can no longer be identified is not personal data: that is what the set is for.",
-        "The list of sensitive data in section 2 is closed, but the set goes further where the risk is the same: it treats health records, gender identity and the language a person speaks — which reveals Maya, Garifuna or Mennonite origin — with the same care.",
-        { "note": "The definition of personal data counts what the controller holds or is likely to hold. Masking is deterministic for the engine key, so whoever has both the production data and the key can link a masked row back to its source. Keep the key, and access to production, away from the people who use the masked copy. Whether a copy counts as anonymised is a legal assessment of the whole environment, not of the profile set alone." }
+        "A test environment with production data is processing for purposes the data was not collected for, and it holds sensitive data — financial and criminal data among them — outside the controls built for it. A copy from which individuals can no longer be identified is not personal data: that is what the policy is for.",
+        "The list of sensitive data in section 2 is closed, but the policy goes further where the risk is the same: it treats health records, gender identity and the language a person speaks — which reveals Maya, Garifuna or Mennonite origin — with the same care.",
+        { "note": "The definition of personal data counts what the controller holds or is likely to hold. Masking is deterministic for the engine key, so whoever has both the production data and the key can link a masked row back to its source. Keep the key, and access to production, away from the people who use the masked copy. Whether a copy counts as anonymised is a legal assessment of the whole environment, not of the discovery policy alone." }
       ]
     }
   ],
@@ -67,7 +67,7 @@
     {
       "id": "HEALTH",
       "title": "Health records",
-      "intro": ["Section 2 does not list health among the sensitive data, but the Act gives health records a place of their own: a health record is information on a person's physical or mental condition made by a health care professional (s. 2), medical purposes are a condition of their own for processing sensitive data (s. 10), and a small business providing health services is never exempt (s. 3). A diagnosis, an antiretroviral or a pregnancy exposes a person at least as much as the listed categories, and the set treats them the same way."],
+      "intro": ["Section 2 does not list health among the sensitive data, but the Act gives health records a place of their own: a health record is information on a person's physical or mental condition made by a health care professional (s. 2), medical purposes are a condition of their own for processing sensitive data (s. 10), and a small business providing health services is never exempt (s. 3). A diagnosis, an antiretroviral or a pregnancy exposes a person at least as much as the listed categories, and the policy treats them the same way."],
       "domains": ["BZ_HEALTH_ID", "BZ_HEALTH_DIAGNOSIS", "BZ_HEALTH_MEDICATION", "BZ_HEALTH_CLINICAL_TEXT", "BZ_HEALTH_TEST_RESULT", "BZ_HEALTH_BLOOD_GROUP", "BZ_HEALTH_DISABILITY", "BZ_HEALTH_REPRODUCTIVE", "BZ_HEALTH_MENTAL"]
     },
     {
@@ -162,7 +162,7 @@
     "BZ_L1_PAYMENT_CARD": {
       "title": "Payment card",
       "what": "Credit, debit and prepaid card numbers.",
-      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "BZ_L1_IP_ADDRESS": {
       "title": "IP address",
@@ -362,7 +362,7 @@
     "BZ_HEALTH_CLINICAL_TEXT": {
       "title": "Clinical text",
       "what": "Progress notes, nursing notes, discharge summaries, triage notes and treatment plans.",
-      "masking": "Free Text Redaction, as for free text: identity numbers, contact details and names are redacted. The clinical content stays; if it must go too, assign the column to a suppression domain."
+      "masking": "Free Text Redaction, as for free text: identity numbers, contact details and names are redacted. The clinical content stays; if it must go too, assign the column to a suppression data class."
     },
     "BZ_HEALTH_TEST_RESULT": {
       "title": "Test result",
@@ -376,7 +376,7 @@
     },
     "BZ_HEALTH_DISABILITY": {
       "title": "Disability",
-      "what": "Disability or functional limitation, in the domains the 2022 census asks about: seeing, hearing, walking, remembering or concentrating, self-care, communicating.",
+      "what": "Disability or functional limitation, in the data classes the 2022 census asks about: seeing, hearing, walking, remembering or concentrating, self-care, communicating.",
       "masking": "Flags and codes keep their shape; the value is replaced by another from the list."
     },
     "BZ_HEALTH_REPRODUCTIVE": {
@@ -397,22 +397,22 @@
     "BZ_FIN_DEBT": {
       "title": "Debt amount",
       "what": "Loan, mortgage and card balances, amounts in arrears, credit limits, instalments.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_INCOME": {
       "title": "Salary and income",
       "what": "Salary and wages, insurable earnings, household income.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_ASSETS": {
       "title": "Assets",
       "what": "Property and land value, savings and account balances, fixed deposits, investments and credit union shares, net worth.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_PENSION": {
       "title": "Pension",
       "what": "Retirement, invalidity and survivors' pension amounts, the non-contributory pension, gratuities and provident fund balances.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "BZ_FIN_SSB_BENEFIT": {
       "title": "Social security benefit",
@@ -449,7 +449,7 @@
     {
       "title": "Where people live: towns and villages",
       "body": [
-        "With the population by city, town and village of the 2022 Population and Housing Census and the location of each place, the set knows the size, district and position of all 221 places the census counts.",
+        "With the population by city, town and village of the 2022 Population and Housing Census and the location of each place, the policy knows the size, district and position of all 221 places the census counts.",
         { "list": [
           "A **town or village** under 5,000 inhabitants becomes the nearest place of the same district with at least 5,000. Thirteen places reach that size: Belize City, San Pedro Town and Ladyville in Belize District; Belmopan, San Ignacio, Santa Elena and Benque Viejo del Carmen in Cayo; Corozal Town; Orange Walk Town and Trial Farm; Dangriga; Punta Gorda and Bella Vista in Toledo.",
           "The **district** stays: the smallest, Toledo, had 38,944 inhabitants.",
@@ -465,7 +465,7 @@
       "body": [
         { "list": [
           "**Binary columns** — scans of the social security card or passport, fingerprint images, clinical PDFs in BLOBs — cannot be masked by these algorithms. Inventory them and report them as residual risk.",
-          "**Electoral divisions stay.** The set does not mask the 31 constituencies, whose names identify few people on their own but narrow a village down in combination. Where a column holds them next to a birth date and sex, generalize it to the district.",
+          "**Electoral divisions stay.** The policy does not mask the 31 constituencies, whose names identify few people on their own but narrow a village down in combination. Where a column holds them next to a birth date and sex, generalize it to the district.",
           "**Identity numbers keep no check digit.** The social security number has no public one, and the TIN's is not published, so neither is recomputed; applications that validate a TIN check digit may reject masked values.",
           "**Company TINs are masked too.** They cannot be told apart from a person's.",
           "**Passport, permit and licence numbers** have no public format and are masked character by character.",
@@ -481,14 +481,14 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication the set was checked outside a Masking Engine:",
+        "Before publication the policy was checked outside Delphix:",
         { "list": [
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 141 columns with the whole set at its assignment threshold — well named, badly named, and 32 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 141 columns with the whole policy at its assignment threshold — well named, badly named, and 32 columns that are not personal data — and again with the classifiers of the essential pack alone.",
           "The table that generalizes towns and villages was audited for all 221 places.",
           "The algorithms, run with the Delphix algorithm plugin, masked 145 sample values and 198 placeholders such as `N/A`, checking each output against its vocabulary, and 150 social security numbers for collisions. Each of the 90 algorithms also masked its own sample input."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

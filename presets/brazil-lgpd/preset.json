@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "south-america",
+  "country": "BR",
   "name": {
     "en": "Brazil — LGPD, Lei 13.709/2018 (personal data protection)",
     "pt-BR": "Brasil — LGPD, Lei 13.709/2018 (proteção de dados pessoais)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales brasileños conforme a la LGPD: identificadores directos (CPF, CNPJ, título electoral, PIS y CNS con dígito verificador válido, RG, CNH, nombres, contacto, clave PIX), cuasi-identificadores (fecha de nacimiento, municipio, CEP), los datos personales sensibles del artículo 5, II — origen racial o étnico, religión, política, sindicato, salud, vida sexual, datos genéticos y biométricos — y datos financieros y antecedentes penales."
   },
   "profileSet": {
-    "name": "BR - LGPD - v2",
+    "name": "BR - LGPD - v3",
     "description": "LGPD - dados pessoais e sensíveis",
     "threshold": 60,
     "classifiers": [

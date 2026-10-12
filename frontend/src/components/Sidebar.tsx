@@ -10,6 +10,7 @@ import { useAlgorithms } from '@/lib/algorithms'
 import { useDomains } from '@/lib/domains'
 import { useClassifiers } from '@/lib/classifiers'
 import { useProfileSets } from '@/lib/profile-sets'
+import { useHooks } from '@/lib/hooks'
 import { useBuiltinReferences } from '@/lib/references'
 import {
   GROUP_MODES, groupAlgorithms, groupClassifiers, groupDomains, groupFrameworks, scopeOfSet,
@@ -17,16 +18,16 @@ import {
 } from '@/lib/grouping'
 import { LocaleFlags } from '@/components/LocaleFlags'
 import { useVersion } from '@/lib/version'
-import type { Algorithm, Classifier, Domain, Framework, LocalePref, ProfileSet } from '@/types'
+import type { Algorithm, Classifier, Domain, Framework, Hook, LocalePref, ProfileSet } from '@/types'
 
 /**
  * The five macro sections. Those not built yet are announced and disabled — the shape of the
  * tool is easier to read with them visible than with them missing, and a disabled row promises
  * less than one that expands into nothing.
  */
-const SECTIONS = ['frameworks', 'algorithms', 'domains', 'classifiers', 'profileSets'] as const
+const SECTIONS = ['frameworks', 'algorithms', 'domains', 'classifiers', 'profileSets', 'hooks'] as const
 type SectionId = (typeof SECTIONS)[number]
-const BUILT: SectionId[] = ['frameworks', 'algorithms', 'domains', 'classifiers', 'profileSets']
+const BUILT: SectionId[] = ['frameworks', 'algorithms', 'domains', 'classifiers', 'profileSets', 'hooks']
 
 /** Open/closed state for both levels, remembered across reloads. */
 const PREF_KEY = 'dlpx.sidebar.open'
@@ -78,6 +79,7 @@ interface Props {
   activeDomainId: number | null
   activeClassifierId: number | null
   activeProfileSetId: number | null
+  activeHookId: number | null
   onSelectFramework: (framework: Framework) => void
   onSelectAlgorithm: (algorithm: Algorithm, framework: Framework) => void
   onNewAlgorithm: () => void
@@ -87,6 +89,8 @@ interface Props {
   onNewClassifier: () => void
   onSelectProfileSet: (profileSet: ProfileSet) => void
   onNewProfileSet: () => void
+  onSelectHook: (hook: Hook) => void
+  onNewHook: () => void
   onOpenSettings: (tab?: 'profileSets') => void
   onGoHome: () => void
   localePref: LocalePref
@@ -96,9 +100,9 @@ interface Props {
 
 export function Sidebar({
   frameworks, loadError, activeClassName, activeAlgorithmId, activeDomainId, activeClassifierId,
-  activeProfileSetId,
+  activeProfileSetId, activeHookId,
   onSelectFramework, onSelectAlgorithm, onNewAlgorithm, onSelectDomain, onNewDomain, onSelectClassifier, onNewClassifier,
-  onSelectProfileSet, onNewProfileSet,
+  onSelectProfileSet, onNewProfileSet, onSelectHook, onNewHook,
   onOpenSettings, onGoHome, localePref, onLocaleChange, onClose,
 }: Props) {
   const { t } = useT()
@@ -106,6 +110,7 @@ export function Sidebar({
   const { domains } = useDomains()
   const { classifiers } = useClassifiers()
   const { profileSets } = useProfileSets()
+  const { hooks } = useHooks()
   // Which framework each plugin built-in configures. Most domains point at one of those rather
   // than at a saved algorithm, so without it three of the groupings collapse into "other".
   const builtins = useBuiltinReferences()
@@ -222,6 +227,9 @@ export function Sidebar({
   const shownDomains = filter(domains, matchDomain, d => scope!.domainNames.has(d.name))
   const shownClassifiers = filter(classifiers, matchClassifier, c => scope!.classifierIds.has(c.id))
   const shownProfileSets = filter(profileSets, matchProfileSet, s => s.id === setFilter)
+  // A hook belongs to no discovery policy, so the policy filter hides them all.
+  const matchHook = (h: Hook) => h.name.toLowerCase().includes(q) || h.description.toLowerCase().includes(q)
+  const shownHooks = setFilter !== null ? [] : q ? hooks.filter(matchHook) : hooks
 
   // A text search flattens every section: a heading you would have to open first is in the way
   // of an answer you already asked for by name. The set filter leaves the grouping alone.
@@ -298,7 +306,8 @@ export function Sidebar({
             : id === 'algorithms' ? shownAlgorithms.length
             : id === 'domains' ? shownDomains.length
             : id === 'classifiers' ? shownClassifiers.length
-            : id === 'profileSets' ? shownProfileSets.length : 0
+            : id === 'profileSets' ? shownProfileSets.length
+            : id === 'hooks' ? shownHooks.length : 0
           if (filtering && built && count === 0) return null
 
           return (
@@ -349,6 +358,12 @@ export function Sidebar({
                       onNew={onNewProfileSet}
                       extraLabel={t('profileSet.loadPreset')}
                       onExtra={() => onOpenSettings('profileSets')}
+                    />
+                  ) : id === 'hooks' && built ? (
+                    <SectionMenu
+                      title={t('hook.actions')}
+                      newLabel={t('hook.new')}
+                      onNew={onNewHook}
                     />
                   ) : null
                 }
@@ -403,6 +418,10 @@ export function Sidebar({
                 />
               )}
 
+              {isOpen && id === 'hooks' && (
+                <HookList hooks={shownHooks} activeId={activeHookId} onSelect={onSelectHook} />
+              )}
+
               {isOpen && id === 'profileSets' && (
                 <ProfileSetList
                   profileSets={shownProfileSets}
@@ -429,6 +448,27 @@ export function Sidebar({
       </div>
 
     </div>
+  )
+}
+
+/** The hooks: flat, with the shell each one runs in. */
+function HookList({ hooks, activeId, onSelect }: {
+  hooks: Hook[]
+  activeId: number | null
+  onSelect: (h: Hook) => void
+}) {
+  const { t } = useT()
+  if (hooks.length === 0) return <p className="text-slate-400 text-xs px-3 py-3">{t('hook.empty')}</p>
+  return (
+    <>{hooks.map(h => (
+      <ItemButton
+        key={h.id}
+        label={h.name}
+        hint={t(`hook.shell.${h.shell}`)}
+        active={activeId === h.id}
+        onClick={() => onSelect(h)}
+      />
+    ))}</>
   )
 }
 

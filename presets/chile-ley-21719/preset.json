@@ -1,6 +1,8 @@
 {
-  "version": 5,
-  "versionDate": "2026-10-11",
+  "version": 6,
+  "versionDate": "2026-10-12",
+  "region": "south-america",
+  "country": "CL",
   "name": {
     "en": "Chile — Law 21.719 (personal data protection)",
     "pt-BR": "Chile — Lei 21.719 (proteção de dados pessoais)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales chilenos en tres capas: identificadores directos (RUT con dígito verificador válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, comuna, edad) y las categorías sensibles del artículo 2, incluida la situación socioeconómica."
   },
   "profileSet": {
-    "name": "CL - Ley 21.719 - v5",
+    "name": "CL - Ley 21.719 - v6",
     "description": "Ley 21.719 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

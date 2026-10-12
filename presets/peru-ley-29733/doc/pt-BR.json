@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais peruanos: DNI e RUC com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 2, 5 — inclusive os rendimentos econômicos —, dados de saúde, dados financeiros e antecedentes criminais.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de uma base peruana e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
-        "Mascarar apenas nomes e DNIs não basta: uma data de nascimento, um sexo e um distrito pequeno já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        "Esta política de descoberta encontra os dados pessoais de uma base peruana e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar apenas nomes e DNIs não basta: uma data de nascimento, um sexo e um distrito pequeno já apontam para uma pessoa. A política trabalha nas camadas onde está o risco:",
         {
           "list": [
             "**Identificadores diretos** — DNI e RUC, carné de extranjería, passaporte, registro civil, números do EsSalud e das pensões, código de estudante, registro profissional, nomes, contato, endereço, contas, cartões, carteiras digitais, dispositivos, cookies, placas, imóveis, texto livre.",
@@ -17,7 +17,7 @@
             "**Antecedentes criminais** — certidões de antecedentes, situação processual e números de processo judicial ou de pasta fiscal."
           ]
         },
-        "Num Masking Engine, o set é um profile set com seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos de que estes dependem — e os arquivos de consulta que leem. Os apêndices listam cada um com a configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos de que estes dependem — e os arquivos de consulta que leem. Os apêndices listam cada um com a configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — precisa que os valores concordem. Uma coluna com nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm forma ou vocabulário reconhecíveis: um DNI, um RUC de onze dígitos, um celular de nove dígitos, um endereço com urbanização, manzana e lote, uma placa, um distrito.",
         "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas peruanos (`NUM_DOC`, `FEC_NAC`, `UBIGEO`, `RUC`, `ESSALUD`, `CODIGO_MODULAR`) e em inglês.",
         {
@@ -48,12 +48,12 @@
       "title": "Dissociação, anonimização e cópias fora de produção",
       "body": [
         "O Peru é um dos poucos países que escreve a diferença na própria lei. **Anonimização** é irreversível (art. 2, 14). **Dissociação** é o procedimento que impede a identificação, e o artigo 41.1 do regulamento de 2024 diz com todas as letras que **é reversível**.",
-        "Os algoritmos deste set são determinísticos para a chave do Masking Engine: o mesmo DNI é mascarado do mesmo jeito em toda tabela, o que mantém os joins funcionando. É essa chave que torna o procedimento reversível. A cópia mascarada está **dissociada** no sentido do artigo 41, não **anonimizada**, e segue sendo dado pessoal para quem tem a chave e a produção.",
+        "Os algoritmos desta política são determinísticos para a chave de mascaramento do Delphix: o mesmo DNI é mascarado do mesmo jeito em toda tabela, o que mantém os joins funcionando. É essa chave que torna o procedimento reversível. A cópia mascarada está **dissociada** no sentido do artigo 41, não **anonimizada**, e segue sendo dado pessoal para quem tem a chave e a produção.",
         {
           "list": [
             "Mantenha a chave do engine separada da cópia e trate quem tiver as duas como quem trata dados pessoais.",
-            "O artigo 133.7 do regulamento dispensa a mudança de finalidade quando houve procedimento de dissociação; o artigo 41.2 pede que a técnica seja adequada ao dado, ao número de titulares e ao risco. Registre qual técnica este set aplica a cada coluna — os apêndices as listam uma a uma.",
-            "Se o que você precisa é de dado anonimizado — irreversível, fora da lei —, meça o risco de reidentificação dos quase-identificadores que sobram; o artigo 2, 14 é um padrão mais alto do que este set atinge."
+            "O artigo 133.7 do regulamento dispensa a mudança de finalidade quando houve procedimento de dissociação; o artigo 41.2 pede que a técnica seja adequada ao dado, ao número de titulares e ao risco. Registre qual técnica esta política aplica a cada coluna — os apêndices as listam uma a uma.",
+            "Se o que você precisa é de dado anonimizado — irreversível, fora da lei —, meça o risco de reidentificação dos quase-identificadores que sobram; o artigo 2, 14 é um padrão mais alto do que esta política atinge."
           ]
         }
       ]
@@ -205,7 +205,7 @@
       "title": "DNI",
       "what": [
         "O número do Documento Nacional de Identidad emitido pelo RENIEC: oito dígitos, `45678901`, a chave de quase todo registro peruano. O cartão imprime ao lado um **caractere de verificação**, que os sistemas guardam colado ao número (`45678901-7`) ou em coluna própria.",
-        "O mesmo domínio recebe RUCs: uma coluna de documento costuma guardar os dois."
+        "A mesma classe de dados recebe RUCs: uma coluna de documento costuma guardar os dois."
       ],
       "masking": [
         "Dígito a dígito, com o caractere de verificação recalculado — a série de dígitos ou a de letras, conforme o valor traga. Um valor com forma de RUC é mascarado como RUC."
@@ -305,7 +305,7 @@
       "title": "Nome completo",
       "what": [
         "Prenomes e sobrenomes numa coluna só: `Juan Carlos Quispe Huamán`. Também os da mãe, do pai, do tutor, do cônjuge, do companheiro, do contato de emergência e da referência.",
-        "As listas do RENIEC escrevem `APELLIDOS, NOMBRES` com vírgula; o set também lê essa forma."
+        "As listas do RENIEC escrevem `APELLIDOS, NOMBRES` com vírgula; a política também lê essa forma."
       ],
       "masking": [
         "Na ordem peruana: duas palavras são prenome e sobrenome; três, um prenome e dois sobrenomes; quatro, dois e dois. A forma com vírgula é mascarada mantendo a vírgula."
@@ -344,7 +344,7 @@
         "O endereço com o tipo de via e o número — `Av. Arequipa 1234, Urb. Santa Patricia` —, e o `Mz. B Lt. 12` de um asentamiento humano."
       ],
       "masking": [
-        "A linha inteira é substituída por um endereço peruano fictício da mesma forma. Urbanização, centro povoado, distrito e código postal têm domínios próprios para quando estão em colunas separadas."
+        "A linha inteira é substituída por um endereço peruano fictício da mesma forma. Urbanização, centro povoado, distrito e código postal têm classes de dados próprias para quando estão em colunas separadas."
       ]
     },
     "PE_L1_DIRECCION_COMPLEMENTO": {
@@ -359,7 +359,7 @@
     "PE_L1_CUENTA_BANCARIA": {
       "title": "Conta bancária",
       "what": [
-        "Números de conta poupança, corrente, salário, CTS e de detração, e o CCI de vinte dígitos. O código do banco não é dado pessoal e não tem domínio."
+        "Números de conta poupança, corrente, salário, CTS e de detração, e o CCI de vinte dígitos. O código do banco não é dado pessoal e não tem classe de dados."
       ],
       "masking": [
         "Os dígitos são mapeados; os separadores ficam."
@@ -371,7 +371,7 @@
         "Números de cartão de crédito e débito, reconhecidos pelo algoritmo de Luhn."
       ],
       "masking": [
-        "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+        "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
       ]
     },
     "PE_L1_BILLETERA": {
@@ -857,7 +857,7 @@
         "O parecer de aptidão dos exames médicos ocupacionais (EMO), acidentes de trabalho e doenças ocupacionais, o SCTR, atestados e absenteísmo."
       ],
       "masking": [
-        "Um parecer é trocado por outro da lista — apto, não apto —; uma bandeira continua bandeira; o diagnóstico cai no domínio próprio."
+        "Um parecer é trocado por outro da lista — apto, não apto —; uma bandeira continua bandeira; o diagnóstico cai na classe de dados própria."
       ]
     },
     "PE_SALUD_REPRODUCTIVA": {
@@ -884,7 +884,7 @@
         "Salário, renda mensal ou familiar, honorários e rendas de qualquer categoria. **O artigo 2, 5 lista os rendimentos econômicos entre os dados sensíveis**: no Peru esta coluna pesa como um diagnóstico. O salário mínimo é de 1.130 soles mensais desde janeiro de 2025."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_HISTORIAL_CREDITICIO": {
@@ -902,7 +902,7 @@
         "Saldos de crédito e de carteira, valores em atraso, parcelas, montantes liberados e limites."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_PATRIMONIO": {
@@ -911,7 +911,7 @@
         "Patrimônio, ativos, avaliações e autoavaliações, saldos de conta, de CTS e de fundos, depósitos a prazo e a declaração juramentada de bens."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_PENSION": {
@@ -920,7 +920,7 @@
         "O valor da pensão, do subsídio ou do benefício, e a pensão alimentícia."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_PROGRAMA_SOCIAL": {
@@ -973,7 +973,7 @@
     {
       "title": "Os dígitos verificadores do DNI e do RUC",
       "body": [
-        "As duas regras são módulo 11, e as duas terminam onde o algoritmo Check Digit do Masking Engine não consegue segui-las sozinho.",
+        "As duas regras são módulo 11, e as duas terminam onde o algoritmo Check Digit do Delphix não consegue segui-las sozinho.",
         {
           "list": [
             "**DNI**: pesos 3, 2, 7, 6, 5, 4, 3 e 2 a partir da esquerda; onze menos o resto (zero continua zero) dá uma posição de 0 a 10, que indexa duas séries — os dígitos 6 7 8 9 0 1 1 2 3 4 5 e as letras K A B C D E F G H I J. As letras pertencem aos documentos emitidos até 14 de agosto de 2007.",
@@ -981,14 +981,14 @@
           ]
         },
         "O Check Digit escreve *módulo menos resto* e escreve dez como `0`. As duas regras concordam com ele em toda parte, exceto no único ponto em que esse zero escrito é ambíguo: ele representa ao mesmo tempo um resto 0 e um resto 1, e os dois precisam de dígitos diferentes — 6 e 5 no DNI, 1 e 0 no RUC.",
-        "O set resolve isso com um **Check Digit auxiliar cujos pesos são os reais dobrados, módulo 11**. Dobrar leva um resto 0 a 0 e um resto 1 a 2, de modo que o auxiliar escreve `0` no primeiro caso e `9` no segundo — os dois casos ficam distintos. Um **Regex Decompose** então lê o par de dígitos, escreve o verdadeiro e descarta o auxiliar. Quatro passos numa cadeia, sem tabela de consulta, e o corpo inteiro mascarado dígito a dígito antes de o dígito ser calculado.",
+        "A política resolve isso com um **Check Digit auxiliar cujos pesos são os reais dobrados, módulo 11**. Dobrar leva um resto 0 a 0 e um resto 1 a 2, de modo que o auxiliar escreve `0` no primeiro caso e `9` no segundo — os dois casos ficam distintos. Um **Regex Decompose** então lê o par de dígitos, escreve o verdadeiro e descarta o auxiliar. Quatro passos numa cadeia, sem tabela de consulta, e o corpo inteiro mascarado dígito a dígito antes de o dígito ser calculado.",
         "Como o RUC de uma pessoa natural é o número 10 seguido do DNI, e ambos mantêm esses oito dígitos sob o mesmo mapeamento, o DNI mascarado e o RUC mascarado da mesma pessoa continuam coincidindo."
       ]
     },
     {
       "title": "Onde as pessoas moram: distritos, UBIGEO e código postal",
       "body": [
-        "Com a população contada pelo censo de 2017 e a localização publicada pelo INEI, o set conhece o tamanho, a província, o departamento e a posição dos 1.892 distritos e das 196 províncias.",
+        "Com a população contada pelo censo de 2017 e a localização publicada pelo INEI, a política conhece o tamanho, a província, o departamento e a posição dos 1.892 distritos e das 196 províncias.",
         {
           "list": [
             "Um **distrito** com menos de 20.000 habitantes vira o distrito mais próximo da sua **província** com pelo menos 20.000; quando a província não tem nenhum, o mais próximo do seu departamento. São 1.633 de 1.892, com 7,4 milhões de habitantes.",
@@ -1023,17 +1023,17 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         {
           "list": [
             "A regra do DNI foi conferida contra o exemplo resolvido com que a própria rotina do RENIEC é publicada, e a do RUC contra RUCs publicados por órgãos públicos.",
-            "Cada configuração de classifier foi revisada contra o que um Masking Engine aceita.",
-            "O profiling foi simulado em 145 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 29 que não são dados pessoais — e de novo só com os classifiers do pacote essencial.",
+            "Cada configuração de classifier foi revisada contra o que o Delphix aceita.",
+            "A descoberta foi simulada em 145 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 29 que não são dados pessoais — e de novo só com os classifiers do pacote essencial.",
             "A tabela que generaliza lugares foi auditada para todos os 1.892 distritos e 196 províncias: pelo nome, pelo nome com a província e o departamento, e pelo UBIGEO.",
-            "Os algoritmos, executados com o plugin de algoritmos da Delphix, mascararam os valores de exemplo de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 150 DNIs da série de dígitos e 60 da série de letras, 200 RUCs dos quatro tipos de contribuinte para validade e colisões, e 20 pares de DNI e RUC para confirmar que continuam coincidindo. Cada algoritmo também mascarou o próprio valor de exemplo."
+            "Os algoritmos, executados com o plugin de algoritmos da Delphix, mascararam os valores de exemplo de cada classe de dados e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 150 DNIs da série de dígitos e 60 da série de letras, 200 RUCs dos quatro tipos de contribuinte para validade e colisões, e 20 pares de DNI e RUC para confirmar que continuam coincidindo. Cada algoritmo também mascarou o próprio valor de exemplo."
           ]
         },
-        "Toda coluna foi atribuída como esperado e todo valor mascarado como esperado. Antes de usar o set com dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Toda coluna foi atribuída como esperado e todo valor mascarado como esperado. Antes de usar a política com dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

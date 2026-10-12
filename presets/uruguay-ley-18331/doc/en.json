@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Uruguayan personal data: cédula de identidad and RUT with a valid check digit, the razón social of a legal person — a data subject in Uruguay —, quasi-identifiers, the sensitive data of article 4 E), health data, the commercial and credit data of article 22 and the offence data of article 18.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Uruguayan database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
-        "Masking names and cédulas alone is not enough: a birth date, a sex and a small localidad already point at one person. The set works in the layers where the risk is:",
+        "This discovery policy finds the personal data in a Uruguayan database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and cédulas alone is not enough: a birth date, a sex and a small localidad already point at one person. The policy works in the layers where the risk is:",
         {
           "list": [
             "**Direct identifiers** — cédula de identidad and RUT, foreigner documents, passport, credencial cívica, civil registry, BPS numbers, student code, professional registration, names, **razón social and nombre de fantasía**, contact, address, accounts, cards, devices, cookies, plates, property, free text.",
@@ -17,7 +17,7 @@
             "**Offences** — the data on criminal, civil or administrative offences that the final paragraph of article 18 reserves to the competent public authorities."
           ]
         },
-        "In a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a cédula written `1.234.567-2`, a twelve-digit RUT, a mobile starting 09, an address with a door number and an apartamento, a plate, a localidad.",
         "Column names are recognized in Spanish, in the abbreviations of Uruguayan systems (`CI`, `FEC_NAC`, `RUT`, `BPS`, `IUE`, `PADRON`) and in English.",
         {
@@ -34,7 +34,7 @@
           "list": [
             "**Personal data** is information of any kind about determinate or determinable **natural or legal** persons (art. 4 D). Uruguay is one of the few countries whose law makes a **company** a data subject: the razón social, the nombre de fantasía and the RUT of a legal person are personal data, and article 9 C) names them.",
             "**Sensitive data** (art. 4 E) is data that reveals racial and ethnic origin, political preferences, religious **or moral** convictions, trade union membership, and information on health or sexual life. Article 18 forbids building databases that store information which **directly or indirectly** reveals it, and allows treatment for statistical or scientific purposes only \"cuando se disocien de sus titulares\".",
-            "**Dissociation** is any processing of personal data such that the information obtained **cannot be linked to a determinate or determinable person** (art. 4 G). Article 17 D) is the clause this set is written for: the prior consent of the data subject is not needed to communicate data when \"se hubiera aplicado un procedimiento de disociación de la información, de modo que los titulares de los datos no sean identificables\".",
+            "**Dissociation** is any processing of personal data such that the information obtained **cannot be linked to a determinate or determinable person** (art. 4 G). Article 17 D) is the clause this policy is written for: the prior consent of the data subject is not needed to communicate data when \"se hubiera aplicado un procedimiento de disociación de la información, de modo que los titulares de los datos no sean identificables\".",
             "**Where dissociation appears.** Article 9-BIS D) allows a register whose publication is not of general interest to be used \"mediante técnicas de disociación u ocultamiento de los datos personales\"; article 17 C) requires \"mecanismos de disociación adecuados\" when health data travels for sanitary or epidemiological reasons; article 18 requires dissociation for statistics and science. And **article 8 a) of Decree 64/020** lists, first among the privacy-by-design measures, the \"**técnicas de disociación, seudonimización y minimización de datos**\".",
             "**Security.** Article 10 makes the controller adopt the measures needed to guarantee the security and confidentiality of the data, and forbids registering personal data in databases that do not meet technical conditions of integrity and security. Article 38 of Ley 19.670 has a breach notified to the subjects and to the URCDP **immediately**, and the URCDP coordinates with CERTuy. Articles 6 and 7 of Decree 64/020 require an impact assessment where the risk is high — among the triggers, a permanent treatment of the data of Chapter IV or of data on offences.",
             "**Biometric data.** Article 4 Ñ), added by Ley 19.924 in 2020, defines it as the datum obtained from a specific technical processing that permits or confirms the unique identification of a person; article 18-BIS allows processing it only after a **data protection impact assessment**.",
@@ -48,7 +48,7 @@
       "title": "Dissociation, pseudonymization and non-production copies",
       "body": [
         "Ley 18.331 is from 2008 and uses one word, **disociación**: processing such that the information obtained cannot be linked to a determinate or determinable person (art. 4 G). It does not define pseudonymization — but **article 8 a) of Decree 64/020**, from 2020, names the two side by side as privacy-by-design measures: \"técnicas de disociación, seudonimización y minimización de datos\".",
-        "The algorithms of this set are deterministic for the Masking Engine's key: the same cédula masks the same way in every table, which keeps joins working. Whoever holds that key and production can link the two back, so the masked copy is **pseudonymized** in the sense of the decree, not dissociated in the sense of article 4 G), and it remains personal data for them.",
+        "The algorithms of this policy are deterministic for the Delphix masking key: the same cédula masks the same way in every table, which keeps joins working. Whoever holds that key and production can link the two back, so the masked copy is **pseudonymized** in the sense of the decree, not dissociated in the sense of article 4 G), and it remains personal data for them.",
         {
           "list": [
             "Keep the engine key apart from the copy, and treat whoever holds both as processing personal data subject to the whole law.",
@@ -203,7 +203,7 @@
       "title": "Cédula de identidad",
       "what": [
         "The number of the Dirección Nacional de Identificación Civil, the key of every Uruguayan record: seven digits and a check digit, written `1.234.567-2`, and also plain.",
-        "The same domain takes RUTs: a document column often holds both."
+        "The same data class takes RUTs: a document column often holds both."
       ],
       "masking": [
         "Digit by digit, with the check digit recomputed: weights 2 9 8 7 6 3 4 from the left, modulus 10, ten minus the remainder — exactly what Check Digit computes. The dots and the hyphen stay where they are."
@@ -294,7 +294,7 @@
     "UY_L1_APELLIDO": {
       "title": "Surname",
       "what": [
-        "The surnames — the father's and the mother's —, in separate columns or together: `Rodríguez Techera`. The set carries the Uruguayan ones, Spanish, Italian, Basque and Portuguese alike, with `Da Silva` and `De León` kept whole."
+        "The surnames — the father's and the mother's —, in separate columns or together: `Rodríguez Techera`. The policy carries the Uruguayan ones, Spanish, Italian, Basque and Portuguese alike, with `Da Silva` and `De León` kept whole."
       ],
       "masking": [
         "Word by word, replacing each surname with one from the list; particles stay in place."
@@ -342,7 +342,7 @@
         "The address with the street and the door number, the apartamento and often the corner — `Av. 18 de Julio 1234 apto. 501`, `Calle Mercedes 900 esq. Río Branco`."
       ],
       "masking": [
-        "The whole line is replaced by a fictitious Uruguayan address of the same form. Barrio, localidad and postal code have domains of their own for when they live in separate columns."
+        "The whole line is replaced by a fictitious Uruguayan address of the same form. Barrio, localidad and postal code have data classes of their own for when they live in separate columns."
       ]
     },
     "UY_L1_DIRECCION_COMPLEMENTO": {
@@ -357,7 +357,7 @@
     "UY_L1_CUENTA_BANCARIA": {
       "title": "Bank account",
       "what": [
-        "Savings, current and payroll account numbers. The bank code is not personal data and has no domain."
+        "Savings, current and payroll account numbers. The bank code is not personal data and has no data class."
       ],
       "masking": [
         "Digits are mapped; separators stay."
@@ -369,7 +369,7 @@
         "Credit and debit card numbers, recognized by the Luhn algorithm."
       ],
       "masking": [
-        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+        "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "UY_L1_BILLETERA": {
@@ -522,7 +522,7 @@
         "Sex as the system records it: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` or the codes 1 and 2."
       ],
       "masking": [
-        "Replaced within its own vocabulary: `F` stays `F` or `M`, `1` stays `1` or `2`. Gender identity has its own domain among the sensitive data."
+        "Replaced within its own vocabulary: `F` stays `F` or `M`, `1` stays `1` or `2`. Gender identity has its own data class among the sensitive data."
       ]
     },
     "UY_L2_LOCALIDAD": {
@@ -681,7 +681,7 @@
     "UY_L3_AFILIACION_SINDICAL": {
       "title": "Trade union membership",
       "what": [
-        "The union, the membership, the dues deducted on the payroll and the consejo de salarios. Article 4 E) names it, and article 18 lets a union keep the data of its own members — which is exactly the database this domain protects."
+        "The union, the membership, the dues deducted on the payroll and the consejo de salarios. Article 4 E) names it, and article 18 lets a union keep the data of its own members — which is exactly the database this data class protects."
       ],
       "masking": [
         "A flag stays a flag; any other value becomes `Sin información`."
@@ -837,7 +837,7 @@
         "The **carné de salud básico** is compulsory for every worker in Uruguay, which puts a health certificate in the personnel table of almost every employer. Also occupational exams, work accidents and occupational diseases, the BSE claim, sick leave and absenteeism."
       ],
       "masking": [
-        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own domain."
+        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own data class."
       ]
     },
     "UY_SALUD_REPRODUCTIVA": {
@@ -873,7 +873,7 @@
         "Credit and portfolio balances, amounts in arrears, instalments, amounts granted and limits."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_INGRESOS": {
@@ -882,7 +882,7 @@
         "Sueldo nominal and líquido, monthly or household income, fees and rents. The national minimum wage was some 23,600 pesos a month in 2025."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_PATRIMONIO": {
@@ -891,7 +891,7 @@
         "Net worth, assets, tasaciones and the aforo catastral, account, CTS and fund balances, term deposits and the sworn declaration of assets."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_PENSION": {
@@ -900,7 +900,7 @@
         "The amount of the pasividad, the pension or the benefit, and child support. One in four Uruguayans draws one."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_PROGRAMA_SOCIAL": {
@@ -953,16 +953,16 @@
     {
       "title": "The cédula and RUT check digits",
       "body": [
-        "The **cédula de identidad** is the simple case: seven digits with the weights 2 9 8 7 6 3 4 from the left, modulus 10, and the digit is ten minus the remainder. That is exactly what the Masking Engine's Check Digit algorithm does, so one step is enough: it maps the seven digits and writes the eighth. The published worked example — 1.234.567 gives 2 — checks out, and the dots and hyphen pass through untouched because Check Digit is told to preserve them.",
+        "The **cédula de identidad** is the simple case: seven digits with the weights 2 9 8 7 6 3 4 from the left, modulus 10, and the digit is ten minus the remainder. That is exactly what Delphix's Check Digit algorithm does, so one step is enough: it maps the seven digits and writes the eighth. The published worked example — 1.234.567 gives 2 — checks out, and the dots and hyphen pass through untouched because Check Digit is told to preserve them.",
         "The **RUT** needs one more turn. Its digit is modulus 11 over the weights 4 3 2 9 8 7 6 5 4 3 2, eleven minus the remainder, written **0 when that is eleven and 1 when it is ten**. Check Digit writes *modulus minus remainder* and writes ten as `0`, so it agrees everywhere except on one remainder: with a remainder of 1 the true digit is 1 and Check Digit writes 0 — and a remainder of 0, whose true digit really is 0, produces the same written zero. The two cases are indistinguishable from the digit alone.",
-        "The set resolves it with an **auxiliary Check Digit whose weights are the real ones doubled, modulo 11**. Doubling maps a remainder of 0 to 0 and a remainder of 1 to 2, so the auxiliary writes `0` for the first and `9` for the second — the two cases are told apart. A **Regex Decompose** then reads the pair of digits, writes the true one and drops the auxiliary. Four steps in a chain, no lookup table, and the two digits of the kind of taxpayer and the three of the branch stay where they were.",
+        "The policy resolves it with an **auxiliary Check Digit whose weights are the real ones doubled, modulo 11**. Doubling maps a remainder of 0 to 0 and a remainder of 1 to 2, so the auxiliary writes `0` for the first and `9` for the second — the two cases are told apart. A **Regex Decompose** then reads the pair of digits, writes the true one and drops the auxiliary. Four steps in a chain, no lookup table, and the two digits of the kind of taxpayer and the three of the branch stay where they were.",
         "Uruguay's RUT is not derived from the cédula, so the two are masked independently — unlike Peru or Ecuador, where the taxpayer number carries the identity document inside it."
       ]
     },
     {
       "title": "Where people live: localidades, INE code and postal code",
       "body": [
-        "With the population the 2023 census counted and a location for each place, the set knows the size, departamento and position of the 652 localidades censales and the 19 departamentos.",
+        "With the population the 2023 census counted and a location for each place, the policy knows the size, departamento and position of the 652 localidades censales and the 19 departamentos.",
         {
           "list": [
             "A **localidad** with fewer than 20,000 inhabitants becomes the nearest localidad of at least 20,000 **in the same departamento**. There are 624 of them, with 873,000 inhabitants — a quarter of the country.",
@@ -982,8 +982,8 @@
           "list": [
             "**Binary columns** — cédula photos, fingerprints, validation selfies, clinical PDFs in BLOBs — cannot be masked by these algorithms. Inventory them and report them as residual risk.",
             "**The location of 186 of the 652 localidades is approximate**: it is the centre of the localidades of their departamento for which one was found. Because seventeen departamentos have a single target, this changes the outcome for only 84 small localidades, all in Canelones, Maldonado and San José — and the guarantee of at least 20,000 inhabitants in the same departamento holds in every case.",
-            "**The INE publishes the localidad names in capitals without their accents.** The set restores them with a dictionary and writes both spellings into the tables, but a name it could not restore comes out unaccented.",
-            "**A localidad whose name is also a departamento is not generalized**, so that a departamento column is never rewritten. Every localidad in that position is above the threshold, so nothing escapes — but if your data uses a departamento name for a smaller place, give that column a domain of its own.",
+            "**The INE publishes the localidad names in capitals without their accents.** The policy restores them with a dictionary and writes both spellings into the tables, but a name it could not restore comes out unaccented.",
+            "**A localidad whose name is also a departamento is not generalized**, so that a departamento column is never rewritten. Every localidad in that position is above the threshold, so nothing escapes — but if your data uses a departamento name for a smaller place, give that column a data class of its own.",
             "**Data Cleansing leaves unknown values as they are**: a localidad spelled in a way that is not in the table — abbreviated, misspelled — passes unchanged.",
             "**Free text** is redacted word by word: a phone written with spaces inside a sentence may not be found, and a name that is also a common word (`Rosa`, `Cruz`, `Flores`) is redacted wherever it appears.",
             "**Children and adolescents**: a birth date moves at most 60 days, so few people cross their 18th birthday — but some do. Where that line matters, split the rule by age group with Multi-Column Condition.",
@@ -997,17 +997,17 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication, the set was checked outside a Masking Engine:",
+        "Before publication, the policy was checked outside Delphix:",
         {
           "list": [
             "The cédula rule was checked against the published worked example, and the RUT rule against the published worked example of a real RUT — Antel's 21-100342-001-7.",
-            "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-            "Profiling was simulated on 144 columns with the whole set at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
+            "Every classifier configuration was reviewed against what Delphix accepts.",
+            "Discovery was simulated on 144 columns with the whole policy at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
             "The table that generalizes places was audited for all 652 localidades and 19 departamentos: by name, by name with the departamento, and by INE code, checking that no code leaves its departamento.",
-            "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 cédulas for validity, distinctness and the dots and hyphen they keep, and 200 RUTs for validity, distinctness and the kind of taxpayer and branch they keep. Every algorithm also masked its own sample value."
+            "The algorithms, run with the Delphix algorithm plugin, masked each data class's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 cédulas for validity, distinctness and the dots and hyphen they keep, and 200 RUTs for validity, distinctness and the kind of taxpayer and branch they keep. Every algorithm also masked its own sample value."
           ]
         },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

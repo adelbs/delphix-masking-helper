@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais da Jamaica: o TRN e os outros números de identificação, nomes e contato, quase-identificadores, os dados pessoais sensíveis da seção 2 — entre eles dados biométricos, filiação, crenças, saúde, vida sexual e infrações — e dados financeiros.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais num banco de dados jamaicano e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
-        "Mascarar só nomes e TRNs não basta: uma data de nascimento, um sexo e uma cidade de poucos milhares de habitantes chegam a apontar uma pessoa. O set trabalha nas camadas em que o risco está:",
+        "Esta política de descoberta encontra os dados pessoais num banco de dados jamaicano e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
+        "Mascarar só nomes e TRNs não basta: uma data de nascimento, um sexo e uma cidade de poucos milhares de habitantes chegam a apontar uma pessoa. A política trabalha nas camadas em que o risco está:",
         {
           "list": [
             "**Identificadores diretos** — TRN, número do NIS, passaporte, título de eleitor, carteira de motorista, documentos de imigração, registros civis, nomes, contato, contas e cartões, títulos de terra, dispositivos, veículos, texto livre.",
@@ -17,7 +17,7 @@
             "**Infrações e processos** — antecedentes, acusações, desfechos e números de processo: a seção 2 torna sensível a prática alegada de uma infração, não só a condenação."
           ]
         },
-        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa. Alguns domínios usam algoritmos que vêm com o Masking Engine — CM Numeric, Credit Card, BloodType SL — e esses são citados, mas não incluídos.",
+        "No Data Control Tower, a política é uma política de descoberta com os seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa. Algumas classes de dados usam algoritmos que vêm com o Delphix — CM Numeric, Credit Card, BloodType SL — e esses são citados, mas não incluídos.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NAME`, `RESULT`, `CITY` — precisa que os valores concordem. Uma coluna de nome sem sentido (`FIELD1`, `PFNOM`, `REMARKS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um TRN, um telefone 876, uma placa, uma cidade, um nome completo.",
         "Os nomes de coluna são reconhecidos em inglês e nas abreviações dos sistemas jamaicanos (`TRN`, `NIS_NO`, `NIN`, `NHF_CARD_NO`, `NHT_NUMBER`, `DOB`).",
         {
@@ -47,9 +47,9 @@
           ]
         },
         "Um ambiente de teste com dados de produção é tratamento para finalidades para as quais os dados não foram coletados, por pessoas que não precisam vê-los, e guarda dados sensíveis — biométricos, de saúde e criminais entre eles — fora dos controles feitos para eles. O mascaramento é a pseudonimização que o sétimo padrão nomeia: o que vai para o ambiente de teste não identifica mais ninguém sem a chave, e usar meios para quebrá-la é uma infração própria.",
-        "A lista de dados sensíveis da seção 2 é fechada, mas o set vai além onde o risco é o mesmo: trata a identidade de gênero com o mesmo cuidado que a vida sexual, e mascara os dados financeiros, que bancos e birôs de crédito têm de manter sigilosos por outras leis.",
+        "A lista de dados sensíveis da seção 2 é fechada, mas a política vai além onde o risco é o mesmo: trata a identidade de gênero com o mesmo cuidado que a vida sexual, e mascara os dados financeiros, que bancos e birôs de crédito têm de manter sigilosos por outras leis.",
         {
-          "note": "A definição de dado pessoal conta o que o controlador tem ou provavelmente terá. O mascaramento é determinístico para a chave do engine, então quem tem ao mesmo tempo os dados de produção e a chave consegue ligar uma linha mascarada à sua origem. Mantenha a chave, e o acesso à produção, longe de quem usa a cópia mascarada. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro, não só do profile set."
+          "note": "A definição de dado pessoal conta o que o controlador tem ou provavelmente terá. O mascaramento é determinístico para a chave do engine, então quem tem ao mesmo tempo os dados de produção e a chave consegue ligar uma linha mascarada à sua origem. Mantenha a chave, e o acesso à produção, longe de quem usa a cópia mascarada. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro, não só da política de descoberta."
         }
       ]
     }
@@ -117,7 +117,7 @@
       "id": "L3",
       "title": "Dados pessoais sensíveis",
       "intro": [
-        "As categorias da seção 2 que não são saúde nem infrações — que têm grupos próprios: dados genéticos e biométricos, filiação, origem racial ou étnica, opiniões políticas, crenças religiosas, filosóficas e semelhantes, filiação sindical e vida sexual — e, além da lista, identidade de gênero. A definição jamaicana de dado biométrico é incomumente ampla: além de impressões e leituras, ela nomeia a fotografia, a altura, a cor dos olhos e o tipo sanguíneo, por isso o set dá à altura e à cor dos olhos domínios próprios. Colunas categóricas mantêm a forma: um indicador sim/não continua indicador, um código numérico ganha outros dígitos e qualquer outro valor é trocado por um da lista da sua categoria. Onde os valores não têm vocabulário comum, são suprimidos para `Not stated`."
+        "As categorias da seção 2 que não são saúde nem infrações — que têm grupos próprios: dados genéticos e biométricos, filiação, origem racial ou étnica, opiniões políticas, crenças religiosas, filosóficas e semelhantes, filiação sindical e vida sexual — e, além da lista, identidade de gênero. A definição jamaicana de dado biométrico é incomumente ampla: além de impressões e leituras, ela nomeia a fotografia, a altura, a cor dos olhos e o tipo sanguíneo, por isso a política dá à altura e à cor dos olhos classes de dados próprias. Colunas categóricas mantêm a forma: um indicador sim/não continua indicador, um código numérico ganha outros dígitos e qualquer outro valor é trocado por um da lista da sua categoria. Onde os valores não têm vocabulário comum, são suprimidos para `Not stated`."
       ],
       "domains": [
         "JM_L3_GENETIC",
@@ -263,7 +263,7 @@
     "JM_L1_PAYMENT_CARD": {
       "title": "Cartão de pagamento",
       "what": "Números de cartões de crédito, débito e pré-pagos.",
-      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "JM_L1_IP_ADDRESS": {
       "title": "Endereço IP",
@@ -483,7 +483,7 @@
     "JM_HEALTH_BLOOD_GROUP": {
       "title": "Grupo sanguíneo",
       "what": "Grupo ABO e fator Rh — dado de saúde, e dado biométrico pelo nome na seção 2.",
-      "masking": "BloodType SL, que vem com o Masking Engine: trocado por outro dos oito grupos."
+      "masking": "BloodType SL, que vem com o Delphix: trocado por outro dos oito grupos."
     },
     "JM_HEALTH_DISABILITY": {
       "title": "Deficiência",
@@ -508,22 +508,22 @@
     "JM_FIN_DEBT": {
       "title": "Valor de dívida",
       "what": "Saldos de empréstimos, hipotecas e cartões, valores em atraso, limites de crédito, parcelas.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "JM_FIN_INCOME": {
       "title": "Renda",
       "what": "Salário, remuneração, proventos, salário de contribuição, renda do domicílio.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "JM_FIN_ASSETS": {
       "title": "Patrimônio",
       "what": "Valores de imóveis e terrenos, saldos de poupança e depósitos, investimentos, fundos, patrimônio líquido.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "JM_FIN_PENSION": {
       "title": "Valor de pensão",
       "what": "Pensões do NIS, aposentadorias complementares e superannuation, pensões por morte e por invalidez, gratificações.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "JM_FIN_NIS_BENEFIT": {
       "title": "Benefício do NIS",
@@ -560,7 +560,7 @@
     {
       "title": "Onde as pessoas moram: cidades",
       "body": [
-        "Com as cidades do Population and Housing Census de 2022 e as suas populações, o set conhece o tamanho e a paróquia de todas as 140 cidades da lista do censo.",
+        "Com as cidades do Population and Housing Census de 2022 e as suas populações, a política conhece o tamanho e a paróquia de todas as 140 cidades da lista do censo.",
         {
           "list": [
             "Uma **cidade** com menos de 10.000 habitantes vira a **capital da sua paróquia**: Kingston; Half Way Tree para St. Andrew; Spanish Town; May Pen; Mandeville; Black River; Savanna-la-Mar; Lucea; Montego Bay; Falmouth; St. Ann's Bay; Port Maria; Port Antonio; Morant Bay. 111 das 140 cidades são generalizadas.",
@@ -596,16 +596,16 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         {
           "list": [
-            "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-            "O profiling foi simulado em 157 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas, oito com os nomes curtos de sistemas de pacote e 33 colunas que não são dado pessoal —, de novo em 148 delas completadas com espaços ou zeros, e de novo só com os classifiers do pacote essencial.",
+            "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+            "A descoberta foi simulada em 157 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas, oito com os nomes curtos de sistemas de pacote e 33 colunas que não são dado pessoal —, de novo em 148 delas completadas com espaços ou zeros, e de novo só com os classifiers do pacote essencial.",
             "A tabela que generaliza cidades foi auditada para as 140 cidades.",
             "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 153 valores de amostra e 204 marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; os mesmos valores de novo completados com espaços ou zeros (314), que tinham de sair como o valor sem preenchimento; 150 TRNs quanto a colisões, e vinte TRNs como números de carteira de motorista, que tinham de sair iguais. Cada um dos 83 algoritmos também mascarou o seu próprio valor de exemplo."
           ]
         },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

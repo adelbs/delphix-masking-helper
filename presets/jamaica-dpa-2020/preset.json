@@ -1,6 +1,8 @@
 {
-  "version": 1,
-  "versionDate": "2026-10-11",
+  "version": 2,
+  "versionDate": "2026-10-12",
+  "region": "caribbean",
+  "country": "JM",
   "name": {
     "en": "Jamaica — Data Protection Act, 2020 (personal data protection)",
     "pt-BR": "Jamaica — Data Protection Act, 2020 (proteção de dados pessoais)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales de Jamaica conforme a la Data Protection Act, 2020: identificadores directos (TRN, número del NIS, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, ciudad, barrio), los datos personales sensibles de la sección 2 — datos genéticos y biométricos, filiación, origen étnico, creencias, opiniones políticas, afiliación sindical, salud, vida sexual e infracciones — y datos financieros."
   },
   "profileSet": {
-    "name": "JM - Data Protection Act 2020 - v1",
+    "name": "JM - Data Protection Act 2020 - v2",
     "description": "Data Protection Act 2020 - personal data",
     "threshold": 60,
     "classifiers": [

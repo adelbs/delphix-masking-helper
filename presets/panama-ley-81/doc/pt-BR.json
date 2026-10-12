@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais panamenhos: cédula e RUC com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 4, dados econômicos e de crédito e antecedentes criminais.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de um banco de dados panamenho e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
-        "Mascarar só nomes e cédulas não chega lá: uma data de nascimento, um sexo e um corregimento pequeno bastam para apontar uma pessoa. O set trabalha nas mesmas camadas em que o risco está:",
+        "Esta política de descoberta encontra os dados pessoais de um banco de dados panamenho e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
+        "Mascarar só nomes e cédulas não chega lá: uma data de nascimento, um sexo e um corregimento pequeno bastam para apontar uma pessoa. A política trabalha nas mesmas camadas em que o risco está:",
         { "list": [
           "**Identificadores diretos** — cédula, RUC e seu DV, nomes, contato, contas e cartões, passaporte e documentos migratórios, idoneidad, imóveis, dispositivos, veículos, texto livre.",
           "**Quase-identificadores** — data de nascimento, idade, sexo, distrito, corregimento, barriada, código postal, ocupação, empregador, escolaridade.",
@@ -14,7 +14,7 @@
           "**Dados econômicos e de crédito** — referências da APC, dívidas, salário, patrimônio, pensão, cobertura da seguridade social, programas sociais, pobreza, posse da moradia.",
           "**Antecedentes criminais** — récord policivo e números de processo."
         ] },
-        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com os seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: uma cédula, um RUC com DV, uma placa, um corregimento.",
         "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas panamenhos (`NUM_CEDULA`, `CIP`, `FEC_NAC`, `COD_CORREG`, `NIS`), nos campos da fatura eletrônica (`dRuc`, `dDV`) e em inglês.",
         { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da cédula: o número continua legível na imagem. Reporte essas colunas como risco residual." }
@@ -36,9 +36,9 @@
           "**Segurança.** Medidas técnicas e organizacionais proporcionais, em especial para dados sensíveis (art. 2, 5; Decreto 285, art. 36). Uma violação de segurança é notificada à ANTAI e aos titulares afetados em até setenta e duas horas (Decreto 285, art. 37).",
           "**Sanções.** Multas de mil a dez mil balboas fixadas pela ANTAI (art. 36). Não observar as regras sobre dados sensíveis é infração muito grave, que pode levar ao fechamento dos registros da base de dados ou à suspensão da atividade de tratamento (arts. 41 e 43)."
         ] },
-        "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o titular não autorizou, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia efetivamente anonimizada fica, pelo artigo 3, fora do âmbito da lei: é para isso que o set serve.",
-        "A lista de dados sensíveis é enunciativa. O set também trata como sensíveis a identidade de gênero e a vida sexual, que expõem as pessoas a discriminação da mesma forma. Há propostas de reforma da lei em discussão, entre elas multas maiores; este documento segue o texto vigente em setembro de 2026.",
-        { "note": "Este documento descreve controles técnicos. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não do profile set sozinho." }
+        "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o titular não autorizou, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia efetivamente anonimizada fica, pelo artigo 3, fora do âmbito da lei: é para isso que a política serve.",
+        "A lista de dados sensíveis é enunciativa. A política também trata como sensíveis a identidade de gênero e a vida sexual, que expõem as pessoas a discriminação da mesma forma. Há propostas de reforma da lei em discussão, entre elas multas maiores; este documento segue o texto vigente em setembro de 2026.",
+        { "note": "Este documento descreve controles técnicos. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não da política de descoberta sozinho." }
       ]
     }
   ],
@@ -83,7 +83,7 @@
     "PA_L1_RUC": {
       "title": "RUC",
       "what": "O Registro Único de Contribuyentes da DGI. O de uma pessoa natural é a cédula, com um dígito verificador de dois algarismos ao lado: `8-442-445 DV 08`. O de uma pessoa jurídica é o número do Registro Público: `155596713-2-2015 DV 59`. Uma mesma coluna costuma misturar os dois.",
-      "masking": "O RUC de pessoa natural é mascarado como a cédula e o DV é recalculado, então todo RUC mascarado passa na validação da DGI. São reconhecidos os separadores ` DV `, ` DV`, `-` e o espaço. O RUC de pessoa jurídica fica como está: não é dado pessoal pelo artigo 4, e mantê-lo preserva os cruzamentos com cadastros de fornecedores. Ver *O DV do RUC, calculado pelo set*."
+      "masking": "O RUC de pessoa natural é mascarado como a cédula e o DV é recalculado, então todo RUC mascarado passa na validação da DGI. São reconhecidos os separadores ` DV `, ` DV`, `-` e o espaço. O RUC de pessoa jurídica fica como está: não é dado pessoal pelo artigo 4, e mantê-lo preserva os cruzamentos com cadastros de fornecedores. Ver *O DV do RUC, calculado pela política*."
     },
     "PA_L1_RUC_DV": {
       "title": "DV em coluna própria",
@@ -97,7 +97,7 @@
     },
     "PA_L1_DOCUMENTO_MIGRATORIO": {
       "title": "Documento migratório",
-      "what": "Carné de residente, permissões de residência e de trabalho, vistos e números de identificação estrangeiros. A cédula `E` do residente permanente está no domínio de cédula.",
+      "what": "Carné de residente, permissões de residência e de trabalho, vistos e números de identificação estrangeiros. A cédula `E` do residente permanente está na classe de dados de cédula.",
       "masking": "Caractere a caractere, mantendo tamanho e formato."
     },
     "PA_L1_SEGURO_SOCIAL": {
@@ -153,7 +153,7 @@
     "PA_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": "Números de cartão de crédito, débito e pré-pago, inclusive a Tarjeta Clave Social com que o MIDES paga seus programas.",
-      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "PA_L1_IP": {
       "title": "Endereço IP",
@@ -323,7 +323,7 @@
     "PA_L3_SALUD_TEXTO_CLINICO": {
       "title": "Texto clínico",
       "what": "Notas de evolução, anamnese, epicrise e resumos clínicos.",
-      "masking": "Free Text Redaction, como o texto livre: cédulas, contatos e nomes são redigidos. O conteúdo clínico fica; se também precisar sumir, atribua a coluna a um domínio de supressão."
+      "masking": "Free Text Redaction, como o texto livre: cédulas, contatos e nomes são redigidos. O conteúdo clínico fica; se também precisar sumir, atribua a coluna a uma classe de dados de supressão."
     },
     "PA_L3_SALUD_RESULTADO_EXAMEN": {
       "title": "Resultado de exame",
@@ -408,22 +408,22 @@
     "PA_FIN_MONTO_DEUDA": {
       "title": "Valor de dívida",
       "what": "Saldos de empréstimos, cartões e hipotecas, valores em atraso, limites de crédito, parcelas.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_INGRESO_MENSUAL": {
       "title": "Salário e renda",
       "what": "Salário, décimo terceiro, renda do domicílio.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": "Valor cadastral ou de mercado de imóveis e veículos, poupança, aplicações a prazo, patrimônio.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_PENSION": {
       "title": "Pensão e conta individual",
       "what": "Valor de aposentadoria ou pensão da CSS, saldo da conta individual, do SIACAP ou do fundo de cesantía.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "PA_FIN_SEGURO_SOCIAL": {
       "title": "Cobertura da seguridade social",
@@ -458,23 +458,23 @@
   },
   "closing": [
     {
-      "title": "O DV do RUC, calculado pelo set",
+      "title": "O DV do RUC, calculado pela política",
       "body": [
         "O DV de um RUC de pessoa natural são dois dígitos que a DGI calcula sobre uma tabela de 21 posições: os campos da cédula alinhados à direita em larguras fixas — asiento 5, tomo 3, um código de dois dígitos para as letras (`AV` 15, `PI` 79, `E` 50, `N` 40, `PE` 75), província 2 — e um 5 constante. Os pesos crescem a partir de 2 na direita, módulo 11, e resto 0 ou 1 dá 0; o segundo dígito repete a conta com o primeiro acrescentado. Um campo maior que a sua largura empurra os que estão à esquerda, e uma província de um dígito com `AV` ou `PI` é preenchida com dois zeros.",
-        "Nenhum framework do plugin faz essa conta: o Check Digit sabe somar dígitos com pesos, mas não preencher campos nem pesar letras. O set faz com tabelas:",
+        "Nenhum framework do plugin faz essa conta: o Check Digit sabe somar dígitos com pesos, mas não preencher campos nem pesar letras. A política faz com tabelas:",
         { "list": [
-          "A cédula é mascarada com o mesmo algoritmo do domínio de cédula. Letras e separadores são trocados por marcadores de um caractere, e o DV antigo é substituído por um estado inicial.",
+          "A cédula é mascarada com o mesmo algoritmo da classe de dados de cédula. Letras e separadores são trocados por marcadores de um caractere, e o DV antigo é substituído por um estado inicial.",
           "O estado — soma ponderada, soma dos dígitos e posição — percorre o valor da direita para a esquerda, um caractere por passo. Cada passo é um Data Cleansing que transforma *caractere + estado* em *novo estado + caractere*.",
           "Na ponta esquerda, uma tabela transforma o estado nos dois dígitos do DV, e um segundo percurso os leva de volta ao lugar do DV antigo.",
           "Os marcadores voltam a ser letras e separadores."
         ] },
-        "As tabelas são arquivos de Data Cleansing gerados com o set, e os passos são algoritmos Regex Decompose unidos em String Algorithm Chains de no máximo oito — o limite do engine. Todo RUC mascarado tem DV válido e o mapeamento continua um-para-um. O preço é uma árvore de algoritmos longa sob o domínio e uma tabela de passos com mais de 30.000 linhas."
+        "As tabelas são arquivos de Data Cleansing gerados com a política, e os passos são algoritmos Regex Decompose unidos em String Algorithm Chains de no máximo oito — o limite do engine. Todo RUC mascarado tem DV válido e o mapeamento continua um-para-um. O preço é uma árvore de algoritmos longa sob a classe de dados e uma tabela de passos com mais de 30.000 linhas."
       ]
     },
     {
       "title": "Onde as pessoas moram: distritos e corregimentos",
       "body": [
-        "Com os dados do XII Censo de População de 2023 (INEC), o set conhece a população, o distrito, a província e a localização de cada um dos 699 corregimentos.",
+        "Com os dados do XII Censo de População de 2023 (INEC), a política conhece a população, o distrito, a província e a localização de cada um dos 699 corregimentos.",
         { "list": [
           "Um **corregimento** com menos de 10.000 habitantes passa ao corregimento mais próximo da sua província ou comarca que tenha pelo menos 10.000. Darién, Los Santos e as comarcas Emberá-Wounaan e Ngäbe-Buglé não têm nenhum: os delas vão para o mais próximo do país.",
           "Um **distrito** com menos de 20.000 habitantes passa ao distrito mais próximo da sua província ou comarca com pelo menos 20.000, ou do país na comarca Emberá-Wounaan.",
@@ -504,14 +504,14 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         { "list": [
           "Primeiro, o cálculo do DV do RUC foi conferido contra os exemplos do algoritmo publicado.",
-          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 138 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 24 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+          "A descoberta foi simulada em 138 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 24 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 255 valores de amostra e 210 placeholders como `N/D`: RUCs com DV nos quatro separadores e nos cinco tipos de letra, conferindo o DV de cada um; 150 cédulas e 150 RUCs quanto a colisões; e 20 pessoas cuja cédula e RUC precisam continuar coincidindo."
         ] },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

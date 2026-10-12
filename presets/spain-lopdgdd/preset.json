@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "europe",
+  "country": "ES",
   "name": {
     "en": "Spain — GDPR and Ley Orgánica 3/2018 (LOPDGDD)",
     "pt-BR": "Espanha — RGPD e Ley Orgánica 3/2018 (LOPDGDD)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales españoles conforme al Reglamento General de Protección de Datos y a la Ley Orgánica 3/2018 (LOPDGDD): identificadores directos (DNI y NIE con letra válida, número de la Seguridad Social, IBAN y CCC, la referencia catastral y el CUPS con caracteres de control válidos, nombres, contacto, dirección, matrículas), cuasi-identificadores (fecha de nacimiento, municipio, código INE y código postal generalizados por debajo de 20.000 habitantes, nacionalidad y situación administrativa), las categorías especiales del artículo 9 — para las que el artículo 9.1 de la LOPDGDD dice que el solo consentimiento no basta —, datos de salud, información crediticia y los datos tributarios que el artículo 95 de la Ley General Tributaria declara reservados, y antecedentes penales, certificados de delitos sexuales y sanciones administrativas."
   },
   "profileSet": {
-    "name": "ES - LOPDGDD - v2",
+    "name": "ES - LOPDGDD - v3",
     "description": "RGPD y LOPDGDD - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

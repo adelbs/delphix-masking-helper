@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw, CheckCircle2,
-  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers, ChevronDown,
+  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers, ChevronDown, Search, Globe2, PackageOpen,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { api } from '@/lib/api'
+import { api, type DelphixTarget } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/i18n'
 import { useVersion } from '@/lib/version'
 import { refreshAfterImport } from '@/lib/engine-sync'
 import { ImportProgressBar } from '@/components/ImportProgressBar'
 import { startSync, useSyncJob } from '@/lib/sync-job'
-import type { AiStatus, Locale, PresetConflict, PresetPack, ProfileSetPreset, ServerFile } from '@/types'
+import { PRESET_REGIONS } from '@/types'
+import type { AiStatus, Locale, PresetConflict, PresetPack, PresetRegion, ProfileSetPreset, ServerFile } from '@/types'
 
 interface Props {
   filesDir: string
@@ -384,6 +385,9 @@ function PresetsTab() {
   const [presets, setPresets] = useState<ProfileSetPreset[] | null>(null)
   const [failed, setFailed] = useState(false)
   const [busy, setBusy] = useState<{ id: string; unloading: boolean } | null>(null)
+  const [query, setQuery] = useState('')
+  const [region, setRegion] = useState<PresetRegion | 'other' | 'all'>('all')
+  const [onlyLoaded, setOnlyLoaded] = useState(false)
 
   useEffect(() => {
     api.getPresets().then(setPresets).catch(() => { setFailed(true); setPresets([]) })
@@ -447,113 +451,231 @@ function PresetsTab() {
     }
   }
 
+  const renderPreset = (preset: ProfileSetPreset) => {
+    const summary = text(preset.summary)
+    const blocked = preset.problems.length > 0
+    const working = busy?.id === preset.id
+    return (
+      <li key={preset.id} className="flex items-start gap-3 px-4 py-3.5">
+        <CountryMark country={preset.country} />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-semibold text-slate-800">{text(preset.name)}</p>
+          {summary && <p className="text-xs text-slate-500 mt-0.5">{summary}</p>}
+          <p className="text-xs text-slate-400 mt-1">
+            {t('presets.counts', {
+              version: preset.version ?? '—',
+              date: formatVersionDate(preset.versionDate, locale),
+              classifiers: preset.packs.extended.classifiers,
+              domains: preset.packs.extended.domains,
+              algorithms: preset.packs.extended.algorithms,
+            })}
+          </p>
+          {preset.loaded && (
+            <p className="flex items-center gap-1 text-xs text-emerald-700 mt-1">
+              <CheckCircle2 size={12} />
+              {t('presets.loadedAt', {
+                pack: packName(preset.loaded.pack),
+                date: formatLoadedAt(preset.loaded.loaded_at, locale),
+              })}
+            </p>
+          )}
+          {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
+            <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version, date: formatVersionDate(preset.versionDate, locale) })}</p>
+          )}
+          {blocked && (
+            <div className="mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              <p className="font-medium">{t('presets.invalid')}</p>
+              <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                {preset.problems.map((problem, i) => <li key={i}>{problem}</li>)}
+              </ul>
+            </div>
+          )}
+
+        {/* Below the text rather than beside it: three buttons beside it left the text a sliver. */}
+        <div className="flex flex-wrap items-center gap-2 mt-3">
+          {preset.docs.length > 0 ? (
+            <a
+              href={api.presetDocUrl(preset.id, locale)}
+              download
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors"
+            >
+              <FileDown size={13} /> {t('presets.doc')}
+            </a>
+          ) : (
+            <span
+              title={t('presets.noDoc')}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 border border-slate-100 rounded-lg cursor-not-allowed"
+            >
+              <FileDown size={13} /> {t('presets.doc')}
+            </span>
+          )}
+          {blocked ? (
+            <span
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 border border-slate-100 rounded-lg cursor-not-allowed"
+            >
+              <PackageOpen size={13} /> {t('presets.bundle')}
+            </span>
+          ) : (
+            <a
+              href={api.presetBundleUrl(preset.id)}
+              download
+              title={t('presets.bundleHint')}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors"
+            >
+              <PackageOpen size={13} /> {t('presets.bundle')}
+            </a>
+          )}
+          <PackMenu
+            preset={preset}
+            disabled={blocked || busy !== null}
+            onPick={pack => load(preset, pack)}
+            className={cn(
+              'flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-60',
+              preset.loaded
+                ? 'text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100'
+                : 'text-white bg-blue-600 hover:bg-blue-700'
+            )}
+          >
+            {working && !busy.unloading ? <Loader2 size={13} className="animate-spin" /> : preset.loaded ? <RotateCcw size={13} /> : <Download size={13} />}
+            {working && !busy.unloading ? t('presets.working') : preset.loaded ? t('presets.reset') : t('presets.load')}
+          </PackMenu>
+          {preset.loaded && (
+            <button
+              onClick={() => unload(preset)}
+              disabled={busy !== null}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-700 bg-white hover:bg-red-50 border border-red-200 rounded-lg transition-colors disabled:opacity-60"
+            >
+              {working && busy.unloading ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+              {working && busy.unloading ? t('presets.unloading') : t('presets.unload')}
+            </button>
+          )}
+        </div>
+        </div>
+      </li>
+    )
+  }
+
+  // Fifteen policies and counting: grouped by where the law applies, and narrowed by what is typed —
+  // a country, a law, its number — and by whether it is loaded here.
+  const fold = (value: string) => value.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
+  const words = fold(query).split(/\s+/).filter(Boolean)
+  const regionOf = (preset: ProfileSetPreset): PresetRegion | 'other' => preset.region ?? 'other'
+  const matches = (preset: ProfileSetPreset) => {
+    if (onlyLoaded && !preset.loaded) return false
+    if (region !== 'all' && regionOf(preset) !== region) return false
+    if (!words.length) return true
+    const hay = fold([
+      ...Object.values(preset.name), ...Object.values(preset.summary), preset.profileSet.name,
+      preset.country ?? '', t(`presets.region.${regionOf(preset)}`), preset.id,
+    ].join(' '))
+    return words.every(w => hay.includes(w))
+  }
+  const regionOrder: Array<PresetRegion | 'other'> = [...PRESET_REGIONS, 'other']
+  const present = regionOrder.filter(r => (presets ?? []).some(p => regionOf(p) === r))
+  const shown = (presets ?? []).filter(matches)
+  const groups = present
+    .map(r => ({
+      region: r,
+      items: shown.filter(p => regionOf(p) === r)
+        .sort((a, b) => text(a.name).localeCompare(text(b.name), locale)),
+    }))
+    .filter(g => g.items.length > 0)
+  const filtering = words.length > 0 || region !== 'all' || onlyLoaded
+
   return (
     <div className="max-w-2xl space-y-4">
       <p className="text-sm text-slate-500">{t('presets.intro')}</p>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        {presets === null ? (
-          <div className="flex items-center gap-2 p-4 text-sm text-slate-400">
-            <div className="w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-500 animate-spin" />
-            {t('presets.loading')}
+      {presets !== null && !failed && presets.length > 0 && (
+        <div className="space-y-2">
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="search" value={query} onChange={e => setQuery(e.target.value)}
+              placeholder={t('presets.filterPlaceholder')} aria-label={t('presets.filterPlaceholder')}
+              className="w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
           </div>
-        ) : failed ? (
-          <p className="p-6 text-sm text-amber-700 text-center">{t('presets.listError')}</p>
-        ) : presets.length === 0 ? (
-          <p className="p-6 text-sm text-slate-400 text-center italic">{t('presets.empty')}</p>
-        ) : (
-          <ul className="divide-y divide-slate-100">
-            {presets.map(preset => {
-              const summary = text(preset.summary)
-              const blocked = preset.problems.length > 0
-              const working = busy?.id === preset.id
+          <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label={t('presets.filterRegion')}>
+            {(['all', ...present] as Array<PresetRegion | 'other' | 'all'>).map(r => {
+              const count = r === 'all' ? presets.length : presets.filter(p => regionOf(p) === r).length
               return (
-                <li key={preset.id} className="flex items-start gap-3 px-4 py-3.5">
-                  <Layers size={16} className="hidden sm:block text-slate-400 mt-0.5 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-slate-800">{text(preset.name)}</p>
-                    {summary && <p className="text-xs text-slate-500 mt-0.5">{summary}</p>}
-                    <p className="text-xs text-slate-400 mt-1">
-                      {t('presets.counts', {
-                        version: preset.version ?? '—',
-                        date: formatVersionDate(preset.versionDate, locale),
-                        classifiers: preset.packs.extended.classifiers,
-                        domains: preset.packs.extended.domains,
-                        algorithms: preset.packs.extended.algorithms,
-                      })}
-                    </p>
-                    {preset.loaded && (
-                      <p className="flex items-center gap-1 text-xs text-emerald-700 mt-1">
-                        <CheckCircle2 size={12} />
-                        {t('presets.loadedAt', {
-                          pack: packName(preset.loaded.pack),
-                          date: formatLoadedAt(preset.loaded.loaded_at, locale),
-                        })}
-                      </p>
-                    )}
-                    {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
-                      <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version, date: formatVersionDate(preset.versionDate, locale) })}</p>
-                    )}
-                    {blocked && (
-                      <div className="mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                        <p className="font-medium">{t('presets.invalid')}</p>
-                        <ul className="list-disc pl-4 mt-1 space-y-0.5">
-                          {preset.problems.map((problem, i) => <li key={i}>{problem}</li>)}
-                        </ul>
-                      </div>
-                    )}
-
-                  {/* Below the text rather than beside it: three buttons beside it left the text a sliver. */}
-                  <div className="flex flex-wrap items-center gap-2 mt-3">
-                    {preset.docs.length > 0 ? (
-                      <a
-                        href={api.presetDocUrl(preset.id, locale)}
-                        download
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors"
-                      >
-                        <FileDown size={13} /> {t('presets.doc')}
-                      </a>
-                    ) : (
-                      <span
-                        title={t('presets.noDoc')}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 border border-slate-100 rounded-lg cursor-not-allowed"
-                      >
-                        <FileDown size={13} /> {t('presets.doc')}
-                      </span>
-                    )}
-                    <PackMenu
-                      preset={preset}
-                      disabled={blocked || busy !== null}
-                      onPick={pack => load(preset, pack)}
-                      className={cn(
-                        'flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors disabled:opacity-60',
-                        preset.loaded
-                          ? 'text-amber-700 bg-amber-50 border border-amber-200 hover:bg-amber-100'
-                          : 'text-white bg-blue-600 hover:bg-blue-700'
-                      )}
-                    >
-                      {working && !busy.unloading ? <Loader2 size={13} className="animate-spin" /> : preset.loaded ? <RotateCcw size={13} /> : <Download size={13} />}
-                      {working && !busy.unloading ? t('presets.working') : preset.loaded ? t('presets.reset') : t('presets.load')}
-                    </PackMenu>
-                    {preset.loaded && (
-                      <button
-                        onClick={() => unload(preset)}
-                        disabled={busy !== null}
-                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-red-700 bg-white hover:bg-red-50 border border-red-200 rounded-lg transition-colors disabled:opacity-60"
-                      >
-                        {working && busy.unloading ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
-                        {working && busy.unloading ? t('presets.unloading') : t('presets.unload')}
-                      </button>
-                    )}
-                  </div>
-                  </div>
-                </li>
+                <button
+                  key={r} type="button" onClick={() => setRegion(r)} aria-pressed={region === r}
+                  className={cn(
+                    'px-2.5 py-1 text-xs rounded-full border transition-colors',
+                    region === r
+                      ? 'bg-blue-600 border-blue-600 text-white'
+                      : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'
+                  )}
+                >
+                  {r === 'all' ? t('presets.filterAll') : t(`presets.region.${r}`)}
+                  <span className={cn('ml-1.5', region === r ? 'text-blue-100' : 'text-slate-400')}>{count}</span>
+                </button>
               )
             })}
-          </ul>
-        )}
-      </div>
+            <label className="ml-auto flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
+              <input type="checkbox" checked={onlyLoaded} onChange={e => setOnlyLoaded(e.target.checked)} />
+              {t('presets.filterLoaded')}
+            </label>
+          </div>
+          {filtering && (
+            <p className="text-xs text-slate-400">
+              {t('presets.filterShown', { n: shown.length, total: presets.length })}
+              {' · '}
+              <button type="button" className="underline hover:text-slate-600"
+                      onClick={() => { setQuery(''); setRegion('all'); setOnlyLoaded(false) }}>
+                {t('presets.filterClear')}
+              </button>
+            </p>
+          )}
+        </div>
+      )}
+
+      {presets === null ? (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-xs flex items-center gap-2 p-4 text-sm text-slate-400">
+          <div className="w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-500 animate-spin" />
+          {t('presets.loading')}
+        </div>
+      ) : failed ? (
+        <p className="bg-white rounded-xl border border-slate-200 p-6 text-sm text-amber-700 text-center">{t('presets.listError')}</p>
+      ) : presets.length === 0 ? (
+        <p className="bg-white rounded-xl border border-slate-200 p-6 text-sm text-slate-400 text-center italic">{t('presets.empty')}</p>
+      ) : groups.length === 0 ? (
+        <p className="bg-white rounded-xl border border-slate-200 p-6 text-sm text-slate-400 text-center italic">{t('presets.filterNone')}</p>
+      ) : (
+        groups.map(g => (
+          <section key={g.region} aria-labelledby={`preset-region-${g.region}`}>
+            <h3 id={`preset-region-${g.region}`}
+                className="flex items-center gap-2 text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5 px-1">
+              <Globe2 size={13} className="text-slate-400" />
+              {t(`presets.region.${g.region}`)}
+              <span className="font-normal normal-case text-slate-400">{g.items.length}</span>
+            </h3>
+            <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+              <ul className="divide-y divide-slate-100">
+                {g.items.map(renderPreset)}
+              </ul>
+            </div>
+          </section>
+        ))
+      )}
     </div>
+  )
+}
+
+/**
+ * The country of a policy, as its flag. Flags are emoji built from the two letters of the ISO code;
+ * where the system draws them as plain letters (Windows) the code still reads. Without a country,
+ * the stack icon the list always had.
+ */
+function CountryMark({ country }: { country: string | null }) {
+  if (!country || !/^[A-Z]{2}$/.test(country)) {
+    return <Layers size={16} className="hidden sm:block text-slate-400 mt-0.5 shrink-0" />
+  }
+  const flag = String.fromCodePoint(...[...country].map(c => 0x1F1E6 + c.charCodeAt(0) - 65))
+  return (
+    <span className="hidden sm:block text-lg leading-none mt-0.5 shrink-0" title={country} aria-hidden="true">{flag}</span>
   )
 }
 
@@ -852,25 +974,33 @@ function FilesTab() {
 
 
 /**
- * The connection to one Delphix Continuous Compliance engine.
+ * The connection to Delphix: one Continuous Compliance engine, or Data Control Tower.
  *
- * An integration, not a set of credentials: configuring it copies the whole engine down at once,
- * and from then on the fields are locked. There is nothing useful about editing a URL under a
- * mirror of the instance that URL no longer names — changing engine means dropping this one,
- * which takes what came with it, and setting up the other.
+ * One or the other, never both. DCT now centralises Continuous Compliance — algorithms, data
+ * classes, classifiers and discovery policies live there and run on its compliance nodes — but an
+ * engine of its own is still a place many users work in. Both are mirrored the same way here.
+ *
+ * An integration, not a set of credentials: configuring it copies everything down at once, and
+ * from then on the fields are locked. There is nothing useful about editing a URL under a mirror
+ * of the instance that URL no longer names — changing instance (or switching between an engine
+ * and DCT) means dropping this one, which takes what came with it, and setting up the other.
  */
 function DelphixTab() {
   const { t } = useT()
+  const [target, setTarget] = useState<DelphixTarget>('engine')
   const [baseUrl, setBaseUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [apiKey, setApiKey] = useState('')
   const [selfSigned, setSelfSigned] = useState(false)
-  // What the config returned for the password: a mask, never the real value. Comparing against
-  // it tells us whether the user actually typed a new one.
+  // What the config returned for the secrets: a mask, never the real value. Comparing against it
+  // tells us whether the user actually typed a new one.
   const [maskedPassword, setMaskedPassword] = useState('')
-  // Set when the password comes from an environment variable: the field then has no effect.
+  const [maskedApiKey, setMaskedApiKey] = useState('')
+  // Set when a secret comes from an environment variable: the field then has no effect.
   const [passwordEnv, setPasswordEnv] = useState<string | null>(null)
-  /** Whether an engine is stored, which is what locks the fields. Null until the config arrives. */
+  const [apiKeyEnv, setApiKeyEnv] = useState<string | null>(null)
+  /** Whether an instance is stored, which is what locks the fields. Null until the config arrives. */
   const [linked, setLinked] = useState<boolean | null>(null)
   const [saving, setSaving] = useState(false)
   const [removing, setRemoving] = useState(false)
@@ -880,14 +1010,19 @@ function DelphixTab() {
   const busy = job?.kind ?? (removing ? 'remove' : null)
   const [status, setStatus] = useState<{ configured?: boolean; ok?: boolean; error?: string; apiRoot?: string } | null>(null)
   const [checking, setChecking] = useState(false)
+  const dct = target === 'dct'
 
   /** Puts the stored connection on screen. `linked` is what locks the fields. */
   const apply = (c: Record<string, string>) => {
+    setTarget(c['delphix.target'] === 'dct' ? 'dct' : 'engine')
     setBaseUrl(c['delphix.baseUrl'] ?? '')
     setUsername(c['delphix.username'] ?? '')
     setPassword(c['delphix.password'] ?? '')
     setMaskedPassword(c['delphix.password'] ?? '')
     setPasswordEnv(c['delphix.password.fromEnv'] ?? null)
+    setApiKey(c['delphix.apiKey'] ?? '')
+    setMaskedApiKey(c['delphix.apiKey'] ?? '')
+    setApiKeyEnv(c['delphix.apiKey.fromEnv'] ?? null)
     setSelfSigned(String(c['delphix.allowSelfSigned']) === 'true')
     setLinked(Boolean(c['delphix.baseUrl']))
   }
@@ -900,27 +1035,31 @@ function DelphixTab() {
     api.getConfig().then(cfg => apply(cfg as unknown as Record<string, string>)).catch(() => {})
   }, [])
 
-  // Tests what is on screen, so the button works before anything is saved. An untouched
-  // password field still holds the mask, so it is sent blank and the server uses the stored one.
+  // Tests what is on screen, so the button works before anything is saved. An untouched secret
+  // field still holds the mask, so it is sent blank and the server uses the stored one.
+  const onScreen = () => ({
+    target,
+    baseUrl,
+    username: dct ? '' : username,
+    password: dct || password === maskedPassword ? '' : password,
+    apiKey: !dct || apiKey === maskedApiKey ? '' : apiKey,
+    allowSelfSigned: selfSigned,
+  })
+
   const check = async () => {
     setChecking(true)
     try {
-      setStatus(await api.delphixTest({
-        baseUrl,
-        username,
-        password: password === maskedPassword ? '' : password,
-        allowSelfSigned: selfSigned,
-      }))
+      setStatus(await api.delphixTest(onScreen()))
     } catch (e) {
       setStatus({ ok: false, error: (e as Error).message })
     } finally { setChecking(false) }
   }
 
-  /** Brings the engine down. Shared by the first save and the Refresh button. */
+  /** Brings everything down. Shared by the first save and the Refresh button. */
   const pullEverything = () => startSync('import', t)
 
   /**
-   * Saves the connection and, if it works, copies the engine down straight away.
+   * Saves the connection and, if it works, copies everything down straight away.
    *
    * The import is not a separate step someone has to know to take: an integration that is
    * configured but empty is a screen full of nothing, and the first thing anyone would do next.
@@ -928,13 +1067,17 @@ function DelphixTab() {
   const save = async () => {
     setSaving(true)
     try {
+      // The other kind's credentials are cleared, so a stored engine password never lingers
+      // under a DCT integration (or the other way round).
       await api.updateConfig({
+        'delphix.target': target,
         'delphix.baseUrl': baseUrl,
-        'delphix.username': username,
-        'delphix.password': password,
+        'delphix.username': dct ? '' : username,
+        'delphix.password': dct ? '' : password,
+        'delphix.apiKey': dct ? apiKey : '',
         'delphix.allowSelfSigned': String(selfSigned),
       } as unknown as Record<string, string>)
-      const probe = await api.delphixTest({ baseUrl, username, password: '', allowSelfSigned: selfSigned })
+      const probe = await api.delphixTest({ ...onScreen(), password: '', apiKey: '' })
       setStatus(probe)
       if (!probe.ok) { toast.error(t('settings.dlpxFail')); return }
       await load()
@@ -965,6 +1108,8 @@ function DelphixTab() {
 
   const working = saving || busy !== null
   const locked = linked === true
+  const targetName = t(dct ? 'settings.dlpxTarget.dct' : 'settings.dlpxTarget.engine')
+  const canConnect = baseUrl.trim() !== '' && (dct ? apiKey.trim() !== '' || Boolean(apiKeyEnv) : true)
 
   return (
     <div className="max-w-lg space-y-5">
@@ -972,39 +1117,81 @@ function DelphixTab() {
         {locked && (
           <p className="flex gap-2 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg p-3">
             <Lock size={14} className="shrink-0 mt-0.5 text-slate-400" />
-            {t('settings.dlpxLocked')}
+            <span>
+              <span className="block font-semibold text-slate-600">{t('settings.dlpxLinkedTo', { target: targetName })}</span>
+              {t('settings.dlpxLocked')}
+            </span>
           </p>
         )}
+        <fieldset disabled={locked}>
+          <legend className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+            {t('settings.dlpxTarget')}
+          </legend>
+          <div role="radiogroup" className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {(['dct', 'engine'] as DelphixTarget[]).map(id => (
+              <label key={id}
+                     className={cn('flex gap-2 rounded-lg border p-3 text-sm transition-colors',
+                       target === id ? 'border-blue-500 bg-blue-50 text-slate-800' : 'border-slate-200 text-slate-600',
+                       locked ? 'opacity-60' : 'cursor-pointer hover:border-blue-300')}>
+                <input type="radio" name="delphix-target" value={id} checked={target === id}
+                       onChange={() => { setTarget(id); setStatus(null) }} className="mt-1" />
+                <span>
+                  <span className="block font-medium">{t(`settings.dlpxTarget.${id}`)}</span>
+                  <span className="block text-xs text-slate-500 mt-0.5">{t(`settings.dlpxTarget.${id}Hint`)}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+          <p className="text-xs text-slate-400 mt-1">{t('settings.dlpxTargetOnly')}</p>
+        </fieldset>
         <div>
           <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
             {t('settings.dlpxUrl')}
           </label>
           <input type="text" value={baseUrl} onChange={e => setBaseUrl(e.target.value)}
-                 disabled={locked} placeholder="masking.example.com"
+                 disabled={locked} placeholder={dct ? 'dct.example.com' : 'masking.example.com'}
                  className={cn(fieldCls, locked && 'opacity-60')} />
-          <p className="text-xs text-slate-400 mt-1">{t('settings.dlpxUrlHint')}</p>
+          <p className="text-xs text-slate-400 mt-1">{t(dct ? 'settings.dlpxDctUrlHint' : 'settings.dlpxEngineUrlHint')}</p>
         </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-            {t('settings.dlpxUser')}
-          </label>
-          <input type="text" value={username} onChange={e => setUsername(e.target.value)}
-                 disabled={locked} autoComplete="off"
-                 className={cn(fieldCls, locked && 'opacity-60')} />
-        </div>
-        <div>
-          <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
-            {t('settings.dlpxPassword')}
-          </label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                 autoComplete="new-password" disabled={locked || Boolean(passwordEnv)}
-                 className={cn(fieldCls, (locked || passwordEnv) && 'opacity-60')} />
-          <p className="text-xs text-slate-400 mt-1">
-            {passwordEnv
-              ? t('settings.secretFromEnv', { name: passwordEnv })
-              : t('settings.dlpxPasswordHint')}
-          </p>
-        </div>
+        {dct ? (
+          <div>
+            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+              {t('settings.dlpxApiKey')}
+            </label>
+            <input type="password" value={apiKey} onChange={e => setApiKey(e.target.value)}
+                   autoComplete="new-password" disabled={locked || Boolean(apiKeyEnv)}
+                   className={cn(fieldCls, (locked || apiKeyEnv) && 'opacity-60')} />
+            <p className="text-xs text-slate-400 mt-1">
+              {apiKeyEnv
+                ? t('settings.secretFromEnv', { name: apiKeyEnv })
+                : t('settings.dlpxApiKeyHint')}
+            </p>
+          </div>
+        ) : (
+          <>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                {t('settings.dlpxUser')}
+              </label>
+              <input type="text" value={username} onChange={e => setUsername(e.target.value)}
+                     disabled={locked} autoComplete="off"
+                     className={cn(fieldCls, locked && 'opacity-60')} />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                {t('settings.dlpxPassword')}
+              </label>
+              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                     autoComplete="new-password" disabled={locked || Boolean(passwordEnv)}
+                     className={cn(fieldCls, (locked || passwordEnv) && 'opacity-60')} />
+              <p className="text-xs text-slate-400 mt-1">
+                {passwordEnv
+                  ? t('settings.secretFromEnv', { name: passwordEnv })
+                  : t('settings.dlpxPasswordHint')}
+              </p>
+            </div>
+          </>
+        )}
         <label className={cn('flex items-start gap-2 text-sm text-slate-700', locked && 'opacity-60')}>
           <input type="checkbox" checked={selfSigned} onChange={e => setSelfSigned(e.target.checked)}
                  disabled={locked} className="mt-1" />
@@ -1037,7 +1224,7 @@ function DelphixTab() {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <button onClick={save} disabled={working || !baseUrl.trim()}
+            <button onClick={save} disabled={working || !canConnect}
                     className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-60 transition-colors">
               <Save size={14} />{saving ? t('settings.saving') : t('settings.dlpxConnect')}
             </button>
@@ -1050,6 +1237,7 @@ function DelphixTab() {
 
         {job?.progress && <ImportProgressBar progress={job.progress} />}
         {!locked && <p className="text-xs text-slate-400">{t('settings.dlpxConnectHint')}</p>}
+        {dct && <p className="text-xs text-slate-400">{t('settings.dlpxDctScope')}</p>}
       </div>
 
       {status && (

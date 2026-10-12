@@ -3,10 +3,10 @@
   "subtitle": "Descubrimiento y enmascaramiento de datos personales uruguayos: cédula de identidad y RUT con dígito verificador válido, la razón social de una persona jurídica — titular en el Uruguay —, cuasi-identificadores, los datos sensibles del artículo 4 E), datos de salud, los datos comerciales y crediticios del artículo 22 y los datos de infracciones del artículo 18.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descubrimiento",
       "body": [
-        "Este profile set encuentra los datos personales de una base uruguaya y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
-        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y una localidad pequeña ya apuntan a una persona. El set trabaja en las capas donde está el riesgo:",
+        "Esta política de descubrimiento encuentra los datos personales de una base uruguaya y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
+        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y una localidad pequeña ya apuntan a una persona. La política trabaja en las capas donde está el riesgo:",
         {
           "list": [
             "**Identificadores directos** — cédula de identidad y RUT, documentos de extranjeros, pasaporte, credencial cívica, registro civil, números del BPS, código de estudiante, matrícula profesional, nombres, **razón social y nombre de fantasía**, contacto, dirección, cuentas, tarjetas, dispositivos, cookies, matrículas, padrones, texto libre.",
@@ -17,7 +17,7 @@
             "**Infracciones** — los datos sobre infracciones penales, civiles o administrativas que el último inciso del artículo 18 reserva a las autoridades públicas competentes."
           ]
         },
-        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos de los que estos dependen — y los archivos de consulta que leen. Los apéndices listan cada uno con su configuración completa.",
+        "En Data Control Tower, la política es una política de descubrimiento con sus classifiers, las clases de datos por las que votan, los algoritmos que esas clases de datos nombran — y los algoritmos de los que estos dependen — y los archivos de consulta que leen. Los apéndices listan cada uno con su configuración completa.",
         "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — necesita que los valores concuerden. Una columna con nombre sin sentido (`CAMPO1`, `OBS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocibles: una cédula escrita `1.234.567-2`, un RUT de doce dígitos, un celular que empieza en 09, una dirección con número de puerta y apartamento, una matrícula, una localidad.",
         "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas uruguayos (`CI`, `FEC_NAC`, `RUT`, `BPS`, `IUE`, `PADRON`) y en inglés.",
         {
@@ -34,7 +34,7 @@
           "list": [
             "**Dato personal** es información de cualquier tipo referida a personas **físicas o jurídicas** determinadas o determinables (art. 4 D). El Uruguay es uno de los pocos países cuya ley hace titular a una **empresa**: la razón social, el nombre de fantasía y el RUT de una persona jurídica son datos personales, y el artículo 9 C) los nombra.",
             "**Dato sensible** (art. 4 E) es el dato que revela origen racial y étnico, preferencias políticas, convicciones religiosas **o morales**, afiliación sindical e información referente a la salud o a la vida sexual. El artículo 18 prohíbe la formación de bases que almacenen información que **directa o indirectamente** lo revele, y admite el tratamiento con finalidades estadísticas o científicas solo \"cuando se disocien de sus titulares\".",
-            "**Disociación de datos** es todo tratamiento de datos personales de manera que la información obtenida **no pueda vincularse a persona determinada o determinable** (art. 4 G). El artículo 17 D) es la cláusula para la que está escrito este set: no se necesita el previo consentimiento del titular para comunicar datos cuando \"se hubiera aplicado un procedimiento de disociación de la información, de modo que los titulares de los datos no sean identificables\".",
+            "**Disociación de datos** es todo tratamiento de datos personales de manera que la información obtenida **no pueda vincularse a persona determinada o determinable** (art. 4 G). El artículo 17 D) es la cláusula para la que está escrita esta política: no se necesita el previo consentimiento del titular para comunicar datos cuando \"se hubiera aplicado un procedimiento de disociación de la información, de modo que los titulares de los datos no sean identificables\".",
             "**Dónde aparece la disociación.** El artículo 9-BIS D) permite usar un registro cuya publicación no sea de interés general \"mediante técnicas de disociación u ocultamiento de los datos personales\"; el artículo 17 C) exige \"mecanismos de disociación adecuados\" cuando los datos de salud viajan por razones sanitarias o epidemiológicas; el artículo 18 exige disociación para la estadística y la ciencia. Y el **artículo 8 a) del Decreto 64/020** lista, en primer lugar entre las medidas de privacidad desde el diseño, las \"**técnicas de disociación, seudonimización y minimización de datos**\".",
             "**Seguridad.** El artículo 10 obliga al responsable a adoptar las medidas necesarias para garantizar la seguridad y confidencialidad de los datos, y prohíbe registrar datos personales en bases que no reúnan condiciones técnicas de integridad y seguridad. El artículo 38 de la Ley 19.670 manda informar la vulneración a los titulares y a la URCDP **inmediatamente**, y la URCDP coordina con CERTuy. Los artículos 6 y 7 del Decreto 64/020 exigen evaluación de impacto donde el riesgo es alto — entre los disparadores, el tratamiento permanente de los datos del Capítulo IV o de datos sobre infracciones.",
             "**Dato biométrico.** El artículo 4 Ñ), agregado por la Ley 19.924 en 2020, lo define como el dato obtenido a partir de un tratamiento técnico específico que permita o confirme la identificación única de una persona; el artículo 18-BIS solo admite tratarlo previa **evaluación de impacto en la protección de datos personales**.",
@@ -48,7 +48,7 @@
       "title": "Disociación, seudonimización y copias fuera de producción",
       "body": [
         "La Ley 18.331 es de 2008 y usa una sola palabra, **disociación**: el tratamiento de manera que la información obtenida no pueda vincularse a persona determinada o determinable (art. 4 G). No define la seudonimización — pero el **artículo 8 a) del Decreto 64/020**, de 2020, nombra las dos juntas como medidas de privacidad desde el diseño: \"técnicas de disociación, seudonimización y minimización de datos\".",
-        "Los algoritmos de este set son deterministas para la clave del Masking Engine: la misma cédula se enmascara igual en toda tabla, lo que mantiene los joins. Quien tenga esa clave y producción puede volver a vincularlas, así que la copia enmascarada está **seudonimizada** en el sentido del decreto, no disociada en el sentido del artículo 4 G), y para esa persona sigue siendo dato personal.",
+        "Los algoritmos de esta política son deterministas para la clave de enmascaramiento de Delphix: la misma cédula se enmascara igual en toda tabla, lo que mantiene los joins. Quien tenga esa clave y producción puede volver a vincularlas, así que la copia enmascarada está **seudonimizada** en el sentido del decreto, no disociada en el sentido del artículo 4 G), y para esa persona sigue siendo dato personal.",
         {
           "list": [
             "Mantenga la clave del engine separada de la copia y trate a quien tenga ambas como quien trata datos personales sujetos a toda la ley.",
@@ -203,7 +203,7 @@
       "title": "Cédula de identidad",
       "what": [
         "El número de la Dirección Nacional de Identificación Civil, la llave de todo registro uruguayo: siete dígitos y un dígito verificador, escrito `1.234.567-2`, y también sin puntos.",
-        "El mismo dominio recibe RUT: una columna de documento suele guardar ambos."
+        "La misma clase de datos recibe RUT: una columna de documento suele guardar ambos."
       ],
       "masking": [
         "Dígito por dígito, con el dígito verificador recalculado: pesos 2 9 8 7 6 3 4 desde la izquierda, módulo 10, diez menos el residuo — exactamente lo que calcula Check Digit. Los puntos y el guion quedan en su sitio."
@@ -213,7 +213,7 @@
       "title": "RUT",
       "what": [
         "El número de doce dígitos del contribuyente en la Dirección General Impositiva: dos dígitos para el tipo de contribuyente, seis para el número, tres para la sucursal y un dígito verificador — `21-100342-001-7`.",
-        "El artículo 4 D) hace dato personal también el de una **persona jurídica**, así que el RUT de una empresa se enmascara como cualquier otro identificador — a diferencia de los sets de países cuya ley alcanza solo a personas físicas."
+        "El artículo 4 D) hace dato personal también el de una **persona jurídica**, así que el RUT de una empresa se enmascara como cualquier otro identificador — a diferencia de las políticas de países cuya ley alcanza solo a personas físicas."
       ],
       "masking": [
         "El tipo de contribuyente y la sucursal quedan, los seis dígitos del número se mapean y el dígito verificador se recalcula."
@@ -294,7 +294,7 @@
     "UY_L1_APELLIDO": {
       "title": "Apellidos",
       "what": [
-        "Los apellidos — paterno y materno —, en columnas separadas o juntos: `Rodríguez Techera`. El set lleva los uruguayos, españoles, italianos, vascos y portugueses, con `Da Silva` y `De León` conservados enteros."
+        "Los apellidos — paterno y materno —, en columnas separadas o juntos: `Rodríguez Techera`. La política lleva los uruguayos, españoles, italianos, vascos y portugueses, con `Da Silva` y `De León` conservados enteros."
       ],
       "masking": [
         "Palabra por palabra, reemplazando cada apellido por uno de la lista; las partículas quedan en su sitio."
@@ -342,7 +342,7 @@
         "La dirección con la calle y el número de puerta, el apartamento y a menudo la esquina — `Av. 18 de Julio 1234 apto. 501`, `Calle Mercedes 900 esq. Río Branco`."
       ],
       "masking": [
-        "La línea entera se reemplaza por una dirección uruguaya ficticia de la misma forma. Barrio, localidad y código postal tienen dominios propios para cuando viven en columnas separadas."
+        "La línea entera se reemplaza por una dirección uruguaya ficticia de la misma forma. Barrio, localidad y código postal tienen clases de datos propias para cuando viven en columnas separadas."
       ]
     },
     "UY_L1_DIRECCION_COMPLEMENTO": {
@@ -357,7 +357,7 @@
     "UY_L1_CUENTA_BANCARIA": {
       "title": "Cuenta bancaria",
       "what": [
-        "Números de caja de ahorros, cuenta corriente y cuenta sueldo. El código del banco no es dato personal y no tiene dominio."
+        "Números de caja de ahorros, cuenta corriente y cuenta sueldo. El código del banco no es dato personal y no tiene clase de datos."
       ],
       "masking": [
         "Los dígitos se mapean; los separadores quedan."
@@ -369,7 +369,7 @@
         "Números de tarjeta de crédito y débito, reconocidos por el algoritmo de Luhn."
       ],
       "masking": [
-        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
+        "Credit Card, que viene con Delphix: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "UY_L1_BILLETERA": {
@@ -522,7 +522,7 @@
         "El sexo como lo registra el sistema: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` o los códigos 1 y 2."
       ],
       "masking": [
-        "Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`. La identidad de género tiene dominio propio entre los datos sensibles."
+        "Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`. La identidad de género tiene clase de datos propia entre los datos sensibles."
       ]
     },
     "UY_L2_LOCALIDAD": {
@@ -681,7 +681,7 @@
     "UY_L3_AFILIACION_SINDICAL": {
       "title": "Afiliación sindical",
       "what": [
-        "El sindicato, la afiliación, la cuota descontada en nómina y el consejo de salarios. El artículo 4 E) la nombra, y el artículo 18 permite a un sindicato conservar los datos de sus propios afiliados — que es exactamente la base que protege este dominio."
+        "El sindicato, la afiliación, la cuota descontada en nómina y el consejo de salarios. El artículo 4 E) la nombra, y el artículo 18 permite a un sindicato conservar los datos de sus propios afiliados — que es exactamente la base que protege esta clase de datos."
       ],
       "masking": [
         "Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`."
@@ -837,7 +837,7 @@
         "El **carné de salud básico** es obligatorio para todo trabajador en el Uruguay, lo que pone un certificado de salud en la tabla de personal de casi todo empleador. También exámenes ocupacionales, accidentes de trabajo y enfermedades profesionales, el siniestro del BSE, certificaciones médicas y ausentismo."
       ],
       "masking": [
-        "Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su propio dominio."
+        "Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su propia clase de datos."
       ]
     },
     "UY_SALUD_REPRODUCTIVA": {
@@ -873,7 +873,7 @@
         "Saldos de crédito y de cartera, montos en mora, cuotas, montos otorgados y límites."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_INGRESOS": {
@@ -882,7 +882,7 @@
         "Sueldo nominal y líquido, ingreso mensual o familiar, honorarios y rentas. El salario mínimo nacional fue de unos 23.600 pesos mensuales en 2025."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_PATRIMONIO": {
@@ -891,7 +891,7 @@
         "Patrimonio, activos, tasaciones y el aforo catastral, saldos de cuenta y de fondos, depósitos a plazo y la declaración jurada de bienes."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_PENSION": {
@@ -900,7 +900,7 @@
         "El monto de la pasividad, la pensión o el beneficio, y la pensión alimenticia. Uno de cada cuatro uruguayos cobra una."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_PROGRAMA_SOCIAL": {
@@ -953,16 +953,16 @@
     {
       "title": "Los dígitos verificadores de la cédula y del RUT",
       "body": [
-        "La **cédula de identidad** es el caso simple: siete dígitos con los pesos 2 9 8 7 6 3 4 desde la izquierda, módulo 10, y el dígito es diez menos el residuo. Es exactamente lo que hace el algoritmo Check Digit del Masking Engine, así que basta un paso: mapea los siete dígitos y escribe el octavo. El ejemplo resuelto publicado — 1.234.567 da 2 — coincide, y los puntos y el guion pasan intactos porque Check Digit recibe la instrucción de preservarlos.",
+        "La **cédula de identidad** es el caso simple: siete dígitos con los pesos 2 9 8 7 6 3 4 desde la izquierda, módulo 10, y el dígito es diez menos el residuo. Es exactamente lo que hace el algoritmo Check Digit de Delphix, así que basta un paso: mapea los siete dígitos y escribe el octavo. El ejemplo resuelto publicado — 1.234.567 da 2 — coincide, y los puntos y el guion pasan intactos porque Check Digit recibe la instrucción de preservarlos.",
         "El **RUT** necesita una vuelta más. Su dígito es módulo 11 sobre los pesos 4 3 2 9 8 7 6 5 4 3 2, once menos el residuo, escrito **0 cuando da once y 1 cuando da diez**. Check Digit escribe *módulo menos residuo* y escribe diez como `0`, así que coincide en todas partes salvo en un residuo: con residuo 1 el dígito verdadero es 1 y Check Digit escribe 0 — y el residuo 0, cuyo dígito verdadero sí es 0, produce el mismo cero escrito. Los dos casos son indistinguibles a partir del dígito solo.",
-        "El set lo resuelve con un **Check Digit auxiliar cuyos pesos son los reales duplicados, módulo 11**. Duplicar lleva un residuo 0 a 0 y un residuo 1 a 2, de modo que el auxiliar escribe `0` en el primer caso y `9` en el segundo — los dos casos quedan distinguidos. Un **Regex Decompose** lee entonces el par de dígitos, escribe el verdadero y descarta el auxiliar. Cuatro pasos en una cadena, sin tabla de consulta, y los dos dígitos del tipo de contribuyente y los tres de la sucursal quedan donde estaban.",
+        "La política lo resuelve con un **Check Digit auxiliar cuyos pesos son los reales duplicados, módulo 11**. Duplicar lleva un residuo 0 a 0 y un residuo 1 a 2, de modo que el auxiliar escribe `0` en el primer caso y `9` en el segundo — los dos casos quedan distinguidos. Un **Regex Decompose** lee entonces el par de dígitos, escribe el verdadero y descarta el auxiliar. Cuatro pasos en una cadena, sin tabla de consulta, y los dos dígitos del tipo de contribuyente y los tres de la sucursal quedan donde estaban.",
         "El RUT uruguayo no se deriva de la cédula, así que los dos se enmascaran de forma independiente — a diferencia del Perú o el Ecuador, donde el número del contribuyente lleva el documento de identidad dentro."
       ]
     },
     {
       "title": "Dónde vive la gente: localidades, código INE y código postal",
       "body": [
-        "Con la población que contó el censo de 2023 y una ubicación para cada lugar, el set conoce el tamaño, el departamento y la posición de las 652 localidades censales y los 19 departamentos.",
+        "Con la población que contó el censo de 2023 y una ubicación para cada lugar, la política conoce el tamaño, el departamento y la posición de las 652 localidades censales y los 19 departamentos.",
         {
           "list": [
             "Una **localidad** con menos de 20.000 habitantes pasa a la localidad más cercana de al menos 20.000 **en el mismo departamento**. Son 624, con 873.000 habitantes — un cuarto del país.",
@@ -982,8 +982,8 @@
           "list": [
             "**Columnas binarias** — fotos de la cédula, huellas, selfies de validación, PDF clínicos en BLOB — no pueden enmascararse con estos algoritmos. Inventaríelas y repórtelas como riesgo residual.",
             "**La ubicación de 186 de las 652 localidades es aproximada**: es el centro de las localidades de su departamento para las que se encontró una. Como diecisiete departamentos tienen un destino único, esto cambia el resultado de solo 84 localidades pequeñas, todas en Canelones, Maldonado y San José — y la garantía de al menos 20.000 habitantes en el mismo departamento se cumple en todos los casos.",
-            "**El INE publica los nombres de las localidades en mayúsculas sin sus tildes.** El set las restituye con un diccionario y escribe ambas grafías en las tablas, pero un nombre que no pudo restituir sale sin tilde.",
-            "**Una localidad cuyo nombre es también un departamento no se generaliza**, para que una columna de departamento nunca se reescriba. Toda localidad en esa posición está por encima del umbral, así que nada se escapa — pero si sus datos usan un nombre de departamento para un lugar menor, dele a esa columna un dominio propio.",
+            "**El INE publica los nombres de las localidades en mayúsculas sin sus tildes.** La política las restituye con un diccionario y escribe ambas grafías en las tablas, pero un nombre que no pudo restituir sale sin tilde.",
+            "**Una localidad cuyo nombre es también un departamento no se generaliza**, para que una columna de departamento nunca se reescriba. Toda localidad en esa posición está por encima del umbral, así que nada se escapa — pero si sus datos usan un nombre de departamento para un lugar menor, dele a esa columna una clase de datos propia.",
             "**Data Cleansing deja los valores desconocidos tal cual**: una localidad escrita de una forma que no está en la tabla — abreviada, mal escrita — pasa sin cambios.",
             "**El texto libre** se redacta palabra por palabra: un teléfono escrito con espacios dentro de una frase puede no encontrarse, y un nombre que también es palabra común (`Rosa`, `Cruz`, `Flores`) se redacta dondequiera que aparezca.",
             "**Niños y adolescentes**: la fecha de nacimiento se mueve como mucho 60 días, así que pocas personas cruzan su cumpleaños 18 — pero algunas lo hacen. Donde esa línea importe, separe la regla por grupo de edad con Multi-Column Condition.",
@@ -997,17 +997,17 @@
     {
       "title": "Verificación",
       "body": [
-        "Antes de publicarse, el set se comprobó fuera de un Masking Engine:",
+        "Antes de publicarse, la política se comprobó fuera de Delphix:",
         {
           "list": [
             "La regla de la cédula se comprobó contra el ejemplo resuelto publicado, y la del RUT contra el ejemplo resuelto de un RUT real — el 21-100342-001-7 de Antel.",
-            "Cada configuración de classifier se revisó contra lo que acepta un Masking Engine.",
-            "El profiling se simuló sobre 144 columnas con el set entero en su umbral de asignación — bien nombradas, mal nombradas y 29 que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
+            "Cada configuración de classifier se revisó contra lo que acepta Delphix.",
+            "El descubrimiento se simuló sobre 144 columnas con la política entera en su umbral de asignación — bien nombradas, mal nombradas y 29 que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
             "La tabla que generaliza lugares se auditó para las 652 localidades y los 19 departamentos: por nombre, por nombre con el departamento y por código INE, comprobando que ningún código abandona su departamento.",
-            "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de ejemplo de cada dominio y marcadores como `N/A`, comprobando cada salida contra su vocabulario; 200 cédulas para validez, distinción y los puntos y el guion que conservan, y 200 RUT para validez, distinción y el tipo de contribuyente y la sucursal que conservan. Cada algoritmo enmascaró además su propio valor de ejemplo."
+            "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de ejemplo de cada clase de datos y marcadores como `N/A`, comprobando cada salida contra su vocabulario; 200 cédulas para validez, distinción y los puntos y el guion que conservan, y 200 RUT para validez, distinción y el tipo de contribuyente y la sucursal que conservan. Cada algoritmo enmascaró además su propio valor de ejemplo."
           ]
         },
-        "Toda columna se asignó como se esperaba y todo valor se enmascaró como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+        "Toda columna se asignó como se esperaba y todo valor se enmascaró como se esperaba. Antes de usar la política con datos reales, ejecute un job de descubrimiento y uno de enmascaramiento sobre una copia representativa."
       ]
     },
     {

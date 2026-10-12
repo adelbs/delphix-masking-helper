@@ -1,6 +1,8 @@
 {
-  "version": 3,
-  "versionDate": "2026-10-11",
+  "version": 4,
+  "versionDate": "2026-10-12",
+  "region": "north-america",
+  "country": "MX",
   "name": {
     "en": "Mexico — LFPDPPP (personal data held by private parties)",
     "pt-BR": "México — LFPDPPP (dados pessoais em posse de particulares)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales mexicanos conforme a la ley federal de 2025: identificadores directos (CURP, RFC y NSS con dígito verificador válido, clave de elector, CLABE, nombres, contacto), cuasi-identificadores (fecha de nacimiento, municipio, código postal), los datos sensibles del artículo 2 y los datos financieros y patrimoniales que requieren consentimiento expreso."
   },
   "profileSet": {
-    "name": "MX - LFPDPPP - v3",
+    "name": "MX - LFPDPPP - v4",
     "description": "LFPDPPP 2025 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

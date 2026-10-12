@@ -73,7 +73,7 @@
   <a href="#checkdigit">Check Digit</a>
   <a href="#tokenization">Tokenization</a>
   <div class="grp">Classifiers</div>
-  <a href="#profiling">Cómo se decide un dominio</a>
+  <a href="#descubrimiento">Cómo se decide una clase de datos</a>
   <a href="#path">PATH</a>
   <a href="#type">TYPE</a>
   <a href="#regex">REGEX</a>
@@ -793,7 +793,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
     <div class="label">Parámetros</div>
     <p class="p-none">Ninguno.</p>
 
-    <div class="note"><b>En el runner independiente siempre devuelve <code>null</code>.</b> El framework depende del contexto del Masking Engine para resolver su archivo de lookup incorporado. Un resultado <code>null</code> aquí es lo esperado y no indica un error de configuración.</div></div>
+    <div class="note"><b>En el runner independiente siempre devuelve <code>null</code>.</b> El framework depende del contexto del Continuous Compliance Engine para resolver su archivo de lookup incorporado. Un resultado <code>null</code> aquí es lo esperado y no indica un error de configuración.</div></div>
 </article>
 <article class="framework-card" id="data-cleansing">
   <header>
@@ -843,7 +843,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
     <div class="label">Parámetros</div>
     <div class="params">
       <div class="p-row"><div class="p-name">mappingSet <span class="req">*</span></div><div class="p-desc">Referencia al conjunto de mapeo que almacena las correspondencias.</div></div>
-      <div class="p-row"><div class="p-name"><span class="sub">↳</span> algorithmName <span class="req">*</span></div><div class="p-desc">Nombre del mapping set en el Masking Engine — identifica qué conjunto usar. Ej.: <code>client-name-mapping</code>.</div></div>
+      <div class="p-row"><div class="p-name"><span class="sub">↳</span> algorithmName <span class="req">*</span></div><div class="p-desc">Nombre del mapping set en el Continuous Compliance Engine — identifica qué conjunto usar. Ej.: <code>client-name-mapping</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> host</div><div class="p-desc">Host de la base de datos que aloja el mapping set, cuando es remoto.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> port</div><div class="p-desc">Puerto de la base de datos remota del mapping set.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> database</div><div class="p-desc">Nombre de la base de datos remota.</div></div>
@@ -854,7 +854,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
       <div class="p-row"><div class="p-name">ignoreCharacters</div><div class="p-desc">Códigos ASCII a eliminar de la entrada antes de la consulta. Ej.: <code>45</code> guion, <code>46</code> punto — haciendo que un CPF con y sin formato apunte al mismo mapeo.</div></div>
     </div>
 
-    <div class="note"><b>No disponible en el Masking Helper.</b> El runner independiente no tiene base de mapeo; cualquier ejecución devuelve <code>Mapping set references are not supported</code>. Este framework solo puede validarse en el Masking Engine.</div></div>
+    <div class="note"><b>No disponible en el Masking Helper.</b> El runner independiente no tiene base de mapeo; cualquier ejecución devuelve <code>Mapping set references are not supported</code>. Este framework solo puede validarse en el Continuous Compliance Engine.</div></div>
 </article>
 <div class="part-head">
   <div class="lbl">Parte 8</div>
@@ -893,7 +893,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
       <div class="p-row"><div class="p-name">filterDirection</div><div class="p-desc">Desde dónde contar los caracteres de <code>filterLength</code>: <code>LEFT</code> (el inicio) o <code>RIGHT</code> (el final).</div></div>
     </div>
 
-    <div class="note tip"><b>De dónde salen los nombres <code>key</code>, <code>string1</code>…</b> Son <b>ranuras fijas</b> del framework, no nombres de columnas de tu base de datos. La traducción entre la columna real (<code>GENERO</code>, <code>NOMBRE</code>) y la ranura (<code>key</code>, <code>string1</code>) se hace en el <b>inventario</b> del Masking Engine. En el Masking Helper simulas ese mapeo rellenando la tabla de entrada a mano.</div>
+    <div class="note tip"><b>De dónde salen los nombres <code>key</code>, <code>string1</code>…</b> Son <b>ranuras fijas</b> del framework, no nombres de columnas de tu base de datos. La traducción entre la columna real (<code>GENERO</code>, <code>NOMBRE</code>) y la ranura (<code>key</code>, <code>string1</code>) se hace en el <b>inventario</b> del Continuous Compliance Engine. En el Masking Helper simulas ese mapeo rellenando la tabla de entrada a mano.</div>
 
     <div class="note"><b>Las columnas sin algoritmo no se enmascaran.</b> Si una condición declara solo <code>string1</code>, todas las demás columnas de la fila pasan intactas — aunque contengan datos sensibles. Configura <code>fallbackAlgo</code> o declara cada ranura explícitamente.</div></div>
 </article>
@@ -916,7 +916,7 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
     <div class="label">Parámetros</div>
     <p class="p-none">No documentados en esta guía — el framework no se inicializa sin el archivo de direcciones, lo que impide inspeccionar su esquema en el runner.</p>
 
-    <div class="note"><b>No comprobable en el runner independiente.</b> El framework falla durante la inicialización sin el archivo de lookup de direcciones, que no viene con el plugin. Configúralo y valida directamente en el Masking Engine.</div></div>
+    <div class="note"><b>No comprobable en el runner independiente.</b> El framework falla durante la inicialización sin el archivo de lookup de direcciones, que no viene con el plugin. Configúralo y valida directamente en el Continuous Compliance Engine.</div></div>
 </article>
 <div class="part-head">
   <div class="lbl">Parte 9</div>
@@ -997,32 +997,32 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
 <div class="part-head">
   <div class="lbl">Parte 10</div>
   <h2>Classifiers</h2>
-  <p>El enmascaramiento responde <em>cómo</em> se oculta un campo. Antes viene <em>cuáles</em> campos hay que ocultar, y eso es lo que deciden los classifiers: leen una columna — su nombre, su tipo, una muestra de sus valores — y votan por un dominio de dato sensible. Cuatro frameworks, pesados unos contra otros, una confianza por dominio.</p>
+  <p>El enmascaramiento responde <em>cómo</em> se oculta un campo. Antes viene <em>cuáles</em> campos hay que ocultar, y eso es lo que deciden los classifiers: leen una columna — su nombre, su tipo, una muestra de sus valores — y votan por una clase de datos sensibles. Cuatro frameworks, pesados unos contra otros, una confianza por clase de datos.</p>
 </div>
-<article class="framework-card" id="profiling">
+<article class="framework-card" id="descubrimiento">
   <header>
-    <div class="hd"><span class="num">10.1</span><h3>Cómo se decide un dominio</h3></div>
-    <div class="meta"><span class="cls">Profiling</span></div>
+    <div class="hd"><span class="num">10.1</span><h3>Cómo se decide una clase de datos</h3></div>
+    <div class="meta"><span class="cls">Descubrimiento</span></div>
   </header>
-  <div class="gd"><p class="framework-desc">Un classifier es un nombre, un <strong>dominio</strong> por el que vota, un <strong>framework</strong> y la configuración de ese framework. Normalmente varios classifiers sirven a un mismo dominio — uno reconoce el nombre de la columna, otro los valores que hay dentro — y el profiling es la aritmética que convierte esas opiniones separadas en una única confianza por dominio, y asigna la más fuerte.</p>
+  <div class="gd"><p class="framework-desc">Un classifier es un nombre, una <strong>clase de datos</strong> por la que vota, un <strong>framework</strong> y la configuración de ese framework. Normalmente varios classifiers sirven a una misma clase de datos — uno reconoce el nombre de la columna, otro los valores que hay dentro — y el descubrimiento es la aritmética que convierte esas opiniones separadas en una única confianza por clase de datos, y asigna la más fuerte.</p>
 
     <div class="label">Dos tipos de evidencia</div>
     <div class="fmt"><strong>Metadato</strong> — <span class="inline">PATH</span> y <span class="inline">TYPE</span> leen lo que el catálogo dice de la columna: su nombre, la tabla o el archivo que la contiene, su tipo y su longitud declarada. No necesitan dato alguno.<br><strong>Valores</strong> — <span class="inline">REGEX</span> y <span class="inline">LIST</span> leen una muestra de lo que la columna realmente contiene. Sin muestra, no tienen nada que decir.</div>
 
     <div class="label">Todo resultado es un número entre −1 y 1</div>
-    <p class="framework-desc">Un classifier que encaja devuelve su <strong>fuerza de coincidencia</strong>; uno que no encaja devuelve la <strong>fuerza de rechazo</strong>, en negativo. Un resultado positivo argumenta a favor del dominio, uno negativo en contra, y cero es abstención. El Masking Engine muestra los mismos números como porcentaje, de −100 a 100.</p>
-    <div class="fmt">Los dos extremos son absolutos. Un resultado <strong>1</strong> confirma el dominio de inmediato — ningún classifier de valores llega a ejecutarse. Un resultado <strong>−1</strong> descarta el dominio — el resto de sus classifiers se elimina para ese campo.</div>
+    <p class="framework-desc">Un classifier que encaja devuelve su <strong>fuerza de coincidencia</strong>; uno que no encaja devuelve la <strong>fuerza de rechazo</strong>, en negativo. Un resultado positivo argumenta a favor de la clase de datos, uno negativo en contra, y cero es abstención. El Continuous Compliance Engine muestra los mismos números como porcentaje, de −100 a 100.</p>
+    <div class="fmt">Los dos extremos son absolutos. Un resultado <strong>1</strong> confirma la clase de datos de inmediato — ningún classifier de valores llega a ejecutarse. Un resultado <strong>−1</strong> descarta la clase de datos — el resto de sus classifiers se elimina para ese campo.</div>
 
     <div class="label">De varios classifiers a una confianza</div>
     <div class="params">
-      <div class="p-row"><div class="p-name">Preparar</div><div class="p-desc">Los classifiers idénticos en nombre, dominio y configuración cuentan una sola vez. Un dominio con más de un classifier <code>TYPE</code> los tiene <strong>fundidos en uno solo</strong> antes de que nada se ejecute: los tipos permitidos se unen, se conserva la menor longitud mínima, y todo lo demás — longitud máxima, tipo SQL, autoincremento, fuerzas — vuelve a su valor por defecto.</div></div>
-      <div class="p-row"><div class="p-name">Evidencia</div><div class="p-desc">Cada classifier puntúa el campo. Por dominio solo <strong>sobreviven dos resultados</strong>: el más fuerte de metadato y el más fuerte de valores — más fuerte en el sentido de más lejano de cero, de modo que un rechazo firme gana a una coincidencia débil.</div></div>
+      <div class="p-row"><div class="p-name">Preparar</div><div class="p-desc">Los classifiers idénticos en nombre, clase de datos y configuración cuentan una sola vez. Una clase de datos con más de un classifier <code>TYPE</code> los tiene <strong>fundidos en uno solo</strong> antes de que nada se ejecute: los tipos permitidos se unen, se conserva la menor longitud mínima, y todo lo demás — longitud máxima, tipo SQL, autoincremento, fuerzas — vuelve a su valor por defecto.</div></div>
+      <div class="p-row"><div class="p-name">Evidencia</div><div class="p-desc">Cada classifier puntúa el campo. Por clase de datos solo <strong>sobreviven dos resultados</strong>: el más fuerte de metadato y el más fuerte de valores — más fuerte en el sentido de más lejano de cero, de modo que un rechazo firme gana a una coincidencia débil.</div></div>
       <div class="p-row"><div class="p-name">Combinar</div><div class="p-desc">Los dos se vuelven uno. Apuntando en la misma dirección, el más fuerte se refuerza con el más débil: <code>a + (1 − |a|) × b</code> — la evidencia se acumula pero nunca pasa de 1. Apuntando en direcciones opuestas, se suman, y por tanto se anulan. Un resultado demasiado cercano a cero se ignora, y el otro queda solo.</div></div>
-      <div class="p-row"><div class="p-name">Decidir</div><div class="p-desc">Los dominios se ordenan por confianza. El primero se asigna si alcanza el <strong>umbral de asignación</strong> del profile set; el valor por defecto del engine es 1%, así que en la práctica cualquier confianza positiva asigna el dominio.</div></div>
+      <div class="p-row"><div class="p-name">Decidir</div><div class="p-desc">Las clases de datos se ordenan por confianza. La primera se asigna si alcanza el <strong>umbral de asignación</strong> de la política de descubrimiento; el valor por defecto del engine es 1%, así que en la práctica cualquier confianza positiva asigna la clase de datos.</div></div>
     </div>
 
     <div class="label">Un ejemplo completo</div>
-    <div class="fmt">Columna <span class="inline">EMAIL_CLIENTE</span> en <span class="inline">CLIENTES</span>, <span class="inline">VARCHAR(120)</span>, muestreada como <span class="inline">ana.silva@acme.com</span>, <span class="inline">j.doe@example.org</span>, <span class="inline">contact@shop.co.uk</span>, <span class="inline">no es un email</span>. El dominio <span class="inline">EMAIL</span> tiene dos classifiers: un <span class="inline">PATH</span> que busca <code>email</code> con fuerza 0,5, y un <span class="inline">REGEX</span> de dirección con fuerza 1 y rechazo 1.</div>
+    <div class="fmt">Columna <span class="inline">EMAIL_CLIENTE</span> en <span class="inline">CLIENTES</span>, <span class="inline">VARCHAR(120)</span>, muestreada como <span class="inline">ana.silva@acme.com</span>, <span class="inline">j.doe@example.org</span>, <span class="inline">contact@shop.co.uk</span>, <span class="inline">no es un email</span>. La clase de datos <span class="inline">EMAIL</span> tiene dos classifiers: un <span class="inline">PATH</span> que busca <code>email</code> con fuerza 0,5, y un <span class="inline">REGEX</span> de dirección con fuerza 1 y rechazo 1.</div>
     <table class="xf">
       <tr><th class="c-in">Evidencia</th><th class="c-ar"></th><th class="c-out">Resultado</th></tr>
       <tr><td class="c-in">PATH · el nombre contiene <code>email</code></td><td class="c-ar">→</td><td class="c-out">0,5</td></tr>
@@ -1031,14 +1031,14 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
     </table>
     <div class="fmt">Ninguno de los dos estaba seguro por su cuenta; juntos sí. Si el <span class="inline">PATH</span> hubiera rechazado el nombre con fuerza 0,4, los dos discreparían y se sumarían: −0,4 + 0,8 = 0,4, un 40% mucho más frágil.</div>
 
-    <div class="note tip"><b>Dónde se ejecuta esto.</b> El Masking Helper reproduce esta aritmética en local, así que un classifier puede probarse sobre un campo que describas antes de llegar a ningún engine — sin job de profiling y sin conexión. Lo que no reproduce es el muestreo: el engine elige los valores por su cuenta, y la confianza sale de lo que le haya tocado.</div></div>
+    <div class="note tip"><b>Dónde se ejecuta esto.</b> El Masking Helper reproduce esta aritmética en local, así que un classifier puede probarse sobre un campo que describas antes de llegar a ningún engine — sin job de descubrimiento y sin conexión. Lo que no reproduce es el muestreo: el engine elige los valores por su cuenta, y la confianza sale de lo que le haya tocado.</div></div>
 </article>
 <article class="framework-card" id="path">
   <header>
     <div class="hd"><span class="num">10.2</span><h3>PATH</h3></div>
     <div class="meta"><span class="cls">PATH</span><span class="tg tg-det">Lee metadato</span></div>
   </header>
-  <div class="gd"><p class="framework-desc">Reconoce un campo por su <strong>nombre</strong>, y opcionalmente por el nombre de la tabla o del archivo que lo contiene. Es el classifier más barato que existe — no se lee ningún dato — y suele ser la primera línea de un dominio: <code>EMAIL</code>, <code>EMAIL_CLIENTE</code> y <code>direccion_email</code> se delatan antes de que nadie mire lo que tienen dentro.</p>
+  <div class="gd"><p class="framework-desc">Reconoce un campo por su <strong>nombre</strong>, y opcionalmente por el nombre de la tabla o del archivo que lo contiene. Es el classifier más barato que existe — no se lee ningún dato — y suele ser la primera línea de una clase de datos: <code>EMAIL</code>, <code>EMAIL_CLIENTE</code> y <code>direccion_email</code> se delatan antes de que nadie mire lo que tienen dentro.</p>
 
     <div class="label">Cómo coincide</div>
     <div class="fmt">Un classifier guarda una lista de rutas. Se prueban <strong>de la más fuerte a la más débil</strong>, y la primera que sirve da su fuerza de coincidencia — las demás no se consultan. Si ninguna sirve, vale la fuerza de rechazo, en negativo. Una ruta con nombre de padre solo sirve cuando la tabla o el archivo también coincide; un nombre de padre vacío, o un campo sin padre, deja esa comprobación fuera.</div>
@@ -1060,17 +1060,17 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> matchStrength</div><div class="p-desc">Cuánto vale esta ruta cuando sirve, de 0 a 1. Por defecto <code>0.5</code>.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> caseSensitive</div><div class="p-desc">Desactivado por defecto, así que <code>EMAIL</code> y <code>email</code> son el mismo nombre.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> allowPartialMatch</div><div class="p-desc">Activado por defecto: al nombre le basta con contener el valor, o con que el patrón se encuentre en algún punto. Desactivado exige el nombre entero — sin necesidad de <code>^</code> ni <code>$</code>.</div></div>
-      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">Cuánto pesa <em>en contra</em> del dominio un nombre que no coincide con ninguna ruta, de 0 a 1. Por defecto <code>0</code> — el classifier simplemente no opina, que suele ser lo correcto: una columna llamada <code>CAMPO_17</code> todavía puede guardar correos.</div></div>
+      <div class="p-row"><div class="p-name">rejectStrength</div><div class="p-desc">Cuánto pesa <em>en contra</em> de la clase de datos un nombre que no coincide con ninguna ruta, de 0 a 1. Por defecto <code>0</code> — el classifier simplemente no opina, que suele ser lo correcto: una columna llamada <code>CAMPO_17</code> todavía puede guardar correos.</div></div>
     </div>
 
-    <div class="note"><b>El nombre es convención, no garantía.</b> Una fuerza alta sobre una palabra genérica — <code>nombre</code>, <code>id</code>, <code>numero</code> — asigna dominios a columnas que solo suenan parecido. Deja débiles las rutas genéricas y pide a un classifier de valores que las confirme.</div></div>
+    <div class="note"><b>El nombre es convención, no garantía.</b> Una fuerza alta sobre una palabra genérica — <code>nombre</code>, <code>id</code>, <code>numero</code> — asigna clases de datos a columnas que solo suenan parecido. Deja débiles las rutas genéricas y pide a un classifier de valores que las confirme.</div></div>
 </article>
 <article class="framework-card" id="type">
   <header>
     <div class="hd"><span class="num">10.3</span><h3>TYPE</h3></div>
     <div class="meta"><span class="cls">TYPE</span><span class="tg tg-det">Lee metadato</span></div>
   </header>
-  <div class="gd"><p class="framework-desc">Una <strong>barrera sobre el tipo de la columna</strong> y su longitud declarada. Es el único framework hecho para decir que no: por defecto un tipo aceptado puntúa 0 y uno rechazado puntúa −1, de modo que <code>TYPE</code> nunca sostiene un dominio por sí solo — elimina los campos que no podrían pertenecerle. Una columna de fecha no es una dirección de correo, se llame como se llame.</p>
+  <div class="gd"><p class="framework-desc">Una <strong>barrera sobre el tipo de la columna</strong> y su longitud declarada. Es el único framework hecho para decir que no: por defecto un tipo aceptado puntúa 0 y uno rechazado puntúa −1, de modo que <code>TYPE</code> nunca sostiene una clase de datos por sí solo — elimina los campos que no podrían pertenecerle. Una columna de fecha no es una dirección de correo, se llame como se llame.</p>
 
     <div class="label">Cómo coincide</div>
     <div class="fmt">Se recorren los tipos permitidos buscando uno que cubra la columna: primero un código SQL exacto, cuando alguna entrada nombra uno, y después la familia de la columna — <code>String</code>, <code>Number</code>, <code>Date</code> o <code>Binary</code>. El tipo que la cubre se confronta entonces con los límites de longitud. Lo que no queda cubierto, una longitud fuera de los límites, o una columna autoincremental cuando no se aceptan, es rechazo.</div>
@@ -1079,31 +1079,31 @@ El primer patrón solo coincide con valores que tengan <code>@</code>; todo lo d
     <table class="xf">
       <tr><th class="c-in">Permitido: <code>String</code>, longitud mínima 6</th><th class="c-ar"></th><th class="c-out">Resultado</th></tr>
       <tr><td class="c-in">EMAIL VARCHAR(120)</td><td class="c-ar">→</td><td class="c-out">0 — aceptado, y neutro a propósito</td></tr>
-      <tr><td class="c-in">EDAD INTEGER</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — el dominio queda descartado</span></td></tr>
+      <tr><td class="c-in">EDAD INTEGER</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — la clase de datos queda descartada</span></td></tr>
       <tr><td class="c-in">PAIS CHAR(2)</td><td class="c-ar">→</td><td class="c-out"><span class="err">−1 — más corta que el mínimo</span></td></tr>
     </table>
 
     <div class="label">Parámetros</div>
     <div class="params">
-      <div class="p-row"><div class="p-name">allowedTypes <span class="req">*</span></div><div class="p-desc">Los tipos de columna que el dominio acepta — como mucho una entrada por tipo.</div></div>
+      <div class="p-row"><div class="p-name">allowedTypes <span class="req">*</span></div><div class="p-desc">Los tipos de columna que la clase de datos acepta — como mucho una entrada por tipo.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> typeName <span class="req">*</span></div><div class="p-desc"><strong>String</strong>, <strong>Number</strong>, <strong>Date</strong> y <strong>Binary</strong> son familias de tipos SQL; <strong>JavaSqlType</strong> nombra un tipo exacto a través de <code>sqlType</code>. <code>TIMESTAMP</code> y <code>BOOLEAN</code> no pertenecen a ninguna familia, así que solo un código exacto los alcanza.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> minimumLength / maximumLength</div><div class="p-desc">Rechaza columnas declaradas más cortas o más largas que esto. <code>0</code> significa sin límite, y una columna de longitud desconocida no se mide.</div></div>
       <div class="p-row"><div class="p-name"><span class="sub">↳</span> sqlType</div><div class="p-desc">El código de tipo JDBC (<code>java.sql.Types</code>) que se acepta cuando <code>typeName</code> es <code>JavaSqlType</code> — 12 para <code>VARCHAR</code>, 4 para <code>INTEGER</code>, 91 para <code>DATE</code>.</div></div>
       <div class="p-row"><div class="p-name">matchAutoIncrementingColumn</div><div class="p-desc">Las columnas que la base rellena sola — <code>IDENTITY</code>, <code>SERIAL</code>, <code>AUTO_INCREMENT</code> — son clave técnica mucho más a menudo que dato personal. Desactivado por defecto, lo que las rechaza sea cual sea su tipo.</div></div>
-      <div class="p-row"><div class="p-name">matchStrength / rejectStrength</div><div class="p-desc">Por defecto <code>0</code> y <code>1</code>. Delphix marca ambos como experimentales, y los valores por defecto dicen la intención: un tipo puede descartar un dominio, nunca confirmarlo.</div></div>
+      <div class="p-row"><div class="p-name">matchStrength / rejectStrength</div><div class="p-desc">Por defecto <code>0</code> y <code>1</code>. Delphix marca ambos como experimentales, y los valores por defecto dicen la intención: un tipo puede descartar una clase de datos, nunca confirmarla.</div></div>
     </div>
 
-    <div class="note"><b>El rechazo es contagioso.</b> Con la fuerza de rechazo por defecto 1, un <code>TYPE</code> que rechaza la columna cierra el dominio para ese campo — sus classifiers <code>REGEX</code> y <code>LIST</code> no se ejecutan, por bien que fueran a coincidir los valores. Ese es el objetivo, y también la trampa: un tipo olvidado en la lista de permitidos le cuesta al dominio, en silencio, todos los campos de ese tipo.</div></div>
+    <div class="note"><b>El rechazo es contagioso.</b> Con la fuerza de rechazo por defecto 1, un <code>TYPE</code> que rechaza la columna cierra la clase de datos para ese campo — sus classifiers <code>REGEX</code> y <code>LIST</code> no se ejecutan, por bien que fueran a coincidir los valores. Ese es el objetivo, y también la trampa: un tipo olvidado en la lista de permitidos le cuesta a la clase de datos, en silencio, todos los campos de ese tipo.</div></div>
 </article>
 <article class="framework-card" id="regex">
   <header>
     <div class="hd"><span class="num">10.4</span><h3>REGEX</h3></div>
     <div class="meta"><span class="cls">REGEX</span><span class="tg tg-rev">Lee valores</span></div>
   </header>
-  <div class="gd"><p class="framework-desc">Reconoce un dominio por la <strong>forma de los valores</strong>. Cada valor de la muestra se limpia, se prueba contra una cadena de patrones y, opcionalmente, se confirma con un <strong>dígito de control</strong> — que es lo que separa una tarjeta o un documento de verdad de cualquier número de la longitud correcta.</p>
+  <div class="gd"><p class="framework-desc">Reconoce una clase de datos por la <strong>forma de los valores</strong>. Cada valor de la muestra se limpia, se prueba contra una cadena de patrones y, opcionalmente, se confirma con un <strong>dígito de control</strong> — que es lo que separa una tarjeta o un documento de verdad de cualquier número de la longitud correcta.</p>
 
     <div class="label">Cómo coincide</div>
-    <div class="fmt">Por valor: la expresión de limpieza del patrón quita lo que coincide con ella, el patrón se prueba contra lo que queda, y el dígito de control, si lo hay, tiene que pasar. Los patrones se prueban <strong>del más fuerte al más débil</strong>, y el primero que acepta el valor da su fuerza. Un patrón que coincide pero falla la comprobación pasa el valor al siguiente en vez de reclamarlo. Un valor que ningún patrón acepta puntúa la fuerza de rechazo, en negativo.<br>La confianza del classifier es el <strong>promedio de la muestra</strong> — así degrada con elegancia: una columna donde la mayoría de los valores encaja y unos pocos no sigue argumentando por el dominio.</div>
+    <div class="fmt">Por valor: la expresión de limpieza del patrón quita lo que coincide con ella, el patrón se prueba contra lo que queda, y el dígito de control, si lo hay, tiene que pasar. Los patrones se prueban <strong>del más fuerte al más débil</strong>, y el primero que acepta el valor da su fuerza. Un patrón que coincide pero falla la comprobación pasa el valor al siguiente en vez de reclamarlo. Un valor que ningún patrón acepta puntúa la fuerza de rechazo, en negativo.<br>La confianza del classifier es el <strong>promedio de la muestra</strong> — así degrada con elegancia: una columna donde la mayoría de los valores encaja y unos pocos no sigue argumentando por la clase de datos.</div>
 
     <div class="label">Valor de la muestra → Puntuación</div>
     <table class="xf">

@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Panamanian personal data: cédula and RUC with a valid check digit, quasi-identifiers, the sensitive data of article 4, economic and credit data, and criminal records.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Panamanian database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
-        "Masking only names and cédulas does not get there: a birth date, a sex and a small corregimiento are enough to point at one person. The set works on the same layers the risk is in:",
+        "This discovery policy finds the personal data in a Panamanian database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
+        "Masking only names and cédulas does not get there: a birth date, a sex and a small corregimiento are enough to point at one person. The policy works on the same layers the risk is in:",
         { "list": [
           "**Direct identifiers** — cédula, RUC and its DV, names, contact, accounts and cards, passport and immigration documents, professional licenses, property, devices, vehicles, free text.",
           "**Quasi-identifiers** — birth date, age, sex, district, corregimiento, barriada, postal code, occupation, employer, schooling.",
@@ -14,7 +14,7 @@
           "**Economic and credit data** — APC credit references, debt, salary, assets, pensions, social security coverage, social programs, poverty, housing tenure.",
           "**Criminal records** — police records and case numbers."
         ] },
-        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a cédula, a RUC with its DV, a plate, a corregimiento.",
         "Column names are recognized in Spanish, in the abbreviations of Panamanian systems (`NUM_CEDULA`, `CIP`, `FEC_NAC`, `COD_CORREG`, `NIS`), in the fields of the electronic invoice (`dRuc`, `dDV`) and in English.",
         { "tip": "Before masking, inventory the binary columns (BLOBs, images, PDFs). Onboarding processes often store a photo of the cédula: the number is still readable in the image. Report those columns as residual risk." }
@@ -36,9 +36,9 @@
           "**Security.** Proportionate technical and organizational measures, especially for sensitive data (art. 2, 5; Decree 285, art. 36). A security breach is notified to ANTAI and to the affected data subjects within seventy-two hours (Decree 285, art. 37).",
           "**Sanctions.** Fines from one thousand to ten thousand balboas set by ANTAI (art. 36). Disregarding the rules on sensitive data is a very serious infringement, which can lead to closing the database's records or suspending the processing activity (arts. 41 and 43)."
         ] },
-        "A test environment with production data is processing for a purpose the data subject did not authorize, and it holds sensitive and financial data outside the controls built for them. A copy that is effectively anonymized falls, under article 3, outside the law: that is what the set is for.",
-        "The list of sensitive data is not exhaustive. The set also treats gender identity and sexual life as sensitive, since they expose people to discrimination in the same way. Reform proposals are under discussion, among them higher fines; this document follows the text in force in September 2026.",
-        { "note": "This document describes technical controls. Whether a copy counts as anonymized is a legal assessment of the whole environment — access, retention, what else it is combined with — not of the profile set alone." }
+        "A test environment with production data is processing for a purpose the data subject did not authorize, and it holds sensitive and financial data outside the controls built for them. A copy that is effectively anonymized falls, under article 3, outside the law: that is what the policy is for.",
+        "The list of sensitive data is not exhaustive. The policy also treats gender identity and sexual life as sensitive, since they expose people to discrimination in the same way. Reform proposals are under discussion, among them higher fines; this document follows the text in force in September 2026.",
+        { "note": "This document describes technical controls. Whether a copy counts as anonymized is a legal assessment of the whole environment — access, retention, what else it is combined with — not of the discovery policy alone." }
       ]
     }
   ],
@@ -83,7 +83,7 @@
     "PA_L1_RUC": {
       "title": "RUC (taxpayer number)",
       "what": "The DGI's Single Taxpayer Registry number. A natural person's RUC is their cédula, with a two-digit check digit next to it: `8-442-445 DV 08`. A legal entity's RUC is its Public Registry number: `155596713-2-2015 DV 59`. One column often mixes both.",
-      "masking": "A natural person's RUC is masked as their cédula and the DV is recomputed, so every masked RUC passes DGI validation. The separators ` DV `, ` DV`, `-` and a space are recognized. A legal entity's RUC stays as it is: it is not personal data under article 4, and keeping it keeps joins with supplier catalogs working. See *The RUC check digit, computed by the set*."
+      "masking": "A natural person's RUC is masked as their cédula and the DV is recomputed, so every masked RUC passes DGI validation. The separators ` DV `, ` DV`, `-` and a space are recognized. A legal entity's RUC stays as it is: it is not personal data under article 4, and keeping it keeps joins with supplier catalogs working. See *The RUC check digit, computed by the policy*."
     },
     "PA_L1_RUC_DV": {
       "title": "DV in its own column",
@@ -97,7 +97,7 @@
     },
     "PA_L1_DOCUMENTO_MIGRATORIO": {
       "title": "Immigration document",
-      "what": "Resident cards, residence and work permits, visas and foreign identification numbers. A permanent resident's `E` cédula is in the cédula domain.",
+      "what": "Resident cards, residence and work permits, visas and foreign identification numbers. A permanent resident's `E` cédula is in the cédula data class.",
       "masking": "Character by character, keeping length and format."
     },
     "PA_L1_SEGURO_SOCIAL": {
@@ -153,7 +153,7 @@
     "PA_L1_TARJETA": {
       "title": "Payment card",
       "what": "Credit, debit and prepaid card numbers, including the Tarjeta Clave Social through which MIDES pays its programs.",
-      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "PA_L1_IP": {
       "title": "IP address",
@@ -323,7 +323,7 @@
     "PA_L3_SALUD_TEXTO_CLINICO": {
       "title": "Clinical text",
       "what": "Progress notes, medical history, discharge summaries and clinical summaries.",
-      "masking": "Free Text Redaction, as for free text: cédulas, contact details and names are redacted. The clinical content stays; if it must go too, assign the column to a suppression domain."
+      "masking": "Free Text Redaction, as for free text: cédulas, contact details and names are redacted. The clinical content stays; if it must go too, assign the column to a suppression data class."
     },
     "PA_L3_SALUD_RESULTADO_EXAMEN": {
       "title": "Test result",
@@ -408,22 +408,22 @@
     "PA_FIN_MONTO_DEUDA": {
       "title": "Debt amount",
       "what": "Balances of loans, cards and mortgages, past-due amounts, credit limits, installments.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_INGRESO_MENSUAL": {
       "title": "Salary and income",
       "what": "Salary, thirteenth-month pay, household income.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": "Cadastral or market value of real estate and vehicles, savings, term deposits, net worth.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_PENSION": {
       "title": "Pension and individual account",
       "what": "CSS retirement or pension amount, balance of the individual account, of SIACAP or of the severance fund.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_SEGURO_SOCIAL": {
       "title": "Social security coverage",
@@ -458,23 +458,23 @@
   },
   "closing": [
     {
-      "title": "The RUC check digit, computed by the set",
+      "title": "The RUC check digit, computed by the policy",
       "body": [
         "A natural person's RUC check digit is two digits that the DGI computes over a 21-position table: the cédula fields right-aligned in fixed widths — asiento 5, tomo 3, a two-digit code for the letters (`AV` 15, `PI` 79, `E` 50, `N` 40, `PE` 75), province 2 — and a constant 5. Weights grow from 2 at the right, modulo 11, and a remainder of 0 or 1 gives 0; the second digit repeats the computation with the first one appended. A field longer than its width pushes the fields to its left, and a one-digit province with `AV` or `PI` is padded with two zeros.",
-        "No framework of the plugin does this: Check Digit can add weighted digits, but not pad fields or weigh letters. The set does it with tables:",
+        "No framework of the plugin does this: Check Digit can add weighted digits, but not pad fields or weigh letters. The policy does it with tables:",
         { "list": [
-          "The cédula is masked with the same algorithm as the cédula domain. Letters and separators are swapped for one-character markers, and the old DV is replaced by an initial state.",
+          "The cédula is masked with the same algorithm as the cédula data class. Letters and separators are swapped for one-character markers, and the old DV is replaced by an initial state.",
           "The state — weighted sum, digit sum and position — travels through the value from right to left, one character per step. Each step is a Data Cleansing that turns *character + state* into *new state + character*.",
           "At the left end, a table turns the state into the two digits of the DV, and a second pass carries them back to where the old DV was.",
           "The markers become letters and separators again."
         ] },
-        "The tables are Data Cleansing files generated with the set, and the steps are Regex Decompose algorithms joined in String Algorithm Chains of at most eight — the engine's limit. Every masked RUC has a valid DV and the mapping stays one-to-one. The price is a long algorithm tree under the domain and a step table of more than 30,000 lines."
+        "The tables are Data Cleansing files generated with the policy, and the steps are Regex Decompose algorithms joined in String Algorithm Chains of at most eight — the engine's limit. Every masked RUC has a valid DV and the mapping stays one-to-one. The price is a long algorithm tree under the data class and a step table of more than 30,000 lines."
       ]
     },
     {
       "title": "Where people live: districts and corregimientos",
       "body": [
-        "With the data of the 2023 XII Population Census (INEC), the set knows the population, district, province and location of each of the 699 corregimientos.",
+        "With the data of the 2023 XII Population Census (INEC), the policy knows the population, district, province and location of each of the 699 corregimientos.",
         { "list": [
           "A **corregimiento** under 10,000 inhabitants becomes the nearest corregimiento of its province or comarca with at least 10,000. Darién, Los Santos and the Emberá-Wounaan and Ngäbe-Buglé comarcas have none: theirs become the nearest one in the country.",
           "A **district** under 20,000 inhabitants becomes the nearest district of its province or comarca with at least 20,000, or of the country in the Emberá-Wounaan comarca.",
@@ -504,14 +504,14 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication the set was checked outside a Masking Engine:",
+        "Before publication the policy was checked outside Delphix:",
         { "list": [
           "The computation of the RUC check digit was first checked against the examples of the published algorithm.",
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 138 columns with the whole set at its assignment threshold — well named, badly named, and 24 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 138 columns with the whole policy at its assignment threshold — well named, badly named, and 24 columns that are not personal data — and again with the classifiers of the essential pack alone.",
           "The algorithms, run with the Delphix algorithm plugin, masked 255 sample values and 210 placeholders such as `N/D`: RUCs with a DV in the four separators and the five letter types, checking each DV; 150 cédulas and 150 RUCs for collisions; and 20 people whose cédula and RUC must still agree."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Brazilian personal data: CPF, CNPJ, PIS, voter card and CNS with valid check digits, quasi-identifiers, the sensitive personal data of art. 5, II, financial data and criminal records.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Brazilian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
-        "Masking names and CPFs alone is not enough: a birth date, a sex and a small municipality already point at one person. The set works in the layers where the risk is:",
+        "This discovery policy finds the personal data in a Brazilian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and CPFs alone is not enough: a birth date, a sex and a small municipality already point at one person. The policy works in the layers where the risk is:",
         { "list": [
           "**Direct identifiers** — CPF, CNPJ, RG, CNH, voter card, PIS/NIS, work card, passport, foreigner documents, civil registry certificates, professional registrations, names, contact, address, accounts, cards and PIX key, devices, vehicles, property, free text.",
           "**Quasi-identifiers** — birth date, age, sex, municipality and IBGE code, CEP, neighbourhood, electoral zone, nationality, marital status, occupation, employer, education.",
@@ -15,7 +15,7 @@
           "**Financial and credit data** — credit score and negative records, debt, income, assets, INSS benefits, social programmes and the Cadastro Único, income bracket, housing.",
           "**Criminal records and court cases** — records, prison status and case numbers."
         ] },
-        "On a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those lean on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those lean on — and the lookup files they read. The appendices list each of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOME`, `CARGO`, `RESULTADO`, `PROCESSO` — needs the values to agree. A column whose name means nothing (`CAMPO1`, `OBS`) is still found when the values have a recognizable format or vocabulary: a formatted CPF, a CNPJ, a CEP, a plate, a municipality.",
         "Column names are recognized in Portuguese, in the prefixes of Brazilian data models (`NR_CPF`, `NM_CLIENTE`, `DT_NASCIMENTO`, `CO_MUNICIPIO_IBGE`, `CS_RACA`, `NU_CNS`, `SG_PARTIDO`) and in English.",
         { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding and proof-of-life processes often store a photo of the RG or CNH and a selfie: the document is still readable in the image, and the selfie is biometric data. Report those columns as residual risk." }
@@ -35,20 +35,20 @@
           "**Security incidents** that may cause relevant risk or harm are reported to the ANPD and to the data subjects (art. 48) within **three business days** (Resolução CD/ANPD 15/2024). Having made the data unintelligible to those without access counts in the assessment of severity (art. 48, § 3): a masked copy that leaks is not the production database leaking.",
           "**Sanctions.** Warning, a fine of up to 2% of revenue in Brazil capped at R$ 50 million per infraction, daily fines, publicity, blocking and deletion of the data, suspension of the database or of the processing, and a ban on processing data (art. 52), calculated under Resolução CD/ANPD 4/2023."
         ] },
-        "Two subjects outside the text of the LGPD are in the set too. **Financial data** is not sensitive under the law, but the operations of financial institutions are under secrecy (Lei Complementar 105/2001), credit databases have a law of their own (Lei 12.414/2011, the positive credit register) and credit protection is a legal basis of its own (art. 7, X). **Criminal records** are not on the list of art. 5, II either, but the Superior Labour Court held that requiring a job candidate's criminal record certificate without a legal or job-related reason gives rise to moral damages (IRR Tema 1): it is data that exposes people to discrimination, and gets the care of sensitive data."
+        "Two subjects outside the text of the LGPD are in the policy too. **Financial data** is not sensitive under the law, but the operations of financial institutions are under secrecy (Lei Complementar 105/2001), credit databases have a law of their own (Lei 12.414/2011, the positive credit register) and credit protection is a legal basis of its own (art. 7, X). **Criminal records** are not on the list of art. 5, II either, but the Superior Labour Court held that requiring a job candidate's criminal record certificate without a legal or job-related reason gives rise to moral damages (IRR Tema 1): it is data that exposes people to discrimination, and gets the care of sensitive data."
       ]
     },
     {
       "title": "Anonymization, pseudonymization and non-production copies",
       "body": [
         "The LGPD tells two results apart. **Anonymization** is the use of reasonable technical means by which data loses the possibility of being associated, directly or indirectly, with an individual (art. 5, XI); anonymized data is outside the law (art. 12). **Pseudonymization** is processing by which data loses that possibility *except through additional information kept separately by the controller in a controlled and secure environment* (art. 13, § 4); pseudonymized data is still personal data.",
-        "The algorithms of this set are deterministic for the key of the Masking Engine: the same CPF masks the same way in every table, which keeps joins working. So for whoever holds the key **and** production, the masked copy can be linked back — it is pseudonymized. For whoever holds only the copy, without the key or production, direct identifiers were replaced and quasi-identifiers generalized, and reversing the process is beyond reasonable effort.",
+        "The algorithms of this policy are deterministic for the Delphix masking key: the same CPF masks the same way in every table, which keeps joins working. So for whoever holds the key **and** production, the masked copy can be linked back — it is pseudonymized. For whoever holds only the copy, without the key or production, direct identifiers were replaced and quasi-identifiers generalized, and reversing the process is beyond reasonable effort.",
         { "list": [
           "Keep the engine key out of reach of the users of the masked copy: it is the *additional information kept separately* of art. 13, § 4.",
           "Do not hand the copy to people who also access production without need.",
-          "Review quasi-identifiers the set does not know. The ANPD recalls that postal code, sex and birth date were enough to identify 87% of the population of the United States in a 2000 study."
+          "Review quasi-identifiers the policy does not know. The ANPD recalls that postal code, sex and birth date were enough to identify 87% of the population of the United States in a 2000 study."
         ] },
-        "In January 2024 the ANPD put a preliminary study and a guide on anonymization and pseudonymization to public consultation; in December 2025 the subject was still on the Regulatory Agenda 2025–2026 (item 9). The study describes techniques — suppression, generalization, noise addition, permutation, masking, substitution, tokenization — and warns that partial masking of the CPF (`***.111.111-**`), common in publications, can be reconstructed when each source hides different parts. This set replaces the whole identifier with another valid one instead of hiding part of it."
+        "In January 2024 the ANPD put a preliminary study and a guide on anonymization and pseudonymization to public consultation; in December 2025 the subject was still on the Regulatory Agenda 2025–2026 (item 9). The study describes techniques — suppression, generalization, noise addition, permutation, masking, substitution, tokenization — and warns that partial masking of the CPF (`***.111.111-**`), common in publications, can be reconstructed when each source hides different parts. This policy replaces the whole identifier with another valid one instead of hiding part of it."
       ]
     }
   ],
@@ -137,7 +137,7 @@
     "BR_L1_TITULO_ELEITOR": {
       "title": "Voter card",
       "what": ["The voter registration number: eight sequential digits, two for the state (01 São Paulo, 02 Minas Gerais … 28 abroad) and two check digits, `1023 8501 0671`."],
-      "masking": ["The state stays, the sequence is mapped and both check digits are recomputed, including the São Paulo and Minas Gerais rule in which a remainder of 0 gives 1. Every masked voter card is valid, and a number that lost its zeros in a numeric column gets them back before the computation. See *Check digits computed by the set*."]
+      "masking": ["The state stays, the sequence is mapped and both check digits are recomputed, including the São Paulo and Minas Gerais rule in which a remainder of 0 gives 1. Every masked voter card is valid, and a number that lost its zeros in a numeric column gets them back before the computation. See *Check digits computed by the policy*."]
     },
     "BR_L1_PIS_NIS": {
       "title": "PIS, PASEP, NIT and NIS",
@@ -183,7 +183,7 @@
       "title": "Full name",
       "what": [
         "Given names and surnames in one column: `José Carlos da Silva Júnior`. Also the mother's and father's names — asked in almost every Brazilian register and used as a security question —, the guardian's, the spouse's, and the **social name**, which reveals a trans person's gender identity.",
-        "A column called just `NOME` may hold given names or full names: the values decide between the two domains."
+        "A column called just `NOME` may hold given names or full names: the values decide between the two data classes."
       ],
       "masking": [
         "In Brazilian order: two words are a given name and a surname; three, one given name and two surnames (`Maria da Silva` too); from four on, two given names and the rest surnames. Particles and agnomens stay. `SURNAMES, GIVEN NAMES` with a comma, as in lists, is recognized too. The result is a plausible Brazilian name, never the original."
@@ -202,7 +202,7 @@
     "BR_L1_ENDERECO": {
       "title": "Address",
       "what": ["The address line: street type and name, number, complement, sometimes the neighbourhood. `Av. Paulista, 1578, 12º andar - Bela Vista`."],
-      "masking": ["The whole line is replaced with a fictitious Brazilian address — a common street name, number, apartment or house, neighbourhood. Municipality, state and CEP in their own columns are handled by their domains."]
+      "masking": ["The whole line is replaced with a fictitious Brazilian address — a common street name, number, apartment or house, neighbourhood. Municipality, state and CEP in their own columns are handled by their data classes."]
     },
     "BR_L1_ENDERECO_COMPLEMENTO": {
       "title": "Number and complement",
@@ -211,18 +211,18 @@
     },
     "BR_L1_CONTA_BANCARIA": {
       "title": "Branch and account",
-      "what": ["Bank branch and account, with each bank's check digits (sometimes X). The bank code (COMPE, ISPB) is not personal data and has no domain."],
+      "what": ["Bank branch and account, with each bank's check digits (sometimes X). The bank code (COMPE, ISPB) is not personal data and has no data class."],
       "masking": ["Digits are mapped; X and separators stay. Check digits are not recomputed: each bank has its own rule."]
     },
     "BR_L1_CARTAO": {
       "title": "Payment card",
       "what": ["Credit and debit card numbers, recognized by the Luhn algorithm."],
-      "masking": ["Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
+      "masking": ["Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
     },
     "BR_L1_CHAVE_PIX": {
       "title": "PIX key",
       "what": ["A PIX key is a CPF, a CNPJ, an e-mail, a phone number in the `+5511987654321` format or a random key (a UUID)."],
-      "masking": ["Each kind of key is masked as its own domain: CPF and CNPJ with valid check digits, e-mail with `.test`, phone keeping the DDD, random key keeping its hexadecimal format. A CPF key and the same person's CPF still agree."]
+      "masking": ["Each kind of key is masked as its own data class: CPF and CNPJ with valid check digits, e-mail with `.test`, phone keeping the DDD, random key keeping its hexadecimal format. A CPF key and the same person's CPF still agree."]
     },
     "BR_L1_IP": {
       "title": "IP address",
@@ -421,7 +421,7 @@
     },
     "BR_L3_IDENTIDADE_GENERO": {
       "title": "Gender identity",
-      "what": ["Self-declared gender identity. Not on the list of art. 5, II, but it exposes people to the same discrimination. The social name falls under the full-name domain."],
+      "what": ["Self-declared gender identity. Not on the list of art. 5, II, but it exposes people to the same discrimination. The social name falls under the full-name data class."],
       "masking": ["Replaced with a category from the list."]
     },
     "BR_SAUDE_CNS": {
@@ -467,7 +467,7 @@
     "BR_SAUDE_OCUPACIONAL": {
       "title": "Occupational health",
       "what": ["What HR keeps about an employee's health: the result of the occupational health certificate (ASO), the work accident report (CAT), medical certificates, sick leave and absences."],
-      "masking": ["A fitness result is replaced with another from the list — fit, unfit —; a flag stays a flag; the ICD of the leave falls under the diagnosis domain."]
+      "masking": ["A fitness result is replaced with another from the list — fit, unfit —; a flag stays a flag; the ICD of the leave falls under the diagnosis data class."]
     },
     "BR_SAUDE_REPRODUTIVA": {
       "title": "Sexual and reproductive health",
@@ -487,22 +487,22 @@
     "BR_FIN_DIVIDA": {
       "title": "Debt",
       "what": ["Outstanding balance, overdue amount, instalments and credit limits."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "BR_FIN_RENDA": {
       "title": "Income and salary",
       "what": ["Salary, pay, earnings and monthly or household income."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "BR_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": ["Value of real estate and goods, account balances, savings, investments and FGTS."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "BR_FIN_VALOR_BENEFICIO": {
       "title": "Benefit and pension amount",
       "what": ["Amount of a retirement pension, survivor's pension, allowance, BPC and child support."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "BR_FIN_BENEFICIO_INSS": {
       "title": "INSS benefit type",
@@ -542,23 +542,23 @@
   },
   "closing": [
     {
-      "title": "Check digits computed by the set",
+      "title": "Check digits computed by the policy",
       "body": [
-        "Brazilian systems validate their identifiers. An invalid CPF in a test database breaks the registration, the integration with the Receita Federal or the issuing of an invoice. So where the check-digit rule is public, the set recomputes it.",
+        "Brazilian systems validate their identifiers. An invalid CPF in a test database breaks the registration, the integration with the Receita Federal or the issuing of an invoice. So where the check-digit rule is public, the policy recomputes it.",
         { "list": [
           "**CPF.** Two Check Digit algorithms, one inside the other. The outer one receives the eleven digits and hands the first ten to the inner one, which hands the first nine to a Character Mapping and recomputes the first digit with weights 10 to 2; the outer one recomputes the second with weights 11 to 2. Check Digit writes a remainder of 0 or 1 as 0 — exactly the Receita's rule. Separators stay out of the computation, and a short number is padded with zeros on the left.",
           "**CNPJ, alphanumeric included.** The same design with weights 5 to 2 and 9 to 2, and with the character handling *ASCII value minus 48* — the rule of Instrução Normativa RFB 2.229/2024, in which `A` is worth 17. Only the root is mapped.",
           "**PIS and RENAVAM.** One Check Digit with weights 3 2 9 8 7 6 5 4 3 2.",
-          "**Voter card.** Check Digit cannot follow the voter card's rule: the first digit is the remainder itself, it comes after the two state digits, and in São Paulo and Minas Gerais a remainder of 0 gives 1. The set computes it with tables: the sequence is mapped and the old digits become `00`; a running sum travels through the value two digits per step, each step a Data Cleansing that turns *sum + two digits* into *two digits + new sum*; at the end, a table turns *sum + state + 00* into the state and the two right digits.",
+          "**Voter card.** Check Digit cannot follow the voter card's rule: the first digit is the remainder itself, it comes after the two state digits, and in São Paulo and Minas Gerais a remainder of 0 gives 1. The policy computes it with tables: the sequence is mapped and the old digits become `00`; a running sum travels through the value two digits per step, each step a Data Cleansing that turns *sum + two digits* into *two digits + new sum*; at the end, a table turns *sum + state + 00* into the state and the two right digits.",
           "**National Health Card.** The PIS inside a definitive CNS is masked by the PIS algorithm, and the same step tables carry the weighted sum to the end, where `0000` becomes `000` or `001` and the digit that makes the sum a multiple of 11."
         ] },
-        "The tables are Data Cleansing files generated with the set — 1,100 lines per step —, and the steps are Regex Decompose algorithms joined in String Algorithm Chains. Every identifier stays one-to-one: two different CPFs never become the same CPF."
+        "The tables are Data Cleansing files generated with the policy — 1,100 lines per step —, and the steps are Regex Decompose algorithms joined in String Algorithm Chains. Every identifier stays one-to-one: two different CPFs never become the same CPF."
       ]
     },
     {
       "title": "Where people live: municipalities and CEP",
       "body": [
-        "With the resident population of the 2022 Demographic Census (IBGE) and the location of each seat, the set knows the size, state and position of the 5,570 municipalities.",
+        "With the resident population of the 2022 Demographic Census (IBGE) and the location of each seat, the policy knows the size, state and position of the 5,570 municipalities.",
         { "list": [
           "A **municipality** with fewer than 20,000 inhabitants becomes the nearest municipality of the same state with at least 20,000. There are 3,860 of them, with 32 million inhabitants — 15.8% of the population. Serra da Saudade (MG), the smallest, becomes São Gotardo; Borá (SP) becomes Paraguaçu Paulista; Uiramutã (RR) becomes Boa Vista.",
           "The **state** stays: the smallest, Roraima, had 636,707 inhabitants.",
@@ -589,15 +589,15 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication, the set was checked outside a Masking Engine:",
+        "Before publication, the policy was checked outside Delphix:",
         { "list": [
           "The check-digit rules were checked against published examples: the CPF `529.982.247-25`, the first alphanumeric CNPJ issued by the Receita Federal, `00.000.000/E08G-12` (July 2026), and the voter card `1023 8501 0671` of OBMEP.",
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 164 columns with the whole set at its assignment threshold — well named, badly named and 33 columns that are not personal data — and again with only the classifiers of the essential pack.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 164 columns with the whole policy at its assignment threshold — well named, badly named and 33 columns that are not personal data — and again with only the classifiers of the essential pack.",
           "The table that generalizes municipalities was audited for all 5,570 municipalities: by name, by name with the state and by IBGE code.",
-          "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/I`, checking every output against its vocabulary and every CPF, CNPJ, PIS, voter card, CNS and RENAVAM against its check-digit rule; 150 of each for collisions and validity; and 20 people whose PIS and CNS must still agree. Every algorithm also masked its own sample value."
+          "The algorithms, run with the Delphix algorithm plugin, masked each data class's sample values and placeholders such as `N/I`, checking every output against its vocabulary and every CPF, CNPJ, PIS, voter card, CNS and RENAVAM against its check-digit rule; 150 of each for collisions and validity; and 20 people whose PIS and CNS must still agree. Every algorithm also masked its own sample value."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

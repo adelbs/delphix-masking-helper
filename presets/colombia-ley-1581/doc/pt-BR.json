@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais colombianos: cédula e NIT com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 5, vítimas do conflito armado, dados financeiros da Lei 1266 de 2008 e antecedentes criminais.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de um banco de dados colombiano e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
-        "Mascarar só nomes e cédulas não basta: uma data de nascimento, um sexo e um município pequeno já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        "Esta política de descoberta encontra os dados pessoais de um banco de dados colombiano e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar só nomes e cédulas não basta: uma data de nascimento, um sexo e um município pequeno já apontam para uma pessoa. A política trabalha nas camadas onde está o risco:",
         { "list": [
           "**Identificadores diretos** — cédula, tarjeta de identidad e NUIP, NIT, documentos de estrangeiros (cédula de extranjería, PPT, PEP), passaporte, registro civil, carteira profissional, nomes, contato, endereço, contas, cartões e chave Bre-B, dispositivos, veículos, imóveis, texto livre.",
           "**Quase-identificadores** — data de nascimento, idade, sexo, município e código DIVIPOLA, código postal, bairro, vereda, nacionalidade, estado civil, ocupação, empregador, escolaridade.",
@@ -15,7 +15,7 @@
           "**Dados financeiros** — os da Lei 1266 de 2008: registros em birôs de crédito, dívidas, renda, patrimônio, pensão; e os que revelam a situação socioeconômica: estrato, Sisbén IV, programas sociais, posse da moradia.",
           "**Antecedentes criminais e processos** — antecedentes judiciais, disciplinares e fiscais, medidas corretivas, situação jurídica e números de processo."
         ] },
-        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com os seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `DOCUMENTO`, `CARGO`, `PROCESO` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: uma cédula com pontos, um NIT, um endereço na nomenclatura de ruas, uma placa, um município.",
         "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas colombianos (`NRO_DOCUMENTO`, `CC_CLIENTE`, `FEC_NAC`, `COD_MPIO`, `DX_PRINCIPAL`, `ESTRATO`, `GRUPO_SISBEN`) e em inglês.",
         { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da cédula — com a digital e o tipo sanguíneo — e uma selfie de validação biométrica. Reporte essas colunas como risco residual." }
@@ -35,18 +35,18 @@
           "**Sanções.** Multas pessoais e institucionais de até 2.000 salários mínimos mensais — em 2026, cerca de 3,5 bilhões de pesos —, suspensão das atividades de tratamento por até seis meses, fechamento temporário e **fechamento imediato e definitivo** da operação que envolva dados sensíveis (art. 23). Além disso, obter, compilar, vender ou divulgar dados pessoais sem autorização é crime: o artigo 269F do Código Penal (Lei 1273 de 2009) prevê de 48 a 96 meses de prisão."
         ] },
         "**Dados financeiros.** As bases de dados regidas pela Lei 1266 de 2008 — habeas data financeiro, creditício e comercial — ficam fora da Lei 1581, mas os seus princípios se aplicam a elas (art. 2, e e parágrafo). A Lei 2157 de 2021 limita a permanência do dado negativo ao dobro do tempo da inadimplência, com máximo de quatro anos.",
-        "**Reforma arquivada.** Em agosto de 2025 foram apresentados na Câmara os projetos de lei estatutária 214 e 274 de 2025, reunidos, que atualizam a Lei 1581 (definições de dados genéticos e biométricos, perfilamento, decisões automatizadas, multas maiores). O projeto foi aprovado em primeiro debate em outubro de 2025 e em setembro de 2026 consta como **arquivado** na página da Câmara: uma lei estatutária precisa ser aprovada numa única legislatura (art. 153 da Constituição). Este set segue o texto vigente."
+        "**Reforma arquivada.** Em agosto de 2025 foram apresentados na Câmara os projetos de lei estatutária 214 e 274 de 2025, reunidos, que atualizam a Lei 1581 (definições de dados genéticos e biométricos, perfilamento, decisões automatizadas, multas maiores). O projeto foi aprovado em primeiro debate em outubro de 2025 e em setembro de 2026 consta como **arquivado** na página da Câmara: uma lei estatutária precisa ser aprovada numa única legislatura (art. 153 da Constituição). Esta política segue o texto vigente."
       ]
     },
     {
       "title": "Anonimização, pseudonimização e cópias não produtivas",
       "body": [
         "A Lei 1581 não tem cláusula de anonimização: a consequência decorre da definição de dado pessoal. Se um dado já não pode ser associado a uma pessoa determinada ou determinável, não é dado pessoal. O **Guia de Anonimização de Dados Estruturados** do Archivo General de la Nación (2020), elaborado com o Ministério das TIC, a SIC, a Função Pública, o Departamento Nacional de Planejamento e o DANE, traça a linha: a **pseudonimização** substitui um atributo por outro, não produz registros completamente anônimos e *não se pode afirmar que seja um método de anonimização*, embora reduza o risco de identificação.",
-        "Os algoritmos deste set são determinísticos para a chave do Masking Engine: a mesma cédula é mascarada do mesmo jeito em todas as tabelas, o que mantém os joins. Por isso, para quem tem a chave **e** a produção, a cópia mascarada é religável — está pseudonimizada e continua sendo dado pessoal. Para quem tem só a cópia, os identificadores diretos foram trocados e os quase-identificadores generalizados.",
+        "Os algoritmos desta política são determinísticos para a chave de mascaramento do Delphix: a mesma cédula é mascarada do mesmo jeito em todas as tabelas, o que mantém os joins. Por isso, para quem tem a chave **e** a produção, a cópia mascarada é religável — está pseudonimizada e continua sendo dado pessoal. Para quem tem só a cópia, os identificadores diretos foram trocados e os quase-identificadores generalizados.",
         { "list": [
           "Guarde a chave do engine fora do alcance de quem usa a cópia mascarada.",
           "Não entregue a cópia a quem também acessa a produção sem necessidade.",
-          "Revise os quase-identificadores que o set não conhece. O guia do AGN e o do DANE (2024) recomendam medir o risco de reidentificação antes de publicar ou compartilhar."
+          "Revise os quase-identificadores que a política não conhece. O guia do AGN e o do DANE (2024) recomendam medir o risco de reidentificação antes de publicar ou compartilhar."
         ] }
       ]
     }
@@ -72,7 +72,7 @@
       "id": "L3",
       "title": "Dados sensíveis",
       "intro": [
-        "As categorias do artigo 5 que não são de saúde — que tem grupo próprio: origem racial ou étnica, orientação política, convicções religiosas ou filosóficas, filiação a sindicatos, a organizações sociais e de direitos humanos e a partidos, vida sexual e dados biométricos. A lista é enunciativa (*tais como*): o set inclui dados genéticos, orientação sexual e identidade de gênero, e duas categorias que na Colômbia expõem a discriminação e a violência — a condição de **vítima do conflito armado**, cuja informação é reservada (Lei 1448 de 2011, arts. 29 e 156), e a de **pessoa em processo de reincorporação**. Colunas categóricas mantêm a forma: uma flag S/N continua flag, um código é trocado por outro do mesmo catálogo e qualquer outro valor por um da lista da categoria. Onde os valores não têm vocabulário comum, são suprimidos para `Sin información`."
+        "As categorias do artigo 5 que não são de saúde — que tem grupo próprio: origem racial ou étnica, orientação política, convicções religiosas ou filosóficas, filiação a sindicatos, a organizações sociais e de direitos humanos e a partidos, vida sexual e dados biométricos. A lista é enunciativa (*tais como*): a política inclui dados genéticos, orientação sexual e identidade de gênero, e duas categorias que na Colômbia expõem a discriminação e a violência — a condição de **vítima do conflito armado**, cuja informação é reservada (Lei 1448 de 2011, arts. 29 e 156), e a de **pessoa em processo de reincorporação**. Colunas categóricas mantêm a forma: uma flag S/N continua flag, um código é trocado por outro do mesmo catálogo e qualquer outro valor por um da lista da categoria. Onde os valores não têm vocabulário comum, são suprimidos para `Sin información`."
       ],
       "domains": ["CO_L3_GRUPO_ETNICO", "CO_L3_PUEBLO_INDIGENA", "CO_L3_LENGUA_NATIVA", "CO_L3_RELIGION", "CO_L3_CONVICCION_FILOSOFICA", "CO_L3_ORIENTACION_POLITICA", "CO_L3_AFILIACION_PARTIDO", "CO_L3_SINDICATO", "CO_L3_ORGANIZACION_SOCIAL", "CO_L3_BIOMETRICO", "CO_L3_GENETICO", "CO_L3_ORIENTACION_SEXUAL", "CO_L3_VIDA_SEXUAL", "CO_L3_IDENTIDAD_GENERO", "CO_L3_VICTIMA_CONFLICTO", "CO_L3_REINCORPORACION"]
     },
@@ -156,7 +156,7 @@
       "title": "Nome completo",
       "what": [
         "Prenomes e sobrenomes numa coluna só: `Juan Carlos Rodríguez Gómez`. Também os da mãe, do pai, do responsável, do cônjuge, da referência pessoal ou familiar, e o nome identitário de uma pessoa trans.",
-        "Uma coluna chamada só `NOMBRE` pode ter prenomes ou nomes completos: os valores decidem entre os dois domínios."
+        "Uma coluna chamada só `NOMBRE` pode ter prenomes ou nomes completos: os valores decidem entre as duas classes de dados."
       ],
       "masking": [
         "Na ordem colombiana: duas palavras são prenome e sobrenome; três, um prenome e dois sobrenomes; quatro, dois e dois; cinco, dois prenomes e três palavras de sobrenome. `SOBRENOMES, NOMES` com vírgula, como em listas, também é reconhecido. O resultado é um nome plausível, nunca o original."
@@ -175,7 +175,7 @@
     "CO_L1_DIRECCION": {
       "title": "Endereço",
       "what": ["O endereço na nomenclatura urbana — a via, o seu número, a via que cruza e a distância até ela: `Carrera 7 # 32-16`, `Cl 100 No. 19-54 Apto 802` —, que situa uma porta num quarteirão, e endereços rurais com vereda, fazenda ou quilômetro."],
-      "masking": ["A linha inteira é trocada por um endereço colombiano fictício na mesma nomenclatura. Bairro, vereda, município e código postal em colunas próprias são tratados pelos seus domínios."]
+      "masking": ["A linha inteira é trocada por um endereço colombiano fictício na mesma nomenclatura. Bairro, vereda, município e código postal em colunas próprias são tratados pelas suas classes de dados."]
     },
     "CO_L1_DIRECCION_COMPLEMENTO": {
       "title": "Complemento do endereço",
@@ -184,18 +184,18 @@
     },
     "CO_L1_CUENTA_BANCARIA": {
       "title": "Conta bancária",
-      "what": ["Números de contas de poupança e corrente, depósitos de baixo valor e carteiras digitais. O código do banco não é dado pessoal e não tem domínio."],
+      "what": ["Números de contas de poupança e corrente, depósitos de baixo valor e carteiras digitais. O código do banco não é dado pessoal e não tem classe de dados."],
       "masking": ["Os dígitos são mapeados; os separadores ficam."]
     },
     "CO_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
-      "masking": ["Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
+      "masking": ["Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
     },
     "CO_L1_LLAVE_BREB": {
       "title": "Chave Bre-B",
       "what": ["A chave do Bre-B, o sistema de pagamentos instantâneos do Banco de la República: um número de documento de identidade, um celular, um e-mail ou uma chave alfanumérica que começa com `@`."],
-      "masking": ["Cada tipo de chave é mascarado como o seu domínio: o documento dígito a dígito, o celular mantendo a faixa, o e-mail com `.test`, a chave alfanumérica caractere a caractere mantendo o `@`. Uma chave com a cédula e a cédula da mesma pessoa continuam coincidindo."]
+      "masking": ["Cada tipo de chave é mascarado como a sua classe de dados: o documento dígito a dígito, o celular mantendo a faixa, o e-mail com `.test`, a chave alfanumérica caractere a caractere mantendo o `@`. Uma chave com a cédula e a cédula da mesma pessoa continuam coincidindo."]
     },
     "CO_L1_IP": {
       "title": "Endereço IP",
@@ -399,7 +399,7 @@
     },
     "CO_L3_IDENTIDAD_GENERO": {
       "title": "Identidade de gênero",
-      "what": ["A identidade de gênero autodeclarada. Não está na lista do artigo 5, mas expõe às mesmas discriminações. O nome identitário fica no domínio de nome completo."],
+      "what": ["A identidade de gênero autodeclarada. Não está na lista do artigo 5, mas expõe às mesmas discriminações. O nome identitário fica na classe de dados de nome completo."],
       "masking": ["Trocada por uma categoria da lista."]
     },
     "CO_L3_VICTIMA_CONFLICTO": {
@@ -414,7 +414,7 @@
     },
     "CO_SALUD_IDENTIFICADOR": {
       "title": "Identificadores de saúde",
-      "what": ["Números de prontuário, internação, atendimento, autorização de serviços, receita, licença médica e prescrição MIPRES. O prontuário é identificado pelo número do documento do paciente, que cai no domínio de cédula."],
+      "what": ["Números de prontuário, internação, atendimento, autorização de serviços, receita, licença médica e prescrição MIPRES. O prontuário é identificado pelo número do documento do paciente, que cai na classe de dados de cédula."],
       "masking": ["Caractere a caractere, mantendo tamanho e formato."]
     },
     "CO_SALUD_AFILIACION": {
@@ -460,7 +460,7 @@
     "CO_SALUD_OCUPACIONAL": {
       "title": "Saúde ocupacional",
       "what": ["O resultado de aptidão dos exames médicos ocupacionais, os relatórios de acidente de trabalho (FURAT) e de doença laboral (FUREL), as licenças médicas, a avaliação de perda de capacidade laboral e as restrições médicas."],
-      "masking": ["Um resultado é trocado por outro da lista — apto, inapto —; uma flag continua flag; o diagnóstico da licença cai no seu domínio."]
+      "masking": ["Um resultado é trocado por outro da lista — apto, inapto —; uma flag continua flag; o diagnóstico da licença cai na sua classe de dados."]
     },
     "CO_SALUD_REPRODUCTIVA": {
       "title": "Saúde sexual e reprodutiva",
@@ -480,22 +480,22 @@
     "CO_FIN_DEUDA": {
       "title": "Dívidas",
       "what": ["Saldos de crédito e de carteira, valor em atraso, parcelas, valores desembolsados e limites."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "CO_FIN_INGRESOS": {
       "title": "Renda e salário",
       "what": ["Salário, renda mensal ou familiar, honorários e salário de contribuição (IBC)."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "CO_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": ["Patrimônio, ativos, avaliações cadastrais e de mercado, saldos em conta, CDTs e investimentos, fundo de indenização trabalhista (cesantías)."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "CO_FIN_PENSION": {
       "title": "Pensão e subsídios",
       "what": ["O valor da pensão mensal, de subsídios e auxílios, e da pensão alimentícia."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "CO_FIN_ESTRATO": {
       "title": "Estrato socioeconômico",
@@ -532,8 +532,8 @@
     {
       "title": "O dígito verificador do NIT",
       "body": [
-        "O algoritmo Check Digit do Masking Engine calcula um dígito módulo 11 como *onze menos o resto* e escreve 10 como 0. Para o NIT isso acerta em dez dos onze restos possíveis: quando o resto é 1, a DIAN escreve 1 e o Check Digit escreveria 0. Um NIT mascarado em cada onze sairia inválido.",
-        "O set resolve em dois passos, sem tabelas:",
+        "O algoritmo Check Digit do Delphix calcula um dígito módulo 11 como *onze menos o resto* e escreve 10 como 0. Para o NIT isso acerta em dez dos onze restos possíveis: quando o resto é 1, a DIAN escreve 1 e o Check Digit escreveria 0. Um NIT mascarado em cada onze sairia inválido.",
+        "A política resolve em dois passos, sem tabelas:",
         { "list": [
           "Um Check Digit com os **pesos dobrados** mapeia o corpo e escreve um dígito auxiliar no lugar do verificador. Como 2 × 1 ≡ 2 módulo 11, o auxiliar é 9 exatamente quando o resto do corpo mascarado com os pesos verdadeiros é 1.",
           "Um Regex Decompose troca um 9 final por 1 e, em qualquer outro caso, aplica um Check Digit com os pesos verdadeiros sobre o corpo, que deixa como está, e recalcula o dígito."
@@ -544,7 +544,7 @@
     {
       "title": "Onde as pessoas moram: municípios, veredas e código postal",
       "body": [
-        "Com a projeção de população municipal do DANE para 2026 (base censo 2018, atualização pós-COVID-19) e a localização de cada sede na DIVIPOLA, o set conhece o tamanho, o departamento e a posição de 1.122 municípios e áreas não municipalizadas.",
+        "Com a projeção de população municipal do DANE para 2026 (base censo 2018, atualização pós-COVID-19) e a localização de cada sede na DIVIPOLA, a política conhece o tamanho, o departamento e a posição de 1.122 municípios e áreas não municipalizadas.",
         { "list": [
           "Um **município** com menos de 20.000 habitantes vira o município mais próximo do mesmo departamento com pelo menos 20.000. São 694, com 6,4 milhões de habitantes — 12% da população. Jardín (Antioquia) vira Andes; Providencia, San Andrés; as áreas não municipalizadas de Guainía, Inírida.",
           "O **departamento** fica. Todos têm pelo menos um município de 20.000 habitantes.",
@@ -576,15 +576,15 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         { "list": [
           "A regra do dígito verificador foi conferida contra o NIT da própria DIAN, `800.197.268-4`.",
-          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 151 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+          "A descoberta foi simulada em 151 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "A tabela que generaliza municípios foi auditada para as 1.122 unidades da DIVIPOLA: pelo nome, pelo nome com o departamento e pelo código.",
-          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 200 NITs de todos os tamanhos — inclusive os de resto 1 — quanto a validade e colisões; 150 cédulas quanto a colisões; e 20 pessoas cuja cédula e NIT precisam continuar coincidindo. Cada algoritmo também mascarou o seu próprio valor de exemplo."
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada classe de dados e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 200 NITs de todos os tamanhos — inclusive os de resto 1 — quanto a validade e colisões; 150 cédulas quanto a colisões; e 20 pessoas cuja cédula e NIT precisam continuar coincidindo. Cada algoritmo também mascarou o seu próprio valor de exemplo."
         ] },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

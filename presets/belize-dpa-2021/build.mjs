@@ -967,8 +967,8 @@ if (notDomains.length) throw new Error(`essential pack names domains the set doe
 
 // The version and the day it was built: bump both whenever anything in the set changes, so that
 // whoever loaded an older one can see how old it is.
-const VERSION = 3
-const VERSION_DATE = '2026-10-11'
+const VERSION = 4
+const VERSION_DATE = '2026-10-12'
 // Zeros on the left are padding only in the value a column holds — the top of a domain's tree. Inside
 // it, a step may read a digit at a fixed position, and an optional zero would shift what it reads.
 for (const d of domains) {
@@ -980,6 +980,9 @@ for (const d of domains) {
 const preset = {
   version: VERSION,
   versionDate: VERSION_DATE,
+  // Where the law applies, for grouping the list of presets: a region id and the ISO 3166 country code.
+  region: 'central-america',
+  country: 'BZ',
   name: {
     en: 'Belize — Data Protection Act, 2021 (personal data protection)',
     'pt-BR': 'Belize — Data Protection Act, 2021 (proteção de dados pessoais)',

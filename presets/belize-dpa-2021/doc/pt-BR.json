@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais de Belize: números de identificação e nomes, quase-identificadores, os dados pessoais sensíveis da seção 2 — incluindo registro ou situação financeira e processos criminais — e registros de saúde.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais num banco de dados de Belize e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
-        "Mascarar só nomes e números da previdência social não basta: uma data de nascimento, um sexo e uma vila de poucas centenas de habitantes já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        "Esta política de descoberta encontra os dados pessoais num banco de dados de Belize e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar só nomes e números da previdência social não basta: uma data de nascimento, um sexo e uma vila de poucas centenas de habitantes já apontam para uma pessoa. A política trabalha nas camadas onde está o risco:",
         { "list": [
           "**Identificadores diretos** — número da previdência social, TIN, passaporte, título de eleitor, carteira de motorista, autorizações de imigração, registros civis, nomes, contato, contas e cartões, lotes de terra, dispositivos, veículos, texto livre.",
           "**Quase-identificadores** — data de nascimento, idade, sexo, cidade ou vila, bairro, nacionalidade, estado civil, ocupação, empregador, escolaridade.",
@@ -15,7 +15,7 @@
           "**Registro ou situação financeira** — referências de crédito, dívidas, renda, patrimônio, pensões, benefícios da previdência social, programas sociais, pobreza e posse da moradia. A seção 2 os torna sensíveis.",
           "**Antecedentes e processos criminais** — antecedentes, acusações, desfechos e números de processo, também sensíveis pela seção 2."
         ] },
-        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com os seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NAME`, `RESULT`, `CITY` — precisa que os valores concordem. Uma coluna de nome sem sentido (`FIELD1`, `REMARKS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um número da previdência social, um telefone de Belize, uma placa, uma vila.",
         "Os nomes de coluna são reconhecidos em inglês, nas abreviações dos sistemas de Belize (`SSN`, `SSB_NO`, `TIN`, `BHIS_NO`, `NHI_NO`, `DOB`) e em espanhol, que boa parte do país fala.",
         { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOBs, imagens, PDFs). Processos de cadastro costumam guardar a imagem do cartão da previdência social ou do passaporte: o número continua legível na imagem. Reporte essas colunas como risco residual." }
@@ -25,7 +25,7 @@
       "title": "O Data Protection Act, 2021 em resumo",
       "body": [
         "O Data Protection Act, 2021 — Act No. 45 of 2021 — foi sancionado em 29 de novembro de 2021 e publicado no Gazette em 30 de novembro de 2021. Ele regula a coleta, a guarda, o uso e a divulgação de dados pessoais e protege a privacidade das pessoas em relação a eles.",
-        "**Entrada em vigor.** A lei entra em vigor na data que o Ministro fixar por Order publicada no Gazette, e podem ser fixadas datas diferentes para dispositivos diferentes (s. 97). Nas fontes públicas consultadas em setembro de 2026 não foi encontrada essa Order, e fontes secundárias divergem sobre se e quando a lei passou a valer. Confirme a situação com o Ministério antes de depender de uma data; o desenho do set não depende dela.",
+        "**Entrada em vigor.** A lei entra em vigor na data que o Ministro fixar por Order publicada no Gazette, e podem ser fixadas datas diferentes para dispositivos diferentes (s. 97). Nas fontes públicas consultadas em setembro de 2026 não foi encontrada essa Order, e fontes secundárias divergem sobre se e quando a lei passou a valer. Confirme a situação com o Ministério antes de depender de uma data; o desenho da política não depende dela.",
         "O que importa para uma cópia de dados de produção:",
         { "list": [
           "**Dado pessoal** é o dado relativo a um indivíduo que pode ser identificado a partir desse dado, ou desse dado junto com outras informações que estão, ou provavelmente estarão, em posse do controlador (s. 2). Um dado a partir do qual nenhum indivíduo pode ser identificado, nem com essas outras informações, não é dado pessoal.",
@@ -39,9 +39,9 @@
           "**Pesquisa e estatística.** O tratamento só para fins de pesquisa, estatísticos ou históricos é compatível com a finalidade original quando os resultados não são divulgados de forma que identifique os titulares (s. 36).",
           "**Supervisão.** O Data Protection Commissioner, servidor público do Ministério responsável pela transformação digital e pelo governo eletrônico que atua com independência, administra a lei (s. 68); os recursos vão ao Data Protection Tribunal (s. 88)."
         ] },
-        "Um ambiente de teste com dados de produção é tratamento para finalidades para as quais o dado não foi coletado, e guarda dados sensíveis — financeiros e criminais entre eles — fora dos controles feitos para eles. Uma cópia a partir da qual as pessoas não podem mais ser identificadas não é dado pessoal: é para isso que o set existe.",
-        "A lista de dados sensíveis da seção 2 é fechada, mas o set vai além onde o risco é o mesmo: trata com o mesmo cuidado os registros de saúde, a identidade de gênero e a língua que a pessoa fala — que revela origem maia, garífuna ou menonita.",
-        { "note": "A definição de dado pessoal conta o que o controlador tem ou provavelmente terá. O mascaramento é determinístico para a chave do engine, então quem tem ao mesmo tempo os dados de produção e a chave consegue ligar uma linha mascarada à sua origem. Mantenha a chave, e o acesso à produção, longe de quem usa a cópia mascarada. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro, não só do profile set." }
+        "Um ambiente de teste com dados de produção é tratamento para finalidades para as quais o dado não foi coletado, e guarda dados sensíveis — financeiros e criminais entre eles — fora dos controles feitos para eles. Uma cópia a partir da qual as pessoas não podem mais ser identificadas não é dado pessoal: é para isso que a política existe.",
+        "A lista de dados sensíveis da seção 2 é fechada, mas a política vai além onde o risco é o mesmo: trata com o mesmo cuidado os registros de saúde, a identidade de gênero e a língua que a pessoa fala — que revela origem maia, garífuna ou menonita.",
+        { "note": "A definição de dado pessoal conta o que o controlador tem ou provavelmente terá. O mascaramento é determinístico para a chave do engine, então quem tem ao mesmo tempo os dados de produção e a chave consegue ligar uma linha mascarada à sua origem. Mantenha a chave, e o acesso à produção, longe de quem usa a cópia mascarada. Se uma cópia conta como anonimizada é uma avaliação jurídica do ambiente inteiro, não só da política de descoberta." }
       ]
     }
   ],
@@ -67,7 +67,7 @@
     {
       "id": "HEALTH",
       "title": "Registros de saúde",
-      "intro": ["A seção 2 não inclui saúde entre os dados sensíveis, mas a lei dá aos registros de saúde um lugar próprio: registro de saúde é a informação sobre a condição física ou mental de uma pessoa feita por um profissional de saúde (s. 2), finalidades médicas são uma condição própria para tratar dados sensíveis (s. 10), e uma pequena empresa que presta serviços de saúde nunca está isenta (s. 3). Um diagnóstico, um antirretroviral ou uma gravidez expõem uma pessoa pelo menos tanto quanto as categorias listadas, e o set os trata do mesmo jeito."],
+      "intro": ["A seção 2 não inclui saúde entre os dados sensíveis, mas a lei dá aos registros de saúde um lugar próprio: registro de saúde é a informação sobre a condição física ou mental de uma pessoa feita por um profissional de saúde (s. 2), finalidades médicas são uma condição própria para tratar dados sensíveis (s. 10), e uma pequena empresa que presta serviços de saúde nunca está isenta (s. 3). Um diagnóstico, um antirretroviral ou uma gravidez expõem uma pessoa pelo menos tanto quanto as categorias listadas, e a política os trata do mesmo jeito."],
       "domains": ["BZ_HEALTH_ID", "BZ_HEALTH_DIAGNOSIS", "BZ_HEALTH_MEDICATION", "BZ_HEALTH_CLINICAL_TEXT", "BZ_HEALTH_TEST_RESULT", "BZ_HEALTH_BLOOD_GROUP", "BZ_HEALTH_DISABILITY", "BZ_HEALTH_REPRODUCTIVE", "BZ_HEALTH_MENTAL"]
     },
     {
@@ -162,7 +162,7 @@
     "BZ_L1_PAYMENT_CARD": {
       "title": "Cartão de pagamento",
       "what": "Números de cartões de crédito, débito e pré-pagos.",
-      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "BZ_L1_IP_ADDRESS": {
       "title": "Endereço IP",
@@ -362,7 +362,7 @@
     "BZ_HEALTH_CLINICAL_TEXT": {
       "title": "Texto clínico",
       "what": "Notas de evolução e de enfermagem, resumos de alta, notas de triagem e planos de tratamento.",
-      "masking": "Free Text Redaction, como no texto livre: números de identificação, contatos e nomes são suprimidos. O conteúdo clínico fica; se também precisar sair, atribua a coluna a um domínio de supressão."
+      "masking": "Free Text Redaction, como no texto livre: números de identificação, contatos e nomes são suprimidos. O conteúdo clínico fica; se também precisar sair, atribua a coluna a uma classe de dados de supressão."
     },
     "BZ_HEALTH_TEST_RESULT": {
       "title": "Resultado de exame",
@@ -376,7 +376,7 @@
     },
     "BZ_HEALTH_DISABILITY": {
       "title": "Deficiência",
-      "what": "Deficiência ou limitação funcional, nos domínios que o censo de 2022 pergunta: enxergar, ouvir, andar, lembrar ou concentrar-se, cuidar de si, comunicar-se.",
+      "what": "Deficiência ou limitação funcional, nas classes de dados que o censo de 2022 pergunta: enxergar, ouvir, andar, lembrar ou concentrar-se, cuidar de si, comunicar-se.",
       "masking": "Flags e códigos mantêm a forma; o valor é trocado por outro da lista."
     },
     "BZ_HEALTH_REPRODUCTIVE": {
@@ -397,22 +397,22 @@
     "BZ_FIN_DEBT": {
       "title": "Valor de dívida",
       "what": "Saldos de empréstimos, hipotecas e cartões, valores em atraso, limites de crédito, parcelas.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_INCOME": {
       "title": "Salário e renda",
       "what": "Salário, remuneração segurada, renda do domicílio.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_ASSETS": {
       "title": "Patrimônio",
       "what": "Valor de imóveis e terrenos, saldos de poupança e de contas, depósitos a prazo, investimentos e cotas de cooperativa, patrimônio líquido.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_PENSION": {
       "title": "Pensão",
       "what": "Valores de aposentadoria, pensão por invalidez e por morte, a pensão não contributiva, gratificações e saldos de fundos de previdência.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_SSB_BENEFIT": {
       "title": "Benefício da previdência social",
@@ -449,7 +449,7 @@
     {
       "title": "Onde as pessoas moram: cidades e vilas",
       "body": [
-        "Com a população por cidade e vila do Population and Housing Census de 2022 e a localização de cada lugar, o set conhece o tamanho, o distrito e a posição dos 221 lugares que o censo conta.",
+        "Com a população por cidade e vila do Population and Housing Census de 2022 e a localização de cada lugar, a política conhece o tamanho, o distrito e a posição dos 221 lugares que o censo conta.",
         { "list": [
           "Uma **cidade ou vila** com menos de 5.000 habitantes vira o lugar mais próximo do mesmo distrito com pelo menos 5.000. Treze lugares chegam a esse tamanho: Belize City, San Pedro Town e Ladyville no distrito de Belize; Belmopan, San Ignacio, Santa Elena e Benque Viejo del Carmen em Cayo; Corozal Town; Orange Walk Town e Trial Farm; Dangriga; Punta Gorda e Bella Vista em Toledo.",
           "O **distrito** fica: o menor, Toledo, tinha 38.944 habitantes.",
@@ -465,7 +465,7 @@
       "body": [
         { "list": [
           "**Colunas binárias** — imagens do cartão da previdência social ou do passaporte, imagens de digitais, PDFs clínicos em BLOBs — não podem ser mascaradas por estes algoritmos. Inventarie-as e reporte-as como risco residual.",
-          "**As divisões eleitorais ficam.** O set não mascara os 31 distritos eleitorais, cujos nomes identificam poucas pessoas sozinhos mas, em combinação, estreitam uma vila. Onde uma coluna os guarda junto com data de nascimento e sexo, generalize-a para o distrito.",
+          "**As divisões eleitorais ficam.** A política não mascara os 31 distritos eleitorais, cujos nomes identificam poucas pessoas sozinhos mas, em combinação, estreitam uma vila. Onde uma coluna os guarda junto com data de nascimento e sexo, generalize-a para o distrito.",
           "**Os números de identificação não mantêm dígito verificador.** O número da previdência social não tem um público, e o do TIN não é publicado, então nenhum é recalculado; aplicações que validam o dígito do TIN podem recusar valores mascarados.",
           "**TINs de empresas também são mascarados.** Não se distinguem dos de pessoas.",
           "**Números de passaporte, autorizações e carteiras de motorista** não têm formato público e são mascarados caractere a caractere.",
@@ -481,14 +481,14 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         { "list": [
-          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 141 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 32 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+          "A descoberta foi simulada em 141 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 32 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "A tabela que generaliza cidades e vilas foi auditada para os 221 lugares.",
           "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 145 valores de amostra e 198 marcadores como `N/A`, conferindo cada saída contra o seu vocabulário, e 150 números da previdência social quanto a colisões. Cada um dos 90 algoritmos também mascarou o seu próprio valor de exemplo."
         ] },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

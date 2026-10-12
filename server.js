@@ -7,6 +7,9 @@ const crypto = require('node:crypto');
 const { DatabaseSync } = require('node:sqlite');
 const ai = require('./ai');
 const delphix = require('./delphix');
+const dct = require('./dct');
+const { presetBundle } = require('./preset-bundle');
+const mountHooks = require('./hooks');
 
 const app = express();
 app.use(express.json());
@@ -297,6 +300,18 @@ for (const [col, decl] of [
 // The files this tool has put in each engine's upload store, by content, so sending the same file
 // again reuses its address instead of piling up copies there. Only a shortcut: an entry is used
 // after the engine confirms the address still resolves.
+// Every upload, by address. engine_uploads keeps one address per content and name, which is all
+// an engine needs (it lets any object name any upload); DCT ties an upload to the object that
+// named it, so two classifiers reading one list hold two addresses, and each must find its own.
+db.exec(`
+  CREATE TABLE IF NOT EXISTS upload_refs (
+    origin     TEXT NOT NULL,
+    reference  TEXT NOT NULL,
+    sha256     TEXT NOT NULL,
+    name       TEXT NOT NULL,
+    PRIMARY KEY (origin, reference)
+  )
+`);
 db.exec(`
   CREATE TABLE IF NOT EXISTS engine_uploads (
     origin     TEXT NOT NULL,
@@ -314,6 +329,7 @@ db.exec(`
 // not have it on disk at all. The names are namespaced so nothing is adopted by accident.
 const SECRET_ENV = {
   'delphix.password': 'DLPX_ENGINE_PASSWORD',
+  'delphix.apiKey': 'DLPX_DCT_API_KEY',
   'ai.anthropic.apiKey': 'DLPX_AI_ANTHROPIC_KEY',
   'ai.gemini.apiKey': 'DLPX_AI_GEMINI_KEY',
   'ai.openai.apiKey': 'DLPX_AI_OPENAI_KEY',
@@ -361,7 +377,7 @@ ensureDir(path.resolve(__dirname, readConfig().filesDir));
 // Config
 const KEY_MASK = '\u2022'.repeat(8);
 const isApiKey = (k) =>
-  (k.startsWith('ai.') && k.endsWith('.apiKey')) || k === 'delphix.password';
+  (k.startsWith('ai.') && k.endsWith('.apiKey')) || k === 'delphix.password' || k === 'delphix.apiKey';
 
 /** Replaces stored API keys with a mask, plus a `<key>.set` flag so the UI can show state. */
 function publicConfig(config) {
@@ -648,6 +664,8 @@ function parseStoredConfig(raw) {
 
 const delphixCfg = () => delphix.settings(readConfig());
 
+const hooks = mountHooks(app, { db, delphix, delphixCfg });
+
 /** Reports whether the configured engine is reachable and the credentials work. */
 app.get('/api/delphix/status', async (req, res) => {
   const cfg = delphixCfg();
@@ -663,6 +681,8 @@ app.post('/api/delphix/test', async (req, res) => {
   const stored = readConfig();
   const cfg = delphix.settings({
     ...stored,
+    'delphix.target': req.body.target ?? stored['delphix.target'],
+    'delphix.apiKey': req.body.apiKey || stored['delphix.apiKey'],
     'delphix.baseUrl': req.body.baseUrl ?? stored['delphix.baseUrl'],
     'delphix.username': req.body.username ?? stored['delphix.username'],
     'delphix.password': req.body.password || stored['delphix.password'],
@@ -712,7 +732,8 @@ async function pushAlgorithmRow(ctx, row, { asked = null, description } = {}) {
     });
     db.prepare(`UPDATE saved_algorithms SET delphix_name = ?, delphix_origin = ?,
                 updated_at = datetime('now') WHERE id = ?`).run(out.name, ctx.origin, row.id);
-    engine.set(out.name, { algorithmName: out.name, createdBy: ctx.cfg.username, config });
+    // Sent from here, so it is the user's — DCT has no username in the settings to say so.
+    engine.set(out.name, { algorithmName: out.name, createdBy: ctx.cfg.username || 'helper', config });
     const result = { ...out, renamedLocally };
     ctx.done.set(row.id, result);
     return result;
@@ -724,7 +745,7 @@ async function pushAlgorithmRow(ctx, row, { asked = null, description } = {}) {
 app.post('/api/delphix/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine is configured.' });
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix integration is configured.' });
   }
   const row = db.prepare('SELECT * FROM saved_algorithms WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Saved algorithm not found' });
@@ -791,7 +812,7 @@ const canDownloadLookup = (a) =>
  * the engine does not have, a file the engine offers no way to download.
  */
 async function importFromEngine(cfg, { algorithms = [], domains = [], classifiers = [], profileSets = [], onProgress = null }) {
-  const origin = delphix.apiRoot(cfg.baseUrl);
+  const origin = delphix.origin(cfg);
   const out = { profileSets: [], classifiers: [], domains: [], algorithms: [], skipped: [], downloaded: [], needsFiles: [] };
 
   // Progress, for the dialog to show. The work is discovered as it goes — a classifier drags its
@@ -840,15 +861,16 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
 
   const pendingDomains = new Set(domains);
   const pendingAlgorithms = algorithms.map((name) => ({ name, asked: true }));
-  const pendingClassifiers = new Set(classifiers.map(Number));
+  // Engine ids are numbers and DCT ids are UUIDs; both are compared as text.
+  const pendingClassifiers = new Set(classifiers.map(String));
   // Which engine classifier ids each imported set holds. Resolved to local rows only after the
   // classifiers themselves are in, because that is when they have local ids to point at.
   const memberships = [];
 
   if (profileSets.length) {
     const sets = await delphix.listProfileSets(cfg);
-    const wanted = new Set(profileSets.map(Number));
-    const picked = sets.filter((s) => wanted.has(Number(s.profileSetId)));
+    const wanted = new Set(profileSets.map(String));
+    const picked = sets.filter((s) => wanted.has(String(s.profileSetId)));
     for (const [i, s] of picked.entries()) {
       step('profileSet', s.profileSetName, (picked.length - 1 - i)
         + pendingClassifiers.size + pendingDomains.size + pendingAlgorithms.length);
@@ -881,7 +903,7 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
         out.skipped.push({ kind: 'profileSet', name: s.profileSetName, reason: 'name-taken' });
         continue;
       }
-      const members = (s.classifierIds ?? []).map(Number);
+      const members = (s.classifierIds ?? []).map(String);
       for (const id of members) pendingClassifiers.add(id);
       memberships.push({ localId, members });
       out.profileSets.push(s.profileSetName);
@@ -891,7 +913,7 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
   if (pendingClassifiers.size) {
     const [list, frameworks] = await Promise.all([delphix.listClassifiers(cfg), delphix.classifierFrameworks(cfg)]);
     const frameworkOf = Object.fromEntries(Object.entries(frameworks).map(([name, id]) => [id, name]));
-    const picked = list.filter((c) => pendingClassifiers.has(Number(c.classifierId)));
+    const picked = list.filter((c) => pendingClassifiers.has(String(c.classifierId)));
     for (const [i, c] of picked.entries()) {
       step('classifier', c.classifierName, (picked.length - 1 - i) + pendingDomains.size + pendingAlgorithms.length);
       const framework = frameworkOf[c.frameworkId];
@@ -932,7 +954,7 @@ async function importFromEngine(cfg, { algorithms = [], domains = [], classifier
   // unsupported framework) is simply not in the set — and is already named in `skipped`.
   const localByEngineId = new Map(
     db.prepare('SELECT id, delphix_id FROM classifiers WHERE delphix_origin = ? AND delphix_id IS NOT NULL')
-      .all(origin).map((r) => [Number(r.delphix_id), r.id])
+      .all(origin).map((r) => [String(r.delphix_id), r.id])
   );
   for (const { localId, members } of memberships) {
     setMembers(localId, members.map((id) => localByEngineId.get(id)).filter((id) => id != null));
@@ -1069,7 +1091,7 @@ function followSyncJob(job, res) {
 
 /** The refusal for a sync asked for while another is running. */
 function refuseConcurrentSync(res) {
-  return res.status(409).json({ code: 'sync-running', error: 'A sync with the engine is already running.' });
+  return res.status(409).json({ code: 'sync-running', error: 'A sync with Delphix is already running.' });
 }
 
 /**
@@ -1109,7 +1131,7 @@ function exportContext(cfg) {
   let uploadStore = null;
   return {
     cfg,
-    origin: delphix.apiRoot(cfg.baseUrl),
+    origin: delphix.origin(cfg),
     sent: [],        // referenced algorithms pushed along, in order
     skipped: [],     // referenced names left as they are, and why
     uploaded: [],    // files put in the upload store
@@ -1124,8 +1146,12 @@ function exportContext(cfg) {
     // time a push takes (a CURP domain brings 29 algorithms), so a bar that named only what was
     // asked for would sit still through the slow part.
     onStep: null,
+    // DCT names some built-ins differently from the plugin ("CreditCard" for "Credit Card"), so a
+    // built-in is also found by its alias — see remoteAlgorithm().
     engineAlgorithms: () => (engineAlgorithms ??= delphix.listAlgorithms(cfg)
-      .then((list) => new Map(list.map((a) => [a.algorithmName, a])))),
+      .then((list) => new Map(list.flatMap((a) => [
+        [a.algorithmName, a], ...(a.aliases ?? []).map((alias) => [`alias:${alias}`, a]),
+      ])))),
     uploadStore: () => (uploadStore ??= delphix.uploadedFiles(cfg)),
   };
 }
@@ -1143,12 +1169,12 @@ async function pushReference(ctx, name, owner) {
     if (!ctx.skipped.some((s) => s.name === name)) ctx.skipped.push({ name, reason });
     return name;
   };
-  const remote = (await ctx.engineAlgorithms()).get(name);
+  const remote = remoteAlgorithm(await ctx.engineAlgorithms(), name);
   if (remote && !remote.createdBy) return skip('engine-owned');
   const row = db.prepare('SELECT * FROM saved_algorithms WHERE name = ?').get(name);
   if (!row) {
     if (remote) return skip('not-local');
-    const err = new Error(`"${owner}" references the algorithm "${name}", which neither this machine nor the engine has.`);
+    const err = new Error(`"${owner}" references the algorithm "${name}", which neither this machine nor Delphix has.`);
     err.code = 'reference-missing';
     throw err;
   }
@@ -1163,6 +1189,11 @@ async function pushReference(ctx, name, owner) {
     failure.code = 'reference-failed';
     throw failure;
   }
+}
+
+/** The algorithm on the other side a name means: by the name, or a built-in by its alias. */
+function remoteAlgorithm(engine, name) {
+  return engine.get(name) ?? engine.get(`alias:${dct.builtinKey(name)}`);
 }
 
 /** A file address the engine may not be able to open as it is, with where the copy here lives. */
@@ -1198,9 +1229,11 @@ async function engineReadyFiles(ctx, config, current) {
   for (const value of new Set(delphix.configStrings(config))) {
     const file = fileToSend(value);
     if (!file || owned.has(value)) continue;
-    if (file.onEngine && (await ctx.uploadStore()).has(value)) continue;
+    // An upload still in the store may be named again — on an engine. DCT ties an upload to the
+    // one algorithm that named it first, so there a new owner gets its own.
+    if (file.onEngine && delphix.sharesUploads(ctx.cfg) && (await ctx.uploadStore()).has(value)) continue;
     if (!file.path || !fs.existsSync(file.path)) {
-      const err = new Error(`"${file.name}" is not on this machine, so it could not go to the engine. Add it under Files and send again.`);
+      const err = new Error(`"${file.name}" is not on this machine, so it could not go to Delphix. Add it under Files and send again.`);
       err.code = 'file-missing';
       err.file = file.name;
       throw err;
@@ -1216,20 +1249,26 @@ async function uploadOnce(ctx, full, owned) {
   const name = path.basename(full);
   const sha256 = crypto.createHash('sha256').update(content).digest('hex');
   const key = `${sha256}/${name}`;
-  if (ctx.uploads.has(key)) return ctx.uploads.get(key);
+  const shares = delphix.sharesUploads(ctx.cfg);
+  if (shares && ctx.uploads.has(key)) return ctx.uploads.get(key);
 
   const known = db.prepare('SELECT reference FROM engine_uploads WHERE origin = ? AND sha256 = ? AND name = ?')
     .get(ctx.origin, sha256, name);
-  let reference = known && (owned.has(known.reference) || (await ctx.uploadStore()).has(known.reference))
+  let reference = known && (owned.has(known.reference) || (shares && (await ctx.uploadStore()).has(known.reference)))
     ? known.reference : null;
+  // The object may already own an upload of this very file under another address.
+  reference ??= db.prepare('SELECT reference FROM upload_refs WHERE origin = ? AND sha256 = ? AND name = ?')
+    .all(ctx.origin, sha256, name).map((r) => r.reference).find((r) => owned.has(r)) ?? null;
   if (!reference) {
     reference = await delphix.uploadFile(ctx.cfg, name, content);
     db.prepare('INSERT OR REPLACE INTO engine_uploads (origin, sha256, name, reference) VALUES (?, ?, ?, ?)')
       .run(ctx.origin, sha256, name, reference);
+    db.prepare('INSERT OR REPLACE INTO upload_refs (origin, reference, sha256, name) VALUES (?, ?, ?, ?)')
+      .run(ctx.origin, reference, sha256, name);
     (await ctx.uploadStore()).add(reference);
     ctx.uploaded.push(name);
   }
-  ctx.uploads.set(key, reference);
+  if (shares) ctx.uploads.set(key, reference);
   return reference;
 }
 
@@ -1540,7 +1579,7 @@ app.post('/api/domains', (req, res) => {
   const name = String(req.body.name ?? '').trim();
   if (!name) return res.status(400).json({ code: 'name-required', error: 'A name is required.' });
   if (name.length > 100) {
-    return res.status(400).json({ code: 'name-too-long', error: 'The engine caps a domain name at 100 characters.' });
+    return res.status(400).json({ code: 'name-too-long', error: 'Delphix caps a data class name at 100 characters.' });
   }
   const clash = db.prepare('SELECT id FROM domains WHERE name = ?').get(name);
   if (clash) return res.status(409).json({ code: 'name-taken', error: `"${name}" already exists.` });
@@ -1554,7 +1593,7 @@ app.post('/api/domains', (req, res) => {
 /** Name is identity and is never updated — same rule the engine enforces on the path. */
 app.put('/api/domains/:id', (req, res) => {
   const current = db.prepare('SELECT * FROM domains WHERE id = ?').get(req.params.id);
-  if (!current) return res.status(404).json({ error: 'Domain not found' });
+  if (!current) return res.status(404).json({ error: 'Data class not found' });
 
   db.prepare(`
     UPDATE domains SET default_algorithm = ?, default_tokenization = ?, updated_at = datetime('now')
@@ -1617,10 +1656,10 @@ async function pushDomainRow(ctx, row) {
 app.post('/api/delphix/domains/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix integration configured yet.' });
   }
   const row = db.prepare('SELECT * FROM domains WHERE id = ?').get(req.params.id);
-  if (!row) return res.status(404).json({ error: 'Domain not found' });
+  if (!row) return res.status(404).json({ error: 'Data class not found' });
 
   await exportJob(res, cfg, 'domain', { id: row.id, name: row.name }, async (ctx) => {
     const out = await pushDomainRow(ctx, row);
@@ -1671,7 +1710,7 @@ let engineReferences = { key: null, at: 0, promise: null };
 app.get('/api/reference/engine', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) return res.json({ state: 'not-configured', algorithms: [], tokenization: [], domains: [] });
-  const key = `${delphix.apiRoot(cfg.baseUrl)}|${cfg.username}`;
+  const key = `${delphix.origin(cfg)}|${cfg.username}`;
   const stale = engineReferences.key !== key || Date.now() - engineReferences.at > 60000;
   if (stale || req.query.refresh) {
     engineReferences = {
@@ -1783,7 +1822,7 @@ app.post('/api/classifiers', (req, res) => {
   if (nameProblem) return res.status(nameProblem.status ?? 400).json(nameProblem);
   if (!classifierKit.isFramework(framework)) return res.status(400).json(unknownFramework(framework));
   // A classifier without a domain has nothing to vote for, and the engine will not store one.
-  if (!domain) return res.status(400).json({ code: 'domain-required', error: 'Choose the domain this classifier votes for.' });
+  if (!domain) return res.status(400).json({ code: 'domain-required', error: 'Choose the data class this classifier votes for.' });
   const { errors } = classifierKit.reviewClassifier(framework, config);
   if (errors.length) return res.status(400).json(configRefusal('invalid-config', errors));
 
@@ -1805,7 +1844,7 @@ app.put('/api/classifiers/:id', (req, res) => {
 
   const nameProblem = classifierNameProblem(name, current.id);
   if (nameProblem) return res.status(nameProblem.status ?? 400).json(nameProblem);
-  if (!domain) return res.status(400).json({ code: 'domain-required', error: 'Choose the domain this classifier votes for.' });
+  if (!domain) return res.status(400).json({ code: 'domain-required', error: 'Choose the data class this classifier votes for.' });
   const { errors } = classifierKit.reviewClassifier(current.framework, config);
   if (errors.length) return res.status(400).json(configRefusal('invalid-config', errors));
 
@@ -1913,10 +1952,10 @@ function profileSetRow(r) {
 }
 
 function profileSetNameProblem(name, exceptId = null) {
-  if (!name) return { code: 'name-required', error: 'Give the profile set a name.' };
-  if (name.length > 100) return { code: 'name-too-long', error: 'Profile set names are limited to 100 characters.' };
+  if (!name) return { code: 'name-required', error: 'Give the discovery policy a name.' };
+  if (name.length > 100) return { code: 'name-too-long', error: 'Discovery policy names are limited to 100 characters.' };
   const clash = db.prepare('SELECT id FROM profile_sets WHERE name = ?').get(name);
-  if (clash && clash.id !== exceptId) return { code: 'name-taken', error: `Another profile set is already called "${name}".`, status: 409 };
+  if (clash && clash.id !== exceptId) return { code: 'name-taken', error: `Another discovery policy is already called "${name}".`, status: 409 };
   return null;
 }
 
@@ -1961,7 +2000,7 @@ app.post('/api/profile-sets', (req, res) => {
 
 app.put('/api/profile-sets/:id', (req, res) => {
   const current = db.prepare('SELECT * FROM profile_sets WHERE id = ?').get(req.params.id);
-  if (!current) return res.status(404).json({ error: 'Profile set not found' });
+  if (!current) return res.status(404).json({ error: 'Discovery policy not found' });
 
   const name = req.body.name === undefined ? current.name : String(req.body.name).trim();
   const description = req.body.description === undefined ? current.description : String(req.body.description);
@@ -2006,7 +2045,7 @@ async function pushClassifierRow(ctx, row) {
       throw err;
     });
     if (!exists) {
-      const err = new Error(`Neither this machine nor the engine has a domain called "${row.domain_name}".`);
+      const err = new Error(`Neither this machine nor Delphix has a data class called "${row.domain_name}".`);
       err.code = 'domain-missing';
       err.domain = row.domain_name;
       throw err;
@@ -2032,7 +2071,7 @@ async function pushClassifierRow(ctx, row) {
 app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix integration configured yet.' });
   }
   const row = db.prepare('SELECT * FROM classifiers WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Classifier not found' });
@@ -2059,17 +2098,17 @@ app.post('/api/delphix/classifiers/export/:id', async (req, res) => {
 app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix integration configured yet.' });
   }
   const row = db.prepare('SELECT * FROM profile_sets WHERE id = ?').get(req.params.id);
-  if (!row) return res.status(404).json({ error: 'Profile set not found' });
+  if (!row) return res.status(404).json({ error: 'Discovery policy not found' });
   const members = db.prepare(`
     SELECT c.* FROM profile_set_classifiers m
       JOIN classifiers c ON c.id = m.classifier_id
      WHERE m.profile_set_id = ? ORDER BY c.name COLLATE NOCASE
   `).all(row.id);
   if (!members.length) {
-    return res.status(400).json({ code: 'no-members', error: 'A profile set with no classifier has nothing to send.' });
+    return res.status(400).json({ code: 'no-members', error: 'A discovery policy with no classifier has nothing to send.' });
   }
   await exportJob(res, cfg, 'profileSet', { id: row.id, name: row.name }, async (ctx, progress) => {
     // Counted by member, the one thing known up front; the name is whatever is being written now.
@@ -2082,7 +2121,7 @@ app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
     for (const member of members) {
       const out = await pushClassifierRow(ctx, member);
       if (out.id == null) {
-        throw new Error(`The engine accepted "${member.name}" but returned no id, so the set cannot name it.`);
+        throw new Error(`Delphix accepted "${member.name}" but returned no id, so the policy cannot name it.`);
       }
       classifierIds.push(out.id);
       sent.push({ name: out.name, mode: out.mode });
@@ -2119,7 +2158,7 @@ app.post('/api/delphix/profile-sets/export/:id', async (req, res) => {
 app.post('/api/delphix/sync/import', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix integration configured yet.' });
   }
 
   if (syncJob) return refuseConcurrentSync(res);
@@ -2132,10 +2171,14 @@ app.post('/api/delphix/sync/import', async (req, res) => {
       delphix.listProfileSets(cfg), delphix.listClassifiers(cfg),
       delphix.listDomains(cfg), delphix.listAlgorithms(cfg),
     ]);
+    // DCT's built-in data classes, classifiers and policies are read-only there and ship with
+    // every DCT, like an engine's plugin instances: what is the user's is what comes down. A
+    // built-in data class a user classifier votes for still comes, along with the classifier.
+    const own = (item) => !item.builtIn;
     selection = {
-      profileSets: sets.map((s) => s.profileSetId),
-      classifiers: classifiers.map((c) => c.classifierId),
-      domains: domains.map((d) => d.domainName),
+      profileSets: sets.filter(own).map((s) => s.profileSetId),
+      classifiers: classifiers.filter(own).map((c) => c.classifierId),
+      domains: domains.filter((d) => cfg.target !== 'dct' || d.createdBy).map((d) => d.domainName),
       // The engine's own plugin instances are left out. This tool holds the same plugin, so a
       // saved copy of one would be a row that answers to nothing and cannot be sent back.
       algorithms: algorithms.filter((a) => a.createdBy).map((a) => a.algorithmName),
@@ -2146,8 +2189,10 @@ app.post('/api/delphix/sync/import', async (req, res) => {
 
   try {
     const out = await importFromEngine(cfg, { ...selection, onProgress: (p) => job.emit('progress', p) });
-    job.finish('done', importReply(out, 'all',
-      [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms]));
+    // Hook templates live in DCT; an engine has none.
+    const hookNames = cfg.target === 'dct' ? await hooks.importHooks(cfg) : [];
+    job.finish('done', { ...importReply(out, 'all',
+      [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms, ...hookNames]), hooks: hookNames });
   } catch (err) {
     job.finish('error', { message: err.message });
   }
@@ -2176,7 +2221,7 @@ app.get('/api/delphix/sync/current', (req, res) => {
 app.post('/api/delphix/sync/export', async (req, res) => {
   const cfg = delphixCfg();
   if (!delphix.isConfigured(cfg)) {
-    return res.status(400).json({ code: 'not-configured', error: 'No Delphix engine configured yet.' });
+    return res.status(400).json({ code: 'not-configured', error: 'No Delphix integration configured yet.' });
   }
 
   if (syncJob) return refuseConcurrentSync(res);
@@ -2247,6 +2292,10 @@ app.post('/api/delphix/sync/export', async (req, res) => {
       if (saved.descriptionCut) descriptionCut.push(saved.name);
     }
 
+    if (cfg.target === 'dct') {
+      job.emit('progress', { kind: 'hook', name: null, done, total });
+      out.hooks = await hooks.exportHooks(cfg);
+    }
     job.finish('done', { ...out, engine: ctx.origin, uploaded: ctx.uploaded, references: ctx.skipped, descriptionCut });
   } catch (err) {
     job.finish('error', { message: err.message, done, total });
@@ -2267,9 +2316,9 @@ app.post('/api/delphix/sync/export', async (req, res) => {
  */
 app.delete('/api/delphix/integration', (req, res) => {
   const cfg = delphixCfg();
-  const origin = delphix.isConfigured(cfg) ? delphix.apiRoot(cfg.baseUrl) : null;
+  const origin = delphix.isConfigured(cfg) ? delphix.origin(cfg) : null;
 
-  const removed = { profileSets: 0, classifiers: 0, domains: 0, algorithms: 0 };
+  const removed = { profileSets: 0, classifiers: 0, domains: 0, algorithms: 0, hooks: 0 };
   if (origin) {
     const setIds = db.prepare('SELECT id FROM profile_sets WHERE delphix_origin = ?').all(origin).map((r) => r.id);
     for (const id of setIds) db.prepare('DELETE FROM profile_set_classifiers WHERE profile_set_id = ?').run(id);
@@ -2281,10 +2330,12 @@ app.delete('/api/delphix/integration', (req, res) => {
 
     removed.domains = db.prepare('DELETE FROM domains WHERE delphix_origin = ?').run(origin).changes;
     removed.algorithms = db.prepare('DELETE FROM saved_algorithms WHERE delphix_origin = ?').run(origin).changes;
+    removed.hooks = hooks.dropIntegration(origin);
     db.prepare('DELETE FROM engine_uploads WHERE origin = ?').run(origin);
+    db.prepare('DELETE FROM upload_refs WHERE origin = ?').run(origin);
   }
 
-  for (const key of ['delphix.baseUrl', 'delphix.username', 'delphix.password', 'delphix.allowSelfSigned']) {
+  for (const key of ['delphix.target', 'delphix.baseUrl', 'delphix.username', 'delphix.password', 'delphix.apiKey', 'delphix.allowSelfSigned']) {
     db.prepare('DELETE FROM config WHERE key = ?').run(key);
   }
   res.json({ ok: true, engine: origin, removed });
@@ -2381,6 +2432,10 @@ function readPreset(id) {
     dir,
     version: manifest?.version ?? null,
     versionDate: manifest?.versionDate ?? null,
+    // Where the law applies, for grouping the list. Optional: a hand-made preset without them lands
+    // under "other".
+    region: manifest?.region ?? null,
+    country: manifest?.country ?? null,
     name: manifest?.name ?? {},
     summary: manifest?.summary ?? {},
     profileSet: manifest?.profileSet ?? {},
@@ -2394,6 +2449,9 @@ function readPreset(id) {
   preset.problems = manifest ? presetProblems(preset) : [unreadable];
   return preset;
 }
+
+/** The regions the list of presets is grouped by, in the order it shows them. */
+const PRESET_REGIONS = ['north-america', 'central-america', 'caribbean', 'south-america', 'europe', 'africa', 'asia', 'oceania'];
 
 function readPresets() {
   if (!fs.existsSync(PRESETS_DIR)) return [];
@@ -2416,6 +2474,8 @@ function presetProblems(p) {
   // Optional, so a hand-made preset without one still loads; the ones shipped here all carry it.
   if (p.versionDate !== null && !isCalendarDate(p.versionDate)) out.push('versionDate must be a date written YYYY-MM-DD.');
   if (!p.name.en) out.push('name.en is required.');
+  if (p.region !== null && !PRESET_REGIONS.includes(p.region)) out.push(`region must be one of ${PRESET_REGIONS.join(', ')}.`);
+  if (p.country !== null && !/^[A-Z]{2}$/.test(String(p.country))) out.push('country must be an ISO 3166 code of two capital letters.');
 
   const names = (kind, list) => {
     const seen = new Set();
@@ -2547,6 +2607,8 @@ function presetListing(p) {
     id: p.id,
     version: p.version,
     versionDate: p.versionDate,
+    region: p.region,
+    country: p.country,
     name: p.name,
     summary: p.summary,
     profileSet: { name: p.profileSet.name ?? '' },
@@ -2849,10 +2911,31 @@ app.get('/api/presets', (req, res) => {
 /** The documentation PDF, in the requested language when there is one, else English, else any. */
 app.get('/api/presets/:id/doc', (req, res) => {
   const p = readPresets().find((x) => x.id === req.params.id);
-  if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
+  if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
   const locale = [req.query.locale, 'en', ...p.docs].find((l) => p.docs.includes(l));
-  if (!locale) return res.status(404).json({ code: 'no-doc', error: 'This profile set has no documentation yet.' });
+  if (!locale) return res.status(404).json({ code: 'no-doc', error: 'This discovery policy has no documentation yet.' });
   res.download(path.join(p.dir, `doc.${locale}.pdf`), `${p.id}.${locale}.pdf`);
+});
+
+/**
+ * The preset as a zip that loads it into Delphix without this tool: its documentation, an import
+ * script for bash and one for PowerShell, and every object already shaped for the engine's API and
+ * for Data Control Tower's. See preset-bundle.js.
+ */
+app.get('/api/presets/:id/bundle', (req, res) => {
+  const p = readPresets().find((x) => x.id === req.params.id);
+  if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
+  if (p.problems.length) {
+    return res.status(400).json({ code: 'preset-invalid', problems: p.problems, error: p.problems.join(' ') });
+  }
+  try {
+    const zip = presetBundle(p, presetPack);
+    res.setHeader('Content-Type', 'application/zip');
+    res.setHeader('Content-Disposition', `attachment; filename="${p.id}-v${p.version}.zip"`);
+    res.send(zip);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 /**
@@ -2863,13 +2946,13 @@ app.get('/api/presets/:id/doc', (req, res) => {
  */
 app.post('/api/presets/:id/load', async (req, res) => {
   const p = readPresets().find((x) => x.id === req.params.id);
-  if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
+  if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
   if (p.problems.length) {
     return res.status(400).json({ code: 'preset-invalid', problems: p.problems, error: p.problems.join(' ') });
   }
   const pack = req.body?.pack ?? 'extended';
   if (!presetPackIds(p).includes(pack)) {
-    return res.status(400).json({ code: 'preset-pack', error: `This profile set has no ${String(pack)} pack.` });
+    return res.status(400).json({ code: 'preset-pack', error: `This discovery policy has no ${String(pack)} pack.` });
   }
 
   let displayName;
@@ -2889,7 +2972,7 @@ app.post('/api/presets/:id/load', async (req, res) => {
     return res.status(409).json({
       code: 'preset-conflict',
       conflicts: plan.conflicts,
-      error: `Already on this machine, and not from this profile set: ${plan.conflicts.map((c) => c.name).join(', ')}.`,
+      error: `Already on this machine, and not from this discovery policy: ${plan.conflicts.map((c) => c.name).join(', ')}.`,
     });
   }
   try {
@@ -2906,7 +2989,7 @@ app.post('/api/presets/:id/load', async (req, res) => {
  */
 app.post('/api/presets/:id/unload', (req, res) => {
   const p = readPresets().find((x) => x.id === req.params.id);
-  if (!p) return res.status(404).json({ error: 'No pre-configured profile set by that id.' });
+  if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
 
   const copied = presetCopiedFiles(p, presetLoad(p.id));
   let rows;

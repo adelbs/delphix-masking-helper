@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "south-america",
+  "country": "EC",
   "name": {
     "en": "Ecuador — Ley Orgánica de Protección de Datos Personales",
     "pt-BR": "Equador — Ley Orgánica de Protección de Datos Personales",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales ecuatorianos conforme a la Ley Orgánica de Protección de Datos Personales (Registro Oficial 459 de 2021) y su reglamento de 2023: identificadores directos (cédula y RUC con dígito verificador válido, documentos de extranjeros, nombres, contacto, dirección, cuentas, placas), cuasi-identificadores (fecha de nacimiento, parroquia y código DPA, código postal), los datos sensibles del artículo 4 — etnia, identidad cultural, identidad de género, religión, ideología, filiación política, condición migratoria, orientación sexual, salud, datos biométricos y genéticos —, el pasado judicial que el mismo artículo hace sensible, datos de salud, datos crediticios y procesos penales."
   },
   "profileSet": {
-    "name": "EC - LOPDP - v2",
+    "name": "EC - LOPDP - v3",
     "description": "LOPDP - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

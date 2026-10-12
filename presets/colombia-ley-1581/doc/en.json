@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Colombian personal data: cédula and NIT with a valid check digit, quasi-identifiers, the sensitive data of article 5, victims of the armed conflict, financial data under Law 1266 of 2008 and criminal records.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Colombian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
-        "Masking names and cédulas alone is not enough: a birth date, a sex and a small municipality already point at one person. The set works in the layers where the risk is:",
+        "This discovery policy finds the personal data in a Colombian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and cédulas alone is not enough: a birth date, a sex and a small municipality already point at one person. The policy works in the layers where the risk is:",
         { "list": [
           "**Direct identifiers** — cédula, identity card and NUIP, NIT, foreigner documents (cédula de extranjería, PPT, PEP), passport, civil registry, professional card, names, contact, address, accounts, cards and Bre-B key, devices, vehicles, real estate, free text.",
           "**Quasi-identifiers** — birth date, age, sex, municipality and DIVIPOLA code, postal code, neighbourhood, vereda, nationality, marital status, occupation, employer, education.",
@@ -15,7 +15,7 @@
           "**Financial data** — those of Law 1266 of 2008: credit bureau reports, debt, income, assets, pension; and those that reveal the socioeconomic situation: stratum, Sisbén IV, social programmes, housing tenure.",
           "**Criminal records and proceedings** — judicial, disciplinary and fiscal records, corrective measures, legal situation and case file numbers."
         ] },
-        "On a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those lean on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those lean on — and the lookup files they read. The appendices list each of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `CARGO`, `PROCESO` — needs the values to agree. A column whose name means nothing (`CAMPO1`, `OBS`) is still found when the values have a recognizable format or vocabulary: a cédula with dots, a NIT, an address in the street grid notation, a plate, a municipality.",
         "Column names are recognized in Spanish, in the abbreviations of Colombian systems (`NRO_DOCUMENTO`, `CC_CLIENTE`, `FEC_NAC`, `COD_MPIO`, `DX_PRINCIPAL`, `ESTRATO`, `GRUPO_SISBEN`) and in English.",
         { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often store a photo of the cédula — with the fingerprint and blood group — and a biometric validation selfie. Report those columns as residual risk." }
@@ -35,18 +35,18 @@
           "**Sanctions.** Personal and institutional fines of up to 2,000 monthly minimum wages — in 2026, about 3.5 billion pesos —, suspension of processing for up to six months, temporary closure and **immediate and definitive closure** of any operation involving sensitive data (art. 23). Obtaining, compiling, selling or disclosing personal data without authorization is also a crime: article 269F of the Criminal Code (Law 1273 of 2009) punishes it with 48 to 96 months in prison."
         ] },
         "**Financial data.** Databases governed by Law 1266 of 2008 — financial, credit and commercial habeas data — are outside Law 1581, but its principles apply to them (art. 2, e and paragraph). Law 2157 of 2021 limits how long negative data stays to twice the time in arrears, four years at most.",
-        "**Archived reform.** In August 2025 statutory bills 214 and 274 of 2025, merged, were filed in the House of Representatives to update Law 1581 (definitions of genetic and biometric data, profiling, automated decisions, higher fines). The bill passed its first debate in October 2025, and in September 2026 it is listed as **archived** on the House website: a statutory law must be passed within a single legislative term (art. 153 of the Constitution). This set follows the law in force."
+        "**Archived reform.** In August 2025 statutory bills 214 and 274 of 2025, merged, were filed in the House of Representatives to update Law 1581 (definitions of genetic and biometric data, discovery, automated decisions, higher fines). The bill passed its first debate in October 2025, and in September 2026 it is listed as **archived** on the House website: a statutory law must be passed within a single legislative term (art. 153 of the Constitution). This policy follows the law in force."
       ]
     },
     {
       "title": "Anonymization, pseudonymization and non-production copies",
       "body": [
         "Law 1581 has no anonymization clause: the consequence follows from the definition of personal data. If data can no longer be associated with a determined or determinable person, it is not personal data. The **Guide to the Anonymization of Structured Data** of the Archivo General de la Nación (2020), written with the ICT Ministry, the SIC, the Civil Service Department, the National Planning Department and DANE, draws the line: **pseudonymization** replaces one attribute with another, does not produce completely anonymous records and *cannot be said to be an anonymization method*, although it reduces the risk of identification.",
-        "The algorithms of this set are deterministic for the key of the Masking Engine: the same cédula masks the same way in every table, which keeps joins working. So for whoever holds the key **and** production, the masked copy can be linked back — it is pseudonymized and still personal data. For whoever holds only the copy, direct identifiers were replaced and quasi-identifiers generalized.",
+        "The algorithms of this policy are deterministic for the Delphix masking key: the same cédula masks the same way in every table, which keeps joins working. So for whoever holds the key **and** production, the masked copy can be linked back — it is pseudonymized and still personal data. For whoever holds only the copy, direct identifiers were replaced and quasi-identifiers generalized.",
         { "list": [
           "Keep the engine key out of reach of the users of the masked copy.",
           "Do not hand the copy to people who also access production without need.",
-          "Review quasi-identifiers the set does not know. The AGN guide and the DANE guide (2024) recommend measuring the re-identification risk before publishing or sharing."
+          "Review quasi-identifiers the policy does not know. The AGN guide and the DANE guide (2024) recommend measuring the re-identification risk before publishing or sharing."
         ] }
       ]
     }
@@ -72,7 +72,7 @@
       "id": "L3",
       "title": "Sensitive data",
       "intro": [
-        "The categories of article 5 that are not health data — which has a group of its own: racial or ethnic origin, political orientation, religious or philosophical convictions, membership of trade unions, of social and human rights organizations and of parties, sexual life and biometric data. The list is illustrative (*such as*): the set includes genetic data, sexual orientation and gender identity, and two categories that in Colombia expose people to discrimination and violence — being a **victim of the armed conflict**, whose information is confidential (Law 1448 of 2011, arts. 29 and 156), and being a **person in the reincorporation process**. Categorical columns keep their shape: an S/N flag stays a flag, a code is replaced by another code of the same catalog and any other value by one from the list of its category. Where the values share no vocabulary, they are suppressed to `Sin información`."
+        "The categories of article 5 that are not health data — which has a group of its own: racial or ethnic origin, political orientation, religious or philosophical convictions, membership of trade unions, of social and human rights organizations and of parties, sexual life and biometric data. The list is illustrative (*such as*): the policy includes genetic data, sexual orientation and gender identity, and two categories that in Colombia expose people to discrimination and violence — being a **victim of the armed conflict**, whose information is confidential (Law 1448 of 2011, arts. 29 and 156), and being a **person in the reincorporation process**. Categorical columns keep their shape: an S/N flag stays a flag, a code is replaced by another code of the same catalog and any other value by one from the list of its category. Where the values share no vocabulary, they are suppressed to `Sin información`."
       ],
       "domains": ["CO_L3_GRUPO_ETNICO", "CO_L3_PUEBLO_INDIGENA", "CO_L3_LENGUA_NATIVA", "CO_L3_RELIGION", "CO_L3_CONVICCION_FILOSOFICA", "CO_L3_ORIENTACION_POLITICA", "CO_L3_AFILIACION_PARTIDO", "CO_L3_SINDICATO", "CO_L3_ORGANIZACION_SOCIAL", "CO_L3_BIOMETRICO", "CO_L3_GENETICO", "CO_L3_ORIENTACION_SEXUAL", "CO_L3_VIDA_SEXUAL", "CO_L3_IDENTIDAD_GENERO", "CO_L3_VICTIMA_CONFLICTO", "CO_L3_REINCORPORACION"]
     },
@@ -156,7 +156,7 @@
       "title": "Full name",
       "what": [
         "Given names and surnames in one column: `Juan Carlos Rodríguez Gómez`. Also those of the mother, father, guardian, spouse, personal or family reference, and the identity name of a trans person.",
-        "A column called just `NOMBRE` may hold given names or full names: the values decide between the two domains."
+        "A column called just `NOMBRE` may hold given names or full names: the values decide between the two data classes."
       ],
       "masking": [
         "In Colombian order: two words are a given name and a surname; three, a given name and two surnames; four, two and two; five, two given names and three words of surnames. `SURNAMES, GIVEN NAMES` with a comma, as in lists, is recognized too. The result is a plausible name, never the original."
@@ -175,7 +175,7 @@
     "CO_L1_DIRECCION": {
       "title": "Address",
       "what": ["The address in the urban grid notation — the street, its number, the crossing street and the distance to it: `Carrera 7 # 32-16`, `Cl 100 No. 19-54 Apto 802` —, which places a door on a block, and rural addresses with a vereda, farm or kilometre."],
-      "masking": ["The whole line is replaced with a fictitious Colombian address in the same notation. Neighbourhood, vereda, municipality and postal code in their own columns are handled by their domains."]
+      "masking": ["The whole line is replaced with a fictitious Colombian address in the same notation. Neighbourhood, vereda, municipality and postal code in their own columns are handled by their data classes."]
     },
     "CO_L1_DIRECCION_COMPLEMENTO": {
       "title": "Address complement",
@@ -184,18 +184,18 @@
     },
     "CO_L1_CUENTA_BANCARIA": {
       "title": "Bank account",
-      "what": ["Savings and current account numbers, low-value deposits and wallets. The bank code is not personal data and has no domain."],
+      "what": ["Savings and current account numbers, low-value deposits and wallets. The bank code is not personal data and has no data class."],
       "masking": ["Digits are mapped; separators stay."]
     },
     "CO_L1_TARJETA": {
       "title": "Payment card",
       "what": ["Credit and debit card numbers, recognized by the Luhn algorithm."],
-      "masking": ["Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
+      "masking": ["Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
     },
     "CO_L1_LLAVE_BREB": {
       "title": "Bre-B key",
       "what": ["The key of Bre-B, the instant payment system of the Banco de la República: an identity document number, a mobile number, an e-mail or an alphanumeric key starting with `@`."],
-      "masking": ["Each kind of key is masked as its own domain: the document digit by digit, the mobile keeping its range, the e-mail with `.test`, the alphanumeric key character by character keeping the `@`. A key holding the cédula and the same person's cédula still agree."]
+      "masking": ["Each kind of key is masked as its own data class: the document digit by digit, the mobile keeping its range, the e-mail with `.test`, the alphanumeric key character by character keeping the `@`. A key holding the cédula and the same person's cédula still agree."]
     },
     "CO_L1_IP": {
       "title": "IP address",
@@ -399,7 +399,7 @@
     },
     "CO_L3_IDENTIDAD_GENERO": {
       "title": "Gender identity",
-      "what": ["Self-declared gender identity. Not on the list of article 5, but it exposes people to the same discrimination. The identity name falls under the full-name domain."],
+      "what": ["Self-declared gender identity. Not on the list of article 5, but it exposes people to the same discrimination. The identity name falls under the full-name data class."],
       "masking": ["Replaced with a category from the list."]
     },
     "CO_L3_VICTIMA_CONFLICTO": {
@@ -414,7 +414,7 @@
     },
     "CO_SALUD_IDENTIFICADOR": {
       "title": "Health identifiers",
-      "what": ["Medical record, admission, visit, service authorization, prescription, sick-leave and MIPRES numbers. The medical record is identified by the patient's document number, which falls under the cédula domain."],
+      "what": ["Medical record, admission, visit, service authorization, prescription, sick-leave and MIPRES numbers. The medical record is identified by the patient's document number, which falls under the cédula data class."],
       "masking": ["Character by character, keeping length and format."]
     },
     "CO_SALUD_AFILIACION": {
@@ -460,7 +460,7 @@
     "CO_SALUD_OCUPACIONAL": {
       "title": "Occupational health",
       "what": ["The fitness result of occupational medical exams, work accident (FURAT) and occupational disease (FUREL) reports, sick leaves, the assessment of loss of working capacity and medical restrictions."],
-      "masking": ["A result is replaced with another from the list — fit, unfit —; a flag stays a flag; the diagnosis of the sick leave falls under its domain."]
+      "masking": ["A result is replaced with another from the list — fit, unfit —; a flag stays a flag; the diagnosis of the sick leave falls under its data class."]
     },
     "CO_SALUD_REPRODUCTIVA": {
       "title": "Sexual and reproductive health",
@@ -480,22 +480,22 @@
     "CO_FIN_DEUDA": {
       "title": "Debt",
       "what": ["Loan and portfolio balances, overdue amounts, instalments, disbursed amounts and credit limits."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "CO_FIN_INGRESOS": {
       "title": "Income and salary",
       "what": ["Salary, monthly or household income, fees and contribution base income (IBC)."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "CO_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": ["Net worth, assets, cadastral and market valuations, account balances, term deposits and investments, severance funds."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "CO_FIN_PENSION": {
       "title": "Pension and subsidies",
       "what": ["The amount of the monthly pension, subsidies and allowances, and child support."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "CO_FIN_ESTRATO": {
       "title": "Socioeconomic stratum",
@@ -532,8 +532,8 @@
     {
       "title": "The NIT check digit",
       "body": [
-        "The Check Digit algorithm of the Masking Engine computes a modulus 11 digit as *eleven minus the remainder* and writes 10 as 0. For the NIT that is right for ten of the eleven possible remainders: when the remainder is 1, the DIAN writes 1 and Check Digit would write 0. One masked NIT in eleven would be invalid.",
-        "The set solves it in two steps, without tables:",
+        "The Check Digit algorithm of Delphix computes a modulus 11 digit as *eleven minus the remainder* and writes 10 as 0. For the NIT that is right for ten of the eleven possible remainders: when the remainder is 1, the DIAN writes 1 and Check Digit would write 0. One masked NIT in eleven would be invalid.",
+        "The policy solves it in two steps, without tables:",
         { "list": [
           "A Check Digit with **doubled weights** maps the body and writes an auxiliary digit where the check digit goes. Since 2 × 1 ≡ 2 modulus 11, the auxiliary digit is 9 exactly when the remainder of the masked body with the true weights is 1.",
           "A Regex Decompose turns a final 9 into 1, and otherwise applies a Check Digit with the true weights over the body, which it leaves as it is, and recomputes the digit."
@@ -544,7 +544,7 @@
     {
       "title": "Where people live: municipalities, veredas and postal code",
       "body": [
-        "With DANE's municipal population projection for 2026 (based on the 2018 census, post COVID-19 update) and the location of each seat in DIVIPOLA, the set knows the size, department and position of 1,122 municipalities and non-municipalized areas.",
+        "With DANE's municipal population projection for 2026 (based on the 2018 census, post COVID-19 update) and the location of each seat in DIVIPOLA, the policy knows the size, department and position of 1,122 municipalities and non-municipalized areas.",
         { "list": [
           "A **municipality** with fewer than 20,000 inhabitants becomes the nearest municipality of the same department with at least 20,000. There are 694 of them, with 6.4 million inhabitants — 12% of the population. Jardín (Antioquia) becomes Andes; Providencia, San Andrés; the non-municipalized areas of Guainía, Inírida.",
           "The **department** stays. Every one has at least one municipality of 20,000 inhabitants.",
@@ -576,15 +576,15 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication, the set was checked outside a Masking Engine:",
+        "Before publication, the policy was checked outside Delphix:",
         { "list": [
           "The check-digit rule was checked against the DIAN's own NIT, `800.197.268-4`.",
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 151 columns with the whole set at its assignment threshold — well named, badly named and 31 columns that are not personal data — and again with only the classifiers of the essential pack.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 151 columns with the whole policy at its assignment threshold — well named, badly named and 31 columns that are not personal data — and again with only the classifiers of the essential pack.",
           "The table that generalizes municipalities was audited for all 1,122 DIVIPOLA units: by name, by name with the department and by code.",
-          "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 NITs of every length — remainder 1 included — for validity and collisions; 150 cédulas for collisions; and 20 people whose cédula and NIT must still agree. Every algorithm also masked its own sample value."
+          "The algorithms, run with the Delphix algorithm plugin, masked each data class's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 NITs of every length — remainder 1 included — for validity and collisions; 150 cédulas for collisions; and 20 people whose cédula and NIT must still agree. Every algorithm also masked its own sample value."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

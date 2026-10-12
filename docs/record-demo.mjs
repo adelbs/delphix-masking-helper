@@ -3,14 +3,14 @@
  *
  *   1. testing an algorithm against a real value
  *   2. testing a classifier against a column described on screen
- *   3. the profile sets that ship with the tool
+ *   3. the discovery policies that ship with the tool
  *   4. syncing with a Delphix engine: the integration, then an algorithm that came from it
  *
  * Drives the running app in headless Chrome and encodes the frames as a GIF. No ffmpeg or
  * ImageMagick involved: Chrome decodes and rescales each screenshot on its own canvas, and
  * gifenc does the quantising.
  *
- * Requires the app running (`npm run dev`), the Chile profile set loaded (scene 2 opens one of
+ * Requires the app running (`npm run dev`), the Chile discovery policy loaded (scene 2 opens one of
  * its classifiers), and a Delphix engine connected under Settings → Delphix for scene 4. There is
  * no assistant scene: with the default local provider the assistant advises and does not build,
  * so recording one would need a hosted provider.
@@ -232,14 +232,14 @@ async function sceneClassifier(page) {
 }
 
 async function scenePresets(page) {
-  console.log('  scene 3 — pre-configured profile sets')
+  console.log('  scene 3 — pre-configured discovery policies')
   await filterSidebar(page, '')
   await clickText(page, 'aside button', /^\s*Settings\s*$/)
   await sleep(700)
-  await clickText(page, 'main button', /^\s*Profile Sets\s*$/)
+  await clickText(page, 'main button', /^\s*Discovery Policies\s*$/)
   const listed = await waitFor(page, () => /Version \d+/.test(document.querySelector('main')?.textContent || ''),
     { every: 400, delay: 80 })
-  if (!listed) console.warn('     the profile set list did not load')
+  if (!listed) console.warn('     the discovery policy list did not load')
   await hold(page, 2600)
   await scrollMainTo(page, 'main h3, main h4, main p', /Panama/i, { steps: 10, offset: 40 })
   await hold(page, 2200)

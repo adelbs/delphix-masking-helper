@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais mexicanos: identificadores diretos com dígito verificador válido, quase-identificadores, os dados sensíveis do artigo 2 e os dados financeiros e patrimoniais do artigo 7.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de um banco de dados mexicano e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
-        "Mascarar só nomes e CURPs não chega lá: uma data de nascimento, um sexo e um município pequeno bastam para apontar uma pessoa. O set trabalha nas mesmas camadas em que o risco está:",
+        "Esta política de descoberta encontra os dados pessoais de um banco de dados mexicano e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — não identifique mais ninguém.",
+        "Mascarar só nomes e CURPs não chega lá: uma data de nascimento, um sexo e um município pequeno bastam para apontar uma pessoa. A política trabalha nas mesmas camadas em que o risco está:",
         { "list": [
           "**Identificadores diretos** — CURP, RFC, NSS, chave de eleitor do INE, nomes, contato, CLABE e cartões, documentos, dispositivos, veículos, texto livre.",
           "**Quase-identificadores** — data de nascimento, idade, sexo, município, localidade, colônia, código postal, ocupação, empregador, escolaridade.",
@@ -14,7 +14,7 @@
           "**Dados financeiros e patrimoniais** — birô de crédito, dívidas, renda, patrimônio, poupança de aposentadoria, crédito habitacional, seguridade social, programas sociais, nível socioeconômico, regime fiscal.",
           "**Antecedentes criminais** — antecedentes e números de processo."
         ] },
-        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com os seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um CURP, um RFC, uma chave de eleitor, uma CLABE, uma placa, um município.",
         "Os nomes de coluna são reconhecidos em espanhol, nas abreviações dos sistemas mexicanos (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), nos atributos das notas fiscais CFDI 4.0 (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) e em inglês.",
         { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Processos de cadastro costumam guardar a foto da credencial do INE: o CURP e a chave de eleitor continuam legíveis na imagem. Reporte essas colunas como risco residual." }
@@ -34,9 +34,9 @@
           "**Segurança.** Medidas administrativas, técnicas e físicas proporcionais à sensibilidade dos dados (art. 18); vulnerações que afetem as pessoas de forma significativa devem ser comunicadas a elas (art. 19); todos os que intervêm guardam confidencialidade (art. 20).",
           "**Sanções.** Multas de até 320.000 vezes a UMA, que podem dobrar para dados sensíveis (art. 59); prisão de três meses a cinco anos pelos crimes do capítulo XII, em dobro para dados sensíveis (arts. 62 a 64)."
         ] },
-        "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o aviso de privacidade não cobre, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia dissociada é o caminho que a própria lei oferece: é para isso que o set serve.",
-        "Duas notas sobre as categorias. A lei de 2010 listava a **filiação sindical** como sensível; o texto de 2025 não a cita mais. A lista não é exaustiva e a filiação sindical continua expondo as pessoas a discriminação, então o set a mantém. **Dados biométricos** também não são citados; identificam a pessoa por definição e são tratados aqui como sensíveis.",
-        { "note": "Este documento descreve controles técnicos. Se uma cópia conta como dissociada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não do profile set sozinho." }
+        "Um ambiente de teste com dados de produção é tratamento para uma finalidade que o aviso de privacidade não cobre, e guarda dados sensíveis e financeiros fora dos controles feitos para eles. Uma cópia dissociada é o caminho que a própria lei oferece: é para isso que a política serve.",
+        "Duas notas sobre as categorias. A lei de 2010 listava a **filiação sindical** como sensível; o texto de 2025 não a cita mais. A lista não é exaustiva e a filiação sindical continua expondo as pessoas a discriminação, então a política a mantém. **Dados biométricos** também não são citados; identificam a pessoa por definição e são tratados aqui como sensíveis.",
+        { "note": "Este documento descreve controles técnicos. Se uma cópia conta como dissociada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não da política de descoberta sozinho." }
       ]
     }
   ],
@@ -76,7 +76,7 @@
     "MX_L1_CURP": {
       "title": "CURP",
       "what": "A Clave Única de Registro de Población: 18 caracteres formados pelos nomes (4 letras), data de nascimento, sexo, estado de nascimento, três consoantes internas, um diferenciador — dígito para nascidos antes de 2000, letra depois — e um dígito verificador. `HEGA850720MDFRRL04`. É a chave de quase todo registro mexicano, e já é um quase-identificador: carrega data de nascimento, sexo e estado.",
-      "masking": "Letras viram outras letras (vogal por vogal, consoante por consoante), a data de nascimento outra data válida da mesma década, sexo e estado outros valores, as consoantes e o diferenciador outros do mesmo tipo — e o dígito verificador é recalculado, então todo CURP mascarado passa na validação. O mapeamento é um-para-um: um CURP usado como chave não colide. Ver *Dígitos verificadores calculados pelo set*."
+      "masking": "Letras viram outras letras (vogal por vogal, consoante por consoante), a data de nascimento outra data válida da mesma década, sexo e estado outros valores, as consoantes e o diferenciador outros do mesmo tipo — e o dígito verificador é recalculado, então todo CURP mascarado passa na validação. O mapeamento é um-para-um: um CURP usado como chave não colide. Ver *Dígitos verificadores calculados pela política*."
     },
     "MX_L1_RFC": {
       "title": "RFC",
@@ -146,7 +146,7 @@
     "MX_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": "Números de cartão de crédito e débito.",
-      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "MX_L1_PASAPORTE": {
       "title": "Passaporte",
@@ -366,7 +366,7 @@
     "MX_L3_BIOMETRICO": {
       "title": "Dados biométricos",
       "what": "Templates de digital e facial, íris, voz e assinaturas digitalizadas guardados como texto.",
-      "masking": "Todo caractere vira `X`. Colunas binárias não podem ser mascaradas pelo set; ver *Limites*."
+      "masking": "Todo caractere vira `X`. Colunas binárias não podem ser mascaradas pela política; ver *Limites*."
     },
     "MX_L3_INFORMACION_GENETICA": {
       "title": "Informação genética",
@@ -421,22 +421,22 @@
     "MX_FIN_MONTO_DEUDA": {
       "title": "Valor da dívida",
       "what": "Saldo devedor, valor em atraso, limite de crédito, pagamento mínimo.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_INGRESO_MENSUAL": {
       "title": "Renda mensal",
       "what": "Salário, percepções, líquido a receber, renda do domicílio.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_SALARIO_DIARIO": {
       "title": "Salário diário (SDI, SBC)",
       "what": "O salário diário integrado e o salário base de contribuição usados pelo IMSS — o jeito como as folhas mexicanas guardam a remuneração.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": "Patrimônio líquido, valores cadastrais e de avaliação, investimentos e poupança.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_AFORE": {
       "title": "AFORE",
@@ -446,7 +446,7 @@
     "MX_FIN_SALDO_RETIRO": {
       "title": "Poupança de aposentadoria e habitação",
       "what": "Saldos das subcontas de aposentadoria e habitação, poupança voluntária, valores de pensão.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "MX_FIN_CREDITO_VIVIENDA": {
       "title": "Crédito habitacional",
@@ -491,14 +491,14 @@
   },
   "closing": [
     {
-      "title": "Dígitos verificadores calculados pelo set",
+      "title": "Dígitos verificadores calculados pela política",
       "body": [
         "As aplicações mexicanas validam suas chaves, e uma chave mascarada que falha na validação quebra o teste que ela deveria servir. Duas chaves são cobertas pelos frameworks do próprio plugin: a CLABE pelo Check Digit (pesos 3, 7, 1, módulo 10), e o NSS pelo Payment Card, porque o dígito dele é Luhn — a verificação dos cartões de pagamento. O CURP e o RFC exigem mais:",
         { "list": [
           "**CURP** — todo caractere conta, letras incluídas (`0`–`9`, `A`–`N` → 10–23, `Ñ` 24, `O`–`Z` → 25–36), com pesos de 18 a 2, módulo 10. O Check Digit lê letras em base 36, em que `O`–`Z` valem um a menos.",
           "**RFC** — a tabela do SAT (`&` 24, espaço 37, `Ñ` 38), pesos de 13 a 2, módulo 11, com 10 escrito `A`. Um RFC de empresa conta como se tivesse um espaço na frente. O Check Digit escreve um resultado 10 como `0` e não aceita `&` nem `Ñ`."
         ] },
-        "Para esses dois o set calcula o dígito verificador ele mesmo. Depois que o corpo é mascarado, uma soma acumulada percorre o valor de dois em dois caracteres: uma tabela de lookup transforma *soma + próximos dois caracteres* em *esses caracteres + nova soma*, e a última tabela escreve o dígito verificador no lugar. Cada tabela lista só o que as suas posições podem conter — dígitos na data, letras nos nomes —, então o CURP leva 8 passos e o RFC 6, cada um um Regex Decompose e um arquivo de Data Cleansing gerado com o set, numa única String Algorithm Chain.",
+        "Para essas duas a política calcula o dígito verificador ele mesmo. Depois que o corpo é mascarado, uma soma acumulada percorre o valor de dois em dois caracteres: uma tabela de lookup transforma *soma + próximos dois caracteres* em *esses caracteres + nova soma*, e a última tabela escreve o dígito verificador no lugar. Cada tabela lista só o que as suas posições podem conter — dígitos na data, letras nos nomes —, então o CURP leva 8 passos e o RFC 6, cada um um Regex Decompose e um arquivo de Data Cleansing gerado com a política, numa única String Algorithm Chain.",
         "Todo CURP, RFC e NSS mascarado é válido, e o mapeamento continua um-para-um — uma chave não colide com outra. O custo é pago por valor, por passo, e não por algoritmo configurado. Medido com o plugin fora do engine, num notebook, um CURP é mascarado em cerca de 11 µs, um RFC em cerca de 9 e um NSS em cerca de 3, contra cerca de 2 de um Character Mapping: uns 90.000 CURPs por segundo por thread. Metade do custo do CURP é o corpo — a data e os lookups com chave de sexo e estado; o dígito verificador é a outra metade. A vazão de um engine depende do hardware e da configuração do job."
       ]
     },
@@ -529,13 +529,13 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         { "list": [
-          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 151 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 26 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+          "A descoberta foi simulada em 151 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 26 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 350 valores de amostra e 228 placeholders como `S/D`. CURPs, RFCs, NSS e CLABEs aleatórios foram conferidos quanto a dígito verificador e data válidos, 150 de cada quanto a colisões, e pares de CURP e RFC da mesma pessoa quanto à concordância."
         ] },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

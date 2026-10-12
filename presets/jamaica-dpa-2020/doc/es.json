@@ -3,10 +3,10 @@
   "subtitle": "Descubrimiento y enmascaramiento de datos personales de Jamaica: el TRN y los demás números de identificación, nombres y contacto, cuasi-identificadores, los datos personales sensibles de la sección 2 — entre ellos datos biométricos, filiación, creencias, salud, vida sexual e infracciones — y datos financieros.",
   "sections": [
     {
-      "title": "Acerca de este profile set",
+      "title": "Acerca de esta política de descubrimiento",
       "body": [
-        "Este profile set encuentra los datos personales en una base de datos jamaicana y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — ya no identifique a nadie.",
-        "Enmascarar solo nombres y TRN no alcanza: una fecha de nacimiento, un sexo y una ciudad de pocos miles de habitantes bastan para señalar a una persona. El set trabaja en las capas donde está el riesgo:",
+        "Esta política de descubrimiento encuentra los datos personales en una base de datos jamaicana y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — ya no identifique a nadie.",
+        "Enmascarar solo nombres y TRN no alcanza: una fecha de nacimiento, un sexo y una ciudad de pocos miles de habitantes bastan para señalar a una persona. La política trabaja en las capas donde está el riesgo:",
         {
           "list": [
             "**Identificadores directos** — TRN, número del NIS, pasaporte, credencial de elector, licencia de conducir, documentos migratorios, registro civil, nombres, contacto, cuentas y tarjetas, títulos de tierra, dispositivos, vehículos, texto libre.",
@@ -17,7 +17,7 @@
             "**Infracciones y procesos** — antecedentes, acusaciones, resultados y números de causa: la sección 2 hace sensible la comisión alegada de una infracción, no solo la condena."
           ]
         },
-        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos en los que estos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa. Algunos dominios usan algoritmos que vienen con el Masking Engine — CM Numeric, Credit Card, BloodType SL — y esos se nombran, pero no se incluyen.",
+        "En Data Control Tower, la política es una política de descubrimiento con sus classifiers, las clases de datos por las que votan, los algoritmos que esas clases de datos nombran — y los algoritmos en los que estos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa. Algunas clases de datos usan algoritmos que vienen con Delphix — CM Numeric, Credit Card, BloodType SL — y esos se nombran, pero no se incluyen.",
         "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NAME`, `RESULT`, `CITY` — necesita que los valores coincidan. Una columna de nombre sin sentido (`FIELD1`, `PFNOM`, `REMARKS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocible: un TRN, un teléfono 876, una placa, una ciudad, un nombre completo.",
         "Los nombres de columna se reconocen en inglés y en las abreviaturas de los sistemas jamaicanos (`TRN`, `NIS_NO`, `NIN`, `NHF_CARD_NO`, `NHT_NUMBER`, `DOB`).",
         {
@@ -47,9 +47,9 @@
           ]
         },
         "Un ambiente de pruebas con datos de producción es tratamiento para finalidades para las que los datos no se recogieron, por personas que no necesitan verlos, y guarda datos sensibles — biométricos, de salud y penales entre ellos — fuera de los controles hechos para ellos. El enmascaramiento es la seudonimización que el séptimo estándar nombra: lo que va al ambiente de pruebas ya no identifica a nadie sin la clave, y usar medios para romperla es una infracción en sí misma.",
-        "La lista de datos sensibles de la sección 2 es cerrada, pero el set va más allá donde el riesgo es el mismo: trata la identidad de género con el mismo cuidado que la vida sexual, y enmascara los datos financieros, que bancos y burós de crédito deben mantener confidenciales por otras leyes.",
+        "La lista de datos sensibles de la sección 2 es cerrada, pero la política va más allá donde el riesgo es el mismo: trata la identidad de género con el mismo cuidado que la vida sexual, y enmascara los datos financieros, que bancos y burós de crédito deben mantener confidenciales por otras leyes.",
         {
-          "note": "La definición de dato personal cuenta lo que el responsable tiene o probablemente tendrá. El enmascaramiento es determinista para la clave del engine, así que quien tenga a la vez los datos de producción y la clave puede vincular una fila enmascarada con su origen. Mantenga la clave, y el acceso a producción, lejos de quienes usan la copia enmascarada. Si una copia cuenta como anonimizada es una evaluación jurídica del ambiente completo, no solo del profile set."
+          "note": "La definición de dato personal cuenta lo que el responsable tiene o probablemente tendrá. El enmascaramiento es determinista para la clave del engine, así que quien tenga a la vez los datos de producción y la clave puede vincular una fila enmascarada con su origen. Mantenga la clave, y el acceso a producción, lejos de quienes usan la copia enmascarada. Si una copia cuenta como anonimizada es una evaluación jurídica del ambiente completo, no solo de la política de descubrimiento."
         }
       ]
     }
@@ -117,7 +117,7 @@
       "id": "L3",
       "title": "Datos personales sensibles",
       "intro": [
-        "Las categorías de la sección 2 que no son salud ni infracciones — que tienen grupos propios: datos genéticos y biométricos, filiación, origen racial o étnico, opiniones políticas, creencias religiosas, filosóficas y similares, afiliación sindical y vida sexual — y, más allá de la lista, identidad de género. La definición jamaicana de dato biométrico es inusualmente amplia: además de huellas y lecturas nombra la fotografía, la estatura, el color de ojos y el tipo de sangre, por eso el set da a la estatura y al color de ojos dominios propios. Las columnas categóricas conservan su forma: un indicador sí/no sigue siendo indicador, un código numérico recibe otros dígitos y cualquier otro valor se reemplaza por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Not stated`."
+        "Las categorías de la sección 2 que no son salud ni infracciones — que tienen grupos propios: datos genéticos y biométricos, filiación, origen racial o étnico, opiniones políticas, creencias religiosas, filosóficas y similares, afiliación sindical y vida sexual — y, más allá de la lista, identidad de género. La definición jamaicana de dato biométrico es inusualmente amplia: además de huellas y lecturas nombra la fotografía, la estatura, el color de ojos y el tipo de sangre, por eso la política da a la estatura y al color de ojos clases de datos propias. Las columnas categóricas conservan su forma: un indicador sí/no sigue siendo indicador, un código numérico recibe otros dígitos y cualquier otro valor se reemplaza por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Not stated`."
       ],
       "domains": [
         "JM_L3_GENETIC",
@@ -263,7 +263,7 @@
     "JM_L1_PAYMENT_CARD": {
       "title": "Tarjeta de pago",
       "what": "Números de tarjetas de crédito, débito y prepago.",
-      "masking": "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
+      "masking": "Credit Card, que viene con Delphix: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
     },
     "JM_L1_IP_ADDRESS": {
       "title": "Dirección IP",
@@ -483,7 +483,7 @@
     "JM_HEALTH_BLOOD_GROUP": {
       "title": "Grupo sanguíneo",
       "what": "Grupo ABO y factor Rh — dato de salud, y dato biométrico por su nombre en la sección 2.",
-      "masking": "BloodType SL, que viene con el Masking Engine: se reemplaza por otro de los ocho grupos."
+      "masking": "BloodType SL, que viene con Delphix: se reemplaza por otro de los ocho grupos."
     },
     "JM_HEALTH_DISABILITY": {
       "title": "Discapacidad",
@@ -508,22 +508,22 @@
     "JM_FIN_DEBT": {
       "title": "Monto de deuda",
       "what": "Saldos de préstamos, hipotecas y tarjetas, montos en mora, límites de crédito, cuotas.",
-      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+      "masking": "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "JM_FIN_INCOME": {
       "title": "Ingresos",
       "what": "Salario, jornales, emolumentos, remuneración imponible, ingreso del hogar.",
-      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+      "masking": "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "JM_FIN_ASSETS": {
       "title": "Patrimonio",
       "what": "Valores de inmuebles y terrenos, saldos de ahorro y depósitos, inversiones, fondos, patrimonio neto.",
-      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+      "masking": "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "JM_FIN_PENSION": {
       "title": "Monto de pensión",
       "what": "Pensiones del NIS, pensiones ocupacionales y de superannuation, pensiones de sobrevivencia y de invalidez, gratificaciones.",
-      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+      "masking": "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "JM_FIN_NIS_BENEFIT": {
       "title": "Beneficio del NIS",
@@ -560,7 +560,7 @@
     {
       "title": "Dónde vive la gente: ciudades",
       "body": [
-        "Con las ciudades del Population and Housing Census de 2022 y sus poblaciones, el set conoce el tamaño y la parroquia de las 140 ciudades de la lista del censo.",
+        "Con las ciudades del Population and Housing Census de 2022 y sus poblaciones, la política conoce el tamaño y la parroquia de las 140 ciudades de la lista del censo.",
         {
           "list": [
             "Una **ciudad** de menos de 10.000 habitantes pasa a ser la **capital de su parroquia**: Kingston; Half Way Tree para St. Andrew; Spanish Town; May Pen; Mandeville; Black River; Savanna-la-Mar; Lucea; Montego Bay; Falmouth; St. Ann's Bay; Port Maria; Port Antonio; Morant Bay. Se generalizan 111 de las 140 ciudades.",
@@ -596,16 +596,16 @@
     {
       "title": "Verificación",
       "body": [
-        "Antes de su publicación, el set se verificó fuera de un Masking Engine:",
+        "Antes de su publicación, la política se verificó fuera de Delphix:",
         {
           "list": [
-            "La configuración de cada classifier se revisó contra lo que acepta un Masking Engine.",
-            "El profiling se simuló en 157 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas, ocho con los nombres cortos de sistemas empaquetados y 33 columnas que no son datos personales —, de nuevo en 148 de ellas completadas con espacios o ceros, y de nuevo solo con los classifiers del paquete esencial.",
+            "La configuración de cada classifier se revisó contra lo que acepta Delphix.",
+            "El descubrimiento se simuló en 157 columnas con la política completa en su umbral de asignación — bien nombradas, mal nombradas, ocho con los nombres cortos de sistemas empaquetados y 33 columnas que no son datos personales —, de nuevo en 148 de ellas completadas con espacios o ceros, y de nuevo solo con los classifiers del paquete esencial.",
             "La tabla que generaliza ciudades se auditó para las 140 ciudades.",
             "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon 153 valores de muestra y 204 marcadores como `N/A`, comprobando cada salida contra su vocabulario; los mismos valores de nuevo completados con espacios o ceros (314), que debían salir como el valor sin relleno; 150 TRN contra colisiones, y veinte TRN como números de licencia de conducir, que debían salir iguales. Cada uno de los 83 algoritmos también enmascaró su propio valor de ejemplo."
           ]
         },
-        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar la política con datos reales, ejecute un job de descubrimiento y uno de enmascaramiento sobre una copia representativa."
       ]
     },
     {

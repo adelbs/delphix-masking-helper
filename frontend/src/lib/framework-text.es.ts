@@ -102,7 +102,7 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
   },
   StringAlgorithmChain: {
     example: { input: 'Juan Perez', key: 'clave-chain' },
-    description: 'Encadena varios algoritmos en secuencia: la salida de cada uno es la entrada del siguiente. Mínimo 2 algoritmos. Los nombres deben ser instancias del catálogo incorporado (p. ej. "dlpx-core:FirstName") o del Masking Engine.',
+    description: 'Encadena varios algoritmos en secuencia: la salida de cada uno es la entrada del siguiente. Mínimo 2 algoritmos. Los nombres deben ser instancias del catálogo incorporado (p. ej. "dlpx-core:FirstName") o del Continuous Compliance Engine.',
     inputFormat: 'Cadena de texto compatible con el primer algoritmo de la cadena. El ejemplo encadena nombres: FirstName → LastName.',
     params: { algorithmReferences: 'Array de referencias a algoritmos por nombre de instancia. Mínimo: 2 entradas. P. ej. [{ name: "dlpx-core:FirstName" }, { name: "dlpx-core:LastName" }].' },
     labels: { algorithmReferences: 'Algoritmos en secuencia' },
@@ -255,8 +255,8 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
   },
   NullSecureLookup: {
     example: { input: 'valor-sensible', key: 'clave-lookup' },
-    description: 'Variante de Secure Lookup con tratamiento de valores nulos. No tiene parámetros configurables — usa el archivo de lookup incorporado en el plugin. En el runner standalone devuelve null para cualquier entrada (comportamiento esperado sin el contexto del Masking Engine).',
-    inputFormat: 'Cualquier cadena. En el runner standalone la salida siempre es null (sin contexto de motor). En el Masking Engine, si la entrada es null devuelve null; en caso contrario aplica el lookup configurado.',
+    description: 'Variante de Secure Lookup con tratamiento de valores nulos. No tiene parámetros configurables — usa el archivo de lookup incorporado en el plugin. En el runner standalone devuelve null para cualquier entrada (comportamiento esperado sin el contexto del Continuous Compliance Engine).',
+    inputFormat: 'Cualquier cadena. En el runner standalone la salida siempre es null (sin contexto de motor). En el Continuous Compliance Engine, si la entrada es null devuelve null; en caso contrario aplica el lookup configurado.',
   },
   Mapping: {
     example: { config: { mappingSet: { algorithmName: 'mapping-set-predeterminado' } }, input: 'cliente@email.com' },
@@ -264,12 +264,12 @@ export const FRAMEWORK_TEXT_ES: Record<string, FrameworkText> = {
     inputFormat: 'Cualquier cadena. El algoritmo consulta (o crea) un registro en el mapping set y devuelve siempre el mismo sustituto para cada valor original.',
     params: {
       mappingSet: 'Obligatorio. Referencia al conjunto de mapeo que almacena las correspondencias. En el runner standalone esa base de datos no está disponible y el algoritmo fallará.',
-      'mappingSet.algorithmName': 'Obligatorio. Nombre del mapping set en el Masking Engine — identifica qué conjunto de mapeos usar. P. ej. "client-name-mapping".',
-      'mappingSet.host': 'Host de la base de datos donde está el mapping set. Se usa cuando el mapping set está en una instancia remota del Masking Engine.',
+      'mappingSet.algorithmName': 'Obligatorio. Nombre del mapping set en el Continuous Compliance Engine — identifica qué conjunto de mapeos usar. P. ej. "client-name-mapping".',
+      'mappingSet.host': 'Host de la base de datos donde está el mapping set. Se usa cuando el mapping set está en una instancia remota del Continuous Compliance Engine.',
       'mappingSet.port': 'Puerto de la base de datos remota del mapping set.',
       'mappingSet.database': 'Nombre de la base de datos remota del mapping set.',
       'mappingSet.schema': 'Esquema de la base de datos remota del mapping set.',
-      'mappingSet.isRemote': 'Si es verdadero, el mapping set está en una instancia remota del Masking Engine (usando host/port/database/schema de arriba). Si es falso, se usa la instancia local.',
+      'mappingSet.isRemote': 'Si es verdadero, el mapping set está en una instancia remota del Continuous Compliance Engine (usando host/port/database/schema de arriba). Si es falso, se usa la instancia local.',
       'mappingSet.mappingLookupKey': 'Clave adicional usada para particionar el mapping set. Permite que un mismo mapping set sirva a varios contextos aislados.',
       'mappingSet.propertiesRef': 'Archivo de propiedades con la configuración de conexión a la base de datos remota del mapping set (alternativa a definir host/port/database/schema por separado).',
       ignoreCharacters: 'Códigos ASCII de los caracteres a eliminar de la entrada antes de buscarla en el mapping set. P. ej. 45 = guion, 46 = punto. Útil para llevar documentos con y sin formato al mismo mapeo.',

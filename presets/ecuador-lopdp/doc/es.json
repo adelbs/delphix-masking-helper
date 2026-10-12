@@ -3,10 +3,10 @@
   "subtitle": "Descubrimiento y enmascaramiento de datos personales ecuatorianos: cédula y RUC con dígito verificador válido, cuasi-identificadores, los datos sensibles del artículo 4 — que nombra la identidad cultural, la condición migratoria y el pasado judicial como ninguna ley vecina —, datos de salud, datos crediticios y procesos penales.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descubrimiento",
       "body": [
-        "Este profile set encuentra los datos personales de una base ecuatoriana y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
-        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y una parroquia pequeña ya apuntan a una persona. El set trabaja en las capas donde está el riesgo:",
+        "Esta política de descubrimiento encuentra los datos personales de una base ecuatoriana y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
+        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y una parroquia pequeña ya apuntan a una persona. La política trabaja en las capas donde está el riesgo:",
         {
           "list": [
             "**Identificadores directos** — cédula y RUC, documentos de extranjeros, pasaporte, registro civil, números del IESS y de pensiones, código de estudiante, registro profesional, nombres, contacto, dirección, cuentas, tarjetas, dispositivos, cookies, placas, predios, texto libre.",
@@ -17,7 +17,7 @@
             "**Antecedentes penales** — el **pasado judicial** que el artículo 4 lista entre los datos sensibles, y los números de juicio."
           ]
         },
-        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos de los que estos dependen — y los archivos de consulta que leen. Los apéndices listan cada uno con su configuración completa.",
+        "En Data Control Tower, la política es una política de descubrimiento con sus classifiers, las clases de datos por las que votan, los algoritmos que esas clases de datos nombran — y los algoritmos de los que estos dependen — y los archivos de consulta que leen. Los apéndices listan cada uno con su configuración completa.",
         "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — necesita que los valores concuerden. Una columna con nombre sin sentido (`CAMPO1`, `OBS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocibles: una cédula, un RUC de trece dígitos, un celular que empieza en 09, una dirección con ciudadela, manzana y villa, una placa, una parroquia.",
         "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas ecuatorianos (`NUM_DOC`, `FEC_NAC`, `DPA`, `RUC`, `IESS`, `AMIE`) y en inglés.",
         {
@@ -47,12 +47,12 @@
       "title": "Anonimización, seudonimización y copias fuera de producción",
       "body": [
         "El Ecuador escribe los dos conceptos como el reglamento europeo. La **anonimización** impide la identificación **y la reidentificación** sin esfuerzos desproporcionados, y saca al dato de la ley (art. 2 c). La **seudonimización** acepta que el dato pueda volver a atribuirse a su titular *con información adicional*, y por eso exige que esa información figure por separado y bajo medidas técnicas y organizativas.",
-        "Los algoritmos de este set son deterministas para la clave del Masking Engine: la misma cédula se enmascara igual en toda tabla, lo que mantiene los joins. Esa clave es exactamente la *información adicional* de la que habla el artículo 4. La copia enmascarada está **seudonimizada**, no anonimizada, y sigue siendo dato personal para quien tenga la clave y la producción.",
+        "Los algoritmos de esta política son deterministas para la clave de enmascaramiento de Delphix: la misma cédula se enmascara igual en toda tabla, lo que mantiene los joins. Esa clave es exactamente la *información adicional* de la que habla el artículo 4. La copia enmascarada está **seudonimizada**, no anonimizada, y sigue siendo dato personal para quien tenga la clave y la producción.",
         {
           "list": [
             "Mantenga la clave del engine separada de la copia y bajo medidas técnicas y organizativas — es lo que pide el artículo 4 para que la seudonimización cuente, y el artículo 37 la cuenta como medida de seguridad.",
             "Para datos de salud, el artículo 31.2 pide anonimización o seudonimización *siempre que sea posible*: una copia enmascarada de una base clínica es la forma ordinaria de cumplirlo.",
-            "Si lo que necesita es dato anonimizado — fuera de la ley por el artículo 2 c) —, mida el riesgo de reidentificación de los cuasi-identificadores que quedan; el estándar del artículo 4 es más alto del que alcanza este set."
+            "Si lo que necesita es dato anonimizado — fuera de la ley por el artículo 2 c) —, mida el riesgo de reidentificación de los cuasi-identificadores que quedan; el estándar del artículo 4 es más alto del que alcanza esta política."
           ]
         }
       ]
@@ -201,7 +201,7 @@
       "title": "Cédula de identidad",
       "what": [
         "El número de diez dígitos del Registro Civil, `1710034065`, la llave de casi todo registro ecuatoriano. Los dos primeros dígitos son la provincia de emisión — 01 a 24, o 30 para quien se registró en el exterior —, el tercero dice que el titular es una persona natural, y el décimo es el dígito verificador.",
-        "El mismo dominio recibe RUC: una columna de documento suele guardar ambos."
+        "La misma clase de datos recibe RUC: una columna de documento suele guardar ambos."
       ],
       "masking": [
         "Otra cédula válida, conservando la provincia de emisión y el dígito de persona natural y recalculando el verificador. Un valor con forma de RUC se enmascara como RUC."
@@ -219,7 +219,7 @@
     "EC_L1_DOCUMENTO_EXTRANJERO": {
       "title": "Documentos de extranjero",
       "what": [
-        "La cédula de extranjería, el carné de refugiado o solicitante, la visa y los números de trámite migratorio. La **condición migratoria** que llevan es dato sensible por el artículo 4 y tiene dominio propio."
+        "La cédula de extranjería, el carné de refugiado o solicitante, la visa y los números de trámite migratorio. La **condición migratoria** que llevan es dato sensible por el artículo 4 y tiene clase de datos propia."
       ],
       "masking": [
         "Carácter por carácter, manteniendo longitud y formato."
@@ -282,7 +282,7 @@
     "EC_L1_APELLIDO": {
       "title": "Apellidos",
       "what": [
-        "Los apellidos — paterno y materno —, en columnas separadas o juntos: `Zambrano Cedeño`. El set lleva los ecuatorianos, de Zambrano y Loor en la costa a Guamán y Quishpe en la sierra."
+        "Los apellidos — paterno y materno —, en columnas separadas o juntos: `Zambrano Cedeño`. La política lleva los ecuatorianos, de Zambrano y Loor en la costa a Guamán y Quishpe en la sierra."
       ],
       "masking": [
         "Palabra por palabra, reemplazando cada apellido por uno de la lista; las partículas quedan en su sitio."
@@ -330,7 +330,7 @@
         "La dirección con la calle principal y la secundaria — `Av. Amazonas N34-120 y Av. República` —, o la ciudadela con manzana, villa y solar."
       ],
       "masking": [
-        "La línea entera se reemplaza por una dirección ecuatoriana ficticia de la misma forma. Ciudadela, parroquia y código postal tienen dominios propios para cuando viven en columnas separadas."
+        "La línea entera se reemplaza por una dirección ecuatoriana ficticia de la misma forma. Ciudadela, parroquia y código postal tienen clases de datos propias para cuando viven en columnas separadas."
       ]
     },
     "EC_L1_DIRECCION_COMPLEMENTO": {
@@ -345,7 +345,7 @@
     "EC_L1_CUENTA_BANCARIA": {
       "title": "Cuenta bancaria",
       "what": [
-        "Números de cuenta de ahorros, corriente y de nómina. El código del banco no es dato personal y no tiene dominio."
+        "Números de cuenta de ahorros, corriente y de nómina. El código del banco no es dato personal y no tiene clase de datos."
       ],
       "masking": [
         "Los dígitos se mapean; los separadores quedan."
@@ -357,7 +357,7 @@
         "Números de tarjeta de crédito y débito, reconocidos por el algoritmo de Luhn."
       ],
       "masking": [
-        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
+        "Credit Card, que viene con Delphix: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "EC_L1_BILLETERA": {
@@ -510,7 +510,7 @@
         "El sexo como lo registra el sistema: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` o los códigos 1 y 2."
       ],
       "masking": [
-        "Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`. La **identidad de género** del art. 4 tiene dominio propio entre los datos sensibles."
+        "Reemplazado dentro de su propio vocabulario: `F` sigue siendo `F` o `M`, `1` sigue siendo `1` o `2`. La **identidad de género** del art. 4 tiene clase de datos propia entre los datos sensibles."
       ]
     },
     "EC_L2_PARROQUIA": {
@@ -825,7 +825,7 @@
         "El concepto de aptitud de los exámenes médicos ocupacionales, accidentes de trabajo y enfermedades ocupacionales, reposos médicos y ausentismo."
       ],
       "masking": [
-        "Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su propio dominio."
+        "Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su propia clase de datos."
       ]
     },
     "EC_SALUD_REPRODUCTIVA": {
@@ -861,7 +861,7 @@
         "Saldos de crédito y de cartera, montos en mora, cuotas, montos desembolsados y límites."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_INGRESOS": {
@@ -870,7 +870,7 @@
         "Sueldo, ingreso mensual o familiar, honorarios y rentas. El salario básico unificado fue de 470 dólares mensuales en 2025."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_PATRIMONIO": {
@@ -879,7 +879,7 @@
         "Patrimonio, activos, avalúos y valores catastrales, saldos de cuenta y de fondos, depósitos a plazo y la declaración juramentada de bienes."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_PENSION": {
@@ -888,7 +888,7 @@
         "El monto de la pensión, el subsidio o el beneficio, y la pensión de alimentos."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "EC_FIN_PROGRAMA_SOCIAL": {
@@ -942,12 +942,12 @@
       "title": "Los dígitos verificadores de la cédula y del RUC",
       "body": [
         "La **cédula** tiene diez dígitos. Cada uno de los nueve primeros se multiplica por la serie 2 1 2 1 2 1 2 1 2, todo producto mayor que nueve se reduce en nueve, y el décimo dígito es diez menos el residuo de la suma módulo diez. Es el **algoritmo de Luhn**, el mismo de una tarjeta de pago — y eso es lo que hace que el enmascaramiento quepa en un solo paso.",
-        "El framework **Payment Card** del Masking Engine conserva el residuo de Luhn del valor que recibe: una cédula válida sale como otra cédula válida. Su parámetro `preserve` fija cuántos dígitos iniciales quedan, y tres de ellos conservan la **provincia de emisión** y el dígito que dice que el titular es una persona natural. La provincia queda por la misma razón que queda la columna de provincia: el set generaliza por debajo de la provincia, no en ella.",
+        "El framework **Payment Card** de Delphix conserva el residuo de Luhn del valor que recibe: una cédula válida sale como otra cédula válida. Su parámetro `preserve` fija cuántos dígitos iniciales quedan, y tres de ellos conservan la **provincia de emisión** y el dígito que dice que el titular es una persona natural. La provincia queda por la misma razón que queda la columna de provincia: la política generaliza por debajo de la provincia, no en ella.",
         "El **RUC** tiene trece dígitos, y el tercero decide la regla:",
         {
           "list": [
-            "**0 a 5 — persona natural**: el RUC es la cédula más el código de establecimiento `001`. El set enmascara los diez dígitos como cédula y conserva el código, de modo que la cédula y el RUC de la misma persona siguen coincidiendo.",
-            "**9 — sociedad privada**: el dígito verificador está en la décima posición, calculado módulo 11 con los coeficientes 4 3 2 7 6 5 4 3 2. **6 — entidad pública**: el dígito está en la novena, con los coeficientes 3 2 7 6 5 4 3 2. Ninguna de las dos es persona natural, así que ninguna es dato personal: el set deja ambas exactamente como están, y lo dice."
+            "**0 a 5 — persona natural**: el RUC es la cédula más el código de establecimiento `001`. La política enmascara los diez dígitos como cédula y conserva el código, de modo que la cédula y el RUC de la misma persona siguen coincidiendo.",
+            "**9 — sociedad privada**: el dígito verificador está en la décima posición, calculado módulo 11 con los coeficientes 4 3 2 7 6 5 4 3 2. **6 — entidad pública**: el dígito está en la novena, con los coeficientes 3 2 7 6 5 4 3 2. Ninguna de las dos es persona natural, así que ninguna es dato personal: la política deja ambas exactamente como están, y lo dice."
           ]
         }
       ]
@@ -955,7 +955,7 @@
     {
       "title": "Dónde vive la gente: parroquias, código DPA y código postal",
       "body": [
-        "Con la población que contó el censo de 2022 y la ubicación que publica la capa DPA, el set conoce el tamaño, el cantón, la provincia y la posición de unas 1.040 parroquias y 224 cantones.",
+        "Con la población que contó el censo de 2022 y la ubicación que publica la capa DPA, la política conoce el tamaño, el cantón, la provincia y la posición de unas 1.040 parroquias y 224 cantones.",
         {
           "list": [
             "Una **parroquia** con menos de 20.000 habitantes pasa a la parroquia más cercana de su **cantón** con al menos 20.000; cuando su cantón no tiene ninguna, a la más cercana de su provincia. Son 913, con 4,3 millones de habitantes.",
@@ -975,9 +975,9 @@
         {
           "list": [
             "**Columnas binarias** — fotos de la cédula, huellas, selfies de validación, PDF clínicos en BLOB — no pueden enmascararse con estos algoritmos. Inventaríelas y repórtelas como riesgo residual.",
-            "**La provincia de emisión de la cédula queda**, y la provincia también: el set generaliza por debajo de la provincia, no en ella. Si la provincia misma resulta demasiado reveladora para sus datos, añada un paso que la mapee — recordando que cualquier cambio en esos dos dígitos rompe el dígito de Luhn, que entonces hay que recalcular.",
-            "**El RUC de empresa no se enmascara**: el artículo 4 hace titular solo a la persona natural. Si su rule set necesita enmascararlo igualmente, dele a la columna un dominio propio.",
-            "**La capa DPA publica los nombres de los lugares sin sus tildes.** El set las restituye con un diccionario y escribe ambas grafías en las tablas, pero un nombre que no pudo restituir sale sin tilde.",
+            "**La provincia de emisión de la cédula queda**, y la provincia también: la política generaliza por debajo de la provincia, no en ella. Si la provincia misma resulta demasiado reveladora para sus datos, añada un paso que la mapee — recordando que cualquier cambio en esos dos dígitos rompe el dígito de Luhn, que entonces hay que recalcular.",
+            "**El RUC de empresa no se enmascara**: el artículo 4 hace titular solo a la persona natural. Si su rule set necesita enmascararlo igualmente, dele a la columna una clase de datos propia.",
+            "**La capa DPA publica los nombres de los lugares sin sus tildes.** La política las restituye con un diccionario y escribe ambas grafías en las tablas, pero un nombre que no pudo restituir sale sin tilde.",
             "**Data Cleansing deja los valores desconocidos tal cual**: una parroquia escrita de una forma que no está en la tabla — abreviada, mal escrita — pasa sin cambios.",
             "**El texto libre** se redacta palabra por palabra: un teléfono escrito con espacios dentro de una frase puede no encontrarse, y un nombre que también es palabra común (`Rosa`, `Cruz`, `Flores`) se redacta dondequiera que aparezca.",
             "**Niñas, niños y adolescentes** son una categoría especial propia (art. 25 b). La fecha de nacimiento se mueve como mucho 60 días, así que pocas personas cruzan su cumpleaños 18 — pero algunas lo hacen. Donde esa línea importe, separe la regla por grupo de edad con Multi-Column Condition.",
@@ -990,17 +990,17 @@
     {
       "title": "Verificación",
       "body": [
-        "Antes de publicarse, el set se comprobó fuera de un Masking Engine:",
+        "Antes de publicarse, la política se comprobó fuera de Delphix:",
         {
           "list": [
             "La regla de la cédula se comprobó contra números válidos publicados, y las dos reglas del RUC contra RUC publicados por empresas y entidades públicas.",
-            "Cada configuración de classifier se revisó contra lo que acepta un Masking Engine.",
-            "El profiling se simuló sobre 142 columnas con el set entero en su umbral de asignación — bien nombradas, mal nombradas y 29 que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
+            "Cada configuración de classifier se revisó contra lo que acepta Delphix.",
+            "El descubrimiento se simuló sobre 142 columnas con la política entera en su umbral de asignación — bien nombradas, mal nombradas y 29 que no son datos personales — y de nuevo solo con los classifiers del paquete esencial.",
             "La tabla que generaliza lugares se auditó para las 1.040 parroquias y los 224 cantones: por nombre, por nombre con la provincia y por código DPA.",
-            "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de ejemplo de cada dominio y marcadores como `N/A`, comprobando cada salida contra su vocabulario; 200 cédulas para validez, distinción y la provincia y el tipo que conservan, 25 pares de cédula y RUC para confirmar que siguen coincidiendo, y 40 RUC de empresa para confirmar que vuelven intactos. Cada algoritmo enmascaró además su propio valor de ejemplo."
+            "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de ejemplo de cada clase de datos y marcadores como `N/A`, comprobando cada salida contra su vocabulario; 200 cédulas para validez, distinción y la provincia y el tipo que conservan, 25 pares de cédula y RUC para confirmar que siguen coincidiendo, y 40 RUC de empresa para confirmar que vuelven intactos. Cada algoritmo enmascaró además su propio valor de ejemplo."
           ]
         },
-        "Toda columna se asignó como se esperaba y todo valor se enmascaró como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+        "Toda columna se asignó como se esperaba y todo valor se enmascaró como se esperaba. Antes de usar la política con datos reales, ejecute un job de descubrimiento y uno de enmascaramiento sobre una copia representativa."
       ]
     },
     {

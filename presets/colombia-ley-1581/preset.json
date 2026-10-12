@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "south-america",
+  "country": "CO",
   "name": {
     "en": "Colombia — Ley 1581 de 2012 (personal data protection)",
     "pt-BR": "Colômbia — Ley 1581 de 2012 (proteção de dados pessoais)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales colombianos conforme a la Ley Estatutaria 1581 de 2012: identificadores directos (cédula, NIT con dígito de verificación válido, documentos de extranjeros, nombres, contacto, dirección, llave Bre-B), cuasi-identificadores (fecha de nacimiento, municipio, código postal), los datos sensibles del artículo 5 — origen étnico, política, religión, sindicatos, organizaciones sociales, salud, vida sexual, datos biométricos —, víctimas del conflicto armado, datos financieros de la Ley 1266 de 2008 (estrato, Sisbén, centrales de riesgo) y antecedentes penales."
   },
   "profileSet": {
-    "name": "CO - Ley 1581 de 2012 - v2",
+    "name": "CO - Ley 1581 de 2012 - v3",
     "description": "Ley 1581 de 2012 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

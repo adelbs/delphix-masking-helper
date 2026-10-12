@@ -3,10 +3,10 @@
   "subtitle": "Descubrimiento y enmascaramiento de datos personales costarricenses: cédula de identidad, DIMEX y NITE, el IBAN con dígitos de control válidos, la dirección escrita por señas desde un punto de referencia, cuasi-identificadores, los datos sensibles que el artículo 9.1 prohíbe tratar a un particular, datos de salud, la condición socioeconómica que el artículo 3 e) llama sensible y los antecedentes penales.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descubrimiento",
       "body": [
-        "Este profile set encuentra los datos personales de una base costarricense y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
-        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y un distrito pequeño ya apuntan a un puñado de personas, y la mayoría de los 492 distritos de Costa Rica es pequeña. El set trabaja en las capas donde está el riesgo:",
+        "Esta política de descubrimiento encuentra los datos personales de una base costarricense y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — deje de identificar a nadie.",
+        "Enmascarar solo nombres y cédulas no alcanza: una fecha de nacimiento, un sexo y un distrito pequeño ya apuntan a un puñado de personas, y la mayoría de los 492 distritos de Costa Rica es pequeña. La política trabaja en las capas donde está el riesgo:",
         {
           "list": [
             "**Identificadores directos** — cédula de identidad, DIMEX, NITE, pasaporte, números de seguridad social y de estudiante, registro profesional, nombres, contacto, dirección y señas, cuentas bancarias, tarjetas, dispositivos, cookies, placas, inmuebles, fotografías, texto libre.",
@@ -17,16 +17,16 @@
             "**Antecedentes penales**, cuyos asientos el Registro Judicial cancela en una escala propia."
           ]
         },
-        "Cada grupo a continuación dice qué es cada dominio, cómo se enmascara y por qué. El descubrimiento es un profile set de 141 classifiers con umbral 60; el enmascaramiento son 81 dominios con sus algoritmos."
+        "Cada grupo a continuación dice qué es cada clase de datos, cómo se enmascara y por qué. El descubrimiento ejecuta una política de descubrimiento de 141 classifiers con umbral 60; el enmascaramiento son 81 clases de datos con sus algoritmos."
       ]
     },
     {
       "title": "La Ley 8968 en breve",
       "body": [
         "Costa Rica tiene ley de protección de datos desde 2011: la **Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales**, vigente desde el 5 de setiembre de 2011 y **nunca reformada**. Su reglamento, el Decreto Ejecutivo 37554-JP, fue reformado dos veces, por el Decreto 40008-JP en 2016 y por el Decreto 41582 en 2019, ambos sobre el registro de bases de datos y no sobre los principios. La autoridad es la **Agencia de Protección de Datos de los Habitantes (Prodhab)**, creada por el artículo 15.",
-        "Dos rasgos de la ley moldean este set. Primero, el artículo 1 declara su alcance sobre los datos de una persona **o bienes** — los bienes además de la persona —, lo que pone inmuebles, ingresos y patrimonio dentro de ella. Segundo, solo la **persona física** es titular: el artículo 3 b) define dato personal como cualquier dato relativo a una persona física identificada o identificable, y el artículo 3 g) y el artículo 2 v) del reglamento definen al interesado igual. Una empresa no es titular en Costa Rica, por eso una cédula jurídica queda exactamente como está.",
+        "Dos rasgos de la ley moldean esta política. Primero, el artículo 1 declara su alcance sobre los datos de una persona **o bienes** — los bienes además de la persona —, lo que pone inmuebles, ingresos y patrimonio dentro de ella. Segundo, solo la **persona física** es titular: el artículo 3 b) define dato personal como cualquier dato relativo a una persona física identificada o identificable, y el artículo 3 g) y el artículo 2 v) del reglamento definen al interesado igual. Una empresa no es titular en Costa Rica, por eso una cédula jurídica queda exactamente como está.",
         "En datos sensibles la ley es especialmente severa. El artículo 3 e) los define como \"información relativa al **fuero íntimo** de la persona, como por ejemplo los que revelen origen racial, opiniones políticas, convicciones religiosas o espirituales, **condición socioeconómica**, información **biomédica o genética**, vida y orientación sexual, **entre otros**\" — una lista abierta, y la única de la región que nombra la condición socioeconómica. El artículo 9.1 entonces **prohíbe** tratarlos, con cinco excepciones estrechas, y el artículo 31 a) hace del tratamiento por un particular una **falta gravísima**: quince a treinta salarios base y la suspensión del fichero por hasta seis meses.",
-        "El artículo 9.3 merece leerse al lado. Enumera lo que **no** es dato de acceso irrestricto aun constando en un registro público: \"la dirección exacta de la residencia\", \"la fotografía\", \"los números de teléfono privados y otros de igual naturaleza cuyo tratamiento pueda afectar los derechos y los intereses de la persona titular\". Tres dominios de este set existen porque ese párrafo los nombra."
+        "El artículo 9.3 merece leerse al lado. Enumera lo que **no** es dato de acceso irrestricto aun constando en un registro público: \"la dirección exacta de la residencia\", \"la fotografía\", \"los números de teléfono privados y otros de igual naturaleza cuyo tratamiento pueda afectar los derechos y los intereses de la persona titular\". Tres clases de datos de esta política existen porque ese párrafo los nombra."
       ]
     },
     {
@@ -34,7 +34,7 @@
       "body": [
         "Costa Rica escribe la técnica en la propia ley. El artículo 6.1 dice que los datos personales que puedan afectar a su titular en ningún caso serán conservados pasados diez años desde los hechos registrados, y que \"en caso de que sea necesaria su conservación, más allá del plazo estipulado, deberán ser **desasociados de su titular**\". El artículo 2 r) del reglamento define el procedimiento: \"acción y efecto de **disociar** los datos personales, de modo que la información que se obtenga no pueda asociarse o vincularse a persona determinada o determinable\". Ninguna otra ley de la región ordena la técnica en el cuerpo del estatuto.",
         "Conviene ser preciso sobre lo que el enmascaramiento logra frente a esa definición. El motor enmascara con una llave, y quien tiene la llave puede reproducir el mapeo: el resultado es una copia **seudonimizada**, no disociada en el sentido estricto del artículo 2 r), y sigue siendo dato personal. Lo que sí es, con claridad, es la \"medida de índole técnica\" que exige el artículo 10 y la \"medida de seguridad lógica\" que los artículos 34 a 37 del reglamento piden al responsable elegir por riesgo — incluido el **riesgo residual** que el artículo 36 f) manda calcular. Para alcanzar la desasociación hay que descartar la llave, y nada en una copia enmascarada debe leerse como anónimo mientras exista.",
-        "Dos disposiciones más hacen explícita la lectura por riesgo. El artículo 2 q) del reglamento dice que la persona física es identificable cuando la identidad pueda determinarse \"directa o **indirectamente**, mediante cualquier información referida a su identidad anatómica, fisiológica, psíquica, económica, cultural o social\", y agrega que \"una persona física **no se considerará identificable** si dicha identificación requiere plazos o actividades desproporcionadas\". El artículo 8 d) de la ley limita sus principios para bases de datos usadas con fines estadísticos, históricos o de investigación científica \"cuando **no exista riesgo** de que las personas sean identificadas\". Ambos ponen la pregunta donde este set la responde: cuánto trabajo haría falta para volver a señalar a una persona."
+        "Dos disposiciones más hacen explícita la lectura por riesgo. El artículo 2 q) del reglamento dice que la persona física es identificable cuando la identidad pueda determinarse \"directa o **indirectamente**, mediante cualquier información referida a su identidad anatómica, fisiológica, psíquica, económica, cultural o social\", y agrega que \"una persona física **no se considerará identificable** si dicha identificación requiere plazos o actividades desproporcionadas\". El artículo 8 d) de la ley limita sus principios para bases de datos usadas con fines estadísticos, históricos o de investigación científica \"cuando **no exista riesgo** de que las personas sean identificadas\". Ambos ponen la pregunta donde esta política la responde: cuánto trabajo haría falta para volver a señalar a una persona."
       ]
     }
   ],
@@ -180,7 +180,7 @@
       "title": "Cédula de identidad",
       "what": [
         "El número del Tribunal Supremo de Elecciones, la llave de todo registro costarricense. Su forma canónica son diez dígitos, `0P-TTTT-AAAA` — una provincia, el tomo y el asiento del registro de nacimiento — y los ceros iniciales suelen omitirse, así que se escribe `1-0234-0567` o `102340567`.",
-        "El mismo dominio recibe los otros números que una columna de documento guarda: un DIMEX de once o doce dígitos, un NITE de la serie 3-120 y la cédula jurídica de una empresa. La licencia de conducir lleva la cédula de su titular, así que una columna de licencia cae aquí también."
+        "La misma clase de datos recibe los otros números que una columna de documento guarda: un DIMEX de once o doce dígitos, un NITE de la serie 3-120 y la cédula jurídica de una empresa. La licencia de conducir lleva la cédula de su titular, así que una columna de licencia cae aquí también."
       ],
       "masking": [
         "Dígito a dígito, conservando los guiones. La cédula **no lleva dígito verificador** — la Dirección General de Tributación la valida contra el propio Registro Civil —, así que nada hay que recalcular y el número cambia entero, **incluido el dígito de la provincia**: es la provincia del asiento de nacimiento y de otro modo sobreviviría en la copia. El primer dígito se mapea entre 1 y 9, nunca a cero, para que el resultado siga siendo una cédula bien formada.",
@@ -319,7 +319,7 @@
         "El número de tarjeta, de crédito o de débito, con o sin espacios."
       ],
       "masking": [
-        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
+        "Credit Card, que viene con Delphix: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "CR_L1_BILLETERA": {
@@ -436,7 +436,7 @@
         "Observaciones, comentarios, notas, el relato de un reclamo: las columnas donde se escribe lo que se quiera, y donde terminan cédulas, teléfonos y nombres."
       ],
       "masking": [
-        "El texto se conserva y lo que identifica dentro de él se redacta: una cédula, un DIMEX, un NITE, un correo, un teléfono, una tarjeta, un IBAN y una IP se vuelven `[DATO]`, y un nombre de las listas del set se vuelve `[NOMBRE]`."
+        "El texto se conserva y lo que identifica dentro de él se redacta: una cédula, un DIMEX, un NITE, un correo, un teléfono, una tarjeta, un IBAN y una IP se vuelven `[DATO]`, y un nombre de las listas de la política se vuelve `[NOMBRE]`."
       ]
     },
     "CR_L2_FECHA_NACIMIENTO": {
@@ -616,7 +616,7 @@
         "Una convicción filosófica, moral o ética, una objeción de conciencia, la pertenencia a una logia."
       ],
       "masking": [
-        "Suprimida: reemplazada por \"Sin información\". El artículo 9.1 nombra las **convicciones filosóficas** que el artículo 3 e) deja fuera, y su excepción b) permite a una fundación o asociación de finalidad filosófica guardar los datos de sus propios miembros — que es la base que este dominio protege en todas partes."
+        "Suprimida: reemplazada por \"Sin información\". El artículo 9.1 nombra las **convicciones filosóficas** que el artículo 3 e) deja fuera, y su excepción b) permite a una fundación o asociación de finalidad filosófica guardar los datos de sus propios miembros — que es la base que esta clase de datos protege en todas partes."
       ]
     },
     "CR_L3_OPINION_POLITICA": {
@@ -832,7 +832,7 @@
         "El saldo de una deuda, de un préstamo o de una tarjeta, la cuota, el límite de crédito."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "CR_FIN_INGRESOS": {
@@ -841,7 +841,7 @@
         "El salario, bruto o neto, los honorarios, el ingreso declarado, el ingreso per cápita del hogar."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "CR_FIN_PATRIMONIO": {
@@ -850,7 +850,7 @@
         "El patrimonio, los activos, el valor fiscal o comercial de un inmueble o un vehículo, el saldo de una cuenta o una inversión, una declaración jurada de bienes."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real. El artículo 1 de la ley alcanza los datos de una persona \"o **bienes**\", lo que pone esta columna dentro de ella por las palabras expresas del estatuto."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real. El artículo 1 de la ley alcanza los datos de una persona \"o **bienes**\", lo que pone esta columna dentro de ella por las palabras expresas del estatuto."
       ]
     },
     "CR_FIN_PENSION": {
@@ -859,7 +859,7 @@
         "El monto de una pensión o un subsidio: el IVM, el Régimen No Contributivo, una pensión alimentaria, una pensión por invalidez."
       ],
       "masking": [
-        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real. Una pensión del Régimen No Contributivo dice que la persona es pobre, una pensión por invalidez dice que tiene una discapacidad."
+        "Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real. Una pensión del Régimen No Contributivo dice que la persona es pobre, una pensión por invalidez dice que tiene una discapacidad."
       ]
     },
     "CR_FIN_PROGRAMA_SOCIAL": {
@@ -877,7 +877,7 @@
         "La clasificación del IMAS o del SINIRUBE — pobreza extrema, pobreza básica, vulnerabilidad, no pobre —, el puntaje de la ficha de información social, el quintil, el índice de desarrollo social."
       ],
       "masking": [
-        "Reemplazada dentro de su propia lista, un código por otro código. Este dominio lleva la frase de la propia ley: el artículo 3 e) enumera la **condición socioeconómica** como dato sensible, en la misma oración que el origen racial y la convicción religiosa, cosa que ninguna otra ley de la región hace."
+        "Reemplazada dentro de su propia lista, un código por otro código. Esta clase de datos lleva la frase de la propia ley: el artículo 3 e) enumera la **condición socioeconómica** como dato sensible, en la misma oración que el origen racial y la convicción religiosa, cosa que ninguna otra ley de la región hace."
       ]
     },
     "CR_FIN_VIVIENDA": {
@@ -912,9 +912,9 @@
     {
       "title": "Los dígitos de control del IBAN",
       "body": [
-        "Costa Rica es inusual porque **ninguno de sus números de identidad lleva dígito verificador**: la cédula de identidad, el DIMEX, el NITE y la cédula jurídica se validan contra un registro y no por aritmética. La Dirección General de Tributación verifica una cédula contra el Registro Civil en tiempo real. Así, nada en este set tiene que recalcular un dígito de identidad — y el número entero puede cambiar, razón por la cual incluso el dígito de la provincia de una cédula se enmascara.",
+        "Costa Rica es inusual porque **ninguno de sus números de identidad lleva dígito verificador**: la cédula de identidad, el DIMEX, el NITE y la cédula jurídica se validan contra un registro y no por aritmética. La Dirección General de Tributación verifica una cédula contra el Registro Civil en tiempo real. Así, nada en esta política tiene que recalcular un dígito de identidad — y el número entero puede cambiar, razón por la cual incluso el dígito de la provincia de una cédula se enmascara.",
         "El **IBAN** es el único lugar donde la aritmética importa, y ahí importa en todas partes: desde 2017 toda cuenta costarricense es un IBAN, SINPE se mueve sobre él, y cualquier biblioteca que lo toque lo valida. La regla es la ISO 13616: mover los cuatro primeros caracteres al final, leer `C` como 12 y `R` como 27, y el número resultante debe dejar resto **1 módulo 97**. El propio ejemplo del BCCR, CR05 0152 0200 1026 2840 66, lo deja.",
-        "Ningún framework de enmascaramiento calcula un resto módulo 97, y el algoritmo Check Digit escribe un carácter donde estos son dos. Así que el set lo calcula con tablas de búsqueda. Un **estado de dos dígitos** — el resto hasta ahí — se pone donde estaban los dígitos de control viejos, y viaja a la derecha por el número un carácter a la vez; cada paso es un Data Cleansing que convierte \"estado + carácter\" en \"carácter + nuevo estado\", desde una tabla de 1.067 líneas, una por cada par de resto y dígito. En el extremo derecho una tabla de 97 líneas convierte el resto en los dígitos de control, por la fórmula 98 − (r·10⁶ + 1227·100) mod 97. Un segundo viajero lleva entonces los dos dígitos de vuelta al frente.",
+        "Ningún framework de enmascaramiento calcula un resto módulo 97, y el algoritmo Check Digit escribe un carácter donde estos son dos. Así que la política lo calcula con tablas de búsqueda. Un **estado de dos dígitos** — el resto hasta ahí — se pone donde estaban los dígitos de control viejos, y viaja a la derecha por el número un carácter a la vez; cada paso es un Data Cleansing que convierte \"estado + carácter\" en \"carácter + nuevo estado\", desde una tabla de 1.067 líneas, una por cada par de resto y dígito. En el extremo derecho una tabla de 97 líneas convierte el resto en los dígitos de control, por la fórmula 98 − (r·10⁶ + 1227·100) mod 97. Un segundo viajero lleva entonces los dos dígitos de vuelta al frente.",
         "`CR` y los espacios de la forma impresa esperan como marcadores de un carácter mientras eso ocurre, y se reescriben al final, así que la forma compacta y la impresa en grupos de cuatro salen como entraron — válidas, con su banco, y con una cuenta que no pertenece a nadie."
       ]
     },
@@ -935,10 +935,10 @@
           "list": [
             "**Enmascarar con llave es seudonimización, no desasociación.** El artículo 2 r) del reglamento pide que el resultado no pueda asociarse o vincularse a persona determinada o determinable; quien tiene la llave puede reproducir el mapeo, así que una copia enmascarada sigue siendo dato personal y sigue necesitando las medidas del artículo 10. Para alcanzar la desasociación hay que descartar la llave.",
             "**Las poblaciones son estimaciones.** Las poblaciones distritales son la estimación del Instituto Nacional de Estadística y Censos para 2022, proyectada del censo de 2011; suman unos 5,20 millones, cerca de 3% por encima de los 5.044.197 que contó el censo de 2022. Un distrito a unos cientos del umbral de 20.000 puede caer al otro lado con las cifras del censo, y conviene revisarlo para los pocos que están ahí.",
-            "**Dieciséis distritos no tienen cifra publicada propia.** Se crearon después de la distribución de la que viene la estimación — entre ellos los tres del cantón de Río Cuarto, Monteverde, Puerto Jiménez, Puente Salas y los territorios indígenas de Quitirrisí y Matambú — y la Isla del Coco está deshabitada. El set trata a los dieciséis como pequeños, lo que los generaliza: la opción conservadora, al costo de alguna utilidad.",
+            "**Dieciséis distritos no tienen cifra publicada propia.** Se crearon después de la distribución de la que viene la estimación — entre ellos los tres del cantón de Río Cuarto, Monteverde, Puerto Jiménez, Puente Salas y los territorios indígenas de Quitirrisí y Matambú — y la Isla del Coco está deshabitada. La política trata a los dieciséis como pequeños, lo que los generaliza: la opción conservadora, al costo de alguna utilidad.",
             "**El banco de un IBAN se conserva.** No es dato personal, y conservarlo mantiene una cuenta de pruebas dentro de un banco real; pero un banco con pocos clientes en un lugar pequeño estrecha un poco a una persona. Los dos dígitos de control se recalculan desde la cuenta enmascarada, así que no filtran nada del original.",
             "**Una fecha de nacimiento se desplaza, no se reemplaza.** Sesenta días a cada lado rompen el vínculo con un registro público y dejan la edad y la generación en su lugar. Donde la edad de un niño decide algo — un año escolar, un programa — un desplazamiento que cruza el cumpleaños mueve unas filas; donde eso importe, desplace la fecha igual en todas las tablas que la guardan.",
-            "**Las columnas binarias y los adjuntos quedan fuera de alcance.** Una cédula escaneada, una fotografía, un PDF de una hoja de delincuencia o una imagen clínica guarda todo lo que las columnas al lado dejaron de decir. El set enmascara la ruta, no el archivo.",
+            "**Las columnas binarias y los adjuntos quedan fuera de alcance.** Una cédula escaneada, una fotografía, un PDF de una hoja de delincuencia o una imagen clínica guarda todo lo que las columnas al lado dejaron de decir. La política enmascara la ruta, no el archivo.",
             "**El descubrimiento es una propuesta, no un veredicto.** Los classifiers leen nombres de columna y valores; una columna con un nombre que nadie reconoce y pocos valores puede escapar, y una llamada como persona puede quedar atrapada por error. Revise el inventario antes de correr un job de enmascaramiento, que es para eso que existe el inventario."
           ]
         }
@@ -947,9 +947,9 @@
     {
       "title": "Verificación",
       "body": [
-        "El set se verifica en cada build. Las 141 configuraciones de classifier se revisan una por una, y una batería de 146 columnas — bien nombradas, mal nombradas, y 30 que no son dato personal alguno, entre ellas una cédula jurídica — se perfila con el set entero en su umbral de 60 y de nuevo solo con el paquete esencial: toda columna cae donde debe, y ninguna de las 30 es reclamada.",
+        "La política se verifica en cada build. Las 141 configuraciones de classifier se revisan una por una, y una batería de 146 columnas — bien nombradas, mal nombradas, y 30 que no son dato personal alguno, entre ellas una cédula jurídica — se perfila con la política entera en su umbral de 60 y de nuevo solo con el paquete esencial: toda columna cae donde debe, y ninguna de las 30 es reclamada.",
         "La generalización se audita offline: los 492 distritos, los 84 cantones y las 7 provincias se verifican contra la regla, y cada una de las 11.582 sustituciones que la tabla escribe se verifica para que nombre un lugar de al menos 20.000 — en la provincia correcta, por el nombre, con el cantón, con la provincia y por el código.",
-        "El enmascaramiento se corre de verdad: 572 valores en todos los dominios, cada uno verificado contra lo que debería volverse. Doscientas cédulas dan doscientas salidas distintas, todas bien formadas, con el dígito de la provincia enmascarado y nunca cero. Doscientos IBAN — cien compactos y cien impresos en grupos de cuatro — dan doscientas salidas distintas, **todas válidas bajo la ISO 13616**, todas conservando su banco y su forma escrita."
+        "El enmascaramiento se corre de verdad: 572 valores en todas las clases de datos, cada uno verificado contra lo que debería volverse. Doscientas cédulas dan doscientas salidas distintas, todas bien formadas, con el dígito de la provincia enmascarado y nunca cero. Doscientos IBAN — cien compactos y cien impresos en grupos de cuatro — dan doscientas salidas distintas, **todas válidas bajo la ISO 13616**, todas conservando su banco y su forma escrita."
       ]
     },
     {

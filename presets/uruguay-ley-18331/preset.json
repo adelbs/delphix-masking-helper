@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "south-america",
+  "country": "UY",
   "name": {
     "en": "Uruguay — Ley 18.331 de Protección de Datos Personales",
     "pt-BR": "Uruguai — Ley 18.331 de Protección de Datos Personales",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales uruguayos conforme a la Ley 18.331 y sus modificativas (Ley 19.670 de 2018, Ley 19.924 de 2020) y el Decreto 64/020: identificadores directos (cédula de identidad y RUT con dígito verificador válido, credencial cívica, nombres, razón social — el artículo 4 D) hace titular también a la persona jurídica —, contacto, dirección, cuentas, matrículas), cuasi-identificadores (fecha de nacimiento, localidad y código INE, barrio, código postal), los datos sensibles del artículo 4 E) — origen racial y étnico, preferencias políticas, convicciones religiosas o morales, afiliación sindical, salud y vida sexual —, los datos biométricos del artículo 4 Ñ), datos de salud, los datos comerciales y crediticios del artículo 22 y los datos de infracciones del artículo 18."
   },
   "profileSet": {
-    "name": "UY - Ley 18.331 - v2",
+    "name": "UY - Ley 18.331 - v3",
     "description": "Ley 18.331 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais argentinos: DNI, CUIT e CUIL com dígito verificador válido, CBU e CVU, quase-identificadores, os dados sensíveis dos artigos 2 e 7, dados genéticos e biométricos, identidade de gênero, dados de saúde, dados financeiros e antecedentes criminais.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de um banco de dados argentino e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
-        "Mascarar só nomes e DNI não basta: uma data de nascimento, um sexo e uma localidade pequena já apontam para uma pessoa. O set trabalha nas camadas onde está o risco:",
+        "Esta política de descoberta encontra os dados pessoais de um banco de dados argentino e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar só nomes e DNI não basta: uma data de nascimento, um sexo e uma localidade pequena já apontam para uma pessoa. A política trabalha nas camadas onde está o risco:",
         { "list": [
           "**Identificadores diretos** — DNI e as antigas libretas, CUIT, CUIL e CDI, número de trámite do DNI, documentos de estrangeiros, passaporte, atas do registro civil, matrícula profissional, nomes, razão social, contato, endereço, CBU, CVU e alias, contas e cartões, dispositivos, placa do veículo, imóveis, texto livre.",
           "**Quase-identificadores** — data de nascimento, idade, sexo, localidade, partido ou departamento e seus códigos do INDEC, código postal, bairro, nacionalidade, estado civil, ocupação, empregador, escolaridade.",
@@ -15,7 +15,7 @@
           "**Dados financeiros** — os dos serviços de informação de crédito do artigo 26: situação na Central de Deudores do BCRA, dívidas, renda, patrimônio, aposentadorias; e os que revelam a situação socioeconômica: benefícios da ANSES e programas sociais, categoria do monotributo, posse da moradia.",
           "**Antecedentes criminais** — os que o artigo 7.4 reserva às autoridades públicas, e os números de processo e de causa."
         ] },
-        "Num Masking Engine, o set é um profile set com seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos em que esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um com sua configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos em que esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um com sua configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `DOCUMENTO`, `PARTIDO`, `DEPARTAMENTO` — precisa que os valores concordem. Uma coluna de nome sem sentido (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível: um DNI com pontos, um CUIT, um CBU, um endereço com andar e apartamento, uma placa, uma localidade.",
         "Os nomes de coluna são reconhecidos em espanhol, nas abreviaturas dos sistemas argentinos (`NRO_DOC`, `APYNOM`, `FEC_NAC`, `COD_LOCALIDAD`, `OBRA_SOCIAL`, `SITUACION_BCRA`) e em inglês.",
         { "tip": "Antes de mascarar, inventarie as colunas binárias (BLOB, imagens, PDF). Os processos de cadastro costumam guardar a foto da frente e do verso do DNI e uma selfie validada contra o RENAPER. Reporte essas colunas como risco residual." }
@@ -27,7 +27,7 @@
         "A Lei 25.326 de Proteção dos Dados Pessoais — sancionada em 4 de outubro de 2000 e promulgada parcialmente em 30 de outubro — desenvolve o habeas data do artigo 43 da Constituição Nacional, e o Decreto 1558/2001 a regulamenta. A autoridade de aplicação é a **Agencia de Acceso a la Información Pública (AAIP)**, que absorveu em 2017 a antiga Dirección Nacional de Protección de Datos Personales. A União Europeia reconhece à Argentina um nível adequado de proteção desde 2003, e o confirmou na revisão de 2024.",
         "O que importa para uma cópia de dados de produção:",
         { "list": [
-          "**Dado pessoal** é a informação de qualquer tipo referida a pessoas físicas **ou de existência ideal** determinadas ou determináveis (art. 2). A lei protege também as pessoas jurídicas: por isso o set mascara a razão social e o CUIT das empresas.",
+          "**Dado pessoal** é a informação de qualquer tipo referida a pessoas físicas **ou de existência ideal** determinadas ou determináveis (art. 2). A lei protege também as pessoas jurídicas: por isso a política mascara a razão social e o CUIT das empresas.",
           "**Dados sensíveis** são os que revelam origem racial e étnica, opiniões políticas, convicções religiosas, filosóficas ou morais, filiação sindical e informação referente à saúde ou à vida sexual (art. 2). Ninguém pode ser obrigado a fornecê-los, e **fica proibida a formação de arquivos que armazenem informação que direta ou indiretamente os revele**, salvo exceções (art. 7). Os dados de saúde têm ainda o regime do artigo 8 e o sigilo profissional.",
           "**Antecedentes criminais ou contravencionais** só podem ser tratados pelas autoridades públicas competentes (art. 7.4).",
           "**Dissociação.** A lei define a *disociación de datos* como todo tratamento de modo que a informação obtida não possa ser associada a pessoa determinada ou determinável (art. 2). Com dados dissociados, a cessão não exige consentimento (art. 11.3.e), e pesquisas e estatísticas devem usá-la (art. 28).",
@@ -35,19 +35,19 @@
           "**Informação de crédito.** Só podem ser arquivados dados relevantes para avaliar a solvência dos últimos cinco anos, ou dois se o devedor quitou a dívida (art. 26).",
           "**Sanções.** Advertência, suspensão, multa e fechamento ou cancelamento do arquivo (art. 31); a Resolução AAIP 126/2024 classifica as infrações em leves, graves e muito graves e gradua as sanções desde 1º de junho de 2024. Além disso, a lei incorporou ao Código Penal os artigos 117 bis e 157 bis: inserir dados falsos num arquivo de dados pessoais e acessar ilegitimamente um banco de dados ou revelar informação nele registrada são crimes (art. 32)."
         ] },
-        "**Convenção 108.** A Argentina aprovou a Convenção 108 do Conselho da Europa e seu protocolo adicional (Lei 27.483) e o protocolo que a moderniza, a Convenção 108+ (Lei 27.699, 2022). A 108+ acrescenta às categorias especiais os dados genéticos, os biométricos que identificam unicamente uma pessoa e os relativos a crimes, processos e condenações penais, e obriga a notificar à autoridade as violações de segurança graves. O protocolo entra em vigor quando 38 Partes o ratificarem: em maio de 2026 eram 34. Este set trata essas categorias como sensíveis de qualquer forma.",
-        "**Reforma em tramitação.** O Congresso tem vários projetos para substituir a Lei 25.326 — entre eles os expedientes 644-S-2025 e 1948-D-2025, e o 3397-D-2026, apresentado em 16 de julho de 2026, que retoma o projeto enviado pelo Poder Executivo em 2023 e fixa em 16 anos a idade para consentir o tratamento dos próprios dados. Nenhum foi aprovado. Este set segue o texto vigente."
+        "**Convenção 108.** A Argentina aprovou a Convenção 108 do Conselho da Europa e seu protocolo adicional (Lei 27.483) e o protocolo que a moderniza, a Convenção 108+ (Lei 27.699, 2022). A 108+ acrescenta às categorias especiais os dados genéticos, os biométricos que identificam unicamente uma pessoa e os relativos a crimes, processos e condenações penais, e obriga a notificar à autoridade as violações de segurança graves. O protocolo entra em vigor quando 38 Partes o ratificarem: em maio de 2026 eram 34. Esta política trata essas categorias como sensíveis de qualquer forma.",
+        "**Reforma em tramitação.** O Congresso tem vários projetos para substituir a Lei 25.326 — entre eles os expedientes 644-S-2025 e 1948-D-2025, e o 3397-D-2026, apresentado em 16 de julho de 2026, que retoma o projeto enviado pelo Poder Executivo em 2023 e fixa em 16 anos a idade para consentir o tratamento dos próprios dados. Nenhum foi aprovado. Esta política segue o texto vigente."
       ]
     },
     {
       "title": "Dissociação, pseudonimização e cópias não produtivas",
       "body": [
         "A consequência da dissociação decorre das definições: um dado que não pode mais ser associado a uma pessoa determinada ou determinável não é dado pessoal. A lei não fala de pseudonimização, mas a pergunta é a mesma de qualquer regime: **alguém consegue associar o dado à pessoa de novo?**",
-        "Os algoritmos deste set são determinísticos para a chave do Masking Engine: o mesmo DNI é mascarado do mesmo jeito em todas as tabelas, o que mantém os joins. Por isso, para quem tem a chave **e** a produção, a cópia mascarada pode ser religada — não está dissociada no sentido do artigo 2 e continua sendo dado pessoal. Para quem tem só a cópia, os identificadores diretos foram substituídos e os quase-identificadores generalizados.",
+        "Os algoritmos desta política são determinísticos para a chave de mascaramento do Delphix: o mesmo DNI é mascarado do mesmo jeito em todas as tabelas, o que mantém os joins. Por isso, para quem tem a chave **e** a produção, a cópia mascarada pode ser religada — não está dissociada no sentido do artigo 2 e continua sendo dado pessoal. Para quem tem só a cópia, os identificadores diretos foram substituídos e os quase-identificadores generalizados.",
         { "list": [
           "Guarde a chave do engine fora do alcance de quem usa a cópia mascarada.",
           "Não entregue a cópia a quem também acessa a produção sem necessidade.",
-          "Revise os quase-identificadores que o set não conhece, e meça o risco de reidentificação antes de publicar ou ceder a cópia como dissociada."
+          "Revise os quase-identificadores que a política não conhece, e meça o risco de reidentificação antes de publicar ou ceder a cópia como dissociada."
         ] }
       ]
     }
@@ -73,7 +73,7 @@
       "id": "L3",
       "title": "Dados sensíveis",
       "intro": [
-        "As categorias do artigo 2 que não são de saúde — que tem grupo próprio: origem racial e étnica, opiniões políticas, convicções religiosas, filosóficas ou morais, filiação sindical e vida sexual. O set acrescenta as categorias especiais da Convenção 108+ — dados genéticos e biométricos —, a orientação sexual, a **identidade de gênero**, cuja retificação registral é confidencial (Lei 26.743, art. 9), e a condição de **vítima** de violência de gênero (Lei 26.485), de tráfico (Lei 26.364) ou de crimes contra a integridade sexual, cuja identidade a lei manda proteger. As colunas categóricas conservam sua forma: uma flag S/N continua flag, um código é substituído por outro código e qualquer outro valor por um da lista da sua categoria. Onde os valores não compartilham vocabulário, são suprimidos para `Sin información`."
+        "As categorias do artigo 2 que não são de saúde — que tem grupo próprio: origem racial e étnica, opiniões políticas, convicções religiosas, filosóficas ou morais, filiação sindical e vida sexual. A política acrescenta as categorias especiais da Convenção 108+ — dados genéticos e biométricos —, a orientação sexual, a **identidade de gênero**, cuja retificação registral é confidencial (Lei 26.743, art. 9), e a condição de **vítima** de violência de gênero (Lei 26.485), de tráfico (Lei 26.364) ou de crimes contra a integridade sexual, cuja identidade a lei manda proteger. As colunas categóricas conservam sua forma: uma flag S/N continua flag, um código é substituído por outro código e qualquer outro valor por um da lista da sua categoria. Onde os valores não compartilham vocabulário, são suprimidos para `Sin información`."
       ],
       "domains": ["AR_L3_ORIGEN_ETNICO", "AR_L3_PUEBLO_INDIGENA", "AR_L3_LENGUA_INDIGENA", "AR_L3_RELIGION", "AR_L3_CONVICCION_FILOSOFICA", "AR_L3_OPINION_POLITICA", "AR_L3_AFILIACION_PARTIDARIA", "AR_L3_AFILIACION_SINDICAL", "AR_L3_BIOMETRICO", "AR_L3_GENETICO", "AR_L3_ORIENTACION_SEXUAL", "AR_L3_VIDA_SEXUAL", "AR_L3_IDENTIDAD_GENERO", "AR_L3_VICTIMA"]
     },
@@ -162,7 +162,7 @@
       "title": "Nome completo",
       "what": [
         "Nomes e sobrenomes numa só coluna: `Juan Carlos Fernández`, `FERNÁNDEZ, JUAN CARLOS`. Também os do pai, da mãe, do tutor, do cônjuge ou convivente, do fiador e da referência pessoal.",
-        "Uma coluna chamada só `NOMBRE` pode ter prenomes ou nomes completos: os valores decidem entre os dois domínios."
+        "Uma coluna chamada só `NOMBRE` pode ter prenomes ou nomes completos: os valores decidem entre as duas classes de dados."
       ],
       "masking": [
         "Na ordem argentina, com um só sobrenome como o mais comum: duas palavras são prenome e sobrenome; três, dois prenomes e um sobrenome; quatro, dois e dois; cinco, três e dois. `APELLIDO, NOMBRES` com vírgula, como em listagens e padrões eleitorais, também é reconhecido. O resultado é um nome plausível, nunca o original."
@@ -186,7 +186,7 @@
     "AR_L1_DIRECCION": {
       "title": "Endereço",
       "what": ["O endereço com rua e número — `Av. Corrientes 1234 Piso 5 Dto. B` —, com rua numerada como em La Plata (`Calle 7 N° 1234`), ou com quadra e lote em bairros e conjuntos habitacionais (`Mz. 12 Lote 5`), e as rodovias com quilômetro."],
-      "masking": ["A linha inteira é trocada por um endereço argentino fictício com as mesmas formas. Bairro, localidade, partido e código postal em colunas próprias são tratados pelos seus domínios."]
+      "masking": ["A linha inteira é trocada por um endereço argentino fictício com as mesmas formas. Bairro, localidade, partido e código postal em colunas próprias são tratados pelas suas classes de dados."]
     },
     "AR_L1_DIRECCION_COMPLEMENTO": {
       "title": "Complemento do endereço",
@@ -207,13 +207,13 @@
     },
     "AR_L1_CUENTA_BANCARIA": {
       "title": "Conta bancária",
-      "what": ["Números de caja de ahorros, conta corrente e conta salário, e carteiras digitais. O código do banco não é dado pessoal e não tem domínio."],
+      "what": ["Números de caja de ahorros, conta corrente e conta salário, e carteiras digitais. O código do banco não é dado pessoal e não tem classe de dados."],
       "masking": ["Os dígitos são mapeados; os separadores se mantêm."]
     },
     "AR_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
-      "masking": ["Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
+      "masking": ["Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
     },
     "AR_L1_IP": {
       "title": "Endereço IP",
@@ -303,7 +303,7 @@
     "AR_L2_PROVINCIA": {
       "title": "Província (opcional)",
       "what": ["A província ou a Cidade Autônoma de Buenos Aires, pelo nome — `Córdoba`, `CORDOBA`, `CABA`, `Capital Federal` — ou pelo código ISO 3166-2 (`AR-X`)."],
-      "masking": ["**Este domínio é opcional e o set não o atribui.** A província se mantém por padrão, porque partidos, localidades e o código postal são generalizados dentro dela. O domínio serve para uma coluna que precise mudar de qualquer jeito, e é atribuído à mão no inventário.", "A província vira outra da sua região estatística do INDEC — Noroeste, Nordeste, Cuyo, Pampeana ou Patagônia —, escolhida por um Secure Lookup com a chave do engine: `Córdoba` pode virar `Entre Ríos` ou `La Pampa`, nunca `Salta`. Uma província pode sortear a si mesma. A Cidade Autônoma de Buenos Aires, que o INDEC agrupa com os partidos do conurbano na Grande Buenos Aires, vai com a Pampeana e não está entre as substitutas.", "Um primeiro passo escreve cada grafia com o nome oficial, então `Cordoba` e `Córdoba`, ou `CABA` e `Capital Federal`, sorteiam a mesma província. As maiúsculas se mantêm; um valor que não é província passa sem mudança.", "Se a província muda e a localidade, o partido ou o código postal da mesma linha não, a linha deixa de ser coerente: `Rosario` e `S2000` ficam com outra província. O código ISO e o nome da mesma província também deixam de corresponder depois do mascaramento."]
+      "masking": ["**Esta classe de dados é opcional e a política não o atribui.** A província se mantém por padrão, porque partidos, localidades e o código postal são generalizados dentro dela. A classe de dados serve para uma coluna que precise mudar de qualquer jeito, e é atribuído à mão no inventário.", "A província vira outra da sua região estatística do INDEC — Noroeste, Nordeste, Cuyo, Pampeana ou Patagônia —, escolhida por um Secure Lookup com a chave do engine: `Córdoba` pode virar `Entre Ríos` ou `La Pampa`, nunca `Salta`. Uma província pode sortear a si mesma. A Cidade Autônoma de Buenos Aires, que o INDEC agrupa com os partidos do conurbano na Grande Buenos Aires, vai com a Pampeana e não está entre as substitutas.", "Um primeiro passo escreve cada grafia com o nome oficial, então `Cordoba` e `Córdoba`, ou `CABA` e `Capital Federal`, sorteiam a mesma província. As maiúsculas se mantêm; um valor que não é província passa sem mudança.", "Se a província muda e a localidade, o partido ou o código postal da mesma linha não, a linha deixa de ser coerente: `Rosario` e `S2000` ficam com outra província. O código ISO e o nome da mesma província também deixam de corresponder depois do mascaramento."]
     },
     "AR_L2_CODIGO_GEOGRAFICO": {
       "title": "Códigos geográficos do INDEC",
@@ -417,7 +417,7 @@
     },
     "AR_L3_IDENTIDAD_GENERO": {
       "title": "Identidade de gênero",
-      "what": ["A identidade de gênero autopercebida, a retificação registral e a mudança de sexo registral da Lei 26.743, que proíbe dar publicidade à retificação e à certidão original sem autorização da pessoa (art. 9). O nome autopercebido fica no domínio de nome."],
+      "what": ["A identidade de gênero autopercebida, a retificação registral e a mudança de sexo registral da Lei 26.743, que proíbe dar publicidade à retificação e à certidão original sem autorização da pessoa (art. 9). O nome autopercebido fica na classe de dados de nome."],
       "masking": ["Trocada por uma categoria da lista."]
     },
     "AR_L3_VICTIMA": {
@@ -478,7 +478,7 @@
     "AR_SALUD_OCUPACIONAL": {
       "title": "Saúde ocupacional",
       "what": ["O resultado do exame admissional e periódico, as doenças preexistentes, os acidentes de trabalho e de trajeto e as doenças ocupacionais comunicados à ART (Lei 24.557), as licenças médicas e o absenteísmo, e a incapacidade fixada pelas comissões médicas."],
-      "masking": ["Um resultado é trocado por outro da lista — apto, inapto —; uma flag continua flag; o diagnóstico cai no seu domínio."]
+      "masking": ["Um resultado é trocado por outro da lista — apto, inapto —; uma flag continua flag; o diagnóstico cai na sua classe de dados."]
     },
     "AR_SALUD_REPRODUCTIVA": {
       "title": "Saúde sexual e reprodutiva",
@@ -498,22 +498,22 @@
     "AR_FIN_DEUDA": {
       "title": "Dívidas",
       "what": ["Saldos devedores, valores de empréstimos e parcelas, valores em atraso e limites de compra."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_INGRESOS": {
       "title": "Renda e remuneração",
       "what": ["Salário básico, bruto ou líquido, remuneração tributável, vencimentos, renda familiar e faturamento anual."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": ["Patrimônio, bens pessoais, valores venais e avaliações, saldos em contas e prazos fixos, posições em moeda estrangeira."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_JUBILACION": {
       "title": "Aposentadorias e benefícios",
       "what": ["O valor da aposentadoria ou pensão, o de um auxílio ou benefício e a pensão alimentícia."],
-      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_PROGRAMA_SOCIAL": {
       "title": "Benefícios e programas sociais",
@@ -545,8 +545,8 @@
     {
       "title": "O dígito verificador do CUIT",
       "body": [
-        "O algoritmo Check Digit do Masking Engine calcula um dígito módulo 11 como *onze menos o resto* e escreve o 10 como 0. Para o CUIT isso acerta em dez dos onze restos possíveis: quando o resto é 1, a ARCA não usa um dígito, muda o tipo — 20 e 27 passam a 23, 30 a 33, 23 a 24, 33 a 34 —, e o Check Digit escreveria 0. Um em cada onze CUITs mascarados seria inválido.",
-        "O set resolve isso em dois passos, sem tabelas:",
+        "O algoritmo Check Digit do Delphix calcula um dígito módulo 11 como *onze menos o resto* e escreve o 10 como 0. Para o CUIT isso acerta em dez dos onze restos possíveis: quando o resto é 1, a ARCA não usa um dígito, muda o tipo — 20 e 27 passam a 23, 30 a 33, 23 a 24, 33 a 34 —, e o Check Digit escreveria 0. Um em cada onze CUITs mascarados seria inválido.",
+        "A política resolve isso em dois passos, sem tabelas:",
         { "list": [
           "Um Check Digit com os **pesos dobrados** mantém o tipo, mapeia os oito dígitos do DNI e escreve no lugar do dígito um dígito auxiliar. Como 2 × 1 ≡ 2 módulo 11, o auxiliar é 9 exatamente quando o resto do corpo mascarado com os pesos verdadeiros é 1.",
           "Um Regex Decompose, quando o auxiliar é 9, reescreve o tipo e o dígito: mudar o tipo soma um múltiplo conhecido dos pesos, e o dígito novo fica determinado — 23 e 9 para um 20, 23 e 4 para um 27, 33 e 9 para um 30, 24 e 6 para um 23, 34 e 6 para um 33. Em qualquer outro caso aplica um Check Digit com os pesos verdadeiros sobre o corpo, que deixa como está, e recalcula o dígito."
@@ -557,12 +557,12 @@
     {
       "title": "Onde as pessoas moram: localidades, partidos e código postal",
       "body": [
-        "Com a população do Censo 2022 por gobierno local e por departamento, e a localização de cada um segundo o serviço Georef, o set conhece o tamanho, a província e a posição de 528 partidos, departamentos e comunas, de 2.280 gobiernos locales e das 4.027 localidades censais do INDEC.",
+        "Com a população do Censo 2022 por gobierno local e por departamento, e a localização de cada um segundo o serviço Georef, a política conhece o tamanho, a província e a posição de 528 partidos, departamentos e comunas, de 2.280 gobiernos locales e das 4.027 localidades censais do INDEC.",
         { "list": [
           "Um **gobierno local** com menos de 20.000 habitantes vira o gobierno local mais próximo da mesma província com pelo menos 20.000. São 1.952, com 7 milhões de habitantes — 15% da população. El Chaltén (Santa Cruz) vira El Calafate; Tilcara (Jujuy), Libertador General San Martín; Ancasti (Catamarca), Valle Viejo.",
           "Uma **localidade** segue o seu gobierno local. As que ficam fora de qualquer gobierno local — zonas rurais de Santiago del Estero, Córdoba ou da Patagônia — também são generalizadas, para o gobierno local grande mais próximo.",
           "Um **partido ou departamento** com menos de 20.000 habitantes vira o mais próximo da mesma província com pelo menos 20.000. São 203, com 2 milhões de habitantes.",
-          "A **província** se mantém, e todas têm pelo menos um gobierno local de 20.000 habitantes. Para uma coluna que precise mudar, o set traz o domínio opcional `AR_L2_PROVINCIA`, que ele não atribui sozinho.",
+          "A **província** se mantém, e todas têm pelo menos um gobierno local de 20.000 habitantes. Para uma coluna que precise mudar, a política traz a classe de dados opcional `AR_L2_PROVINCIA`, que ele não atribui sozinho.",
           "A distância é medida entre os centroides do Georef, em linha reta.",
           "Há nomes repetidos — San José, San Martín, Villa Nueva, 25 de Mayo — e outros que só diferem num acento. Um nome só é generalizado quando todos os lugares que o têm são pequenos, e então segue o maior deles. Com a província (`San José - Entre Ríos`, `San José (Entre Ríos)`, `San José, Entre Ríos`) vale a mesma regra dentro da província.",
           "Os **códigos do INDEC** seguem a mesma tabela, e o nome e o código de uma pessoa continuam coincidindo.",
@@ -580,7 +580,7 @@
           "**Uma localidade pequena dentro de um gobierno local grande** se mantém: o censo publica população por gobierno local, não por localidade. Um paraje rural de um partido grande conserva o nome.",
           "**O DNI de sete dígitos** é mascarado com sete dígitos; dentro do CUIL ele tem um zero na frente e é mascarado com oito. O DNI e o CUIL dessa pessoa deixam de coincidir.",
           "**O dígito verificador em coluna própria** não é recalculado: é mascarado e deixa de corresponder ao CUIT mascarado.",
-          "**A província, o banco do CBU e o código de área do telefone se mantêm.** A província pode ser mascarada dentro da sua região com o domínio opcional `AR_L2_PROVINCIA`, atribuído à mão.",
+          "**A província, o banco do CBU e o código de área do telefone se mantêm.** A província pode ser mascarada dentro da sua região com a classe de dados opcional `AR_L2_PROVINCIA`, atribuído à mão.",
           "**Data Cleansing deixa passar o que não conhece**: uma localidade escrita de uma forma que a tabela não tem — abreviada, com erro de grafia — passa sem mudança.",
           "**O texto livre** é redigido palavra por palavra: um celular escrito com espaços não é encontrado, e um nome que também é palavra comum (`Luz`, `Rosa`, `Paz`) é redigido onde aparecer.",
           "**Crianças e adolescentes** — a data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam os 13, 16 ou 18 anos, mas algumas cruzam. Onde importar, divida a regra por faixa etária com Multi-Column Condition.",
@@ -592,14 +592,14 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         { "list": [
-          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 166 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+          "A descoberta foi simulada em 166 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 31 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "As tabelas que generalizam lugares foram auditadas para os 528 partidos e departamentos e para os 2.280 gobiernos locales e as 4.027 localidades: pelo nome, pelo nome com a província e pelo código.",
-          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada domínio e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 240 CUITs de todos os tipos — inclusive os que mudam de tipo — e 150 CBUs quanto a validade e colisões; 150 DNIs quanto a colisões; 20 pessoas cujo DNI e CUIL precisam continuar coincidindo; e 106 grafias das 24 jurisdições, cada uma das quais precisa sortear uma só província da sua região, como quer que esteja escrita. Cada algoritmo também mascarou o seu próprio valor de exemplo."
+          "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam os valores de amostra de cada classe de dados e marcadores como `N/A`, conferindo cada saída contra o seu vocabulário; 240 CUITs de todos os tipos — inclusive os que mudam de tipo — e 150 CBUs quanto a validade e colisões; 150 DNIs quanto a colisões; 20 pessoas cujo DNI e CUIL precisam continuar coincidindo; e 106 grafias das 24 jurisdições, cada uma das quais precisa sortear uma só província da sua região, como quer que esteja escrita. Cada algoritmo também mascarou o seu próprio valor de exemplo."
         ] },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

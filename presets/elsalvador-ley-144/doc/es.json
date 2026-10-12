@@ -3,10 +3,10 @@
   "subtitle": "Descubrimiento y enmascaramiento de datos personales salvadoreños: DUI y NIT con dígito verificador válido, cuasi-identificadores, los datos sensibles del artículo 4 g), la nacionalidad del artículo 59 b), datos de salud, datos financieros y antecedentes penales.",
   "sections": [
     {
-      "title": "Acerca de este profile set",
+      "title": "Acerca de esta política de descubrimiento",
       "body": [
-        "Este profile set encuentra los datos personales de una base de datos salvadoreña y los enmascara, para que una copia no productiva — de pruebas, desarrollo, capacitación o análisis — deje de identificar a alguien.",
-        "Enmascarar solo nombres y DUI no alcanza: una fecha de nacimiento, un sexo y un distrito pequeño ya apuntan a una persona. El set trabaja en las capas donde está el riesgo:",
+        "Esta política de descubrimiento encuentra los datos personales de una base de datos salvadoreña y los enmascara, para que una copia no productiva — de pruebas, desarrollo, capacitación o análisis — deje de identificar a alguien.",
+        "Enmascarar solo nombres y DUI no alcanza: una fecha de nacimiento, un sexo y un distrito pequeño ya apuntan a una persona. La política trabaja en las capas donde está el riesgo:",
         { "list": [
           "**Identificadores directos** — DUI, NIT y NRC, documentos de extranjeros, pasaporte, partidas del registro del estado familiar, número del ISSS y NUP, NIE, nombres, contacto, dirección, cuentas, tarjetas, billeteras digitales, dispositivos, cookies, placas, inmuebles, texto libre.",
           "**Cuasi-identificadores** — fecha de nacimiento, edad, sexo, distrito y municipio con sus códigos, código postal, colonia, cantón, estado familiar, ocupación, patrono, escolaridad.",
@@ -15,7 +15,7 @@
           "**Datos financieros** — el historial crediticio que el artículo 3 a) deja a su propia ley, las deudas, ingresos, patrimonio, pensiones, **remesas**, subsidios y la tenencia de la vivienda.",
           "**Antecedentes penales** — solvencias, situación jurídica y números de expediente judicial o fiscal."
         ] },
-        "En un Masking Engine, el set es un profile set con sus classifiers, los dominios por los que votan, los algoritmos que esos dominios nombran — y los algoritmos en los que esos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa.",
+        "En Data Control Tower, la política es una política de descubrimiento con sus classifiers, las clases de datos por las que votan, los algoritmos que esas clases de datos nombran — y los algoritmos en los que esos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa.",
         "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza por sí solo; uno ambiguo — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — necesita que los valores concuerden. Una columna de nombre sin sentido (`CAMPO1`, `OBS`) igual se encuentra cuando los valores tienen formato o vocabulario reconocible: un DUI, un NIT, un teléfono de ocho dígitos, una dirección con colonia y polígono, una placa, un distrito.",
         "Los nombres de columna se reconocen en español, en las abreviaturas de los sistemas salvadoreños (`NUM_DOC`, `FEC_NAC`, `COD_MUNICIPIO`, `NRC`, `ISSS`, `CENTRO_ESCOLAR`) y en inglés.",
         { "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOB, imágenes, PDF). Los procesos de alta suelen guardar la foto del DUI — con la huella y la firma — y una selfie de validación. Reporte esas columnas como riesgo residual." }
@@ -35,18 +35,18 @@
           "**Sanciones.** Multas de uno a diez salarios mínimos del sector comercio por infracciones leves, de once a veinticinco por graves y de veintiséis a cuarenta por muy graves (art. 57) — con el salario mínimo de comercio y servicios de 408,80 dólares vigente en 2026, hasta unos 16.350 dólares. **Revertir la seudonimización de los datos personales sin el consentimiento del titular es infracción muy grave** (art. 56 c, 8)."
         ] },
         "**Lo que la ley deja fuera.** El historial crediticio que tratan los sujetos de la Ley de Regulación de los Servicios de Información sobre el Historial de Créditos de las Personas queda excluido (art. 3 a), aunque esa ley tiene su propio deber de reserva; también quedan fuera el tratamiento doméstico, el de seguridad pública y defensa, y los registros públicos y el registro del estado familiar (art. 3 b, c y d).",
-        "**Desarrollo posterior.** El artículo 60 dio a la ACE tres meses para dictar las políticas, medidas y guías de aplicación. En el Diario Oficial del 11 de agosto de 2026 la Agencia publicó los **Lineamientos para el Delegado de Protección de Datos Personales** y la **Normativa para el Desarrollo del Procedimiento Administrativo Sancionador**, vigentes ocho días después. Las políticas de medidas de seguridad del artículo 36 siguen siendo la referencia que hay que vigilar: cuando se publiquen, conviene revisar este set contra ellas."
+        "**Desarrollo posterior.** El artículo 60 dio a la ACE tres meses para dictar las políticas, medidas y guías de aplicación. En el Diario Oficial del 11 de agosto de 2026 la Agencia publicó los **Lineamientos para el Delegado de Protección de Datos Personales** y la **Normativa para el Desarrollo del Procedimiento Administrativo Sancionador**, vigentes ocho días después. Las políticas de medidas de seguridad del artículo 36 siguen siendo la referencia que hay que vigilar: cuando se publiquen, conviene revisar esta política contra ellas."
       ]
     },
     {
       "title": "Disociación, seudonimización y copias no productivas",
       "body": [
         "Pocas leyes de la región distinguen los dos conceptos con tanta claridad como el Decreto 144. La **disociación o anonimización** es irreversible (art. 4 h): el dato deja de permitir la identificación. La **seudonimización** (art. 4 q) admite que el dato vuelva a asociarse al titular *con información adicional*, y por eso exige que esa información esté separada, oculta, clasificada y resguardada bajo medidas técnicas y organizativas.",
-        "Los algoritmos de este set son deterministas para la clave del Masking Engine: el mismo DUI se enmascara igual en todas las tablas, lo que mantiene los joins. Esa clave es exactamente la *información adicional* del artículo 4 q). La copia enmascarada está **seudonimizada**, no anonimizada, y sigue siendo dato personal para quien tiene la clave y la producción.",
+        "Los algoritmos de esta política son deterministas para la clave de enmascaramiento de Delphix: el mismo DUI se enmascara igual en todas las tablas, lo que mantiene los joins. Esa clave es exactamente la *información adicional* del artículo 4 q). La copia enmascarada está **seudonimizada**, no anonimizada, y sigue siendo dato personal para quien tiene la clave y la producción.",
         { "list": [
           "Guarde la clave del engine separada, oculta y resguardada — es lo que la ley pide para que la seudonimización cuente.",
           "No entregue la copia a quien también accede a producción sin necesidad: revertir la seudonimización sin consentimiento del titular es infracción muy grave (art. 56 c, 8).",
-          "Si lo que necesita es tratar los datos como disociados — estadística o ciencia, art. 38 —, mida el riesgo de reidentificación de los cuasi-identificadores que quedan; la irreversibilidad del artículo 4 h) es un estándar más alto que el de este set."
+          "Si lo que necesita es tratar los datos como disociados — estadística o ciencia, art. 38 —, mida el riesgo de reidentificación de los cuasi-identificadores que quedan; la irreversibilidad del artículo 4 h) es un estándar más alto que el de esta política."
         ] }
       ]
     }
@@ -72,7 +72,7 @@
       "id": "L3",
       "title": "Datos sensibles",
       "intro": [
-        "Las categorías del artículo 4 g) que no son de salud — que tiene grupo propio —, más las que el artículo 59 b) prohíbe tratar sin cumplir el capítulo de datos sensibles: origen racial o étnico, **nacionalidad**, afiliación partidaria, convicciones religiosas, espirituales o filosóficas, salud, vida y orientación sexual. El set añade dos categorías que la ley nombra y que ninguna otra de la región enumera — la **situación moral y familiar** y los **hábitos personales** — y la condición de víctima de violencia, que otras leyes salvadoreñas mandan proteger. Las columnas categóricas conservan su forma: una bandera S/N sigue siendo bandera, un código se reemplaza por otro código y cualquier otro valor por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Sin información`."
+        "Las categorías del artículo 4 g) que no son de salud — que tiene grupo propio —, más las que el artículo 59 b) prohíbe tratar sin cumplir el capítulo de datos sensibles: origen racial o étnico, **nacionalidad**, afiliación partidaria, convicciones religiosas, espirituales o filosóficas, salud, vida y orientación sexual. La política añade dos categorías que la ley nombra y que ninguna otra de la región enumera — la **situación moral y familiar** y los **hábitos personales** — y la condición de víctima de violencia, que otras leyes salvadoreñas mandan proteger. Las columnas categóricas conservan su forma: una bandera S/N sigue siendo bandera, un código se reemplaza por otro código y cualquier otro valor por uno de la lista de su categoría. Donde los valores no comparten vocabulario, se suprimen a `Sin información`."
       ],
       "domains": ["SV_L3_ORIGEN_ETNICO", "SV_L3_LENGUA_INDIGENA", "SV_L3_NACIONALIDAD", "SV_L3_RELIGION", "SV_L3_CONVICCION_FILOSOFICA", "SV_L3_IDEOLOGIA_POLITICA", "SV_L3_AFILIACION_PARTIDARIA", "SV_L3_AFILIACION_SINDICAL", "SV_L3_BIOMETRICO", "SV_L3_GENETICO", "SV_L3_ORIENTACION_SEXUAL", "SV_L3_VIDA_SEXUAL", "SV_L3_IDENTIDAD_GENERO", "SV_L3_SITUACION_FAMILIAR", "SV_L3_HABITOS", "SV_L3_VICTIMA"]
     },
@@ -171,7 +171,7 @@
       "title": "Nombre completo",
       "what": [
         "Nombres y apellidos en una sola columna: `José Alberto Menjívar Portillo`. También los de la madre, el padre, el tutor, el cónyuge, el fiador o la referencia personal.",
-        "Una columna llamada solo `NOMBRE` puede tener nombres de pila o nombres completos: los valores deciden entre los dos dominios."
+        "Una columna llamada solo `NOMBRE` puede tener nombres de pila o nombres completos: los valores deciden entre las dos clases de datos."
       ],
       "masking": [
         "En el orden salvadoreño: dos palabras son nombre y apellido; tres, un nombre y dos apellidos; cuatro, dos y dos. `APELLIDOS, NOMBRES` con coma, como en los listados, también se reconoce. El resultado es un nombre plausible, nunca el original."
@@ -190,7 +190,7 @@
     "SV_L1_DIRECCION": {
       "title": "Dirección",
       "what": ["La dirección con la calle o avenida y el número — `Calle Arce #123, Colonia Escalón` —, con polígono y pasaje en las colonias y lotificaciones, o con el kilómetro de una carretera."],
-      "masking": ["La línea entera se reemplaza por una dirección salvadoreña ficticia con la misma forma. Colonia, cantón, distrito y código postal en columnas propias los tratan sus dominios."]
+      "masking": ["La línea entera se reemplaza por una dirección salvadoreña ficticia con la misma forma. Colonia, cantón, distrito y código postal en columnas propias los tratan sus clases de datos."]
     },
     "SV_L1_DIRECCION_COMPLEMENTO": {
       "title": "Complemento de la dirección",
@@ -199,13 +199,13 @@
     },
     "SV_L1_CUENTA_BANCARIA": {
       "title": "Cuenta bancaria",
-      "what": ["Números de cuentas de ahorro, corrientes y de planilla. El código del banco no es dato personal y no tiene dominio."],
+      "what": ["Números de cuentas de ahorro, corrientes y de planilla. El código del banco no es dato personal y no tiene clase de datos."],
       "masking": ["Los dígitos se mapean; los separadores se mantienen."]
     },
     "SV_L1_TARJETA": {
       "title": "Tarjeta de pago",
       "what": ["Números de tarjetas de crédito y débito, reconocidos por el algoritmo de Luhn."],
-      "masking": ["Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."]
+      "masking": ["Credit Card, que viene con Delphix: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."]
     },
     "SV_L1_BILLETERA": {
       "title": "Billetera digital y bitcoin",
@@ -320,7 +320,7 @@
     "SV_L2_ESTADO_FAMILIAR": {
       "title": "Estado familiar",
       "what": ["Soltero, casado, acompañado — la unión no matrimonial que reconoce el Código de Familia —, separado, divorciado o viudo, en palabras o en código."],
-      "masking": ["Reemplazado por otro estado familiar de la lista; un código sigue siendo código. La *situación familiar* como tal tiene su propio dominio entre los datos sensibles."]
+      "masking": ["Reemplazado por otro estado familiar de la lista; un código sigue siendo código. La *situación familiar* como tal tiene su propia clase de datos entre los datos sensibles."]
     },
     "SV_L2_OCUPACION": {
       "title": "Ocupación",
@@ -415,7 +415,7 @@
     "SV_L3_SITUACION_FAMILIAR": {
       "title": "Situación moral y familiar",
       "what": ["La *situación moral y familiar* que el artículo 4 g) nombra entre los datos sensibles: composición y vínculos familiares, con quién vive la persona, referencias morales y de conducta."],
-      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`. El estado familiar — soltero, casado — tiene su propio dominio entre los cuasi-identificadores."]
+      "masking": ["Una bandera sigue siendo bandera; cualquier otro valor pasa a `Sin información`. El estado familiar — soltero, casado — tiene su propia clase de datos entre los cuasi-identificadores."]
     },
     "SV_L3_HABITOS": {
       "title": "Hábitos personales",
@@ -480,7 +480,7 @@
     "SV_SALUD_OCUPACIONAL": {
       "title": "Salud ocupacional",
       "what": ["El concepto de aptitud de los exámenes médicos ocupacionales, los accidentes de trabajo y enfermedades profesionales, las incapacidades y el ausentismo."],
-      "masking": ["Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su dominio."]
+      "masking": ["Un concepto se reemplaza por otro de la lista — apto, no apto —; una bandera sigue siendo bandera; el diagnóstico cae en su clase de datos."]
     },
     "SV_SALUD_REPRODUCTIVA": {
       "title": "Salud sexual y reproductiva",
@@ -500,27 +500,27 @@
     "SV_FIN_DEUDA": {
       "title": "Deudas",
       "what": ["Saldos de crédito y de cartera, valor en mora, cuotas, montos desembolsados y límites."],
-      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
+      "masking": ["Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "SV_FIN_INGRESOS": {
       "title": "Ingresos y salario",
       "what": ["Salario, ingresos mensuales o familiares, honorarios y salario cotizable. El salario mínimo de comercio y servicios era de 408,80 dólares en 2026."],
-      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
+      "masking": ["Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "SV_FIN_PATRIMONIO": {
       "title": "Patrimonio",
       "what": ["Patrimonio, activos, avalúos, saldos en cuentas y depósitos a plazo."],
-      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
+      "masking": ["Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "SV_FIN_PENSION": {
       "title": "Pensión y subsidios",
       "what": ["El monto de la pensión, del subsidio o del beneficio, y la cuota alimenticia."],
-      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
+      "masking": ["Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "SV_FIN_REMESAS": {
       "title": "Remesas",
       "what": ["El monto y la frecuencia de las remesas familiares y la condición de receptor. Una de cada cuatro familias salvadoreñas las recibe, y el dato dice quién emigró y de qué vive el hogar."],
-      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
+      "masking": ["Enmascarado por CM Numeric, que viene con Delphix: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "SV_FIN_PROGRAMA_SOCIAL": {
       "title": "Subsidios y programas sociales",
@@ -547,11 +547,11 @@
     {
       "title": "Los dígitos verificadores del DUI y del NIT",
       "body": [
-        "El **DUI** es el caso simple: ocho dígitos con pesos 9, 8, 7, 6, 5, 4, 3 y 2 desde la izquierda, módulo 10, y el dígito es diez menos el residuo, escrito 0 cuando da diez. Es exactamente lo que hace el algoritmo Check Digit del Masking Engine, así que basta un paso: mapea los ocho dígitos y escribe el noveno.",
+        "El **DUI** es el caso simple: ocho dígitos con pesos 9, 8, 7, 6, 5, 4, 3 y 2 desde la izquierda, módulo 10, y el dígito es diez menos el residuo, escrito 0 cuando da diez. Es exactamente lo que hace el algoritmo Check Digit de Delphix, así que basta un paso: mapea los ocho dígitos y escribe el noveno.",
         "El **NIT** de catorce dígitos tiene dos reglas, y cuál se aplica depende del correlativo — el tercer bloque:",
         { "list": [
           "Correlativo **mayor que 100**: pesos 2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3 y 2, módulo 11, y el dígito es once menos el residuo, o 0 cuando el residuo es 0 o 1. Check Digit escribe once menos el residuo y el diez como 0: coincide sin ajustes.",
-          "Correlativo **de 100 o menos**: pesos 14, 13, 12 … 2, módulo 11, y el dígito **es el residuo** (el diez se escribe 0). Check Digit no sabe escribir el residuo, pero sí once menos el residuo — así que el set usa los **pesos complementarios** (once menos cada peso, módulo 11). Con ellos el residuo se invierte y lo que Check Digit escribe es el residuo verdadero."
+          "Correlativo **de 100 o menos**: pesos 14, 13, 12 … 2, módulo 11, y el dígito **es el residuo** (el diez se escribe 0). Check Digit no sabe escribir el residuo, pero sí once menos el residuo — así que la política usa los **pesos complementarios** (once menos cada peso, módulo 11). Con ellos el residuo se invierte y lo que Check Digit escribe es el residuo verdadero."
         ] },
         "Como la regla depende del correlativo y el cuerpo entero se enmascara, cada rama mantiene su clase: la rama antigua deja el correlativo con un cero adelante, y la nueva lo mapea con Numeric Mapping al rango 101–999. Un Regex Decompose elige la rama por la forma del valor de entrada, con o sin guiones. Los dos bloques que más dicen de la persona — el municipio y la **fecha de nacimiento** — se mapean dígito a dígito, así que el NIT enmascarado ya no revela cuándo ni dónde nació nadie."
       ]
@@ -559,7 +559,7 @@
     {
       "title": "Dónde vive la gente: distritos, cantones y código postal",
       "body": [
-        "Con la población del VII Censo de Población y VI de Vivienda de 2024 y la ubicación que publica el Banco Central de Reserva, el set conoce el tamaño, el municipio, el departamento y la posición de los 262 distritos y de los 44 municipios.",
+        "Con la población del VII Censo de Población y VI de Vivienda de 2024 y la ubicación que publica el Banco Central de Reserva, la política conoce el tamaño, el municipio, el departamento y la posición de los 262 distritos y de los 44 municipios.",
         { "list": [
           "Un **distrito** con menos de 20.000 habitantes pasa al distrito más cercano de su **municipio** con al menos 20.000; si su municipio no tiene ninguno, al más cercano de su departamento. Son 190 de 262, con 1,5 millones de habitantes — una cuarta parte del país. Apaneca pasa a Ahuachapán; Perquín, a San Francisco Gotera.",
           "Los **44 municipios** y los 14 departamentos se mantienen: el más pequeño de los municipios supera con creces el umbral.",
@@ -591,15 +591,15 @@
     {
       "title": "Verificación",
       "body": [
-        "Antes de la publicación, el set se verificó fuera de un Masking Engine:",
+        "Antes de la publicación, la política se verificó fuera de Delphix:",
         { "list": [
           "La regla del dígito verificador del DUI se contrastó con números publicados como válidos, y la del NIT con dos implementaciones independientes de la rutina que usan los sistemas salvadoreños.",
-          "La configuración de cada classifier se revisó contra lo que un Masking Engine acepta.",
-          "El profiling se simuló en 146 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 30 columnas que no son dato personal — y de nuevo solo con los classifiers del paquete esencial.",
+          "La configuración de cada classifier se revisó contra lo que acepta Delphix.",
+          "El descubrimiento se simuló en 146 columnas con la política completa en su umbral de asignación — bien nombradas, mal nombradas y 30 columnas que no son dato personal — y de nuevo solo con los classifiers del paquete esencial.",
           "La tabla que generaliza distritos se auditó para los 262: por nombre, por nombre con el departamento y por código.",
-          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de muestra de cada dominio y marcadores como `N/A`, contrastando cada salida con su vocabulario; 150 DUI y 200 NIT de las dos reglas en cuanto a validez y colisiones, y 20 NIT para comprobar que la fecha de nacimiento que llevan dentro no sobrevive. Cada algoritmo enmascaró además su propio valor de ejemplo."
+          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de muestra de cada clase de datos y marcadores como `N/A`, contrastando cada salida con su vocabulario; 150 DUI y 200 NIT de las dos reglas en cuanto a validez y colisiones, y 20 NIT para comprobar que la fecha de nacimiento que llevan dentro no sobrevive. Cada algoritmo enmascaró además su propio valor de ejemplo."
         ] },
-        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar la política con datos reales, ejecute un job de descubrimiento y uno de enmascaramiento sobre una copia representativa."
       ]
     },
     {

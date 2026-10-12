@@ -3,10 +3,10 @@
   "subtitle": "Discovering and masking Mexican personal data: direct identifiers with valid check digits, quasi-identifiers, the sensitive data of article 2 and the financial and patrimonial data of article 7.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Mexican database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
-        "Masking only names and CURPs does not achieve that: a birth date, a sex and a small municipality single people out on their own. The set works in the same layers the risk does:",
+        "This discovery policy finds the personal data in a Mexican database and masks it, so that a non-production copy — for testing, development, training or analytics — no longer identifies anyone.",
+        "Masking only names and CURPs does not achieve that: a birth date, a sex and a small municipality single people out on their own. The policy works in the same layers the risk does:",
         { "list": [
           "**Direct identifiers** — CURP, RFC, NSS, INE voter key, names, contact details, CLABE and cards, documents, devices, vehicles, free text.",
           "**Quasi-identifiers** — birth date, age, sex, municipality, locality, colonia, postal code, occupation, employer, schooling.",
@@ -14,7 +14,7 @@
           "**Financial and patrimonial data** — credit bureau records, debts, income, assets, retirement savings, housing credit, social security, social programs, socioeconomic level, tax regime.",
           "**Criminal records** — records and case numbers."
         ] },
-        "On a Masking Engine the set is one profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those build on — and the lookup files they read. The appendices list every one of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it alone; an ambiguous one — `NOMBRE`, `RESULTADO`, `CIUDAD` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a CURP, an RFC, an INE voter key, a CLABE, a plate, a municipality.",
         "Column names are recognized in Spanish, in the abbreviations of Mexican systems (`AP_PATERNO`, `FEC_NAC`, `NUM_EXT`, `CVE_MUN`, `SDI`), in the attribute names of CFDI 4.0 invoices (`RfcReceptor`, `DomicilioFiscalReceptor`, `RegimenFiscalReceptor`) and in English.",
         { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often store photos of the INE credential: the CURP and the voter key stay readable in the image. Report those columns as residual risk." }
@@ -34,9 +34,9 @@
           "**Security.** Administrative, technical and physical measures proportional to the sensitivity of the data (art. 18); breaches that significantly affect people must be reported to them (art. 19); everyone involved keeps confidentiality (art. 20).",
           "**Sanctions.** Fines up to 320,000 times the UMA, which may be doubled for sensitive data (art. 59); prison of three months to five years for the crimes of chapter XII, doubled for sensitive data (arts. 62 to 64)."
         ] },
-        "A test environment filled with production data is processing for a purpose the privacy notice does not cover, and holds sensitive and financial data outside the controls built for them. A dissociated copy is the route the law itself provides: that is what this set is for.",
-        "Two notes on the categories. The 2010 law listed **union membership** as sensitive; the 2025 text no longer names it. Its list is not exhaustive and union membership still exposes people to discrimination, so the set keeps it. **Biometric data** are not named either; they identify a person by definition and are treated as sensitive here.",
-        { "note": "This document describes technical controls. Whether a copy counts as dissociated is a legal assessment of the whole environment — its access, its retention, what else is joined to it — and not of the profile set alone." }
+        "A test environment filled with production data is processing for a purpose the privacy notice does not cover, and holds sensitive and financial data outside the controls built for them. A dissociated copy is the route the law itself provides: that is what this policy is for.",
+        "Two notes on the categories. The 2010 law listed **union membership** as sensitive; the 2025 text no longer names it. Its list is not exhaustive and union membership still exposes people to discrimination, so the policy keeps it. **Biometric data** are not named either; they identify a person by definition and are treated as sensitive here.",
+        { "note": "This document describes technical controls. Whether a copy counts as dissociated is a legal assessment of the whole environment — its access, its retention, what else is joined to it — and not of the discovery policy alone." }
       ]
     }
   ],
@@ -76,7 +76,7 @@
     "MX_L1_CURP": {
       "title": "CURP",
       "what": "The Clave Única de Registro de Población: 18 characters built from the names (4 letters), the birth date, the sex, the state of birth, three internal consonants, a differentiator — a digit for people born before 2000, a letter after — and a check digit. `HEGA850720MDFRRL04`. The key of almost every Mexican record, and a quasi-identifier in itself: it carries the birth date, sex and state.",
-      "masking": "Letters become other letters (vowel for vowel, consonant for consonant), the birth date another valid date of the same decade, the sex and state other values, the consonants and differentiator other ones of their kind — and the check digit is recomputed, so every masked CURP passes validation. The mapping is one-to-one: a CURP used as a key cannot collide. See *Check digits computed by the set*."
+      "masking": "Letters become other letters (vowel for vowel, consonant for consonant), the birth date another valid date of the same decade, the sex and state other values, the consonants and differentiator other ones of their kind — and the check digit is recomputed, so every masked CURP passes validation. The mapping is one-to-one: a CURP used as a key cannot collide. See *Check digits computed by the policy*."
     },
     "MX_L1_RFC": {
       "title": "RFC",
@@ -146,7 +146,7 @@
     "MX_L1_TARJETA": {
       "title": "Payment card",
       "what": "Credit and debit card numbers.",
-      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "MX_L1_PASAPORTE": {
       "title": "Passport",
@@ -366,7 +366,7 @@
     "MX_L3_BIOMETRICO": {
       "title": "Biometric data",
       "what": "Fingerprint and facial templates, iris, voice and digitized signatures stored as text.",
-      "masking": "Every character becomes `X`. Binary columns cannot be masked by the set; see *Limits*."
+      "masking": "Every character becomes `X`. Binary columns cannot be masked by the policy; see *Limits*."
     },
     "MX_L3_INFORMACION_GENETICA": {
       "title": "Genetic information",
@@ -421,22 +421,22 @@
     "MX_FIN_MONTO_DEUDA": {
       "title": "Debt amount",
       "what": "Outstanding balance, amount owed, credit limit, minimum payment.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_INGRESO_MENSUAL": {
       "title": "Monthly income",
       "what": "Salary, perceptions, net pay, household income.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_SALARIO_DIARIO": {
       "title": "Daily wage (SDI, SBC)",
       "what": "The integrated daily wage and the contribution base wage used by the IMSS — the way Mexican payrolls store pay.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": "Net worth, cadastral and appraisal values, investments and savings.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_AFORE": {
       "title": "AFORE",
@@ -446,7 +446,7 @@
     "MX_FIN_SALDO_RETIRO": {
       "title": "Retirement and housing savings",
       "what": "Balances of the retirement and housing subaccounts, voluntary savings, pension amounts.",
-      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+      "masking": "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "MX_FIN_CREDITO_VIVIENDA": {
       "title": "Housing credit",
@@ -491,14 +491,14 @@
   },
   "closing": [
     {
-      "title": "Check digits computed by the set",
+      "title": "Check digits computed by the policy",
       "body": [
         "Mexican applications validate their keys, and a masked key that fails validation breaks the test it was meant for. Two keys are covered by the plugin's own frameworks: the CLABE by Check Digit (weights 3, 7, 1, modulo 10), and the NSS by Payment Card, since its check digit is Luhn — the check of payment cards. The CURP and the RFC need more:",
         { "list": [
           "**CURP** — every character counts, letters included (`0`–`9`, `A`–`N` → 10–23, `Ñ` 24, `O`–`Z` → 25–36), with weights 18 down to 2, modulo 10. Check Digit reads letters in base 36, where `O`–`Z` are worth one less.",
           "**RFC** — the SAT table (`&` 24, space 37, `Ñ` 38), weights 13 down to 2, modulo 11, with 10 written `A`. A company RFC counts as if preceded by a space. Check Digit writes a result of 10 as `0` and does not accept `&` or `Ñ`."
         ] },
-        "For these two the set computes the check digit itself. After the body is masked, a running sum travels through the value two characters at a time: a lookup table turns *sum + next two characters* into *those characters + new sum*, and the last table writes the check digit in place. Each table lists only what its positions can hold — digits for the date, letters for the names — so the CURP takes 8 steps and the RFC 6, each a Regex Decompose and a Data Cleansing file generated with the set, in a single String Algorithm Chain.",
+        "For these two the policy computes the check digit itself. After the body is masked, a running sum travels through the value two characters at a time: a lookup table turns *sum + next two characters* into *those characters + new sum*, and the last table writes the check digit in place. Each table lists only what its positions can hold — digits for the date, letters for the names — so the CURP takes 8 steps and the RFC 6, each a Regex Decompose and a Data Cleansing file generated with the policy, in a single String Algorithm Chain.",
         "Every masked CURP, RFC and NSS is valid, and the mapping stays one-to-one — a key cannot collide with another. The cost is paid per value, per step, not per algorithm configured. Measured with the plugin outside the engine, on a laptop, a CURP masks in about 11 µs, an RFC in about 9 and an NSS in about 3, against about 2 for a Character Mapping: some 90,000 CURPs per second per thread. Half of the CURP's cost is its body — the date, and the keyed lookups for sex and state; the check digit is the other half. An engine's throughput depends on its hardware and job settings."
       ]
     },
@@ -529,13 +529,13 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication the set was checked outside a Masking Engine:",
+        "Before publication the policy was checked outside Delphix:",
         { "list": [
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 151 columns with the whole set at its assignment threshold — well named, badly named, and 26 columns that are not personal data — and again with the classifiers of the essential pack alone.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 151 columns with the whole policy at its assignment threshold — well named, badly named, and 26 columns that are not personal data — and again with the classifiers of the essential pack alone.",
           "The algorithms, run with the Delphix algorithm plugin, masked 350 sample values and 228 placeholders such as `S/D`. Random CURPs, RFCs, NSS and CLABEs were checked for a valid check digit and a valid date, 150 of each for collisions, and pairs of CURP and RFC of the same person for agreement."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

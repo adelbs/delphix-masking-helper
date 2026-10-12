@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Peruvian personal data: DNI and RUC with a valid check digit, quasi-identifiers, the sensitive data of article 2, 5 — including economic income —, health data, financial data and criminal records.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Peruvian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
-        "Masking names and DNIs alone is not enough: a birth date, a sex and a small distrito already point at one person. The set works in the layers where the risk is:",
+        "This discovery policy finds the personal data in a Peruvian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and DNIs alone is not enough: a birth date, a sex and a small distrito already point at one person. The policy works in the layers where the risk is:",
         {
           "list": [
             "**Direct identifiers** — DNI and RUC, foreigner card, passport, civil registry records, EsSalud and pension numbers, student code, professional registration, names, contact, address, accounts, cards, wallets, devices, cookies, plates, property, free text.",
@@ -17,7 +17,7 @@
             "**Criminal records** — record certificates, procedural situation and court or prosecution file numbers."
           ]
         },
-        "In a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a DNI, an eleven-digit RUC, a nine-digit mobile, an address with urbanización, manzana and lote, a plate, a distrito.",
         "Column names are recognized in Spanish, in the abbreviations of Peruvian systems (`NUM_DOC`, `FEC_NAC`, `UBIGEO`, `RUC`, `ESSALUD`, `CODIGO_MODULAR`) and in English.",
         {
@@ -48,12 +48,12 @@
       "title": "Dissociation, anonymization and non-production copies",
       "body": [
         "Peru is one of the few countries that writes the difference down in the law itself. **Anonymization** is irreversible (art. 2, 14). **Dissociation** is the procedure that prevents identification, and article 41.1 of the 2024 regulation says in so many words that it **is reversible**.",
-        "The algorithms of this set are deterministic for the Masking Engine's key: the same DNI masks the same way in every table, which keeps joins working. That key is what makes the procedure reversible. The masked copy is **dissociated** in the sense of article 41, not **anonymized**, and remains personal data for whoever holds the key and production.",
+        "The algorithms of this policy are deterministic for the Delphix masking key: the same DNI masks the same way in every table, which keeps joins working. That key is what makes the procedure reversible. The masked copy is **dissociated** in the sense of article 41, not **anonymized**, and remains personal data for whoever holds the key and production.",
         {
           "list": [
             "Keep the engine key apart from the copy, and treat whoever holds both as processing personal data.",
-            "Article 133.7 of the regulation excuses the change of purpose when a dissociation procedure has taken place; article 41.2 asks for the technique to fit the data, the number of subjects and the risk. Record which technique this set applies to each column — the appendices list them one by one.",
-            "If what you need is anonymized data — irreversible, out of the law altogether —, measure the re-identification risk of the quasi-identifiers that remain; article 2, 14 is a higher standard than this set meets."
+            "Article 133.7 of the regulation excuses the change of purpose when a dissociation procedure has taken place; article 41.2 asks for the technique to fit the data, the number of subjects and the risk. Record which technique this policy applies to each column — the appendices list them one by one.",
+            "If what you need is anonymized data — irreversible, out of the law altogether —, measure the re-identification risk of the quasi-identifiers that remain; article 2, 14 is a higher standard than this policy meets."
           ]
         }
       ]
@@ -205,7 +205,7 @@
       "title": "DNI",
       "what": [
         "The number of the Documento Nacional de Identidad issued by RENIEC: eight digits, `45678901`, the key of almost every Peruvian record. The card prints a **verification character** beside it, and systems store it glued to the number (`45678901-7`) or in a column of its own.",
-        "The same domain takes RUCs: a document column often holds both."
+        "The same data class takes RUCs: a document column often holds both."
       ],
       "masking": [
         "Digit by digit, with the verification character recomputed — the digit series or the letter series, whichever the value carries. A value shaped like a RUC is masked as a RUC."
@@ -305,7 +305,7 @@
       "title": "Full name",
       "what": [
         "Given names and surnames in one column: `Juan Carlos Quispe Huamán`. Also those of the mother, father, guardian, spouse, partner, emergency contact and reference.",
-        "RENIEC lists write `APELLIDOS, NOMBRES` with a comma; the set reads that form too."
+        "RENIEC lists write `APELLIDOS, NOMBRES` with a comma; the policy reads that form too."
       ],
       "masking": [
         "In Peruvian order: two words are a given name and a surname; three, a given name and two surnames; four, two and two. The comma form is masked keeping the comma."
@@ -344,7 +344,7 @@
         "The address with the kind of street and the number — `Av. Arequipa 1234, Urb. Santa Patricia` —, and the `Mz. B Lt. 12` of an asentamiento humano."
       ],
       "masking": [
-        "The whole line is replaced by a fictitious Peruvian address of the same form. Urbanización, centro poblado, distrito and postal code have domains of their own for when they live in separate columns."
+        "The whole line is replaced by a fictitious Peruvian address of the same form. Urbanización, centro poblado, distrito and postal code have data classes of their own for when they live in separate columns."
       ]
     },
     "PE_L1_DIRECCION_COMPLEMENTO": {
@@ -359,7 +359,7 @@
     "PE_L1_CUENTA_BANCARIA": {
       "title": "Bank account",
       "what": [
-        "Savings, current, payroll, CTS and detraction account numbers, and the twenty-digit CCI. The bank code is not personal data and has no domain."
+        "Savings, current, payroll, CTS and detraction account numbers, and the twenty-digit CCI. The bank code is not personal data and has no data class."
       ],
       "masking": [
         "Digits are mapped; separators stay."
@@ -371,7 +371,7 @@
         "Credit and debit card numbers, recognized by the Luhn algorithm."
       ],
       "masking": [
-        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+        "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "PE_L1_BILLETERA": {
@@ -857,7 +857,7 @@
         "The fitness opinion of occupational medical exams (EMO), work accidents and occupational diseases, the SCTR, sick leave and absenteeism."
       ],
       "masking": [
-        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own domain."
+        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own data class."
       ]
     },
     "PE_SALUD_REPRODUCTIVA": {
@@ -884,7 +884,7 @@
         "Salary, monthly or household income, fees and rents of every category. **Article 2, 5 lists the economic income among the sensitive data**: in Peru this column weighs the same as a diagnosis. The minimum wage was 1,130 soles a month from January 2025."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_HISTORIAL_CREDITICIO": {
@@ -902,7 +902,7 @@
         "Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_PATRIMONIO": {
@@ -911,7 +911,7 @@
         "Net worth, assets, valuations and self-assessments, account, CTS and fund balances, term deposits and the sworn declaration of assets."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_PENSION": {
@@ -920,7 +920,7 @@
         "The amount of the pension, subsidy or benefit, and child support."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "PE_FIN_PROGRAMA_SOCIAL": {
@@ -973,7 +973,7 @@
     {
       "title": "The DNI and RUC check digits",
       "body": [
-        "Both rules are modulus 11, and both end where the Masking Engine's Check Digit algorithm cannot follow them on its own.",
+        "Both rules are modulus 11, and both end where Delphix's Check Digit algorithm cannot follow them on its own.",
         {
           "list": [
             "**DNI**: weights 3, 2, 7, 6, 5, 4, 3 and 2 from the left; eleven minus the remainder (zero stays zero) gives a position from 0 to 10, which indexes two series — the digits 6 7 8 9 0 1 1 2 3 4 5 and the letters K A B C D E F G H I J. The letters belong to the documents issued up to 14 August 2007.",
@@ -981,14 +981,14 @@
           ]
         },
         "Check Digit writes *modulus minus remainder* and writes ten as `0`. Both rules agree with it everywhere except in the one place where that written zero is ambiguous: it stands for a remainder of 0 and for a remainder of 1 at once, and the two need different digits — 6 and 5 for the DNI, 1 and 0 for the RUC.",
-        "The set resolves it with an **auxiliary Check Digit whose weights are the real ones doubled, modulo 11**. Doubling maps a remainder of 0 to 0 and a remainder of 1 to 2, so the auxiliary writes `0` for the first and `9` for the second — the two cases are told apart. A **Regex Decompose** then reads the pair of digits, writes the true one and drops the auxiliary. Four steps in a chain, no lookup table, and the whole body masked digit by digit before the digit is computed.",
+        "The policy resolves it with an **auxiliary Check Digit whose weights are the real ones doubled, modulo 11**. Doubling maps a remainder of 0 to 0 and a remainder of 1 to 2, so the auxiliary writes `0` for the first and `9` for the second — the two cases are told apart. A **Regex Decompose** then reads the pair of digits, writes the true one and drops the auxiliary. Four steps in a chain, no lookup table, and the whole body masked digit by digit before the digit is computed.",
         "Because a natural person's RUC is the number 10 followed by the DNI, and both keep those eight digits under the same mapping, the masked DNI and the masked RUC of the same person still agree."
       ]
     },
     {
       "title": "Where people live: distritos, UBIGEO and postal code",
       "body": [
-        "With the population the 2017 census counted and the location the INEI publishes, the set knows the size, provincia, departamento and position of the 1,892 distritos and the 196 provincias.",
+        "With the population the 2017 census counted and the location the INEI publishes, the policy knows the size, provincia, departamento and position of the 1,892 distritos and the 196 provincias.",
         {
           "list": [
             "A **distrito** with fewer than 20,000 inhabitants becomes the nearest distrito of its **provincia** with at least 20,000; when its provincia has none, the nearest of its departamento. There are 1,633 of 1,892, with 7.4 million inhabitants.",
@@ -1023,17 +1023,17 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication, the set was checked outside a Masking Engine:",
+        "Before publication, the policy was checked outside Delphix:",
         {
           "list": [
             "The DNI rule was checked against the worked example RENIEC's own routine is published with, and the RUC rule against RUCs published by public bodies.",
-            "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-            "Profiling was simulated on 145 columns with the whole set at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
+            "Every classifier configuration was reviewed against what Delphix accepts.",
+            "Discovery was simulated on 145 columns with the whole policy at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
             "The table that generalizes places was audited for all 1,892 distritos and 196 provincias: by name, by name with the provincia and the departamento, and by UBIGEO.",
-            "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 150 DNIs of the digit series and 60 of the letter series, 200 RUCs of the four kinds of taxpayer for validity and collisions, and 20 DNI and RUC pairs to confirm they still agree. Every algorithm also masked its own sample value."
+            "The algorithms, run with the Delphix algorithm plugin, masked each data class's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 150 DNIs of the digit series and 60 of the letter series, 200 RUCs of the four kinds of taxpayer for validity and collisions, and 20 DNI and RUC pairs to confirm they still agree. Every algorithm also masked its own sample value."
           ]
         },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

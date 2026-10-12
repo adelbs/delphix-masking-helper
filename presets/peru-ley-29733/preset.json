@@ -1,6 +1,8 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
+  "region": "south-america",
+  "country": "PE",
   "name": {
     "en": "Peru — Ley 29733 de Protección de Datos Personales",
     "pt-BR": "Peru — Ley 29733 de Protección de Datos Personales",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales peruanos conforme a la Ley 29733 y su reglamento (Decreto Supremo 016-2024-JUS): identificadores directos (DNI y RUC con dígito verificador válido, carné de extranjería, nombres, contacto, dirección, cuentas, placas), cuasi-identificadores (fecha de nacimiento, distrito y UBIGEO, código postal), los datos sensibles del artículo 2, 5 — datos biométricos que por sí mismos identifican, origen racial y étnico, ingresos económicos, convicciones políticas, religiosas, filosóficas y morales, afiliación sindical, salud y vida sexual —, además de datos genéticos, identidad de género, pueblo y lengua indígenas, datos financieros y antecedentes penales."
   },
   "profileSet": {
-    "name": "PE - Ley 29733 - v2",
+    "name": "PE - Ley 29733 - v3",
     "description": "Ley 29733 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [

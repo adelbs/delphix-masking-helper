@@ -111,7 +111,7 @@ function finishExport(t: Translate, out: SyncExportResult) {
 
 /** What a finished send of one algorithm says. */
 async function finishAlgorithm(t: Translate, out: AlgorithmExportResult) {
-  toast.success(t(out.mode === 'updated' ? 'saved.exportUpdated' : 'saved.exportCreated', { name: out.name }))
+  toast.success(t(out.mode === 'created' ? 'saved.exportCreated' : 'saved.exportUpdated', { name: out.name }))
   if (out.renamed) toast.warning(t('saved.exportRenamed', { name: out.name }))
   announceExport(t, out)
   forgetEngineReferences()
@@ -120,7 +120,7 @@ async function finishAlgorithm(t: Translate, out: AlgorithmExportResult) {
 
 /** What a finished send of one domain says. */
 async function finishDomain(t: Translate, out: DomainExportResult) {
-  toast.success(t(out.mode === 'updated' ? 'domain.exportUpdated' : 'domain.exportCreated', { name: out.name }))
+  toast.success(t(out.mode === 'created' ? 'domain.exportCreated' : 'domain.exportUpdated', { name: out.name }))
   // The algorithms had to go first — the engine refuses a domain whose reference it does not
   // know — so say which ones travelled rather than leaving it to be discovered.
   announceExport(t, out)
@@ -130,7 +130,7 @@ async function finishDomain(t: Translate, out: DomainExportResult) {
 
 /** What a finished send of one classifier says. */
 async function finishClassifier(t: Translate, out: ClassifierExportResult) {
-  toast.success(t(out.mode === 'updated' ? 'classifier.exportUpdated' : 'classifier.exportCreated', { name: out.name }))
+  toast.success(t(out.mode === 'created' ? 'classifier.exportCreated' : 'classifier.exportUpdated', { name: out.name }))
   // The domain had to go first — the engine will not keep a classifier whose domain it lacks.
   if (out.domain) toast.success(t('classifier.exportSentDomain', { name: out.domain.name }))
   announceExport(t, out)
@@ -140,7 +140,7 @@ async function finishClassifier(t: Translate, out: ClassifierExportResult) {
 
 /** What a finished send of one profile set says. */
 async function finishProfileSet(t: Translate, out: ProfileSetExportResult) {
-  toast.success(t(out.mode === 'updated' ? 'profileSet.exportUpdated' : 'profileSet.exportCreated', { name: out.name }))
+  toast.success(t(out.mode === 'created' ? 'profileSet.exportCreated' : 'profileSet.exportUpdated', { name: out.name }))
   if (out.classifiers.length) toast.success(t('profileSet.exportSentClassifiers', { n: out.classifiers.length }))
   announceExport(t, out)
   announceCut(t, out.descriptionCut)

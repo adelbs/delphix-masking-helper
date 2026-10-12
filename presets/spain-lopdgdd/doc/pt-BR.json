@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais espanhóis: DNI e NIE com letra válida, o número da Seguridad Social, o IBAN e o CCC, a referencia catastral e o CUPS com caracteres de controle válidos, municípios e códigos postais generalizados abaixo de 20.000 habitantes, as categorias especiais do artigo 9, dados de saúde, econômicos e tributários, e antecedentes penais e sanções administrativas.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de uma base espanhola e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
-        "Mascarar apenas nomes e DNIs não basta: uma data de nascimento, um sexo e um município pequeno já apontam para um punhado de pessoas, e 7.700 dos 8.132 municípios da Espanha têm menos de 20.000 habitantes. O set trabalha nas camadas onde está o risco:",
+        "Esta política de descoberta encontra os dados pessoais de uma base espanhola e os mascara, para que uma cópia fora de produção — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "Mascarar apenas nomes e DNIs não basta: uma data de nascimento, um sexo e um município pequeno já apontam para um punhado de pessoas, e 7.700 dos 8.132 municípios da Espanha têm menos de 20.000 habitantes. A política trabalha nas camadas onde está o risco:",
         {
           "list": [
             "**Identificadores diretos** — DNI, NIE e o NIF de pessoa física, passaporte, o número de suporte do cartão, o número da Seguridad Social, números de estudante e de registro profissional, nomes, contato, endereço, contas bancárias, cartões, dispositivos, cookies, placas, a referencia catastral de um imóvel, o CUPS de um fornecimento de luz ou gás, fotografias, texto livre.",
@@ -17,15 +17,15 @@
             "**Infrações penais e administrativas** — antecedentes penais, a certidão do registro de condenados por crimes sexuais, números de processo judicial, e sanções administrativas como multas e os pontos da carteira de motorista."
           ]
         },
-        "Cada grupo abaixo diz o que é cada domínio, como é mascarado e por quê. A descoberta é um profile set de 147 classifiers com limiar 60; o mascaramento são 83 domínios com seus algoritmos. Os nomes de coluna são reconhecidos em castelhano, em inglês e, para os dados mais comuns, em catalão, galego e basco."
+        "Cada grupo abaixo diz o que é cada classe de dados, como é mascarado e por quê. A descoberta roda uma política de descoberta de 147 classifiers com limiar 60; o mascaramento são 83 classes de dados com seus algoritmos. Os nomes de coluna são reconhecidos em castelhano, em inglês e, para os dados mais comuns, em catalão, galego e basco."
       ]
     },
     {
       "title": "A lei na Espanha: o Regulamento e a LOPDGDD",
       "body": [
-        "A Espanha não tem uma lei de proteção de dados própria como as dos seus vizinhos do outro lado do Atlântico: a lei é o **Regulamento Geral de Proteção de Dados**, Regulamento (UE) 2016/679, que se aplica diretamente, e a **Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales** (LOPDGDD), que o adapta e completa onde o Regulamento deixa espaço aos Estados-membros. O próprio direito fundamental está no artigo 18.4 da Constituição. A LOPDGDD foi alterada várias vezes — pela Ley Orgánica 3/2020, Ley Orgánica 7/2021, Ley 2/2023, Ley 11/2023 e, por último, pela Ley 10/2025 de 26 de dezembro, que reescreveu os sistemas de exclusão publicitária do artigo 23 — sem tocar nos dispositivos em que este set se apoia. A autoridade é a **Agencia Española de Protección de Datos** (AEPD), ao lado das autoridades da Catalunha, do País Basco e da Andaluzia para o seu próprio setor público.",
-        "O Regulamento protege apenas **pessoas físicas**: o artigo 4.1 define dado pessoal como informação relativa a uma pessoa física identificada ou identificável, e o considerando 14 diz que ele não cobre dados de pessoas jurídicas. Por isso o NIF de uma empresa atravessa este set intacto, enquanto o NIF de um trabalhador autônomo — que é o seu DNI — é mascarado como qualquer outro.",
-        "Quatro dispositivos da LOPDGDD dão forma a este set além do Regulamento:",
+        "A Espanha não tem uma lei de proteção de dados própria como as dos seus vizinhos do outro lado do Atlântico: a lei é o **Regulamento Geral de Proteção de Dados**, Regulamento (UE) 2016/679, que se aplica diretamente, e a **Ley Orgánica 3/2018, de 5 de diciembre, de Protección de Datos Personales y garantía de los derechos digitales** (LOPDGDD), que o adapta e completa onde o Regulamento deixa espaço aos Estados-membros. O próprio direito fundamental está no artigo 18.4 da Constituição. A LOPDGDD foi alterada várias vezes — pela Ley Orgánica 3/2020, Ley Orgánica 7/2021, Ley 2/2023, Ley 11/2023 e, por último, pela Ley 10/2025 de 26 de dezembro, que reescreveu os sistemas de exclusão publicitária do artigo 23 — sem tocar nos dispositivos em que esta política se apoia. A autoridade é a **Agencia Española de Protección de Datos** (AEPD), ao lado das autoridades da Catalunha, do País Basco e da Andaluzia para o seu próprio setor público.",
+        "O Regulamento protege apenas **pessoas físicas**: o artigo 4.1 define dado pessoal como informação relativa a uma pessoa física identificada ou identificável, e o considerando 14 diz que ele não cobre dados de pessoas jurídicas. Por isso o NIF de uma empresa atravessa esta política intacto, enquanto o NIF de um trabalhador autônomo — que é o seu DNI — é mascarado como qualquer outro.",
+        "Quatro dispositivos da LOPDGDD dão forma a esta política além do Regulamento:",
         {
           "list": [
             "**Artigo 9.1** — para ideologia, filiação sindical, religião, orientação sexual, crenças e origem racial ou étnica, \"el solo consentimiento del afectado no bastará para levantar la prohibición del tratamiento de datos cuya finalidad principal sea identificar\" esses dados. O consentimento, que o Regulamento admite, não basta na Espanha.",
@@ -34,7 +34,7 @@
             "**Disposição adicional 17** — as leis sob as quais se tratam dados de saúde, e as condições para dados de saúde pseudonimizados em pesquisa, citadas abaixo."
           ]
         },
-        "As infrações são graduadas pelos artigos 72 a 74 da LOPDGDD, e as multas são as do artigo 83 do Regulamento, até 20 milhões de euros ou 4% do faturamento mundial. Entre as infrações muito graves, que prescrevem em três anos, estão tratar categorias especiais fora do artigo 9 (art. 72.1 e), tratar dados penais fora do artigo 10 (art. 72.1 f), violar o dever de confidencialidade (art. 72.1 i), deixar de bloquear dados (art. 72.1 n) — e, o dispositivo que fala mais diretamente a este set, **\"la reversión deliberada de un procedimiento de anonimización a fin de permitir la reidentificación de los afectados\"** (art. 72.1 p)."
+        "As infrações são graduadas pelos artigos 72 a 74 da LOPDGDD, e as multas são as do artigo 83 do Regulamento, até 20 milhões de euros ou 4% do faturamento mundial. Entre as infrações muito graves, que prescrevem em três anos, estão tratar categorias especiais fora do artigo 9 (art. 72.1 e), tratar dados penais fora do artigo 10 (art. 72.1 f), violar o dever de confidencialidade (art. 72.1 i), deixar de bloquear dados (art. 72.1 n) — e, o dispositivo que fala mais diretamente a esta política, **\"la reversión deliberada de un procedimiento de anonimización a fin de permitir la reidentificación de los afectados\"** (art. 72.1 p)."
       ]
     },
     {
@@ -42,7 +42,7 @@
       "body": [
         "O Regulamento nomeia a técnica. O artigo 4.5 define **pseudonimização** como o tratamento de dados pessoais de forma que deixem de poder ser atribuídos a uma pessoa sem recorrer a informações adicionais, \"desde que essas informações suplementares sejam mantidas separadamente e sujeitas a medidas técnicas e organizativas\". O considerando 26 deixa a informação anônima totalmente fora do Regulamento e mede a identificabilidade por \"todos os meios suscetíveis de ser razoavelmente utilizados\". O artigo 25.1 cita a pseudonimização como primeiro exemplo de proteção de dados desde a concepção, o artigo 32.1 a) como primeiro exemplo de medida de segurança, e o artigo 6.4 e) como garantia que torna compatível um uso posterior com o original.",
         "Mascarar com o engine é pseudonimização exatamente nesse sentido: o resultado é determinístico para a chave do engine, e quem tem a chave e os dados de produção pode reproduzir o mapeamento. Uma cópia mascarada continua sendo dado pessoal **para quem alcança a chave**, e a chave tem de ficar separada da cópia. O Tribunal de Justiça tirou a consequência em 4 de setembro de 2025, em **EDPS v SRB (C‑413/23 P)**: dados pseudonimizados podem não ser dados pessoais para um destinatário sem meios razoáveis de reidentificá-los, enquanto continuam sendo para quem detém a informação adicional. O EDPB disse o mesmo nas suas Diretrizes 01/2025 sobre pseudonimização, adotadas em 16 de janeiro de 2025. A Comissão Europeia propôs em novembro de 2025, no Digital Omnibus, escrever essa leitura relativa na definição de dado pessoal; o compromisso do Conselho de 2026 retirou a mudança, e em outubro de 2026 a definição segue como era.",
-        "A lei espanhola acrescenta três coisas próprias. A disposição adicional 17 da LOPDGDD admite dados de saúde pseudonimizados em pesquisa apenas com **\"una separación técnica y funcional entre el equipo investigador y quienes realicen la seudonimización y conserven la información que posibilite la reidentificación\"** — a regra que este set pede para a chave do engine. O artigo 28.2 a) inclui a \"reversión no autorizada de la seudonimización\" entre os riscos que o responsável deve pesar. E o artigo 72.1 p) faz da reversão deliberada de uma anonimização uma infração muito grave.",
+        "A lei espanhola acrescenta três coisas próprias. A disposição adicional 17 da LOPDGDD admite dados de saúde pseudonimizados em pesquisa apenas com **\"una separación técnica y funcional entre el equipo investigador y quienes realicen la seudonimización y conserven la información que posibilite la reidentificación\"** — a regra que esta política pede para a chave do engine. O artigo 28.2 a) inclui a \"reversión no autorizada de la seudonimización\" entre os riscos que o responsável deve pesar. E o artigo 72.1 p) faz da reversão deliberada de uma anonimização uma infração muito grave.",
         "Sobre cópias fora de produção a orientação é clara. A AEPD escreveu em 18 de abril de 2022, em \"Brechas de datos personales en entornos de desarrollo y preproducción\", que se deve evitar o uso de dados pessoais em ambientes de desenvolvimento e pré-produção, que os dados de teste devem ser criados artificialmente ou derivados dos reais de modo que conservem a estrutura sem conter dados pessoais reais, e que, onde dados reais forem estritamente necessários, a decisão deve ser documentada com uma análise de necessidade e proporcionalidade. Para o setor público e seus fornecedores é regra: o **Esquema Nacional de Seguridad** (Real Decreto 311/2022) exige na medida **mp.sw.1** que o desenvolvimento se faça num sistema separado da produção, \"ni datos de producción en el de desarrollo\", e no reforço R4 que os testes antes de pôr um sistema em serviço \"preferiblemente\" não usem dados reais — ambos para sistemas de categoria média e alta. Uma cópia mascarada é como se cumprem os dois."
       ]
     }
@@ -52,7 +52,7 @@
       "id": "L1",
       "title": "Identificadores diretos",
       "intro": [
-        "Dados que identificam uma pessoa sozinhos. Os identificadores espanhóis trazem caracteres de controle — a letra do DNI, os dígitos de controle do número da Seguridad Social e da conta bancária, as letras de controle da referencia catastral e do CUPS — e todo sistema espanhol os valida, por isso o set recalcula cada um a partir dos dígitos mascarados. O NIF de uma empresa não é dado pessoal de ninguém e atravessa intacto."
+        "Dados que identificam uma pessoa sozinhos. Os identificadores espanhóis trazem caracteres de controle — a letra do DNI, os dígitos de controle do número da Seguridad Social e da conta bancária, as letras de controle da referencia catastral e do CUPS — e todo sistema espanhol os valida, por isso a política recalcula cada um a partir dos dígitos mascarados. O NIF de uma empresa não é dado pessoal de ninguém e atravessa intacto."
       ],
       "domains": [
         "ES_L1_DNI",
@@ -191,7 +191,7 @@
       "title": "DNI e NIF de pessoa física",
       "what": [
         "O Documento Nacional de Identidad: oito dígitos e uma letra, `12345678Z`, muitas vezes escrito `12.345.678-Z`. A letra é o número **módulo 23**, lido na tabela `TRWAGMYFPDXBNJZSQVHLCKE`, e todo formulário espanhol a confere. O DNI é também o NIF do seu titular perante o fisco, então uma coluna de NIF de pessoa física é esta coluna.",
-        "O mesmo domínio recebe o que uma coluna de documento guarda ao lado de DNIs: um NIE, o NIF de uma pessoa física sem DNI nem NIE — **K** para um espanhol menor de catorze anos, **L** para um espanhol residente no exterior, **M** para um estrangeiro sem NIE, sete dígitos e a letra dos sete dígitos —, o NIF de uma empresa, um DNI gravado sem a letra e um passaporte."
+        "A mesma classe de dados recebe o que uma coluna de documento guarda ao lado de DNIs: um NIE, o NIF de uma pessoa física sem DNI nem NIE — **K** para um espanhol menor de catorze anos, **L** para um espanhol residente no exterior, **M** para um estrangeiro sem NIE, sete dígitos e a letra dos sete dígitos —, o NIF de uma empresa, um DNI gravado sem a letra e um passaporte."
       ],
       "masking": [
         "Os dígitos mudam e **a letra é recalculada**, então o valor mascarado é um DNI válido que não pertence a ninguém. Nenhum framework escreve uma letra módulo 23, por isso um estado de dois dígitos — o resto até ali — é posto na frente do valor e o atravessa um caractere por vez; cada passo é um Data Cleansing sobre uma tabela de 299 linhas que responde a \"estado + caractere\" com \"caractere + novo estado\", passando por cima dos pontos, hífens e espaços das formas escritas. No fim uma tabela de 46 linhas transforma o resto na letra, maiúscula ou minúscula como era.",
@@ -321,7 +321,7 @@
         "Uma conta espanhola tem vinte dígitos, o Código Cuenta Cliente: quatro do banco, quatro da agência, **dois dígitos de controle** e dez da conta, `2100 0418 45 0200051332`. O primeiro dígito de controle confere banco e agência, o segundo a conta, cada um uma soma ponderada módulo 11. O IBAN põe `ES` e **mais dois dígitos de controle** na frente, os da ISO 13616, módulo 97: `ES91 2100 0418 4502 0005 1332`."
       ],
       "masking": [
-        "Os dez dígitos da conta mudam; banco, agência e o primeiro dígito de controle continuam válidos. Num IBAN, o algoritmo IBAN do plugin mascara a conta e recalcula os dígitos do IBAN — mas não o segundo dígito de controle, que nenhum IBAN estrangeiro tem. O set então recalcula esse dígito com um estado que atravessa a conta da direita para a esquerda, leva o dígito antigo e o novo para a frente, e corrige os dígitos do IBAN pela mudança a partir de uma tabela de 10.000 linhas. Compacto ou impresso em grupos de quatro, o IBAN mascarado passa nas duas verificações; um CCC sozinho tem o segundo dígito recalculado do mesmo jeito."
+        "Os dez dígitos da conta mudam; banco, agência e o primeiro dígito de controle continuam válidos. Num IBAN, o algoritmo IBAN do plugin mascara a conta e recalcula os dígitos do IBAN — mas não o segundo dígito de controle, que nenhum IBAN estrangeiro tem. A política então recalcula esse dígito com um estado que atravessa a conta da direita para a esquerda, leva o dígito antigo e o novo para a frente, e corrige os dígitos do IBAN pela mudança a partir de uma tabela de 10.000 linhas. Compacto ou impresso em grupos de quatro, o IBAN mascarado passa nas duas verificações; um CCC sozinho tem o segundo dígito recalculado do mesmo jeito."
       ]
     },
     "ES_L1_TARJETA": {
@@ -330,7 +330,7 @@
         "O número de um cartão de crédito ou débito."
       ],
       "masking": [
-        "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+        "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
       ]
     },
     "ES_L1_BILLETERA": {
@@ -456,7 +456,7 @@
         "Observações, comentários, descrições de uma reclamação ou de um incidente: texto onde qualquer coisa pode ter sido digitada."
       ],
       "masking": [
-        "O Free Text Redaction troca DNIs, NIEs, e-mails, telefones, cartões, IBANs e CCCs, números da Seguridad Social e endereços IP por `[DATO]`, e os 1.100 nomes e sobrenomes do set por `[NOMBRE]`."
+        "O Free Text Redaction troca DNIs, NIEs, e-mails, telefones, cartões, IBANs e CCCs, números da Seguridad Social e endereços IP por `[DATO]`, e os 1.100 nomes e sobrenomes da política por `[NOMBRE]`."
       ]
     },
     "ES_L2_FECHA_NACIMIENTO": {
@@ -852,7 +852,7 @@
         "Saldo devedor, valor de empréstimo ou hipoteca, parcela mensal, limite de crédito, penhora."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_INGRESOS": {
@@ -861,7 +861,7 @@
         "Salário, folha de pagamento, renda do domicílio, rendimentos do trabalho ou do capital."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_PATRIMONIO": {
@@ -870,7 +870,7 @@
         "Valor catastral ou de avaliação de um imóvel, saldos de contas e investimentos, planos de previdência."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_PENSION": {
@@ -879,7 +879,7 @@
         "O valor de uma aposentadoria, pensão por viuvez, orfandade, invalidez ou não contributiva, ou de alimentos."
       ],
       "masking": [
-        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+        "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_PRESTACION_SOCIAL": {
@@ -942,9 +942,9 @@
       "title": "Caracteres de controle calculados por tabelas",
       "body": [
         "A Espanha valida quase todo identificador por aritmética. A letra do DNI e do NIE é o número módulo 23; os dígitos de controle do número da Seguridad Social são o número módulo 97; a conta bancária traz dois dígitos de controle módulo 11 e o IBAN mais dois módulo 97; a referencia catastral traz duas letras, cada uma uma soma ponderada módulo 23; o CUPS traz duas letras, o número módulo 529. Um valor mascarado cujos caracteres de controle não foram recalculados é rejeitado por todo formulário, todo banco e toda distribuidora que o receba — exatamente o que um teste precisa evitar.",
-        "Nenhum framework de mascaramento escreve uma letra, ou dois dígitos, ou um resto módulo 23, 97 ou 529. O Check Digit escreve um dígito. Por isso o set os calcula com tabelas. Um **estado** — o resto até ali, escrito com tantos dígitos quantos o módulo pede — é posto na frente do valor e o atravessa um caractere por vez. Cada passo é um Regex Decompose que entrega três ou quatro caracteres, \"estado + próximo caractere\", a um Data Cleansing cuja tabela responde \"próximo caractere + novo estado\". Separadores e caracteres que não contam são saltados por linhas que levam o estado sem alterá-lo. No fim uma última tabela transforma o resto nos caracteres de controle, maiúsculos ou minúsculos como era a entrada.",
+        "Nenhum framework de mascaramento escreve uma letra, ou dois dígitos, ou um resto módulo 23, 97 ou 529. O Check Digit escreve um dígito. Por isso a política os calcula com tabelas. Um **estado** — o resto até ali, escrito com tantos dígitos quantos o módulo pede — é posto na frente do valor e o atravessa um caractere por vez. Cada passo é um Regex Decompose que entrega três ou quatro caracteres, \"estado + próximo caractere\", a um Data Cleansing cuja tabela responde \"próximo caractere + novo estado\". Separadores e caracteres que não contam são saltados por linhas que levam o estado sem alterá-lo. No fim uma última tabela transforma o resto nos caracteres de controle, maiúsculos ou minúsculos como era a entrada.",
         "As tabelas são pequenas — 299 linhas para o DNI, 1.358 para a Seguridad Social, 6.877 para o CUPS, onze de 230 linhas para os pesos da referencia catastral —, e um passo que não acha linha para a sua janela deixa o valor como está, então uma só cadeia atende todas as formas escritas: um DNI com ou sem pontos e hífen, um número da Seguridad Social com ou sem barras, um CUPS com ou sem espaços.",
-        "A conta bancária segue outro caminho. O algoritmo IBAN do plugin mascara os últimos caracteres de um IBAN e recalcula os seus dois dígitos da ISO 13616, mas não conhece o segundo dígito de controle da conta espanhola, que fica entre a agência e a conta. O set deixa o algoritmo IBAN mascarar a conta, recalcula esse dígito com um estado que atravessa a conta da direita para a esquerda, leva o dígito antigo e o novo para a frente como um par, e corrige os dígitos do IBAN pela mudança com uma tabela de 10.000 linhas: o segundo dígito pesa 10¹⁶ no número que o IBAN confere, então a correção é (novo − antigo) · 10¹⁶ módulo 97. Banco, agência e primeiro dígito de controle ficam, e o resultado passa nas duas verificações."
+        "A conta bancária segue outro caminho. O algoritmo IBAN do plugin mascara os últimos caracteres de um IBAN e recalcula os seus dois dígitos da ISO 13616, mas não conhece o segundo dígito de controle da conta espanhola, que fica entre a agência e a conta. A política deixa o algoritmo IBAN mascarar a conta, recalcula esse dígito com um estado que atravessa a conta da direita para a esquerda, leva o dígito antigo e o novo para a frente como um par, e corrige os dígitos do IBAN pela mudança com uma tabela de 10.000 linhas: o segundo dígito pesa 10¹⁶ no número que o IBAN confere, então a correção é (novo − antigo) · 10¹⁶ módulo 97. Banco, agência e primeiro dígito de controle ficam, e o resultado passa nas duas verificações."
       ]
     },
     {
@@ -964,13 +964,13 @@
           "list": [
             "**Mascarar com chave é pseudonimização, não anonimização.** Quem tem a chave e os dados de produção pode reproduzir o mapeamento, então a cópia mascarada continua sendo dado pessoal para essa pessoa e continua exigindo as medidas do artigo 32 do Regulamento. Mantenha a chave separada da cópia — a separação que a disposição adicional 17 da LOPDGDD pede para a pesquisa — e não chame a cópia de anônima enquanto a chave existir.",
             "**Dados bloqueados não devem ser copiados.** O artigo 32 da LOPDGDD proíbe tratar dados bloqueados para qualquer finalidade que não seja colocá-los à disposição de juízes e autoridades, e deixar de bloquear é infração muito grave. Mascarar uma linha bloqueada não torna lícito copiá-la: deixe as linhas bloqueadas fora da cópia, ou fora do subconjunto que o job lê.",
-            "**As populações são as do Padrón de 1º de janeiro de 2025.** Um município a poucas centenas de habitantes de 20.000 pode cruzar a linha na próxima revisão; refaça o set quando o INE a publicar.",
-            "**Um código postal pode cobrir mais de um município.** O set segue o município com mais trechos de rua; o código de uma cidade grande que também atende aldeias ao redor fica, e com ele a pista de que a pessoa mora numa delas.",
+            "**As populações são as do Padrón de 1º de janeiro de 2025.** Um município a poucas centenas de habitantes de 20.000 pode cruzar a linha na próxima revisão; refaça a política quando o INE a publicar.",
+            "**Um código postal pode cobrir mais de um município.** A política segue o município com mais trechos de rua; o código de uma cidade grande que também atende aldeias ao redor fica, e com ele a pista de que a pessoa mora numa delas.",
             "**O Data Cleansing deixa valores desconhecidos como estão.** Um município escrito de um jeito que não está na tabela — um nome antigo, um erro de digitação, o nome de um povoado em vez do seu município — passa sem mudança. As entidades singulares de população abaixo do município não estão na tabela.",
             "**Banco e agência são preservados.** Não são dados pessoais, e mantê-los mantém uma conta de teste dentro de um banco real; mas a agência pode indicar uma cidade. Mascare a agência com regra própria onde isso importar.",
             "**As letras de controle de uma referencia catastral só são recalculadas na forma compacta.** Escrita em grupos, ou cortada aos catorze caracteres da parcela, os dígitos da parcela mudam mas as letras ficam como estavam.",
             "**Um M sozinho é lido como mujer (mulher).** É a convenção da administração espanhola (H/M, V/M); uma coluna que codifica o sexo F/M, como a zona de leitura mecânica do DNI, receberia H em vez de M em algumas linhas e deveria ter um algoritmo próprio.",
-            "**Texto livre** é suprimido palavra a palavra: o Free Text Redaction separa por espaços, então um telefone escrito `612 34 56 78` é alcançado em pedaços e não como um número. Os padrões do set são as formas compactas.",
+            "**Texto livre** é suprimido palavra a palavra: o Free Text Redaction separa por espaços, então um telefone escrito `612 34 56 78` é alcançado em pedaços e não como um número. Os padrões da política são as formas compactas.",
             "**Crianças**: uma data de nascimento se move no máximo 60 dias, então poucas pessoas cruzam os 14 anos — a idade do consentimento digital na Espanha pelo artigo 7 da LOPDGDD — ou os 18; mas algumas cruzam. Divida a regra por faixa etária com Multi-Column Condition onde isso importar.",
             "**Colunas binárias e anexos estão fora de alcance.** Um DNI escaneado, uma fotografia, o PDF de um laudo médico guardam tudo o que as colunas ao lado já não dizem. Inventarie-os e reporte-os como risco residual.",
             "**A descoberta é uma proposta, não um veredito.** Os classifiers leem nomes de coluna e valores; uma coluna com um nome que ninguém reconhece pode escapar, e uma com nome de pessoa pode ser pega por engano. Revise o inventário antes de rodar um job de mascaramento."
@@ -981,10 +981,10 @@
     {
       "title": "Verificação",
       "body": [
-        "O set é conferido a cada build. Cada cadeia que calcula um caractere de controle é rodada primeiro no próprio build com o mascaramento tomado como identidade, e tem de devolver intacto um exemplo válido — o DNI `12345678Z`, o número da Seguridad Social `28 12345678 40`, o IBAN `ES91 2100 0418 4502 0005 1332`, a referencia catastral `9872023VH5797S0001WX` e o CUPS `ES1234123456789012JY`.",
-        "As 147 configurações de classifier são revisadas uma a uma, e uma bateria de 159 colunas — bem nomeadas, mal nomeadas, nomeadas em catalão, galego ou basco, e 31 que nem são dados pessoais, entre elas o NIF de uma empresa — é perfilada com o set inteiro no limiar de 60 e de novo só com o pacote essencial: toda coluna cai onde deve, e nenhuma das 31 é reclamada.",
+        "A política é conferida a cada build. Cada cadeia que calcula um caractere de controle é rodada primeiro no próprio build com o mascaramento tomado como identidade, e tem de devolver intacto um exemplo válido — o DNI `12345678Z`, o número da Seguridad Social `28 12345678 40`, o IBAN `ES91 2100 0418 4502 0005 1332`, a referencia catastral `9872023VH5797S0001WX` e o CUPS `ES1234123456789012JY`.",
+        "As 147 configurações de classifier são revisadas uma a uma, e uma bateria de 159 colunas — bem nomeadas, mal nomeadas, nomeadas em catalão, galego ou basco, e 31 que nem são dados pessoais, entre elas o NIF de uma empresa — é perfilada com a política inteira no limiar de 60 e de novo só com o pacote essencial: toda coluna cai onde deve, e nenhuma das 31 é reclamada.",
         "A generalização é auditada offline: os 8.132 municípios, os 10.790 códigos postais e as 52 províncias são conferidos contra a regra, e cada uma das 68.972 substituições que a tabela escreve nomeia um município de pelo menos 20.000 — na mesma província sempre que a província está escrita.",
-        "O mascaramento é rodado de verdade, no plugin: 797 valores em todos os domínios — amostras, marcadores e a entrada de exemplo de cada algoritmo —, cada um conferido contra o que deve virar. Depois, em massa: 250 DNIs (50 escritos com pontos), 100 NIEs, 200 números da Seguridad Social, 200 IBANs — cem compactos e cem impressos em grupos de quatro —, 100 CCCs, 150 referencias catastrales e 100 CUPS dão outras tantas saídas distintas, **todas válidas pela sua própria regra**, da mesma forma, e mantendo o que devem manter: o prefixo de um NIE, a província de um número da Seguridad Social, banco e agência, a folha do mapa ou o polígono, a distribuidora."
+        "O mascaramento é rodado de verdade, no plugin: 797 valores em todas as classes de dados — amostras, marcadores e a entrada de exemplo de cada algoritmo —, cada um conferido contra o que deve virar. Depois, em massa: 250 DNIs (50 escritos com pontos), 100 NIEs, 200 números da Seguridad Social, 200 IBANs — cem compactos e cem impressos em grupos de quatro —, 100 CCCs, 150 referencias catastrales e 100 CUPS dão outras tantas saídas distintas, **todas válidas pela sua própria regra**, da mesma forma, e mantendo o que devem manter: o prefixo de um NIE, a província de um número da Seguridad Social, banco e agência, a folha do mapa ou o polígono, a distribuidora."
       ]
     },
     {

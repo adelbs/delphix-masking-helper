@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Ecuadorian personal data: cédula and RUC with a valid check digit, quasi-identifiers, the sensitive data of article 4 — which names the cultural identity, the migratory status and the judicial record no neighbouring law does —, health data, credit data and criminal proceedings.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in an Ecuadorian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
-        "Masking names and cédulas alone is not enough: a birth date, a sex and a small parroquia already point at one person. The set works in the layers where the risk is:",
+        "This discovery policy finds the personal data in an Ecuadorian database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and cédulas alone is not enough: a birth date, a sex and a small parroquia already point at one person. The policy works in the layers where the risk is:",
         {
           "list": [
             "**Direct identifiers** — cédula and RUC, foreigner documents, passport, civil registry, IESS and pension numbers, student code, professional registration, names, contact, address, accounts, cards, devices, cookies, plates, property, free text.",
@@ -17,7 +17,7 @@
             "**Criminal records** — the **pasado judicial** article 4 lists among the sensitive data, and court file numbers."
           ]
         },
-        "In a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a cédula, a thirteen-digit RUC, a mobile starting 09, an address with ciudadela, manzana and villa, a plate, a parroquia.",
         "Column names are recognized in Spanish, in the abbreviations of Ecuadorian systems (`NUM_DOC`, `FEC_NAC`, `DPA`, `RUC`, `IESS`, `AMIE`) and in English.",
         {
@@ -47,12 +47,12 @@
       "title": "Anonymization, pseudonymization and non-production copies",
       "body": [
         "Ecuador writes the two concepts the way the European regulation does. **Anonymization** prevents identification **and re-identification** without disproportionate effort, and takes the data out of the law (art. 2 c). **Pseudonymization** accepts that the data can be attributed to its subject again *with additional information*, and for that reason requires that information to be kept apart and under technical and organizational measures.",
-        "The algorithms of this set are deterministic for the Masking Engine's key: the same cédula masks the same way in every table, which keeps joins working. That key is exactly the *additional information* article 4 speaks of. The masked copy is **pseudonymized**, not anonymized, and remains personal data for whoever holds the key and production.",
+        "The algorithms of this policy are deterministic for the Delphix masking key: the same cédula masks the same way in every table, which keeps joins working. That key is exactly the *additional information* article 4 speaks of. The masked copy is **pseudonymized**, not anonymized, and remains personal data for whoever holds the key and production.",
         {
           "list": [
             "Keep the engine key apart from the copy and under technical and organizational measures — that is what article 4 asks for pseudonymization to count, and article 37 counts it as a security measure.",
             "For health data, article 31.2 asks for anonymization or pseudonymization *whenever possible*: a masked copy of a clinical database is the ordinary way to comply with it.",
-            "If what you need is anonymized data — out of the law by article 2 c) —, measure the re-identification risk of the quasi-identifiers that remain; the standard of article 4 is higher than this set meets."
+            "If what you need is anonymized data — out of the law by article 2 c) —, measure the re-identification risk of the quasi-identifiers that remain; the standard of article 4 is higher than this policy meets."
           ]
         }
       ]
@@ -201,7 +201,7 @@
       "title": "Cédula de identidad",
       "what": [
         "The ten-digit number of the Registro Civil, `1710034065`, the key of almost every Ecuadorian record. The first two digits are the province of issue — 01 to 24, or 30 for a citizen registered abroad —, the third says the holder is a natural person, and the tenth is a check digit.",
-        "The same domain takes RUCs: a document column often holds both."
+        "The same data class takes RUCs: a document column often holds both."
       ],
       "masking": [
         "Another valid cédula, with the province of issue and the natural-person digit kept and the check digit recomputed. A value shaped like a RUC is masked as a RUC."
@@ -219,7 +219,7 @@
     "EC_L1_DOCUMENTO_EXTRANJERO": {
       "title": "Foreigner documents",
       "what": [
-        "The cédula de extranjería, the refugee or applicant card, the visa and the migration procedure numbers. The **condición migratoria** these carry is sensitive data by article 4 and has a domain of its own."
+        "The cédula de extranjería, the refugee or applicant card, the visa and the migration procedure numbers. The **condición migratoria** these carry is sensitive data by article 4 and has a data class of its own."
       ],
       "masking": [
         "Character by character, keeping length and format."
@@ -282,7 +282,7 @@
     "EC_L1_APELLIDO": {
       "title": "Surname",
       "what": [
-        "The surnames — the father's and the mother's —, in separate columns or together: `Zambrano Cedeño`. The set carries the Ecuadorian ones, from Zambrano and Loor on the coast to Guamán and Quishpe in the sierra."
+        "The surnames — the father's and the mother's —, in separate columns or together: `Zambrano Cedeño`. The policy carries the Ecuadorian ones, from Zambrano and Loor on the coast to Guamán and Quishpe in the sierra."
       ],
       "masking": [
         "Word by word, replacing each surname with one from the list; particles stay in place."
@@ -330,7 +330,7 @@
         "The address with the main street and the cross street — `Av. Amazonas N34-120 y Av. República` —, or the ciudadela with manzana, villa and solar."
       ],
       "masking": [
-        "The whole line is replaced by a fictitious Ecuadorian address of the same form. Ciudadela, parroquia and postal code have domains of their own for when they live in separate columns."
+        "The whole line is replaced by a fictitious Ecuadorian address of the same form. Ciudadela, parroquia and postal code have data classes of their own for when they live in separate columns."
       ]
     },
     "EC_L1_DIRECCION_COMPLEMENTO": {
@@ -345,7 +345,7 @@
     "EC_L1_CUENTA_BANCARIA": {
       "title": "Bank account",
       "what": [
-        "Savings, current and payroll account numbers. The bank code is not personal data and has no domain."
+        "Savings, current and payroll account numbers. The bank code is not personal data and has no data class."
       ],
       "masking": [
         "Digits are mapped; separators stay."
@@ -357,7 +357,7 @@
         "Credit and debit card numbers, recognized by the Luhn algorithm."
       ],
       "masking": [
-        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
+        "Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "EC_L1_BILLETERA": {
@@ -510,7 +510,7 @@
         "Sex as the system records it: `F`/`M`, `Femenino`/`Masculino`, `Mujer`/`Hombre` or the codes 1 and 2."
       ],
       "masking": [
-        "Replaced within its own vocabulary: `F` stays `F` or `M`, `1` stays `1` or `2`. The **identidad de género** of art. 4 has its own domain among the sensitive data."
+        "Replaced within its own vocabulary: `F` stays `F` or `M`, `1` stays `1` or `2`. The **identidad de género** of art. 4 has its own data class among the sensitive data."
       ]
     },
     "EC_L2_PARROQUIA": {
@@ -825,7 +825,7 @@
         "The fitness opinion of occupational medical exams, work accidents and occupational diseases, sick leave and absenteeism."
       ],
       "masking": [
-        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own domain."
+        "An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its own data class."
       ]
     },
     "EC_SALUD_REPRODUCTIVA": {
@@ -861,7 +861,7 @@
         "Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_INGRESOS": {
@@ -870,7 +870,7 @@
         "Salary, monthly or household income, fees and rents. The unified basic wage was 470 dollars a month in 2025."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_PATRIMONIO": {
@@ -879,7 +879,7 @@
         "Net worth, assets, valuations and cadastral values, account and fund balances, term deposits and the sworn declaration of assets."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_PENSION": {
@@ -888,7 +888,7 @@
         "The amount of the pension, subsidy or benefit, and child support."
       ],
       "masking": [
-        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
+        "Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_PROGRAMA_SOCIAL": {
@@ -942,12 +942,12 @@
       "title": "The cédula and RUC check digits",
       "body": [
         "The **cédula** is ten digits. Each of the first nine is multiplied by the series 2 1 2 1 2 1 2 1 2, every product over nine is reduced by nine, and the tenth digit is ten minus the remainder of the sum modulo ten. That is the **Luhn algorithm**, the same one a payment card uses — which is what makes the masking a single step.",
-        "The Masking Engine's **Payment Card** framework keeps the Luhn residue of the value it is given: a valid cédula comes out as another valid cédula. Its `preserve` parameter fixes how many leading digits stay, and three of them keep the **province of issue** and the digit that says the holder is a natural person. The province stays for the same reason the provincia column stays: the set generalizes below the province, not at it.",
+        "Delphix's **Payment Card** framework keeps the Luhn residue of the value it is given: a valid cédula comes out as another valid cédula. Its `preserve` parameter fixes how many leading digits stay, and three of them keep the **province of issue** and the digit that says the holder is a natural person. The province stays for the same reason the provincia column stays: the policy generalizes below the province, not at it.",
         "The **RUC** is thirteen digits, and its third one decides the rule:",
         {
           "list": [
-            "**0 to 5 — a natural person**: the RUC is the cédula plus the establishment code `001`. The set masks the ten digits as a cédula and keeps the code, so the cédula and the RUC of the same person still agree.",
-            "**9 — a private company**: the check digit is in the tenth position, computed modulo 11 with the coefficients 4 3 2 7 6 5 4 3 2. **6 — a public body**: the check digit is in the ninth, with the coefficients 3 2 7 6 5 4 3 2. Neither is a natural person, so neither is personal data: the set leaves both exactly as they are, and says so."
+            "**0 to 5 — a natural person**: the RUC is the cédula plus the establishment code `001`. The policy masks the ten digits as a cédula and keeps the code, so the cédula and the RUC of the same person still agree.",
+            "**9 — a private company**: the check digit is in the tenth position, computed modulo 11 with the coefficients 4 3 2 7 6 5 4 3 2. **6 — a public body**: the check digit is in the ninth, with the coefficients 3 2 7 6 5 4 3 2. Neither is a natural person, so neither is personal data: the policy leaves both exactly as they are, and says so."
           ]
         }
       ]
@@ -955,7 +955,7 @@
     {
       "title": "Where people live: parroquias, DPA code and postal code",
       "body": [
-        "With the population the 2022 census counted and the location the DPA layer publishes, the set knows the size, cantón, provincia and position of about 1,040 parroquias and 224 cantones.",
+        "With the population the 2022 census counted and the location the DPA layer publishes, the policy knows the size, cantón, provincia and position of about 1,040 parroquias and 224 cantones.",
         {
           "list": [
             "A **parroquia** with fewer than 20,000 inhabitants becomes the nearest parroquia of its **cantón** with at least 20,000; when its cantón has none, the nearest of its provincia. There are 913 of them, with 4.3 million inhabitants.",
@@ -975,9 +975,9 @@
         {
           "list": [
             "**Binary columns** — cédula photos, fingerprints, validation selfies, clinical PDFs in BLOBs — cannot be masked by these algorithms. Inventory them and report them as residual risk.",
-            "**The province of issue of the cédula stays**, and so does the provincia: the set generalizes below the province, not at it. If the province itself is too revealing for your data, add a step that maps it — remembering that any change to those two digits breaks the Luhn digit, which then has to be recomputed.",
-            "**A company RUC is not masked**: article 4 makes only a natural person a data subject. If your rule set needs it masked anyway, give the column a domain of its own.",
-            "**The DPA layer publishes the place names without their acute accents.** The set restores them with a dictionary, and writes both spellings into the tables, but a name it could not restore comes out unaccented.",
+            "**The province of issue of the cédula stays**, and so does the provincia: the policy generalizes below the province, not at it. If the province itself is too revealing for your data, add a step that maps it — remembering that any change to those two digits breaks the Luhn digit, which then has to be recomputed.",
+            "**A company RUC is not masked**: article 4 makes only a natural person a data subject. If your rule set needs it masked anyway, give the column a data class of its own.",
+            "**The DPA layer publishes the place names without their acute accents.** The policy restores them with a dictionary, and writes both spellings into the tables, but a name it could not restore comes out unaccented.",
             "**Data Cleansing leaves unknown values as they are**: a parroquia spelled in a way that is not in the table — abbreviated, misspelled — passes unchanged.",
             "**Free text** is redacted word by word: a phone written with spaces inside a sentence may not be found, and a name that is also a common word (`Rosa`, `Cruz`, `Flores`) is redacted wherever it appears.",
             "**Children and adolescents** are a special category of their own (art. 25 b). A birth date moves at most 60 days, so few people cross their 18th birthday — but some do. Where that line matters, split the rule by age group with Multi-Column Condition.",
@@ -990,17 +990,17 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication, the set was checked outside a Masking Engine:",
+        "Before publication, the policy was checked outside Delphix:",
         {
           "list": [
             "The cédula rule was checked against published valid numbers, and the two RUC rules against RUCs published by companies and public bodies.",
-            "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-            "Profiling was simulated on 142 columns with the whole set at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
+            "Every classifier configuration was reviewed against what Delphix accepts.",
+            "Discovery was simulated on 142 columns with the whole policy at its assignment threshold — well named, badly named and 29 columns that are not personal data — and again with only the classifiers of the essential pack.",
             "The table that generalizes places was audited for all 1,040 parroquias and 224 cantones: by name, by name with the provincia, and by DPA code.",
-            "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 cédulas for validity, distinctness and the province and type they keep, 25 cédula and RUC pairs to confirm they still agree, and 40 company RUCs to confirm they come back untouched. Every algorithm also masked its own sample value."
+            "The algorithms, run with the Delphix algorithm plugin, masked each data class's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 200 cédulas for validity, distinctness and the province and type they keep, 25 cédula and RUC pairs to confirm they still agree, and 40 company RUCs to confirm they come back untouched. Every algorithm also masked its own sample value."
           ]
         },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

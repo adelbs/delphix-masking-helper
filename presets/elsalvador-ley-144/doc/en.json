@@ -3,10 +3,10 @@
   "subtitle": "Discovery and masking of Salvadoran personal data: DUI and NIT with a valid check digit, quasi-identifiers, the sensitive data of article 4 g), the nationality of article 59 b), health data, financial data and criminal records.",
   "sections": [
     {
-      "title": "About this profile set",
+      "title": "About this discovery policy",
       "body": [
-        "This profile set finds the personal data in a Salvadoran database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
-        "Masking names and DUIs alone is not enough: a birth date, a sex and a small distrito already point at one person. The set works in the layers where the risk is:",
+        "This discovery policy finds the personal data in a Salvadoran database and masks it, so that a non-production copy — for testing, development, training or analysis — no longer identifies anyone.",
+        "Masking names and DUIs alone is not enough: a birth date, a sex and a small distrito already point at one person. The policy works in the layers where the risk is:",
         { "list": [
           "**Direct identifiers** — DUI, NIT and NRC, foreigner documents, passport, civil registry records, ISSS and pension numbers, student number, names, contact, address, accounts, cards, digital wallets, devices, cookies, plates, property, free text.",
           "**Quasi-identifiers** — birth date, age, sex, distrito and municipio with their codes, postal code, colonia, cantón, family status, occupation, employer, education.",
@@ -15,7 +15,7 @@
           "**Financial data** — the credit history that article 3 a) leaves to its own law, debt, income, assets, pensions, **remittances**, subsidies and housing tenure.",
           "**Criminal records** — record certificates, procedural situation and court or prosecution file numbers."
         ] },
-        "In a Masking Engine, the set is a profile set with its classifiers, the domains they vote for, the algorithms those domains name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
+        "In Data Control Tower the policy is one discovery policy with its classifiers, the data classes they vote for, the algorithms those data classes name — and the algorithms those rely on — and the lookup files they read. The appendices list each of them with its full configuration.",
         "The assignment threshold is 60%. An unambiguous column name reaches it on its own; an ambiguous one — `NOMBRE`, `DOCUMENTO`, `EXPEDIENTE`, `CARGO` — needs the values to agree. A column with a meaningless name (`CAMPO1`, `OBS`) is still found when its values have a recognizable shape or vocabulary: a DUI, a NIT, an eight-digit phone, an address with colonia and polígono, a plate, a distrito.",
         "Column names are recognized in Spanish, in the abbreviations of Salvadoran systems (`NUM_DOC`, `FEC_NAC`, `COD_MUNICIPIO`, `NRC`, `ISSS`, `CENTRO_ESCOLAR`) and in English.",
         { "tip": "Before masking, inventory the binary columns (BLOB, images, PDF). Onboarding processes often keep a photo of the DUI — with the fingerprint and the signature — and a validation selfie. Report those columns as residual risk." }
@@ -35,18 +35,18 @@
           "**Sanctions.** Fines of one to ten minimum wages of the commerce sector for minor infringements, eleven to twenty-five for serious ones and twenty-six to forty for very serious ones (art. 57) — with the 2026 commerce and services minimum wage of 408.80 dollars, up to some 16,350 dollars. **Reversing the pseudonymization of personal data without the subject's consent is a very serious infringement** (art. 56 c, 8)."
         ] },
         "**What the law leaves out.** The credit history processed by those covered by the Law regulating credit history information services is excluded (art. 3 a), although that law has its own duty of secrecy; so are domestic processing, public security and defence, and the public registries and the civil registry (art. 3 b, c and d).",
-        "**What came after.** Article 60 gave the ACE three months to issue the policies, measures and guidelines. In the Official Gazette of 11 August 2026 the Agency published the **Guidelines for the Data Protection Delegate** and the **Rules for the Administrative Sanctioning Procedure**, in force eight days later. The security-measure policies of article 36 are the thing to watch: when they are published, this set should be reviewed against them."
+        "**What came after.** Article 60 gave the ACE three months to issue the policies, measures and guidelines. In the Official Gazette of 11 August 2026 the Agency published the **Guidelines for the Data Protection Delegate** and the **Rules for the Administrative Sanctioning Procedure**, in force eight days later. The security-measure policies of article 36 are the thing to watch: when they are published, this policy should be reviewed against them."
       ]
     },
     {
       "title": "Dissociation, pseudonymization and non-production copies",
       "body": [
         "Few laws in the region separate the two concepts as clearly as Decreto 144. **Dissociation or anonymization** is irreversible (art. 4 h): the data no longer allows identification. **Pseudonymization** (art. 4 q) accepts that the data can be associated with its subject again *with additional information*, and for that reason requires that information to be separate, hidden, classified and safeguarded under technical and organizational measures.",
-        "The algorithms of this set are deterministic for the Masking Engine's key: the same DUI masks the same way in every table, which keeps joins working. That key is exactly the *additional information* of article 4 q). The masked copy is **pseudonymized**, not anonymized, and remains personal data for whoever holds the key and production.",
+        "The algorithms of this policy are deterministic for the Delphix masking key: the same DUI masks the same way in every table, which keeps joins working. That key is exactly the *additional information* of article 4 q). The masked copy is **pseudonymized**, not anonymized, and remains personal data for whoever holds the key and production.",
         { "list": [
           "Keep the engine key separate, hidden and safeguarded — that is what the law asks for pseudonymization to count.",
           "Do not hand the copy to people who also access production without need: reversing pseudonymization without the subject's consent is a very serious infringement (art. 56 c, 8).",
-          "If what you need is to treat the data as dissociated — statistics or science, art. 38 —, measure the re-identification risk of the quasi-identifiers that remain; the irreversibility of article 4 h) is a higher standard than this set meets."
+          "If what you need is to treat the data as dissociated — statistics or science, art. 38 —, measure the re-identification risk of the quasi-identifiers that remain; the irreversibility of article 4 h) is a higher standard than this policy meets."
         ] }
       ]
     }
@@ -72,7 +72,7 @@
       "id": "L3",
       "title": "Sensitive data",
       "intro": [
-        "The categories of article 4 g) other than health — which has its own group —, plus what article 59 b) forbids processing without following the sensitive-data chapter: racial or ethnic origin, **nationality**, party affiliation, religious, spiritual or philosophical convictions, health, sexual life and orientation. The set adds two categories the law names and no other in the region spells out — **moral and family situation** and **personal habits** — and being a victim of violence, which other Salvadoran laws order protected. Categorical columns keep their shape: a Y/N flag stays a flag, a code is replaced by another code and any other value by one from the list of its category. Where the values share no vocabulary, they are suppressed to `Sin información`."
+        "The categories of article 4 g) other than health — which has its own group —, plus what article 59 b) forbids processing without following the sensitive-data chapter: racial or ethnic origin, **nationality**, party affiliation, religious, spiritual or philosophical convictions, health, sexual life and orientation. The policy adds two categories the law names and no other in the region spells out — **moral and family situation** and **personal habits** — and being a victim of violence, which other Salvadoran laws order protected. Categorical columns keep their shape: a Y/N flag stays a flag, a code is replaced by another code and any other value by one from the list of its category. Where the values share no vocabulary, they are suppressed to `Sin información`."
       ],
       "domains": ["SV_L3_ORIGEN_ETNICO", "SV_L3_LENGUA_INDIGENA", "SV_L3_NACIONALIDAD", "SV_L3_RELIGION", "SV_L3_CONVICCION_FILOSOFICA", "SV_L3_IDEOLOGIA_POLITICA", "SV_L3_AFILIACION_PARTIDARIA", "SV_L3_AFILIACION_SINDICAL", "SV_L3_BIOMETRICO", "SV_L3_GENETICO", "SV_L3_ORIENTACION_SEXUAL", "SV_L3_VIDA_SEXUAL", "SV_L3_IDENTIDAD_GENERO", "SV_L3_SITUACION_FAMILIAR", "SV_L3_HABITOS", "SV_L3_VICTIMA"]
     },
@@ -171,7 +171,7 @@
       "title": "Full name",
       "what": [
         "Given names and surnames in one column: `José Alberto Menjívar Portillo`. Also those of the mother, father, guardian, spouse, guarantor or personal reference.",
-        "A column named just `NOMBRE` may hold given names or full names: the values decide between the two domains."
+        "A column named just `NOMBRE` may hold given names or full names: the values decide between the two data classes."
       ],
       "masking": [
         "In Salvadoran order: two words are a given name and a surname; three, a given name and two surnames; four, two and two. `APELLIDOS, NOMBRES` with a comma, as in lists, is recognized too. The result is a plausible name, never the original."
@@ -190,7 +190,7 @@
     "SV_L1_DIRECCION": {
       "title": "Address",
       "what": ["The address with the street or avenue and the number — `Calle Arce #123, Colonia Escalón` —, with polígono and pasaje in the colonias and housing plans, or with the kilometre of a road."],
-      "masking": ["The whole line is replaced by a fictitious Salvadoran address of the same form. Colonia, cantón, distrito and postal code in columns of their own are handled by their domains."]
+      "masking": ["The whole line is replaced by a fictitious Salvadoran address of the same form. Colonia, cantón, distrito and postal code in columns of their own are handled by their data classes."]
     },
     "SV_L1_DIRECCION_COMPLEMENTO": {
       "title": "Address complement",
@@ -199,13 +199,13 @@
     },
     "SV_L1_CUENTA_BANCARIA": {
       "title": "Bank account",
-      "what": ["Savings, current and payroll account numbers. The bank code is not personal data and has no domain."],
+      "what": ["Savings, current and payroll account numbers. The bank code is not personal data and has no data class."],
       "masking": ["Digits are mapped; separators stay."]
     },
     "SV_L1_TARJETA": {
       "title": "Payment card",
       "what": ["Credit and debit card numbers, recognized by the Luhn algorithm."],
-      "masking": ["Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
+      "masking": ["Credit Card, which comes with Delphix: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."]
     },
     "SV_L1_BILLETERA": {
       "title": "Digital wallet and bitcoin",
@@ -320,7 +320,7 @@
     "SV_L2_ESTADO_FAMILIAR": {
       "title": "Family status",
       "what": ["Single, married, acompañado — the non-marital union the Family Code recognizes —, separated, divorced or widowed, in words or as a code."],
-      "masking": ["Replaced by another status from the list; a code stays a code. The *family situation* itself has its own domain among the sensitive data."]
+      "masking": ["Replaced by another status from the list; a code stays a code. The *family situation* itself has its own data class among the sensitive data."]
     },
     "SV_L2_OCUPACION": {
       "title": "Occupation",
@@ -415,7 +415,7 @@
     "SV_L3_SITUACION_FAMILIAR": {
       "title": "Moral and family situation",
       "what": ["The *moral and family situation* that article 4 g) lists among sensitive data: family composition and ties, who the person lives with, moral and conduct references."],
-      "masking": ["A flag stays a flag; any other value becomes `Sin información`. Family status — single, married — has its own domain among the quasi-identifiers."]
+      "masking": ["A flag stays a flag; any other value becomes `Sin información`. Family status — single, married — has its own data class among the quasi-identifiers."]
     },
     "SV_L3_HABITOS": {
       "title": "Personal habits",
@@ -480,7 +480,7 @@
     "SV_SALUD_OCUPACIONAL": {
       "title": "Occupational health",
       "what": ["The fitness opinion of occupational medical exams, work accidents and occupational diseases, sick leave and absenteeism."],
-      "masking": ["An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its domain."]
+      "masking": ["An opinion is replaced by another from the list — fit, unfit —; a flag stays a flag; the diagnosis falls under its data class."]
     },
     "SV_SALUD_REPRODUCTIVA": {
       "title": "Sexual and reproductive health",
@@ -500,27 +500,27 @@
     "SV_FIN_DEUDA": {
       "title": "Debt",
       "what": ["Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_INGRESOS": {
       "title": "Income and pay",
       "what": ["Salary, monthly or household income, fees and contributory pay. The commerce and services minimum wage was 408.80 dollars in 2026."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": ["Net worth, assets, valuations, account balances and term deposits."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_PENSION": {
       "title": "Pension and benefits",
       "what": ["The amount of the pension, subsidy or benefit, and child support."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_REMESAS": {
       "title": "Remittances",
       "what": ["The amount and frequency of family remittances and the condition of receiving them. One in four Salvadoran households does, and the data says who emigrated and what the household lives on."],
-      "masking": ["Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
+      "masking": ["Masked by CM Numeric, which comes with Delphix: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."]
     },
     "SV_FIN_PROGRAMA_SOCIAL": {
       "title": "Subsidies and social programmes",
@@ -547,11 +547,11 @@
     {
       "title": "The DUI and NIT check digits",
       "body": [
-        "The **DUI** is the simple case: eight digits with weights 9, 8, 7, 6, 5, 4, 3 and 2 from the left, modulus 10, and the digit is ten minus the remainder, written 0 when it is ten. That is exactly what the Masking Engine's Check Digit algorithm does, so one step is enough: it maps the eight digits and writes the ninth.",
+        "The **DUI** is the simple case: eight digits with weights 9, 8, 7, 6, 5, 4, 3 and 2 from the left, modulus 10, and the digit is ten minus the remainder, written 0 when it is ten. That is exactly what Delphix's Check Digit algorithm does, so one step is enough: it maps the eight digits and writes the ninth.",
         "The fourteen-digit **NIT** has two rules, and which applies depends on the correlative — the third block:",
         { "list": [
           "Correlative **above 100**: weights 2, 7, 6, 5, 4, 3, 2, 7, 6, 5, 4, 3 and 2, modulus 11, and the digit is eleven minus the remainder, or 0 when the remainder is 0 or 1. Check Digit writes eleven minus the remainder and ten as 0: it matches with no adjustment.",
-          "Correlative **of 100 or less**: weights 14, 13, 12 … 2, modulus 11, and the digit **is the remainder** (ten written as 0). Check Digit cannot write the remainder, but it can write eleven minus it — so the set uses the **complementary weights** (eleven minus each weight, modulo 11). With them the remainder is inverted, and what Check Digit writes is the true remainder."
+          "Correlative **of 100 or less**: weights 14, 13, 12 … 2, modulus 11, and the digit **is the remainder** (ten written as 0). Check Digit cannot write the remainder, but it can write eleven minus it — so the policy uses the **complementary weights** (eleven minus each weight, modulo 11). With them the remainder is inverted, and what Check Digit writes is the true remainder."
         ] },
         "Since the rule depends on the correlative and the whole body is masked, each branch keeps its class: the old branch leaves the correlative with a leading zero, and the new one maps it with Numeric Mapping into 101–999. A Regex Decompose picks the branch by the shape of the input value, with or without hyphens. The two blocks that say most about the person — the municipality and the **date of birth** — are mapped digit by digit, so a masked NIT no longer reveals when or where anyone was born."
       ]
@@ -559,7 +559,7 @@
     {
       "title": "Where people live: distritos, cantones and postal code",
       "body": [
-        "With the population of the 2024 census and the location published by the Banco Central de Reserva, the set knows the size, municipio, departamento and position of the 262 distritos and the 44 municipios.",
+        "With the population of the 2024 census and the location published by the Banco Central de Reserva, the policy knows the size, municipio, departamento and position of the 262 distritos and the 44 municipios.",
         { "list": [
           "A **distrito** with fewer than 20,000 inhabitants becomes the nearest distrito of its **municipio** with at least 20,000; when its municipio has none, the nearest of its departamento. There are 190 of 262, with 1.5 million inhabitants — a quarter of the country. Apaneca becomes Ahuachapán; Perquín, San Francisco Gotera.",
           "The **44 municipios** and the 14 departamentos stay: the smallest municipio is far above the threshold.",
@@ -591,15 +591,15 @@
     {
       "title": "Verification",
       "body": [
-        "Before publication, the set was checked outside a Masking Engine:",
+        "Before publication, the policy was checked outside Delphix:",
         { "list": [
           "The DUI check-digit rule was checked against numbers published as valid, and the NIT rule against two independent implementations of the routine Salvadoran systems use.",
-          "Every classifier configuration was reviewed against what a Masking Engine accepts.",
-          "Profiling was simulated on 146 columns with the whole set at its assignment threshold — well named, badly named and 30 columns that are not personal data — and again with only the classifiers of the essential pack.",
+          "Every classifier configuration was reviewed against what Delphix accepts.",
+          "Discovery was simulated on 146 columns with the whole policy at its assignment threshold — well named, badly named and 30 columns that are not personal data — and again with only the classifiers of the essential pack.",
           "The table that generalizes distritos was audited for all 262: by name, by name with the departamento and by code.",
-          "The algorithms, run with the Delphix algorithm plugin, masked each domain's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 150 DUIs and 200 NITs of both rules for validity and collisions, and 20 NITs to confirm that the birth date inside them does not survive. Every algorithm also masked its own sample value."
+          "The algorithms, run with the Delphix algorithm plugin, masked each data class's sample values and placeholders such as `N/A`, checking every output against its vocabulary; 150 DUIs and 200 NITs of both rules for validity and collisions, and 20 NITs to confirm that the birth date inside them does not survive. Every algorithm also masked its own sample value."
         ] },
-        "Every column was assigned as expected and every value masked as expected. Before using the set on real data, run a profiling job and a masking job on a representative copy."
+        "Every column was assigned as expected and every value masked as expected. Before using the policy on real data, run a discovery job and a masking job on a representative copy."
       ]
     },
     {

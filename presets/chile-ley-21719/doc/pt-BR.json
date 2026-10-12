@@ -3,10 +3,10 @@
   "subtitle": "Descoberta e mascaramento de dados pessoais chilenos: identificadores diretos, quase-identificadores e os dados sensíveis do artigo 2 — situação socioeconômica incluída.",
   "sections": [
     {
-      "title": "Sobre este profile set",
+      "title": "Sobre esta política de descoberta",
       "body": [
-        "Este profile set encontra os dados pessoais de um banco de dados chileno e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
-        "A Ley 21.719 não se aplica a dados anonimizados. Por isso o set não para nos identificadores diretos: ele também generaliza os quase-identificadores que reidentificam pessoas em combinação e cobre todas as categorias sensíveis do artigo 2. Os domínios estão organizados nas mesmas camadas:",
+        "Esta política de descoberta encontra os dados pessoais de um banco de dados chileno e os mascara, para que uma cópia não produtiva — de teste, desenvolvimento, treinamento ou análise — deixe de identificar alguém.",
+        "A Ley 21.719 não se aplica a dados anonimizados. Por isso a política não para nos identificadores diretos: ele também generaliza os quase-identificadores que reidentificam pessoas em combinação e cobre todas as categorias sensíveis do artigo 2. As classes de dados estão organizadas nas mesmas camadas:",
         { "list": [
           "**Identificadores diretos** — RUT, nomes, contato, documentos, contas, dispositivos, veículos, texto livre.",
           "**Quase-identificadores** — data de nascimento, idade, sexo, comuna, código postal, ocupação, empregador e atributos semelhantes.",
@@ -14,9 +14,9 @@
           "**Situação socioeconômica** — tramo FONASA e ISAPRE, Registro Social de Hogares, benefícios do Estado, dívida comercial, renda, fundo de pensão, moradia, financiamento estudantil.",
           "**Antecedentes penais** — condenações e números de processos judiciais."
         ] },
-        "Num Masking Engine, o set é um profile set com os seus classifiers, os domínios em que eles votam, os algoritmos que esses domínios nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
+        "No Data Control Tower, a política é uma política de descoberta com os seus classifiers, as classes de dados em que eles votam, os algoritmos que essas classes de dados nomeiam — e os algoritmos sobre os quais esses se apoiam — e os arquivos de lookup que eles leem. Os apêndices listam cada um deles com a configuração completa.",
         "O limiar de atribuição é 60%. Um nome de coluna inequívoco o alcança sozinho; um ambíguo — `NOMBRE`, `RESULTADO`, `CIUDAD` — precisa que os valores concordem. Uma coluna de nome sem significado (`CAMPO1`, `OBS`) ainda é encontrada quando os valores têm formato ou vocabulário reconhecível.",
-        { "tip": "Antes de mascarar, faça o inventário das colunas binárias (BLOB, imagens, PDF). Os algoritmos deste set trabalham com texto, números e datas: uma cédula escaneada guardada num BLOB continua com o RUT legível. Reporte essas colunas como risco residual." }
+        { "tip": "Antes de mascarar, faça o inventário das colunas binárias (BLOB, imagens, PDF). Os algoritmos desta política trabalham com texto, números e datas: uma cédula escaneada guardada num BLOB continua com o RUT legível. Reporte essas colunas como risco residual." }
       ]
     },
     {
@@ -24,8 +24,8 @@
       "body": [
         "A Ley 21.719 regula a proteção e o tratamento de dados pessoais e cria a Agencia de Protección de Datos Personales. O artigo 2 define como **sensíveis** os dados que revelam origem étnica ou racial, filiação política, sindical ou gremial, situação socioeconômica, convicções ideológicas ou filosóficas, crenças religiosas, saúde e perfil biológico humano, dados biométricos, e vida sexual, orientação sexual e identidade de gênero.",
         "Situação socioeconômica é uma categoria do direito chileno: dados comuns em outros países — um tramo FONASA, uma ISAPRE, um percentil do Registro Social de Hogares, um registro no DICOM — são sensíveis no Chile, e modelos feitos para o GDPR não os cobrem.",
-        "A lei entra em vigor em 1º de dezembro de 2026. Em 31 de agosto de 2026 o Governo enviou ao Senado um projeto (Boletín 18.623-07) que adiaria a data para 1º de dezembro de 2027; verifique a tramitação. A data não muda este set.",
-        { "note": "Este documento descreve controles técnicos. Se uma cópia dos dados conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não só do profile set." }
+        "A lei entra em vigor em 1º de dezembro de 2026. Em 31 de agosto de 2026 o Governo enviou ao Senado um projeto (Boletín 18.623-07) que adiaria a data para 1º de dezembro de 2027; verifique a tramitação. A data não muda esta política.",
+        { "note": "Este documento descreve controles técnicos. Se uma cópia dos dados conta como anonimizada é uma avaliação jurídica do ambiente inteiro — acesso, retenção, o que mais é cruzado com ela — e não só da política de descoberta." }
       ]
     }
   ],
@@ -135,7 +135,7 @@
     "CL_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": "Números de cartão de crédito e débito, com ou sem espaços.",
-      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Delphix: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "CL_L1_IP": {
       "title": "Endereço IP",
@@ -390,12 +390,12 @@
     "CL_L3_SOCIOEC_MONTO_DEUDA": {
       "title": "Valores de dívida",
       "what": "Dívidas, atrasos e saldos devedores.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "CL_L3_SOCIOEC_INGRESOS": {
       "title": "Renda e salário",
       "what": "Salários, renda tributável, renda do domicílio e per capita, patrimônio.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "CL_L3_SOCIOEC_PREVISION_AFP": {
       "title": "Fundo de pensão",
@@ -405,7 +405,7 @@
     "CL_L3_SOCIOEC_SALDO_PREVISIONAL": {
       "title": "Saldos previdenciários",
       "what": "Saldos de conta individual, cotizações, poupança voluntária (APV) e valores de pensão.",
-      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Delphix: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "CL_L3_SOCIOEC_VIVIENDA": {
       "title": "Situação de moradia",
@@ -457,13 +457,13 @@
     {
       "title": "Verificação",
       "body": [
-        "Antes da publicação, o set foi conferido fora de um Masking Engine:",
+        "Antes da publicação, a política foi conferida fora do Delphix:",
         { "list": [
-          "A configuração de cada classifier foi revisada contra o que um Masking Engine aceita.",
-          "O profiling foi simulado em 129 colunas com o set inteiro no seu limiar de atribuição — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
+          "A configuração de cada classifier foi revisada contra o que o Delphix aceita.",
+          "A descoberta foi simulada em 129 colunas com a política inteira no seu limiar de atribuição — bem nomeadas, mal nomeadas e 21 colunas que não são dado pessoal — e de novo só com os classifiers do pacote essencial.",
           "Os algoritmos, executados com o plugin de algoritmos do Delphix, mascararam 184 valores de amostra e 204 placeholders como `S/I`, conferindo se cada valor mascarado vem do vocabulário certo, e o dígito verificador de 60 RUTs aleatórios. Cada um dos 101 algoritmos também mascarou o seu próprio valor de exemplo."
         ] },
-        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar o set em dados reais, rode um job de profiling e um de mascaramento numa cópia representativa."
+        "Todas as colunas foram atribuídas como esperado e todos os valores mascarados como esperado. Antes de usar a política em dados reais, rode um job de descoberta e um de mascaramento numa cópia representativa."
       ]
     },
     {

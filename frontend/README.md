@@ -21,11 +21,11 @@ src/
 │   ├── api.ts                  # Chamadas à API do Express (/api/*), incluindo chat e sincronização via SSE
 │   ├── utils.ts                # cn() — merge de classes Tailwind com tailwind-merge
 │   ├── algorithms.ts                # useAlgorithms(): lista salva com cache e subscribers
-│   ├── domains.ts                   # useDomains() + a categoria de um domínio
+│   ├── domains.ts                   # useDomains() + a categoria de uma classe de dados
 │   ├── classifiers.ts               # useClassifiers(), catálogo dos frameworks de classifier
-│   ├── profile-sets.ts              # Store dos profile sets
+│   ├── profile-sets.ts              # Store das políticas de descoberta
 │   ├── references.ts                # Nomes referenciáveis: built-ins do plugin e do engine
-│   ├── grouping.ts                  # Modos de agrupamento da barra e o alcance de um profile set
+│   ├── grouping.ts                  # Modos de agrupamento da barra e o alcance de uma política de descoberta
 │   ├── engine-sync.ts               # Respostas da sincronização e os toasts do que viajou junto
 │   ├── import-progress.ts           # Progresso da sincronização (a barra só anda para a frente)
 │   ├── field-form.ts                # O campo que o teste de classifier descreve
@@ -40,17 +40,17 @@ src/
 │       ├── I18nProvider.tsx    # Provider do contexto
 │       └── messages/           # en.ts (fonte das chaves), pt-BR.ts, es.ts
 └── components/
-    ├── Sidebar.tsx             # Cinco sessões colapsáveis, busca e filtro por profile set; mobile = overlay
+    ├── Sidebar.tsx             # Cinco sessões colapsáveis, busca e filtro por política de descoberta; mobile = overlay
     ├── LocaleFlags.tsx         # Troca de idioma pelas bandeiras do rodapé da barra
     ├── SetupNeeded.tsx         # Tela de primeiro uso quando faltam os JARs do Delphix
     ├── WelcomeScreen.tsx       # Home: cabeçalho + chat com a IA
     ├── Chat.tsx                # Chat com a IA (streaming SSE, card de algoritmo salvo)
     ├── FrameworkTester.tsx     # Testa um framework, ou edita um algoritmo salvo
-    ├── DomainEditor.tsx        # Nome, algoritmo e tokenização de um domínio
+    ├── DomainEditor.tsx        # Nome, algoritmo e tokenização de uma classe de dados
     ├── ClassifierEditor.tsx    # Configuração e teste de um classifier
     ├── FieldForm.tsx           # A coluna descrita no teste de classifier
-    ├── ProfileSetEditor.tsx    # Nome, limiar e membros de um profile set
-    ├── ReferencePicker.tsx     # Campo pesquisável para nomear algoritmo ou domínio
+    ├── ProfileSetEditor.tsx    # Nome, limiar e membros de uma política de descoberta
+    ├── ReferencePicker.tsx     # Campo pesquisável para nomear algoritmo ou classe de dados
     ├── ImportProgressBar.tsx   # Barra de progresso da sincronização
     ├── DuplicatePrompt.tsx     # Pede o nome da cópia
     ├── FrameworkDoc.tsx        # Aba Documentação: a seção do guia daquele framework

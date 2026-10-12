@@ -1,6 +1,8 @@
 {
-  "version": 3,
-  "versionDate": "2026-10-11",
+  "version": 4,
+  "versionDate": "2026-10-12",
+  "region": "central-america",
+  "country": "PA",
   "name": {
     "en": "Panama — Ley 81 de 2019 (personal data protection)",
     "pt-BR": "Panamá — Ley 81 de 2019 (proteção de dados pessoais)",
@@ -12,7 +14,7 @@
     "es": "Descubre y enmascara datos personales panameños conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021: identificadores directos (cédula, RUC con DV válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, distrito, corregimiento), los datos sensibles del artículo 4, datos económicos y de crédito, y antecedentes penales."
   },
   "profileSet": {
-    "name": "PA - Ley 81 de 2019 - v3",
+    "name": "PA - Ley 81 de 2019 - v4",
     "description": "Ley 81 de 2019 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
