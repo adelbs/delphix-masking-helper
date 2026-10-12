@@ -1,0 +1,623 @@
+{
+  "title": "Reino Unido — UK GDPR y Data Protection Act 2018",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales del Reino Unido: el National Insurance number, el NHS number y otros identificadores, nombres y contacto, datos bancarios, cuasi-identificadores como el postcode, las categorías especiales del artículo 9, datos de infracciones penales y datos financieros.",
+  "sections": [
+    {
+      "title": "Acerca de esta política de descubrimiento",
+      "body": [
+        "Esta política de descubrimiento encuentra los datos personales en una base de datos del Reino Unido y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, capacitación o análisis — ya no identifique a nadie.",
+        "Enmascarar solo nombres y National Insurance numbers no alcanza: una fecha de nacimiento, un sexo y un postcode completo bastan para señalar a una persona. La política trabaja en las capas donde está el riesgo:",
+        {
+          "list": [
+            "**Identificadores directos** — National Insurance number, números NHS, CHI y H&C, Unique Taxpayer Reference, pasaporte, licencia de conducir, documentos migratorios, registro civil, nombres, contacto, cuenta bancaria, sort code, IBAN y tarjetas, referencias de inmuebles, dispositivos, vehículos, texto libre.",
+            "**Cuasi-identificadores** — fecha de nacimiento, edad, sexo, postcode, ciudad, nacionalidad, estado civil y unión civil, ocupación, empleador, calificaciones.",
+            "**Categorías especiales** — las del artículo 9 del UK GDPR: origen racial o étnico, opiniones políticas, creencias religiosas o filosóficas, afiliación sindical, datos genéticos y biométricos, vida sexual y orientación sexual — y la identidad de género, que protege la Gender Recognition Act 2004.",
+            "**Salud** — datos relativos a la salud, también categoría especial: números de historia clínica, diagnósticos (CIE-10 y SNOMED CT), medicamentos, notas clínicas, resultados de análisis, grupo sanguíneo, discapacidad, salud reproductiva y mental.",
+            "**Datos financieros** — historial crediticio, County Court Judgments e insolvencia, deudas, ingresos, patrimonio y pensiones, prestaciones, índices de privación, régimen de vivienda.",
+            "**Datos de infracciones penales** — condenas, amonestaciones (cautions) y la comisión alegada de infracciones, referencias del PNC y de causas, verificaciones del DBS."
+          ]
+        },
+        "En Data Control Tower, la política es una política de descubrimiento con sus classifiers, las clases de datos por las que votan, los algoritmos que esas clases de datos nombran — y los algoritmos en los que estos se apoyan — y los archivos de lookup que leen. Los apéndices listan cada uno con su configuración completa. Algunas clases de datos usan algoritmos que vienen con Delphix — CM Numeric, Credit Card, BloodType SL — y esos se nombran, pero no se incluyen.",
+        "El umbral de asignación es 60%. Un nombre de columna inequívoco lo alcanza solo; uno ambiguo — `NAME`, `RESULT`, `CITY` — necesita que los valores coincidan. Una columna de nombre sin sentido (`FIELD1`, `PFNOM`, `REMARKS`) igual se encuentra cuando sus valores tienen forma o vocabulario reconocible: un National Insurance number, un NHS number que pasa su dígito verificador, un teléfono del Reino Unido, un postcode, una matrícula, un IBAN, una ciudad, un nombre completo.",
+        "Los nombres de columna se reconocen en inglés y en las abreviaturas de los sistemas del Reino Unido (`NINO`, `NI_NO`, `NHS_NO`, `CHI`, `UTR`, `UPRN`, `MPAN`, `PNC_ID`, `DBS`, `DOB`).",
+        "Donde un número tiene dígito verificador, el número enmascarado también tiene uno válido: el NHS number (y los números CHI y H&C, que usan el mismo cálculo) y la Unique Taxpayer Reference se enmascaran dígito a dígito y se recalcula su dígito verificador, y el IBAN recibe nuevos dígitos de control. Una aplicación que los valida sigue aceptando la copia enmascarada.",
+        {
+          "tip": "Antes de enmascarar, inventaríe las columnas binarias (BLOBs, imágenes, PDFs). Los procesos de alta y de verificación del derecho a trabajar suelen guardar la imagen del pasaporte, de la licencia de conducir o del biometric residence permit — y una imagen facial tratada para identificar a alguien es dato biométrico según el artículo 4(14). Informe esas columnas como riesgo residual."
+        }
+      ]
+    },
+    {
+      "title": "El UK GDPR y la Data Protection Act 2018 en resumen",
+      "body": [
+        "El Reino Unido no tiene una ley única de protección de datos. El **UK GDPR** — el Reglamento General de Protección de Datos de la UE, conservado en el derecho británico después del Brexit y modificado desde entonces — fija los principios, los derechos y los deberes; la **Data Protection Act 2018** lo complementa, define las excepciones y los delitos y regula la persecución penal y los servicios de inteligencia. Ambos fueron modificados por la **Data (Use and Access) Act 2025**, cuyos cambios en protección de datos entraron en vigor por etapas en 2026. El 30 de septiembre de 2026 la **Information Commission** reemplazó a la Information Commissioner's Office como autoridad.",
+        "Lo que importa para una copia de datos de producción:",
+        {
+          "list": [
+            "**Dato personal** es toda información relativa a una persona viva identificada o identificable — directa o indirectamente, mediante un identificador como un nombre, un número de identificación, datos de localización o un identificador en línea, o mediante factores propios de su identidad física, fisiológica, genética, mental, económica, cultural o social (UK GDPR, artículo 4(1); DPA 2018, s. 3).",
+            "**Seudonimización** es tratar datos personales de modo que ya no puedan atribuirse a una persona sin información adicional, guardada por separado y bajo medidas técnicas y organizativas (artículo 4(5)). El dato seudonimizado sigue siendo dato personal; solo el dato efectivamente anónimo, consideradas las medidas razonablemente probables para identificar a alguien, queda fuera de la ley (considerando 26).",
+            "**Tratamiento** incluye copiar, adaptar, modificar, combinar y suprimir datos (artículo 4(2)). Copiar datos de producción a un ambiente de pruebas es tratamiento; enmascararlos también.",
+            "**Principios** (artículo 5): limitación de la finalidad — ningún tratamiento ulterior incompatible con los fines originales —, **minimización** — datos adecuados, pertinentes y limitados a lo necesario —, limitación del plazo de conservación, integridad y confidencialidad. Una copia íntegra de producción en un ambiente de pruebas incumple la minimización, salvo que sea necesaria allí.",
+            "**Protección de datos desde el diseño y por defecto** (artículo 25) pide medidas como la seudonimización que hagan efectivos los principios, y que por defecto solo se trate lo que cada fin exige.",
+            "**Seguridad del tratamiento** (artículo 32(1)(a)) nombra **la seudonimización y el cifrado de datos personales** entre las medidas técnicas apropiadas, con un proceso para verificar regularmente su eficacia (artículo 32(1)(d)).",
+            "**Categorías especiales** (artículo 9): origen racial o étnico, opiniones políticas, creencias religiosas o filosóficas, afiliación sindical, datos genéticos, datos biométricos tratados para identificar de manera unívoca a una persona, datos relativos a la salud y datos relativos a la vida sexual o la orientación sexual. Tratarlos exige una condición del artículo 9(2) y, para la mayoría, una de la Schedule 1 de la ley de 2018, con un documento de política adecuado.",
+            "**Datos de infracciones penales** (artículo 10) solo pueden tratarse bajo autoridad oficial o con una condición de la Schedule 1. La sección 11(2) de la ley los extiende a **la comisión alegada de infracciones** y a los procesos y su resultado — una acusación que terminó en absolución es dato de infracción penal.",
+            "**Reidentificar datos desidentificados es delito.** Quien, a sabiendas o por imprudencia, reidentifica información que es dato personal desidentificado, sin el consentimiento del responsable que la desidentificó, comete delito, y también quien, a sabiendas o por imprudencia, trata datos reidentificados de ese modo (DPA 2018, s. 171). Probar la eficacia de la desidentificación es una defensa cuando se hace en el interés público y se notifica a la Commission (s. 172).",
+            "**Sanciones.** La multa máxima mayor es de £17,5 millones o el 4% del volumen de negocio mundial anual, lo que sea mayor (artículo 83; DPA 2018, s. 157). Las violaciones de datos personales se notifican a la Commission dentro de las 72 horas cuando suponen un riesgo para las personas (artículo 33).",
+            "**Niños.** Para servicios en línea ofrecidos directamente a niños, el consentimiento vale desde los 13 años (artículo 8 y DPA 2018, s. 9)."
+          ]
+        },
+        "Un ambiente de pruebas con datos de producción es tratamiento ulterior para fines para los que los datos no se recogieron, por personas que no necesitan verlos, y guarda datos de categorías especiales y de infracciones penales fuera de los controles construidos para ellos. Enmascarar es la seudonimización que nombran los artículos 25 y 32: lo que va al ambiente de pruebas ya no identifica a nadie sin la clave, y la sección 171 hace de deshacerla sin el consentimiento del responsable un delito.",
+        "La política va más allá del artículo 9 donde el riesgo es el mismo: trata la identidad de género con el mismo cuidado que la orientación sexual — la sección 22 de la Gender Recognition Act 2004 hace delito revelar, a partir de información oficial, que una persona solicitó o tiene un gender recognition certificate — y enmascara los datos financieros, que los bancos guardan bajo deber de confidencialidad y las agencias de crédito solo comparten conforme a la Consumer Credit Act 1974. Las condenas siguen la Rehabilitation of Offenders Act 1974: una condena cumplida (spent) se trata como si nunca hubiera ocurrido, y una copia que la conserva deshace eso.",
+        {
+          "note": "Que un dato sea anónimo depende de los medios razonablemente probables para identificar a alguien, por quien lo guarda o por quien pueda alcanzarlo — la guía de anonimización de la Commission lo prueba frente a un intruso motivado. El enmascaramiento es determinístico para la clave del engine, así que quien tiene los datos de producción y la clave puede vincular una fila enmascarada con su origen: para esa persona, la copia es dato seudonimizado, todavía dato personal. Mantenga la clave, y el acceso a producción, lejos de quienes usan la copia enmascarada. Si una copia cuenta como anónima es una evaluación jurídica de todo el ambiente, no solo de la política de descubrimiento."
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. El Reino Unido no tiene documento nacional de identidad; el Estado conoce a la persona por varios números — el National Insurance number para el trabajo, los impuestos y las prestaciones, el número NHS, CHI o H&C para la salud, la Unique Taxpayer Reference para la declaración de impuestos — y los demás la conocen por nombre, dirección, teléfono, cuenta bancaria y tarjeta. Cada número se enmascara igual dondequiera que aparezca, por lo que sigue uniendo sus tablas después del enmascaramiento, y los dígitos verificadores que las aplicaciones validan se recalculan."
+      ],
+      "domains": [
+        "UK_L1_NINO",
+        "UK_L1_NHS_NUMBER",
+        "UK_L1_UTR",
+        "UK_L1_PASSPORT",
+        "UK_L1_DRIVING_LICENCE",
+        "UK_L1_IMMIGRATION_DOCUMENT",
+        "UK_L1_VITAL_RECORD",
+        "UK_L1_GIVEN_NAME",
+        "UK_L1_SURNAME",
+        "UK_L1_FULL_NAME",
+        "UK_L1_EMAIL",
+        "UK_L1_PHONE",
+        "UK_L1_ADDRESS",
+        "UK_L1_ADDRESS_DETAIL",
+        "UK_L1_BANK_ACCOUNT",
+        "UK_L1_SORT_CODE",
+        "UK_L1_IBAN",
+        "UK_L1_PAYMENT_CARD",
+        "UK_L1_IP_ADDRESS",
+        "UK_L1_DEVICE_ID",
+        "UK_L1_LICENCE_PLATE",
+        "UK_L1_VIN",
+        "UK_L1_PROPERTY",
+        "UK_L1_CONTRACT_NUMBER",
+        "UK_L1_USERNAME",
+        "UK_L1_CREDENTIAL",
+        "UK_L1_GEOLOCATION",
+        "UK_L1_FREE_TEXT"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por sí solos, pero sí en combinación. Un postcode completo cubre unas quince direcciones; con la fecha de nacimiento y el sexo, suele señalar a una persona. De las 4.643 ciudades y pueblos de más de 1.000 habitantes del Reino Unido, 3.993 tienen menos de 20.000. Estos atributos se generalizan o desplazan en vez de reemplazarse: el postcode conserva el outward code, los lugares pequeños pasan a ser la ciudad principal de su autoridad local, y los datos conservan su valor analítico."
+      ],
+      "domains": [
+        "UK_L2_BIRTH_DATE",
+        "UK_L2_BIRTH_YEAR",
+        "UK_L2_AGE",
+        "UK_L2_EVENT_DATE",
+        "UK_L2_SEX",
+        "UK_L2_POSTCODE",
+        "UK_L2_TOWN",
+        "UK_L2_NATIONALITY",
+        "UK_L2_MARITAL_STATUS",
+        "UK_L2_OCCUPATION",
+        "UK_L2_EMPLOYER",
+        "UK_L2_EDUCATION",
+        "UK_L2_SCHOOL",
+        "UK_L2_DEPENDANTS"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Categorías especiales de datos",
+      "intro": [
+        "Las categorías del artículo 9 que no son salud — que tiene grupo propio: origen racial o étnico, opiniones políticas, creencias religiosas o filosóficas, afiliación sindical, datos genéticos, datos biométricos usados para identificar, vida sexual y orientación sexual — y la identidad de género, que protege la Gender Recognition Act 2004. Las columnas categóricas conservan su forma: un sí/no sigue siendo sí/no, un código numérico recibe otros dígitos, y cualquier otro valor se reemplaza por las categorías del censo de 2021, o se suprime donde no hay vocabulario común."
+      ],
+      "domains": [
+        "UK_L3_GENETIC",
+        "UK_L3_BIOMETRIC",
+        "UK_L3_ETHNICITY",
+        "UK_L3_RELIGION",
+        "UK_L3_BELIEF",
+        "UK_L3_POLITICAL_OPINION",
+        "UK_L3_POLITICAL_AFFILIATION",
+        "UK_L3_TRADE_UNION",
+        "UK_L3_SEXUAL_ORIENTATION",
+        "UK_L3_SEXUAL_LIFE",
+        "UK_L3_GENDER_IDENTITY"
+      ]
+    },
+    {
+      "id": "HEALTH",
+      "title": "Datos relativos a la salud",
+      "intro": [
+        "Categoría especial del artículo 9, definida como datos sobre la salud física o mental de una persona, incluida la prestación de servicios de atención sanitaria, que revelen información sobre su estado de salud (artículo 4(15)). Los registros de salud llevan, además, el deber de confidencialidad del common law en el NHS. Un diagnóstico, un resultado de VIH, un antidepresivo o un embarazo exponen a la persona tanto como cualquier otra categoría; el NHS number, sin embargo, está en los identificadores directos, porque acompaña a la persona mucho más allá de la consulta."
+      ],
+      "domains": [
+        "UK_HEALTH_ID",
+        "UK_HEALTH_DIAGNOSIS",
+        "UK_HEALTH_MEDICATION",
+        "UK_HEALTH_CLINICAL_TEXT",
+        "UK_HEALTH_TEST_RESULT",
+        "UK_HEALTH_BLOOD_GROUP",
+        "UK_HEALTH_DISABILITY",
+        "UK_HEALTH_REPRODUCTIVE",
+        "UK_HEALTH_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos financieros",
+      "intro": [
+        "El UK GDPR no hace de los datos financieros una categoría especial. Igual son datos personales, y otras reglas los cierran más: los bancos guardan los asuntos de sus clientes bajo el deber de confidencialidad reconocido en Tournier v National Provincial and Union Bank of England (1924), y la información crediticia circula entre las agencias de crédito conforme a la Consumer Credit Act 1974. Varias prestaciones revelan salud: Personal Independence Payment, Disability Living Allowance, Employment and Support Allowance y Attendance Allowance se pagan por una condición. Las categorías se reemplazan dentro de su propia notación; los montos conservan su número de dígitos, sin relación con el valor real."
+      ],
+      "domains": [
+        "UK_FIN_CREDIT_REFERENCE",
+        "UK_FIN_DEBT",
+        "UK_FIN_INCOME",
+        "UK_FIN_ASSETS",
+        "UK_FIN_PENSION",
+        "UK_FIN_BENEFIT",
+        "UK_FIN_DEPRIVATION",
+        "UK_FIN_HOUSING"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Datos de infracciones penales",
+      "intro": [
+        "El artículo 10 del UK GDPR, que la sección 11(2) de la Data Protection Act 2018 extiende a la comisión alegada de infracciones y a los procesos y su resultado — un arresto que terminó sin más actuaciones (no further action) está tan protegido como una condena. Según la Rehabilitation of Offenders Act 1974, la mayoría de las condenas y amonestaciones quedan cumplidas (spent) tras un tiempo, y una condena cumplida se trata como si nunca hubiera ocurrido; una copia de pruebas que la conserva deshace eso. Las verificaciones del DBS dicen si existe un registro."
+      ],
+      "domains": [
+        "UK_PENAL_CRIMINAL_RECORD",
+        "UK_PENAL_CASE_NUMBER",
+        "UK_PENAL_DBS"
+      ]
+    }
+  ],
+  "domains": {
+    "UK_L1_NINO": {
+      "title": "National Insurance number",
+      "what": "El National Insurance number de HMRC y del Department for Work and Pensions: dos letras de prefijo, seis dígitos y una letra de sufijo de la A a la D, escrito en general `QQ 12 34 56 C`. Acompaña a la persona en el trabajo, los impuestos, las prestaciones y la pensión pública, y lo guardan empleadores, bancos, planes de pensiones y el NHS. Se encuentra por el nombre (`NINO`, `NI_NO`, `NATIONAL_INSURANCE_NUMBER`) y por la forma, sin los prefijos que HMRC no emite.",
+      "masking": "Los seis dígitos se mapean dígito a dígito; las letras de prefijo y de sufijo, que nada dicen de la persona, y los espacios se conservan. El resultado sigue siendo un National Insurance number bien formado, y el mismo número se enmascara igual en todas las tablas."
+    },
+    "UK_L1_NHS_NUMBER": {
+      "title": "NHS number, CHI number, H&C number",
+      "what": "El número de diez dígitos del paciente en Inglaterra, Gales y la Isla de Man (NHS number, escrito `943 476 5919`), en Escocia (Community Health Index, cuyos seis primeros dígitos son la fecha de nacimiento) y en Irlanda del Norte (Health and Care number). Los tres terminan en el mismo dígito verificador módulo 11, y el classifier lo comprueba: una columna de NHS numbers válidos se encuentra aun con un nombre sin sentido.",
+      "masking": "Los nueve dígitos se enmascaran y el dígito verificador se recalcula, así que el resultado es un número válido. El primer dígito se conserva — indica el sistema emisor — y un CHI conserva una fecha real (día 01–28, mes 01–12). La regla nunca emite un número cuyo verificador sería diez; cuando los dígitos enmascarados dan ese caso, el noveno dígito sube uno y el verificador se calcula de nuevo. Cerca de un número enmascarado de cada once se desplaza así, por lo que algunos números distintos pueden enmascararse igual."
+    },
+    "UK_L1_UTR": {
+      "title": "Unique Taxpayer Reference (UTR)",
+      "what": "La referencia de diez dígitos de HMRC para Self Assessment, Corporation Tax y sociedades, a menudo escrita en dos grupos de cinco y a veces seguida de una `K`. Su dígito verificador es el primero: los otros nueve con pesos 6 7 8 9 10 5 4 3 2, módulo 11.",
+      "masking": "Los nueve dígitos se enmascaran y el primero se recalcula con la regla de HMRC, así que la referencia enmascarada pasa la validación; los espacios y la `K` se conservan."
+    },
+    "UK_L1_PASSPORT": {
+      "title": "Pasaporte",
+      "what": "Números de pasaporte, británico (nueve dígitos, emitido por HM Passport Office) o extranjero.",
+      "masking": "Carácter a carácter: las letras siguen siendo letras y los dígitos, dígitos."
+    },
+    "UK_L1_DRIVING_LICENCE": {
+      "title": "Licencia de conducir",
+      "what": "El número de la licencia de conducir del DVLA, dieciséis caracteres que muestran al titular: cinco letras del apellido, seis dígitos de la fecha de nacimiento (el mes más cinco para las mujeres), dos iniciales, un dígito y dos letras de control — `MORGA753116SM9IJ`. Las licencias de Irlanda del Norte tienen ocho dígitos. Se encuentra por el nombre y por la forma.",
+      "masking": "Carácter a carácter, conservando el formato: las letras del apellido, la fecha y las iniciales cambian todas."
+    },
+    "UK_L1_IMMIGRATION_DOCUMENT": {
+      "title": "Documentos migratorios",
+      "what": "Biometric residence permits, share codes de eVisa y del derecho a trabajar, referencias del Home Office y de UKVI, visas, decisiones del EU Settlement Scheme, certificates of sponsorship, referencias de asilo y certificados de naturalización. La situación migratoria no es categoría especial, pero expone a la persona a un daño grave cuando se filtra.",
+      "masking": "Carácter a carácter, conservando el formato."
+    },
+    "UK_L1_VITAL_RECORD": {
+      "title": "Registro civil",
+      "what": "Números de actas y de inscripciones de nacimiento, defunción, matrimonio y unión civil, y las referencias de índice del General Register Office de Inglaterra y Gales, Escocia e Irlanda del Norte.",
+      "masking": "Carácter a carácter, conservando el formato."
+    },
+    "UK_L1_GIVEN_NAME": {
+      "title": "Nombres de pila",
+      "what": "Primer nombre y segundos nombres (`FIRST_NAME`, `FORENAME`, `MIDDLE_NAME`, `KNOWN_AS`), incluidos dos nombres en una columna, como `Mary Elizabeth`.",
+      "masking": "Cada palabra se reemplaza por un nombre de una lista de 350 nombres de pila usados en el Reino Unido — ingleses, escoceses, galeses, irlandeses, del sur de Asia, africanos y de Europa del Este —, conservando el número de palabras y las mayúsculas."
+    },
+    "UK_L1_SURNAME": {
+      "title": "Apellidos",
+      "what": "Apellidos, de soltera y anteriores, incluidos los apellidos compuestos con guion (`Bowes-Lyon`).",
+      "masking": "Cada parte pasa a ser un apellido de una lista de 300 apellidos comunes del Reino Unido; el guion se conserva."
+    },
+    "UK_L1_FULL_NAME": {
+      "title": "Nombre completo",
+      "what": "Nombres y apellido en una columna, en el orden inglés, con o sin tratamiento — `Mrs Mary E. Smith` — o escritos como `SMITH, MARY`.",
+      "masking": "Los nombres pasan a ser nombres y el apellido, apellido, por posición: la última palabra es el apellido. El tratamiento (`Mr`, `Mrs`, `Ms`, `Miss`, `Mx`, `Dr`, `Prof`, `Sir`, `Dame`, `Rev`) y una inicial intermedia se conservan; la forma con coma conserva el orden."
+    },
+    "UK_L1_EMAIL": {
+      "title": "E-mail",
+      "what": "Direcciones de e-mail personales y de trabajo.",
+      "masking": "El nombre y el dominio se mapean carácter a carácter y el dominio de nivel superior pasa a ser `.test`, reservado para pruebas: una dirección enmascarada nunca entrega correo."
+    },
+    "UK_L1_PHONE": {
+      "title": "Teléfono",
+      "what": "Números del Reino Unido con `+44` o el `0` troncal: móviles (`07700 900123`), números geográficos (`020 7946 0018`, `0161 496 0000`), no geográficos y la forma mixta `+44 (0)20…`.",
+      "masking": "El código de país, el `0` troncal, los dos dígitos siguientes (el rango móvil o el comienzo del código de área) y los separadores se conservan; el resto se enmascara dígito a dígito. Un número sin forma del Reino Unido se enmascara carácter a carácter."
+    },
+    "UK_L1_ADDRESS": {
+      "title": "Dirección",
+      "what": "Las líneas de dirección: número o nombre de la casa y calle, departamento y edificio, con o sin ciudad y postcode. Se encuentra por el nombre y por valores con número y palabra de vía, un departamento (flat) o un postcode después de una coma.",
+      "masking": "Se reemplaza por una de 3.000 direcciones ficticias del Reino Unido, armadas con nombres comunes de calles (High Street, Station Road, Heol y Felin, Lisburn Road), departamentos en edificios con nombre y nombres de casa. El postcode tiene clase de datos propia."
+    },
+    "UK_L1_ADDRESS_DETAIL": {
+      "title": "Complemento de dirección",
+      "what": "Número o nombre de la casa, departamento, edificio, unidad y piso en columnas separadas.",
+      "masking": "Carácter a carácter, conservando el formato."
+    },
+    "UK_L1_BANK_ACCOUNT": {
+      "title": "Cuenta bancaria",
+      "what": "Números de cuenta de bancos y building societies (ocho dígitos) y roll numbers de building societies.",
+      "masking": "Carácter a carácter, conservando longitud y separadores; los ceros a la izquierda se conservan."
+    },
+    "UK_L1_SORT_CODE": {
+      "title": "Sort code",
+      "what": "El sort code de seis dígitos, escrito `20-00-00`, que identifica un banco y una sucursal. Con el número de cuenta, identifica la cuenta.",
+      "masking": "Los dos primeros dígitos, que dicen el banco, se conservan; los cuatro que dicen la sucursal se enmascaran."
+    },
+    "UK_L1_IBAN": {
+      "title": "IBAN",
+      "what": "IBANs del Reino Unido (`GB82 WEST 1234 5698 7654 32`): el país, dos dígitos de control, el código de cuatro letras del banco, el sort code y el número de cuenta. El classifier comprueba los dígitos de control de la ISO 13616.",
+      "masking": "El algoritmo IBAN de Delphix enmascara el sort code y el número de cuenta — catorce dígitos — y recalcula los dos dígitos de control, así que el IBAN enmascarado es válido. El código del banco y los espacios se conservan."
+    },
+    "UK_L1_PAYMENT_CARD": {
+      "title": "Tarjeta de pago",
+      "what": "Números de tarjetas de crédito, débito y prepagas.",
+      "masking": "Credit Card, que viene con Delphix: otro número que pasa el Luhn, conservando los seis primeros dígitos (el emisor, no el titular)."
+    },
+    "UK_L1_IP_ADDRESS": {
+      "title": "Dirección IP",
+      "what": "Direcciones IPv4 e IPv6 en logs de acceso, sesiones y transacciones — identificadores en línea según el artículo 4(1).",
+      "masking": "Cada octeto IPv4 se mapea en 1–254, así que la dirección sigue siendo válida; una IPv6 se mapea dígito a dígito en hexadecimal."
+    },
+    "UK_L1_DEVICE_ID": {
+      "title": "Identificador de dispositivo",
+      "what": "IMEI, IMSI, ICCID, direcciones MAC, identificadores de publicidad y cookies de sesión.",
+      "masking": "Carácter a carácter en hexadecimal: una MAC sigue siendo MAC, un IMEI sigue teniendo quince dígitos."
+    },
+    "UK_L1_LICENCE_PLATE": {
+      "title": "Matrícula de vehículo",
+      "what": "Matrículas (vehicle registration marks): el formato actual desde 2001 — dos letras de la región, dos dígitos de la antigüedad y tres letras al azar, `AB12 CDE` —, los formatos antiguos de prefijo y sufijo (`A123 BCD`, `ABC 123D`) y las matrículas de Irlanda del Norte (`BAZ 1234`).",
+      "masking": "En el formato actual, la región y la antigüedad se conservan — dicen dónde y cuándo se matriculó el auto por primera vez, como lo diría un año de nacimiento — y las tres letras al azar se enmascaran; los formatos antiguos se enmascaran carácter a carácter. Las letras enmascaradas nunca incluyen I ni Q, que las matrículas no usan."
+    },
+    "UK_L1_VIN": {
+      "title": "VIN y referencia del V5C",
+      "what": "Números de identificación del vehículo, de chasis y de motor, y la referencia del certificado de registro V5C (el logbook).",
+      "masking": "Carácter a carácter, conservando el formato de 17 caracteres."
+    },
+    "UK_L1_PROPERTY": {
+      "title": "Referencias de inmueble y de medidor",
+      "what": "Referencias que llevan a un hogar: el Unique Property Reference Number (UPRN), el número de título del HM Land Registry, la cuenta del council tax y de las business rates, y los números de los medidores de electricidad y gas (MPAN, MPRN).",
+      "masking": "Carácter a carácter, conservando el formato, para que las referencias entre tablas sigan coincidiendo."
+    },
+    "UK_L1_CONTRACT_NUMBER": {
+      "title": "Número de cliente, contrato o cuenta",
+      "what": "Números de cliente, socio, empleado, nómina, póliza, préstamo, hipoteca, siniestro y alquiler, y los números de alumno del sistema educativo (UPN, ULN).",
+      "masking": "Carácter a carácter, conservando el formato, para que las referencias entre tablas sigan coincidiendo."
+    },
+    "UK_L1_USERNAME": {
+      "title": "Usuario y redes sociales",
+      "what": "Logins, apodos y perfiles en redes sociales.",
+      "masking": "Carácter a carácter."
+    },
+    "UK_L1_CREDENTIAL": {
+      "title": "Credencial",
+      "what": "Contraseñas, PIN, palabras memorables, hashes de contraseña, respuestas de seguridad, tokens y claves de API. Un hash también se encuentra por su esquema — bcrypt, crypt, Argon2, PBKDF2, LDAP.",
+      "masking": "Cada carácter pasa a ser `X`. Una credencial no tiene por qué parecer real en un ambiente de pruebas."
+    },
+    "UK_L1_GEOLOCATION": {
+      "title": "Geolocalización",
+      "what": "Latitud y longitud, juntas o en columnas separadas, y eastings, northings y grid references del Ordnance Survey. Gran Bretaña e Irlanda del Norte están entre 49° y 61° norte y entre 8° oeste y 2° este.",
+      "masking": "La parte entera y el primer decimal se conservan — unos 11 km — y el resto se enmascara: el lugar se generaliza, no se desplaza."
+    },
+    "UK_L1_FREE_TEXT": {
+      "title": "Texto libre",
+      "what": "Observaciones, comentarios, reclamos, notas de atención y declaraciones donde los datos personales se escriben sin estructura.",
+      "masking": "Los números del Reino Unido se escriben con espacios, y Free Text Redaction mira una palabra a la vez; por eso un Regex Decompose primero cambia las formas con espacios — National Insurance y NHS numbers, UTRs, teléfonos, IBANs, postcodes y matrículas, hasta cuatro por valor — por `[DATA]`. Free Text Redaction hace el resto palabra a palabra: los mismos identificadores escritos sin espacios, e-mails, números de tarjeta e IPs pasan a ser `[DATA]`, y los nombres y apellidos de las listas, `[NAME]`."
+    },
+    "UK_L2_BIRTH_DATE": {
+      "title": "Fecha de nacimiento",
+      "what": "Fecha de nacimiento como fecha, timestamp o texto.",
+      "masking": "Desplazada hasta 60 días, igual para la misma fecha: las edades quedan casi exactas, y pocas personas cruzan un cumpleaños que importa (16, 18)."
+    },
+    "UK_L2_BIRTH_YEAR": {
+      "title": "Año de nacimiento",
+      "what": "El año de nacimiento en una columna propia.",
+      "masking": "La década se conserva y el último dígito se enmascara: 1985 pasa a ser 198x."
+    },
+    "UK_L2_AGE": {
+      "title": "Edad",
+      "what": "Edad en años, al ingreso, al fallecer, en la derivación o en tramos.",
+      "masking": "La década se conserva (37 pasa a ser 3x); un solo dígito se enmascara; desde 100, toda edad pasa a ser 90 — las personas muy mayores son pocas, y una edad exacta las identifica."
+    },
+    "UK_L2_EVENT_DATE": {
+      "title": "Fechas de hechos de la vida",
+      "what": "Fechas de defunción, matrimonio, unión civil, divorcio, alta y baja laboral, internación, alta médica, diagnóstico, derivación, cita, arresto, amonestación y condena — cada una, con la fecha de nacimiento, acota a la persona.",
+      "masking": "Desplazadas hasta 30 días."
+    },
+    "UK_L2_SEX": {
+      "title": "Sexo",
+      "what": "Sexo o género como código o palabra: `F`/`M`, `Female`/`Male`, `Woman`/`Man`.",
+      "masking": "Reemplazado dentro de su propio vocabulario por hash con clave: `F`/`M` sigue siendo `F`/`M`, una palabra sigue siendo palabra, y las proporciones quedan parecidas."
+    },
+    "UK_L2_POSTCODE": {
+      "title": "Postcode",
+      "what": "El postcode completo (`SW1A 2AA`): un outward code — área y distrito — y un inward code de un dígito y dos letras, unas quince direcciones en total. Se encuentra por el nombre y por la forma, que solo admite las letras que usa el inward code.",
+      "masking": "El outward code — un distrito postal de miles de direcciones, el nivel en que la ONS y el NHS publican datos — y el espacio se conservan; el inward code se enmascara dentro del alfabeto de los postcodes, que deja fuera C, I, K, M, O y V. El resultado tiene la forma de un postcode real del mismo distrito."
+    },
+    "UK_L2_TOWN": {
+      "title": "Ciudad",
+      "what": "Ciudad, pueblo, lugar de nacimiento, localidad y post town, en columnas propias. Los valores se reconocen con las 4.643 localidades de la lista.",
+      "masking": "Un lugar de menos de 20.000 habitantes pasa a ser la ciudad principal de su autoridad local — Windermere y Keswick pasan a ser Carlisle, Portree pasa a ser Inverness, una parte pequeña de Londres pasa a ser London. Los lugares de 20.000 o más, y las ciudades principales, conservan su nombre."
+    },
+    "UK_L2_NATIONALITY": {
+      "title": "Nacionalidad",
+      "what": "Nacionalidad, ciudadanía y país de nacimiento.",
+      "masking": "Reemplazada por hash con clave por una de las veinte nacionalidades más comunes entre los residentes del Reino Unido."
+    },
+    "UK_L2_MARITAL_STATUS": {
+      "title": "Estado civil y unión civil",
+      "what": "La situación de pareja legal como la pregunta el censo de 2021 — con la unión civil junto al matrimonio — y la convivencia.",
+      "masking": "Reemplazado por las categorías del censo, por hash con clave."
+    },
+    "UK_L2_OCCUPATION": {
+      "title": "Ocupación",
+      "what": "Ocupación, cargo y código SOC.",
+      "masking": "Reemplazada a partir de una lista de cuarenta ocupaciones comunes. Un cargo raro en una organización pequeña identifica por sí solo."
+    },
+    "UK_L2_EMPLOYER": {
+      "title": "Empleador",
+      "what": "Nombre del empleador o del lugar de trabajo.",
+      "masking": "Reemplazado a partir de una lista de empleadores ficticios."
+    },
+    "UK_L2_EDUCATION": {
+      "title": "Calificación más alta",
+      "what": "La calificación o nivel más alto, en los términos del Regulated Qualifications Framework y del marco escocés: GCSEs y Standard Grades, A levels y Highers, NVQs, BTECs, aprendizajes, títulos universitarios.",
+      "masking": "Reemplazada a partir de una lista de niveles, por hash con clave."
+    },
+    "UK_L2_SCHOOL": {
+      "title": "Escuela",
+      "what": "Escuela, college o universidad a la que asistió.",
+      "masking": "Reemplazada a partir de una lista de escuelas y colleges ficticios."
+    },
+    "UK_L2_DEPENDANTS": {
+      "title": "Número de hijos o dependientes",
+      "what": "Número de hijos, dependientes o miembros del hogar.",
+      "masking": "Se conserva hasta 5; por encima pasa a ser 5. Los hogares grandes son raros, y un conteo raro identifica."
+    },
+    "UK_L3_GENETIC": {
+      "title": "Datos genéticos",
+      "what": "Datos personales relativos a las características genéticas heredadas o adquiridas de una persona, obtenidos del análisis de una muestra biológica (artículo 4(13)): perfiles de ADN, secuencias, genotipos, pruebas BRCA y otras pruebas genéticas, tamizaje neonatal, condición de portador. Una secuencia también se encuentra por sus letras.",
+      "masking": "Cada carácter pasa a ser `X`."
+    },
+    "UK_L3_BIOMETRIC": {
+      "title": "Datos biométricos",
+      "what": "Datos obtenidos del tratamiento de las características físicas, fisiológicas o conductuales de una persona que permitan o confirmen su identificación unívoca, como imágenes faciales y huellas dactilares (artículo 4(14)): huellas, plantillas faciales, fotografías e imágenes de custodia, escaneos de iris y de venas, huellas de voz, firmas, patrones de tecleo y de marcha.",
+      "masking": "Cada carácter pasa a ser `X` — incluida la ruta de un archivo de foto."
+    },
+    "UK_L3_ETHNICITY": {
+      "title": "Origen racial o étnico",
+      "what": "Grupo étnico, en las categorías del censo de 2021 de Inglaterra y Gales (Escocia e Irlanda del Norte hacen casi la misma pregunta): White British, Irish, Gypsy or Irish Traveller, Roma, los grupos Mixed, Indian, Pakistani, Bangladeshi, Chinese, African, Caribbean, Arab.",
+      "masking": "Reemplazado por las categorías del censo, por hash con clave; un sí/no sigue siendo sí/no y un código numérico recibe otros dígitos."
+    },
+    "UK_L3_RELIGION": {
+      "title": "Creencias religiosas",
+      "what": "Religión y denominación: las respuestas del censo de 2021 (No religion, Christian, Muslim, Hindu, Sikh, Jewish, Buddhist) y las principales iglesias — Church of England, Church of Scotland, Roman Catholic, Church of Ireland, Presbyterian, Methodist.",
+      "masking": "Reemplazada a partir de la lista, por hash con clave; flags y códigos conservan su forma."
+    },
+    "UK_L3_BELIEF": {
+      "title": "Creencias filosóficas",
+      "what": "Creencias y convicciones filosóficas, objeción de conciencia. Los tribunales laborales reconocieron el veganismo ético, entre otras, como creencia filosófica protegida por la Equality Act 2010.",
+      "masking": "Suprimidas a `Not stated`: los valores no tienen vocabulario común del cual reemplazar."
+    },
+    "UK_L3_POLITICAL_OPINION": {
+      "title": "Opiniones políticas",
+      "what": "Orientación política, intención de voto, voto en referéndum.",
+      "masking": "Reemplazadas a partir de una escala de orientaciones, por hash con clave."
+    },
+    "UK_L3_POLITICAL_AFFILIATION": {
+      "title": "Partido político",
+      "what": "El partido al que la persona pertenece o apoya: Labour, Conservative, Liberal Democrats, Reform UK, los Greens, el SNP, Plaid Cymru, Sinn Féin, el DUP, Alliance, el SDLP, el UUP.",
+      "masking": "Reemplazado a partir de la lista de partidos, por hash con clave; flags y códigos conservan su forma."
+    },
+    "UK_L3_TRADE_UNION": {
+      "title": "Afiliación sindical",
+      "what": "Afiliación, nombre del sindicato y cuota (check-off): Unison, Unite, GMB, el RCN, el NEU, el NASUWT, el PCS, Usdaw, el CWU, el UCU, la BMA, el RMT y otros.",
+      "masking": "Suprimida a `Not stated`; un sí/no sigue siendo sí/no."
+    },
+    "UK_L3_SEXUAL_ORIENTATION": {
+      "title": "Orientación sexual",
+      "what": "Orientación sexual, en las categorías del censo de 2021.",
+      "masking": "Reemplazada por las categorías del censo, por hash con clave."
+    },
+    "UK_L3_SEXUAL_LIFE": {
+      "title": "Vida sexual",
+      "what": "Actividad sexual, parejas, prácticas e historial.",
+      "masking": "Suprimida a `Not stated`."
+    },
+    "UK_L3_GENDER_IDENTITY": {
+      "title": "Identidad de género",
+      "what": "La identidad de género como la pregunta el censo de 2021 (si es el sexo registrado al nacer), condición trans, pronombres y gender recognition certificates. La sección 22 de la Gender Recognition Act 2004 hace delito revelar, a partir de información oficial, que una persona solicitó o tiene un certificado.",
+      "masking": "Reemplazada por las categorías del censo, por hash con clave; un flag (tiene certificado) sigue siendo flag."
+    },
+    "UK_HEALTH_ID": {
+      "title": "Identificadores de registros de salud",
+      "what": "Números de hospital y de historia clínica, de case notes y del PAS, números de GHIC y EHIC, de recetas y de fit notes, y códigos de consultorio de GP.",
+      "masking": "Carácter a carácter, conservando el formato."
+    },
+    "UK_HEALTH_DIAGNOSIS": {
+      "title": "Diagnóstico",
+      "what": "Diagnósticos, afecciones, alergias y causas de defunción o de ausencia, como códigos CIE-10 (`F32.9`), conceptos SNOMED CT (`44054006`) o texto.",
+      "masking": "Un código CIE-10 pasa a ser otro código CIE-10 común de la misma forma, un concepto SNOMED CT recibe otros dígitos, y un texto pasa a ser un diagnóstico común — uno raro identifica."
+    },
+    "UK_HEALTH_MEDICATION": {
+      "title": "Medicamentos",
+      "what": "Medicamentos recetados y recetas de uso continuo. Algunos revelan la afección por sí solos: un antirretroviral, PrEP, un antipsicótico, metadona.",
+      "masking": "Reemplazado por un medicamento común de la atención primaria."
+    },
+    "UK_HEALTH_CLINICAL_TEXT": {
+      "title": "Notas clínicas",
+      "what": "Notas de consulta y de evolución, epicrisis, cartas de consultorio y de derivación, planes de cuidado.",
+      "masking": "Los mismos dos pasos del texto libre: los identificadores, con o sin espacios, pasan a ser `[DATA]` y los nombres `[NAME]`. El contenido clínico se conserva y sigue mereciendo cuidado."
+    },
+    "UK_HEALTH_TEST_RESULT": {
+      "title": "Resultados de análisis",
+      "what": "Resultados de laboratorio y de patología, estado de VIH, carga viral, HbA1c, eGFR, cribado de cuello uterino, pruebas de COVID-19.",
+      "masking": "Carácter a carácter, conservando el formato."
+    },
+    "UK_HEALTH_BLOOD_GROUP": {
+      "title": "Grupo sanguíneo",
+      "what": "Grupo ABO y factor Rh.",
+      "masking": "BloodType SL, que viene con Delphix: uno de los ocho grupos, por hash con clave."
+    },
+    "UK_HEALTH_DISABILITY": {
+      "title": "Discapacidad",
+      "what": "La discapacidad como la pregunta el censo de 2021 (la definición de la Equality Act 2010: una afección que limita mucho o poco las actividades cotidianas), tipos de deficiencia, necesidades educativas especiales y EHC plans, Blue Badge, ajustes razonables.",
+      "masking": "Reemplazada a partir de la lista, por hash con clave; flags y códigos conservan su forma."
+    },
+    "UK_HEALTH_REPRODUCTIVE": {
+      "title": "Salud reproductiva y sexual",
+      "what": "Embarazo, fecha probable de parto, interrupciones, abortos espontáneos, anticoncepción, tratamiento de fertilidad, infecciones de transmisión sexual.",
+      "masking": "Suprimida a `Not stated`; flags y códigos conservan su forma."
+    },
+    "UK_HEALTH_MENTAL": {
+      "title": "Salud mental",
+      "what": "Afecciones de salud mental, internación conforme a la Mental Health Act, autolesiones, consumo de sustancias, terapias y CAMHS.",
+      "masking": "Suprimida a `Not stated`."
+    },
+    "UK_FIN_CREDIT_REFERENCE": {
+      "title": "Historial crediticio e insolvencia",
+      "what": "Puntajes de crédito, pagos atrasados, defaults, County Court Judgments, Individual Voluntary Arrangements, Debt Relief Orders y quiebra.",
+      "masking": "Un puntaje recibe otros dígitos de la misma longitud; una situación se reemplaza a partir de una lista; los flags siguen siendo flags."
+    },
+    "UK_FIN_DEBT": {
+      "title": "Deuda",
+      "what": "Saldos de préstamos, hipotecas y descubiertos, montos adeudados y en mora, límites de crédito, cuotas.",
+      "masking": "CM Numeric, que viene con Delphix: cada dígito se mapea, así que el monto conserva su número de dígitos y su orden de magnitud."
+    },
+    "UK_FIN_INCOME": {
+      "title": "Ingresos",
+      "what": "Sueldo, salario, ganancias, bonos e ingreso del hogar.",
+      "masking": "CM Numeric, que viene con Delphix: el orden de magnitud se conserva, el valor no."
+    },
+    "UK_FIN_ASSETS": {
+      "title": "Patrimonio",
+      "what": "Valor de inmuebles, saldos de ahorro y de ISA, inversiones, patrimonio neto.",
+      "masking": "CM Numeric, que viene con Delphix."
+    },
+    "UK_FIN_PENSION": {
+      "title": "Pensión",
+      "what": "Montos de la State Pension y de pensiones privadas, fondos acumulados, rentas vitalicias, retiros y valores de transferencia.",
+      "masking": "CM Numeric, que viene con Delphix."
+    },
+    "UK_FIN_BENEFIT": {
+      "title": "Prestaciones",
+      "what": "Prestaciones del DWP, de HMRC y de los councils: Universal Credit, Personal Independence Payment, Disability Living Allowance, Employment and Support Allowance, Jobseeker's Allowance, Pension Credit, State Pension, Child Benefit, Carer's Allowance, Attendance Allowance, Housing Benefit, Council Tax Reduction y comidas escolares gratuitas (free school meals). Varias revelan una discapacidad o una afección de salud.",
+      "masking": "Reemplazadas a partir de la lista, por hash con clave; un flag sigue siendo flag."
+    },
+    "UK_FIN_DEPRIVATION": {
+      "title": "Privación y clase socioeconómica",
+      "what": "Índices de Privación Múltiple de las cuatro naciones (decil, quintil, posición), IDACI, NS-SEC, segmentos geodemográficos (ACORN, Mosaic) y tramos de ingreso.",
+      "masking": "Un decil o quintil se reemplaza dentro de su rango, una posición recibe otros dígitos, y una etiqueta se reemplaza a partir de una lista."
+    },
+    "UK_FIN_HOUSING": {
+      "title": "Régimen de vivienda",
+      "what": "El régimen como lo pregunta el censo de 2021 — propia pagada o con hipoteca, propiedad compartida, alquiler social o privado, sin pagar alquiler — y situación de calle y alojamiento temporal.",
+      "masking": "Reemplazado por las categorías del censo, por hash con clave."
+    },
+    "UK_PENAL_CRIMINAL_RECORD": {
+      "title": "Antecedentes penales",
+      "what": "Condenas, cumplidas (spent) o no, amonestaciones (cautions), penalty notices, acusaciones, arrestos, fianza, prisión preventiva, penas, libertad condicional y condiciones de licencia, absoluciones y no further action.",
+      "masking": "Reemplazados por una situación genérica de una lista; los flags siguen siendo flags."
+    },
+    "UK_PENAL_CASE_NUMBER": {
+      "title": "Referencias policiales y judiciales",
+      "what": "Identificadores del Police National Computer (`2019/0123456X`), números CRO, referencias de denuncias e incidentes, números de custodia, números de causa y de preso.",
+      "masking": "Carácter a carácter, conservando el formato."
+    },
+    "UK_PENAL_DBS": {
+      "title": "Verificaciones del DBS",
+      "what": "Verificaciones del Disclosure and Barring Service (Disclosure Scotland y AccessNI en las otras naciones): el número de certificado, el nivel — basic, standard, enhanced, con las barred lists — y el resultado.",
+      "masking": "Un número de certificado recibe otros dígitos; un nivel o resultado se reemplaza a partir de una lista; los flags siguen siendo flags."
+    }
+  },
+  "closing": [
+    {
+      "title": "Dónde vive la gente: postcodes y ciudades",
+      "body": [
+        "Dos columnas ponen a la persona en el mapa, y ambas se generalizan en vez de reemplazarse, para que los datos conserven su geografía en un nivel en que ya no señalan un hogar.",
+        {
+          "list": [
+            "El **postcode** conserva el outward code: `SW1A 2AA` queda en `SW1A`, el distrito, y el inward code se enmascara. Un distrito postal reúne miles de direcciones; el postcode completo, unas quince.",
+            "Una **ciudad o pueblo** de menos de 20.000 habitantes pasa a ser la **ciudad principal de su autoridad local** — su council, unitary authority o condado: Windermere y Keswick pasan a ser Carlisle, Whitby pasa a ser Harrogate, Portree pasa a ser Inverness, Tenby pasa a ser Haverfordwest. Se generalizan 3.963 de las 4.643 localidades.",
+            "Las partes de Londres cuentan como lugares propios: Wimbledon, Brixton y Peckham conservan su nombre, y las menores — Highgate, Soho — pasan a ser **London**.",
+            "Los lugares de 20.000 habitantes o más conservan su nombre, y también las ciudades principales, aun las pequeñas (Lerwick, Kirkwall, Stornoway): una ciudad principal en una columna enmascarada dice la autoridad local, nada más.",
+            "Un nombre que comparten varios lugares (hay Newports en Gales, en la Isla de Wight y en Shropshire) se conserva cuando alguno de ellos es grande, y si no se generaliza como el mayor de ellos. También se reconocen los nombres escritos con `St` o `Saint`, o con espacios en lugar de guiones."
+          ]
+        },
+        "Las poblaciones vienen de la lista de GeoNames de lugares de más de 1.000 habitantes, revisada a mano donde atribuía la población de un distrito a un solo pueblo. Los nombres que también son nombres de pila o apellidos quedan fuera de la lista de detección, para que una columna de apellidos no se tome por ciudades."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        {
+          "list": [
+            "**Columnas binarias** — imágenes de pasaportes, licencias de conducir y residence permits, fotografías, imágenes de custodia, PDFs clínicos en BLOBs — no pueden enmascararse con estos algoritmos. Inventaríelas e infórmelas como riesgo residual.",
+            "**Los lugares de menos de 1.000 habitantes** no están en la tabla: una columna de caseríos se encuentra por el nombre, pero los valores que la tabla no conoce pasan sin cambios. Donde esa columna está junto a la fecha de nacimiento y el sexo, generalícela a la autoridad local.",
+            "**El ajuste del NHS number** desplaza cerca de un número enmascarado de cada once, así que algunos NHS numbers distintos pueden enmascararse al mismo. Donde el NHS number es una clave que debe seguir siendo única, revise duplicados en la copia enmascarada.",
+            "**Un CHI conserva una fecha real**, pero otra: su parte de fecha deja de coincidir con la columna de fecha de nacimiento, que se desplaza por separado.",
+            "**El prefijo y el sufijo del National Insurance number se conservan.** No dicen nada de la persona, pero un número temporal (`TN`) sigue siendo reconocible como tal.",
+            "**Los números de pasaporte, permisos y licencias** se enmascaran carácter a carácter; no se recalcula ningún dígito verificador suyo.",
+            "**Data Cleansing deja los valores desconocidos como están**: una ciudad escrita de una forma que la lista no tiene pasa sin cambios.",
+            "**El texto libre** se redacta patrón por patrón: hasta cuatro identificadores con espacios por valor, luego palabra a palabra. Un número partido entre líneas o escrito de forma inusual no se encuentra, y un nombre de pila que también es palabra común (`Grace`, `Rose`, `Hope`) se redacta dondequiera que aparezca.",
+            "**Las palabras de color y de oficio son apellidos.** Brown, Green, Gray, White, Baker, Cook y Wood son apellidos británicos comunes: con solo el paquete esencial cargado, una columna de esas palabras puede tomarse por nombres.",
+            "**Niños** — la fecha de nacimiento se mueve como máximo 60 días, así que pocas personas cruzan los 13, 16 o 18 años, pero algunas sí. Separe la regla por grupo de edad con Multi-Column Condition donde eso importe.",
+            "**La clave del engine** vincula los valores enmascarados con producción para quien tiene ambas cosas; manténgala lejos de quienes usan la copia enmascarada — reidentificar sin el consentimiento del responsable es delito según la sección 171."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "Antes de su publicación, la política se verificó fuera de Delphix:",
+        {
+          "list": [
+            "Cada configuración de classifier se revisó contra lo que Delphix acepta.",
+            "El descubrimiento se simuló sobre 168 columnas con la política entera en su umbral de asignación — bien nombradas, mal nombradas, diez con los nombres cortos de sistemas empaquetados y 36 columnas que no son datos personales —, de nuevo sobre 157 de ellas completadas con espacios o ceros, y de nuevo solo con los classifiers del paquete esencial.",
+            "La tabla que generaliza ciudades se auditó para las 4.643 localidades.",
+            "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de ejemplo y marcadores como `N/A`, comprobando cada salida contra su vocabulario y cada NHS number, UTR e IBAN enmascarado contra sus dígitos verificadores; los mismos valores de nuevo completados con espacios o ceros, que debían enmascararse como el valor sin relleno; y 150 National Insurance numbers y 150 NHS numbers por colisiones. Cada uno de los 105 algoritmos también enmascaró su propia entrada de ejemplo."
+          ]
+        },
+        "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar la política con datos reales, ejecute un job de descubrimiento y uno de enmascaramiento sobre una copia representativa."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        {
+          "list": [
+            "UK GDPR y Data Protection Act 2018, con las modificaciones de la Data (Use and Access) Act 2025 — legislation.gov.uk. Reglamentos de entrada en vigor de la ley de 2025 y supresión de la Information Commissioner's Office — S.I. 2026/82 y S.I. 2026/1015.",
+            "Guías sobre anonimización, seudonimización y tecnologías de mejora de la privacidad, y sobre datos de categorías especiales y de infracciones penales — Information Commissioner's Office, hoy Information Commission.",
+            "Rehabilitation of Offenders Act 1974; Gender Recognition Act 2004; Equality Act 2010; Consumer Credit Act 1974 — legislation.gov.uk.",
+            "National Insurance numbers — National Insurance Manual de HMRC. Unique Taxpayer Reference — HMRC. NHS number — diccionario de datos de NHS England; CHI — Public Health Scotland; H&C — Business Services Organisation, Irlanda del Norte.",
+            "Números de licencias de conducir y matrículas — DVLA. Postcodes — Royal Mail y ONS Postcode Directory. IBAN — ISO 13616 y el directorio de sort codes del Reino Unido.",
+            "Grupo étnico, religión, orientación sexual, identidad de género, situación de pareja legal, discapacidad y régimen de vivienda — Censo de 2021, Office for National Statistics; Scotland's Census 2022; Census 2021, NISRA.",
+            "Índices de Privación Múltiple — Ministry of Housing, Communities and Local Government, Scottish Government, Welsh Government, NISRA. Prestaciones — Department for Work and Pensions.",
+            "Ciudades, pueblos y sus poblaciones — GeoNames (cities1000), con las autoridades locales de sus divisiones administrativas. Frecuencia de apellidos y nombres — nombres de bebés de la ONS y estudios publicados de apellidos."
+          ]
+        }
+      ]
+    }
+  ]
+}
