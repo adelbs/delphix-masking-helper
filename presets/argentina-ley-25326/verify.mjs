@@ -73,6 +73,22 @@ const fold = (s) => s.normalize('NFD').replace(/\p{M}/gu, '')
 const PERSONAL = new Set([...GIVEN, ...SURNAMES].map((w) => fold(w).toLowerCase()))
 const SMALL_GOBIERNOS = GOBIERNOS.filter((g) => g.population < 20000 && !PERSONAL.has(fold(g.name).toLowerCase())).map((g) => g.name)
 const SMALL_DEPARTAMENTOS = DEPARTAMENTOS.filter((d) => d.population < 20000 && !PERSONAL.has(fold(d.name).toLowerCase())).map((d) => d.name)
+// The INDEC statistical regions, CABA with the Pampeana; the ISO 3166-2 letter of each jurisdiction.
+const CABA = 'Ciudad Autónoma de Buenos Aires'
+const PROVINCE_REGION = Object.fromEntries(Object.entries({
+  NOA: 'Catamarca K|Jujuy Y|La Rioja F|Salta A|Santiago del Estero G|Tucumán T',
+  NEA: 'Chaco H|Corrientes W|Formosa P|Misiones N',
+  CUYO: 'Mendoza M|San Juan J|San Luis D',
+  PAMPEANA: `Buenos Aires B|Córdoba X|Entre Ríos E|La Pampa L|Santa Fe S|${CABA} C`,
+  PATAGONIA: 'Chubut U|Neuquén Q|Río Negro R|Santa Cruz Z|Tierra del Fuego V',
+}).flatMap(([region, list]) => list.split('|').map((p) => [p.slice(0, -2), region])))
+const ISO_PROVINCE = {
+  K: 'Catamarca', Y: 'Jujuy', F: 'La Rioja', A: 'Salta', G: 'Santiago del Estero', T: 'Tucumán', H: 'Chaco', W: 'Corrientes',
+  P: 'Formosa', N: 'Misiones', M: 'Mendoza', J: 'San Juan', D: 'San Luis', B: 'Buenos Aires', X: 'Córdoba', E: 'Entre Ríos',
+  L: 'La Pampa', S: 'Santa Fe', C: CABA, U: 'Chubut', Q: 'Neuquén', R: 'Río Negro', Z: 'Santa Cruz', V: 'Tierra del Fuego',
+}
+const PROVINCE_ALIAS = { caba: CABA, 'c.a.b.a.': CABA, 'capital federal': CABA, 'ciudad de buenos aires': CABA, 'tierra del fuego, antartida e islas del atlantico sur': 'Tierra del Fuego' }
+const provinceOf = (v) => { const k = fold(v).toLowerCase(); return PROVINCE_ALIAS[k] ?? Object.keys(PROVINCE_REGION).find((p) => fold(p).toLowerCase() === k) }
 
 const pad = (n, w) => String(n).padStart(w, '0')
 const digits = (n) => many(() => int(0, 9), n).join('')
@@ -303,7 +319,10 @@ function verifyClassifiers() {
   console.log(`reviewed ${resolved.length} classifiers (${hints} hints)`)
 
   const covered = new Set(COLUMNS.map((c) => c.expect).filter(Boolean))
-  const uncovered = preset.domains.map((d) => d.name).filter((d) => !covered.has(d))
+  // A domain with no classifier is assigned by hand, never by profiling (AR_L2_PROVINCIA): the
+  // PROVINCIA column below checks that it stays unassigned.
+  const detected = new Set(preset.classifiers.map((c) => c.domain))
+  const uncovered = preset.domains.map((d) => d.name).filter((d) => detected.has(d) && !covered.has(d))
   if (uncovered.length) { failures++; console.log(`  ✗ domains with no test column: ${uncovered.join(', ')}`) }
 
   const profile = (classifiers, expectOf, label) => {
@@ -462,6 +481,21 @@ const MASKING = {
   AR_L2_SEXO: { inputs: ['F', 'M', 'X', 'Femenino', 'masculino', 'Varón', '1'], same: true },
   AR_L2_LOCALIDAD: { inputs: ['El Chaltén', 'Rosario', 'MAR DEL PLATA', 'Tres Lagos - Santa Cruz', 'Colonia Hocker', 'San José', 'Tilcara', 'Purmamarca'], same: true },
   AR_L2_DEPARTAMENTO: { inputs: ['Ancasti', 'La Matanza', 'Iruya - Salta', 'TORDILLO'], same: true },
+  // A province of the same INDEC region, written as the input was (capitals stay capitals); the ISO
+  // code keeps its AR- prefix. A province may draw itself, so unchanged is allowed one value at a time.
+  AR_L2_PROVINCIA: {
+    inputs: [...Object.keys(PROVINCE_REGION), 'BUENOS AIRES', 'cordoba', 'CÓRDOBA', 'Neuquen', 'CABA', 'Capital Federal', 'C.A.B.A.',
+      'Ciudad de Buenos Aires', 'Tierra del Fuego, Antártida e Islas del Atlántico Sur', 'Rio Negro', 'santa fe', 'Provincia de Buenos Aires', 'AR-B', 'AR-C', 'ar-k', 'AR-V'],
+    check: (i, o) => {
+      const iso = /^ar-/i.test(i)
+      const from = iso ? ISO_PROVINCE[i.slice(3).toUpperCase()] : provinceOf(i)
+      if (!from) return o === i
+      const to = iso ? (o.slice(0, 3) === i.slice(0, 3) ? ISO_PROVINCE[o.slice(3).toUpperCase()] : null) : provinceOf(o)
+      return Boolean(to) && PROVINCE_REGION[from] === PROVINCE_REGION[to] && to !== CABA
+        && (i !== i.toUpperCase() || o === o.toUpperCase())
+    },
+    same: true,
+  },
   AR_L2_CODIGO_GEOGRAFICO: { inputs: ['10014', '06427', '785035', '06357110'], same: true },
   AR_L2_CODIGO_POSTAL: { inputs: ['C1043AAZ', '1636', 'B1636'], check: (i, o) => ({ C1043AAZ: 'C1000AAA', 1636: '1600', B1636: 'B1600' })[i] === o },
   AR_L2_BARRIO: { inputs: ['Barrio Parque Los Andes'], same: true },
@@ -738,6 +772,21 @@ async function verifyAlgorithms() {
   }
   if (agree !== people.length) { failures++; console.log(`  ✗ DNI and CUIL agree for ${agree} of ${people.length} people`) }
   else console.log(`DNI and CUIL of the same person agree: ${agree} of ${people.length}`)
+
+  // Every spelling of a province draws the same one, so a province joins across tables however each
+  // writes it; and not every province keeps its name.
+  const spellings = Object.keys(PROVINCE_REGION).flatMap((p) => [p, fold(p), p.toUpperCase(), fold(p).toLowerCase()])
+    .concat(Object.keys(PROVINCE_ALIAS), Object.keys(PROVINCE_ALIAS).map((a) => a.toUpperCase()))
+  const drawn = new Map()
+  for (const s of spellings) {
+    const { output } = await run('AR_PROVINCIA', s)
+    const key = provinceOf(s)
+    drawn.set(key, [...(drawn.get(key) ?? []), provinceOf(output ?? '')])
+  }
+  const split = [...drawn].filter(([, outs]) => new Set(outs).size !== 1 || !outs[0])
+  const moved = [...drawn].filter(([from, outs]) => outs[0] !== from).length
+  if (split.length || moved < drawn.size / 2) { failures++; console.log(`  ✗ provinces: ${split.map(([p]) => p).join(', ') || 'none'} drew more than one province; ${moved} of ${drawn.size} moved`) }
+  else console.log(`provinces: ${spellings.length} spellings of ${drawn.size} jurisdictions, one draw each; ${moved} moved`)
 }
 
 if (only !== 'algorithms') { verifyClassifiers(); verifyGeneralization() }

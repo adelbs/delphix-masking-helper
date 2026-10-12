@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "versionDate": "2026-10-11",
+  "version": 3,
+  "versionDate": "2026-10-12",
   "name": {
     "en": "Argentina — Ley 25.326 (personal data protection)",
     "pt-BR": "Argentina — Ley 25.326 (proteção de dados pessoais)",
@@ -12,7 +12,7 @@
     "es": "Descubre y enmascara datos personales argentinos conforme a la Ley 25.326: identificadores directos (DNI, CUIT y CUIL con dígito verificador válido, CBU y CVU con dígitos verificadores válidos, nombres, contacto, domicilio, razón social), cuasi-identificadores (fecha de nacimiento, localidad, partido, código postal), los datos sensibles de los artículos 2 y 7 — origen racial y étnico, política, convicciones religiosas, filosóficas o morales, afiliación sindical, salud, vida sexual —, y además datos genéticos y biométricos, identidad de género, víctimas de violencia de género, datos financieros (situación en la Central de Deudores del BCRA, prestaciones sociales) y antecedentes penales."
   },
   "profileSet": {
-    "name": "AR - Ley 25.326 - v2",
+    "name": "AR - Ley 25.326 - v3",
     "description": "Ley 25.326 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
@@ -3501,6 +3501,10 @@
       "algorithm": "AR_DEPARTAMENTO"
     },
     {
+      "name": "AR_L2_PROVINCIA",
+      "algorithm": "AR_PROVINCIA"
+    },
+    {
       "name": "AR_L2_CODIGO_GEOGRAFICO",
       "algorithm": "AR_CODIGO_GEOGRAFICO"
     },
@@ -5610,6 +5614,323 @@
       "input": "10014"
     },
     {
+      "name": "AR_GRAFIA_PROVINCIA",
+      "framework": "algorithm.plugin.dataCleansing.DataCleansing",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-grafias.txt"
+        },
+        "delimiter": "|",
+        "caseSensitive": true,
+        "trimWhitespace": true
+      },
+      "input": "CABA"
+    },
+    {
+      "name": "AR_REGION_NOA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-noa.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Catamarca"
+    },
+    {
+      "name": "AR_REGION_NOA_ISO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-noa-iso.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "K"
+    },
+    {
+      "name": "AR_REGION_NEA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-nea.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Chaco"
+    },
+    {
+      "name": "AR_REGION_NEA_ISO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-nea-iso.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "H"
+    },
+    {
+      "name": "AR_REGION_CUYO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-cuyo.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Mendoza"
+    },
+    {
+      "name": "AR_REGION_CUYO_ISO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-cuyo-iso.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "M"
+    },
+    {
+      "name": "AR_REGION_PAMPEANA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-pampeana.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Buenos Aires"
+    },
+    {
+      "name": "AR_REGION_PAMPEANA_ISO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-pampeana-iso.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "B"
+    },
+    {
+      "name": "AR_REGION_PATAGONIA",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-patagonia.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "Chubut"
+    },
+    {
+      "name": "AR_REGION_PATAGONIA_ISO",
+      "framework": "algorithm.plugin.secureLookup.SecureLookup",
+      "config": {
+        "lookupFile": {
+          "uri": "preset-file://ar-provincias-patagonia-iso.txt"
+        },
+        "hashMethod": "SHA256",
+        "maskedValueCase": "PRESERVE_INPUT",
+        "inputCaseSensitive": false,
+        "trimWhitespaceFromInput": true,
+        "trimWhitespaceInLookupFile": true
+      },
+      "input": "U"
+    },
+    {
+      "name": "AR_REGION_PROVINCIA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(?iu)(Catamarca|Jujuy|La Rioja|Salta|Santiago del Estero|Tucumán)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_NOA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(AR-)([KYFAGT])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_NOA_ISO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?iu)(Chaco|Corrientes|Formosa|Misiones)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_NEA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(AR-)([HWPN])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_NEA_ISO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?iu)(Mendoza|San Juan|San Luis)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_CUYO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(AR-)([MJD])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_CUYO_ISO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?iu)(Buenos Aires|Córdoba|Entre Ríos|La Pampa|Santa Fe|Ciudad Autónoma de Buenos Aires)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_PAMPEANA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(AR-)([BXELSC])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_PAMPEANA_ISO"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?iu)(Chubut|Neuquén|Río Negro|Santa Cruz|Tierra del Fuego)",
+            "actions": [
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_PATAGONIA"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(?i)(AR-)([UQRZV])",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_REGION_PATAGONIA_ISO"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "Córdoba"
+    },
+    {
+      "name": "AR_PROVINCIA",
+      "framework": "algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain",
+      "config": {
+        "algorithmReferences": [
+          {
+            "name": "AR_GRAFIA_PROVINCIA"
+          },
+          {
+            "name": "AR_REGION_PROVINCIA"
+          }
+        ]
+      },
+      "input": "Córdoba"
+    },
+    {
       "name": "AR_CODIGO_POSTAL",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
@@ -7328,6 +7649,17 @@
     "ar-partidos-politicos.txt",
     "ar-procedimientos.txt",
     "ar-programas-sociales.txt",
+    "ar-provincias-cuyo-iso.txt",
+    "ar-provincias-cuyo.txt",
+    "ar-provincias-grafias.txt",
+    "ar-provincias-nea-iso.txt",
+    "ar-provincias-nea.txt",
+    "ar-provincias-noa-iso.txt",
+    "ar-provincias-noa.txt",
+    "ar-provincias-pampeana-iso.txt",
+    "ar-provincias-pampeana.txt",
+    "ar-provincias-patagonia-iso.txt",
+    "ar-provincias-patagonia.txt",
     "ar-pueblos-indigenas.txt",
     "ar-religiones.txt",
     "ar-sexo-1-2.txt",

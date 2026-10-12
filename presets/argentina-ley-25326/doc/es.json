@@ -67,7 +67,7 @@
       "intro": [
         "Datos que no identifican a nadie por sí solos, pero sí en combinación. El Censo 2022 cuenta 2.280 gobiernos locales — municipios, comunas, comisiones de fomento y municipales —; 1.952 tienen menos de 20.000 habitantes y más de mil, menos de 2.000. Una fecha de nacimiento, un sexo y uno de esos pueblos apuntan a un puñado de personas. Estos atributos se generalizan o desplazan en lugar de reemplazarse, y el dato conserva su valor analítico."
       ],
-      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
+      "domains": ["AR_L2_FECHA_NACIMIENTO", "AR_L2_ANIO_NACIMIENTO", "AR_L2_EDAD", "AR_L2_FECHA_EVENTO", "AR_L2_SEXO", "AR_L2_LOCALIDAD", "AR_L2_DEPARTAMENTO", "AR_L2_PROVINCIA", "AR_L2_CODIGO_GEOGRAFICO", "AR_L2_CODIGO_POSTAL", "AR_L2_BARRIO", "AR_L2_NACIONALIDAD", "AR_L2_ESTADO_CIVIL", "AR_L2_OCUPACION", "AR_L2_EMPLEADOR", "AR_L2_NIVEL_EDUCATIVO", "AR_L2_ESTABLECIMIENTO_EDUCATIVO", "AR_L2_PERSONAS_A_CARGO"]
     },
     {
       "id": "L3",
@@ -299,6 +299,11 @@
       "title": "Partido y departamento",
       "what": ["El partido de la provincia de Buenos Aires, el departamento de las demás provincias o la comuna de la Ciudad de Buenos Aires, por el nombre."],
       "masking": ["Un partido o departamento con menos de 20.000 habitantes pasa al más cercano de la misma provincia con al menos 20.000: `Iruya` pasa a `Orán`. Los mayores se mantienen."]
+    },
+    "AR_L2_PROVINCIA": {
+      "title": "Provincia (opcional)",
+      "what": ["La provincia o la Ciudad Autónoma de Buenos Aires, por el nombre — `Córdoba`, `CORDOBA`, `CABA`, `Capital Federal` — o por el código ISO 3166-2 (`AR-X`)."],
+      "masking": ["**Este dominio es opcional y el set no lo asigna.** La provincia se mantiene por defecto, porque los partidos, las localidades y el código postal se generalizan dentro de ella. El dominio sirve para una columna que deba cambiar de todos modos, y se asigna a mano en el inventario.", "La provincia pasa a otra de su región estadística del INDEC — Noroeste, Noreste, Cuyo, Pampeana o Patagonia —, elegida por un Secure Lookup con la clave del engine: `Córdoba` puede pasar a `Entre Ríos` o a `La Pampa`, nunca a `Salta`. Una provincia puede tocarse a sí misma. La Ciudad Autónoma de Buenos Aires, que el INDEC agrupa con los partidos del conurbano en Gran Buenos Aires, va con la Pampeana y no está entre los reemplazos.", "Un primer paso escribe cada grafía con el nombre oficial, así que `Cordoba` y `Córdoba`, o `CABA` y `Capital Federal`, reciben la misma provincia. Las mayúsculas se mantienen; un valor que no es una provincia pasa sin cambios.", "Si la provincia cambia y la localidad, el partido o el código postal de la misma fila no, la fila deja de ser coherente: `Rosario` y `S2000` quedan con otra provincia. El código ISO y el nombre de una misma provincia tampoco se corresponden después del enmascaramiento."]
     },
     "AR_L2_CODIGO_GEOGRAFICO": {
       "title": "Códigos geográficos del INDEC",
@@ -557,7 +562,7 @@
           "Un **gobierno local** con menos de 20.000 habitantes pasa al gobierno local más cercano de la misma provincia con al menos 20.000. Son 1.952, con 7 millones de habitantes — el 15% de la población. El Chaltén (Santa Cruz) pasa a El Calafate; Tilcara (Jujuy), a Libertador General San Martín; Ancasti (Catamarca), a Valle Viejo.",
           "Una **localidad** sigue a su gobierno local. Las que están fuera de todo gobierno local — zonas rurales de Santiago del Estero, Córdoba o la Patagonia — se generalizan igual, al gobierno local grande más cercano.",
           "Un **partido o departamento** con menos de 20.000 habitantes pasa al más cercano de la misma provincia con al menos 20.000. Son 203, con 2 millones de habitantes.",
-          "La **provincia** se mantiene. Todas tienen al menos un gobierno local de 20.000 habitantes.",
+          "La **provincia** se mantiene, y todas tienen al menos un gobierno local de 20.000 habitantes. Para una columna que deba cambiar, el set trae el dominio opcional `AR_L2_PROVINCIA`, que no asigna por sí mismo.",
           "La distancia se mide entre los centroides del Georef, en línea recta.",
           "Hay nombres repetidos — San José, San Martín, Villa Nueva, 25 de Mayo — y otros que solo difieren en un acento. Un nombre solo se generaliza cuando todos los lugares que lo llevan son chicos, y entonces sigue al mayor de ellos. Con la provincia (`San José - Entre Ríos`, `San José (Entre Ríos)`, `San José, Entre Ríos`) se aplica la misma regla dentro de la provincia.",
           "Los **códigos del INDEC** siguen la misma tabla, y el nombre y el código de una persona siguen coincidiendo.",
@@ -575,7 +580,7 @@
           "**Una localidad chica dentro de un gobierno local grande** se mantiene: el censo publica población por gobierno local, no por localidad. Un paraje rural de un partido grande conserva su nombre.",
           "**El DNI de siete dígitos** se enmascara con siete dígitos; dentro del CUIL tiene un cero adelante y se enmascara con ocho. El DNI y el CUIL de esa persona dejan de coincidir.",
           "**El dígito verificador en columna propia** no se recalcula: se enmascara y deja de corresponder al CUIT enmascarado.",
-          "**La provincia, el banco del CBU y la característica del teléfono se mantienen.**",
+          "**La provincia, el banco del CBU y la característica del teléfono se mantienen.** La provincia puede enmascararse dentro de su región con el dominio opcional `AR_L2_PROVINCIA`, asignado a mano.",
           "**Data Cleansing deja pasar lo que no conoce**: una localidad escrita de una forma que la tabla no tiene — abreviada, con error de ortografía — pasa sin cambios.",
           "**El texto libre** se redacta palabra por palabra: un celular escrito con espacios no se encuentra, y un nombre que también es palabra común (`Luz`, `Rosa`, `Paz`) se redacta donde aparezca.",
           "**Niñas, niños y adolescentes** — la fecha de nacimiento se mueve como máximo 60 días, así que pocas personas cruzan los 13, 16 o 18 años, pero algunas sí. Donde importe, divida la regla por grupo etario con Multi-Column Condition.",
@@ -590,9 +595,9 @@
         "Antes de la publicación, el set se verificó fuera de un Masking Engine:",
         { "list": [
           "La configuración de cada classifier se revisó contra lo que un Masking Engine acepta.",
-          "El profiling se simuló en 160 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 31 columnas que no son dato personal — y de nuevo solo con los classifiers del paquete esencial.",
+          "El profiling se simuló en 166 columnas con el set completo en su umbral de asignación — bien nombradas, mal nombradas y 31 columnas que no son dato personal — y de nuevo solo con los classifiers del paquete esencial.",
           "Las tablas que generalizan lugares se auditaron para los 528 partidos y departamentos y para los 2.280 gobiernos locales y las 4.027 localidades: por nombre, por nombre con la provincia y por código.",
-          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de muestra de cada dominio y marcadores como `N/A`, contrastando cada salida con su vocabulario; 240 CUIT de todos los tipos — incluidos los que cambian de tipo — y 150 CBU en cuanto a validez y colisiones; 150 DNI en cuanto a colisiones; y 20 personas cuyo DNI y CUIL deben seguir coincidiendo. Cada algoritmo enmascaró además su propio valor de ejemplo."
+          "Los algoritmos, ejecutados con el plugin de algoritmos de Delphix, enmascararon los valores de muestra de cada dominio y marcadores como `N/A`, contrastando cada salida con su vocabulario; 240 CUIT de todos los tipos — incluidos los que cambian de tipo — y 150 CBU en cuanto a validez y colisiones; 150 DNI en cuanto a colisiones; 20 personas cuyo DNI y CUIL deben seguir coincidiendo; y 106 grafías de las 24 jurisdicciones, cada una de las cuales debe recibir una sola provincia de su región, la escriba como la escriba. Cada algoritmo enmascaró además su propio valor de ejemplo."
         ] },
         "Todas las columnas se asignaron como se esperaba y todos los valores se enmascararon como se esperaba. Antes de usar el set con datos reales, ejecute un job de profiling y uno de enmascaramiento sobre una copia representativa."
       ]
@@ -604,7 +609,7 @@
           "Ley 25.326 de Protección de los Datos Personales y Decreto 1558/2001 (InfoLEG). Constitución Nacional, art. 43. Ley 27.483 (Convenio 108) y Ley 27.699 (Convenio 108+). Código Penal, arts. 117 bis y 157 bis.",
           "Agencia de Acceso a la Información Pública: Resolución 47/2018, medidas de seguridad recomendadas (Anexo I, punto H); Resolución 126/2024, clasificación de infracciones y graduación de sanciones. Proyectos de ley 644-S-2025, 1948-D-2025 y 3397-D-2026. Comisión Europea, Decisión 2003/490/CE e informe de revisión de 2024.",
           "Leyes 26.529 (derechos del paciente), 26.657 (salud mental), 27.675 (VIH, hepatitis, tuberculosis e ITS), 27.610 (interrupción voluntaria del embarazo), 26.743 (identidad de género), 26.485 (violencia contra las mujeres), 26.364 (trata de personas), 22.431 (discapacidad), 24.557 (riesgos del trabajo). Decreto 476/2021 (DNI con nomenclatura X).",
-          "INDEC: Censo Nacional de Población, Hogares y Viviendas 2022, resultados definitivos por departamento y por gobierno local; localidades censales. Servicio de normalización de datos geográficos Georef (datos.gob.ar). RENAPER: nombres de personas físicas (datos.gob.ar).",
+          "INDEC: Censo Nacional de Población, Hogares y Viviendas 2022, resultados definitivos por departamento y por gobierno local; localidades censales; regiones estadísticas. Servicio de normalización de datos geográficos Georef (datos.gob.ar). RENAPER: nombres de personas físicas (datos.gob.ar).",
           "ARCA (ex AFIP): CUIT, CUIL y régimen simplificado. BCRA: Central de Deudores y clasificación de deudores; Clave Bancaria Uniforme y Clave Virtual Uniforme. ANSES: prestaciones. Correo Argentino: Código Postal Argentino. Superintendencia de Servicios de Salud: Registro Nacional de Obras Sociales."
         ] }
       ]

@@ -487,7 +487,7 @@ function render(locale, content, examples, masked, displayNames) {
   const overviewRows = content.groups.flatMap((g) => [
     `<tr class="group-row"><td colspan="3">${esc(g.title)}</td></tr>`,
     ...g.domains.map((name) => {
-      const kinds = [...new Set(classifiersOf(name).map((c) => c.framework))].map((k) => `<span class="tag k-${k}">${t.kinds[k]}</span>`).join('')
+      const kinds = [...new Set(classifiersOf(name).map((c) => c.framework))].map((k) => `<span class="tag k-${k}">${t.kinds[k]}</span>`).join('') || `<span class="tag tag-manual">${t.manualKind}</span>`
       return `<tr><td><a href="#d-${esc(name)}"><b>${esc(text(name).title)}</b></a> ${essentialTag(name)}<br>${code(name)}</td><td>${kinds}</td><td>${h.ref({ name: domainsByName.get(name).algorithm })}</td></tr>`
     }),
   ])
@@ -501,14 +501,14 @@ function render(locale, content, examples, masked, displayNames) {
       const d = domainsByName.get(name)
       const own = classifiersOf(name)
       toc.push({ row: [num, text(name).title, name], href: `d-${name}` })
-      const tags = [...new Set(own.map((c) => c.framework))].map((k) => `<span class="tag k-${k}">${t.kinds[k]}</span>`).join('')
+      const tags = [...new Set(own.map((c) => c.framework))].map((k) => `<span class="tag k-${k}">${t.kinds[k]}</span>`).join('') || `<span class="tag tag-manual">${t.manualKind}</span>`
       const rows = examples[name].map((input) => `<tr><td class="c-in">${esc(input)}</td><td class="c-ar">→</td><td class="c-out">${esc(masked.get(`${name} ${input}`))}</td></tr>`)
       return `<article class="domain" id="d-${esc(name)}">`
         + `<div class="domain-head"><span class="domain-n">${num}</span><h3>${esc(text(name).title)}</h3><code class="domain-code">${esc(name)}</code></div>`
         + `<div class="domain-tags">${essentialTag(name)}${tags}<span class="tag tag-algo">${esc(display(algorithms.get(d.algorithm).framework))}</span></div>`
         + '<div class="domain-body">'
         + `<div class="label">${t.what}</div>${blocks(text(name).what)}`
-        + `<div class="label">${t.found}</div>${own.map(classifier).join('')}`
+        + `<div class="label">${t.found}</div>${own.length ? own.map(classifier).join('') : `<p>${t.manualOnly}</p>`}`
         + `<div class="label">${t.masked}</div>${blocks(text(name).masking)}<ul class="tree">${tree(d.algorithm, new Set())}</ul>`
         + `<div class="label">${t.examples}</div><table class="xf"><thead><tr><th>${t.input}</th><th></th><th>${t.output}</th></tr></thead><tbody>${rows.join('')}</tbody></table>`
         + '</div></article>'
