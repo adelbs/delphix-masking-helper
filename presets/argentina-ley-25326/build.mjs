@@ -85,7 +85,7 @@ const redactAs = (text) => ({ type: 'REDACT', redactString: text })
 /** Regex Decompose: each pattern is [regex, ...one action per capture group]. */
 function decompose(name, patterns, fallback, input) {
   for (const [regex, ...actions] of patterns) {
-    const groups = new RegExp(`${regex.replace(/^\(\?i\)/, '')}|`).exec('').length - 1
+    const groups = new RegExp(`${regex.replace(/^\(\?[a-z]+\)/, '')}|`).exec('').length - 1
     if (groups !== actions.length) throw new Error(`${name}: ${regex} has ${groups} groups and ${actions.length} actions`)
   }
   return algorithm(name, 'decompose.RegexDecompose', {
@@ -902,6 +902,56 @@ domain('AR_L2_DEPARTAMENTO', 'AR_DEPARTAMENTO',
   ),
   byList([['ar-detectar-departamentos.txt', placeNames(DEPARTAMENTOS), 0.8]], { reject: 0.4 }))
 
+// The province, for whoever wants it masked. The set keeps it — every generalization above stays
+// within the province, and the postal code keeps its letter — so this domain has no classifier:
+// profiling never assigns it, and it takes a column only when someone assigns it by hand.
+//
+// A province becomes one of its INDEC statistical region, chosen by a keyed Secure Lookup: the
+// preset is public, and a fixed table would publish the substitution with it. CABA, which the
+// INDEC puts with the partidos around it in Gran Buenos Aires, goes with the Pampeana; it is not
+// among the substitutes, whose names are kept short — the longest, Santiago del Estero, has 19
+// characters. The ISO 3166-2 code (AR-B) follows the same regions.
+const PROVINCE_REGIONS = [
+  ['NOA', [['Catamarca', 'K'], ['Jujuy', 'Y'], ['La Rioja', 'F'], ['Salta', 'A'], ['Santiago del Estero', 'G'], ['Tucumán', 'T']]],
+  ['NEA', [['Chaco', 'H'], ['Corrientes', 'W'], ['Formosa', 'P'], ['Misiones', 'N']]],
+  ['CUYO', [['Mendoza', 'M'], ['San Juan', 'J'], ['San Luis', 'D']]],
+  ['PAMPEANA', [['Buenos Aires', 'B'], ['Córdoba', 'X'], ['Entre Ríos', 'E'], ['La Pampa', 'L'], ['Santa Fe', 'S']]],
+  ['PATAGONIA', [['Chubut', 'U'], ['Neuquén', 'Q'], ['Río Negro', 'R'], ['Santa Cruz', 'Z'], ['Tierra del Fuego', 'V']]],
+]
+const CABA = ['Ciudad Autónoma de Buenos Aires', 'Ciudad de Buenos Aires', 'Capital Federal', 'C.A.B.A.', 'CABA']
+const PROVINCE_ALIASES = { 'Tierra del Fuego': ['Tierra del Fuego, Antártida e Islas del Atlántico Sur'] }
+const inRegions = new Set([...PROVINCE_REGIONS.flatMap(([, ps]) => ps.map(([p]) => p)), CABA[0]])
+if (inRegions.size !== 24 || PROVINCES.some((p) => !inRegions.has(p))) throw new Error('the regions do not cover the 24 jurisdictions')
+// The lookup hashes the value as written, capitals aside: `Cordoba` and `Córdoba`, or `CABA` and
+// `Capital Federal`, would draw different provinces. A first step writes every spelling as the
+// official name, in the same case, so that one province always draws the same one.
+const officialNames = [...PROVINCE_REGIONS.flatMap(([, ps]) => ps.map(([p]) => [p, [p, ...(PROVINCE_ALIASES[p] ?? [])]])), [CABA[0], CABA]]
+const spellingPairs = new Map()
+for (const [official, names] of officialNames) {
+  for (const name of names) {
+    // An abbreviation in capitals (CABA) is written in capitals.
+    const asWritten = name === name.toUpperCase() ? official.toUpperCase() : official
+    for (const [from, to] of [[name, asWritten], [fold(name), asWritten], [name.toUpperCase(), official.toUpperCase()],
+      [fold(name).toUpperCase(), official.toUpperCase()], [name.toLowerCase(), official.toLowerCase()], [fold(name).toLowerCase(), official.toLowerCase()]]) {
+      if (from !== to && !spellingPairs.has(from)) spellingPairs.set(from, to)
+    }
+  }
+}
+cleansing('AR_GRAFIA_PROVINCIA', 'ar-provincias-grafias.txt', [...spellingPairs], 'CABA', '|')
+const literal = (name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+decompose('AR_REGION_PROVINCIA', PROVINCE_REGIONS.flatMap(([region, provinces]) => {
+  const names = [...provinces.map(([p]) => p), ...(region === 'PAMPEANA' ? [CABA[0]] : [])]
+  const codes = provinces.map(([, code]) => code)
+  const id = region.toLowerCase()
+  return [
+    [`(?iu)(${names.map(literal).join('|')})`, apply(lookup(`AR_REGION_${region}`, `ar-provincias-${id}.txt`, provinces.map(([p]) => p)))],
+    [`(?i)(AR-)([${codes.join('')}${region === 'PAMPEANA' ? 'C' : ''}])`,
+      keep, apply(lookup(`AR_REGION_${region}_ISO`, `ar-provincias-${id}-iso.txt`, codes))],
+  ]
+}), keep, 'Córdoba')
+chain('AR_PROVINCIA', ['AR_GRAFIA_PROVINCIA', 'AR_REGION_PROVINCIA'], 'Córdoba')
+domain('AR_L2_PROVINCIA', 'AR_PROVINCIA')
+
 domain('AR_L2_CODIGO_GEOGRAFICO', 'AR_CODIGO_GEOGRAFICO',
   byName(['(cod|codigo|cd|id)_?(localidad|loc|municipio|gobierno_?local|departamento|depto|dpto|partido)(_?(indec|censal|res|residencia|nac|nacimiento))?|(cod|codigo)_?indec|indec_?(cod|codigo|localidad|departamento)|codloc|coddepto|cod_?gl|localidad_?censal_?(id|cod)', 0.85]),
   byPattern([[String.raw`(0[26]|1[0480]|2[26]|3[0484]|4[26]|5[048]|6[26]|7[048]|8[26]|9[04])\d{3}(\d|\d{3})?`, 0.4]], { reject: 0.3 }))
@@ -1258,8 +1308,8 @@ if (notDomains.length) throw new Error(`essential pack names domains the set doe
 
 // The version and the day it was built: bump both whenever anything in the set changes, so that
 // whoever loaded an older one can see how old it is.
-const VERSION = 2
-const VERSION_DATE = '2026-10-11'
+const VERSION = 3
+const VERSION_DATE = '2026-10-12'
 // Zeros on the left are padding only in the value a column holds — the top of a domain's tree. Inside
 // it, a step may read a digit at a fixed position, and an optional zero would shift what it reads.
 for (const d of domains) {
