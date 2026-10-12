@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "versionDate": "2026-10-01",
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Costa Rica — Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales",
     "pt-BR": "Costa Rica — Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales costarricenses conforme a la Ley 8968 y su reglamento (Decreto 37554-JP, reformado en 2016 y 2019): identificadores directos (cédula de identidad, DIMEX, NITE, nombres, contacto, la dirección por señas del art. 9.3, el IBAN con dígitos de control válidos, tarjetas, placas, inmuebles), cuasi-identificadores (fecha de nacimiento, distrito y cantón, el código de distrito que también es el código postal, barrio), los datos sensibles que el art. 9.1 prohíbe tratar a un particular — origen racial o étnico, opiniones políticas, convicciones religiosas, espirituales o filosóficas, salud, vida y orientación sexual —, datos de salud, los datos económicos que el art. 3 e) llama condición socioeconómica y que el art. 1 extiende a los bienes de la persona, y antecedentes penales."
   },
   "profileSet": {
-    "name": "CR - Ley 8968 - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 3 e y art. 9.1), datos de salud, condición socioeconómica y datos de bienes (art. 3 e y art. 1) y antecedentes penales, conforme a la Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales de Costa Rica y su reglamento.",
+    "name": "CR - Ley 8968 - v2",
+    "description": "Ley 8968 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "CR_L1_CEDULA - Path",
@@ -63,6 +63,7 @@
       "CR_L1_CONTRATO - Path",
       "CR_L1_USUARIO - Path",
       "CR_L1_CREDENCIAL - Path",
+      "CR_L1_CREDENCIAL - Regex",
       "CR_L1_IMAGEN - Path",
       "CR_L1_GEOLOCALIZACION - Path",
       "CR_L1_GEOLOCALIZACION - Regex",
@@ -80,63 +81,64 @@
       "CR_L2_SEXO - Path",
       "CR_L2_SEXO - List",
       "CR_L2_DISTRITO - Path",
-      "CR_L2_DISTRITO - List",
+      "CR_L2_DISTRITO - Values",
       "CR_L2_CODIGO_DTA - Path",
       "CR_L2_CODIGO_DTA - Regex",
       "CR_L2_BARRIO - Path",
       "CR_L2_ESTADO_CIVIL - Path",
-      "CR_L2_ESTADO_CIVIL - List",
+      "CR_L2_ESTADO_CIVIL - Values",
       "CR_L2_OCUPACION - Path",
       "CR_L2_EMPLEADOR - Path",
       "CR_L2_NIVEL_EDUCATIVO - Path",
-      "CR_L2_NIVEL_EDUCATIVO - List",
+      "CR_L2_NIVEL_EDUCATIVO - Values",
       "CR_L2_INSTITUCION_EDUCATIVA - Path",
       "CR_L2_PERSONAS_A_CARGO - Path",
       "CR_L2_PERSONAS_A_CARGO - Type",
       "CR_L3_ETNIA - Path",
-      "CR_L3_ETNIA - List",
+      "CR_L3_ETNIA - Values",
       "CR_L3_PUEBLO_INDIGENA - Path",
-      "CR_L3_PUEBLO_INDIGENA - List",
+      "CR_L3_PUEBLO_INDIGENA - Values",
       "CR_L3_NACIONALIDAD - Path",
-      "CR_L3_NACIONALIDAD - List",
+      "CR_L3_NACIONALIDAD - Values",
       "CR_L3_CONDICION_MIGRATORIA - Path",
-      "CR_L3_CONDICION_MIGRATORIA - List",
+      "CR_L3_CONDICION_MIGRATORIA - Values",
       "CR_L3_RELIGION - Path",
-      "CR_L3_RELIGION - List",
+      "CR_L3_RELIGION - Values",
       "CR_L3_CONVICCION_FILOSOFICA - Path",
       "CR_L3_OPINION_POLITICA - Path",
-      "CR_L3_OPINION_POLITICA - List",
+      "CR_L3_OPINION_POLITICA - Values",
       "CR_L3_AFILIACION_PARTIDARIA - Path",
-      "CR_L3_AFILIACION_PARTIDARIA - List",
+      "CR_L3_AFILIACION_PARTIDARIA - Values",
       "CR_L3_AFILIACION_SINDICAL - Path",
-      "CR_L3_AFILIACION_SINDICAL - List",
+      "CR_L3_AFILIACION_SINDICAL - Values",
       "CR_L3_BIOMETRICO - Path",
       "CR_L3_BIOMETRICO - Type",
       "CR_L3_GENETICO - Path",
+      "CR_L3_GENETICO - Regex",
       "CR_L3_ORIENTACION_SEXUAL - Path",
-      "CR_L3_ORIENTACION_SEXUAL - List",
+      "CR_L3_ORIENTACION_SEXUAL - Values",
       "CR_L3_VIDA_SEXUAL - Path",
       "CR_L3_IDENTIDAD_GENERO - Path",
-      "CR_L3_IDENTIDAD_GENERO - List",
+      "CR_L3_IDENTIDAD_GENERO - Values",
       "CR_L3_VICTIMA - Path",
       "CR_SALUD_IDENTIFICADOR - Path",
       "CR_SALUD_COBERTURA - Path",
-      "CR_SALUD_COBERTURA - List",
+      "CR_SALUD_COBERTURA - Values",
       "CR_SALUD_DIAGNOSTICO - Path",
       "CR_SALUD_DIAGNOSTICO - Regex",
       "CR_SALUD_PROCEDIMIENTO - Path",
       "CR_SALUD_MEDICAMENTO - Path",
-      "CR_SALUD_MEDICAMENTO - List",
+      "CR_SALUD_MEDICAMENTO - Values",
       "CR_SALUD_TEXTO_CLINICO - Path",
       "CR_SALUD_TEXTO_CLINICO - Type",
       "CR_SALUD_RESULTADO_EXAMEN - Path",
       "CR_SALUD_VIH - Path",
       "CR_SALUD_GRUPO_SANGUINEO - Path",
-      "CR_SALUD_GRUPO_SANGUINEO - List",
+      "CR_SALUD_GRUPO_SANGUINEO - Values",
       "CR_SALUD_DISCAPACIDAD - Path",
-      "CR_SALUD_DISCAPACIDAD - List",
+      "CR_SALUD_DISCAPACIDAD - Values",
       "CR_SALUD_OCUPACIONAL - Path",
-      "CR_SALUD_OCUPACIONAL - List",
+      "CR_SALUD_OCUPACIONAL - Values",
       "CR_SALUD_REPRODUCTIVA - Path",
       "CR_SALUD_MENTAL - Path",
       "CR_FIN_HISTORIAL_CREDITICIO - Path",
@@ -149,11 +151,11 @@
       "CR_FIN_PENSION - Path",
       "CR_FIN_PENSION - Type",
       "CR_FIN_PROGRAMA_SOCIAL - Path",
-      "CR_FIN_PROGRAMA_SOCIAL - List",
+      "CR_FIN_PROGRAMA_SOCIAL - Values",
       "CR_FIN_CONDICION_SOCIOECONOMICA - Path",
-      "CR_FIN_CONDICION_SOCIOECONOMICA - List",
+      "CR_FIN_CONDICION_SOCIOECONOMICA - Values",
       "CR_FIN_VIVIENDA - Path",
-      "CR_FIN_VIVIENDA - List",
+      "CR_FIN_VIVIENDA - Values",
       "CR_PENAL_ANTECEDENTES - Path",
       "CR_PENAL_EXPEDIENTE - Path",
       "CR_PENAL_EXPEDIENTE - Regex"
@@ -161,7 +163,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la Ley 8968: cédula de identidad, DIMEX, NITE, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial de la Ley 8968",
       "domains": [
         "CR_L1_CEDULA",
         "CR_L1_DIMEX",
@@ -183,7 +185,7 @@
       "name": "CR_L1_CEDULA - Path",
       "framework": "PATH",
       "domain": "CR_L1_CEDULA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -235,36 +237,36 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d-\\d{4}-\\d{4}",
+            "regex": "0*(?:\\d-\\d{4}-\\d{4})",
             "matchStrength": 0.95,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "0\\d-\\d{4}-\\d{4}",
+            "regex": "0*(?:0\\d-\\d{4}-\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d-\\d{3}-\\d{3}",
+            "regex": "0*(?:\\d-\\d{3}-\\d{3})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[1-9]\\d{8}",
+            "regex": "0*(?:[1-9]\\d{8})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -274,7 +276,7 @@
       "name": "CR_L1_DIMEX - Path",
       "framework": "PATH",
       "domain": "CR_L1_DIMEX",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -297,12 +299,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{11,12}",
+            "regex": "0*(?:[1-9]\\d{10,11})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -312,7 +314,7 @@
       "name": "CR_L1_NITE - Path",
       "framework": "PATH",
       "domain": "CR_L1_NITE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -335,12 +337,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "3[\\s\\-]?120[\\s\\-]?\\d{6}",
+            "regex": "0*(?:3[\\s\\-]?120[\\s\\-]?\\d{6})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -350,7 +352,7 @@
       "name": "CR_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "CR_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -378,7 +380,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -388,7 +390,7 @@
       "name": "CR_L1_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "CR_L1_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -407,7 +409,7 @@
       "name": "CR_L1_CODIGO_ESTUDIANTE - Path",
       "framework": "PATH",
       "domain": "CR_L1_CODIGO_ESTUDIANTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -426,7 +428,7 @@
       "name": "CR_L1_MATRICULA_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "CR_L1_MATRICULA_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -445,7 +447,7 @@
       "name": "CR_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "CR_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -489,7 +491,7 @@
       "name": "CR_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "CR_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -525,7 +527,7 @@
       "name": "CR_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "CR_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -581,7 +583,7 @@
       "name": "CR_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "CR_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -621,12 +623,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -636,7 +638,7 @@
       "name": "CR_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "CR_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -659,20 +661,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?506[\\s\\-]?)?[5-8]\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?506[\\s\\-]?)?[5-8]\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?506[\\s\\-]?)?[24]\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?506[\\s\\-]?)?[24]\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -682,7 +684,7 @@
       "name": "CR_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "CR_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -727,7 +729,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)(urbanizaci[oó]n|residencial|condominio|barrio|caser[ií]o)\\s+[a-záéíóúñ0-9.' ]{2,40}.*",
@@ -735,7 +737,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*(avenida|calle)\\s*\\d{1,3}.*(calle|avenida)\\s*\\d{1,3}.*",
@@ -743,7 +745,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(contiguo|frente|diagonal|costado|detr[aá]s)\\b.*",
@@ -751,7 +753,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -761,7 +763,7 @@
       "name": "CR_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "CR_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -780,7 +782,7 @@
       "name": "CR_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "CR_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -808,7 +810,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "CR\\d{2}(\\s\\d{4}){4}\\s\\d{2}",
@@ -816,15 +818,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{17}",
+            "regex": "0*(?:\\d{17})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -834,7 +836,7 @@
       "name": "CR_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "CR_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -857,12 +859,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -872,7 +874,7 @@
       "name": "CR_L1_BILLETERA - Path",
       "framework": "PATH",
       "domain": "CR_L1_BILLETERA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -900,7 +902,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -910,7 +912,7 @@
       "name": "CR_L1_IP - Path",
       "framework": "PATH",
       "domain": "CR_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -933,20 +935,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -956,7 +958,7 @@
       "name": "CR_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "CR_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -979,20 +981,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1002,7 +1004,7 @@
       "name": "CR_L1_COOKIE - Path",
       "framework": "PATH",
       "domain": "CR_L1_COOKIE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1021,7 +1023,7 @@
       "name": "CR_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "CR_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1049,7 +1051,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{3}[\\s\\-]?\\d{3}",
@@ -1057,15 +1059,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{6}",
+            "regex": "0*(?:\\d{6})",
             "matchStrength": 0.35,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1075,7 +1077,7 @@
       "name": "CR_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "CR_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1103,7 +1105,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1113,7 +1115,7 @@
       "name": "CR_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "CR_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1136,12 +1138,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[1-7]-\\d{6}-\\d{3}",
+            "regex": "0*(?:[1-7]-\\d{6}-\\d{3})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)(SJ|A|C|H|G|P|L)-\\d{6,7}-\\d{4}",
@@ -1149,7 +1151,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1159,7 +1161,7 @@
       "name": "CR_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "CR_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1178,7 +1180,7 @@
       "name": "CR_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "CR_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1197,7 +1199,7 @@
       "name": "CR_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "CR_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1213,10 +1215,61 @@
       }
     },
     {
+      "name": "CR_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "CR_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "CR_L1_IMAGEN - Path",
       "framework": "PATH",
       "domain": "CR_L1_IMAGEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1235,7 +1288,7 @@
       "name": "CR_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "CR_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1266,12 +1319,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(8|9|10|11)\\.\\d{3,}\\s*,\\s*-8[2-6]\\.\\d{3,}",
+            "regex": "0*(?:(8|9|10|11)\\.\\d{3,}\\s*,\\s*-8[2-6]\\.\\d{3,})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-8[2-6]\\.\\d{4,}",
@@ -1279,15 +1332,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(8|9|10|11)\\.\\d{4,}",
+            "regex": "0*(?:(8|9|10|11)\\.\\d{4,})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1297,7 +1350,7 @@
       "name": "CR_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "CR_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1337,12 +1390,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d-\\d{4}-\\d{4}",
+            "regex": "0*(?:\\d-\\d{4}-\\d{4})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1350,15 +1403,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[5-8]\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:[5-8]\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1368,7 +1421,7 @@
       "name": "CR_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "CR_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1411,7 +1464,7 @@
       "name": "CR_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "CR_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1451,7 +1504,7 @@
       "name": "CR_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "CR_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1491,7 +1544,7 @@
       "name": "CR_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "CR_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1534,7 +1587,7 @@
       "name": "CR_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "CR_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1558,10 +1611,14 @@
         "valueLists": [
           {
             "file": "preset-file://cr-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://cr-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1570,7 +1627,7 @@
       "name": "CR_L2_DISTRITO - Path",
       "framework": "PATH",
       "domain": "CR_L2_DISTRITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1586,27 +1643,30 @@
       }
     },
     {
-      "name": "CR_L2_DISTRITO - List",
-      "framework": "LIST",
+      "name": "CR_L2_DISTRITO - Values",
+      "framework": "REGEX",
       "domain": "CR_L2_DISTRITO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-distritos.txt",
-            "matchStrength": 0.8
+            "note": "398 — Merced · Hospital · Catedral · Zapote · San Francisco de Dos Ríos · Uruca · …",
+            "regex": "(?iu)(?:(?:a(?:bangares|capulco|gua(?:buena|caliente(?: o san francisco)?|s (?:claras|zarcas))|l(?:ajuelita|egr(?:ia|ía))|n(?:geles|selmo llorente)|r(?:ancibia|en(?:al|illa))|serr(?:i|í)|tenas)|b(?:a(?:gaces|h(?:ia (?:ballena|drake)|ía (?:ballena|drake))|r(?:bacoas|ranca|u|va|ú)|t(?:an|án))|e(?:bedero|juco|l(?:en(?: de nosarita)?|én(?: de nosarita)?))|i(?:jagua|olley|rrisito)|o(?:ls(?:on|ón)|ruca)|r(?:a(?:sil|tsi)|isas|unka)|uen(?:avista|os aires))|c(?:a(?:b(?:eceras|o velas)|ch(?:i|í)|huita|j(?:on|ón)|l(?:dera|le blancos)|n(?:a(?:lete|s(?: dulces)?)|delari(?:a|ta)|grejal|o(?: negro|as))|pellades|r(?:ara|iari|r(?:and(?:i|í)|i(?:llos|zal))|tagena)|scajal|tedral|ñ(?:as(?: dulces)?|o negro))|h(?:a(?:carita|nguena)|ir(?:a|es|rip(?:o|ó))|omes|ánguena)|i(?:nco esquinas|preses|rr(?:i sur|í sur))|o(?:bano|l(?:i(?:ma|nas)|o(?:n|rado)|ón)|pey|rr(?:alillo|edor(?:es)?)|t(?:e|o brus)?|yolar)|u(?:ajiniquil|r(?:e(?:na|ña)|ridabat|uband(?:e|é))|tris)|óbano)|d(?:a(?:mas|niel flores)|e(?:licias|s(?:amparad(?:itos|os)|monte))|iri(?:a|á)|o(?:s r(?:ios|íos)|ta)|u(?:acar(?:i|í)|lce nombre(?: de jes(?:us|ús))?))|e(?:l (?:amparo|cairo|g(?:eneral|uarco)|mastate|ro(?:ble|sario)|tejar)|s(?:c(?:az(?:u|ú)|obal)|p(?:arza|iritu santo|íritu santo)|quipulas))|f(?:iladelfia|lor(?:encia|ida)|railes)|g(?:arabito|ermania|o(?:icoechea|lfito)|r(?:a(?:nadilla|vilias)|ecia|ifo alto)|u(?:a(?:cim(?:a(?:l)?|o)|dalupe o arenilla|itil|piles|tuso|y(?:abo|car(?:a|á)))|ti(?:errez braun|érrez braun)|á(?:cim(?:a|o)|piles)))|h(?:a(?:cienda vieja|tillo)|o(?:jancha|spital)|uacas)|i(?:p(?:is|ís)|sla del coco)|j(?:a(?:c(?:o|ó)|r(?:d(?:in|ín)|is))|es(?:us maria|ús maría)|uan vi(?:nas|ñas))|katira|l(?:a(?: (?:a(?:mistad|sunci(?:on|ón))|c(?:eiba|olonia|ruz|uesta)|fortuna|g(?:arita|ranja)|isabel|mansi(?:on|ón)|palme(?:ira|ra)|ribera|suiza|t(?:igra|rinidad)|uni(?:on|ón)|vi(?:ctoria|rgen))|brador|gun(?:a|illas)|s (?:horquetas|juntas)|urel)|e(?:gua|on (?:cortes castro|xiii)|panto|ón (?:cortés castro|xiii))|i(?:b(?:ano|eria)|moncito)|l(?:an(?:o(?: (?:bonito|grande)|s de santa luc(?:ia|ía))|uras del gaspar)|orente)|os (?:chiles|guido)|íbano)|m(?:a(?:cacona|n(?:si(?:on|ón)|zanillo)|t(?:a(?: (?:de pl(?:atano|átano)|redonda)|m(?:a|b(?:u|ú)))|ina))|erced(?:es sur)?|iramar|o(?:gote|nte(?: romo|rrey|s de o(?:ca|ro)|verde)|ravia))|n(?:a(?:cascolo|ndayure|ranjito)|icoya|osara)|o(?:ccidental|r(?:iental|o(?:si|tina))|sa)|p(?:a(?:c(?:ayas|uarito)|lm(?:ar(?:es)?|i(?:chal|ra|tos))|quera|r(?:a(?:cito|iso|mo|íso)?|rita|á)|t(?:a(?:lillo|rr(?:a|á))|io de agua)|v(?:as|on(?:es)?|ón))|e(?:jibaye|nas blancas|rez zeledon|ñas blancas)|i(?:cagres|ed(?:ades(?: (?:norte|sur))?|ras (?:blancas|negras))|las|t(?:a(?:haya|l)|tier)|zote)|latanares|o(?:as|co(?:c(?:i|í)|ra|sol)|r(?:ozal|venir)|trero (?:cerrado|grande)|zos|ás)|u(?:e(?:nte (?:de piedra|salas)|rto (?:c(?:arrillo|ort(?:es|és))|jim(?:enez|énez)|viejo))|r(?:ab(?:a|á)|iscal|ral))|áramo|érez zeledón)|qu(?:e(?:brad(?:a (?:grande|honda)|illa)|pos)|itirris(?:i|í))|r(?:ancho redondo|eventaz(?:on|ón)|i(?:nc(?:on de sabanilla|ón de sabanilla)|o (?:azul|blanco|cuarto|jimenez|n(?:aranjo|uevo)|segundo))|ío (?:azul|blanco|cuarto|jiménez|n(?:aranjo|uevo)|segundo))|s(?:a(?:ba(?:lito|n(?:a redonda|illa(?:s)?))|litr(?:al|illos)|mara|n(?: (?:an(?:dr(?:es|és)|tonio)|c(?:arlos|rist(?:obal|óbal))|diego|f(?:elipe|rancisco(?: de dos r(?:ios|íos))?)|gabriel|i(?:gnacio|sidro(?: de el general)?)|j(?:er(?:onimo|ónimo)|o(?:aqu(?:in|ín)|rge|s(?:e(?: (?:de la montana|o pizote)|cito)|é (?:de la montaña|o pizote)))|uan(?: (?:de (?:dios|mata)|grande))?)|l(?:orenzo|uis)|m(?:a(?:rcos|teo)|iguel)|nicol(?:as|ás)|p(?:ablo|edro)|r(?:a(?:fael(?: a(?:bajo|rriba))?|m(?:on|ón))|oque)|sebasti(?:an|án)|vi(?:cente|to))|t(?:a (?:ana|b(?:arbara|árbara)|c(?:ecilia|ruz)|e(?:lena|ulalia)|isabel|luc(?:ia|ía)|mar(?:ia|ía)|r(?:ita|osa)|teresita)|o (?:domingo|tom(?:as|ás))))|r(?:apiqu(?:i|í)|ch(?:i(?: (?:norte|sur))?|í(?: (?:norte|sur))?)|dinal)|vegre)|i(?:er(?:pe|ra)|quirres|xaola)|ámara)|t(?:a(?:barcia|cares|lamanca|m(?:arindo|bor)|pesco|r(?:baca|coles|raz(?:u|ú))|yutic)|e(?:lire|mpate)|i(?:b(?:as|ás)|erra(?: blanca|s morenas)|lar(?:an|án)|rrases)|o(?:bosi|ro amarillo)|r(?:es (?:equis|r(?:ios|íos))|onadora)|u(?:currique|is|r(?:es|r(?:ialba|u(?:bares|cares)|úcares)))|árcoles)|u(?:pala|ruca)|v(?:a(?:lle la estrella|rablanca|zquez de coronado)|e(?:intisiete de abril|n(?:ado|ecia))|ol(?:c(?:an|án)|io)|uelta de jorco|ázquez de coronado)|yolillal|za(?:pot(?:al|e)|r(?:agoza|cero))|ángeles))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L2_CODIGO_DTA - Path",
       "framework": "PATH",
       "domain": "CR_L2_CODIGO_DTA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1629,20 +1689,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[1-7]\\d{4}",
+            "regex": "0*(?:[1-7]\\d{4})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[1-7]\\d{2}",
+            "regex": "0*(?:[1-7]\\d{2})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1652,7 +1712,7 @@
       "name": "CR_L2_BARRIO - Path",
       "framework": "PATH",
       "domain": "CR_L2_BARRIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1671,7 +1731,7 @@
       "name": "CR_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "CR_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1687,27 +1747,30 @@
       }
     },
     {
-      "name": "CR_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "CR_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "CR_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "19 — Soltero a · Casado a · Unión libre o de hecho · Separado a · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:casad(?:a|o(?:/a)?)|divorciad(?:a|o(?:/a)?)|s(?:eparad(?:a|o(?:/a)?)|olter(?:a|o(?:/a)?))|uni(?:on (?:de hecho|libre(?: o de hecho)?)|ón (?:de hecho|libre(?: o de hecho)?))|viud(?:a|o(?:/a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "CR_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1734,7 +1797,7 @@
       "name": "CR_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "CR_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1753,7 +1816,7 @@
       "name": "CR_L2_NIVEL_EDUCATIVO - Path",
       "framework": "PATH",
       "domain": "CR_L2_NIVEL_EDUCATIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1769,27 +1832,30 @@
       }
     },
     {
-      "name": "CR_L2_NIVEL_EDUCATIVO - List",
-      "framework": "LIST",
+      "name": "CR_L2_NIVEL_EDUCATIVO - Values",
+      "framework": "REGEX",
       "domain": "CR_L2_NIVEL_EDUCATIVO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-nivel-educativo.txt",
-            "matchStrength": 0.6
+            "note": "22 — Sin instrucción · Preescolar · Primaria incompleta · Primaria completa · Secundaria incompleta · Secundaria completa · …",
+            "regex": "(?iu)(?:(?:bachillerato|doctorado|educaci(?:on tecnica|ón técnica)|maestr(?:ia|ía)|p(?:arauniversitaria|osgrado|r(?:eescolar|imaria(?: (?:completa|incompleta))?))|s(?:ecundaria(?: (?:completa|incompleta))?|in instrucci(?:on|ón))|t(?:ecnico|écnico)|universi(?:dad|taria(?: (?:completa|incompleta))?)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L2_INSTITUCION_EDUCATIVA - Path",
       "framework": "PATH",
       "domain": "CR_L2_INSTITUCION_EDUCATIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1808,7 +1874,7 @@
       "name": "CR_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "CR_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1848,7 +1914,7 @@
       "name": "CR_L3_ETNIA - Path",
       "framework": "PATH",
       "domain": "CR_L3_ETNIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1864,31 +1930,48 @@
       }
     },
     {
-      "name": "CR_L3_ETNIA - List",
-      "framework": "LIST",
+      "name": "CR_L3_ETNIA - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_ETNIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-etnias.txt",
-            "matchStrength": 0.9
+            "note": "20 — Indígena · Afrodescendiente o negra · Mulata · China · Blanca o mestiza · Otra · …",
+            "regex": "(?iu)(?:(?:afrodescendiente(?: o negra)?|blanca(?: o mestiza)?|chin(?:a|o)|ind(?:igena|ígena)|m(?:estiz(?:a|o)|ulat(?:a|o))|n(?:egr(?:a|o)|inguna)|otra))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://cr-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "11 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6|7))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "11 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_PUEBLO_INDIGENA - Path",
       "framework": "PATH",
       "domain": "CR_L3_PUEBLO_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1904,27 +1987,30 @@
       }
     },
     {
-      "name": "CR_L3_PUEBLO_INDIGENA - List",
-      "framework": "LIST",
+      "name": "CR_L3_PUEBLO_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_PUEBLO_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-pueblos.txt",
-            "matchStrength": 0.85
+            "note": "37 — Bribri · Cabécar · Maleku · Chorotega · Huetar · Brunca o boruca · …",
+            "regex": "(?iu)(?:(?:altos de san antonio|b(?:oruca|r(?:ibri|oran|unca(?: o boruca)?|öran)|ugl(?:e|é))|c(?:ab(?:agra|ecar|écar)|h(?:ina kich(?:a|á)|orotega))|gua(?:tuso|ym(?:i|í))|huetar|ma(?:leku|tamb(?:u|ú))|n(?:g(?:abe|äbe)|o pertenece a ning(?:un pueblo|ún pueblo))|otro pueblo|quitirris(?:i|í)|rey curr(?:e|é)|salitre|t(?:alamanca|er(?:ibe(?: o t(?:erraba|érraba))?|raba)|érraba)|ujarr(?:as|ás)|zapat(?:on|ón)))",
+            "matchStrength": 0.85,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "CR_L3_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1940,27 +2026,30 @@
       }
     },
     {
-      "name": "CR_L3_NACIONALIDAD - List",
-      "framework": "LIST",
+      "name": "CR_L3_NACIONALIDAD - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_NACIONALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-nacionalidades.txt",
-            "matchStrength": 0.7
+            "note": "37 — Costarricense · Nicaragüense · Panameña · Colombiana · Venezolana · Salvadoreña · …",
+            "regex": "(?iu)(?:(?:c(?:hina|o(?:lombia(?:n(?:a|o))?|sta(?: rica|rricense))|uban(?:a|o))|e(?:s(?:pa(?:nol(?:a)?|ñol(?:a)?)|tadounidense)|xtranjer(?:a|o))|guatemaltec(?:a|o)|hondure(?:n(?:a|o)|ñ(?:a|o))|italiana|mexican(?:a|o)|nica(?:rag(?:u(?:a|ense)|üense))?|panam(?:a|e(?:n(?:a|o)|ñ(?:a|o))|á)|salvadore(?:n(?:a|o)|ñ(?:a|o))|tic(?:a|o)|venez(?:olan(?:a|o)|uela)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_CONDICION_MIGRATORIA - Path",
       "framework": "PATH",
       "domain": "CR_L3_CONDICION_MIGRATORIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -1976,27 +2065,30 @@
       }
     },
     {
-      "name": "CR_L3_CONDICION_MIGRATORIA - List",
-      "framework": "LIST",
+      "name": "CR_L3_CONDICION_MIGRATORIA - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_CONDICION_MIGRATORIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-condicion-migratoria.txt",
-            "matchStrength": 0.7
+            "note": "19 — Residente permanente · Residente temporal · Categoría especial · Persona refugiada · Solicitante de refugio · Permiso de trabajo · …",
+            "regex": "(?iu)(?:(?:asilo|c(?:ategor(?:ia especial|ía especial)|ondici(?:on irregular|ón irregular))|es(?:pecial|tancia transitoria)|i(?:ndocumentado|rregular)|no aplica|per(?:m(?:anente|iso de trabajo)|sona refugiada)|re(?:fugiad(?:a|o)|sidente(?: (?:permanente|temporal))?)|solicitante de refugio|t(?:emporal|ransitoria)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "CR_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2012,27 +2104,30 @@
       }
     },
     {
-      "name": "CR_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "CR_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "30 — Católica · Evangélica o protestante · Testigo de Jehová · Adventista del Séptimo Día · Iglesia de Jesucristo de los Santos de los Últimos Días · Judía · …",
+            "regex": "(?iu)(?:(?:a(?:dventista(?: del s(?:eptimo dia|éptimo día))?|gn(?:ostico|óstico)|teo)|b(?:autista|udista)|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|ristian(?:a|o))|evang(?:elic(?:a(?: o protestante)?|o)|élic(?:a(?: o protestante)?|o))|iglesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|jud(?:i(?:a|o)|í(?:a|o))|m(?:orm(?:on|ón)|usulm(?:an(?:a)?|án))|ninguna|otra|p(?:entecostal|rotestante)|sin religi(?:on|ón)|testigo de jehov(?:a|á)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_CONVICCION_FILOSOFICA - Path",
       "framework": "PATH",
       "domain": "CR_L3_CONVICCION_FILOSOFICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2051,7 +2146,7 @@
       "name": "CR_L3_OPINION_POLITICA - Path",
       "framework": "PATH",
       "domain": "CR_L3_OPINION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2067,27 +2162,30 @@
       }
     },
     {
-      "name": "CR_L3_OPINION_POLITICA - List",
-      "framework": "LIST",
+      "name": "CR_L3_OPINION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_OPINION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-preferencias-politicas.txt",
-            "matchStrength": 0.7
+            "note": "16 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|ninguno|pr(?:efiere no responder|ogresista)|voto en blanco))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_AFILIACION_PARTIDARIA - Path",
       "framework": "PATH",
       "domain": "CR_L3_AFILIACION_PARTIDARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2103,27 +2201,30 @@
       }
     },
     {
-      "name": "CR_L3_AFILIACION_PARTIDARIA - List",
-      "framework": "LIST",
+      "name": "CR_L3_AFILIACION_PARTIDARIA - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_AFILIACION_PARTIDARIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "20 — Liberación Nacional · Unidad Social Cristiana · Progreso Social Democrático · Nueva República · Frente Amplio · Liberal Progresista · …",
+            "regex": "(?iu)(?:(?:a(?:cci(?:on ciudadana|ón ciudadana)|vanza)|esperanza nacional|frente amplio|integraci(?:on nacional|ón nacional)|libera(?:ci(?:on nacional|ón nacional)|l progresista)|nueva rep(?:ublica|ública)|p(?:ac|in|l(?:n|p)|nr|psd|rogreso social democr(?:atico|ático)|u(?:eblo soberano|sc))|sin afiliaci(?:on|ón)|unid(?:ad social cristiana|os podemos)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "CR_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2139,27 +2240,30 @@
       }
     },
     {
-      "name": "CR_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "CR_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "16 — ANEP · APSE · SEC · ANDE · UNDECA · SINAE · …",
+            "regex": "(?iu)(?:(?:a(?:filiado|n(?:de|ep)|pse|sociaci(?:on solidarista|ón solidarista))|c(?:mtc|trn)|gremio|rerum novarum|s(?:ec|i(?:n(?:ae|dicalizado|trajap)|t(?:eco|rapequia)))|undeca))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CR_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "CR_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2194,7 +2298,7 @@
       "name": "CR_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "CR_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2210,10 +2314,29 @@
       }
     },
     {
+      "name": "CR_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "CR_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "CR_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "CR_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2229,27 +2352,30 @@
       }
     },
     {
-      "name": "CR_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "CR_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "14 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|diversidad sexual|gay|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbti(?:q\\+)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "CR_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2268,7 +2394,7 @@
       "name": "CR_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "CR_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2284,27 +2410,30 @@
       }
     },
     {
-      "name": "CR_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "CR_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "CR_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "15 — Mujer cisgénero · Hombre cisgénero · Mujer trans · Hombre trans · Persona no binaria · Otra · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|hombre(?: (?:cisg(?:enero|énero)|trans))?|mujer(?: (?:cisg(?:enero|énero)|trans))?|no binari(?:a|o)|otra|p(?:ersona no binaria|refiere no responder)|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_L3_VICTIMA - Path",
       "framework": "PATH",
       "domain": "CR_L3_VICTIMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2323,7 +2452,7 @@
       "name": "CR_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2350,7 +2479,7 @@
       "name": "CR_SALUD_COBERTURA - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_COBERTURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2366,27 +2495,30 @@
       }
     },
     {
-      "name": "CR_SALUD_COBERTURA - List",
-      "framework": "LIST",
+      "name": "CR_SALUD_COBERTURA - Values",
+      "framework": "REGEX",
       "domain": "CR_SALUD_COBERTURA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-cobertura.txt",
-            "matchStrength": 0.8
+            "note": "21 — Asegurado directo asalariado · Asegurado directo cuenta propia · Asegurado voluntario · Asegurado por el Estado · Pensionado IVM · Pensionado RNC · …",
+            "regex": "(?iu)(?:(?:as(?:alariado|egurado (?:directo (?:asalariado|cuenta propia)|por el estado|voluntario))|c(?:onvenio especial|uenta propia)|familiar(?: asegurado)?|ivm|no asegurado|p(?:ensionado(?: \\((?:ivm\\)|rnc\\)))?|or el estado|rivado)|rnc|se(?:guro privado|m)|voluntario))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2414,7 +2546,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2424,7 +2556,7 @@
       "name": "CR_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2443,7 +2575,7 @@
       "name": "CR_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2459,27 +2591,30 @@
       }
     },
     {
-      "name": "CR_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "CR_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "CR_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "46 — Acetaminofén · Ibuprofeno · Diclofenaco · Metformina · Glibenclamida · Losartán · …",
+            "regex": "(?iu)(?:(?:a(?:c(?:etaminof(?:en|én)|ido (?:acetilsalicilico|folico|valproico))|lprazolam|m(?:lodipino|oxicilina)|nticonceptivo|torvastatina|zitromicina)|c(?:efalexina|lonazepam|omplejo b)|d(?:iclofenaco|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|o(?:lanzapina|meprazol)|prednisona|quetiapina|risperidona|s(?:albutamol|ertralina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CR_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2515,7 +2650,7 @@
       "name": "CR_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2542,7 +2677,7 @@
       "name": "CR_SALUD_VIH - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_VIH",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2561,7 +2696,7 @@
       "name": "CR_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2577,27 +2712,30 @@
       }
     },
     {
-      "name": "CR_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "CR_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "CR_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2613,27 +2751,30 @@
       }
     },
     {
-      "name": "CR_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "CR_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "CR_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "20 — Física o motora · Auditiva · Visual · Intelectual · Psicosocial · Múltiple · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|ceguera|f(?:isica(?: o motora)?|ísica(?: o motora)?)|intelectual|m(?:ental|otora|ultiple|últiple)|n(?:inguna|o aplica)|psicosocial|sordera|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CR_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2649,27 +2790,30 @@
       }
     },
     {
-      "name": "CR_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "CR_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "CR_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con restricciones · pendiente · apto con recomendaciones",
+            "regex": "(?iu)(?:(?:apto(?: con re(?:comendaciones|stricciones))?|no apto|pendiente))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CR_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2688,7 +2832,7 @@
       "name": "CR_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "CR_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2707,7 +2851,7 @@
       "name": "CR_FIN_HISTORIAL_CREDITICIO - Path",
       "framework": "PATH",
       "domain": "CR_FIN_HISTORIAL_CREDITICIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2726,7 +2870,7 @@
       "name": "CR_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "CR_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2761,7 +2905,7 @@
       "name": "CR_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "CR_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2796,7 +2940,7 @@
       "name": "CR_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "CR_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2831,7 +2975,7 @@
       "name": "CR_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "CR_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2866,7 +3010,7 @@
       "name": "CR_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "CR_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2882,31 +3026,48 @@
       }
     },
     {
-      "name": "CR_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "CR_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "CR_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "19 — Avancemos · Crecemos · Bono de vivienda BANHVI · Red de Cuido · Pensión del Régimen No Contributivo · Beca FONABE · …",
+            "regex": "(?iu)(?:(?:a(?:vancemos|yuda del imas)|b(?:anhvi|eca fonabe|ono (?:de vivienda(?: \\(banhvi\\))?|proteger))|c(?:omedor escolar|recemos)|fonabe|imas|ninguno|pensi(?:on del regimen no contributivo|ón del régimen no contributivo)|r(?:ed de cuido|nc)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://cr-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "11 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6|7))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "11 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_FIN_CONDICION_SOCIOECONOMICA - Path",
       "framework": "PATH",
       "domain": "CR_FIN_CONDICION_SOCIOECONOMICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2922,27 +3083,30 @@
       }
     },
     {
-      "name": "CR_FIN_CONDICION_SOCIOECONOMICA - List",
-      "framework": "LIST",
+      "name": "CR_FIN_CONDICION_SOCIOECONOMICA - Values",
+      "framework": "REGEX",
       "domain": "CR_FIN_CONDICION_SOCIOECONOMICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-condicion-socioeconomica.txt",
-            "matchStrength": 0.6
+            "note": "21 — Pobreza extrema · Pobreza básica · Vulnerabilidad · No pobre · Quintil 1 · Quintil 2 · …",
+            "regex": "(?iu)(?:(?:a|b|c|d(?:ecil)?|e|no pobre|pobreza (?:b(?:asica|ásica)|extrema)|quintil(?: (?:1|2|3|4|5))?|sin clasificaci(?:on|ón)|vulnerab(?:ilidad|le)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CR_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "CR_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -2958,27 +3122,30 @@
       }
     },
     {
-      "name": "CR_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "CR_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "CR_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://cr-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "13 — Propia totalmente pagada · Propia pagando a plazos · Alquilada · En precario · Cedida o prestada · Otra · …",
+            "regex": "(?iu)(?:(?:alquilada|cedida(?: o prestada)?|en precario|otra|pr(?:e(?:cario|stada)|opia(?: (?:pagando a plazos|totalmente pagada))?)|tugurio))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CR_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "CR_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -3005,7 +3172,7 @@
       "name": "CR_PENAL_EXPEDIENTE - Path",
       "framework": "PATH",
       "domain": "CR_PENAL_EXPEDIENTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas costarricenses).",
+      "description": "Nombre de la columna y variantes usadas en sistemas costarricenses.",
       "config": {
         "paths": [
           {
@@ -3036,20 +3203,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{2}-\\d{6}-\\d{4}-[A-Z]{2,4}",
+            "regex": "0*(?:\\d{2}-\\d{6}-\\d{4}-[A-Z]{2,4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{2}-\\d{6}-\\d{4}",
+            "regex": "0*(?:\\d{2}-\\d{6}-\\d{4})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3323,7 +3490,7 @@
     },
     {
       "name": "CR_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "CR_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "CR_SALUD_DISCAPACIDAD",
@@ -3347,19 +3514,19 @@
     },
     {
       "name": "CR_FIN_DEUDA",
-      "algorithm": "CR_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CR_FIN_INGRESOS",
-      "algorithm": "CR_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CR_FIN_PATRIMONIO",
-      "algorithm": "CR_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CR_FIN_PENSION",
-      "algorithm": "CR_VALOR_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CR_FIN_PROGRAMA_SOCIAL",
@@ -3397,7 +3564,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "A1234567"
     },
@@ -3409,7 +3577,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "1-0234-0567"
     },
@@ -3434,7 +3603,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "BLM123"
     },
@@ -3450,7 +3620,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3679,8 +3850,29 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3702,6 +3894,18 @@
       "input": "Trastorno depresivo recurrente"
     },
     {
+      "name": "CR_CM_DIGITOS_ANCHO_FIJO",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "0234"
+    },
+    {
       "name": "CR_CEDULA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
@@ -3721,13 +3925,13 @@
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CR_CM_DIGITOS"
+                  "name": "CR_CM_DIGITOS_ANCHO_FIJO"
                 }
               },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CR_CM_DIGITOS"
+                  "name": "CR_CM_DIGITOS_ANCHO_FIJO"
                 }
               }
             ]
@@ -3744,19 +3948,19 @@
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CR_CM_DIGITOS"
+                  "name": "CR_CM_DIGITOS_ANCHO_FIJO"
                 }
               },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CR_CM_DIGITOS"
+                  "name": "CR_CM_DIGITOS_ANCHO_FIJO"
                 }
               }
             ]
           },
           {
-            "regex": "(\\d)(\\d{8})",
+            "regex": "(\\d)(\\d{4})(\\d{4})",
             "actions": [
               {
                 "type": "APPLY_ALGORITHM",
@@ -3767,7 +3971,13 @@
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CR_CM_DIGITOS"
+                  "name": "CR_CM_DIGITOS_ANCHO_FIJO"
+                }
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CR_CM_DIGITOS_ANCHO_FIJO"
                 }
               }
             ]
@@ -3790,8 +4000,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{11,12})",
+            "regex": "(0*?)(?:(\\d{11,12}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3818,8 +4031,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(3[\\s\\-]?120[\\s\\-]?)(\\d{6})",
+            "regex": "(0*?)(?:(3[\\s\\-]?120[\\s\\-]?)(\\d{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -3832,8 +4048,11 @@
             ]
           },
           {
-            "regex": "(3[\\s\\-]?130[\\s\\-]?[\\dA-Za-z]{6})",
+            "regex": "(0*?)(?:(3[\\s\\-]?130[\\s\\-]?[\\dA-Za-z]{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
@@ -3857,8 +4076,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(3[\\s\\-]?120[\\s\\-]?\\d{6})",
+            "regex": "(0*?)(?:(3[\\s\\-]?120[\\s\\-]?\\d{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3868,16 +4090,22 @@
             ]
           },
           {
-            "regex": "(3[\\s\\-]?\\d{3}[\\s\\-]?[\\dA-Za-z]{6})",
+            "regex": "(0*?)(?:(3[\\s\\-]?\\d{3}[\\s\\-]?[\\dA-Za-z]{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d{11,12})",
+            "regex": "(0*?)(?:([1-9]\\d{10,11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3887,8 +4115,11 @@
             ]
           },
           {
-            "regex": "(0?\\d[\\s\\-]?\\d{3,4}[\\s\\-]?\\d{3,4})",
+            "regex": "(0*?)(?:(0?\\d[\\s\\-]?\\d{3,4}[\\s\\-]?\\d{3,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4413,8 +4644,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?506[\\s\\-]?)([2458-9])([\\d\\s\\-]{7,10})",
+            "regex": "(0*?)(?:(\\+?506[\\s\\-]?)([2458-9])([\\d\\s\\-]{7,10}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4447,8 +4681,11 @@
             ]
           },
           {
-            "regex": "([2458-9])([\\d\\s\\-]{7,9})",
+            "regex": "(0*?)(?:([2458-9])([\\d\\s\\-]{7,9}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6408,8 +6645,11 @@
             ]
           },
           {
-            "regex": "(\\d{3})(\\d{14})",
+            "regex": "(0*?)(?:(\\d{3})(\\d{14}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6434,26 +6674,20 @@
       "input": "CR05015202001026284066"
     },
     {
-      "name": "CR_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4532000000000001"
-    },
-    {
       "name": "CR_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CR_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -6482,8 +6716,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6565,8 +6802,11 @@
             ]
           },
           {
-            "regex": "(\\d{3,6})",
+            "regex": "(0*?)(?:(\\d{3,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6616,8 +6856,11 @@
             ]
           },
           {
-            "regex": "(\\d)([\\s\\-])(\\d{6})([\\s\\-])(\\d{3})",
+            "regex": "(0*?)(?:(\\d)([\\s\\-])(\\d{6})([\\s\\-])(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6645,8 +6888,11 @@
             ]
           },
           {
-            "regex": "(\\d)([\\s\\-])(\\d{6})",
+            "regex": "(0*?)(?:(\\d)([\\s\\-])(\\d{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6800,8 +7046,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6828,8 +7077,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -6837,8 +7089,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6854,8 +7109,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6868,8 +7126,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7038,8 +7299,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7071,7 +7335,7 @@
       "input": "Quitirrisí"
     },
     {
-      "name": "CR_CODIGO_DTA",
+      "name": "CR_CODIGO_DTA_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -7080,6 +7344,34 @@
         "delimiter": "|",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "10707"
+    },
+    {
+      "name": "CR_CODIGO_DTA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CR_CODIGO_DTA_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "10707"
     },
@@ -7145,8 +7437,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7188,8 +7483,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,5})",
+            "regex": "(0*?)(?:(\\d{2,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7272,8 +7570,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7315,16 +7616,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -7387,8 +7694,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7441,8 +7751,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7510,8 +7823,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7564,8 +7880,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7618,8 +7937,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7672,8 +7994,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7726,8 +8051,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7780,8 +8108,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7834,8 +8165,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,8})",
+            "regex": "(0*?)(?:(\\d{1,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7972,8 +8306,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,6})",
+            "regex": "(0*?)(?:(\\d{4,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8026,8 +8363,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8047,21 +8387,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "CR_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://cr-grupos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "CR_DISCAPACIDAD_LISTA",
@@ -8095,8 +8420,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8149,8 +8477,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8218,8 +8549,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8250,42 +8584,6 @@
         "requireMask": false
       },
       "input": "En cobro judicial"
-    },
-    {
-      "name": "CR_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 50000,
-        "maxValue": 60000000
-      },
-      "input": "2400000"
-    },
-    {
-      "name": "CR_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 360000,
-        "maxValue": 6000000
-      },
-      "input": "780000"
-    },
-    {
-      "name": "CR_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000000,
-        "maxValue": 500000000
-      },
-      "input": "48000000"
-    },
-    {
-      "name": "CR_VALOR_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 150000,
-        "maxValue": 2500000
-      },
-      "input": "420000"
     },
     {
       "name": "CR_PROGRAMA_SOCIAL_LISTA",
@@ -8319,8 +8617,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8388,8 +8689,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8442,8 +8746,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8496,8 +8803,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8524,8 +8834,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(-)(\\d{6})(-)(\\d{4})(-)([A-Za-z]{2,4})",
+            "regex": "(0*?)(?:(\\d{2})(-)(\\d{6})(-)(\\d{4})(-)([A-Za-z]{2,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -8553,8 +8866,11 @@
             ]
           },
           {
-            "regex": "(\\d{2})(-)(\\d{6})(-)(\\d{4})",
+            "regex": "(0*?)(?:(\\d{2})(-)(\\d{6})(-)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -8576,8 +8892,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8599,8 +8918,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8648,30 +8970,9 @@
     "cr-condicion-socioeconomica-codigos.txt",
     "cr-condicion-socioeconomica.txt",
     "cr-detectar-apellidos.txt",
-    "cr-detectar-aptitud-laboral.txt",
-    "cr-detectar-cobertura.txt",
-    "cr-detectar-codigos-banderas.txt",
-    "cr-detectar-condicion-migratoria.txt",
-    "cr-detectar-condicion-socioeconomica.txt",
-    "cr-detectar-discapacidades.txt",
-    "cr-detectar-distritos.txt",
-    "cr-detectar-estado-civil.txt",
-    "cr-detectar-etnias.txt",
-    "cr-detectar-grupos-sanguineos.txt",
-    "cr-detectar-identidades-genero.txt",
-    "cr-detectar-medicamentos.txt",
-    "cr-detectar-nacionalidades.txt",
-    "cr-detectar-nivel-educativo.txt",
     "cr-detectar-nombres.txt",
-    "cr-detectar-orientaciones-sexuales.txt",
-    "cr-detectar-partidos.txt",
-    "cr-detectar-preferencias-politicas.txt",
-    "cr-detectar-programas-sociales.txt",
-    "cr-detectar-pueblos.txt",
-    "cr-detectar-religiones.txt",
+    "cr-detectar-sexo-letra.txt",
     "cr-detectar-sexo.txt",
-    "cr-detectar-sindicatos.txt",
-    "cr-detectar-tenencia-vivienda.txt",
     "cr-diagnosticos.txt",
     "cr-direcciones.txt",
     "cr-discapacidades.txt",
@@ -8682,7 +8983,6 @@
     "cr-estados-credito.txt",
     "cr-etnias-codigos.txt",
     "cr-etnias.txt",
-    "cr-grupos-sanguineos.txt",
     "cr-iban-paso.txt",
     "cr-iban-resultado.txt",
     "cr-iban-traslado.txt",

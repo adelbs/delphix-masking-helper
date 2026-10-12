@@ -205,7 +205,7 @@
     "SV_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
-      "masking": ["Payment Card: outro número que passa no algoritmo de Luhn. Só os valores com forma de cartão chegam a ele."]
+      "masking": ["Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
     },
     "SV_L1_BILLETERA": {
       "title": "Carteira digital e bitcoin",
@@ -500,27 +500,27 @@
     "SV_FIN_DEUDA": {
       "title": "Dívidas",
       "what": ["Saldos de crédito e de carteira, valores em atraso, parcelas, montos liberados e limites."],
-      "masking": ["Mapeado para um valor entre 100 e 250.000 dólares, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "SV_FIN_INGRESOS": {
       "title": "Renda e salário",
       "what": ["Salário, renda mensal ou familiar, honorários e salário de contribuição. O salário mínimo de comércio e serviços era de 408,80 dólares em 2026."],
-      "masking": ["Mapeado para um valor entre 365 e 6.000 dólares."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "SV_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": ["Patrimônio, ativos, avaliações, saldos em contas e depósitos a prazo."],
-      "masking": ["Mapeado para um valor entre 1.000 e 500.000 dólares."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "SV_FIN_PENSION": {
       "title": "Pensão e benefícios",
       "what": ["O valor da pensão, do subsídio ou do benefício, e a pensão alimentícia."],
-      "masking": ["Mapeado para um valor entre 304 e 3.000 dólares."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "SV_FIN_REMESAS": {
       "title": "Remessas",
       "what": ["O valor e a frequência das remessas familiares e a condição de receptor. Uma em cada quatro famílias salvadorenhas as recebe, e o dado diz quem emigrou e do que o domicílio vive."],
-      "masking": ["Mapeado para um valor entre 20 e 2.000 dólares."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "SV_FIN_PROGRAMA_SOCIAL": {
       "title": "Subsídios e programas sociais",

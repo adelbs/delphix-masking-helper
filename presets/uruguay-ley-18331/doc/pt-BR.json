@@ -369,7 +369,7 @@
         "Números de cartão de crédito e débito, reconhecidos pelo algoritmo de Luhn."
       ],
       "masking": [
-        "Payment Card: outro número que passa no algoritmo de Luhn. Só valores com forma de cartão chegam até ele."
+        "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
       ]
     },
     "UY_L1_BILLETERA": {
@@ -873,7 +873,7 @@
         "Saldos de crédito e de carteira, valores em atraso, parcelas, montantes concedidos e limites."
       ],
       "masking": [
-        "Mapeada para um valor entre 5.000 e 5.000.000 de pesos uruguaios, sem relação com o real."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "UY_FIN_INGRESOS": {
@@ -882,7 +882,7 @@
         "Sueldo nominal e líquido, renda mensal ou familiar, honorários e rendas. O salário mínimo nacional foi de cerca de 23.600 pesos mensais em 2025."
       ],
       "masking": [
-        "Mapeados para um valor entre 22.000 e 400.000 pesos uruguaios."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "UY_FIN_PATRIMONIO": {
@@ -891,7 +891,7 @@
         "Patrimônio, ativos, tasaciones e o aforo catastral, saldos de conta e de fundos, depósitos a prazo e a declaração juramentada de bens."
       ],
       "masking": [
-        "Mapeado para um valor entre 50.000 e 20.000.000 de pesos uruguaios."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "UY_FIN_PENSION": {
@@ -900,7 +900,7 @@
         "O valor da pasividad, da pensão ou do benefício, e a pensão alimentícia. Um em cada quatro uruguaios recebe uma."
       ],
       "masking": [
-        "Mapeado para um valor entre 15.000 e 200.000 pesos uruguaios."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "UY_FIN_PROGRAMA_SOCIAL": {

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "versionDate": "2026-09-21",
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Peru — Ley 29733 de Protección de Datos Personales",
     "pt-BR": "Peru — Ley 29733 de Protección de Datos Personales",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales peruanos conforme a la Ley 29733 y su reglamento (Decreto Supremo 016-2024-JUS): identificadores directos (DNI y RUC con dígito verificador válido, carné de extranjería, nombres, contacto, dirección, cuentas, placas), cuasi-identificadores (fecha de nacimiento, distrito y UBIGEO, código postal), los datos sensibles del artículo 2, 5 — datos biométricos que por sí mismos identifican, origen racial y étnico, ingresos económicos, convicciones políticas, religiosas, filosóficas y morales, afiliación sindical, salud y vida sexual —, además de datos genéticos, identidad de género, pueblo y lengua indígenas, datos financieros y antecedentes penales."
   },
   "profileSet": {
-    "name": "PE - Ley 29733 - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 2, 5), datos de salud, datos financieros y antecedentes penales, conforme a la Ley 29733 de Protección de Datos Personales del Perú y su reglamento (D.S. 016-2024-JUS).",
+    "name": "PE - Ley 29733 - v2",
+    "description": "Ley 29733 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "PE_L1_DNI - Path",
@@ -64,6 +64,7 @@
       "PE_L1_CONTRATO - Path",
       "PE_L1_USUARIO - Path",
       "PE_L1_CREDENCIAL - Path",
+      "PE_L1_CREDENCIAL - Regex",
       "PE_L1_GEOLOCALIZACION - Path",
       "PE_L1_GEOLOCALIZACION - Regex",
       "PE_L1_TEXTO_LIBRE - Path",
@@ -80,7 +81,7 @@
       "PE_L2_SEXO - Path",
       "PE_L2_SEXO - List",
       "PE_L2_DISTRITO - Path",
-      "PE_L2_DISTRITO - List",
+      "PE_L2_DISTRITO - Values",
       "PE_L2_UBIGEO - Path",
       "PE_L2_UBIGEO - Regex",
       "PE_L2_CENTRO_POBLADO - Path",
@@ -88,58 +89,59 @@
       "PE_L2_CODIGO_POSTAL - Path",
       "PE_L2_CODIGO_POSTAL - Type",
       "PE_L2_ESTADO_CIVIL - Path",
-      "PE_L2_ESTADO_CIVIL - List",
+      "PE_L2_ESTADO_CIVIL - Values",
       "PE_L2_OCUPACION - Path",
       "PE_L2_EMPLEADOR - Path",
       "PE_L2_NIVEL_EDUCATIVO - Path",
-      "PE_L2_NIVEL_EDUCATIVO - List",
+      "PE_L2_NIVEL_EDUCATIVO - Values",
       "PE_L2_INSTITUCION_EDUCATIVA - Path",
       "PE_L2_PERSONAS_A_CARGO - Path",
       "PE_L2_PERSONAS_A_CARGO - Type",
       "PE_L3_ORIGEN_ETNICO - Path",
-      "PE_L3_ORIGEN_ETNICO - List",
+      "PE_L3_ORIGEN_ETNICO - Values",
       "PE_L3_PUEBLO_INDIGENA - Path",
-      "PE_L3_PUEBLO_INDIGENA - List",
+      "PE_L3_PUEBLO_INDIGENA - Values",
       "PE_L3_LENGUA - Path",
-      "PE_L3_LENGUA - List",
+      "PE_L3_LENGUA - Values",
       "PE_L3_NACIONALIDAD - Path",
       "PE_L3_NACIONALIDAD - List",
       "PE_L3_RELIGION - Path",
-      "PE_L3_RELIGION - List",
+      "PE_L3_RELIGION - Values",
       "PE_L3_CONVICCION_FILOSOFICA - Path",
       "PE_L3_OPINION_POLITICA - Path",
-      "PE_L3_OPINION_POLITICA - List",
+      "PE_L3_OPINION_POLITICA - Values",
       "PE_L3_AFILIACION_PARTIDARIA - Path",
-      "PE_L3_AFILIACION_PARTIDARIA - List",
+      "PE_L3_AFILIACION_PARTIDARIA - Values",
       "PE_L3_AFILIACION_SINDICAL - Path",
-      "PE_L3_AFILIACION_SINDICAL - List",
+      "PE_L3_AFILIACION_SINDICAL - Values",
       "PE_L3_BIOMETRICO - Path",
       "PE_L3_BIOMETRICO - Type",
       "PE_L3_GENETICO - Path",
+      "PE_L3_GENETICO - Regex",
       "PE_L3_ORIENTACION_SEXUAL - Path",
-      "PE_L3_ORIENTACION_SEXUAL - List",
+      "PE_L3_ORIENTACION_SEXUAL - Values",
       "PE_L3_VIDA_SEXUAL - Path",
       "PE_L3_IDENTIDAD_GENERO - Path",
-      "PE_L3_IDENTIDAD_GENERO - List",
+      "PE_L3_IDENTIDAD_GENERO - Values",
       "PE_L3_VICTIMA - Path",
       "PE_SALUD_IDENTIFICADOR - Path",
       "PE_SALUD_COBERTURA - Path",
-      "PE_SALUD_COBERTURA - List",
+      "PE_SALUD_COBERTURA - Values",
       "PE_SALUD_DIAGNOSTICO - Path",
       "PE_SALUD_DIAGNOSTICO - Regex",
       "PE_SALUD_PROCEDIMIENTO - Path",
       "PE_SALUD_MEDICAMENTO - Path",
-      "PE_SALUD_MEDICAMENTO - List",
+      "PE_SALUD_MEDICAMENTO - Values",
       "PE_SALUD_TEXTO_CLINICO - Path",
       "PE_SALUD_TEXTO_CLINICO - Type",
       "PE_SALUD_RESULTADO_EXAMEN - Path",
       "PE_SALUD_VIH - Path",
       "PE_SALUD_GRUPO_SANGUINEO - Path",
-      "PE_SALUD_GRUPO_SANGUINEO - List",
+      "PE_SALUD_GRUPO_SANGUINEO - Values",
       "PE_SALUD_DISCAPACIDAD - Path",
-      "PE_SALUD_DISCAPACIDAD - List",
+      "PE_SALUD_DISCAPACIDAD - Values",
       "PE_SALUD_OCUPACIONAL - Path",
-      "PE_SALUD_OCUPACIONAL - List",
+      "PE_SALUD_OCUPACIONAL - Values",
       "PE_SALUD_REPRODUCTIVA - Path",
       "PE_SALUD_MENTAL - Path",
       "PE_FIN_INGRESOS - Path",
@@ -152,11 +154,11 @@
       "PE_FIN_PENSION - Path",
       "PE_FIN_PENSION - Type",
       "PE_FIN_PROGRAMA_SOCIAL - Path",
-      "PE_FIN_PROGRAMA_SOCIAL - List",
+      "PE_FIN_PROGRAMA_SOCIAL - Values",
       "PE_FIN_CLASIFICACION_SOCIOECONOMICA - Path",
-      "PE_FIN_CLASIFICACION_SOCIOECONOMICA - List",
+      "PE_FIN_CLASIFICACION_SOCIOECONOMICA - Values",
       "PE_FIN_VIVIENDA - Path",
-      "PE_FIN_VIVIENDA - List",
+      "PE_FIN_VIVIENDA - Values",
       "PE_PENAL_ANTECEDENTES - Path",
       "PE_PENAL_EXPEDIENTE - Path",
       "PE_PENAL_EXPEDIENTE - Regex"
@@ -164,7 +166,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la Ley 29733: DNI, RUC, carné de extranjería, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial de la Ley 29733",
       "domains": [
         "PE_L1_DNI",
         "PE_L1_RUC",
@@ -186,7 +188,7 @@
       "name": "PE_L1_DNI - Path",
       "framework": "PATH",
       "domain": "PE_L1_DNI",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -238,20 +240,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{8}[\\s\\-][0-9A-JK]",
+            "regex": "0*(?:\\d{8}[\\s\\-][0-9A-JK])",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{8}",
+            "regex": "0*(?:\\d{8})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -261,7 +263,7 @@
       "name": "PE_L1_RUC - Path",
       "framework": "PATH",
       "domain": "PE_L1_RUC",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -284,20 +286,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(10|15|17|20)\\d{9}",
+            "regex": "0*(?:(10|15|17|20)\\d{9})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{11}",
+            "regex": "0*(?:\\d{11})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -307,7 +309,7 @@
       "name": "PE_L1_DIGITO_VERIFICACION - Path",
       "framework": "PATH",
       "domain": "PE_L1_DIGITO_VERIFICACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -347,7 +349,7 @@
       "name": "PE_L1_CARNE_EXTRANJERIA - Path",
       "framework": "PATH",
       "domain": "PE_L1_CARNE_EXTRANJERIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -366,7 +368,7 @@
       "name": "PE_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "PE_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -394,7 +396,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -404,7 +406,7 @@
       "name": "PE_L1_ACTA - Path",
       "framework": "PATH",
       "domain": "PE_L1_ACTA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -423,7 +425,7 @@
       "name": "PE_L1_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "PE_L1_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -442,7 +444,7 @@
       "name": "PE_L1_CODIGO_ESTUDIANTE - Path",
       "framework": "PATH",
       "domain": "PE_L1_CODIGO_ESTUDIANTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -461,7 +463,7 @@
       "name": "PE_L1_COLEGIATURA - Path",
       "framework": "PATH",
       "domain": "PE_L1_COLEGIATURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -480,7 +482,7 @@
       "name": "PE_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "PE_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -524,7 +526,7 @@
       "name": "PE_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "PE_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -560,7 +562,7 @@
       "name": "PE_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "PE_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -616,7 +618,7 @@
       "name": "PE_L1_RAZON_SOCIAL - Path",
       "framework": "PATH",
       "domain": "PE_L1_RAZON_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -635,7 +637,7 @@
       "name": "PE_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "PE_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -675,12 +677,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -690,7 +692,7 @@
       "name": "PE_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "PE_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -713,12 +715,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?51[\\s\\-]?)?9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3}",
+            "regex": "0*(?:(\\+?51[\\s\\-]?)?9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "\\(?0?1\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}",
@@ -726,7 +728,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -736,7 +738,7 @@
       "name": "PE_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "PE_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -781,7 +783,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(mz|manzana)\\.?\\s*[a-z0-9]{1,3}\\s*(lt|lote)\\.?\\s*\\d{1,3}.*",
@@ -789,7 +791,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(urb|urbanizaci[oó]n|aa\\.?hh\\.?|asentamiento_?humano|pueblo_?joven|coop|cooperativa|residencial|conjunto_?habitacional)\\.?\\s+[a-záéíóúñ0-9.' ]{2,40}.*",
@@ -797,7 +799,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)k(m|il[oó]metro)\\.?\\s*\\d{1,3}\\s+(carretera|autopista|v[ií]a).*",
@@ -805,7 +807,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -815,7 +817,7 @@
       "name": "PE_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "PE_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -834,7 +836,7 @@
       "name": "PE_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "PE_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -853,7 +855,7 @@
       "name": "PE_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "PE_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -876,12 +878,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -891,7 +893,7 @@
       "name": "PE_L1_BILLETERA - Path",
       "framework": "PATH",
       "domain": "PE_L1_BILLETERA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -919,7 +921,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -929,7 +931,7 @@
       "name": "PE_L1_IP - Path",
       "framework": "PATH",
       "domain": "PE_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -952,20 +954,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -975,7 +977,7 @@
       "name": "PE_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "PE_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -998,20 +1000,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1021,7 +1023,7 @@
       "name": "PE_L1_COOKIE - Path",
       "framework": "PATH",
       "domain": "PE_L1_COOKIE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1040,7 +1042,7 @@
       "name": "PE_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "PE_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1068,7 +1070,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{2}[\\s\\-]?\\d{4}",
@@ -1076,7 +1078,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1086,7 +1088,7 @@
       "name": "PE_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "PE_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1114,7 +1116,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1124,7 +1126,7 @@
       "name": "PE_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "PE_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1143,7 +1145,7 @@
       "name": "PE_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "PE_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1162,7 +1164,7 @@
       "name": "PE_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "PE_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1181,7 +1183,7 @@
       "name": "PE_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "PE_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1197,10 +1199,61 @@
       }
     },
     {
+      "name": "PE_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "PE_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "PE_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "PE_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1236,7 +1289,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(7[0-9]|8[01])\\.\\d{4,}",
@@ -1244,7 +1297,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-\\d{1,2}\\.\\d{4,}",
@@ -1252,7 +1305,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1262,7 +1315,7 @@
       "name": "PE_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "PE_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1302,12 +1355,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{8}-[0-9A-JK]",
+            "regex": "0*(?:\\d{8}-[0-9A-JK])",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1315,15 +1368,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3}",
+            "regex": "0*(?:9\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1333,7 +1386,7 @@
       "name": "PE_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "PE_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1376,7 +1429,7 @@
       "name": "PE_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "PE_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1416,7 +1469,7 @@
       "name": "PE_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "PE_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1456,7 +1509,7 @@
       "name": "PE_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "PE_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1499,7 +1552,7 @@
       "name": "PE_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "PE_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1523,10 +1576,14 @@
         "valueLists": [
           {
             "file": "preset-file://pe-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://pe-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1535,7 +1592,7 @@
       "name": "PE_L2_DISTRITO - Path",
       "framework": "PATH",
       "domain": "PE_L2_DISTRITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1551,27 +1608,30 @@
       }
     },
     {
-      "name": "PE_L2_DISTRITO - List",
-      "framework": "LIST",
+      "name": "PE_L2_DISTRITO - Values",
+      "framework": "REGEX",
       "domain": "PE_L2_DISTRITO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-distritos.txt",
-            "matchStrength": 0.8
+            "note": "1737 — Chachapoyas · Asunción · Balsas · Cheto · Chiliquín · Chuquibamba · …",
+            "regex": "(?iu)(?:(?:a(?:b(?:ancay|elardo pardo lezameta)|c(?:a(?:r(?:i|í)|s)|c(?:ha|omarca)|h(?:aya|oma)|o(?:bamb(?:a|illa)|c(?:haca|ro)|lla|mayo|p(?:ampa|ia)|r(?:a|ia)|s(?: vinchos|tambo)?)?|raquia|zo)|g(?:allpampa|ua(?: blanca|s verdes))|hua(?:c|y(?:cha|ro))|ija|joyani|l(?:berto leveau|ca(?:menca)?|exander von humboldt|fonso ugarte|is|onso de alvarado|to (?:amazonas|biavo|de la alianza|inambari|lar(?:an|án)|nanay|pichigua|s(?:aposoa|elva alegre)|tapiche))|m(?:a(?:ntani|rilis|shca)|b(?:ar|o)|otape)|n(?:a(?:nea|pia)|c(?:ahuasi|h(?:ihuay|onga)|o(?:-huallo|n)?|ón)|d(?:a(?:bamba|gua|huayl(?:as|illas)|jes|marca|ra(?:pa|y)|ymarca)|oas|r(?:es avelino caceres dorregaray|és avelino cáceres dorregaray))|g(?:a(?:raes|smarca)|uia)|ra|t(?:a(?:bamba|uta)?|ioqu(?:ia|ía)|onio raymondi))|p(?:a(?:ricio pomares|ta)|lao|ongo)|quia|r(?:a(?:huay|mango|ncay|pa)|enal|ma)|s(?:c(?:ensi(?:on|ón)|ope)|i(?:a|llo)|quipata|unci(?:on|ón))|t(?:a(?:laya|quero|ura|villos (?:alto|bajo))|e|i(?:co|quipa)|uncolla)|u(?:ca(?:llama|ra)|rahua)|wajun|y(?:a(?:baca|huanco|pata|uca|vi(?:ri)?)|maraes|na|o)|z(?:angaro|ángaro))|b(?:a(?:gua(?: grande)?|jo biavo|lsa(?:puerto|s)|mba(?:marca|s)|nos|rran(?:c(?:a|o)|quita)|ños)|e(?:l(?:en|la(?: uni(?:on|ón)|vista(?: de la uni(?:on|ón))?)|én)|rnal)|o(?:l(?:ivar|ognesi|ívar)|ngar(?:a|á)|queron)|re(?:na|ña)|u(?:en(?:a vista alta|os aires)|ldibuyo))|c(?:a(?:ban(?:a(?:conde)?|illa)|c(?:atachi|eres del peru|h(?:achi|i(?:cadan|mayo))|ra)|hua(?:c(?:ho)?|panas)|i(?:cay|rani)|ja(?:bamba|cay|marquilla|ruro|tambo|y)?|l(?:a(?:marca|n(?:a|go)|puja)|ca|eta de carqu(?:in|ín)|l(?:a(?:huanca|lli|nmarca|yuc)|eria)|quis|zada)|m(?:an(?:a|ti|á)|i(?:laca|naca)|p(?:anilla|o(?:rredondo|verde)))|n(?:a(?:ri(?:a|s)|s|yre)|ch(?:a(?:bamba|que|yllo)|is)|darave|ete|gallo|is|oas de punta sal|ta)|p(?:a(?:c(?:hica|marca)|ya|zo)|elo|illas)|r(?:a(?:ba(?:mba|y(?:a|llo))|coto|mpoma|nia|po|vel(?:i|í)|ybamba|z)|hua(?:callanga|mayo|nca|pampa|z)|los ferm(?:in fitzcarrald|ín fitzcarrald)|men (?:alto|de la legua reynoso|salcedo)|umas)|s(?:a grande|ca(?:para|s)?|hapampa|itas|ma|pisapa|t(?:ill(?:a|o grande)|rovirreyna))|t(?:a(?:c(?:aos|he)?|huasi)|illuc)|ujul|y(?:a(?:lt(?:i|í)|ra(?:ni)?)|lloma|ma|na(?:rachi)?)|ñ(?:aris|ete))|c(?:a(?:pi|rhuayo|tca)|o(?:chaccasa|rca))|e(?:lend(?:in|ín)|rro (?:azul|colorado))|h(?:a(?:c(?:a(?:bamba|pa(?:lpa|mpa)|s|y(?:an|án))?|cho|ha(?:poyas|s)|lacayo|oche)|d(?:in|ín)|glla|l(?:a(?:co|marca)?|cos|huanca|l(?:abamba|huahuacho))|m(?:aca|bar(?:a|á))|n(?:c(?:ay(?:ba(?:nos|ños))?|hamayo)|guillo)|o|p(?:arra|imarca)|r(?:a(?:cato|t)|cana)|upimarca|v(?:i(?:n(?: de (?:huantar|pariarca)|a|illo)?|ña)|ín(?: de (?:huántar|pariarca))?)|zuta)|e(?:c(?:acupe|ca|ras)|p(?:en|én)|t(?:illa|o))|i(?:ara|c(?:ama|che|has|la(?:yo)?)|gu(?:ata|irip)|l(?:ca(?:s|y(?:marca|oc))?|ete|iqu(?:in|ín)|lia)|mb(?:an|ote|án)|n(?:ch(?:a(?: (?:alta|baja)|o|ypujio)?|ero(?:s)?|ihuasi|o)|ga(?:lpo|s))|p(?:ao|urana)|qui(?:an|án)|rimoto|squilla|vay)|o(?:c(?:hope|o(?:pe|s)?)|jata|lon|n(?:go(?:s (?:alto|bajo)|yape)|ta(?:bamba|li))|r(?:as|o(?:pampa|s)|rillos)|ta)|u(?:cuito|g(?:ay|ur)|lucanas|m(?:bivilcas|pi|uch)|ngui|p(?:a(?:ca|marca)?|uro)|qui(?:bamb(?:a|illa)|s)|r(?:campa|u(?:bamba|ja))|schi))|i(?:e(?:lo punco|neguilla)|rca|udad nueva)|o(?:a(?:laque|sa|ta|yllo)|c(?:a(?:bamba|chacra|s)|h(?:a(?:bamba|ma(?:l|rca)|peti|rcas|s)|orco))|do del pozuzo|ishco|jata|l(?:asay|c(?:a(?:bamba|mar)?|ha)|onia|pas|qu(?:e(?:marca|pata)|ioc)|ta)|m(?:a(?:ndante noel|s)|bapata)|n(?:ayca|c(?:epci(?:on|ón)|h(?:a(?:marca|n)|ucos|án))|d(?:e(?:bamba|suyos)|or(?:canqui|marca|oma)|uriri)|ga(?:lla|s)|i(?:la|ma)|stituci(?:on|ón)|t(?:amana|ralmirante villar|umaz(?:a|á)))|p(?:a(?:ll(?:in|ín)|ni)?|oraque)|r(?:a(?:cora|ni)|culla|is|o(?:n(?:el (?:casta(?:neda|ñeda)|gregorio albarracin lanchipa|portillo)|go)|sha)|rales|tegana)|s(?:me|p(?:an|án))|ta(?:bambas|huasi|paraco|ruse)|viriali|y(?:a|llurqui))|r(?:isto nos valga|ucero)|u(?:chumbaya|enca|ispes|jillo|l(?:ebras|lhuas)|mba|numbuqui|pi(?:snique)?|r(?:a(?: mori|huasi|sco)|gos|i(?:baya|caca|man(?:a|á))|pahuasi)|s(?:ca|ipata)|t(?:ervo|urapi)|yocuyo|ñumbuqui)|á(?:ceres del perú|tac))|d(?:a(?:niel (?:al(?:cides carri(?:on|ón)|omias robles)|hernandez)|tem del mara(?:non|ñon))|e(?:an valdivia|saguadero)|os de mayo)|e(?:charate|duardo villanueva|l(?: (?:a(?:gustino|l(?:garrobal|to))|c(?:armen(?: de la frontera)?|enepa|ollao)|dorado|eslab(?:on|ón)|ingenio|m(?:antaro|ilagro)|oro|p(?:arco|orvenir|rado)|ta(?:llan|mbo))|eazar guzman barron|ias soplin vargas)|milio san mart(?:in|ín)|nca(?:nada|ñada)|s(?:pinar|tique(?:-pampa)?)|t(?:en(?: puerto)?|én(?: puerto)?))|f(?:er(?:nando lores|re(?:nafe|ñafe))|i(?:del olivas escudero|tzcarrald)|lor(?:encia de mora|ida)|r(?:ias|ías))|g(?:eneral s(?:anchez cerro|ánchez cerro)|o(?:rgor|yllarisquizga)|r(?:a(?:n(?: chim(?:u|ú)|ada)|u)|egorio pita|ocio prado)|u(?:adalupito|zmango))|h(?:a(?:bana|quira)|er(?:milio valdiz(?:an|án)|o(?:es albarracin chucatamani|inas toledo))|on(?:gos|oria)|u(?:a(?:bal|c(?:-huas|a(?:chi|na|r|schuque|ybamba|ña)|c(?:ana|his)|h(?:ac|is|o(?:colpa|n|s)|upampa|ón)|ll(?:an|án)|ra(?:chuco|puquio)|ullani)|l(?:gayoc|huas|la(?:ga|nca)|may)|m(?:a(?:chuco|l(?:i(?:es)?|í(?:es)?)|n(?:caca chico|g(?:a|uilla)|quiquia|tanga)|tambo)|b(?:alpa|o(?:s)?)|para)|n(?:c(?:a(?: sancos|-huanca|bamba|n(?:e|o|é)?|p(?:i|on|ón)|r(?:a(?:ma|ni|y(?:lla)?)|qui)|s(?:pata)?|y(?:a|o))|ha(?:co|y)|án)|do(?:val)?|ec|gascar|ipaca|oquite|ta(?:n|r)?|u(?:ara|huanu)|za)|quirca|r(?:a(?:l|n(?:chal|go)|z)|i(?:aca|bamba|colca|pampa)?|m(?:aca|ey)|o(?:c(?:hir(?:i|í)|ondo)|s)?)|s(?:ahuasi|icancha|m(?:in|ín)|o|ta)|ta(?:sani)?|ura|y(?:-huay|a(?:cundo arma|n(?:a)?)?|l(?:as|illas|l(?:a(?:bamba|cay(?:an|án)|huara|n|pampa|ti|y(?: grande)?)|o|án))|nacotas|o(?:pata)?|rapata|tar(?:a|á)|ucachi|án)|ñec)|e(?:petuhe|rtas)|i(?:cungo|mbayoc|poca)|may|á(?:chac|ntar)))|i(?:beria|ch(?:oc(?:an|án)|u(?:na|pampa|ña))|g(?:nacio escudero|uain)|huari|l(?:a(?:baya|ve)|limo|o)|m(?:aza|perial)|n(?:a(?:huaya|mbari|pari)|c(?:ahuasi|hupalla|lan)|d(?:ependencia|iana)|g(?:enio|uilpata)|kawasi)|paria|quitos|ra(?:y|zola)|slay|t(?:e|uata)|zcuchaca|ñapari)|j(?:a(?:c(?:as (?:chico|grande)|obo hunter)|en|malca|n(?:gas|jaillo)|qui|uja|yanca|zan|én)|e(?:beros|naro herrera|pelacio|quetepeque|s(?:us (?:maria|nazareno)|ús (?:maría|nazareno)))|i(?:lili|rcan|via)|o(?:rge (?:basadre|chavez)|s(?:e (?:crespo y castillo|domingo choquehuanca|galvez|l(?:eonardo ortiz|uis bustamante y rivero)|ma(?:nuel quiroz|ria (?:arguedas|quimper))|sabogal)|é (?:crespo y castillo|domingo choquehuanca|galvez|l(?:eonardo ortiz|uis bustamante y rivero)|ma(?:nuel quiroz|ría (?:arguedas|quimper))|sabogal)))|u(?:an(?: (?:espinoza medrano|guerra)|ju(?:i|í))|l(?:c(?:a(?:marca|n)|án)|i(?:aca)?)|mbilla|sto apu sahuaraura))|k(?:aquiabamba|elluyo|ishuara|os(?:nipata|ñipata)|u(?:mpirushiato|nturkanki))|l(?:a(?: (?:arena|b(?:anda de shilcayo|rea)|c(?:apilla|o(?:ipa|nvenci(?:on|ón))|ruz|uesta)|esperanza|florida|huaca|j(?:alca|oya)|libertad de pall(?:an|án)|m(?:a(?:r|tanza)|erced|o(?:lina|rada))|oroya|p(?:ampa|e(?:ca|rla)|rimavera|unta)|ramada|tingui(?:na|ña)|uni(?:on|ón)|victoria|yarada los palos)|berinto|c(?:abamba|haqui)|gunas|huaytambo|jas|laquiz|m(?:a(?:s|y)|bra(?:ma|s)|p(?:a|i(?:an|án))|ud)|n(?:cones|g(?:a|ui))|r(?:a(?:ma(?:rca|te)|os)|e(?:do|s)|i(?:a)?)|s (?:amazonas|lomas|pi(?:edras|rias))|uricocha|yo)|e(?:imebamba|on(?:cio prado|or ordo(?:nez|ñez))|vanto)|i(?:m(?:a(?:bamba|tambo)|bani)|nc(?:e|ha)|rcay|vitaca)|l(?:a(?:c(?:anora|ll(?:in|ín))|lli|m(?:a|ell(?:in|ín))|p(?:a|o)|ta|uta|ylla)|ipa(?:ta)?|o(?:c(?:hegua|llapampa)|que)|u(?:mpa|sco|ta))|o(?:bitos|c(?:roja|umba)|mas|n(?:g(?:ar|otea|uita)|ya (?:chico|grande))|s (?:aquijes|ba(?:nos del inca|ños del inca)|chankas|morochucos|o(?:livos|rganos)|órganos))|u(?:c(?:anas|ma|re)|is carranza|nahuana|r(?:i(?:cocha|gancho|n)|ín)|ya(?: viejo|ndo)?)|ámud)|m(?:a(?:c(?:a(?:ri|te)?|h(?:aguay|e|upicchu)|usani)|d(?:ean|rigal)|gdalena de(?: cao|l mar)|jes|l(?:a|vas)|mara|n(?:a(?:ntay|s|zo)|co(?:ra|s)|gas|itea|seriche|ta|u(?:el antonio mesones muro)?|zanares)|quia|r(?:a(?:n(?:gani|on|ura)|s|ñon)?|c(?:a(?:ba(?:l|mba)|p(?:ata|omacocha)|r(?:a|á)|s|velica)?|ona)|gos|i(?:a(?: parado de bellido|no (?:damaso beraun|melgar|nicol(?:as valcarcel|ás valcarcel))|s|tana)|scal (?:benavides|c(?:a(?:ceres|stilla)|áceres)|luzuriaga|nieto|ram(?:on castilla|ón castilla)))|mot|ía(?: parado de bellido|s))|s(?:i(?:n|sea)|ma(?: chicche)?|ín)|t(?:a(?:coto|huasi|laque|palo|ra)|o|ucana)|ynas|z(?:a(?:mari|n)|án)|ñazo)|e(?:gantoni|lgar)|i(?: per(?:u|ú)|caela bastidas|guel (?:checa|iglesias)|lpuc|r(?:a(?:costa|flores)|gas)|to)|o(?:ch(?:e|umi)|ho|l(?:ino(?:pampa|s)?|le(?:ba(?:mba|ya)|ndo|pa(?:mpa|ta)))|n(?:obamba|sef(?:u|ú)|te(?:ro|video)|z(?:on|ón))|r(?:colla|o(?:cocha|na)?|rop(?:e|on|ón))|soc llacta|tupe|yobamba)|u(?:nani|qui(?:yauyo)?|sga|ñani)|áncora|órrope)|n(?:a(?:huimpuquio|m(?:balle|ora)|nchoc|po|uta|v(?:an|án)|zca)|e(?:pe(?:na|ña)|shuya)|i(?:c(?:asio|ol(?:as de pierola|ás de pierola))|e(?:pos|va)|na(?:bamba|caca))|u(?:ev(?:a (?:arica|cajamarca|requena)|e de julio|o (?:chimbote|imperial|occoro|progreso))|noa|ñoa))|o(?:bas|c(?:a(?:lli|na|ña)|o(?:bamba|n(?:a|gate)|ruro|yo|ña)|ros|u(?:caje|mal|viri))|l(?:l(?:a(?:chea|ntaytambo|raya)|eros)|mos)|m(?:a(?:cha|s|te)|ia)|n(?:dores|g(?:o(?:n|y)|ón))|r(?:co(?:pampa|tuna)|o(?:nccoy|pesa)|urillo)|t(?:oca|uzco)|xa(?:marca|pampa)|y(?:o(?:lo|n|t(?:un|ún))|ón))|p(?:a(?:c(?:a(?:ipampa|nga|pausa|r(?:a(?:n|os)|án)|smayo|ycasa)?|c(?:aritambo|h(?:a|o))|h(?:a(?:c(?:amac|onas|utec|ámac)|marca|ngara|s)|i(?:a|tea|za))|ll(?:on|ón)|o(?:bamba|cha|ra)|ucha)|dre (?:abad|marquez)|i(?:co|j(?:an|án)|mas|ta)|jarillo|l(?:ca(?:mayo|zu)?|l(?:a(?:nchacra|sca)|pata)|pa)|mpa(?: hermosa|c(?:hiri|olca)|marca|rom(?:as|ás)|s(?: (?:chico|de hospital))?)|n(?:ao|c(?:an|án)|goa)|pa(?:playa|yal)|r(?:a(?:cas|monga|nday|r(?:ca|in|ín)|s|tia)|co(?:na|y)?|do miguel|i(?:a(?:coto|huanca)|na(?:cochas|ri|s)|ñas)|obamba|uro)|staza|t(?:a(?:mbuco|po|ypampa|z)|i(?:bamba|vilca))|u(?:ca(?:r(?: del sara sara|a|bamba|colla|pata|tambo)?|s)|sa)|zos)|e(?:bas|dro (?:galvez|vilca apaza)|ren(?:e|é))|hara|i(?:as|c(?:h(?:a(?:cani|naqui|ri)|i(?:gua|rhua)|os)|ota|si)|l(?:c(?:haca|omayo|uyo)|l(?:co marca|pinto|uana)|pichaca)|m(?:entel|pingos)|n(?:ra|to recodo)|on|ra|s(?:ac(?:oma)?|co(?:bamba|yacu)?|uquia)|t(?:ipo|umarca)|ón)|later(?:ia|ía)|o(?:c(?:o(?:huanca|llay)|si)|l(?:obaya|vora)|ma(?:bamba|c(?:anch(?:a|i)|ocha)|huaca|lca|ta)|nto|ro(?:to|y)|sic|toni|zuzo)|ro(?:greso|videncia)|u(?:c(?:a(?:c(?:aca|olpa)|l(?:a|á)|r(?:a|á)|yacu)|usana|yura)|e(?:blo (?:libre|nuevo)|nte piedra|rto (?:berm(?:udez|údez)|inca))|inahua|l(?:an|lo|án)|n(?:cha(?:na|o)|os|ta (?:de bomb(?:on|ón)|hermosa|negra))|qui(?:na|o)|r(?:us|ús)|si|t(?:i(?:n(?:a|za)|s)|umayo)|y(?:ca|usca)|ños)|áucar(?: del sara sara)?|ólvora)|qu(?:e(?:chualla|hue|llouno|que(?:na|ña)|r(?:co|ecotillo|o(?:bamba|cot(?:illo|o)|palca)))|i(?:aca|c(?:acha|h(?:es|ua(?:s|y)))|l(?:ahuani|ca(?:puncu|s)?|lo|mana)|mbiri|n(?:ches|istaquillas|jalca|o(?:cay|ta)|ua(?:bamba)?)|quijana|ruvilca|s(?:huar|picanchi|qui)|to-arma|villa|ñota))|r(?:a(?:gash|huapampa|m(?:on castilla|ón castilla)|nra(?:cancha|hirca)|pay(?:an|án)|ymondi|zuri)|e(?:c(?:ta|uay)|que)|i(?:c(?:ardo palma|r(?:an|án))|mac|nconada llicuar|o(?: (?:grande|magdalena|negro|santiago|tambo)|ja)|pan)|o(?:ble|cchacc|dr(?:iguez de mendoza|íguez de mendoza)|ndo(?:c(?:an|án)|s)|sa(?: panduro|spata))|u(?:misapa|pa-rupa)|í(?:mac|o (?:grande|magdalena|negro|santiago|tambo)))|s(?:a(?:ba(?:ino|ndia)|c(?:anche|haca|samarca)|isa|l(?:a(?:manca|verry)|ca(?:bamba|huasi)|itral|lique|po)|m(?:a(?:n(?:co)?)?|egua|u(?:el pastor|gari)|án)|n(?: (?:a(?:gust(?:in|ín)|n(?:dr(?:es(?: de (?:cutervo|tupicocha))?|és(?: de (?:cutervo|tupicocha))?)|t(?:on(?:io(?: de (?:antaparco|c(?:achi|huca|usicancha)|putina))?)?|ón)))|b(?:artolo(?:m(?:e|é))?|e(?:nito|rnardino)|orja|uenaventura)|c(?:arlos|lemente|rist(?:obal(?: de rajan)?|óbal(?: de rajan)?))|dami(?:an|án)|f(?:e(?:lipe|rnando)|rancisco(?: de(?: (?:asis(?: de yarusyac(?:an|án))?|cayr(?:an|án)|daguas|ravacayco|sangayaico)|l yeso))?)|g(?:aban|regorio)|hilarion|i(?:gnacio|sidro(?: de maino)?)|j(?:a(?:cinto|vier de alpabamba)|er(?:onimo(?: de tunan)?|ónimo(?: de tunán)?)|o(?:aqu(?:in|ín)|s(?:e(?: de(?: (?:lo(?:s molinos|urdes)|quero|sisa|ticllas|ushua)|l alto))?|é(?: de(?: (?:lo(?:s molinos|urdes)|quero|sisa|ticllas|ushua)|l alto))?))|uan(?: (?:bautista|de(?: (?:bigote|c(?:hac(?:na|ña)|utervo)|iris|jarpa|l(?:a virgen|icupis|opecancha|urigancho)|miraflores|rontoy|s(?:alinas|iguas)|ta(?:ntaranche|rucani)|y(?:anac|scos|ánac))|l oro)))?)|l(?:orenzo(?: de quinti)?|uis(?: de (?:lucma|shuaro))?)|m(?:a(?:r(?:cos(?: de rocchac)?|t(?:in de porres|ín de porres))|teo(?: de otao)?)|iguel(?: de (?:aco(?:s)?|c(?:auri|haccrampa|orpanqui)|el faique|mayocc))?)|nicol(?:as|ás)|p(?:ablo(?: de pillao)?|edro(?: de (?:c(?:a(?:chora|jas|sta)|h(?:a(?:na|ul(?:an|án))|un(?:an|án))|oris)|hua(?:carpana|ncayre)|l(?:arcay|loc)|p(?:alco|il(?:as|lao)|utina punco)))?)|r(?:a(?:fael|m(?:on|ón))|o(?:m(?:an|án)|que de cumbaza))|s(?:alvador(?: de quije)?|ebasti(?:an|án)|ilvestre de coch(?:an|án))|vicente de ca(?:nete|ñete))|a(?:goran|yca)?|c(?:hez carrion|os)|dia|ga(?:llaya|rar(?:a|á))|o|t(?:a(?: (?:an(?:a(?: de (?:huaycahuacho|tusi))?|ita)|b(?:arbara de carhuacayan|árbara de carhuacayán)|c(?:atalina(?: de mossa)?|ruz de (?:andamarca|c(?:huca|ocachacra)|flores|toledo))|eulalia|isabel de siguas|l(?:eonor|uc(?:ia|ía))|mar(?:ia(?: de(?: (?:chicmo|huachipa)|l (?:mar|valle)))?|ía(?: de(?: (?:chicmo|huachipa)|l (?:mar|valle)))?)|r(?:ita de siguas|osa(?: de (?:alto yanajanca|ocopa|quives|sacco))?)|teresa))?|i(?:ago de (?:anchucaya|c(?:ao|h(?:allas|ilcas|ocorvos|uco))|lucanamarca|p(?:aucaray|ischa|upuja)|quirahuara|surco|tu(?:cuma|na))|llana)|o (?:domingo(?: de (?:a(?:cobamba|nda)|capillas|l(?:a capilla|os olleros)))?|to(?:m(?:as(?: de pata)?|ás(?: de pata)?)|ribio))))|p(?:allanga|illica|osoa)|quena|r(?:a(?: sara|yacu)|hua|in|timbamba|ín)|tipo|u(?:ce(?:pampa)?|rama|sa)|y(?:a(?:n|pullo)|l(?:a|la)|án)|ñ(?:a(?:yca)?|o))|e(?:c(?:clla|hura)|pahua|xi)|h(?:a(?:mboyacu|nao|paja|toja)|i(?:lla|pasbamba)|u(?:n(?:qui|te)|pluy))|i(?:bayo|c(?:aya|chez|sibamba|uani)|huas|llapata|m(?:bal|on bolivar|ón bolívar)|n(?:a|cos|ga|sicap)|ta(?:bamba|cocha|jara)|via)|o(?:c(?:abaya|o(?:s|ta))|loco|n(?:che|dor(?:illo)?)|plin|r(?:a(?:s|ya)|itor|ochuco))|u(?:btanjalla|c(?:cha|re)|itucancha|llana|mbilca|nampe|pe(?: puerto)?|r(?:cubamba|quillo)|sapaya|y(?:ckutambo|o))|ánchez carrión)|t(?:a(?:ba(?:conas|losos)|cabamba|hua(?:manu|nia)|la(?:ra|vera)|m(?:arindo|b(?:illo|o(?: (?:de mora|grande)|bamba|pata)?|urco))|nta(?:mayo|r(?:a|ica))?|p(?:a(?:cocha|irihua|y)|iche|o|uc)|r(?:a(?:co|poto|ta|y)|ica|ma|ucachi)|te|u(?:ca|ri(?:a|ja|pampa))|ya(?:bamba|caja))|eniente (?:c(?:esar lopez rojas|ésar lopez rojas)|manuel clavero)|i(?:abaya|billo|c(?:a(?:co|pampa)|l(?:acay(?:an|án)|los)|rapo)|gre|lali|n(?:co|go(?: de (?:ponasa|saposoa))?|icachi|ta(?:y(?: puncu)?)?|yahuarco)|p(?:an|án)|quillaca|rapata|sco)|o(?:c(?:ache|moche)|m(?:ay kichwa|epampa)|ngod|r(?:a(?:ta|ya)|ibio casanova|o|res causana)|to(?:ra|s)|urnavista)|r(?:es (?:de diciembre|unidos)|ita|ompeteros)|u(?:cume|m(?:a(?:n|y huaraca)|bad(?:en|én)|án)|n(?:an marca|án marca)|p(?:ac amaru(?: inca)?|e)|rpay|ti)|ú(?:cume|pac amaru(?: inca)?))|u(?:binas|c(?:h(?:iza|u(?:ma(?:rca|yo)|raccay))|o|uncha)|lcumayo|ma(?:chiri|ri)|n(?:i(?:cachi|on (?:a(?:gua blanca|shaninka)|progreso)|ón (?:a(?:gua blanca|sháninka)|progreso))|on)|pahuacho|r(?:a(?:ca|nmarca|rinas)|cos|pay|ubamba)|s(?:icayos|quil)|t(?:c(?:o|ubamba)|icyacu)|ñón)|v(?:argas guerra|e(?:gueta|intis(?:eis de octubre|iete de noviembre)|lille|ntanilla)|i(?:c(?:co|e|hayal|tor (?:fajardo|larco herrera))|l(?:avila|ca(?:bamba|nchos|s huam(?:an|án))|la (?:el salvador|kintiarina|mar(?:ia del triunfo|ía del triunfo)|rica|virgen)|que(?: chico)?)|n(?:ac|chos)|ques|r(?:aco|u(?:ndo)?|ú)|s(?:chongo|ta alegre)|t(?:is|o(?:c|r))|zcatan del ene|ñac)|égueta|í(?:ctor (?:fajardo|larco herrera)|tor))|wanchaq|y(?:a(?:cus|guas|m(?:ango|brasbamba|on|ón)|n(?:a(?:c(?:a(?:ncha)?)?|hua(?:nca|ra|ya)|ma|oca|quihua|s|tile)|que|talo)|querana|r(?:abamba|inacocha|owilca|umayo)|u(?:ca(?: del rosario)?|li|risque|t(?:an|án)|y(?:a|os|uc(?:an|án)))|vari)|o(?:nan|rongos)|u(?:cay|ng(?:a(?:r|y)?|uyo)|p(?:an|án)|r(?:a(?:c(?:marca|yacu))?|imaguas|ua)|yapichis)|ánac)|z(?:a(?:patero|rumilla)|epita|orritos|urite)|ámbar|ñahuimpuquio))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L2_UBIGEO - Path",
       "framework": "PATH",
       "domain": "PE_L2_UBIGEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1594,12 +1654,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1\\d|2[0-5])\\d{2}(\\d{2})?",
+            "regex": "0*(?:(0[1-9]|1\\d|2[0-5])\\d{2}(\\d{2})?)",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1609,7 +1669,7 @@
       "name": "PE_L2_CENTRO_POBLADO - Path",
       "framework": "PATH",
       "domain": "PE_L2_CENTRO_POBLADO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1628,7 +1688,7 @@
       "name": "PE_L2_URBANIZACION - Path",
       "framework": "PATH",
       "domain": "PE_L2_URBANIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1647,7 +1707,7 @@
       "name": "PE_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "PE_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1688,7 +1748,7 @@
       "name": "PE_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "PE_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1704,27 +1764,30 @@
       }
     },
     {
-      "name": "PE_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "PE_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "PE_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "20 — Soltero a · Casado a · Conviviente · Separado a · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:c(?:asad(?:a|o(?:/a)?)|onviv(?:encia|iente))|divorciad(?:a|o(?:/a)?)|s(?:eparad(?:a|o(?:/a)?)|olter(?:a|o(?:/a)?))|uni(?:on de hecho|ón de hecho)|viud(?:a|o(?:/a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "PE_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1751,7 +1814,7 @@
       "name": "PE_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "PE_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1770,7 +1833,7 @@
       "name": "PE_L2_NIVEL_EDUCATIVO - Path",
       "framework": "PATH",
       "domain": "PE_L2_NIVEL_EDUCATIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1786,27 +1849,30 @@
       }
     },
     {
-      "name": "PE_L2_NIVEL_EDUCATIVO - List",
-      "framework": "LIST",
+      "name": "PE_L2_NIVEL_EDUCATIVO - Values",
+      "framework": "REGEX",
       "domain": "PE_L2_NIVEL_EDUCATIVO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-nivel-educativo.txt",
-            "matchStrength": 0.6
+            "note": "21 — Sin nivel · Inicial · Primaria incompleta · Primaria completa · Secundaria incompleta · Secundaria completa · …",
+            "regex": "(?iu)(?:(?:analfabeto|doctorado|inicial|maestr(?:ia(?: o doctorado)?|ía(?: o doctorado)?)|primaria(?: (?:completa|incompleta))?|s(?:ecundaria(?: (?:completa|incompleta))?|in nivel|uperior(?: (?:t(?:ecnica (?:completa|incompleta)|écnica (?:completa|incompleta))|universitaria (?:completa|incompleta)))?)|t(?:ecnica|écnica)|universitaria))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L2_INSTITUCION_EDUCATIVA - Path",
       "framework": "PATH",
       "domain": "PE_L2_INSTITUCION_EDUCATIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1825,7 +1891,7 @@
       "name": "PE_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "PE_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1865,7 +1931,7 @@
       "name": "PE_L3_ORIGEN_ETNICO - Path",
       "framework": "PATH",
       "domain": "PE_L3_ORIGEN_ETNICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1881,31 +1947,48 @@
       }
     },
     {
-      "name": "PE_L3_ORIGEN_ETNICO - List",
-      "framework": "LIST",
+      "name": "PE_L3_ORIGEN_ETNICO - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_ORIGEN_ETNICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-origen-etnico.txt",
-            "matchStrength": 0.9
+            "note": "23 — Quechua · Aimara · Nativo o indígena de la Amazonía · Perteneciente a otro pueblo indígena u originario · Negro moreno zambo mulato o afroperuano · Blanco · …",
+            "regex": "(?iu)(?:(?:a(?:froperuano|imara|maz(?:onico|ónico)|ymara)|blanco|ind(?:igena|ígena)|mestizo|n(?:ativo(?: o ind(?:igena de la amazonia|ígena de la amazonía))?|egro(?:, moreno, zambo, mulato o afroperuano)?|ikkei)|otro|perteneciente a otro pueblo ind(?:igena u originario|ígena u originario)|quechua|tus(?:an|án)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://pe-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_PUEBLO_INDIGENA - Path",
       "framework": "PATH",
       "domain": "PE_L3_PUEBLO_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1921,27 +2004,30 @@
       }
     },
     {
-      "name": "PE_L3_PUEBLO_INDIGENA - List",
-      "framework": "LIST",
+      "name": "PE_L3_PUEBLO_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_PUEBLO_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-pueblos.txt",
-            "matchStrength": 0.85
+            "note": "41 — Quechuas · Aimara · Asháninka · Awajún · Shipibo-Konibo · Shawi · …",
+            "regex": "(?iu)(?:(?:a(?:chuar|guaruna|imara|sh(?:aninka(?: del gran pajonal)?|áninka)|waj(?:un|ún))|bora|h(?:arakbut|uambisa)|k(?:andozi|ichwa|onibo|ukama(?: kukamiria)?)|ma(?:chiguenga|tsigenka)|no(?: pertenece a ning(?:un pueblo|ún pueblo)|matsigenga)|quechuas|sh(?:awi|ipibo(?:-konibo)?)|ticuna|uro|wampis|y(?:agua|ine)))",
+            "matchStrength": 0.85,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_LENGUA - Path",
       "framework": "PATH",
       "domain": "PE_L3_LENGUA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -1957,27 +2043,30 @@
       }
     },
     {
-      "name": "PE_L3_LENGUA - List",
-      "framework": "LIST",
+      "name": "PE_L3_LENGUA - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_LENGUA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "28 — Castellano · Quechua · Aimara · Asháninka · Awajún · Shipibo-Konibo · …",
+            "regex": "(?iu)(?:(?:a(?:chuar|imara|sh(?:aninka|áninka)|waj(?:un|ún)|ymara)|castellano|espa(?:nol|ñol)|ingl(?:es|és)|kukama kukamiria|l(?:engua de se(?:nas(?: peruana)?|ñas(?: peruana)?)|sp)|matsigenka|otra lengua (?:extranjera|originaria)|portugu(?:es|és)|quechua|sh(?:awi|ipibo(?:-konibo)?)|ticuna|wampis|yine))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "PE_L3_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2004,7 +2093,7 @@
             "matchStrength": 0.7
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.4,
         "tokenizationDelimiter": " "
       }
@@ -2013,7 +2102,7 @@
       "name": "PE_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "PE_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2029,27 +2118,30 @@
       }
     },
     {
-      "name": "PE_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "PE_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "26 — Católica · Evangélica · Cristiana · Adventista · Testigo de Jehová · Iglesia de Jesucristo de los Santos de los Últimos Días · …",
+            "regex": "(?iu)(?:(?:a(?:dventista|gn(?:ostico|óstico)|teo)|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|ristian(?:a|o))|evang(?:elic(?:a|o)|élic(?:a|o))|i(?:glesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|sraelita)|jud(?:i(?:a|o)|í(?:a|o))|m(?:orm(?:on|ón)|usulm(?:an(?:a)?|án))|ningun(?:a|o)|otra|testigo de jehov(?:a|á)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_CONVICCION_FILOSOFICA - Path",
       "framework": "PATH",
       "domain": "PE_L3_CONVICCION_FILOSOFICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2068,7 +2160,7 @@
       "name": "PE_L3_OPINION_POLITICA - Path",
       "framework": "PATH",
       "domain": "PE_L3_OPINION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2084,27 +2176,30 @@
       }
     },
     {
-      "name": "PE_L3_OPINION_POLITICA - List",
-      "framework": "LIST",
+      "name": "PE_L3_OPINION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_OPINION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-ideologias-politicas.txt",
-            "matchStrength": 0.7
+            "note": "16 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|ninguno|pr(?:efiere no responder|ogresista)|voto viciado))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_AFILIACION_PARTIDARIA - Path",
       "framework": "PATH",
       "domain": "PE_L3_AFILIACION_PARTIDARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2120,27 +2215,30 @@
       }
     },
     {
-      "name": "PE_L3_AFILIACION_PARTIDARIA - List",
-      "framework": "LIST",
+      "name": "PE_L3_AFILIACION_PARTIDARIA - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_AFILIACION_PARTIDARIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "18 — Fuerza Popular · Perú Libre · Acción Popular · Alianza para el Progreso · Renovación Popular · Avanza País · …",
+            "regex": "(?iu)(?:(?:a(?:cci(?:on popular|ón popular)|lianza para el progreso|p(?:p|ra)?|vanza pa(?:is|ís))|fuerza popular|juntos por el per(?:u|ú)|p(?:artido (?:aprista peruano|morado|popular cristiano)|er(?:u libre|ú libre)|odemos(?: per(?:u|ú))?|pc)|renovaci(?:on popular|ón popular)|s(?:in afiliaci(?:on|ón)|omos per(?:u|ú))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "PE_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2156,27 +2254,30 @@
       }
     },
     {
-      "name": "PE_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "PE_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "11 — CGTP · CUT Perú · CTP · CATP · SUTEP · FENTAP · …",
+            "regex": "(?iu)(?:(?:afiliado|c(?:atp|gtp|tp|ut per(?:u|ú))|fe(?:deraci(?:on de trabajadores|ón de trabajadores)|ntap)|s(?:i(?:ndica(?:lizado|to unitario)|tramun)|utep)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PE_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "PE_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2211,7 +2312,7 @@
       "name": "PE_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "PE_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2227,10 +2328,29 @@
       }
     },
     {
+      "name": "PE_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "PE_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "PE_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "PE_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2246,27 +2366,30 @@
       }
     },
     {
-      "name": "PE_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "PE_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "13 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbti(?:q\\+)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "PE_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2285,7 +2408,7 @@
       "name": "PE_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "PE_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2301,27 +2424,30 @@
       }
     },
     {
-      "name": "PE_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "PE_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "PE_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "15 — Mujer cisgénero · Hombre cisgénero · Mujer trans · Hombre trans · Persona no binaria · Otra · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|hombre(?: (?:cisg(?:enero|énero)|trans))?|mujer(?: (?:cisg(?:enero|énero)|trans))?|no binari(?:a|o)|otra|p(?:ersona no binaria|refiere no responder)|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_L3_VICTIMA - Path",
       "framework": "PATH",
       "domain": "PE_L3_VICTIMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2340,7 +2466,7 @@
       "name": "PE_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2367,7 +2493,7 @@
       "name": "PE_SALUD_COBERTURA - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_COBERTURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2383,27 +2509,30 @@
       }
     },
     {
-      "name": "PE_SALUD_COBERTURA - List",
-      "framework": "LIST",
+      "name": "PE_SALUD_COBERTURA - Values",
+      "framework": "REGEX",
       "domain": "PE_SALUD_COBERTURA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-cobertura.txt",
-            "matchStrength": 0.8
+            "note": "15 — EsSalud · SIS Seguro Integral de Salud · EPS · Sanidad de las Fuerzas Armadas · Sanidad de la Policía Nacional · Seguro privado de salud · …",
+            "regex": "(?iu)(?:(?:e(?:ps|ssalud)|privado|s(?:anidad(?: de la(?: polic(?:ia nacional|ía nacional)|s fuerzas armadas))?|eguro (?:escolar privado|integral de salud|privado de salud)|i(?:n seguro|s(?: \\(seguro integral de salud\\))?))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2431,7 +2560,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2441,7 +2570,7 @@
       "name": "PE_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2460,7 +2589,7 @@
       "name": "PE_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2476,27 +2605,30 @@
       }
     },
     {
-      "name": "PE_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "PE_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "PE_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "46 — Paracetamol · Ibuprofeno · Diclofenaco · Metformina · Glibenclamida · Losartán · …",
+            "regex": "(?iu)(?:(?:a(?:cido (?:acetilsalicilico|folico|valproico)|lprazolam|m(?:lodipino|oxicilina)|nticonceptivo|torvastatina|zitromicina)|c(?:efalexina|lonazepam|omplejo b)|d(?:iclofenaco|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|o(?:lanzapina|meprazol)|p(?:aracetamol|rednisona)|quetiapina|risperidona|s(?:albutamol|ertralina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PE_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2532,7 +2664,7 @@
       "name": "PE_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2559,7 +2691,7 @@
       "name": "PE_SALUD_VIH - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_VIH",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2578,7 +2710,7 @@
       "name": "PE_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2594,27 +2726,30 @@
       }
     },
     {
-      "name": "PE_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "PE_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "PE_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2630,27 +2765,30 @@
       }
     },
     {
-      "name": "PE_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "PE_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "PE_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "22 — Física o motora · Auditiva · Visual · Sordoceguera · Intelectual · Mental o psicosocial · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|c(?:eguera|ognitiva)|f(?:isica(?: o motora)?|ísica(?: o motora)?)|intelectual|m(?:ental(?: o psicosocial)?|otora|ultiple|últiple)|n(?:inguna|o aplica)|psicosocial|sord(?:era|oceguera)|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PE_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2666,27 +2804,30 @@
       }
     },
     {
-      "name": "PE_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "PE_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "PE_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con restricciones · pendiente · apto con recomendaciones",
+            "regex": "(?iu)(?:(?:apto(?: con re(?:comendaciones|stricciones))?|no apto|pendiente))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PE_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2705,7 +2846,7 @@
       "name": "PE_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "PE_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2724,7 +2865,7 @@
       "name": "PE_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "PE_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2759,7 +2900,7 @@
       "name": "PE_FIN_HISTORIAL_CREDITICIO - Path",
       "framework": "PATH",
       "domain": "PE_FIN_HISTORIAL_CREDITICIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2778,7 +2919,7 @@
       "name": "PE_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "PE_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2813,7 +2954,7 @@
       "name": "PE_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "PE_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2848,7 +2989,7 @@
       "name": "PE_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "PE_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2883,7 +3024,7 @@
       "name": "PE_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "PE_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2899,31 +3040,48 @@
       }
     },
     {
-      "name": "PE_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "PE_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "PE_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "19 — Juntos · Pensión 65 · Contigo · Cuna Más · Qali Warma · Beca 18 · …",
+            "regex": "(?iu)(?:(?:beca 18|c(?:ontigo|una m(?:as|ás))|fise(?: \\(vale de descuento de gas\\))?|juntos|ninguno|pensi(?:on 65|ón 65)|qali warma|t(?:echo propio|rabaja per(?:u|ú))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://pe-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_FIN_CLASIFICACION_SOCIOECONOMICA - Path",
       "framework": "PATH",
       "domain": "PE_FIN_CLASIFICACION_SOCIOECONOMICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2939,27 +3097,30 @@
       }
     },
     {
-      "name": "PE_FIN_CLASIFICACION_SOCIOECONOMICA - List",
-      "framework": "LIST",
+      "name": "PE_FIN_CLASIFICACION_SOCIOECONOMICA - Values",
+      "framework": "REGEX",
       "domain": "PE_FIN_CLASIFICACION_SOCIOECONOMICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-clasificacion-socioeconomica.txt",
-            "matchStrength": 0.6
+            "note": "12 — Pobre extremo · Pobre · No pobre · Sin clasificación · pobre · pobre extremo · …",
+            "regex": "(?iu)(?:(?:a|b|c|d|e|no pobre|pobre(?: extremo)?|sin clasificaci(?:on|ón)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PE_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "PE_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -2975,27 +3136,30 @@
       }
     },
     {
-      "name": "PE_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "PE_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "PE_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pe-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "13 — Propia totalmente pagada · Propia pagándola a plazos · Alquilada · Cedida por el centro de trabajo u otro hogar · Propia por invasión · Otra · …",
+            "regex": "(?iu)(?:(?:alquil(?:ada|er)|cedida(?: por el centro de trabajo u otro hogar)?|guardian(?:ia|ía)|invasi(?:on|ón)|otra|pr(?:estada|opia(?: (?:p(?:ag(?:andola a plazos|ándola a plazos)|or invasi(?:on|ón))|totalmente pagada))?)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PE_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "PE_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -3022,7 +3186,7 @@
       "name": "PE_PENAL_EXPEDIENTE - Path",
       "framework": "PATH",
       "domain": "PE_PENAL_EXPEDIENTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas peruanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas peruanos.",
       "config": {
         "paths": [
           {
@@ -3053,20 +3217,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{4,6}-\\d{4}-\\d-\\d{4}-[A-Z\\-]{2,12}-\\d{2}",
+            "regex": "0*(?:\\d{4,6}-\\d{4}-\\d-\\d{4}-[A-Z\\-]{2,12}-\\d{2})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,6}-[A-Z]{2,10}-\\d{4}",
+            "regex": "0*(?:\\d{1,6}-[A-Z]{2,10}-\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3080,7 +3244,7 @@
     },
     {
       "name": "PE_L1_RUC",
-      "algorithm": "PE_RUC"
+      "algorithm": "PE_RUC_COLUMNA"
     },
     {
       "name": "PE_L1_DIGITO_VERIFICACION",
@@ -3356,7 +3520,7 @@
     },
     {
       "name": "PE_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "PE_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "PE_SALUD_DISCAPACIDAD",
@@ -3376,7 +3540,7 @@
     },
     {
       "name": "PE_FIN_INGRESOS",
-      "algorithm": "PE_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PE_FIN_HISTORIAL_CREDITICIO",
@@ -3384,15 +3548,15 @@
     },
     {
       "name": "PE_FIN_DEUDA",
-      "algorithm": "PE_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PE_FIN_PATRIMONIO",
-      "algorithm": "PE_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PE_FIN_PENSION",
-      "algorithm": "PE_VALOR_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PE_FIN_PROGRAMA_SOCIAL",
@@ -3430,7 +3594,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "X123456"
     },
@@ -3442,7 +3607,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "45678901"
     },
@@ -3455,7 +3621,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "ABC-123"
     },
@@ -3471,7 +3638,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3722,8 +3890,29 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3745,6 +3934,18 @@
       "input": "Trastorno depresivo recurrente"
     },
     {
+      "name": "PE_CM_DIGITOS_ANCHO_FIJO",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "45678901"
+    },
+    {
       "name": "PE_DNI_CD",
       "framework": "algorithm.plugin.checkdigit.Checkdigit",
       "config": {
@@ -3763,10 +3964,10 @@
         "numDigitsForCheckdigitCalculation": 8,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "PE_CM_DIGITOS"
+          "name": "PE_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "PE_CM_DIGITOS"
+          "name": "PE_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -4297,7 +4498,7 @@
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "PE_CM_DIGITOS"
+                  "name": "PE_CM_DIGITOS_ANCHO_FIJO"
                 }
               }
             ]
@@ -4691,13 +4892,47 @@
       "input": "20131378972"
     },
     {
+      "name": "PE_RUC_COLUMNA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:((?:10|15|17|20)\\d{9}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "PE_RUC"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "PE_RUC"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "20131378972"
+    },
+    {
       "name": "PE_DOCUMENTO",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "((?:10|15|17|20)\\d{9})",
+            "regex": "(0*?)(?:((?:10|15|17|20)\\d{9}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4707,8 +4942,11 @@
             ]
           },
           {
-            "regex": "(\\d{8}[\\s\\-]?[0-9])",
+            "regex": "(0*?)(?:(\\d{8}[\\s\\-]?[0-9]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4718,8 +4956,11 @@
             ]
           },
           {
-            "regex": "(\\d{8}[\\s\\-]?[A-JKa-jk])",
+            "regex": "(0*?)(?:(\\d{8}[\\s\\-]?[A-JKa-jk]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4729,8 +4970,11 @@
             ]
           },
           {
-            "regex": "(\\d{8})",
+            "regex": "(0*?)(?:(\\d{8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5270,8 +5514,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?51[\\s\\-]?)?(9)(\\d{2})([\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{3})",
+            "regex": "(0*?)(?:(\\+?51[\\s\\-]?)?(9)(\\d{2})([\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5378,26 +5625,20 @@
       "input": "Av. Arequipa 1234, Urb. Santa Patricia"
     },
     {
-      "name": "PE_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4557880000000001"
-    },
-    {
       "name": "PE_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "PE_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -5426,8 +5667,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5587,8 +5831,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5615,8 +5862,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -5624,8 +5874,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5641,8 +5894,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5655,8 +5911,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5825,8 +6084,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5858,7 +6120,7 @@
       "input": "Asunción"
     },
     {
-      "name": "PE_UBIGEO",
+      "name": "PE_UBIGEO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -5867,6 +6129,34 @@
         "delimiter": "|",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "010102"
+    },
+    {
+      "name": "PE_UBIGEO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "PE_UBIGEO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "010102"
     },
@@ -5906,8 +6196,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\d{3})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5918,8 +6211,11 @@
             ]
           },
           {
-            "regex": "(\\d{2})(\\d{2})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5985,8 +6281,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6028,8 +6327,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,5})",
+            "regex": "(0*?)(?:(\\d{2,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6112,8 +6414,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6155,16 +6460,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -6227,8 +6538,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6281,8 +6595,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6335,8 +6652,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6404,8 +6724,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6458,8 +6781,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6512,8 +6838,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6566,8 +6895,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6620,8 +6952,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6674,8 +7009,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,8})",
+            "regex": "(0*?)(?:(\\d{1,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6812,8 +7150,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,6})",
+            "regex": "(0*?)(?:(\\d{4,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6866,8 +7207,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6887,21 +7231,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "PE_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://pe-grupos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "PE_DISCAPACIDAD_LISTA",
@@ -6935,8 +7264,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6989,8 +7321,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7010,15 +7345,6 @@
         "requireMask": false
       },
       "input": "No apto temporalmente"
-    },
-    {
-      "name": "PE_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1025,
-        "maxValue": 25000
-      },
-      "input": "2800"
     },
     {
       "name": "PE_ESTADO_CREDITO",
@@ -7041,8 +7367,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7073,33 +7402,6 @@
         "requireMask": false
       },
       "input": "Reportado en la central de riesgo"
-    },
-    {
-      "name": "PE_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 100,
-        "maxValue": 500000
-      },
-      "input": "18400"
-    },
-    {
-      "name": "PE_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000,
-        "maxValue": 900000
-      },
-      "input": "148000"
-    },
-    {
-      "name": "PE_VALOR_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 300,
-        "maxValue": 8000
-      },
-      "input": "1050"
     },
     {
       "name": "PE_PROGRAMA_SOCIAL_LISTA",
@@ -7133,8 +7435,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7202,8 +7507,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7256,8 +7564,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7310,8 +7621,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7338,8 +7652,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,6})(-)(\\d{4})(-)(\\d)(-)(\\d{4})(-)([A-Za-z\\-]{2,12})(-)(\\d{2})",
+            "regex": "(0*?)(?:(\\d{4,6})(-)(\\d{4})(-)(\\d)(-)(\\d{4})(-)([A-Za-z\\-]{2,12})(-)(\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7382,8 +7699,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7425,8 +7745,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7470,30 +7793,10 @@
     "pe-clasificacion-socioeconomica.txt",
     "pe-cobertura-salud.txt",
     "pe-detectar-apellidos.txt",
-    "pe-detectar-aptitud-laboral.txt",
-    "pe-detectar-clasificacion-socioeconomica.txt",
-    "pe-detectar-cobertura.txt",
-    "pe-detectar-codigos-banderas.txt",
-    "pe-detectar-discapacidades.txt",
-    "pe-detectar-distritos.txt",
-    "pe-detectar-estado-civil.txt",
-    "pe-detectar-grupos-sanguineos.txt",
-    "pe-detectar-identidades-genero.txt",
-    "pe-detectar-ideologias-politicas.txt",
-    "pe-detectar-lenguas.txt",
-    "pe-detectar-medicamentos.txt",
     "pe-detectar-nacionalidades.txt",
-    "pe-detectar-nivel-educativo.txt",
     "pe-detectar-nombres.txt",
-    "pe-detectar-orientaciones-sexuales.txt",
-    "pe-detectar-origen-etnico.txt",
-    "pe-detectar-partidos.txt",
-    "pe-detectar-programas-sociales.txt",
-    "pe-detectar-pueblos.txt",
-    "pe-detectar-religiones.txt",
+    "pe-detectar-sexo-letra.txt",
     "pe-detectar-sexo.txt",
-    "pe-detectar-sindicatos.txt",
-    "pe-detectar-tenencia-vivienda.txt",
     "pe-diagnosticos.txt",
     "pe-direcciones.txt",
     "pe-discapacidades.txt",
@@ -7502,7 +7805,6 @@
     "pe-estado-civil-codigos.txt",
     "pe-estado-civil.txt",
     "pe-estados-credito.txt",
-    "pe-grupos-sanguineos.txt",
     "pe-identidades-genero.txt",
     "pe-ideologias-politicas.txt",
     "pe-instituciones-educativas.txt",

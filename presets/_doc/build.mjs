@@ -21,6 +21,8 @@ import nodePath from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { TEXT } from './text.mjs'
+import { TRIM } from '../_lib/detect.mjs'
+import { ENGINE_FRAMEWORK, isEngineAlgorithm } from '../_lib/engine-algorithms.mjs'
 
 const HERE = nodePath.dirname(fileURLToPath(import.meta.url))
 const [id, ...requested] = process.argv.slice(2)
@@ -45,6 +47,11 @@ function fail(message) {
 
 const preset = JSON.parse(read(DIR, 'preset.json'))
 const algorithms = new Map(preset.algorithms.map((a) => [a.name, a]))
+// Algorithms that come with the engine are named, not shipped: they join the map with their framework
+// and no configuration, so trees can show them, and are left out of what is counted or sent.
+for (const name of new Set([...preset.domains.map((d) => d.algorithm), ...[...JSON.stringify(preset.algorithms).matchAll(/"name":"([^"]+)"/g)].map((m) => m[1])])) {
+  if (isEngineAlgorithm(name) && !algorithms.has(name)) algorithms.set(name, { name, framework: ENGINE_FRAMEWORK[name], config: {}, engineOwned: true })
+}
 const domainsByName = new Map(preset.domains.map((d) => [d.name, d]))
 const fileName = (ref) => String(ref?.uri ?? ref ?? '').replace('preset-file://', '')
 const fileLines = new Map(preset.files.map((f) => [f, read(DIR, 'files', f).split('\n').filter(Boolean)]))
@@ -68,7 +75,7 @@ const filesOf = (config) => [...new Set([...JSON.stringify(config).matchAll(/pre
 
 const usedBy = new Map(preset.algorithms.map((a) => [a.name, []]))
 for (const d of preset.domains) usedBy.get(d.algorithm)?.push(d.name)
-for (const a of preset.algorithms) for (const r of refsOf(a.config)) usedBy.get(r).push(a.name)
+for (const a of preset.algorithms) for (const r of refsOf(a.config)) usedBy.get(r)?.push(a.name)
 const fileUsers = new Map(preset.files.map((f) => [f, []]))
 for (const item of [...preset.algorithms, ...preset.classifiers]) {
   for (const f of filesOf(item.config)) fileUsers.get(f)?.push(item.name)
@@ -89,7 +96,7 @@ function packCounts(domainNames) {
   const classifiers = preset.classifiers.filter((c) => domainNames.has(c.domain))
   const reached = new Set()
   const reach = (name) => {
-    if (!algorithms.has(name) || reached.has(name)) return
+    if (!algorithms.has(name) || algorithms.get(name).engineOwned || reached.has(name)) return
     reached.add(name)
     refsOf(algorithms.get(name).config).forEach(reach)
   }
@@ -162,6 +169,11 @@ async function api(path, body) {
   }
 }
 
+const ENGINE_IDENTITY = {
+  name: 'DOC_IDENTITY', className: 'algorithm.plugin.decompose.RegexDecompose',
+  config: { maskPatterns: [{ regex: '(.*)', actions: [{ type: 'PRESERVE' }] }], fallbackAction: { type: 'PRESERVE' }, requireMask: false },
+}
+
 async function maskExamples(examples) {
   const filesUrl = `${pathToFileURL(nodePath.join(DIR, 'files')).href}/`
   const resolve = (config) => JSON.parse(JSON.stringify(config).replaceAll('preset-file://', filesUrl))
@@ -175,7 +187,7 @@ async function maskExamples(examples) {
   }
   const closures = new Map()
   const additionalFor = (name) => {
-    if (!closures.has(name)) closures.set(name, [...reach(name)].map((n) => algorithms.get(n)).map((a) => ({ name: a.name, className: a.framework, config: resolve(a.config) })))
+    if (!closures.has(name)) closures.set(name, [...[...reach(name)].map((n) => algorithms.get(n)).filter((a) => !a.engineOwned).map((a) => ({ name: a.name, className: a.framework, config: resolve(a.config) })), ENGINE_IDENTITY])
     return closures.get(name)
   }
   const jobs = preset.domains.flatMap((d) => examples[d.name].map((input) => ({ domain: d, input })))
@@ -185,7 +197,11 @@ async function maskExamples(examples) {
   const worker = async () => {
     while (next < jobs.length) {
       const { domain, input } = jobs[next++]
-      const algorithm = algorithms.get(domain.algorithm)
+      const own = algorithms.get(domain.algorithm)
+      // An engine algorithm runs through a chain whose first step changes nothing: a chain takes two.
+      const algorithm = own.engineOwned
+        ? { framework: 'algorithm.plugin.stringAlgorithmChain.StringAlgorithmChain', config: { algorithmReferences: [{ name: ENGINE_IDENTITY.name }, { name: own.name }] } }
+        : own
       const out = await api('/api/mask', { framework: algorithm.framework, config: resolve(algorithm.config), input, additionalAlgorithms: additionalFor(domain.algorithm) })
       if (typeof out.output !== 'string') problems.push(`${domain.name} ${JSON.stringify(input)}: ${out.error}`)
       masked.set(`${domain.name} ${input}`, out.output)
@@ -286,7 +302,8 @@ function render(locale, content, examples, masked, displayNames) {
     num: (n) => number.format(n),
     file: (ref) => code(fileName(ref)),
     lines: (ref) => fileLines.get(fileName(ref))?.length ?? 0,
-    ref: (ref) => (ref?.name ? `<a href="#a-${esc(ref.name)}">${code(ref.name)}</a>` : '—'),
+    // An engine algorithm has no entry in Appendix A to point to.
+    ref: (ref) => (!ref?.name ? '—' : algorithms.get(ref.name)?.engineOwned ? code(ref.name) : `<a href="#a-${esc(ref.name)}">${code(ref.name)}</a>`),
     unit: (unit) => t.units[unit] ?? unit,
   }
   const describe = (a) => {
@@ -337,14 +354,24 @@ function render(locale, content, examples, masked, displayNames) {
     return `<p class="cls-text">${strength > 0 ? t.reject(pct(strength)) : t.noReject}</p>`
   }
 
+  // Every pattern of the set removes the spaces around the value first (presets/_lib/detect.mjs);
+  // the discovery section says so once, and only a clean-up beyond that is shown.
+  const extraCleaning = (clean) => (clean === TRIM ? '' : clean.endsWith(`|${TRIM}`) ? clean.slice(0, -TRIM.length - 1) : clean)
+  // A list of known values held as a prefix tree: its note (`N — a · b · …`) gives the count and the first values,
+  // and a list too long for one pattern is split into several with the same note.
+  const VALUE_TREE = /^(\d+) — (.*)$/
   function regexClassifier(c) {
-    const rows = c.config.dataPatterns.map((p) => {
+    const rows = c.config.dataPatterns.flatMap((p, i, all) => {
+      const tree = p.regex.length > 300 || /^(\(\?iu\)|0\*)\(\?:/.test(p.regex) ? VALUE_TREE.exec(p.note ?? '') : null
+      if (tree && i > 0 && all[i - 1].note === p.note && all[i - 1].matchStrength === p.matchStrength) return []
+      const clean = extraCleaning(p.dataCleanRegex ?? '')
       const notes = [
         p.checksumType && p.checksumType !== 'NONE' ? t.checksum(p.checksumType) : null,
         p.allowPartialMatch ? t.partial : null,
-        p.dataCleanRegex ? t.cleaned(code(p.dataCleanRegex)) : null,
+        clean ? t.cleaned(code(clean)) : null,
       ].filter(Boolean)
-      return `<tr><td>${code(p.regex)}</td><td class="num">${pct(p.matchStrength)}</td><td class="muted">${notes.join('; ')}</td></tr>`
+      const pattern = tree ? t.valueTree(h.num(Number(tree[1])), esc(tree[2].replaceAll(' · ', ', '))) : code(p.regex)
+      return [`<tr><td>${pattern}</td><td class="num">${pct(p.matchStrength)}</td><td class="muted">${notes.join('; ')}</td></tr>`]
     })
     return `<table class="tbl"><thead><tr>${t.regexHead.map((x) => `<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>${rejectLine(c.config.rejectStrength ?? 1)}`
   }
@@ -374,6 +401,9 @@ function render(locale, content, examples, masked, displayNames) {
   function tree(name, seen) {
     seen.add(name)
     const a = algorithms.get(name)
+    if (a.engineOwned) {
+      return `<li>${code(name)}<span class="fw">${esc(display(a.framework))}</span><div class="tree-desc">${t.engineOwned(name)}</div></li>`
+    }
     const children = refsOf(a.config)
     const steps = below(name)
     const closed = steps.size > 10 && children.every((child) => child.startsWith(`${name}_`))
@@ -503,7 +533,7 @@ function render(locale, content, examples, masked, displayNames) {
     appendices.push(sectionHtml(num, title, inner, sectionId, true))
   }
   addAppendix(t.appendixAlgorithms, 'algorithms',
-    `<p>${t.appendixAlgorithmsLede}</p>${[...algorithms.values()].sort((a, b) => a.name.localeCompare(b.name)).map(algorithmEntry).join('')}`)
+    `<p>${t.appendixAlgorithmsLede}</p>${[...algorithms.values()].filter((a) => !a.engineOwned).sort((a, b) => a.name.localeCompare(b.name)).map(algorithmEntry).join('')}`)
   addAppendix(t.appendixFiles, 'files',
     `<p>${t.appendixFilesLede}</p><table class="tbl"><thead><tr>${t.filesHead.map((x) => `<th>${x}</th>`).join('')}</tr></thead><tbody>${
       preset.files.map((f) => `<tr><td>${code(f)}</td><td class="num">${h.num(fileLines.get(f).length)}</td><td>${fileUsers.get(f).map(code).join(' ')}</td><td class="muted">${esc(fileLines.get(f).slice(0, 4).join(' · '))}</td></tr>`).join('')
@@ -553,13 +583,24 @@ if (!Array.isArray(frameworks)) fail(`the app did not list the frameworks: ${fra
 const displayNames = new Map(frameworks.map((f) => [f.className, f.displayName]))
 const masked = await maskExamples(examples)
 
+// A profile of its own, apart from the one of the Chrome the user has open.
+const profile = fs.mkdtempSync(nodePath.join(os.tmpdir(), 'preset-doc-chrome-'))
+process.on('exit', () => fs.rmSync(profile, { recursive: true, force: true }))
 for (const locale of LOCALES) {
   const html = nodePath.join(os.tmpdir(), `preset-doc-${id}.${locale}.html`)
   const pdf = nodePath.join(DIR, `doc.${locale}.pdf`)
   fs.writeFileSync(html, render(locale, contents[locale], examples, masked, displayNames))
-  execFileSync(CHROME, [
-    '--headless', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer',
-    '--virtual-time-budget=15000', `--print-to-pdf=${pdf}`, pathToFileURL(html).href,
-  ], { stdio: 'ignore' })
+  const started = Date.now()
+  try {
+    execFileSync(CHROME, [
+      '--headless', '--disable-gpu', '--no-sandbox', '--no-pdf-header-footer', `--user-data-dir=${profile}`,
+      '--virtual-time-budget=15000', `--print-to-pdf=${pdf}`, pathToFileURL(html).href,
+    ], { stdio: 'ignore' })
+  } catch (err) {
+    // Some Chrome versions write the PDF and then fail while shutting down. A PDF written by this
+    // run is the result; anything else is a real failure.
+    const written = fs.existsSync(pdf) && fs.statSync(pdf).mtimeMs >= started - 1000 && fs.statSync(pdf).size > 0
+    if (!written) throw err
+  }
   console.log(`${nodePath.relative(process.cwd(), pdf)} (${Math.round(fs.statSync(pdf).size / 1024)} KB)`)
 }

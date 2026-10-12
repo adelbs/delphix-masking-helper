@@ -162,7 +162,7 @@
     "BZ_L1_PAYMENT_CARD": {
       "title": "Cartão de pagamento",
       "what": "Números de cartões de crédito, débito e pré-pagos.",
-      "masking": "Trocado por outro número de cartão que continua passando na verificação de Luhn. Valores sem formato de cartão passam inalterados em vez de derrubar a linha."
+      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "BZ_L1_IP_ADDRESS": {
       "title": "Endereço IP",
@@ -397,22 +397,22 @@
     "BZ_FIN_DEBT": {
       "title": "Valor de dívida",
       "what": "Saldos de empréstimos, hipotecas e cartões, valores em atraso, limites de crédito, parcelas.",
-      "masking": "Mapeado para um valor entre BZ$200 e BZ$1.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_INCOME": {
       "title": "Salário e renda",
       "what": "Salário, remuneração segurada, renda do domicílio.",
-      "masking": "Mapeado para um valor entre BZ$700 e BZ$40.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_ASSETS": {
       "title": "Patrimônio",
       "what": "Valor de imóveis e terrenos, saldos de poupança e de contas, depósitos a prazo, investimentos e cotas de cooperativa, patrimônio líquido.",
-      "masking": "Mapeado para um valor entre BZ$20.000 e BZ$5.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_PENSION": {
       "title": "Pensão",
       "what": "Valores de aposentadoria, pensão por invalidez e por morte, a pensão não contributiva, gratificações e saldos de fundos de previdência.",
-      "masking": "Mapeado para um valor entre BZ$100 e BZ$10.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "BZ_FIN_SSB_BENEFIT": {
       "title": "Benefício da previdência social",

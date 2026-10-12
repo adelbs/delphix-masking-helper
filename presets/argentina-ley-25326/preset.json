@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "versionDate": "2026-09-17",
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Argentina — Ley 25.326 (personal data protection)",
     "pt-BR": "Argentina — Ley 25.326 (proteção de dados pessoais)",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales argentinos conforme a la Ley 25.326: identificadores directos (DNI, CUIT y CUIL con dígito verificador válido, CBU y CVU con dígitos verificadores válidos, nombres, contacto, domicilio, razón social), cuasi-identificadores (fecha de nacimiento, localidad, partido, código postal), los datos sensibles de los artículos 2 y 7 — origen racial y étnico, política, convicciones religiosas, filosóficas o morales, afiliación sindical, salud, vida sexual —, y además datos genéticos y biométricos, identidad de género, víctimas de violencia de género, datos financieros (situación en la Central de Deudores del BCRA, prestaciones sociales) y antecedentes penales."
   },
   "profileSet": {
-    "name": "AR - Ley 25.326 - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (arts. 2 y 7), datos genéticos y biométricos, identidad de género, datos de salud, datos financieros (art. 26) y antecedentes penales, conforme a la Ley 25.326 de Protección de los Datos Personales.",
+    "name": "AR - Ley 25.326 - v2",
+    "description": "Ley 25.326 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "AR_L1_DNI - Path",
@@ -64,6 +64,7 @@
       "AR_L1_CONTRATO - Path",
       "AR_L1_USUARIO - Path",
       "AR_L1_CREDENCIAL - Path",
+      "AR_L1_CREDENCIAL - Regex",
       "AR_L1_GEOLOCALIZACION - Path",
       "AR_L1_GEOLOCALIZACION - Regex",
       "AR_L1_TEXTO_LIBRE - Path",
@@ -78,11 +79,11 @@
       "AR_L2_FECHA_EVENTO - Path",
       "AR_L2_FECHA_EVENTO - Type",
       "AR_L2_SEXO - Path",
-      "AR_L2_SEXO - List",
+      "AR_L2_SEXO - Values",
       "AR_L2_LOCALIDAD - Path",
-      "AR_L2_LOCALIDAD - List",
+      "AR_L2_LOCALIDAD - Values",
       "AR_L2_DEPARTAMENTO - Path",
-      "AR_L2_DEPARTAMENTO - List",
+      "AR_L2_DEPARTAMENTO - Values",
       "AR_L2_CODIGO_GEOGRAFICO - Path",
       "AR_L2_CODIGO_GEOGRAFICO - Regex",
       "AR_L2_CODIGO_POSTAL - Path",
@@ -92,61 +93,62 @@
       "AR_L2_NACIONALIDAD - Path",
       "AR_L2_NACIONALIDAD - List",
       "AR_L2_ESTADO_CIVIL - Path",
-      "AR_L2_ESTADO_CIVIL - List",
+      "AR_L2_ESTADO_CIVIL - Values",
       "AR_L2_OCUPACION - Path",
       "AR_L2_EMPLEADOR - Path",
       "AR_L2_NIVEL_EDUCATIVO - Path",
-      "AR_L2_NIVEL_EDUCATIVO - List",
+      "AR_L2_NIVEL_EDUCATIVO - Values",
       "AR_L2_ESTABLECIMIENTO_EDUCATIVO - Path",
       "AR_L2_PERSONAS_A_CARGO - Path",
       "AR_L2_PERSONAS_A_CARGO - Type",
       "AR_L3_ORIGEN_ETNICO - Path",
-      "AR_L3_ORIGEN_ETNICO - List",
+      "AR_L3_ORIGEN_ETNICO - Values",
       "AR_L3_PUEBLO_INDIGENA - Path",
-      "AR_L3_PUEBLO_INDIGENA - List",
+      "AR_L3_PUEBLO_INDIGENA - Values",
       "AR_L3_LENGUA_INDIGENA - Path",
-      "AR_L3_LENGUA_INDIGENA - List",
+      "AR_L3_LENGUA_INDIGENA - Values",
       "AR_L3_RELIGION - Path",
-      "AR_L3_RELIGION - List",
+      "AR_L3_RELIGION - Values",
       "AR_L3_CONVICCION_FILOSOFICA - Path",
       "AR_L3_OPINION_POLITICA - Path",
-      "AR_L3_OPINION_POLITICA - List",
+      "AR_L3_OPINION_POLITICA - Values",
       "AR_L3_AFILIACION_PARTIDARIA - Path",
-      "AR_L3_AFILIACION_PARTIDARIA - List",
+      "AR_L3_AFILIACION_PARTIDARIA - Values",
       "AR_L3_AFILIACION_SINDICAL - Path",
-      "AR_L3_AFILIACION_SINDICAL - List",
+      "AR_L3_AFILIACION_SINDICAL - Values",
       "AR_L3_BIOMETRICO - Path",
       "AR_L3_BIOMETRICO - Type",
       "AR_L3_GENETICO - Path",
+      "AR_L3_GENETICO - Regex",
       "AR_L3_ORIENTACION_SEXUAL - Path",
-      "AR_L3_ORIENTACION_SEXUAL - List",
+      "AR_L3_ORIENTACION_SEXUAL - Values",
       "AR_L3_VIDA_SEXUAL - Path",
       "AR_L3_IDENTIDAD_GENERO - Path",
-      "AR_L3_IDENTIDAD_GENERO - List",
+      "AR_L3_IDENTIDAD_GENERO - Values",
       "AR_L3_VICTIMA - Path",
       "AR_SALUD_IDENTIFICADOR - Path",
       "AR_SALUD_COBERTURA - Path",
-      "AR_SALUD_COBERTURA - List",
+      "AR_SALUD_COBERTURA - Values",
       "AR_SALUD_COBERTURA - Regex",
       "AR_SALUD_DIAGNOSTICO - Path",
       "AR_SALUD_DIAGNOSTICO - Regex",
       "AR_SALUD_PROCEDIMIENTO - Path",
       "AR_SALUD_MEDICAMENTO - Path",
-      "AR_SALUD_MEDICAMENTO - List",
+      "AR_SALUD_MEDICAMENTO - Values",
       "AR_SALUD_TEXTO_CLINICO - Path",
       "AR_SALUD_TEXTO_CLINICO - Type",
       "AR_SALUD_RESULTADO_ESTUDIO - Path",
       "AR_SALUD_VIH - Path",
       "AR_SALUD_GRUPO_SANGUINEO - Path",
-      "AR_SALUD_GRUPO_SANGUINEO - List",
+      "AR_SALUD_GRUPO_SANGUINEO - Values",
       "AR_SALUD_DISCAPACIDAD - Path",
-      "AR_SALUD_DISCAPACIDAD - List",
+      "AR_SALUD_DISCAPACIDAD - Values",
       "AR_SALUD_OCUPACIONAL - Path",
-      "AR_SALUD_OCUPACIONAL - List",
+      "AR_SALUD_OCUPACIONAL - Values",
       "AR_SALUD_REPRODUCTIVA - Path",
       "AR_SALUD_MENTAL - Path",
       "AR_FIN_SITUACION_CREDITICIA - Path",
-      "AR_FIN_SITUACION_CREDITICIA - List",
+      "AR_FIN_SITUACION_CREDITICIA - Values",
       "AR_FIN_DEUDA - Path",
       "AR_FIN_DEUDA - Type",
       "AR_FIN_INGRESOS - Path",
@@ -156,11 +158,11 @@
       "AR_FIN_JUBILACION - Path",
       "AR_FIN_JUBILACION - Type",
       "AR_FIN_PROGRAMA_SOCIAL - Path",
-      "AR_FIN_PROGRAMA_SOCIAL - List",
+      "AR_FIN_PROGRAMA_SOCIAL - Values",
       "AR_FIN_MONOTRIBUTO - Path",
       "AR_FIN_MONOTRIBUTO - Type",
       "AR_FIN_VIVIENDA - Path",
-      "AR_FIN_VIVIENDA - List",
+      "AR_FIN_VIVIENDA - Values",
       "AR_PENAL_ANTECEDENTES - Path",
       "AR_PENAL_EXPEDIENTE - Path",
       "AR_PENAL_EXPEDIENTE - Regex"
@@ -168,7 +170,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la Ley 25.326: DNI, CUIT y CUIL, documentos de extranjeros, pasaporte, nombres, contacto, domicilio y fecha de nacimiento.",
+      "description": "Paquete esencial de la Ley 25.326",
       "domains": [
         "AR_L1_DNI",
         "AR_L1_CUIT",
@@ -190,7 +192,7 @@
       "name": "AR_L1_DNI - Path",
       "framework": "PATH",
       "domain": "AR_L1_DNI",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -242,20 +244,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,2}\\.\\d{3}\\.\\d{3}",
+            "regex": "0*(?:\\d{1,2}\\.\\d{3}\\.\\d{3})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[1-9]\\d{6,7}",
+            "regex": "0*(?:[1-9]\\d{6,7})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -265,7 +267,7 @@
       "name": "AR_L1_CUIT - Path",
       "framework": "PATH",
       "domain": "AR_L1_CUIT",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -288,20 +290,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(20|2[347]|3[034])-\\d{8}-\\d",
+            "regex": "0*(?:(20|2[347]|3[034])-\\d{8}-\\d)",
             "matchStrength": 0.95,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(20|2[347]|3[034])\\d{9}",
+            "regex": "0*(?:(20|2[347]|3[034])\\d{9})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -311,7 +313,7 @@
       "name": "AR_L1_TRAMITE_DNI - Path",
       "framework": "PATH",
       "domain": "AR_L1_TRAMITE_DNI",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -334,12 +336,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "00\\d{9}",
+            "regex": "0*(?:00\\d{9})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -349,7 +351,7 @@
       "name": "AR_L1_DOCUMENTO_EXTRANJERO - Path",
       "framework": "PATH",
       "domain": "AR_L1_DOCUMENTO_EXTRANJERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -368,7 +370,7 @@
       "name": "AR_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "AR_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -396,7 +398,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -406,7 +408,7 @@
       "name": "AR_L1_REGISTRO_CIVIL - Path",
       "framework": "PATH",
       "domain": "AR_L1_REGISTRO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -425,7 +427,7 @@
       "name": "AR_L1_MATRICULA_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "AR_L1_MATRICULA_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -444,7 +446,7 @@
       "name": "AR_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "AR_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -488,7 +490,7 @@
       "name": "AR_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "AR_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -524,7 +526,7 @@
       "name": "AR_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "AR_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -564,11 +566,11 @@
         "valueLists": [
           {
             "file": "preset-file://ar-detectar-nombres.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://ar-detectar-apellidos.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -580,7 +582,7 @@
       "name": "AR_L1_RAZON_SOCIAL - Path",
       "framework": "PATH",
       "domain": "AR_L1_RAZON_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -608,7 +610,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -618,7 +620,7 @@
       "name": "AR_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "AR_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -658,12 +660,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -673,7 +675,7 @@
       "name": "AR_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "AR_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -696,20 +698,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?54[\\s\\-]?9?[\\s\\-]?)?\\(?0?(11|[23]\\d{2,3})\\)?[\\s\\-]?(15[\\s\\-]?)?\\d{3,4}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?54[\\s\\-]?9?[\\s\\-]?)?\\(?0?(11|[23]\\d{2,3})\\)?[\\s\\-]?(15[\\s\\-]?)?\\d{3,4}[\\s\\-]?\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(15[\\s\\-]?)?\\d{4}-\\d{4}",
+            "regex": "0*(?:(15[\\s\\-]?)?\\d{4}-\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -719,7 +721,7 @@
       "name": "AR_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "AR_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -764,7 +766,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)[a-záéíóúñü0-9.' ]{3,40}\\s+(n[°º]\\s*)?\\d{1,5}\\s*,?\\s*(piso|p\\.|pb|dto|depto|dpto|departamento)\\b.*",
@@ -772,7 +774,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)[a-záéíóúñü.' ]{3,40}\\s+\\d{2,5}",
@@ -780,7 +782,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(mz|mza|manzana)\\.?\\s*\\d+.*\\b(lote|casa|lt)\\.?\\s*\\d+.*",
@@ -788,7 +790,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -798,7 +800,7 @@
       "name": "AR_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "AR_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -817,7 +819,7 @@
       "name": "AR_L1_CBU - Path",
       "framework": "PATH",
       "domain": "AR_L1_CBU",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -840,12 +842,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{8}[\\s\\-]?\\d{14}",
+            "regex": "0*(?:\\d{8}[\\s\\-]?\\d{14})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -855,7 +857,7 @@
       "name": "AR_L1_ALIAS_CBU - Path",
       "framework": "PATH",
       "domain": "AR_L1_ALIAS_CBU",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -883,7 +885,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -893,7 +895,7 @@
       "name": "AR_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "AR_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -912,7 +914,7 @@
       "name": "AR_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "AR_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -935,12 +937,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -950,7 +952,7 @@
       "name": "AR_L1_IP - Path",
       "framework": "PATH",
       "domain": "AR_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -973,20 +975,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -996,7 +998,7 @@
       "name": "AR_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "AR_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1019,20 +1021,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1042,7 +1044,7 @@
       "name": "AR_L1_DOMINIO - Path",
       "framework": "PATH",
       "domain": "AR_L1_DOMINIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1070,7 +1072,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{3}\\s?\\d{3}",
@@ -1078,7 +1080,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]\\d{3}[A-Z]{3}",
@@ -1086,15 +1088,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{3}\\s?[A-Z]{3}",
+            "regex": "0*(?:\\d{3}\\s?[A-Z]{3})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1104,7 +1106,7 @@
       "name": "AR_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "AR_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1132,7 +1134,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1142,7 +1144,7 @@
       "name": "AR_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "AR_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1161,7 +1163,7 @@
       "name": "AR_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "AR_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1180,7 +1182,7 @@
       "name": "AR_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "AR_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1199,7 +1201,7 @@
       "name": "AR_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "AR_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1215,10 +1217,61 @@
       }
     },
     {
+      "name": "AR_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "AR_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "AR_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "AR_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1254,7 +1307,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(2[1-9]|[34]\\d|5[0-5]|6\\d|7[0-3])\\.\\d{4,}",
@@ -1262,7 +1315,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1272,7 +1325,7 @@
       "name": "AR_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "AR_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1312,12 +1365,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,2}\\.\\d{3}\\.\\d{3}",
+            "regex": "0*(?:\\d{1,2}\\.\\d{3}\\.\\d{3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1325,15 +1378,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(20|2[347]|3[034])-\\d{8}-\\d",
+            "regex": "0*(?:(20|2[347]|3[034])-\\d{8}-\\d)",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1343,7 +1396,7 @@
       "name": "AR_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "AR_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1386,7 +1439,7 @@
       "name": "AR_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "AR_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1426,7 +1479,7 @@
       "name": "AR_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "AR_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1466,7 +1519,7 @@
       "name": "AR_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "AR_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1509,7 +1562,7 @@
       "name": "AR_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "AR_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1525,27 +1578,39 @@
       }
     },
     {
-      "name": "AR_L2_SEXO - List",
-      "framework": "LIST",
+      "name": "AR_L2_SEXO - Values",
+      "framework": "REGEX",
       "domain": "AR_L2_SEXO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "note": "8 — femenino · masculino · mujer · varón · hombre · no binario · …",
+            "regex": "(?iu)(?:(?:fem(?:ale|enino)|hombre|m(?:a(?:le|sculino)|ujer)|no binario|var(?:on|ón)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "3 — f · m · x",
+            "regex": "(?iu)(?:(?:f|m|x))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.5,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.5
       }
     },
     {
       "name": "AR_L2_LOCALIDAD - Path",
       "framework": "PATH",
       "domain": "AR_L2_LOCALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1561,27 +1626,30 @@
       }
     },
     {
-      "name": "AR_L2_LOCALIDAD - List",
-      "framework": "LIST",
+      "name": "AR_L2_LOCALIDAD - Values",
+      "framework": "REGEX",
       "domain": "AR_L2_LOCALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-localidades.txt",
-            "matchStrength": 0.8
+            "note": "3883 — Adolfo Alsina · Adolfo Gonzales Chaves · Alberti · Almirante Brown · Avellaneda · Ayacucho · …",
+            "regex": "(?iu)(?:(?:1(?:2 de octubre|6 de julio|7 de agosto|° de mayo|º de mayo)|2(?:5 de mayo|8 de (?:julio|noviembre))|3(?: de mayo|0 de agosto)|7 de abril|9 de julio(?: (?:\\(est\\. pueblo 9 de julio\\)|kil(?:ometro 2(?:0|8)|ómetro 2(?:0|8))))?|a(?:ar(?:on castellanos|ón castellanos)|b(?:bott|d(?:on castro tolay|ón castro tolay)|ra(?: (?:grande|pampa)|laite|mo))|c(?:ceso a lima|e(?:bal|vedo)|h(?:eral|iras|upallas)|o(?:nquija|s - pozo del arbolito|yte)|ébal)|d(?:elia mar(?:ia|ía)|olfo (?:alsina|gonzales chaves|van praet))|ero(?:lito|puerto chapelco)|g(?:relo|u(?:a(?: (?:amarga|d(?:e (?:castilla|las piedras|oro)|ulce y la soledad)|escondida)|d(?:a (?:cecilio|de guerra|guzm(?:an|án)|san roque)|ita del portezuelo)|r(?:a(?: grande|y)|á grande)|s (?:blancas|calientes))|ilares|st(?:i(?:na libarona|­n (?:mosconi|roca))|oni|í­n (?:mosconi|roca))))|h(?:i(?: veremos|­ veremos)|í(?: veremos|­ veremos))|i(?:cu(?:na|ñá)|mogasta)|l(?:b(?:a(?: posse|r(?:d(?:on|ón)|ellos))|er(?:di viejo|ti))|c(?:araz(?: (?:norte|sur))?|orta)|d(?:ao|e(?:a (?:a(?:peleg|sunci(?:on|ón))|b(?:eleiro|rasilera)|e(?:igenfeld|pulef|scolar \\(los r(?:apidos\\)|ápidos\\)))|grapschental|mar(?:ia luisa|ía luisa)|p(?:erut(?:i|í)|rotestante)|s(?:a(?:lto|n(?: (?:antonio|francisco|gregorio|juan|miguel|rafael)|ta (?:mar(?:ia|ía)|rosa)))|patzenkutter)|valle mar(?:ia|ía))|retes))|e(?:j(?:andro (?:peti(?:on|ón)|roca)|o ledesma)|man(?:ia|ía))|garrobo del (?:aguila|águila)|huampa|i(?:cia (?:alta|baja)|jil(?:an|án))|len|m(?:afuerte|irante brown)|pa(?: corral|chiri(?: y el molino)?)|t(?:a(?: (?:gracia|italia)|mirano(?: sur)?|utina)|o(?: (?:alegre|carrizal|de (?:l(?:a (?:cocha|sierra)|os quebrachos)|sierra)|pe(?:lado|ncoso)|r(?:io senguer|ío senguer)|salvador(?: sur)?|verde(?: y los guchea)?)|s de chipi(?:on|ón)))|umin(?:e|é)|v(?:arez (?:de toledo|jonte)|ear))|m(?:a(?:dores|icha del valle|m(?:a|á)|n(?:a(?:o)?|á))|b(?:argasta|eres|il|layo|oy|rosetti|ul)|e(?:n(?:abar|ábar)|rica)|i(?:cha|nga)|p(?:ascachi|impa|olla)|érica)|n(?:a(?: zumar(?:an|án)|tuya)|c(?:a(?: juli|j(?:an|uli|án)|sti)|horena)|d(?:a(?:collo|l(?:gal(?:a|á)|hual(?:a|á))|nt)|rade)|elo|g(?:a(?:co|staco)|el(?: (?:gallardo|vicente penaloza)|oni)|u(?:alasto|il|los))|i(?:llaco|man(?:a|á)|sacate)|jull(?:on|ón)|quincila|t(?:aj(?:e|é)|elo|i(?:lla|naco)|o(?:fagasta de la sierra|nio (?:carboni|tom(?:as|ás))))|zo(?:ategui|átegui))|p(?:ar(?:icio|zo)|o(?:linario saravia|stoles)|óstoles)|r(?:a(?:nguren|ta|uco)|b(?:illa|oledas)|cadia|diles|e(?:na(?:s verdes|za)|quito)|gerich|i(?:st(?:obulo del valle|óbulo del valle)|zona)|mstrong|ocena|r(?:a(?:ga|yanal)|ecifes|ibe(?:nos|ños)|oy(?:ito|o (?:a(?:guiar|lgod(?:on|ón))|b(?:ar(?:u|ú)|urgos)|c(?:abral|eibal|l(?:e|é)|o(?:lorado|r(?:ralito|to)))|d(?:e(?: l(?:a cruz|os patos)|l medio)|ulce)|el pedregoso|gen(?:a|á)|l(?:as tunas|eyes|os berros)|maturrango|palo seco|s(?:an antonio|eco)|ve(?:n(?:ado|tana)|rde)))|ufo)|teaga)|s(?:amblea|c(?:ensi(?:on|ón)|ochinga)|sunta|t(?:ica|ra))|t(?:a(?:hona|l(?:aya|iva(?: roca)?))|oj pozo)|usonia|v(?:e(?:llaneda|r(?:ias|ías))|ia terai)|yacucho|z(?:ara|cu(?:enaga|énaga)|opardo|ul(?: pescador)?)|ñ(?:atuya|elo))|b(?:a(?:gual|h(?:i(?:a (?:b(?:lanca|onita|ustamante)|creek|de playas|fox \\(is\\. malvinas\\))|­a san blas)|í(?:a (?:b(?:lanca|onita|ustamante)|creek|de playas|fox \\(is\\. malvinas\\))|­a san blas))|igorrita|j(?:ada del agrio|o (?:car(?:acoles|rizal)|de corrales|grande|hondo))|l(?:carce|de(?: del rosario)?|lesteros(?: sud)?|neari(?:a|o (?:cochic(?:o|ó)|l(?:a(?: verde|guna de gomez)|os (?:angeles|ángeles))|monje|orense|sa(?:n cayetano|uce grande))))|n(?:a(?:do de (?:los pantanos|ovanta|soto)|nal)|co payagu(?:a|á)|d(?:a del r(?:io sali|ío salí)|era(?: bajada|o|s|ó)?))|r(?:adero|cena|da(?: del medio|s blancas)|io ita|ker|r(?:a(?: concepci(?:on|ón)|n(?:ca(?: larga|s)|queras))|eal - villa pituil|io(?: (?:12 de octubre|2(?:0 de junio|70 viviendas)|9 de julio|a(?:l(?:dea casa blanca|t(?:a barda|o del olvido))|rroyo del medio)|b(?:alneario|elgrano norte|lanco|uenos aires chico)|c(?:a(?:ima|lle ciega nº (?:10|6)|nale|rrasco)|e(?:ferino|rrado la mata)|h(?:acra monte|ivilcoy)|icarelli|o(?:elho|lonia conesa|operativa (?:el(?:ectrica|éctrica)|los campamentos|reducci(?:on|ón))|sta (?:este|oeste))|uatro bocas)|de(?: los pescadores|l lago|stacamento)|e(?:l (?:boquer(?:on|ón)|c(?:armen|epillo)|franc(?:es|és)|labrador|m(?:a(?:ngrullo|ruchito)|i(?:lagro|rador))|nevado|p(?:aca(?:a - barrio comipini|á - barrio comipini)|etr(?:oleo|óleo))|taladro)|m(?:anuel|ergente|pleados de comercio)|s(?:cuela (?:461|633)|peranza))|f(?:atima|inca la maroma|rontera|átima)|g(?:ilbert \\(1º de mayo\\)|u(?:atambu|errico))|i(?:ntendencia|sla 10)|j(?:es(?:us de nazaret|ús de nazaret)|o(?:col(?:i ii|í ii)|s(?:e hernandez|é hernández)))|l(?:a(?: (?:barda|costa|defensa|her(?:minia|radura)|luna|p(?:almera|ega)|rotonda)|gunas de bartoluzzi|s (?:golondrinas|plantaciones))|o(?:mas altas|s (?:bosquecitos|charabones|jarilleros|olivos|pioneros \\(barrio tavella\\)))|uisillo)|m(?:a(?:lvinas|r(?: del plata|engo|ia (?:auxiliadora|elvira)|ía (?:auxiliadora|elvira)))|itre|o(?:lina cabrera|no azul|ño azul)|unicipal)|n(?:orte|uestra se(?:nora de fatima|ñora de fátima))|odij|p(?:ar(?:a(?:iso del paso|íso del paso)|que (?:el moraj(?:u|ú)|la(?: ci(?:enaga|énaga)|s acacias)))|erdriel iv|inar|lanta compresora de gas|orvenir)|r(?:eto(?:nos de colon|ños de colón)|i(?:vadavia|­o salado)|odas park|u(?:ral|ta 40)|í­o salado)|sa(?:dop - bella vista|n(?: (?:cayetano|esteban - barrio los pozos|felipe|isidro|jo(?:rge|s(?:e|é))|mart(?:in|ín))|ta (?:emilia|luc(?:ia|ía)|mar(?:i­a|í­a)|paula|r(?:ita|osa)|teresita)))|t(?:ronelli|ungoil)|uni(?:on|ón)|virgen del rosario|yuquer(?:i chico|í chico))|s acapulco y veracruz))|tolom(?:e (?:bavio|de las casas)|é (?:bavio|de las casas)))|s(?:a(?:il|vilbaso)|e aeronaval punta indio)|t(?:a(?:n|via)|án)|uer y sigel|yauca|ñado de (?:los pantanos|ovanta|soto))|e(?:azley|l(?:l(?: ville|a (?:italia|vista)|ocq)|tr(?:an|án))|n(?:golea|ito ju(?:arez|árez)|jam(?:i(?:n (?:araoz y el tajamar|gould|paz)|­n gould)|í(?:n (?:aráoz y el tajamar|gould|paz)|­n gould)))|r(?:a(?:bev(?:u|ú)|veb(?:u|ú)|zategui)|dier|isso|m(?:ej(?:ito|o)|udez|údez)|na(?:rdo (?:de irigoyen|larroud(?:e|é))|sconi)?|rotar(?:an|án)|utti)|t(?:ania|beder))|i(?:alet mass(?:e|é)|gand)|la(?:nc(?:agrande|o encalada|u(?:ntre|ra centro))|quier)|o(?: nueva california sur|ca(?: (?:del (?:r(?:io|ío)|tigre)|riacho pilag(?:as|ás))|yuva)|l(?:ivar|ívar)|mbal|npland|rdenave|u(?:quet|wer)|vril|wen)|r(?:a(?:gado|ndsen|zo (?:largo|norte \\(is\\. malvinas\\)))|ea pozo|inkmann)|u(?:chardo|en(?: pasto|a (?:esperanza|vista)|os aires chico)|lnes|rruyac(?:u|ú)|stinza|ta(?: ranquil|l(?:on norte|ón norte)))|º bernardino rivadavia|árcena)|c(?:a(?:a (?:- yari|cati|yari)|b(?:al(?:ango)?|eza de buey|ildo|ra corral|urei)|c(?:h(?:ar(?:i|í)|euta|i(?:rulo)?)|ique ariacaiqu(?:in|ín))|dret|f(?:ayate|ferata)|imancito|l(?:abacilla|ch(?:aqu(?:i|í)|in(?: oeste)?|ín(?: oeste)?)|e(?:ta olivia|uf(?:u|ú))|i(?:legua|ngasta))|m(?:arones|i(?:lo aldao|n(?:iaga|o al (?:nandubaysal|ñandubaysal)))|p(?:anas|i(?:chuelo|ng magdalena)|o(?: (?:andino|d(?:e(?: herrera|l cielo)|ur(?:an|án))|g(?:allo|rande)|l(?:a(?: (?:cruz|paz)|rgo)|os andes)|piaggio|quijano|ram(?:on|ón)|s(?:anto|iete provincias)|tres pozos|viera)|s de roca)))|n(?:a(?:d(?:a (?:de(?: (?:gomez|l(?:a costa|uque)|machado|rio pinto|salas)|l (?:sauce|ucle))|escobar|honda|ombu|r(?:ica|osquin)|seca)|on (?:chileno|seco))|l(?:ejas|s))|d(?:elaria su(?:d|r)|ioti)|grejillos|uelas)|p(?:ay(?:an|án)|i(?:azuti|lla (?:de(?: (?:los remedios|romero|sit(?:on|ón))|l (?:carmen|monte|se(?:nor|ñor)))|san expedito)|ov(?:i(?:ci(?:no|ño))?|í)|t(?:an (?:bermudez|ca(?:ceres|stro)|general bernardo o(?: higgins|'higgins)|juan page|montoya|s(?:armiento|olari))|án (?:bermúdez|c(?:astro|áceres)|general bernardo o(?: higgins|'higgins)|juan pagé|montoya|s(?:armiento|olari)))|vara))|r(?:a(?:guatay|hunco|par(?:i|í))|boncito|cara(?:na|ñá)|d(?:enal cagliero|on esquina|ón esquina)|hu(?:e|é)|los (?:beguerie|casares|keen|mar(?:ia naon|ía naón)|pellegrini|salas|tejedor)|men(?: de(?: (?:areco|patagones)|l sauce)|sa)|nerillo|pinter(?:ia|ía)|r(?:e(?:nleuf(?:u|ú)|ras)|i(?:lobo|zales)|o quemado))|s(?:a(?: (?:colorada|de piedra|grande)|bindo|l(?:egno|ins)|res|s)|bas|cada|eros(?: (?:centro|este))?|i(?:lda|ra)|p(?:al(?:a|á)|i corral)|t(?:el(?:ar|l(?:anos|i))|illa|ro barros))|t(?:ril(?:o|ó)|ua)|ucete|v(?:anagh|iahue(?: - copahue)?|our)|yast(?:a(?:cito)?|á)|z(?:ador(?:es correntinos)?|on)|á (?:- yarí|catí|yarí)|ñ(?:ad(?:a (?:de(?: (?:gómez|l(?:a costa|uque)|machado|r(?:io pinto|ío pinto)|salas)|l (?:sauce|ucle))|escobar|honda|ombú|r(?:ica|osquín)|seca)|ón (?:chileno|seco))|uelas))|e(?:cilio echavarr(?:ia|ía)|iba(?:lito|s)|jolao|nt(?:en(?:ario|o)|inela del mar|ro (?:25 de junio|forestal|guerrero))|peda|r(?:es|r(?:ito|o (?:azul|c(?:entinela|o(?:lorado|ndor|r(?:a|á))|óndor)|de la gloria|moreno|negro|polic(?:ia|ía)))|vantes)|vil redondo)|h(?:a(?:bas|c(?:abuco|harramendi|ras de(?: (?:la tinidad|olivia|villa espil)|l paran(?:a|á)))|j(?:a(?:n|r(?:i|í))|án)|l(?:acea|guamayoc|ic(?:an|án))|mical|n(?:ar(?: (?:ladeado|punco|viejo)|muyo)?|cani)|p(?:a(?:dmalal|lco|nay)|uy)|quiago|r(?:a(?:cato|dai|ta)|bonier|ras|tres \\(is\\. malvinas\\))|s(?:com(?:us|ús)|ic(?:o|ó))?|u(?:chillas|pi pozo)|varr(?:i(?:a|­a)|í(?:a|­a))|z(?:on|ón)|ñar(?: (?:ladeado|punco|viejo)|muyo)?)|e(?:lfor(?:o|ó)|pes)|i(?:c(?:hinales|lana|oana)|l(?:ca(?: juliana|s)|ecito|ibroste|lar)|m(?:bas|en aike|pay)|pauquil|queros|vilcoy)|o(?:c(?:on medio|ón medio)|ele choel|lila|r(?:o(?:moro|tis)|riaca)|s(?: malal|mes)|vet|ya)|ristophersen|u(?:c(?:hucaruana|u(?:l|ma))|mbicha|na(?: huasi)?|quis|rqui ca(?:nada|ñada)|scha|ña(?: huasi)?))|i(?:anzo|e(?:los del sur|n(?:ag(?:a de(?: allende|l coro)|uita)|eg(?:a de paicone|uillas))|rvo petiso)|n(?:co saltos|tra)|polletti|udacita|én(?:aga del coro|ega de paicone))|l(?:a(?:r(?:az|omec(?:o|ó))|sson)|emente onelli|o(?:domir(?:a|o ledesma)|rinda)|ub de (?:campo l(?:as malvinas|os puentes)|pesca (?:pig(?:ue|üé)|saavedra)))|o(?:b(?:os|res)|c(?:h(?:agual|i(?:co|noca))|taca)|l(?:a(?:lao del valle|n(?: conhu(?:e|é)|a)|zo)|mena|o(?:mbres|n(?:ia(?: (?:1(?:0(?: de julio)?|4|7)?|25 de mayo|6|9 de julio|a(?:borigen(?: bartolom(?:e de las casas|é de las casas))?|caragua|divino|l(?:berdi|dao|emana|mada|pina)|n(?:a|guin(?:an|án)|ita)|urora|v(?:ellaneda|igdor)|yu(?:i|í))|b(?:a(?:r(?:anda|ge|on|ón)|ylina)|e(?:lgrano|n(?:itez|ítez))|i(?:cha|gand|smarck)|ossi|remen)|c(?:ar(?:los pellegrini|oya|rasco)|el(?:ina|lo)|lara|respo)|d(?:el(?: valle|icia)|o(?:lores|ra)|ur(?:an|án))|e(?:l(?: simbolar|i(?:a|sa)|ía)|nsayo)|fi(?:nlandesa|scal)|g(?:eneral roca|isela)|h(?:o(?:cker|gar)|ugues)|it(?:alia(?:na)?|urraspe)|j(?:avier mu(?:niz|ñiz)|os(?:e marmol|é mármol)|uli(?:a y echarren|o u\\. mart(?:in|ín)|á y echarren))|l(?:a(?: (?:argentina|matanza)|s (?:cuatro esquinas|pichanas|rosas))|i(?:bertad|ebig))|m(?:a(?:lligasta|r(?:garita|ina)|sc(?:ias|ías)|u(?:a|ricio)|yo - barrio la milagrosa)|e(?:dici|rou)|édici)|n(?:ievas|ueva(?: coneta)?)|o(?:ficial n(?:° (?:3 y 14|5)|º (?:3 y 14|5))|rtiz de ocampo)|p(?:a(?:ndo|storil)|egouriel|o(?:lana|pular)|rosperidad)|r(?:aquel|osa)|s(?:a(?:n(?: (?:a(?:dolfo|nselmo y aleda(?:nas|ñas))|bartolom(?:e|é)|j(?:o(?:aqu(?:in|ín)|s(?:e|é))|u(?:an|sto))|m(?:art(?:ii­n|íi­n)|iguel(?: arc(?:angel|ángel))?)|pedro)|ta (?:mar(?:i(?:a(?: y las margaritas)?|­a)|í(?:a(?: y las margaritas)?|­a))|r(?:ita|osa)|teresa))|rmiento)|e(?:govia|r(?:e|é))|u(?:damerica|iza))|t(?:acurales|eresa|i(?:nco|rolesa)|unas)|uni(?:on escuela|ón escuela)|v(?:altelina|einticinco|i(?:c(?:ente ag(?:uero|üero)|higasta|toria)|dela|gnaud|rar(?:o|ó)))|wanda)|s unidas))?)|pes|án conhué|ón)|m(?:a(?:llo|ndan(?:cia fr(?:ias|ías)|te (?:andresito|fontana|luis piedra(?: buena|buena)|nicanor otamendi)))|echingones|ic(?:o|ó)|odoro (?:py|rivadavia)|un(?:a tala|idad (?:aborigen (?:lak(?:a wichi|á wichi)|wichi oblitaj)|coquena)))|n(?:a niyeu|c(?:ar(?:an|án)|epci(?:on de(?: la sierra|l (?:bermejo|uruguay|yaguarete cora))|ón de(?: la sierra|l (?:bermejo|uruguay|yaguareté corá)))|ordia)|dor huasi|e(?:sa|ta)|helo|lara|scripto bernardi|tralmirante cordero)|p(?:a(?:cabana|hue)|etonas|o quile)|r(?:anzuli|covado|d(?:on del plata|ón del plata)|o(?:n(?:da|el (?:arnold|b(?:aigorria|elisle|o(?:err|gado)|randsen)|c(?:harlone|ornejo)|d(?:e(?: marina leonardo rosales|siderio sosa)|o(?:m(?:inguez|ínguez)|rrego)|u graty)|fraga|granada|hilario lagos|juan sol(?:a|á)|m(?:a(?:nuel l\\. rico|rt(?:i­nez de hoz|í­nez de hoz))|ol(?:des|linedo))|olleros|pringles|s(?:egu(?:i|í)|u(?:arez|árez))|vidal))|pampa)|pus(?: christi)?|ral(?: (?:blanco|de bustos ifflinger|quemado)|ito)|taderas|zuela)|s(?:qu(?:in|ín)|ta (?:blanco|de(?: araujo|l (?:chubut|lago))|esmeralda|flores|grande|sacate|uruguay norte))|te lai|untry club san justo|vunco abajo|y(?:aguaima|uco - cochico))|r(?:espo|is(?:pi|tiano muerto)|otto|u(?:ce(?: (?:caballero|r(?:io colorado|ío colorado))|sitas octava)|z (?:alta|de(?: (?:ca(?:na|ña)|los milagros|piedra)|l eje))))|u(?:a(?:dro benegas|tro (?:bocas|esquinas|vientos))|c(?:hill(?:a redonda|o co)|ull(?:u|ú))|esta (?:azul|blanca)|lul(?:u|ú)|r(?:a(?:malal|r(?:u|ú))|u(?:pa(?:ity|yt(?:i|í))|z(?:u cuatia|ú cuatiá)))|s(?:hamen(?: centro)?|i cusi)|tral c(?:o|ó))|óndor huasi)|d(?:'orbigny|a(?:ireaux|lmacio v(?:elez|élez)|mi(?:an maisonave|án maisonave)|niel donovan|r(?:regueira|win))|e(?: (?:bary|la (?:canal|garma|serna))|an funes|l(?: (?:ca(?:mpillo|rril)|valle)|f(?:in (?:gallo|huergo)|ín (?:gallo|huergo)))|nnehy|s(?:aguadero|iderio tello|pe(?:nadero(?:s)?|ñadero(?:s)?)|v(?:io arijon|ío arijón))|voto|án funes)|i(?:a(?:dema argentina|mante)|ego (?:de (?:alvear|rojas)|gaynor|l(?:opez|ópez))|na huapi|que (?:chico|florentino ameghino)|strito (?:6º costa de nogoy(?:a|á)|ch(?:a(?:nar|ñar)|iqueros)|diego l(?:opez|ópez)|p(?:ajonal|rimero)|sexto|tal(?:a|itas))|vis(?:adero|oria))|o(?:blas|ctor (?:oscar atilio viglione \\(frontera de r(?:io pico\\)|ío pico\\))|ricardo rojas)|lavon|mingo (?:mill(?:an|án)|savio)|n(?: (?:c(?:ipriano|rist(?:obal (?:1°|i(?:i)?)|óbal (?:1°|i(?:i)?)))|emilio)|a(?: luisa|deu))|rila|s (?:a(?:cequias|rroyos)|de mayo|hermanas|rosas y la legua)|ña luisa)|r(?:\\. atilio oscar viglione|agones)|u(?:dignac|faur|ggan|razno))|e(?:duardo (?:castex|o'brien)|gusquiza|l(?: (?:49|a(?:cheral|guilar|ib(?:e|é)|l(?:amito|c(?:a(?:lde|zar)|ázar)|garrobo|to)|ngosto|r(?:a(?:nado|za|ñado)|enal)|ybal)|b(?:a(?:gual|nado|ñado)|lanco|o(?:badal|ls(?:on|ón)|rdo)|r(?:acho(?: y el cevilar)?|e(?:al|te)))|c(?:a(?:bur(?:e|é)|dillal|i(?:m(?:an|án)|n)|j(?:on|ón)|lafate|r(?:amelo|men(?: de avellaneda)?|ri(?:l|zal))|ín)|e(?:ib(?:al|o)|rcado|vilar)|h(?:a(?:cho|j(?:a|á)|lt(?:en|én)|nar|rco|ñar)|ical|o(?:lar|rro)|urqui)|imarr(?:on|ón)|o(?:lorado|ndor|r(?:covado - el torre(?:on|ón)|ralito))|r(?:is(?:p(?:in|ín)|to)|uce)|u(?:adrado|y)|óndor)|d(?:e(?:an(?:cito)?|s(?:monte|tino)|án(?:cito)?)|ivis(?:adero|orio)|orado|urazno)|e(?:je|mpalme|nc(?:on|ón)|s(?:corial|pin(?:illo|o)))|f(?:o(?:rt(?:in|ín)|yel)|uerte(?:cito)?)|g(?:alp(?:on|ón)|ramiyal)|h(?:oyo|uec(?:u|ú))|j(?:ard(?:i(?:n|­n)|í(?:n|­n))|uncal)|lindero|m(?:a(?:it(?:en|én)|lacate|n(?:antial|so|zano)|rquesado)|edano|i(?:lagro|ra(?:dor|sol))|o(?:j(?:on|ón)|l(?:ino|lar)|reno)|édano)|n(?:aranj(?:ito|o(?: y el sunchal)?)|ihuil)|p(?:a(?:jonal|l(?:enque|omar)|ra(?:i(?:sal|­so)|millo|í­so)|storil)|e(?:dregal|n(?:on|samiento)|r(?:al|dido)|scadero|ñón)|i(?:ngo|quete)|o(?:lear(?: y los c(?:ordoba|órdoba))?|r(?:tezuelo|venir)|tr(?:ero|illo))|r(?:estamo|ovincial|éstamo)|u(?:car(?:a|á)|est(?:ito|o)))|qu(?:e(?:brach(?:al|o)|mado)|imilo)|r(?:a(?:b(?:on|ón)|mbl(?:on|ón)|streador)|e(?:creo|dom(?:on|ón)|mate)|inc(?:on|ón)|odeo)|s(?:a(?:crificio|l(?:ado|to|vaje)|u(?:ce|zal(?:ito)?))|iamb(?:on|ón)|o(?:berbio|corro|lar(?:, san carlos y colonia bertozzi)?|mbrer(?:ito|o)|sneado|tano)|ótano)|t(?:a(?:bacal|la(?:r)?)|i(?:mb(?:o|ó)|o|­o)|o(?:ledano norte|ro)|r(?:apiche|ebol|i(?:go|unfo)|opez(?:on|ón)|ébol)|u(?:nal|rbio|scal)|í(?:o|­o))|v(?:ergel|olc(?:an|án))|zampal)|dorado|ortondo)|m(?:ba(?:jador martini|lse(?: ingeniero reolin)?|rcaci(?:on|ón))|ilio (?:ayarza|v\\. bunge)|p(?:alme (?:san carlos|villa constituci(?:on|ón))|edrado))|n(?:erg(?:i­a|í­a)|rique (?:carb(?:o|ó)|uri(?:en|én))|senada|tre comunas)|puy(?:en|én)|r(?:ezcano|ize|ézcano)|s(?:c(?:aba|uela 357)|p(?:artillar|i(?:gas|nillo norte))|qu(?:el|i(?:na(?: y mancopa)?|u|ú))|t(?:a(?:ci(?:on (?:a(?:postoles|r(?:aoz(?: y tacanas)?|enales)|tamisqui)|c(?:amps|hapadmalal|lucellas)|escrina|general (?:obligado|paz)|juarez celman|kilometro (?:403|501)|l(?:a(?: punta|zo)|ecueder|ibertad|uxardo)|mazan|norquinco|parera|r(?:aices|obles)|s(?:aguier|imbolar|osa)|torrent|y(?:erua|uquer(?:i|í)))|ón (?:a(?:póstoles|r(?:enales|áoz(?: y tacanas)?)|tamisqui)|c(?:amps|lucellas)|escriña|general (?:obligado|paz)|juárez celman|kilómetro (?:403|501)|l(?:a(?: punta|zo)|ecueder|ibertad|uxardo)|mazán|parera|r(?:aíces|obles)|s(?:aguier|imbolar|osa)|torrent|y(?:eruá|uquerí)|ñorquinco))|n(?:cia (?:de guadalupe|grande|las lilas|vieja)|islao del campo)|quitas)|eban (?:agust(?:in gascon|ín gascón)|echeverr(?:ia|ía)|rams)))|truria|u(?:frasio loza|genio bustos|s(?:ebia y carolina|tolia))|xaltaci(?:on de la cruz|ón de la cruz)|zeiza)|f(?:a(?:c(?:hinal|undo quiroga)|l(?:da del ca(?:nete|rmen(?: norte)?|ñete)|ucho)|ma(?:ill(?:a|á)|t(?:anca|ina))|r(?:all(?:on negro|ón negro)|o))|e(?:br(?:e|é)|dera(?:ci(?:on|ón)|l)|li(?:cia|pe (?:sol(?:a|á)|yofr(?:e|é)))|rr(?:e|é))|i(?:ambal(?:a|á)|dela|ghiera|nca del sol - san francisco - catalina norte|rmat|tz roy)|lor(?: de oro|en(?:cio varela|tino ameghino))|o(?:fo cahuel|ntezuela|r(?:res(?: \\(est\\. chaguar punco\\))?|t(?:i(?:i­n acha|n (?:belgrano|c(?:abo 1º lugones|harrua)|el patria|inca|l(?:a(?:s chunas|valle)|ugones)|olmos|s(?:argento 1º leyes|oledad))|­n (?:inca|olavarria|tiburcio))|una|í(?:i­n acha|n (?:belgrano|c(?:abo 1º lugones|harrúa)|el patria|inca|l(?:a(?:s chuñas|valle)|ugones)|olmos|sargento 1º leyes)|­n (?:inca|olavarría|tiburcio)))))|r(?:a(?:cr(?:an|án)|ga|ile pintado|n(?:c(?:isco (?:a\\. berra|madero)|k)|klin)|y (?:luis beltr(?:an|án)|mamerto esqui(?:u|ú)))|e(?:nch|yre)|i­as|ontera|í­as)|u(?:erte (?:esperanza|quemado|san javier)|lton))|g(?:a(?:boto|han|iman|l(?:isteo|vez)|n(?: gan|cedo)|ona|r(?:a(?:bato|v(?:i|í)|yalde)|dey|ibaldi|mendia|r(?:e(?: norte)?|uchos|é(?: norte)?)|u(?:hap(?:e|é)|p(?:a|á))|za)|st(?:on(?:a (?:norte|sud|y belicha)|illa)|re)|to colorado)|e(?:neral (?:a(?:cha|l(?:mada|v(?:arado|ear))|renales)|b(?:al(?:dissera|livi(?:an|án))|elgrano)|c(?:a(?:brera|mpos|pdevila)|onesa)|d(?:aniel cerri|eheza)|enrique godoy|f(?:e(?:lipe varela|rn(?:andez oro|ández oro))|otheringham)|g(?:alarza|elly|u(?:emes|ido)|üemes)|hornos|j(?:os(?:e de san martin|é de san martín)|uan (?:facundo quiroga|madariaga))|l(?:a(?: madrid|gos|madrid|s heras|valle)|evalle|ucio victorio mansilla)|m(?:anuel (?:belgrano|j\\. campos)|osconi)|ortiz de ocampo|p(?:a(?:unero|z)|i(?:co|n(?:edo|to)|r(?:an|án)|zarro)|ueyrred(?:on|ón))|r(?:a(?:cedo|m(?:irez|írez))|ivas|o(?:ca|dr(?:i(?:guez|­guez)|íguez)|jo))|san mart(?:in|ín)|urquiza|v(?:edia|i(?:amonte|llegas)))|rmania|ssler)|i(?:lbert|rodias)|o(?:bernador (?:c(?:astro|osta|respo)|duval|e(?:chag(?:ue|üe)|tchevehere)|gregores|ingeniero valent(?:in virasoro|ín virasoro)|l(?:opez|ópez)|ma(?:nsilla|rt(?:inez|ínez))|piedrabuena|r(?:acedo|oca)|sola|u(?:daondo|garte)|virasoro)|d(?:eken|oy cruz)|l(?:dney|ondrina)|nz(?:alez moreno|ález moreno)|r(?:chs|ostiaga)|udge|wland|y(?:a|ena))|r(?:a(?:milla|n(?: (?:china|guardia)|adero (?:baigorria|gatica)|eros))|egoria p(?:erez de denis|érez de denis)|utly|ytviken \\(is georgias del sur\\))|u(?:a(?:chipas|dal(?:cazar|upe norte)|l(?:eguay(?:c(?:h(?:u|ú)|ito))?|jaina)|m(?:in(?:i|í)|pacha)|n(?:aco(?: muerto|s)?|ch(?:in|ín)|dacol)|r(?:an(?:i|í)|d(?:amonte|ia (?:escolta|mitre)))|sapampa|t(?:imoz(?:in|ín)|rach(?:e|é))|virav(?:i|í)|y(?:a(?:mba|scate)|mall(?:en|én))|ñacos)|errico|nther|temberg)|álvez|ödeken|ünther)|h(?:a(?:le|mbis|rdy|s(?:enkamp|se)|umonia)|e(?:lvecia|nderson|r(?:litzka|moso campo|n(?:an(?: mejia miraval|d(?:arias|o))|án mejía miraval)|r(?:adura|era vegas)|silia))|i(?:ckman|lario ascasubi|noj(?:al|o)|p(?:at(?:ia|ía)|olito yrigoyen|ólito yrigoyen)|to 1)|o(?:cker|r(?:nadita de la cordillera|quilla|tensia)|y(?:on|ón))|u(?:a(?:c(?:alera|hana|o)|lf(?:in|ín)|n(?:c(?:ar|hilla)|guel(?:en|én)|queros)|s(?:a pampa(?: (?:norte|sur))?|cha)|ycama)|cal|erta grande|g(?:entobler|hes)|i(?:llapima|n(?:ca renanc(?:o|ó)|ganco))|m(?:ahuaca|b(?:erto primo|oldt))|rlingham|yamampa|áncar))|i(?:b(?:ar(?:lucea|reta)|icuy)|ca(?:no|ño)|diaz(?:abal|ábal)|glesia|ltico|mpira|n(?:d(?:ependencia|io rico)|es indart|fanz(?:on|ón)|geni(?:ero (?:barbet|chanourdie|foster|g(?:iagnoni|u(?:illermo n(?: ju(?:arez|árez)|icasio ju(?:arez|árez))|stavo andr(?:e|é)))|huergo|jacobacci|lui(?:ggi|s a\\. huergo)|moneta|otto krause|sajaroff|thompson)|o (?:fronterita|primer correntino|san pablo))|ocencio sosa|riville|t(?:e(?:graci(?:on|ón)|ndente alvear)|i(?: cancha|yaco))|és indart)|r(?:a(?:la|ola|zusta)|i(?:arte|goyen|neo portela)|uya)|s(?:c(?:a yacu(?: semaul)?|hilin)|l(?:a (?:de(?: ca(?:nas|ñas)|l cerrito)|la(?:rga|s lechiguanas)|verde)|etas))|t(?:a(?: ibate|caruar(?:e|é)|l(?:o|ó))|in|uzaing(?:o|ó)|á ibaté|ín))|j(?:a(?:c(?:hal|i(?:nto (?:ar(?:auz|áuz)|l\\. ar(?:auz|áuz))|punco))|g(?:ue|üé)|ime p(?:eter|rats)|m(?:a|es craik)|r(?:amillo(?: y fitz roy)?|d(?:in america|ín américa)|illa))|e(?:ppener|s(?:us maria|ús maría))|o(?:aqu(?:in v\\. gonzalez|ín v\\. gonz(?:alez|ález))|col(?:i(?: viejo)?|í(?: viejo)?)|rge born|s(?:e (?:b\\. casas|c\\. paz|de (?:la quintana|san martin)|juan almeyra)|é (?:b\\. casas|c\\. paz|de (?:la quintana|san martín)|juan almeyra))|vita)|u(?:an(?: (?:a\\. (?:de la pe(?:na|ña)|pradere)|b(?:\\. molina|autista alberdi)|coust(?:e|é)|de garay|e\\. barra|f\\. (?:ibarra|salaberry)|g baz(?:an|án)|jo(?:rba|s(?:e (?:castelli|paso)|é (?:castelli|paso)))|llerena|manuel de rosas|n\\. fern(?:andez|ández)|pujol|wenceslao gez)|a koslay|illo)|bileo|ella|li(?:a dufour|o arditi)|n(?:cal|i(?:n(?: de los andes)?|­n)|í(?:n(?: de los andes)?|­n))|st(?:iniano posse|o (?:daract|jos(?:e de urquiza|é de urquiza)))|ventud unida)|áchal)|kil(?:ometro (?:1(?:01|15|2|30|7)|26|3(?:02|14)|49|6(?:58|91)|74|8(?:4|55|84))|ómetro (?:1(?:01|15|2|30|7)|26|3(?:02|14)|49|6(?:58|91)|74|8(?:4|55|84)))|l(?:a(?: (?:a(?:dela|fricana|lmona|ng(?:elita|ostura)|r(?:boleda(?: sur)?|gentina|mon(?:i­a|í­a))|sunci(?:on|ón)|urora)|b(?:a(?:nda|tea)|eba|oca del r(?:io|ío)|r(?:ava|ea)|uitrera)|c(?:a(?:bral|l(?:der(?:a|illa)|era)|mila|n(?:ada|delaria|tera)|r(?:lota|olina(?: el potos(?:i|í))?|reta)|talina|utiva|ñada)|e(?:ntral|sira)|h(?:ispa|oza)|i(?:en(?:aga|ega)|én(?:aga|ega))|l(?:arita|otilde)|o(?:cha|l(?:ina|onia)|ns(?:tancia|ulta)|rita|sta)|r(?:iolla|uz)|u(?:adra|esta del sur|mbre(?:cita)?|rva))|d(?:elfina|or(?:ada|mida))|e(?:duvigis|milia|s(?:condida|peranza|tanci(?:a|ta)))|f(?:alda|ederala|lor(?:esta|ida(?: y luisiana)?)|ra(?:gua|ncia|ternidad y santa juana))|g(?:allareta|ilda|loria|ranja|uardia)|h(?:erradura|iguera|oyada|umada)|i(?:n(?:termedia|ve(?:ncible|rnada(?: sur)?))|sl(?:a|eta))|ju(?:anita|nta)|l(?:a(?:gun(?:a|illa)|rga)|eonesa|i(?:bertad|mpia)|lave nueva|ober(?:ia|ía)|u(?:cila|isa))|m(?:a(?:carena|jada|n(?:ga|uela)|r(?:oma|uja)|tanza)|e(?:ndieta|rced(?: del enc(?:on|ón))?)|uela)|n(?:ena(?: - la simona)?|i(?:na|ña)|oria|ueva donosa)|o(?:llita|vejer(?:ia|ía))|p(?:a(?:isanita|l(?:a|estina|iza)|quita|ra|z)|e(?:drera|lada|n(?:ca y caraguat(?:a|á)|insula|ínsula))|icada|la(?:ta|y(?:a|osa))|o(?:blaci(?:on|ón)|ma|sta)|r(?:imavera|ovidencia)|u(?:erta|n(?:illa|t(?:a|illa))))|qui(?:aca|nta)|r(?:a(?:mada(?: (?:de abajo|y la cruz))?|ncherita(?: y las cascadas)?)|e(?:d(?:onda|ucci(?:on|ón))|forma|serva)|i(?:ca|nconada|ojita)|ubia)|s(?:a(?:bana|lina|rita)|erranita|illeta|of(?:ia|ía))|t(?:i(?:gra|pa)|o(?:ma|rdilla)|r(?:aves(?:i­a|í­a)|inidad)|uquita)|uni(?:on|ón)|v(?:anguardia|er(?:bena|de|tiente)|i(?:na|oleta|ruta|ña)))|b(?:ard(?:en|én)|o(?:rde(?:boy)?|ulaye))|finur|g(?:o (?:blanco|epuy(?:en|én)|moreno|p(?:arque la salada|osadas|uelo)|rosario|salto grande)|un(?:a (?:a(?:lsina|zul)|b(?:en(?:itez|ítez)|lanca)|de(?: lobos|l pescado)|escondida|gallo|l(?:arga|impia)|naick(?: neck|-neck)|paiva|vitel|yema)|i(?:llas de farall(?:on|ón)|ta salada)))|harrague|ma(?:drid|rque)|n(?:deta|teri|us|ús)|p(?:achito|lacette|rida)|r(?:gu(?:ia|ía)|r(?:echea|oque)|tigau)|s (?:a(?:cequias|guadas|lbahacas|r(?:mas|rias)|vispas)|b(?:a(?:hamas|jadas|ndurrias|rran(?:cas|quitas)|yas)|re(?:nas|ñas))|c(?:a(?:l(?:eras|les)|n(?:a(?:das|s)|itas)|r(?:abelas|reras|tas)|titas|ñ(?:a(?:das|s)|itas))|ejas|h(?:acr(?:as|itas)|imbas)|o(?:l(?:inas|oradas)|mpuertas)|uevas)|delicias|e(?:ncadenadas|squinas)|flores|g(?:ar(?:citas|zas)|r(?:amillas|utas)|uachas)|h(?:acheras|eras|igueras)|isletillas|j(?:a(?:rillas|ulas)|unt(?:as|uras))|l(?:a(?:gunas|j(?:as|itas))|e(?:nas|ñas)|omitas)|m(?:a(?:lvinas|r(?:ianas|tinetas)|sitas)|ercedes|o(?:jarras|scas))|ovejas|p(?:a(?:lm(?:as|eras|itas)|mpitas|rejas)|e(?:nas(?: sud)?|r(?:as|dices|las)|tacas|ñas(?: sud)?)|iedritas|l(?:ayas|umas))|r(?:abonas|osas)|s(?:aladas|iringuillas)|t(?:a(?:l(?:as(?: - los m(?:edanos|édanos))?|itas)|pias)|ejas|inajas|o(?:ninas|scas)|unas)|v(?:ar(?:as|illas)|e(?:gas|rtientes)|i(?:oletas|zcachas)))|urencena|va(?:isse|lle)|zzarino)|e(?:andro n\\. alem|hmann|leque|on(?: rouges y santa rosa|es)|zama|ón rouges y santa rosa)|i(?:b(?:a(?:no|ros)|ertad(?:or (?:general san mart(?:in|ín)|san mart(?:in|ín)))?)|cenciado matienzo|lo viejo(?: - patay)?|ma(?:y mahuida)?|n(?: calel|coln)|viara|zoite)|l(?:amb(?:i campbell|í campbell)|ulluchayoc)|o(?:b(?:aton|er(?:i(?:a|­a)|í(?:a|­a))|os)|gro(?:no|ño)|ma(?: (?:alta|blanca|escondida|hermosa|verde)|s de (?:vallejos|zamora))|n(?:copu(?:e|é)|dres|quimay)|pez lecube|r(?:eto|o cu(?:e|é))|s (?:a(?:costa|guirre|l(?:isos|t(?:ares|os))|mores|n(?:geles|tiguos)|rboles|valos)|b(?:a(?:ldecitos|nos|rr(?:eales|iales)|ños)|erros|lancos|ulacio(?: y los villagra)?)|c(?:a(?:jones|mpamentos|r(?:d(?:ales|o(?:s|zos))|rizos)|stillos|tutos)|e(?:dros|rr(?:illos|os))|h(?:a(?:naritos|rr(?:uas|úas)|ñaritos)|i(?:huidos|riguanos))|i(?:preses|snes)|o(?:cos|mpartos|n(?:dores|quistadores)|rral(?:es|itos)|stilla)|óndores)|e(?:spinillos|ucaliptus)|f(?:lotadores|rentones)|g(?:omez|uchea|ómez)|h(?:elechos|o(?:rnillos|yos))|indios|jur(?:ies|íes)|la(?:pachos|ureles(?: sur)?)|m(?:a(?:nantiales|tacos)|enucos|i(?:ches|randa|stoles)|o(?:l(?:inos|les)|rteritos)|uchachos - la alborada)|n(?:a(?:cimientos|ranjos)|ogales|u(?:nez|ñez)|úñez)|ove(?:jeros|ros)|p(?:a(?:lacios|nos|ños)|e(?:nitentes|re(?:yra|z))|i(?:nos|rpintos|zarros)|ozos|u(?:estos|quios)|érez)|quir(?:oga|quinchos)|r(?:alos|e(?:artes|pollos|yunos)|omano(?:s(?: - santo domingo)?)?)|s(?:a(?:rmiento(?: y la tipa|s)|uces)|embrados|o(?:ria|sa)|u(?:eldos|rgentes))|t(?:a(?:banos|la(?:res|s(?: de anisacate)?))|e(?:ales|lares)|igres|oldos|ábanos)|v(?:arela|illagra)|z(?:a(?:pallos|zos)|orros)|á(?:ngeles|rboles|valos))|te(?: (?:1|8)|o (?:costa de r(?:io|ío)|moyano|navea))|ventu(?:e|é)|zada)|u(?:an toro|c(?:as (?:gonz(?:alez|ález)|monteverde|norte|sur (?:1ro|2do|primero|segundo))|ero cu(?:e|é)|io v(?: mansilla|\\. l(?:opez|ópez)|ictorio mansilla))|gones|is (?:b(?:eltr(?:an|án)|urela)|palacios)|j(?:an de cuyo|án de cuyo)|les|mbreras|tti|yaba)|íba(?:no|ros)|ópez lecube)|m(?:a(?:c(?:a(?:ch(?:in|ín)|pillo)|hagai|i(?:a|á)|o(?:mitas)?)|g(?:dala|giolo)|i(?: bao|mar(?:a|á)|nqu(?:e|é)|p(?:u|ú)|sonave|z negro)|kall(?:e|é)|l(?:a(?:brigo|gue(?:no|ño)|nz(?:an|án)|rg(?:ue|üe))|br(?:an|án)|l(?:i(?:gasta|n ahogado|­n)|ín ahogado)|vinas argentinas)|muel choique|n(?:antiales|copa|fredi|ogasta|supa|u(?:cho|el(?: (?:derqui|garc(?:ia fernandez|ía fernández)|ocampo)|a pedraza))|zano amargo)|qui(?:n(?:chao|ista gallini)|to)|r(?: (?:azul|chiquita|de(?: (?:aj(?:o - san bernardo|ó - san bernardo)|cobo)|l (?:plata|sur)))|ayes|c(?:elino escalada|os (?:ju(?:arez|árez)|paz))|garita bel(?:en|én)|i(?: menuco|a(?: (?:cristina|grande(?: 2(?:da|º))?|juana|luisa|magdalena|susana|teresa)|no (?:b(?:en(?:i­tez|í­tez)|oedo)|h\\. alfonzo|i\\. loza(?: \\(est\\. justino solari\\))?|moreno))|­a ignacia)|t(?:i(?:n (?:de loyola|fierro|garcia)|res|­n colman)|í(?:n (?:de loyola|fierro|garcia)|­n colman))|ull|í(?:a (?:cristina|grande(?: 2(?:da|º))?|juana|luisa|magdalena|susana|teresa)|­a ignacia))|ssey|t(?:ar(?:a|á)|orrales|taldi)|uricio (?:hirsch|mayer)|ximo paz|y(?:or (?:buratovich|villafa(?:ne|ñe))|u sumaj)|za(?:ruca)?|íz negro)|b(?:opicu(?:a|á)|urucuy(?:a|á))|e(?:c(?:h(?:ita|ongu(?:e|é))|oyita)|d(?:an(?:itos|os)|ell(?:i(?:n|­n)|í(?:n|­n))|ia naranja)|l(?:ero|incu(?:e|é)|o)|n(?:cu(?:e|é)|diolaza)|rlo|s(?:on de fierro|ón de fierro)|tileo)|i(?: granja|caela cascallares|guel (?:can(?:e|é)|riglos|torres)|n(?:a (?:clavero|p(?:irquitas|rovidencia))|erva|istro ramos mex(?:ia|ía))|ra(?: pampa|flores|mar(?: de ansenuza)?)|s(?:arrumi|i(?:on (?:chaquena|kilometro 6|la paz|nueva pompeya|pozo yacare|san (?:andres|francisco de laishi)|tacaagle)|ón (?:chaqueña|kilómetro 6|la paz|nueva pompeya|pozo yacaré|san (?:andres|francisco de laishi)|tacaaglé)))|yuyoc)|o(?:c(?:oret(?:a|á)|tezuma)|gna|is(?:es ville|és ville)|j(?:on(?: (?:de fierro|grande)|es (?:norte|sur))|ón (?:de fierro|grande))|lino(?: doll|s)|n(?:asterio|es caz(?:on|ón)|igotes|je|te(?: (?:agradable \\(is\\. malvinas\\)|b(?:ello|uey)|c(?:aseros|om(?:an|án))|de(?: los gauchos|l rosario)|flores|hermoso|l(?:e(?:na|ña)|indo)|ma(?:iz|íz)|nievas|oscuridad|potrero|quemado|r(?:alo|edondo)|vera)|agudo|c(?:a(?:rlo|seros)|risto)|fiore|r(?:os|rico)|s de oca)?)|quehu(?:a|e|á)|r(?:ea|on|rison|se|teros|ón)|smota|ussy)|u(?:ndo nuevo|ssi|tqu(?:in|ín))|á(?:rtires|ximo paz)|édanos)|n(?:a(?:c(?:ate|i(?:on ranquel|ón ranquel))|huel (?:map(?:a|á)|niyeu)|ic(?:o|ó)|n(?:cay|ducita)|p(?:al(?:eof(?:u|ú)|p(?:i|í))|enay)|r(?:e|é)|schel|upa huen|via)|e(?:cochea(?: - quequen)?|gr(?:a muerta|o huasi)|mesio parma)|i(?:c(?:anor (?:molinas|olivera)|ol(?:as bruzzone|ás bruzzone))|quivil|rihuau)|o(?:etinger|go(?:l(?:i|í)|y(?:a|á))|no(?:gasta)?|r(?:berto de la riestra|quinco|umbega))|ue(?:stra se(?:nora de(?: (?:los dolores de koluel ka(?:ike|yke)|talavera)|l rosario(?: de caa cati)?)|ñora de(?: (?:los dolores de koluel ka(?:ike|yke)|talavera)|l rosario(?: de caá catí)?))|v(?:a (?:california|delicia|es(?:cocia|peranza)|francia|galia|lehmann|p(?:lata|ompeya)|trinidad|vizcaya)|o (?:pirquitas|torino)))|ácate)|o(?:'higgins|asis|b(?:er(?:a|á)|ispo trejo|ligado)|c(?:handio|loyas|tavio pico)|jos de agua|l(?:a(?:capato|eta|roz chico|scoaga|varr(?:i(?:a|­a)|í(?:a|­a)))|egario v\\. andrade|i(?:den|v(?:a(?:res de san nicol(?:as|ás))?|eros))|pas|ta)|mb(?:u|ú)|n(?:agoity|cativo)|r(?:atorio|d(?:o(?:nez|qui|ñez)|óñez)|ense|iente|o(?: verde|smayo))|svaldo magnasco|tumpa)|p(?:a(?:c(?:ar(?:a|á)|heco de melo|l(?:in|ín))|d(?:illa|re lozano)|g(?:ancillo|o (?:chico|de los deseos))|icone|jonal|l(?:ca de (?:aparzo|varas)|e(?:m(?:on huergo|ón huergo)|rmo oeste)|ma(?: sola|r (?:grande|largo))|o(?: (?:blanco|labrado|negro|santo)|s blancos)|pal(?:a|á))|mp(?:a(?: (?:al(?:mir(?:on|ón)|ta)|blanca|de(?: los guanacos|l in(?:dio|fierno))|landriel|mayo|vieja)|yasta (?:norte|sud))|ichuela)|na(?:holma|mb(?:i(?: kil(?:ometro (?:15|8)|ómetro 15))?|í(?: kilómetro 8)?))|pagayos|r(?:a(?:d(?:a (?:acu(?:na|ña)|labougle|orlando|pucheta|robles - pav(?:on|ón))|or de la montana)|iso|je (?:29|ar(?:ist(?:obulo chico|óbulo chico)|roy(?:o(?: maturrango|n \\(bajo san cayetano\\))|ón \\(bajo san cayetano\\)))|chaco chico|dorado|it(?:a chica|á chica)|l(?:a(?: (?:agraria|costa|r(?:eserva|uta)|tacuara|virgen)|s tunas)|os (?:algarrobos|cedros))|monyolito|ruta 6|sa(?:n manuel|rgento cabral)|tey(?:u cuare|ú cuaré))|n(?:a|á)|íso)|do|e(?:ditas|ra)|ish|que (?:balneario delio panizza|calmayo|diana|norte - guinazu norte))|s(?:c(?:anas|o)|man|o (?:aguerre|c(?:abral|ordova|órdova)|d(?:e(?: (?:indios|l(?:a(?: (?:arena|laguna|patria)|s (?:carretas|lanzas|piedras))|os libres))|l (?:durazno|sapo))|uarte)|flores|grande|tel(?:egrafo|égrafo)|viejo)|t(?:eur|o(?:r(?: britos|eo)|s chicos)))|t(?:a(?:gones|y)|qu(?:ia|ía)|ricios)|v(?:on(?: arriba)?|ón(?: arriba)?)|yogasta)|e(?:arson|d(?:ernal(?:es)?|ro (?:g(?:omez cello|ómez cello)|luro|r\\. fern(?:andez(?: \\(est\\. mantilla\\))?|ández(?: \\(est\\. mantilla\\))?)))|hu(?:aj(?:o|ó)|en co)|licur(?:a|á)|n(?:as blancas|insula ruca co|ínsula ruca co)|r(?:driel|ez (?:de zurita|milan)|gamino|i(?:co|to moreno)|u(?:gorr(?:ia|ía))?|ú)|yrano|ñas blancas)|hillips|i(?:amonte|c(?:ada (?:37|ber(?:on|ón))|h(?:anal|i(?: (?:huinca|mahuida)|ncha))|o truncado|un leufu|ún leufú)|e(?: de palo|dr(?:a(?: del (?:aguila|águila)|s blancas)|itas)|res)|g(?:ue|üé)|l(?:a|caniyeu|o lil|quiniyeu(?: del limay)?)|n(?:a(?:lito (?:norte|sur)|mar)|c(?:en|has|én)|dapoy|ero|to|z(?:on|ón))|pinas|qu(?:ete cabado|i(?:ll(?:in|ín)|renda))|r(?:a(?:n(?:e|é)|y kil(?:ometro 18|ómetro 18))|ovano)|smanta|tuil|ñ(?:alito (?:norte|sur)|ero))|l(?:a(?:ya(?: (?:magagna|uni(?:on|ón))|s doradas)|za (?:c(?:lucellas|olazo)|de mercedes|huincul|luxardo|matilde|sa(?:guier|n francisco)|vieja))?|o(?:mer|ttier)|uma de pato)|o(?:bre diablo|cito|l(?:co|varedas)|m(?:an(?:cillo (?:este|oeste))?|ona|án)|ntaut|r(?:t(?:e(?:na|zuelo|ña)|on negro|ugalete|ón negro)|venir)|s(?:ada(?: de los lagos|s(?: \\(expansi(?:on\\)|ón\\)))?)|caya|ta cambio zalazar)|trer(?:illo(?:s)?|o de (?:garay|los funes))|z(?:o (?:azul|b(?:etbeder|orrado)|de(?: (?:los (?:algarrobos|indios)|maza|piedra)|l (?:mo(?:lle|rtero)|t(?:igre|oba)))|hondo|la chiva|nuevo|salado)|uelos))|r(?:a(?:dera del ganso \\(is\\. malvinas\\)|huaniyeu)|esiden(?:cia (?:de la plaza|ro(?:ca|que s(?:aenz pena|áenz peña)))|te (?:per(?:on|ón)|roca))|im(?:avera|er distrito cuchilla)|o(?:f(?:esor salvador mazza|undidad)|greso|nunciamiento|videncia))|u(?:an|e(?:blo (?:andino|brugo|cazes|doyle|esther|g(?:eneral (?:belgrano|paz)|ouin)|i(?:llia|ndependencia|taliano)|l(?:i(?:bertador|ebig)|uis berli)|m(?:arini|u(?:noz|ñ(?:oz|óz)))|nuevo|san(?: jorge|ta luc(?:ia|ía))|uranga|viejo)|l(?:ches|en|én)|nte (?:cero|de(?: hierro|l inca)|lavay(?:en|én)|urquiza)|rt(?:a de (?:co(?:lorados|rral quemado)|san jos(?:e|é))|o (?:a(?:l(?:garrobo|manza)|ndresito|r(?:ag(?:on|ón)|gentino \\(is\\. malvinas\\)|royo seco))|bermejo(?: (?:nuevo|viejo))?|curtiembre|deseado|e(?:s(?:peranza|quina)|va per(?:on|ón))|general san mart(?:in|ín)|iguaz(?:u|ú)|l(?:a(?:s cuevas|valle)|eoni|ibertad)|m(?:ad(?:o|ryn)|itre \\(is\\. malvinas\\)|uchita)|nuevo|p(?:anal|i(?:lcomayo|nares|r(?:a(?:mides|y)|ámides)))|r(?:econquista|ico|uiz)|san(?: (?:antonio este|juli(?:an|án))|ta (?:ana|cruz))|tirol|v(?:alle|ilelas)|yeru(?:a|á)))|sto (?:de(?: (?:castro|san antonio)|l marqu(?:ez|éz))|la soledad|sey|viejo))|jato(?: norte)?|mahuasi|nta (?:alta|bonita|colorada|de(?: (?:agua|balasto|los llanos|vacas)|l (?:agua|m(?:edano|onte|édano)))|indio|m(?:edanos|édanos)|pozo)|rmamarca|án)|érez (?:de zurita|milán))|qu(?:e(?:bra(?:cho(?: (?:coto|herrado))?|das|le(?:na|ña))|hu(?:e|é)|m(?:u quemu|ú quemú)|num(?:a|á)|ra|trequ(?:en|én))|i(?:l(?:i(?: malal|no)|mes(?: y los sueldos)?)|mil(?:i|lioj|í)|n(?:es|t(?:as el mirador|o cuartel))|r(?:os|ós)|tilipi))|r(?:a(?:co|da tilly|fael (?:garc(?:ia|ía)|obligado)|ices oeste|m(?:a(?: caida|da paso|llo|y(?:on|ón))|blones|i(?:rez de velazco|­rez de velazco)|o(?:n (?:biaus|j c(?:arcano|árcano)|m\\. castro|santamarina)|s otero)|í(?:rez de velazco|­rez de velazco)|ón (?:biaus|m\\. castro|santamarina))|n(?:c(?:agua|h(?:illos(?: y san miguel)?|os)|ul)|qu(?:eles|il norte))|pelli|uch|wson|yo cortado|íces oeste)|e(?:al(?: (?:del padre|sayana)|ic(?:o|ó))|c(?:alde|onquista|reo)|ducci(?:on(?: de abajo)?|ón(?: de abajo)?)|lmo|mes|nca|s(?:erva area protegida el doradillo|istencia)|ta)|i(?:ach(?:o (?:he(?: he|-h(?:e|é))|negro)|uelo)|cardone|nc(?:on(?: (?:de(?: (?:azara|los sauces|nogoya(?: sur)?)|l (?:cinto|doll|gato))|ombu chico|potrero|treneta)|ad(?:a|illas))?|ón(?: (?:de(?: (?:azara|los sauces|nogoyá(?: sur)?)|l (?:cinto|doll|gato))|ombú chico|potrero|treneta))?)|o(?: (?:b(?:amba|lanquito)|c(?:eballos|hico(?: y nueva trinidad)?|olorado|uarto)|de los sauces|g(?:allegos|rande)|juan gomez|m(?:ayo|uerto)|nio|p(?:i(?:co|edras)|rimero)|se(?:co|gundo)|t(?:ercero|urbio)|villegas)|cito)|vadavia(?: banda (?:norte|sur))?|­o (?:del valle|piedras|segundo|t(?:ala|ercero)))|o(?:bert(?:o (?:cano|j\\. payr(?:o|ó))|s)|ca(?: chica|mora)|d(?:e(?:ito|o(?: (?:colorado|de(?: valdez|l medio)))?|ro)|r(?:iguez pena|íguez peña))|mang|osevelt|que p(?:erez|érez)|s(?:a(?:rio (?:de(?: (?:l(?:a frontera|erma)|r(?:io grande(?: \\(ex barro negro\\))?|ío grande(?: \\(ex barro negro\\))?))|l (?:saladillo|tala))|vera pe(?:naloza|ñaloza))|s)|pentek)|versi)|u(?:canelo|eda|iz de montoya|mi (?:huasi|punco)|ta 9 km 107)|í(?:o (?:b(?:amba|lanquito)|c(?:eballos|hico(?: y nueva trinidad)?|olorado|uarto)|de los sauces|g(?:allegos|rande)|juan gómez|m(?:ayo|uerto)|nío|p(?:i(?:co|edras)|rimero)|se(?:co|gundo)|t(?:ercero|urbio)|villegas)|­o (?:del valle|piedras|segundo|t(?:ala|ercero))))|s(?:a(?: pere(?:ira|yra)|bagasta|c(?:anta|h(?:ayoj|áyoj)|o viejo)|forcada|g(?:rada familia|uier)|ira|l(?:a(?:d(?:as|ero mariano cabal|illo)|r de pocitos)|d(?:an|ungaray|án)|i(?:cas - san blas|nas del bebedero)|liquel(?:o|ó)|s(?:acate|ipuedes)|to(?: (?:andersen|de las rosas|encantado|grande))?|vador mar(?:i­a|í­a))|m(?:boromb(?:on|ón)|pacho|uh(?:u|ú))|n(?: (?:a(?:gust(?:in|ín)|l(?:berto|fonso|onso)|n(?:dr(?:es(?: de giles)?|és(?: de giles)?)|tonio(?: (?:- rold(?:an|án)|de (?:ar(?:eco|redondo)|itat(?:i|í)|l(?:it(?:in|ín)|os cobres)|obligado)|isla apip(?:e grande|é grande)|oeste))?))|b(?:a(?:rtolome|silio)|e(?:nito|rnardo)|las de los sauces)|c(?:a(?:rlos(?: (?:centro|de b(?:ariloche|ol(?:ivar|ívar))|minas|norte|sud))?|yetano)|ipriano|lemente(?: del tuy(?:u|ú))?|osme|rist(?:obal|óbal))|e(?:duardo|milio|nrique|rnesto|steban|ugenio)|f(?:abi(?:an|án)|e(?:li(?:pe(?: y santa b(?:arbara|árbara))?|x)|rnando(?: del valle de catamarca)?)|rancisco(?: de(?: (?:a(?:lfarcito|s(?:is|ís))|bellocq|laishi|santa fe)|l (?:cha(?:nar|ñar)|monte de oro)))?)|g(?:abriel|e(?:naro(?: norte)?|r(?:m(?:an|án)|onimo(?: sur)?|ónimo))|otardo|regorio|u(?:illermo|stavo))|hilario|i(?:gnacio(?: \\(loteo (?:san javier\\)|velez crespo\\)))?|sidro(?: de lules)?)|j(?:a(?:ime de la frontera|vier(?: y yacanto)?)|er(?:onimo(?: (?:del sauce|norte|sud))?|ónimo(?: (?:del sauce|norte|sud))?)|o(?:aqu(?:in|ín)|rge|s(?:e(?: de(?: (?:buena vista|escalchi|feliciano|gualeguaychu|jachal|l(?:a(?: (?:cocha|dormida|esquina)|s salinas)|os cerrillos)|metan|orquera)|l (?:boqueron|morro|rincon)))?|é(?: de(?: (?:buena vista|escalchi|feliciano|gualeguaychú|jáchal|l(?:a(?: (?:cocha|dormida|esquina)|s salinas)|os cerrillos)|metán|orquera)|l (?:boquerón|morro|rincón)))?))|u(?:an(?: de (?:dios|oros|quillaqu(?:es|és))|cito)|sto))|l(?:orenzo|u(?:cas|is del palmar))|m(?:a(?:nuel|r(?:c(?:ial|os(?: s(?:ierra|ud))?)|iano|t(?:i(?:n(?: (?:- la colonia|d(?:e l(?:as escobas|os andes)|os)|i(?:i)?|norte))?|­n)|ín(?: (?:- la colonia|d(?:e l(?:as escobas|os andes)|os)|i(?:i)?|norte))?))|uricio|yol)|iguel(?: de(?: (?:colorados|tucum(?:an|án))|l monte))?)|nicol(?:as(?: de los arroyos)?|ás(?: de los arroyos)?)|p(?:a(?:blo(?: y villa nougu(?:es|és))?|tricio del cha(?:nar|ñar))|edro(?: (?:de (?:colalao|gu(?:asay(?:an|án)|temberg)|jujuy|toyos)|m(?:artir|ártir)|norte|y san antonio))?)|r(?:a(?:fael|m(?:irez|on(?: (?:- la darsena|de la nueva oran))?|írez|ón(?: (?:- la dársena|de la nueva orán))?))|icardo|o(?:m(?:an|án)|que))|s(?:alvador(?: de jujuy)?|e(?:basti(?:an|án)|vero))|v(?:ic(?:ente|tor)|íctor))|a(?:bria|gasta)|cti spiritu|ford|ogasta|sinena|t(?:a (?:an(?:a(?: de l(?:a puna|os gu(?:acaras|ácaras)))?|ita)|c(?:atalina(?: holmberg)?|lara(?: de(?: (?:buena vista|saguier)|l mar))?|oloma|ruz y la tuna)|e(?:le(?:na|odora)|ufemia)|f(?:elicia|lorentina)|isabel|lu(?:c(?:i(?:a|­a)|í(?:a|­a))|isa)|mar(?:garita|i(?:a(?: (?:centro|de (?:oro|punilla)|norte|y las margaritas))?|­a(?: de (?:punilla|yariguarenda))?)|í(?:a(?: (?:centro|de (?:oro|punilla)|norte|y las margaritas))?|­a(?: de yariguarenda)?))|r(?:egina|ita(?: de catuna)?|osa(?: de(?: (?:cal(?:amuchita|chines)|l(?:eales(?: y laguna blanca)?|os pastos grandes))|l conlara))?)|sylvina|t(?:eres(?:a|ita - mar del tuy(?:u|ú))|rinidad)|v(?:era cruz|ictoria(?: (?:este|oeste))?))|iago (?:de liniers|temple)|o(?: (?:domingo|pip(?:o|ó)|tom(?:as|e|ás|é))|s lugares)|u(?:ario de tres pozos|rce)))|r(?:a(?:h|sa)|gento (?:cabral|moya|vidal)|miento)|stre(?: y ortiz)?|turnino mar(?:i(?:a laspiur|­a laspiur)|ía laspiur)|u(?:ce(?: (?:arriba|bajada|de luna|montrull|pinto|solo|viejo)|cito|sito)?|jil|zal(?: bonito|ito))|ñogasta)|chiffner|e(?:basti(?:an elcano|án elcano)|clant(?:as|ás)|eber|gu(?:i|nda usina|í)|lva(?:s del r(?:io de oro|ío de oro))?|nillosa|r(?:odino|rezuela)|vign(?:e|é))|i(?:e(?:rra(?: (?:c(?:hica|olorada)|de l(?:a ventana|os padres)|grande|pailem(?:an|án))|s bayas)|te palmas)|j(?:an|án)|lvio pellico|m(?:bol(?:ar)?|oca)|n(?:guil|sacate)|r leonard)|o(?:cavones|l(?: de (?:julio|mayo)|a(?:net|r de los molinos)|d(?:ado maldonado|ini))|utomayor)|peluzzi|t(?:ephenson|roeder)|u(?:ardi|bteniente per(?:in|ín)|co|ipacha|ma(?:m(?:ao|pa(?: viejo)?)|yen)|n(?:ch(?:ales|o corral)|dblad)|ripugio|sques|yuque nuevo))|t(?:a(?:b(?:ay|o(?:ada|ssi))|c(?:a(?:n(?:as|itas)|ñitas)|o (?:pozo|ralo)|u(?:ar(?:a|endi)|ral(?:es)?))|f(?:i (?:del valle|viejo)|í (?:del valle|viejo))|l(?:a(?: (?:ca(?:nada|ñada)|huasi)|ini|pampa)?|ita)|m(?:a(?:nguey(?:u|ú))?|b(?:er(?:ias|ías)|illos))|n(?:cacha|dil|ti)|p(?:alqu(?:e|é)|ebicu(?:a|á)|so)|quimil(?:an|án)|r(?:tagal|u(?:ca pampa|m(?:a|á)))|ta(?:cu(?:a|á)|n(?:e|é)))|e(?:cka|d(?:in uriburu|ín uriburu)|l(?:en|lier|sen|én)|niente (?:berdina|origone)|odelina|r(?:cera usina|mas de (?:r(?:i(?:o hondo|­o hondo)|í(?:o hondo|­o hondo))|santa teresita)|razas del r(?:io|ío))|sorero|zanos pinto)|heobald|i(?:cino|gre|l(?:cara|i(?:muqui|sarao))|m(?:b(?:o (?:nuevo|viejo)|ues|ó (?:nuevo|viejo)|úes)|o(?:n cruz|te))|n(?:o(?:co|gasta)|tina)|o p(?:ozo|ujio)|­o pujio)|o(?:ay|b(?:a(?:ntirenda)?|una)|dd|l(?:ar grande|huin|loche|omb(?:on|ón))|m(?:as (?:m\\. anchorena|young)|ás (?:m\\. anchorena|young))|r(?:dillo|nquist|o pujio|tugas)|s(?:no|quita|tado)|toras)|r(?:a(?:ill|mo (?:16|20)|n(?:cas|quitas))|e(?:bolares|lew|n(?:e(?:l|ta)|que lauquen)|s (?:a(?:lgarrobos|rroyos)|c(?:apones|ruces)|de (?:abril|febrero)|esquinas|isletas|l(?:ag(?:os|unas)|omas)|p(?:icos|o(?:rte(?:nas|ñas)|zos))|sargentos)|vel(?:in|ín))|i(?:cao malal|unvirato)|ong(?:e|é))|u(?:clame|dcum|mbaya|nuy(?:an|án)|p(?:el(?:i|í)|ungato)|saquillas)|í(?:o p(?:ozo|ujio)|­o pujio))|u(?:bajay|cacha|daquiola|garteche|l(?:apes|lum)|n(?:anu(?:e|é)|i(?:on|ón)|quillo)|qu(?:ia|ía)|r(?:anga|d(?:ampilleta|inarrain)|ib(?:elarrea|uru)|u(?:ndel|ta(?:u|ú)))|s(?:huaia|no|pallata))|v(?:a(?:ca (?:hu(?:a(?:nuna|ñuna)|man)|perdida)|gues|l(?:cheta|d(?:es|és)|le(?: (?:azul|colorado|de anisacate|f(?:ertil|értil)|grande|hermoso|mar(?:ia|ía)|viejo)|cito))|queros|rvarco(?: - invernada vieja)?|squez)|e(?:dia|lloso|nado(?: tuerto|s grandes)|r(?:a y pintado|tiz))|i(?:a(?:le|monte)|c(?:ente (?:a\\. echeverr(?:ia|ía)|l(?:opez|ópez))|higasta|torica|u(?:na mackenna|ña mackenna))|dela|e(?:dma|ytes)|l(?:a|elas|ism(?:an|án)|la(?: (?:7 de marzo|a(?:berastain - la rinconada|dela|kerman|l(?:ber(?:di|tina)|fredo fortabat|lende|pina|sina)|m(?:ancay|elia)|n(?:a|gela|tigua)|r(?:anguren|royo grande)|scasubi|t(?:amisqui|uel(?: norte)?))|b(?:a(?:rboza - villa nacusi|silio nievas)|e(?:lgrano|njam(?:in araoz|ín aráoz)|r(?:na|thet))|o(?:la(?:nos \\(medano de oro\\)|ños \\(médano de oro\\))|nita|rjas - la chimbera)|rana|urruyac(?:u|ú))|c(?:a(?:cique|n(?:as|delaria(?: norte)?)|rlos paz|stelli|tedral|ñás)|e(?:ntenario|rro azul)|hicligasta|iudad (?:de am(?:erica|érica)|parque los reartes)|l(?:ar(?:a|ita)|odomiro hileret)|o(?:limba|n(?:cepc(?:i(?:on del (?:alto|tio)|ón del tío)|on del ti­o|ón del tí­o)|stituci(?:on|ón))|operativa|r(?:azon de mar(?:ia|ía)|doba))|ur(?:a brochero|i leuv(?:u|ú))|órdoba)|d(?:e(?: (?:balcozna|l(?:a(?: quebrada|s rosas)|eales)|m(?:ar(?:ia|ía)|erlo)|p(?:ocho|raga)|soto|trancas)|l (?:carmen|dique|nahueve|p(?:arque|lata|rado)|rosario|s(?:alvador|ol)|t(?:otoral|r(?:ansito|ánsito))))|ivisa de mayo|o(?:lores|m(?:ingu(?:ez|ito)|ínguez)|n bosco|s trece))|e(?:l(?: (?:ch(?:ac(?:ay|on|ón)|oc(?:on|ón))|palmar|salvador - villa sefair|ta(?:la|ngo))|isa|o(?:isa|ísa)|vira)|s(?:colar|p(?:eranza|il)))|f(?:i(?:ad - ingenio leales|gueroa)|lor serrana|ontana|utalaufquen)|g(?:e(?:neral (?:arias|belgrano|g(?:uemes|üemes)|manuel belgrano|sa(?:n mart(?:in - campo afuera|ín - campo afuera)|vio))|sell)|i(?:ardino|m(?:enez|énez))|obernador g(?:alvez|álvez)|u(?:asay(?:an|án)|illermina|ti(?:errez|érrez)))|h(?:ernandarias|ip(?:olita|ólita)|u(?:echulafquen|idobro))|i(?:b(?:anez|áñez)|ndependencia|ris)|josefina|kil(?:ometro 213|ómetro 213)|l(?:a(?: (?:a(?:ngostura|rcadia)|bolsa|punta|ribera(?: \\((?:oliveros\\)|pueblo andino\\)))?|serran(?:i­a|í­a)|vi(?:na|ña))|g(?:o (?:azul|meliquina|rivadavia)|una la brava)|rca|s pirquitas|ura)|i(?:a|bertad(?:or san mart(?:in|ín))?)|lanqu(?:in|ín)|o(?:log|s (?:aromos|llanos - ju(?:arez celman|árez celman)|patos))|ynch pueyrred(?:on|ón)|ía)|m(?:a(?:il(?:in|ín)|lvinas argentinas|n(?:tero|uel pomar|zano)|r(?:garita|ia(?: este)?|ía)|scardi|t(?:ar(?:a|á)|oque)|z(?:an|án))|e(?:dia agua|rcedes)|i(?:netti|rasol)|oll|ugueta)|n(?:ougu(?:es|és)|ueva)|o(?:campo|este|jo de agua|livari|rtiz)|p(?:a(?:dre monti|r(?:anacito|odi|que (?:girado|s(?:anta ana|iquim(?:an|án)|íquiman))))|ehuenia|uente pic(?:un leufu|ún leufú))|qu(?:ebrachos|i(?:llinzo|nteros))|r(?:a(?:fael benegas|mallo)|e(?:gina|ynolds)|i(?:o (?:bermejito|hondo|icho cruz)|­o hondo)|o(?:bles|ch|dr(?:i­guez|í­guez)|ssi|th \\(est\\. ingeniero balb(?:in\\)|ín\\))|ulet)|u(?:iz|mipal)|í(?:o (?:bermejito|hondo|icho cruz)|­o hondo))|s(?:a(?:b(?:a z\\. hernandez|oya|á z\\. hernández)|l(?:avina|les)|n(?: (?:agust(?:in|ín)|esteban|isidro|j(?:avier|os(?:e(?: de vinchina)?|é(?: de vinchina)?))|mart(?:i(?:n|­n \\(est\\. loreto\\))|í(?:n|­n \\(est\\. loreto\\))))|agasta|ta (?:cruz del lago|rosa))|r(?:alegui|miento)|uze)|e(?:ca|rrana la gruta)|il(?:i(?:pica|­pica)|í(?:pica|­pica)))|t(?:e(?:nis club neuqu(?:en|én)|resa)|r(?:aful|inidad)|ulum(?:aya|ba))|u(?:ni(?:on|ón)|r(?:quiza|rutia))|v(?:aleria|entana|il)|yacanto|zanj(?:on|ón)|ángela)|da|guay|longa|nueva \\(ap\\. r(?:io salado\\)|ío salado\\))|r(?:ino|s))|mer)|n(?:a(?:lito|r(?:a|á))?|china)|pos|sta (?:alegre(?: (?:norte|sur))?|flores)|vorat(?:a|á)|zcachani|ña)|olc(?:an|án)|uelta de la barranca|ásquez|értiz)|w(?:a(?:l(?:lala|ter moss)|rnes|shington)|e(?:isburd|nceslao escalante)|heelwright|i(?:chi|ldermuth|nifreda))|xx de se(?:ptiembre|tiembre)|y(?:a(?:c(?:ar(?:e|é)|ht club neuqu(?:en|én)|imientos r(?:io turbio|ío turbio)|u(?:tinga|y))|hap(?:e|é)|la(?: laubat)?|minu(?:e|é)|n(?:da|ima(?: y el corralito)?)|pe(?:s|y(?:u|ú))|tay ti calle|vi(?: chico)?)|e(?:rba buena(?: (?:\\(simoca\\)|- marcos paz))?|so oeste)|oscaba|u(?:ch(?:an|án)|to)|ánima(?: y el corralito)?)|z(?:a(?:nj(?:a honda|itas)|p(?:a(?:la|rinqui)|iola)|val(?:ia|la|ía))|en(?:on (?:pereyra|videla dorna)|ón (?:pereyra|videla dorna))|onda)|á(?:lvarez (?:de toledo|jonte)|ngel vicente peñaloza|rraga)|ñ(?:an(?:cay|ducita)|irihuau|orquinc(?:o|ó))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L2_DEPARTAMENTO - Path",
       "framework": "PATH",
       "domain": "AR_L2_DEPARTAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1605,27 +1673,30 @@
       }
     },
     {
-      "name": "AR_L2_DEPARTAMENTO - List",
-      "framework": "LIST",
+      "name": "AR_L2_DEPARTAMENTO - Values",
+      "framework": "REGEX",
       "domain": "AR_L2_DEPARTAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-departamentos.txt",
-            "matchStrength": 0.8
+            "note": "405 — Adolfo Alsina · Adolfo Gonzales Chaves · Alberti · Almirante Brown · Avellaneda · Ayacucho · …",
+            "regex": "(?iu)(?:(?:1(?:2 de octubre|° de mayo)|2(?: de abril|5 de mayo)|9 de julio|a(?:dolfo (?:alsina|gonzales chaves)|l(?:b(?:ard(?:on|ón)|er(?:di|ti))|mirante brown|umin(?:e|é))|mbato|n(?:casti|dalgal(?:a|á)|elo|g(?:aco|el vicente penaloza)|t(?:a(?:rtida argentina(?: e islas del atlantico sur)?)?|ofagasta de la sierra|ártida argentina(?: e islas del atlántico sur)?))|p(?:ostoles|óstoles)|r(?:auco|recifes)|t(?:amisqui|reuc(?:o|ó))|vellaneda|yacucho|zul|ñelo)|b(?:a(?:h(?:ia blanca|ía blanca)|lcarce|nda|r(?:adero|iloche))|e(?:l(?:grano|la vista)|nito ju(?:arez|árez)|r(?:azategui|isso|mejo|on de astrada|ón de astrada))|iedma|ol(?:ivar|ívar)|ra(?:gado|ndsen)|urruyac(?:u|ú))|c(?:a(?:chi|fayate|ingu(?:as|ás)|l(?:amuchita|eu caleu|ingasta)|nuelas|p(?:ay(?:an|án)|it(?:a(?:l|n sarmiento)|án sarmiento))|r(?:los (?:casares|tejedor)|men de areco)|s(?:eros|t(?:ell(?:anos|i)|ro barros))|t(?:an lil|ril(?:o|ó)|án lil)|ucete|ñuelas)|errillos|h(?:a(?:cabuco|lileo|mical|paleuf(?:u|ú)|scom(?:us|ús))|i(?:c(?:al co|ligasta|oana)|lecito|mbas|vilcoy)|o(?:s malal|ya))|o(?:chinoca|l(?:l(?:on cura|ón curá)|on|ón)|mandante fern(?:andez|ández)|n(?:cordia|esa|fluencia|helo|stituci(?:on|ón))|po|r(?:onel (?:d(?:e marina leonardo rosales|orrego)|pringles|su(?:arez|árez))|pen aike))|ruz (?:alta|del eje)|u(?:r(?:ac(?:o|ó)|uz(?:u cuatia|ú cuatiá))|shamen))|d(?:aireaux|eseado|iamante|r\\. manuel belgrano)|e(?:l(?: (?:alto|c(?:armen|uy))|dorado)|mpedrado|nsenada|s(?:calante|quina|teban echeverr(?:ia|ía))|xaltaci(?:on de la cruz|ón de la cruz)|zeiza)|f(?:ama(?:ill(?:a|á)|tina)|edera(?:ci(?:on|ón)|l)|loren(?:cio varela|tino ameghino)|ray (?:justo santa mar(?:ia de oro|ía de oro)|mamerto esqui(?:u|ú))|utaleuf(?:u|ú))|g(?:a(?:iman|stre)|eneral (?:a(?:lv(?:arado|ear)|renales)|belgrano|donovan|felipe varela|g(?:u(?:emes|ido)|üemes)|j(?:os(?:e de san martin|é de san martín)|uan (?:facundo quiroga|madariaga))|l(?:a(?: madrid|madrid|s heras|valle)|opez|ópez)|manuel belgrano|o(?:bligado|rtiz de ocampo)|p(?:az|edernera|into|ueyrred(?:on|ón))|ro(?:ca|dr(?:iguez|íguez))|san mart(?:in|ín)|taboada|vi(?:amonte|llegas))|o(?:bernador dupuy|doy cruz|ya)|raneros|u(?:a(?:chipas|leguay(?:ch(?:u|ú))?|min(?:i|í)|ran(?:i|í)|say(?:an|án)|trach(?:e|é)|ymall(?:en|én))|er aike)|üer aike)|h(?:ip(?:olito yrigoyen|ólito yrigoyen)|u(?:cal|iliches|mahuaca|rlingham))|i(?:g(?:lesia|uaz(?:u|ú))|ndependencia|r(?:iondo|uya)|s(?:chil(?:in|ín)|las del ibicuy)|tuzaing(?:o|ó))|j(?:achal|os(?:e c\\. paz|é c\\. paz)|u(?:a(?:n (?:bautista alberdi|felipe ibarra|mart(?:in de pueyrredon|ín de pueyrredón))|rez celman)|n(?:in|ín)|árez celman)|áchal)|l(?:a(?: (?:c(?:a(?:ldera|ndelaria|pital)|o(?:cha|sta))|matanza|p(?:az|lata|oma)|vi(?:na|ña))|car|go (?:argentino|buenos aires)|ishi|n(?:gui(?:neo|ñeo)|us|ús)|prida|s (?:colonias|flores|heras)|valle)|e(?:a(?:les|ndro n\\. alem)|zama)|i(?:bertad(?:or general san mart(?:in|ín))?|huel calel|may mahuida|ncoln)|o(?:b(?:er(?:ia|ía)|os)|mas de zamora|ncopu(?:e|é)|reto|s (?:andes|lagos)|ventu(?:e|é))|u(?:j(?:an de cuyo|án de cuyo)|les)|ácar)|m(?:a(?:gallanes|ip(?:u|ú)|l(?:arg(?:ue|üe)|vinas argentinas)|r(?: chiquita|ac(?:o|ó)|cos (?:ju(?:arez|árez)|paz)|tires)|tacos|yor luis j\\. fontana)|burucuy(?:a|á)|e(?:rlo|t(?:an|án))|i(?:nas|tre)|o(?:linos|nte(?: (?:caseros|hermoso)|carlo|ros)?|r(?:on|ón))|ártires)|n(?:ecochea|o(?:goy(?:a|á)|rquin(?:co)?))|o(?:'higgins|ber(?:a|á)|jo de agua|lavarr(?:ia|ía)|r(?:an|án))|p(?:a(?:cl(?:in|ín)|lpal(?:a|á)|ran(?:a|á)|so de (?:indios|los libres)|t(?:agones|i(?:no|ño)))|e(?:hu(?:aj(?:o|ó)|enches)|rgamino)|i(?:c(?:hi mahuida|un(?: leufu|ches)|ún leufú)|l(?:a(?:g(?:as|ás))?|c(?:aniyeu|omayo))|namar|ran(?:e|é))|o(?:c(?:ho|ito)|m(?:an|án))|residen(?:cia de la plaza|te (?:per(?:on|ón)|roque s(?:aenz pena|áenz peña)))|u(?:an|el(?:en|én)|n(?:illa|ta indio)|án))|qu(?:e(?:brachos|m(?:u quemu|ú quemú))|i(?:lmes|tilipi))|r(?:a(?:m(?:allo|on lista|ón lista)|ncul|uch|wson)|ealic(?:o|ó)|i(?:nconada|o (?:c(?:hico|uarto)|grande|hondo|primero|se(?:co|gundo|nguer))|vadavia)|o(?:que p(?:erez|érez)|sario (?:de l(?:a frontera|erma)|vera pe(?:naloza|ñaloza)))|ío (?:c(?:hico|uarto)|grande|hondo|primero|se(?:co|gundo|nguer)))|s(?:a(?:l(?:a(?:d(?:as|illo)|vina)|liquel(?:o|ó)|to)|n(?: (?:a(?:lberto|n(?:dr(?:es de giles|és de giles)|tonio(?: de areco)?))|blas de los sauces|c(?:a(?:rlos|yetano)|osme|rist(?:obal|óbal))|fernando|i(?:gnacio|sidro)|j(?:avier|er(?:onimo|ónimo)|usto)|l(?:orenzo|uis del palmar)|m(?:art(?:in|ín)|iguel)|nicol(?:as|ás)|pedro|r(?:afael|oque)|salvador|vicente)|agasta|t(?:a (?:b(?:arbara|árbara)|catalina|luc(?:ia|ía)|mar(?:ia|ía)|rosa|victoria)|o tom(?:e|é)))|r(?:gento cabral|miento)|uce)|i(?:l(?:ipica|ípica)|moca)|obremonte|u(?:ipacha|sques))|t(?:a(?:f(?:i (?:del valle|viejo)|í (?:del valle|viejo))|la|ndil|p(?:alqu(?:e|é)|enag(?:a|á)))|e(?:huelches|lsen|rcero arriba)|i(?:gre|lcara|nogasta)|o(?:ay|lhuin|r(?:dillo|nquist)|toral)|r(?:ancas|e(?:n(?:el|que lauquen)|s (?:arroyos|de febrero|lomas)))|u(?:lumba|mbaya|nuy(?:an|án)|pungato))|u(?:llum|ni(?:on|ón)|ruguay|shuaia|trac(?:an|án))|v(?:al(?:cheta|le (?:f(?:ertil|értil)|grande|viejo))|i(?:cente l(?:opez|ópez)|lla(?: gesell|guay|rino)|nchina))|y(?:avi|erba buena)|z(?:apala|onda)|ángel vicente peñaloza|ñorqu(?:inco|ín)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L2_CODIGO_GEOGRAFICO - Path",
       "framework": "PATH",
       "domain": "AR_L2_CODIGO_GEOGRAFICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1648,12 +1719,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[26]|1[0480]|2[26]|3[0484]|4[26]|5[048]|6[26]|7[048]|8[26]|9[04])\\d{3}(\\d|\\d{3})?",
+            "regex": "0*(?:(0[26]|1[0480]|2[26]|3[0484]|4[26]|5[048]|6[26]|7[048]|8[26]|9[04])\\d{3}(\\d|\\d{3})?)",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1663,7 +1734,7 @@
       "name": "AR_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "AR_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1713,7 +1784,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-HJ-NP-Z]?[1-9]\\d{3}",
@@ -1721,7 +1792,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1731,7 +1802,7 @@
       "name": "AR_L2_BARRIO - Path",
       "framework": "PATH",
       "domain": "AR_L2_BARRIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1750,7 +1821,7 @@
       "name": "AR_L2_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "AR_L2_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1777,7 +1848,7 @@
             "matchStrength": 0.7
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.4,
         "tokenizationDelimiter": " "
       }
@@ -1786,7 +1857,7 @@
       "name": "AR_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "AR_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1802,27 +1873,30 @@
       }
     },
     {
-      "name": "AR_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "AR_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "AR_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "19 — Soltero a · Casado a · Unión convivencial · Separado a de hecho · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:c(?:asad(?:a|o(?:/a)?)|oncubinato)|divorciad(?:a|o(?:/a)?)|s(?:eparad(?:a|o(?:/a de hecho)?)|olter(?:a|o(?:/a)?))|uni(?:on (?:convivencial|de hecho)|ón convivencial)|viud(?:a|o(?:/a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "AR_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1849,7 +1923,7 @@
       "name": "AR_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "AR_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1868,7 +1942,7 @@
       "name": "AR_L2_NIVEL_EDUCATIVO - Path",
       "framework": "PATH",
       "domain": "AR_L2_NIVEL_EDUCATIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1884,27 +1958,30 @@
       }
     },
     {
-      "name": "AR_L2_NIVEL_EDUCATIVO - List",
-      "framework": "LIST",
+      "name": "AR_L2_NIVEL_EDUCATIVO - Values",
+      "framework": "REGEX",
       "domain": "AR_L2_NIVEL_EDUCATIVO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-nivel-educativo.txt",
-            "matchStrength": 0.6
+            "note": "20 — Sin instrucción · Primario incompleto · Primario completo · Secundario incompleto · Secundario completo · Terciario no universitario incompleto · …",
+            "regex": "(?iu)(?:(?:egb|p(?:o(?:limodal|sgrado)|rimari(?:a|o(?: (?:completo|incompleto))?))|s(?:ecundari(?:a|o(?: (?:completo|incompleto))?)|in (?:estudios|instrucci(?:on|ón)))|terciario(?: no universitario (?:completo|incompleto))?|universitario(?: (?:completo|incompleto))?))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L2_ESTABLECIMIENTO_EDUCATIVO - Path",
       "framework": "PATH",
       "domain": "AR_L2_ESTABLECIMIENTO_EDUCATIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1923,7 +2000,7 @@
       "name": "AR_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "AR_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1963,7 +2040,7 @@
       "name": "AR_L3_ORIGEN_ETNICO - Path",
       "framework": "PATH",
       "domain": "AR_L3_ORIGEN_ETNICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -1979,31 +2056,48 @@
       }
     },
     {
-      "name": "AR_L3_ORIGEN_ETNICO - List",
-      "framework": "LIST",
+      "name": "AR_L3_ORIGEN_ETNICO - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_ORIGEN_ETNICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-origen-etnico.txt",
-            "matchStrength": 0.9
+            "note": "16 — Indígena o descendiente de pueblos indígenas u originarios · Afrodescendiente · Ninguno · Prefiere no responder · indígena · originario · …",
+            "regex": "(?iu)(?:(?:afro(?:argentin(?:a|o)|descendiente)|blanco|criollo|ind(?:igena(?: o descendiente de pueblos indigenas u originarios)?|ígena(?: o descendiente de pueblos indígenas u originarios)?)|mestizo|n(?:egro|ingun(?:a|o))|originario|p(?:refiere no responder|ueblo originario)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://ar-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_PUEBLO_INDIGENA - Path",
       "framework": "PATH",
       "domain": "AR_L3_PUEBLO_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2019,27 +2113,30 @@
       }
     },
     {
-      "name": "AR_L3_PUEBLO_INDIGENA - List",
-      "framework": "LIST",
+      "name": "AR_L3_PUEBLO_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_PUEBLO_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-pueblos-indigenas.txt",
-            "matchStrength": 0.9
+            "note": "66 — Mapuche · Guaraní · Diaguita · Kolla · Qom · Wichí · …",
+            "regex": "(?iu)(?:(?:a(?:raucano|tacama|va guaran(?:i|í)|ymara)|c(?:a(?:c(?:an|án)|lchaqu(?:i|í))|h(?:a(?:n(?:a|e|á|é)|rr(?:ua|úa))|i(?:cha|riguano)|orote|ulup(?:i|í))|o(?:lla|meching(?:on|ón)|ya))|diaguita|fiscara|gua(?:ran(?:i|í)|ycur(?:u|ú))|h(?:aush|uarpe)|iogys|kolla(?: (?:atacame(?:no|ño)|guaran(?:i|í)))?|lule(?: vilela)?|m(?:a(?:puche(?: tehuelche)?|taco)|by(?:a(?: guaran(?:i|í))?|á)|ocov(?:i(?: qom)?|í(?: qom)?))|nivacl(?:e|é)|o(?:cloya|maguaca|na)|p(?:a(?:car(?:a|á)|mpa)|ilag(?:a|á))|q(?:om|u(?:e(?:chua|rand(?:i|í))|ilmes))|ran(?:kulche|quel)|s(?:anavir(?:on|ón)|elk'nam)|t(?:a(?:piete|stil)|ehuelche|ili(?:an|án)|o(?:ara|ba|nokot(?:e|é))|up(?:i(?: guarani)?|í(?: guaraní)?))|vilela|wich(?:i|í)|yag(?:an|án)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_LENGUA_INDIGENA - Path",
       "framework": "PATH",
       "domain": "AR_L3_LENGUA_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2055,27 +2152,30 @@
       }
     },
     {
-      "name": "AR_L3_LENGUA_INDIGENA - List",
-      "framework": "LIST",
+      "name": "AR_L3_LENGUA_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_LENGUA_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "26 — Español · Guaraní · Quechua · Mapuzungun · Qom toba · Wichí · …",
+            "regex": "(?iu)(?:(?:aymara|c(?:astellano|horote)|espa(?:nol|ñol)|guaran(?:i|í)|lengua de se(?:nas argentina|ñas argentina)|m(?:apu(?:dungun|zungun)|ocov(?:i|í))|ninguna lengua ind(?:igena|ígena)|pilag(?:a|á)|q(?:om(?: \\(toba\\))?|u(?:echua|ichua))|toba|wich(?:i|í)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "AR_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2091,27 +2191,30 @@
       }
     },
     {
-      "name": "AR_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "AR_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "29 — Católica · Evangélica · Pentecostal · Testigo de Jehová · Iglesia de Jesucristo de los Santos de los Últimos Días · Judía · …",
+            "regex": "(?iu)(?:(?:a(?:dventista|gn(?:ostico|óstico)|teo)|budista|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|ristian(?:a|o))|evang(?:elic(?:a|o)|élic(?:a|o))|iglesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|jud(?:i(?:a|o)|í(?:a|o))|m(?:orm(?:on|ón)|usulm(?:an(?:a)?|án))|ningun(?:a|o)|otra|p(?:entecostal|rotestante)|sin religi(?:on|ón)|testigo de jehov(?:a|á)|umbanda))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_CONVICCION_FILOSOFICA - Path",
       "framework": "PATH",
       "domain": "AR_L3_CONVICCION_FILOSOFICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2130,7 +2233,7 @@
       "name": "AR_L3_OPINION_POLITICA - Path",
       "framework": "PATH",
       "domain": "AR_L3_OPINION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2146,27 +2249,30 @@
       }
     },
     {
-      "name": "AR_L3_OPINION_POLITICA - List",
-      "framework": "LIST",
+      "name": "AR_L3_OPINION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_OPINION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-opiniones-politicas.txt",
-            "matchStrength": 0.7
+            "note": "22 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|kirchnerista|liber(?:al|tario)|macrista|ninguno|p(?:eronista|r(?:efiere no responder|ogresista))|radical|voto en blanco))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_AFILIACION_PARTIDARIA - Path",
       "framework": "PATH",
       "domain": "AR_L3_AFILIACION_PARTIDARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2190,27 +2296,30 @@
       }
     },
     {
-      "name": "AR_L3_AFILIACION_PARTIDARIA - List",
-      "framework": "LIST",
+      "name": "AR_L3_AFILIACION_PARTIDARIA - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_AFILIACION_PARTIDARIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-partidos-politicos.txt",
-            "matchStrength": 0.8
+            "note": "47 — Partido Justicialista · Unión Cívica Radical · Propuesta Republicana PRO · La Libertad Avanza · Coalición Cívica ARI · Frente Renovador · …",
+            "regex": "(?iu)(?:(?:ari|c(?:c-ari|oalici(?:on civica ari|ón cívica ari))|f(?:it(?:-u)?|rente (?:de (?:izquierda|todos)|grande|renovador))|hacemos|izquierda socialista|juntos por el cambio|kolina|l(?:a libertad avanza|la)|m(?:id|ovimiento (?:de integraci(?:on y desarrollo|ón y desarrollo)|popular neuquino|socialista de los trabajadores)|st)|nuevo (?:encuentro|mas)|p(?:artido (?:autonomista|co(?:munista|nservador popular)|de(?: l(?:a victoria|os trabajadores socialistas)|m(?:ocrata (?:cristiano|progresista)|ócrata (?:cristiano|progresista)))|federal|gen|humanista|intransigente|justicialista|libertario|obrero|socialista)|eronismo|j|ro(?:puesta republicana \\(pro\\))?|ts)|radicalismo|u(?:cr|ni(?:on (?:c(?:eleste y blanco|ivica radical)|por la patria)|ón (?:c(?:eleste y blanco|ívica radical)|por la patria)))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "AR_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2226,27 +2335,30 @@
       }
     },
     {
-      "name": "AR_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "AR_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "33 — CGT · CTA · CTA-T · CTA-A · UOM · UOCRA · …",
+            "regex": "(?iu)(?:(?:a(?:ceiteros|demys|filiado|msafe|sociaci(?:on trabajadores del estado|ón trabajadores del estado)|te)|c(?:amioneros|entral de trabajadores de la argentina|gt|o(?:mercio|nfederaci(?:on general del trabajo|ón general del trabajo))|t(?:a(?:-(?:a|t))?|era))|fa(?:ecys|tsa)|l(?:a bancaria|uz y fuerza)|s(?:a(?:dop|nidad)|indicalizado|mata|uteba)|u(?:atre|epc|ni(?:on (?:obrera metalurgica|personal civil de la nacion)|ón (?:obrera metalúrgica|personal civil de la nación))|o(?:cra|m)|pcn|t(?:a|ep))))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "AR_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "AR_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2281,7 +2393,7 @@
       "name": "AR_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "AR_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2297,10 +2409,29 @@
       }
     },
     {
+      "name": "AR_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "AR_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "AR_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "AR_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2316,27 +2447,30 @@
       }
     },
     {
-      "name": "AR_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "AR_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "14 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbt(?:iq\\+(?:nb)?)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "AR_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2355,7 +2489,7 @@
       "name": "AR_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "AR_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2371,27 +2505,30 @@
       }
     },
     {
-      "name": "AR_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "AR_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "AR_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "19 — Mujer cis · Varón cis · Mujer trans travesti · Varón trans masculinidad trans · No binario · Otra · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|femenino|m(?:asculino|ujer(?: (?:cis|trans / travesti))?)|no binari(?:e|o)|otra|prefiere no responder|tra(?:ns(?:g(?:enero|énero))?|vesti)|var(?:on(?: (?:cis|trans / masculinidad trans))?|ón(?: (?:cis|trans / masculinidad trans))?)|x))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_L3_VICTIMA - Path",
       "framework": "PATH",
       "domain": "AR_L3_VICTIMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2410,7 +2547,7 @@
       "name": "AR_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2437,7 +2574,7 @@
       "name": "AR_SALUD_COBERTURA - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_COBERTURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2453,20 +2590,23 @@
       }
     },
     {
-      "name": "AR_SALUD_COBERTURA - List",
-      "framework": "LIST",
+      "name": "AR_SALUD_COBERTURA - Values",
+      "framework": "REGEX",
       "domain": "AR_SALUD_COBERTURA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-cobertura.txt",
-            "matchStrength": 0.8
+            "note": "38 — PAMI · IOMA · OSDE · Swiss Medical · Galeno · Medifé · …",
+            "regex": "(?iu)(?:(?:a(?:ccord salud|pross)|galeno|hospital p(?:ublico|úblico)|i(?:apos|ncluir salud|o(?:ma|sfa))|medif(?:e|é)|o(?:bra social provincial|mint|s(?:choca|de(?:pym)?|e(?:cac|p)|p(?:e(?:dyc)?|jn|rera)|uomra))|p(?:ami|r(?:epaga|ofe))|s(?:ancor salud|in (?:cobertura \\(sistema p(?:ublico\\)|úblico\\))|obra social)|wiss medical)|uni(?:on personal|ón personal)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
@@ -2477,12 +2617,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d-\\d{4}-\\d",
+            "regex": "0*(?:\\d-\\d{4}-\\d)",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -2492,7 +2632,7 @@
       "name": "AR_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2520,7 +2660,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2530,7 +2670,7 @@
       "name": "AR_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2549,7 +2689,7 @@
       "name": "AR_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2565,27 +2705,30 @@
       }
     },
     {
-      "name": "AR_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "AR_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "AR_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "52 — Paracetamol · Ibuprofeno · Diclofenac · Dipirona · Metformina · Glibenclamida · …",
+            "regex": "(?iu)(?:(?:a(?:c(?:enocumarol|ido (?:folico|valproico))|lprazolam|m(?:lodipina|oxicilina)|nticonceptivo|spirina|t(?:enolol|orvastatina)|zitromicina)|betametasona|c(?:efalexina|lonazepam|omplejo b)|d(?:i(?:clofenac|pirona)|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:bup(?:irac|rofeno)|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|i(?:fepristona|soprostol))|o(?:lanzapina|meprazol)|paracetamol|quetiapina|ri(?:speridona|votril)|s(?:albutamol|ertralina|ulfato ferroso)|t(?:afirol|enofovir)|warfarina|ácido (?:fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "AR_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2621,7 +2764,7 @@
       "name": "AR_SALUD_RESULTADO_ESTUDIO - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_RESULTADO_ESTUDIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2648,7 +2791,7 @@
       "name": "AR_SALUD_VIH - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_VIH",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2667,7 +2810,7 @@
       "name": "AR_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2683,27 +2826,30 @@
       }
     },
     {
-      "name": "AR_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "AR_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "AR_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "20 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?: (?:negativo|positivo)|\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2719,27 +2865,30 @@
       }
     },
     {
-      "name": "AR_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "AR_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "AR_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "20 — Motora · Auditiva · Visual · Visceral · Intelectual · Mental · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|baja visi(?:on|ón)|c(?:eguera|ognitiva)|f(?:isica|ísica)|hipoacusia|intelectual|m(?:ental|ot(?:ora|riz)|ultiple|últiple)|n(?:inguna|o aplica)|psicosocial|sordera|tea|vis(?:ceral|ual)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "AR_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2755,27 +2904,30 @@
       }
     },
     {
-      "name": "AR_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "AR_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "AR_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con preexistencias · pendiente · apto condicional",
+            "regex": "(?iu)(?:(?:apto(?: con(?: preexistencias|dicional))?|no apto|pendiente))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "AR_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2794,7 +2946,7 @@
       "name": "AR_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "AR_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2813,7 +2965,7 @@
       "name": "AR_FIN_SITUACION_CREDITICIA - Path",
       "framework": "PATH",
       "domain": "AR_FIN_SITUACION_CREDITICIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2829,27 +2981,30 @@
       }
     },
     {
-      "name": "AR_FIN_SITUACION_CREDITICIA - List",
-      "framework": "LIST",
+      "name": "AR_FIN_SITUACION_CREDITICIA - Values",
+      "framework": "REGEX",
       "domain": "AR_FIN_SITUACION_CREDITICIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-situacion-crediticia.txt",
-            "matchStrength": 0.7
+            "note": "15 — normal · riesgo bajo · riesgo medio · riesgo alto · irrecuperable · con seguimiento especial · …",
+            "regex": "(?iu)(?:(?:alto riesgo de insolvencia|con (?:problemas|seguimiento especial)|irrecuperable(?: por disposici(?:on tecnica|ón técnica))?|normal|riesgo (?:alto|bajo|medio)|situaci(?:on (?:1|2|3|4|5|6)|ón (?:1|2|3|4|5|6))))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "AR_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "AR_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2884,7 +3039,7 @@
       "name": "AR_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "AR_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2919,7 +3074,7 @@
       "name": "AR_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "AR_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2954,7 +3109,7 @@
       "name": "AR_FIN_JUBILACION - Path",
       "framework": "PATH",
       "domain": "AR_FIN_JUBILACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -2989,7 +3144,7 @@
       "name": "AR_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "AR_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -3005,31 +3160,48 @@
       }
     },
     {
-      "name": "AR_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "AR_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "AR_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "27 — Asignación Universal por Hijo · Asignación por Embarazo · Prestación Alimentar · Progresar · Asignaciones familiares · Jubilación · …",
+            "regex": "(?iu)(?:(?:a(?:compa(?:namiento social|ñamiento social)|signaci(?:on(?: (?:por embarazo|universal(?: por hijo)?)|es familiares)|ón (?:por embarazo|universal(?: por hijo)?))|u(?:e|h))|jubilaci(?:on|ón)|n(?:1|2|3|i(?:nguno|vel (?:1|2|3)))|p(?:ensi(?:on (?:no contributiva|universal para el adulto mayor)|ón (?:no contributiva|universal para el adulto mayor))|nc|otenciar trabajo|r(?:estaci(?:on alimentar|ón alimentar)|ogr(?:ama hogar|esar))|uam)|subsidio de energ(?:ia|ía)|tarjeta alimentar|volver al trabajo))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://ar-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "AR_FIN_MONOTRIBUTO - Path",
       "framework": "PATH",
       "domain": "AR_FIN_MONOTRIBUTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -3066,7 +3238,7 @@
       "name": "AR_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "AR_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -3082,27 +3254,30 @@
       }
     },
     {
-      "name": "AR_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "AR_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "AR_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://ar-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "16 — Propietario de la vivienda y el terreno · Propietario solo de la vivienda · Inquilino · Ocupante por préstamo · Ocupante por trabajo · Otra situación · …",
+            "regex": "(?iu)(?:(?:alquila(?:da)?|cedida|inquilino|o(?:cupante(?: por (?:pr(?:estamo|éstamo)|trabajo))?|tra situaci(?:on|ón))|pr(?:estada|opi(?:a|etario(?: (?:de la vivienda y el terreno|solo de la vivienda))?))|toma|usurpada))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "AR_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "AR_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -3129,7 +3304,7 @@
       "name": "AR_PENAL_EXPEDIENTE - Path",
       "framework": "PATH",
       "domain": "AR_PENAL_EXPEDIENTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas argentinos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas argentinos.",
       "config": {
         "paths": [
           {
@@ -3165,7 +3340,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "PP-\\d{2}-\\d{2}-\\d{6}-\\d{2}(\\/\\d{2})?",
@@ -3173,7 +3348,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3479,19 +3654,19 @@
     },
     {
       "name": "AR_FIN_DEUDA",
-      "algorithm": "AR_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "AR_FIN_INGRESOS",
-      "algorithm": "AR_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "AR_FIN_PATRIMONIO",
-      "algorithm": "AR_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "AR_FIN_JUBILACION",
-      "algorithm": "AR_VALOR_JUBILACION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "AR_FIN_PROGRAMA_SOCIAL",
@@ -3529,7 +3704,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "AAA123456"
     },
@@ -3541,7 +3717,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "28.456.789"
     },
@@ -3554,7 +3731,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "AE 123 KD"
     },
@@ -3570,7 +3748,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3799,8 +3978,29 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4098,8 +4298,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2}[\\s\\-./]?\\d{8}[\\s\\-./]?\\d)",
+            "regex": "(0*?)(?:(\\d{2}[\\s\\-./]?\\d{8}[\\s\\-./]?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4126,8 +4329,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2}[\\s\\-./]?\\d{8}[\\s\\-./]?\\d)",
+            "regex": "(0*?)(?:(\\d{2}[\\s\\-./]?\\d{8}[\\s\\-./]?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4137,8 +4343,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,3}(?:\\.\\d{3}){1,2}|\\d{6,8})",
+            "regex": "(0*?)(?:(\\d{1,3}(?:\\.\\d{3}){1,2}|\\d{6,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4678,8 +4887,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?54[\\s\\-]?(?:9[\\s\\-]?)?)?(\\(?0?(?:11|[23]\\d{1,3})\\)?[\\s\\-]+)(15[\\s\\-]?)?(\\d{2,4})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?54[\\s\\-]?(?:9[\\s\\-]?)?)?(\\(?0?(?:11|[23]\\d{1,3})\\)?[\\s\\-]+)(15[\\s\\-]?)?(\\d{2,4})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4707,8 +4919,11 @@
             ]
           },
           {
-            "regex": "(\\+?54[\\s\\-]?(?:9[\\s\\-]?)?|0)?(11|[23]\\d{2,3})(\\d{6,8})",
+            "regex": "(0*?)(?:(\\+?54[\\s\\-]?(?:9[\\s\\-]?)?|0)?(11|[23]\\d{2,3})(\\d{6,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4724,8 +4939,11 @@
             ]
           },
           {
-            "regex": "(15[\\s\\-]?)?(\\d{3,4})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(15[\\s\\-]?)?(\\d{3,4})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4774,6 +4992,18 @@
       "input": "Av. Corrientes 1234 Piso 5 Dto. B"
     },
     {
+      "name": "AR_CM_DIGITOS_ANCHO_FIJO",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "28.456.789"
+    },
+    {
       "name": "AR_CBU_CUENTA",
       "framework": "algorithm.plugin.checkdigit.Checkdigit",
       "config": {
@@ -4797,10 +5027,10 @@
         "numDigitsForCheckdigitCalculation": 13,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "AR_CM_DIGITOS"
+          "name": "AR_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "AR_CM_DIGITOS"
+          "name": "AR_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "",
         "inputHandlingConfig": {
@@ -4819,8 +5049,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{8})([\\s\\-]?)(\\d{14})",
+            "regex": "(0*?)(?:(\\d{8})([\\s\\-]?)(\\d{14}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4848,26 +5081,20 @@
       "input": "2850590940090418135201"
     },
     {
-      "name": "AR_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4509953566233704"
-    },
-    {
       "name": "AR_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "AR_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -4896,8 +5123,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5063,8 +5293,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5091,8 +5324,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -5100,8 +5336,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5117,8 +5356,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5131,8 +5373,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5275,8 +5520,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5321,7 +5569,7 @@
       "input": "Colonia Hocker"
     },
     {
-      "name": "AR_CODIGO_GEOGRAFICO",
+      "name": "AR_CODIGO_GEOGRAFICO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -5330,6 +5578,34 @@
         "delimiter": "|",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "10014"
+    },
+    {
+      "name": "AR_CODIGO_GEOGRAFICO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "AR_CODIGO_GEOGRAFICO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "10014"
     },
@@ -5359,6 +5635,21 @@
           },
           {
             "regex": "([A-Za-z]?)(\\d{2})(\\d{2})",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "REDACT",
+                "redactString": "00"
+              }
+            ]
+          },
+          {
+            "regex": "(0+)([1-9]\\d)(\\d{2})",
             "actions": [
               {
                 "type": "PRESERVE"
@@ -5458,8 +5749,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5501,8 +5795,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,5})",
+            "regex": "(0*?)(?:(\\d{2,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5585,8 +5882,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5628,16 +5928,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -5685,8 +5991,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5739,8 +6048,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5793,8 +6105,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5847,8 +6162,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5901,8 +6219,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5955,8 +6276,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6009,8 +6333,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6063,8 +6390,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6117,8 +6447,11 @@
             ]
           },
           {
-            "regex": "(\\d[\\d\\-]{3,8}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\-]{3,8}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6255,8 +6588,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2}\\.?\\d{2}\\.?\\d{2})",
+            "regex": "(0*?)(?:(\\d{2}\\.?\\d{2}\\.?\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6309,8 +6645,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6432,8 +6771,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6562,8 +6904,11 @@
             ]
           },
           {
-            "regex": "(\\d{2,4})",
+            "regex": "(0*?)(?:(\\d{2,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6594,42 +6939,6 @@
         "requireMask": false
       },
       "input": "3"
-    },
-    {
-      "name": "AR_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 10000,
-        "maxValue": 500000000
-      },
-      "input": "1850000"
-    },
-    {
-      "name": "AR_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 300000,
-        "maxValue": 30000000
-      },
-      "input": "1450000"
-    },
-    {
-      "name": "AR_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000000,
-        "maxValue": 3000000000
-      },
-      "input": "85000000"
-    },
-    {
-      "name": "AR_VALOR_JUBILACION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 250000,
-        "maxValue": 12000000
-      },
-      "input": "420000"
     },
     {
       "name": "AR_PROGRAMA_SOCIAL_LISTA",
@@ -6663,8 +6972,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6818,8 +7130,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6872,8 +7187,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6934,8 +7252,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})(\\/\\d{2,4})",
+            "regex": "(0*?)(?:(\\d{1,6})(\\/\\d{2,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6976,31 +7297,8 @@
     "ar-codigos-geograficos-generalizados.txt",
     "ar-departamentos-generalizados.txt",
     "ar-detectar-apellidos.txt",
-    "ar-detectar-aptitud-laboral.txt",
-    "ar-detectar-cobertura.txt",
-    "ar-detectar-codigos-banderas.txt",
-    "ar-detectar-departamentos.txt",
-    "ar-detectar-discapacidades.txt",
-    "ar-detectar-estado-civil.txt",
-    "ar-detectar-grupos-sanguineos.txt",
-    "ar-detectar-identidades-genero.txt",
-    "ar-detectar-lenguas.txt",
-    "ar-detectar-localidades.txt",
-    "ar-detectar-medicamentos.txt",
     "ar-detectar-nacionalidades.txt",
-    "ar-detectar-nivel-educativo.txt",
     "ar-detectar-nombres.txt",
-    "ar-detectar-opiniones-politicas.txt",
-    "ar-detectar-orientaciones-sexuales.txt",
-    "ar-detectar-origen-etnico.txt",
-    "ar-detectar-partidos-politicos.txt",
-    "ar-detectar-programas-sociales.txt",
-    "ar-detectar-pueblos-indigenas.txt",
-    "ar-detectar-religiones.txt",
-    "ar-detectar-sexo.txt",
-    "ar-detectar-sindicatos.txt",
-    "ar-detectar-situacion-crediticia.txt",
-    "ar-detectar-tenencia-vivienda.txt",
     "ar-diagnosticos.txt",
     "ar-direcciones.txt",
     "ar-discapacidades.txt",

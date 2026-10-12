@@ -23,6 +23,9 @@
 import fs from 'node:fs'
 import nodePath from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { engineTextProblems } from '../_lib/engine-text.mjs'
+import { ENGINE, isEngineAlgorithm } from '../_lib/engine-algorithms.mjs'
+import { cleaning, zeroPadded, keepingZeros, wordByWord, valuePatterns } from '../_lib/detect.mjs'
 
 const HERE = nodePath.dirname(fileURLToPath(import.meta.url))
 const SOURCE = nodePath.join(HERE, 'source')
@@ -92,10 +95,33 @@ function cleansing(name, fileName, pairs, input, delimiter = ',') {
   }, input)
 }
 
+/**
+ * A Data Cleansing of place codes, looked up without the zeros on the left, which stay where they are:
+ * 05364, 5364 and 0005364 all become the same place. Only for codes — check-digit tables keep their
+ * zeros, which count there.
+ */
+function codeCleansing(name, fileName, pairs, input, delimiter = ',') {
+  for (const [from, to] of pairs) if (from.includes(delimiter) || to.includes(delimiter)) throw new Error(`${fileName}: "${from}" holds the delimiter`)
+  if (!pairs.every(([from, to]) => /^\d+$/.test(from) && /^\d+$/.test(to))) throw new Error(`${fileName}: not a table of codes`)
+  // The zero-free forms join the table.
+  const strip = (code) => code.replace(/^0+(?=\d)/, '')
+  const rows = new Map(pairs)
+  const stripped = new Map()
+  for (const [from, to] of pairs) {
+    const [key, value] = [strip(from), strip(to)]
+    if (stripped.has(key) && stripped.get(key) !== value) throw new Error(`${fileName}: ${key} becomes ${stripped.get(key)} and ${value}`)
+    stripped.set(key, value)
+    if (rows.has(key) && rows.get(key) !== value) throw new Error(`${fileName}: ${key} becomes ${rows.get(key)} and, without zeros, ${value}`)
+    rows.set(key, value)
+  }
+  cleansing(`${name}_TABLE`, fileName, [...rows], input, delimiter)
+  return decompose(name, [[String.raw`(0*)([1-9]\d*)`, keep, apply(`${name}_TABLE`)]], keep, input)
+}
+
 const domains = []
 const classifiers = []
 function domain(name, algorithmName, ...detect) {
-  if (!algorithms.some((a) => a.name === algorithmName)) throw new Error(`${name}: no algorithm ${algorithmName}`)
+  if (!isEngineAlgorithm(algorithmName) && !algorithms.some((a) => a.name === algorithmName)) throw new Error(`${name}: no algorithm ${algorithmName}`)
   domains.push({ name, algorithm: algorithmName })
   for (const make of detect) classifiers.push(make(name))
 }
@@ -105,7 +131,7 @@ const words = (alternatives) => String.raw`(?i)(?<![a-z])(?:${alternatives})(?![
 
 const byName = (...rules) => (d) => ({
   name: `${d} - Path`, framework: 'PATH', domain: d,
-  description: 'Column name (and the variants used in Belizean systems).',
+  description: 'Column name and the variants used in Belizean systems.',
   config: {
     paths: rules.map(([alternatives, strength]) => ({
       matchType: 'REGEX', fieldValue: words(alternatives), parentValue: '',
@@ -121,33 +147,56 @@ const byType = (...allowed) => (d) => ({
   config: { allowedTypes: allowed, matchAutoIncrementingColumn: false, matchStrength: 0, rejectStrength: 1 },
 })
 
-/** Values: [regex, strength, { checksum, clean, note }]. Whole value unless `partial`. */
+/**
+ * Values: [regex, strength, { checksum, clean, note }]. Whole value unless `partial`. The spaces a
+ * CHAR column pads with are cleaned away, and a pattern that starts with a digit also takes zeros
+ * on the left (see presets/_lib/detect.mjs).
+ */
 const byPattern = (rules, { reject = 0.3, partial = false } = {}) => (d) => ({
   name: `${d} - Regex`, framework: 'REGEX', domain: d,
   description: 'Shape of the values.',
   config: {
     dataPatterns: rules.map(([regex, strength, extra = {}]) => ({
       ...(extra.note ? { note: extra.note } : {}),
-      regex, matchStrength: strength,
+      regex: zeroPadded(regex), matchStrength: strength,
       checksumType: extra.checksum ?? 'NONE',
       caseSensitive: false, allowPartialMatch: partial,
-      dataCleanRegex: extra.clean ?? '',
+      dataCleanRegex: cleaning(extra.clean),
     })),
     rejectStrength: reject,
   },
 })
 
-/** Values found in lists: [fileName, values, strength]. */
-const byList = (lists, { reject = 0.3, tokenize = false } = {}) => (d) => ({
-  name: `${d} - List`, framework: 'LIST', domain: d,
-  description: 'Known values.',
-  config: {
-    valueLists: lists.map(([fileName, values, strength]) => ({ file: file(fileName, withFolded(values)), matchStrength: strength })),
-    tokenizeInput: tokenize,
-    rejectStrength: reject,
-    tokenizationDelimiter: ' ',
-  },
-})
+/**
+ * Values found in lists: [fileName, values, strength]. A List classifier compares the whole value,
+ * padding included, unless it splits it into words: lists of single words are looked up word by
+ * word, and lists with multi-word values become Regex patterns (presets/_lib/detect.mjs).
+ */
+const byList = (lists, { reject = 0.3, tokenize = false } = {}) => (d) => {
+  const known = lists.map(([fileName, values, strength]) => ({ fileName, values: withFolded(values), shown: unique(values), strength }))
+  if (tokenize || known.every((l) => wordByWord(l.values))) {
+    return {
+      name: `${d} - List`, framework: 'LIST', domain: d,
+      description: 'Known values.',
+      config: {
+        valueLists: known.map((l) => ({ file: file(l.fileName, l.values), matchStrength: l.strength })),
+        tokenizeInput: true,
+        rejectStrength: reject,
+        tokenizationDelimiter: ' ',
+      },
+    }
+  }
+  return {
+    name: `${d} - Values`, framework: 'REGEX', domain: d,
+    description: 'Known values.',
+    config: {
+      dataPatterns: known.flatMap((l) => valuePatterns(l.values, l.shown).map(({ note, regex, dataCleanRegex }) => ({
+        note, regex, matchStrength: l.strength, checksumType: 'NONE', caseSensitive: false, allowPartialMatch: false, dataCleanRegex,
+      }))),
+      rejectStrength: reject,
+    },
+  }
+}
 
 const STRING = (min = 0, max = 0) => ({ typeName: 'String', ...(min ? { minimumLength: min } : {}), ...(max ? { maximumLength: max } : {}) })
 const NUMBER = (min = 0, max = 0) => ({ typeName: 'Number', ...(min ? { minimumLength: min } : {}), ...(max ? { maximumLength: max } : {}) })
@@ -186,12 +235,14 @@ algorithm('BZ_CM_ALNUM', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'AEIOU', 'BCDFGHJKLMNPQRSTVWXYZ', 'aeiou', 'bcdfghjklmnpqrstvwxyz', 'ÁÉÍÓÚÜ', 'áéíóúü'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, '000123456')
 // Hex letters form their own group, so a MAC, UUID or IPv6 stays valid hex.
 algorithm('BZ_CM_HEX', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'abcdef', 'ABCDEF', 'ghijklmnopqrstuvwxyz', 'GHIJKLMNOPQRSTUVWXYZ'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, '3c:22:fb:9a:10:e4')
 decompose('BZ_REDACT', [['(.+)', { type: 'REDACT', redactCharacter: 'X' }]], keep, 'secret123')
 lookup('BZ_SUPPRESS', 'bz-not-stated.txt', ['Not stated'], 'Major depressive disorder', 'PRESERVE_LOOKUP_FILE')
@@ -318,7 +369,9 @@ domain('BZ_L1_FULL_NAME', 'BZ_FULL_NAME',
     // A bare NAME holds a given name or a full name: the values decide between the two domains.
     [`name(?!_?(${NOT_A_PERSON}|${PERSON_ROLE}|full|complete|last|first))|nombre(?!_?(${NOT_A_PERSON}|${PERSON_ROLE}|completo|y_?apellidos?|apellidos?))`, 0.5],
   ),
-  byList([['bz-detect-given-names.txt', GIVEN_NAMES, 0.6], ['bz-detect-surnames.txt', SURNAMES, 0.6]], { tokenize: true, reject: 0.3 }))
+  // 0.65: a full name found word by word reaches the threshold without the column name, and a
+  // single word still goes to the given-name or surname domain, at 0.7.
+  byList([['bz-detect-given-names.txt', GIVEN_NAMES, 0.65], ['bz-detect-surnames.txt', SURNAMES, 0.65]], { tokenize: true, reject: 0.3 }))
 
 // ── L1 · Contact ────────────────────────────────────────────────────────────
 
@@ -329,7 +382,7 @@ decompose('BZ_EMAIL', [
 domain('BZ_L1_EMAIL', 'BZ_EMAIL',
   byName(['e_?mail[a-z0-9_]*|mail[a-z0-9_]*|email_?address|correo(_?electronico)?[a-z0-9_]*', 0.85]),
   byType(STRING(5)),
-  byPattern([[String.raw`[A-Za-z0-9._%+'\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}`, 1]], { reject: 0.2 }))
+  byPattern([[String.raw`[\p{L}\p{N}._%+'\-]+@[\p{L}\p{N}.\-]+\.[A-Za-z]{2,24}`, 1]], { reject: 0.2 }))
 
 // Seven digits after +501. The first digit is the district of a landline (2 Belize, 3 Orange Walk,
 // 4 Corozal, 5 Stann Creek, 7 Toledo, 8 Cayo) or 6 for a mobile: it stays, with +501 and the
@@ -403,12 +456,12 @@ domain('BZ_L1_BANK_ACCOUNT', 'BZ_CM_ALNUM',
   byName(['account_?(no|num|number|nbr)|acct_?(no|num|number|nbr)?|acc_?(no|num|number)|bank_?(account|acct)(_?(no|num|number))?|savings_?(account|acct)(_?(no|number))?|checking_?(account|acct)(_?(no|number))?|chequing_?(account|acct)(_?(no|number))?|share_?account(_?no)?|iban|cuenta_?(bancaria|ahorros?|corriente)|n(o|um|ro)_?(de_?)?cuenta', 0.85]))
 
 // Payment Card fails a row that has no digits to mask; only values shaped like a card reach it.
-algorithm('BZ_CARD_LUHN', 'characterMapping.PaymentCard', { minMaskedPositions: 6, preserve: 0 }, '4916313123456780')
-decompose('BZ_CARD', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply('BZ_CARD_LUHN')]], keep, '4916 3131 2345 6780')
+decompose('BZ_CARD', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply(ENGINE.CREDIT_CARD)]], keep, '4916 3131 2345 6780')
 domain('BZ_L1_PAYMENT_CARD', 'BZ_CARD',
   byName(['card_?(no|num|number)|credit_?card(_?(no|num|number))?|debit_?card(_?(no|num|number))?|cc_?(no|num|number)|pan|card_?pan|masked_?pan|tarjeta(_?(credito|debito))?|n(o|um|ro)_?tarjeta', 0.85]),
-  // 0.9, not 1: an IMEI is 15 Luhn-valid digits too, and its own column name should win.
-  byPattern([[String.raw`\d{13,19}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
+  // An IMEI is 15 Luhn-valid digits too: 15-digit cards are American Express (34, 37), and the rest
+  // is left to the device domain. 0.9, not 1, so that a column name still wins.
+  byPattern([[String.raw`3[47]\d{13}|[1-9]\d{12,13}|[1-9]\d{15,18}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
 
 // ── L1 · Network, devices, vehicles, land ───────────────────────────────────
 
@@ -465,8 +518,18 @@ domain('BZ_L1_CONTRACT_NUMBER', 'BZ_CM_ALNUM',
 domain('BZ_L1_USERNAME', 'BZ_CM_ALNUM',
   byName(['user_?name|username|login(_?(name|id))?|user_?id_?login|nick_?name|nickname|alias|screen_?name|handle|facebook|instagram|twitter|tiktok|linkedin|social_?media(_?(handle|account|profile))?|telegram|usuario', 0.7]))
 
+// Password hashes carry their scheme: bcrypt, crypt (MD5, SHA-256, SHA-512), Argon2, PBKDF2 and the
+// LDAP {SSHA} forms. A bare hex digest could be any hash, and is left to the column name.
+const PASSWORD_HASHES = [
+  [String.raw`\$2[abxy]?\$\d{2}\$[./A-Za-z0-9]{53}`, 0.95],
+  [String.raw`\$(1|5|6)\$(rounds=\d+\$)?[./A-Za-z0-9]{1,16}\$[./A-Za-z0-9]{22,86}`, 0.95],
+  [String.raw`\$argon2(id|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$\S+`, 0.95],
+  [String.raw`pbkdf2_sha(1|256|512)\$\d+\$\S+\$\S+`, 0.95],
+  [String.raw`\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\}\S+`, 0.95],
+]
 domain('BZ_L1_CREDENTIAL', 'BZ_REDACT',
-  byName(['password|passwd|pwd|pass_?word|pass|pin(_?(code|no|number))?|passcode|hash_?password|password_?hash|secret|secret_?(answer|question)|security_?(answer|question)|access_?token|refresh_?token|api_?key|otp|contrasen[aã]|contraseña|clave(?!_?(producto|prod|articulo|postal))', 0.9]))
+  byName(['password|passwd|pwd|pass_?word|pass|pin(_?(code|no|number))?|passcode|hash_?password|password_?hash|secret|secret_?(answer|question)|security_?(answer|question)|access_?token|refresh_?token|api_?key|otp|contrasen[aã]|contraseña|clave(?!_?(producto|prod|articulo|postal))', 0.9]),
+  byPattern(PASSWORD_HASHES, { reject: 0.3 }))
 
 decompose('BZ_COORDINATE', [
   // The integer part and first decimal stay (about 11 km): the place is generalized, not moved.
@@ -531,7 +594,7 @@ domain('BZ_L2_BIRTH_YEAR', 'BZ_YEAR',
 
 // 37 becomes 3x. From 100 on, 90.
 decompose('BZ_AGE', [
-  [String.raw`(\d{3,})`, redactAs('90')],
+  [String.raw`([1-9]\d{2,})`, redactAs('90')],
   [String.raw`([1-9])(\d)(\.\d+)`, keep, CM, keep],
   [String.raw`([1-9])(\d)`, keep, CM],
   [String.raw`(\d)`, CM],
@@ -555,7 +618,11 @@ decompose('BZ_SEX', [
 ], keep, 'F')
 domain('BZ_L2_SEX', 'BZ_SEX',
   byName(['sex(_?(code|at_?birth|registered))?|gender(?!_?(identity|expression))(_?code)?|sexo|genero(?!_?(identidad))', 0.85]),
-  byList([['bz-detect-sex.txt', ['f', 'm', 'h', 'female', 'male', 'woman', 'man', 'fem', 'mujer', 'hombre', 'femenino', 'masculino'], 0.5]], { reject: 0.5 }))
+  // A column of single letters is the sex on its own; the words are stronger evidence.
+  byList([
+    ['bz-detect-sex.txt', ['female', 'male', 'woman', 'man', 'fem', 'mujer', 'hombre', 'femenino', 'masculino'], 0.8],
+    ['bz-detect-sex-letter.txt', ['f', 'm', 'h'], 0.6],
+  ], { reject: 0.5 }))
 
 // ── L2 · Where people live ──────────────────────────────────────────────────
 //
@@ -718,7 +785,9 @@ domain('BZ_L3_TRADE_UNION', 'BZ_SUPPRESSED_CATEGORY',
   byList([['bz-detect-trade-unions.txt', ['BNTU', 'PSU', 'NTUCB', 'CWU', 'BWU', 'BEWU', 'BCWU', 'BWSWU', 'KHMHAWU', 'SWU', 'APSSM', 'UBFSU', 'Belize National Teachers Union', 'Public Service Union', 'Christian Workers Union', 'Belize Workers Union', 'Belize Energy Workers Union', 'Belize Communication Workers Union', 'Belize Water Services Workers Union', 'Southern Workers Union', 'Association of Public Service Senior Managers', 'unionized', 'union member'], 0.6]], { reject: 0.3 }))
 
 domain('BZ_L3_GENETIC', 'BZ_REDACT',
-  byName(['dna|genetic[a-z_]*|genome|genotyp[a-z_]*|gene_?(test|result|marker|panel)|genetic_?(test|marker|profile|result)|mutation|brca[12]?|karyotype|paternity_?test|snp|haplotype|newborn_?screening|adn|gen[eé]tic[oa]', 0.9]))
+  byName(['dna|genetic[a-z_]*|genome|genotyp[a-z_]*|gene_?(test|result|marker|panel)|genetic_?(test|marker|profile|result)|mutation|brca[12]?|karyotype|paternity_?test|snp|haplotype|newborn_?screening|adn|gen[eé]tic[oa]', 0.9]),
+  // A nucleotide sequence (IUPAC letters) long enough not to be a word.
+  byPattern([[String.raw`[ACGTUN]{24,}`, 0.9]], { reject: 0.3 }))
 
 domain('BZ_L3_BIOMETRIC', 'BZ_REDACT',
   byName(['fingerprints?|finger_?prints?|thumb_?prints?|biometric[a-z_]*|face_?(template|encoding|id|print|hash)|facial_?(template|recognition|id|image_?hash)|iris(_?(scan|template|code))?|retina(_?scan)?|voice_?(print|template)|palm_?print|signature_?(image|biometric|capture|pad)|minutiae|huellas?(_?dactilar(es)?)?|biometri[a-z_]*', 0.9]),
@@ -777,8 +846,7 @@ domain('BZ_HEALTH_TEST_RESULT', 'BZ_CM_ALNUM',
   ))
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
-lookup('BZ_BLOOD_GROUP', 'bz-blood-groups.txt', BLOOD_GROUPS, 'O+', 'PRESERVE_LOOKUP_FILE')
-domain('BZ_HEALTH_BLOOD_GROUP', 'BZ_BLOOD_GROUP',
+domain('BZ_HEALTH_BLOOD_GROUP', ENGINE.BLOOD_TYPE,
   byName(['blood_?(type|group)|abo(_?rh)?|rh_?factor|rh|grupo_?sangu[ií]neo|tipo_?(de_?)?sangre', 0.9]),
   byList([['bz-detect-blood-groups.txt', [...BLOOD_GROUPS, '0+', '0-', 'a pos', 'a neg', 'b pos', 'b neg', 'ab pos', 'ab neg', 'o pos', 'o neg', 'a positive', 'a negative', 'b positive', 'b negative', 'ab positive', 'ab negative', 'o positive', 'o negative'], 0.9]], { reject: 0.4 }))
 
@@ -807,23 +875,19 @@ decompose('BZ_CREDIT', [
 domain('BZ_FIN_CREDIT_REFERENCE', 'BZ_CREDIT',
   byName(['credit_?(score|rating|history|report|status|bureau|reference|risk|grade|standing)|crif(_?(score|report|status))?|delinquen(cy|t)(_?(status|days))?|days_?(past_?due|in_?arrears|overdue)|dpd|arrears(_?(status|days))?|past_?due(_?(days|status))?|overdue_?(days|status)|default_?(status|flag|indicator)|defaulted|written_?off|write_?off(_?(status|flag))?|collections?_?status|bad_?debt|loan_?(status|classification|grade)|non_?performing|npl|morosidad|score_?credit[oa]', 0.9]))
 
-algorithm('BZ_DEBT_AMOUNT', 'characterMapping.NumericMapping', { minValue: 200, maxValue: 1000000 }, '8500')
-domain('BZ_FIN_DEBT', 'BZ_DEBT_AMOUNT',
+domain('BZ_FIN_DEBT', ENGINE.CM_NUMERIC,
   byName(['loan_?(amount|balance|principal|outstanding)|outstanding_?(balance|amount|debt|loan|principal)|debt(_?(amount|total|balance))?|amount_?(owed|due|outstanding|in_?arrears|overdue)|balance_?(owed|outstanding|due)|arrears_?amount|credit_?limit|mortgage_?(balance|amount)|instal?lment(_?amount)?|monthly_?(payment|repayment)|saldo_?(deudor|prestamo|pr[eé]stamo)|monto_?(deuda|prestamo)|deuda', 0.85]),
   byType(NUMBER()))
 
-algorithm('BZ_INCOME', 'characterMapping.NumericMapping', { minValue: 700, maxValue: 40000 }, '2400')
-domain('BZ_FIN_INCOME', 'BZ_INCOME',
+domain('BZ_FIN_INCOME', ENGINE.CM_NUMERIC,
   byName(['salary|salaries|wages?|income[a-z_]*|gross_?(pay|salary|income|earnings)|net_?(pay|salary|income|earnings)|(monthly|annual|weekly|fortnightly)_?(income|salary|earnings|pay|wage)|earnings|remuneration|basic_?(pay|salary)|insurable_?earnings|household_?income|take_?home_?pay|salario|sueldo|ingresos?(_?[a-z]+)?', 0.85]),
   byType(NUMBER()))
 
-algorithm('BZ_ASSETS', 'characterMapping.NumericMapping', { minValue: 20000, maxValue: 5000000 }, '185000')
-domain('BZ_FIN_ASSETS', 'BZ_ASSETS',
+domain('BZ_FIN_ASSETS', ENGINE.CM_NUMERIC,
   byName(['net_?worth|assets?_?(value|total)|total_?assets|property_?value|land_?value|market_?value|appraised_?value|valuation_?amount|savings(_?balance)?|account_?balance|deposit_?balance|fixed_?deposit(_?amount)?|investment_?(balance|value|amount)|share_?(balance|capital)|patrimonio|valor_?(catastral|propiedad|comercial)', 0.85]),
   byType(NUMBER()))
 
-algorithm('BZ_PENSION_AMOUNT', 'characterMapping.NumericMapping', { minValue: 100, maxValue: 10000 }, '680')
-domain('BZ_FIN_PENSION', 'BZ_PENSION_AMOUNT',
+domain('BZ_FIN_PENSION', ENGINE.CM_NUMERIC,
   byName(['pension(_?(amount|payment|monthly|benefit_?amount|balance))?|monthly_?pension|retirement_?(pension|benefit|amount|balance)|ncp_?(amount|payment)|survivors?_?pension(_?amount)?|invalidity_?pension(_?amount)?|gratuity(_?amount)?|provident_?fund(_?balance)?|pensi[oó]n(_?monto)?|jubilaci[oó]n(_?monto)?', 0.9]),
   byType(NUMBER()))
 
@@ -903,8 +967,16 @@ if (notDomains.length) throw new Error(`essential pack names domains the set doe
 
 // The version and the day it was built: bump both whenever anything in the set changes, so that
 // whoever loaded an older one can see how old it is.
-const VERSION = 2
-const VERSION_DATE = '2026-09-15'
+const VERSION = 3
+const VERSION_DATE = '2026-10-11'
+// Zeros on the left are padding only in the value a column holds — the top of a domain's tree. Inside
+// it, a step may read a digit at a fixed position, and an optional zero would shift what it reads.
+for (const d of domains) {
+  const top = algorithms.find((a) => a.name === d.algorithm)
+  if (top?.framework === 'algorithm.plugin.decompose.RegexDecompose') {
+    top.config.maskPatterns = top.config.maskPatterns.map(({ regex, actions }) => keepingZeros(regex, actions))
+  }
+}
 const preset = {
   version: VERSION,
   versionDate: VERSION_DATE,
@@ -920,13 +992,13 @@ const preset = {
   },
   profileSet: {
     name: `BZ - Data Protection Act 2021 - v${VERSION}`,
-    description: 'Direct identifiers, quasi-identifiers, sensitive personal data (section 2), health records, financial record or position, and criminal record and proceedings, under the Data Protection Act, 2021 of Belize.',
+    description: 'Data Protection Act 2021 - personal data',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
   },
   packs: {
     essential: {
-      description: 'Essential pack of the Data Protection Act, 2021: social security number, TIN, passport, names, contact, address and birth date.',
+      description: 'Essential pack of the Data Protection Act 2021',
       domains: ESSENTIAL,
     },
   },
@@ -936,6 +1008,9 @@ const preset = {
   files: [...files.keys()].sort(),
 }
 
+// The texts the engine reads must pass as they are: no refused character, a short set description.
+const engineProblems = engineTextProblems(preset)
+if (engineProblems.length) throw new Error(`texts the engine would refuse:\n  ${engineProblems.join('\n  ')}`)
 fs.rmSync(FILES, { recursive: true, force: true })
 fs.mkdirSync(FILES, { recursive: true })
 for (const [name, lines] of files) fs.writeFileSync(nodePath.join(FILES, name), `${lines.join('\n')}\n`)

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "versionDate": "2026-09-17",
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "El Salvador — Ley para la Protección de Datos Personales (Decreto 144)",
     "pt-BR": "El Salvador — Ley para la Protección de Datos Personales (Decreto 144)",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales salvadoreños conforme a la Ley para la Protección de Datos Personales (Decreto Legislativo 144 de 2024): identificadores directos (DUI y NIT con dígito verificador válido, NRC, nombres, contacto, dirección, cuentas, billeteras, placas), cuasi-identificadores (fecha de nacimiento, distrito, código postal), los datos sensibles del artículo 4 g) — origen étnico, convicciones religiosas, espirituales o filosóficas, afiliación política, sindicatos, preferencias sexuales, salud, datos biométricos y genéticos, situación moral y familiar, hábitos personales —, la nacionalidad (art. 59 b), datos financieros y antecedentes penales."
   },
   "profileSet": {
-    "name": "SV - Decreto 144 - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 4 g y art. 59 b), datos de salud, datos financieros y antecedentes penales, conforme a la Ley para la Protección de Datos Personales de El Salvador (Decreto Legislativo 144 de 2024).",
+    "name": "SV - Decreto 144 - v2",
+    "description": "Decreto 144 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "SV_L1_DUI - Path",
@@ -63,6 +63,7 @@
       "SV_L1_CONTRATO - Path",
       "SV_L1_USUARIO - Path",
       "SV_L1_CREDENCIAL - Path",
+      "SV_L1_CREDENCIAL - Regex",
       "SV_L1_GEOLOCALIZACION - Path",
       "SV_L1_GEOLOCALIZACION - Regex",
       "SV_L1_TEXTO_LIBRE - Path",
@@ -79,7 +80,7 @@
       "SV_L2_SEXO - Path",
       "SV_L2_SEXO - List",
       "SV_L2_DISTRITO - Path",
-      "SV_L2_DISTRITO - List",
+      "SV_L2_DISTRITO - Values",
       "SV_L2_CODIGO_GEOGRAFICO - Path",
       "SV_L2_CODIGO_GEOGRAFICO - Regex",
       "SV_L2_CANTON - Path",
@@ -87,58 +88,59 @@
       "SV_L2_CODIGO_POSTAL - Path",
       "SV_L2_CODIGO_POSTAL - Type",
       "SV_L2_ESTADO_FAMILIAR - Path",
-      "SV_L2_ESTADO_FAMILIAR - List",
+      "SV_L2_ESTADO_FAMILIAR - Values",
       "SV_L2_OCUPACION - Path",
       "SV_L2_EMPLEADOR - Path",
       "SV_L2_ESCOLARIDAD - Path",
-      "SV_L2_ESCOLARIDAD - List",
+      "SV_L2_ESCOLARIDAD - Values",
       "SV_L2_CENTRO_EDUCATIVO - Path",
       "SV_L2_PERSONAS_A_CARGO - Path",
       "SV_L2_PERSONAS_A_CARGO - Type",
       "SV_L3_ORIGEN_ETNICO - Path",
-      "SV_L3_ORIGEN_ETNICO - List",
+      "SV_L3_ORIGEN_ETNICO - Values",
       "SV_L3_LENGUA_INDIGENA - Path",
-      "SV_L3_LENGUA_INDIGENA - List",
+      "SV_L3_LENGUA_INDIGENA - Values",
       "SV_L3_NACIONALIDAD - Path",
-      "SV_L3_NACIONALIDAD - List",
+      "SV_L3_NACIONALIDAD - Values",
       "SV_L3_RELIGION - Path",
-      "SV_L3_RELIGION - List",
+      "SV_L3_RELIGION - Values",
       "SV_L3_CONVICCION_FILOSOFICA - Path",
       "SV_L3_IDEOLOGIA_POLITICA - Path",
-      "SV_L3_IDEOLOGIA_POLITICA - List",
+      "SV_L3_IDEOLOGIA_POLITICA - Values",
       "SV_L3_AFILIACION_PARTIDARIA - Path",
-      "SV_L3_AFILIACION_PARTIDARIA - List",
+      "SV_L3_AFILIACION_PARTIDARIA - Values",
       "SV_L3_AFILIACION_SINDICAL - Path",
-      "SV_L3_AFILIACION_SINDICAL - List",
+      "SV_L3_AFILIACION_SINDICAL - Values",
       "SV_L3_BIOMETRICO - Path",
       "SV_L3_BIOMETRICO - Type",
       "SV_L3_GENETICO - Path",
+      "SV_L3_GENETICO - Regex",
       "SV_L3_ORIENTACION_SEXUAL - Path",
-      "SV_L3_ORIENTACION_SEXUAL - List",
+      "SV_L3_ORIENTACION_SEXUAL - Values",
       "SV_L3_VIDA_SEXUAL - Path",
       "SV_L3_IDENTIDAD_GENERO - Path",
-      "SV_L3_IDENTIDAD_GENERO - List",
+      "SV_L3_IDENTIDAD_GENERO - Values",
       "SV_L3_SITUACION_FAMILIAR - Path",
       "SV_L3_HABITOS - Path",
       "SV_L3_VICTIMA - Path",
       "SV_SALUD_IDENTIFICADOR - Path",
       "SV_SALUD_COBERTURA - Path",
-      "SV_SALUD_COBERTURA - List",
+      "SV_SALUD_COBERTURA - Values",
       "SV_SALUD_DIAGNOSTICO - Path",
       "SV_SALUD_DIAGNOSTICO - Regex",
       "SV_SALUD_PROCEDIMIENTO - Path",
       "SV_SALUD_MEDICAMENTO - Path",
-      "SV_SALUD_MEDICAMENTO - List",
+      "SV_SALUD_MEDICAMENTO - Values",
       "SV_SALUD_TEXTO_CLINICO - Path",
       "SV_SALUD_TEXTO_CLINICO - Type",
       "SV_SALUD_RESULTADO_EXAMEN - Path",
       "SV_SALUD_VIH - Path",
       "SV_SALUD_GRUPO_SANGUINEO - Path",
-      "SV_SALUD_GRUPO_SANGUINEO - List",
+      "SV_SALUD_GRUPO_SANGUINEO - Values",
       "SV_SALUD_DISCAPACIDAD - Path",
-      "SV_SALUD_DISCAPACIDAD - List",
+      "SV_SALUD_DISCAPACIDAD - Values",
       "SV_SALUD_OCUPACIONAL - Path",
-      "SV_SALUD_OCUPACIONAL - List",
+      "SV_SALUD_OCUPACIONAL - Values",
       "SV_SALUD_REPRODUCTIVA - Path",
       "SV_SALUD_MENTAL - Path",
       "SV_FIN_HISTORIAL_CREDITICIO - Path",
@@ -153,9 +155,9 @@
       "SV_FIN_REMESAS - Path",
       "SV_FIN_REMESAS - Type",
       "SV_FIN_PROGRAMA_SOCIAL - Path",
-      "SV_FIN_PROGRAMA_SOCIAL - List",
+      "SV_FIN_PROGRAMA_SOCIAL - Values",
       "SV_FIN_VIVIENDA - Path",
-      "SV_FIN_VIVIENDA - List",
+      "SV_FIN_VIVIENDA - Values",
       "SV_PENAL_ANTECEDENTES - Path",
       "SV_PENAL_EXPEDIENTE - Path",
       "SV_PENAL_EXPEDIENTE - Regex"
@@ -163,7 +165,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial del Decreto 144: DUI, NIT, documentos de extranjeros, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial del Decreto 144",
       "domains": [
         "SV_L1_DUI",
         "SV_L1_NIT",
@@ -185,7 +187,7 @@
       "name": "SV_L1_DUI - Path",
       "framework": "PATH",
       "domain": "SV_L1_DUI",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -237,20 +239,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{8}-\\d",
+            "regex": "0*(?:\\d{8}-\\d)",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "0\\d{8}",
+            "regex": "0*(?:0\\d{8})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -260,7 +262,7 @@
       "name": "SV_L1_NIT - Path",
       "framework": "PATH",
       "domain": "SV_L1_NIT",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -283,20 +285,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{4}-\\d{6}-\\d{3}-\\d",
+            "regex": "0*(?:\\d{4}-\\d{6}-\\d{3}-\\d)",
             "matchStrength": 0.95,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{14}",
+            "regex": "0*(?:\\d{14})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -306,7 +308,7 @@
       "name": "SV_L1_NRC - Path",
       "framework": "PATH",
       "domain": "SV_L1_NRC",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -329,12 +331,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,7}-\\d",
+            "regex": "0*(?:\\d{1,7}-\\d)",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -344,7 +346,7 @@
       "name": "SV_L1_DOCUMENTO_EXTRANJERO - Path",
       "framework": "PATH",
       "domain": "SV_L1_DOCUMENTO_EXTRANJERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -363,7 +365,7 @@
       "name": "SV_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "SV_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -391,7 +393,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -401,7 +403,7 @@
       "name": "SV_L1_PARTIDA - Path",
       "framework": "PATH",
       "domain": "SV_L1_PARTIDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -420,7 +422,7 @@
       "name": "SV_L1_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "SV_L1_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -439,7 +441,7 @@
       "name": "SV_L1_NIE - Path",
       "framework": "PATH",
       "domain": "SV_L1_NIE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -458,7 +460,7 @@
       "name": "SV_L1_MATRICULA_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "SV_L1_MATRICULA_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -477,7 +479,7 @@
       "name": "SV_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "SV_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -521,7 +523,7 @@
       "name": "SV_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "SV_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -557,7 +559,7 @@
       "name": "SV_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "SV_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -597,11 +599,11 @@
         "valueLists": [
           {
             "file": "preset-file://sv-detectar-nombres.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://sv-detectar-apellidos.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -613,7 +615,7 @@
       "name": "SV_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "SV_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -653,12 +655,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -668,7 +670,7 @@
       "name": "SV_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "SV_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -691,12 +693,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?503[\\s\\-]?)?[267]\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?503[\\s\\-]?)?[267]\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -706,7 +708,7 @@
       "name": "SV_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "SV_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -751,7 +753,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(colonia|col|residencial|res|reparto|urbanizaci[oó]n|lotificaci[oó]n|barrio|pol[ií]gono|pol)\\.?\\s+[a-záéíóúñ0-9.' ]{2,40}.*",
@@ -759,7 +761,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)k(m|il[oó]metro)\\.?\\s*\\d{1,3}\\s+(carretera|autopista).*",
@@ -767,7 +769,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -777,7 +779,7 @@
       "name": "SV_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "SV_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -796,7 +798,7 @@
       "name": "SV_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "SV_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -815,7 +817,7 @@
       "name": "SV_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "SV_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -838,12 +840,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -853,7 +855,7 @@
       "name": "SV_L1_BILLETERA - Path",
       "framework": "PATH",
       "domain": "SV_L1_BILLETERA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -881,7 +883,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[a-z0-9._\\-]+@(chivowallet|walletofsatoshi|strike)\\.[a-z]{2,10}",
@@ -889,7 +891,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -899,7 +901,7 @@
       "name": "SV_L1_IP - Path",
       "framework": "PATH",
       "domain": "SV_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -922,20 +924,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -945,7 +947,7 @@
       "name": "SV_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "SV_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -968,20 +970,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -991,7 +993,7 @@
       "name": "SV_L1_COOKIE - Path",
       "framework": "PATH",
       "domain": "SV_L1_COOKIE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1010,7 +1012,7 @@
       "name": "SV_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "SV_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1038,7 +1040,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(P|A|C|M|N|O|AB|CD|E|R|EP)[\\s\\-]?\\d{3}[\\s\\-]?\\d{2}[A-Z]",
@@ -1046,7 +1048,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1056,7 +1058,7 @@
       "name": "SV_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "SV_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1084,7 +1086,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1094,7 +1096,7 @@
       "name": "SV_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "SV_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1113,7 +1115,7 @@
       "name": "SV_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "SV_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1132,7 +1134,7 @@
       "name": "SV_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "SV_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1151,7 +1153,7 @@
       "name": "SV_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "SV_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1167,10 +1169,61 @@
       }
     },
     {
+      "name": "SV_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "SV_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "SV_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "SV_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1201,12 +1254,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "1[34]\\.\\d{3,}\\s*,\\s*-(8[89]|90)\\.\\d{3,}",
+            "regex": "0*(?:1[34]\\.\\d{3,}\\s*,\\s*-(8[89]|90)\\.\\d{3,})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(8[89]|90)\\.\\d{4,}",
@@ -1214,15 +1267,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "1[34]\\.\\d{4,}",
+            "regex": "0*(?:1[34]\\.\\d{4,})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1232,7 +1285,7 @@
       "name": "SV_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "SV_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1272,12 +1325,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{8}-\\d",
+            "regex": "0*(?:\\d{8}-\\d)",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1285,15 +1338,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[267]\\d{3}-\\d{4}",
+            "regex": "0*(?:[267]\\d{3}-\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1303,7 +1356,7 @@
       "name": "SV_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "SV_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1346,7 +1399,7 @@
       "name": "SV_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "SV_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1386,7 +1439,7 @@
       "name": "SV_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "SV_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1426,7 +1479,7 @@
       "name": "SV_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "SV_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1469,7 +1522,7 @@
       "name": "SV_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "SV_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1493,10 +1546,14 @@
         "valueLists": [
           {
             "file": "preset-file://sv-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://sv-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1505,7 +1562,7 @@
       "name": "SV_L2_DISTRITO - Path",
       "framework": "PATH",
       "domain": "SV_L2_DISTRITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1521,27 +1578,30 @@
       }
     },
     {
-      "name": "SV_L2_DISTRITO - List",
-      "framework": "LIST",
+      "name": "SV_L2_DISTRITO - Values",
+      "framework": "REGEX",
       "domain": "SV_L2_DISTRITO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-distritos.txt",
-            "matchStrength": 0.8
+            "note": "285 — Apaneca · Concepción de Ataco · Tacuba · Atiquizaya · El Refugio · San Lorenzo · …",
+            "regex": "(?iu)(?:(?:a(?:cajutla|gu(?:a caliente|ilares)|huachap(?:an (?:centro|norte|sur)|án (?:centro|norte|sur))|legr(?:ia|ía)|n(?:amor(?:os|ós)|tiguo cuscatl(?:an|án))|p(?:a(?:neca|stepeque)|opa)|r(?:ambala|catao|menia)|tiquizaya|yutuxtepeque|zacualpa)|b(?:erl(?:in|ín)|ol(?:ivar|ívar))|c(?:a(?:ba(?:nas (?:este|oeste)|ñas (?:este|oeste))|caopera|l(?:ifornia|uco)|n(?:casque|delaria de la frontera))|h(?:a(?:l(?:atenango (?:centro|norte|sur)|chuapa)|peltique)|i(?:l(?:anga|tiup(?:an|án))|nameca|rilagua))|i(?:nquera|tal(?:a|á)|udad (?:arce|barrios))|o(?:atepeque|jutepeque|l(?:on|ón)|ma(?:car(?:an|án)|lapa|sagua)|nc(?:epci(?:on (?:batres|de (?:ataco|oriente)|quezaltepeque)|ón (?:batres|de (?:ataco|oriente)|quezaltepeque))|hagua)|rinto)|u(?:isnahuat|scat(?:ancingo|l(?:an (?:norte|sur)|án (?:norte|sur)))|yultit(?:an|án)))|d(?:elicias de concepci(?:on|ón)|ulce nombre de mar(?:ia|ía))|e(?:l (?:c(?:ar(?:men|rizal)|ongo)|divisadero|p(?:a(?:isnal|ra(?:iso|íso))|orvenir)|r(?:efugio|osario)|sauce|tr(?:ansito|iunfo|ánsito))|reguayqu(?:in|ín)|stanzuelas)|gua(?:cotecti|lococti|tajiagua|ymango|zapa)|huiz(?:ucar|úcar)|i(?:lo(?:basco|pango)|ntipuc(?:a|á)|zalco)|j(?:ayaque|erusal(?:en|én)|i(?:calapa|quilisco)|o(?:ateca|co(?:aitique|ro))|u(?:ay(?:ua|úa)|cua(?:pa|r(?:an|án))|jutla|tiapa))|l(?:a(?: (?:l(?:aguna|ibertad (?:c(?:entro|osta)|este|norte|oeste|sur))|pa(?:lma|z (?:centro|este|oeste))|reina|uni(?:on (?:norte|sur)|ón (?:norte|sur)))|s (?:flores|vueltas))|islique|olotiqu(?:e|illo))|m(?:asahuat|e(?:anguera(?: del golfo)?|jicanos|rcedes (?:la ceiba|uma(?:na|ña))|tap(?:an|án))|o(?:n(?:cagua|te san juan)|raz(?:an (?:norte|sur)|án (?:norte|sur))))|n(?:ahu(?:izalco|lingo)|ejapa|ombre de jes(?:us|ús)|uev(?:a (?:concepci(?:on|ón)|esparta|g(?:ranada|uadalupe)|trinidad)|o (?:cuscatl(?:an|án)|ed(?:en de san juan|én de san juan))))|o(?:jos de agua|locuilta|ratorio de concepci(?:on|ón)|sicala|zatl(?:an|án))|p(?:a(?:nchimalco|ra(?:iso de osorio|íso de osorio)|saquina)|erqu(?:in|ín)|o(?:lor(?:os|ós)|tonico)|uerto el triunfo)|que(?:lepa|zaltepeque)|rosario de mora|s(?:a(?:cacoyo|lcoatit(?:an|án)|n(?: (?:a(?:gust(?:in|ín)|lejo|ntonio(?: (?:de(?: la cruz|l monte)|los ranchos|masahuat|pajonal))?)|b(?:artolom(?:e perulapia|é perulapía)|uena ventura)|c(?:a(?:rlos|yetano istepeque)|rist(?:obal|óbal))|dionisio|e(?:migdio|steban catarina)|f(?:ernando|rancisco (?:chinameca|gotera|javier|lempa|m(?:en(?:endez|éndez)|oraz(?:an|án))))|gerardo|i(?:gnacio|ldefonso|sidro(?: labrador)?)|j(?:o(?:rge|s(?:e(?: (?:guayabal|villanueva))?|é(?: (?:guayabal|villanueva))?))|u(?:an (?:nonualco|opico|t(?:alpa|epezontes))|li(?:an|án)))|l(?:orenzo|uis (?:de(?: la reina|l carmen)|la herradura|talpa))|m(?:a(?:r(?:cos|t(?:in|ín))|t(?:ias|ías))|iguel (?:centro|de mercedes|norte|oeste|tepezontes))|p(?:ablo tacachico|edro (?:masahuat|nonualco|p(?:erulap(?:an|án)|uxtla)))|ra(?:fael(?: (?:cedros|o(?:brajuelo|riente)))?|m(?:on|ón))|s(?:alvador (?:centro|este|norte|oeste|sur)|ebasti(?:an(?: salitrillo)?|án(?: salitrillo)?)|im(?:on|ón))|vicente (?:norte|sur))|t(?:a (?:ana (?:centro|este|norte|oeste)|c(?:atarina masahuat|lara|ruz (?:analquito|michapa))|elena|isabel ishuat(?:an|án)|mar(?:ia(?: ostuma)?|ía(?: ostuma)?)|r(?:ita|osa (?:de lima|guachipil(?:in|ín)))|tecla)|iago (?:de (?:la frontera|mar(?:ia|ía))|nonualco|texacuangos)|o (?:domingo(?: de guzm(?:an|án))?|tom(?:as|ás)))))|e(?:ns(?:embra|untepeque)|sori)|o(?:ciedad|n(?:sonate (?:centro|este|norte|oeste)|zacate)|yapango)|uchitoto)|t(?:a(?:cuba|lnique|manique|palhuaca)|e(?:c(?:ap(?:an|án)|oluca)|jut(?:epeque|la)|nancingo|otepeque|pe(?:coyo|tit(?:an|án))|xistepeque)|o(?:nacatepeque|rola)|ur(?:in|ín))|u(?:luazapa|sulut(?:an (?:este|norte|oeste)|án (?:este|norte|oeste)))|v(?:erapaz|illa dolores)|y(?:a(?:mabal|yantique)|oloaiqu(?:in|ín)|ucuaiqu(?:in|ín))|za(?:catecoluca|ragoza)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L2_CODIGO_GEOGRAFICO - Path",
       "framework": "PATH",
       "domain": "SV_L2_CODIGO_GEOGRAFICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1564,12 +1624,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1[0-4])\\d{2}(\\d{2})?",
+            "regex": "0*(?:(0[1-9]|1[0-4])\\d{2}(\\d{2})?)",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1579,7 +1639,7 @@
       "name": "SV_L2_CANTON - Path",
       "framework": "PATH",
       "domain": "SV_L2_CANTON",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1598,7 +1658,7 @@
       "name": "SV_L2_COLONIA - Path",
       "framework": "PATH",
       "domain": "SV_L2_COLONIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1617,7 +1677,7 @@
       "name": "SV_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "SV_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1658,7 +1718,7 @@
       "name": "SV_L2_ESTADO_FAMILIAR - Path",
       "framework": "PATH",
       "domain": "SV_L2_ESTADO_FAMILIAR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1674,27 +1734,30 @@
       }
     },
     {
-      "name": "SV_L2_ESTADO_FAMILIAR - List",
-      "framework": "LIST",
+      "name": "SV_L2_ESTADO_FAMILIAR - Values",
+      "framework": "REGEX",
       "domain": "SV_L2_ESTADO_FAMILIAR",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-estado-familiar.txt",
-            "matchStrength": 0.7
+            "note": "20 — Soltero a · Casado a · Acompañado a · Separado a · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:acompa(?:nad(?:a|o(?:/a)?)|ñad(?:a|o(?:/a)?))|casad(?:a|o(?:/a)?)|divorciad(?:a|o(?:/a)?)|s(?:eparad(?:a|o(?:/a)?)|olter(?:a|o(?:/a)?))|uni(?:on libre|ón libre)|viud(?:a|o(?:/a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "SV_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1721,7 +1784,7 @@
       "name": "SV_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "SV_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1740,7 +1803,7 @@
       "name": "SV_L2_ESCOLARIDAD - Path",
       "framework": "PATH",
       "domain": "SV_L2_ESCOLARIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1756,27 +1819,30 @@
       }
     },
     {
-      "name": "SV_L2_ESCOLARIDAD - List",
-      "framework": "LIST",
+      "name": "SV_L2_ESCOLARIDAD - Values",
+      "framework": "REGEX",
       "domain": "SV_L2_ESCOLARIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-escolaridad.txt",
-            "matchStrength": 0.6
+            "note": "21 — Ninguno · Parvularia · Básica 1.º a 6.º · Básica 7.º a 9.º · Bachillerato · Técnico · …",
+            "regex": "(?iu)(?:(?:analfabeta|b(?:a(?:chiller(?:ato)?|sica(?: \\((?:1\\.º a 6\\.º\\)|7\\.º a 9\\.º\\)))?)|ásica(?: \\((?:1\\.º a 6\\.º\\)|7\\.º a 9\\.º\\)))?)|doctorado|maestr(?:ia|ía)|ninguno|p(?:arvularia|ostgrado)|t(?:ecnico|écnico)|universitario))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L2_CENTRO_EDUCATIVO - Path",
       "framework": "PATH",
       "domain": "SV_L2_CENTRO_EDUCATIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1795,7 +1861,7 @@
       "name": "SV_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "SV_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1835,7 +1901,7 @@
       "name": "SV_L3_ORIGEN_ETNICO - Path",
       "framework": "PATH",
       "domain": "SV_L3_ORIGEN_ETNICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1851,31 +1917,48 @@
       }
     },
     {
-      "name": "SV_L3_ORIGEN_ETNICO - List",
-      "framework": "LIST",
+      "name": "SV_L3_ORIGEN_ETNICO - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_ORIGEN_ETNICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-origen-etnico.txt",
-            "matchStrength": 0.9
+            "note": "20 — Náhuat Pipil · Lenca · Kakawira Cacaopera · Mestizo · Blanco · Negro o afrodescendiente · …",
+            "regex": "(?iu)(?:(?:afrodescendiente|blanco|cacaopera|ind(?:igena|ígena)|kakawira(?: \\(cacaopera\\))?|lenca|mestizo|n(?:ahuat(?: pipil)?|egro(?: o afrodescendiente)?|inguno|áhuat(?: pipil)?)|otro|pipil))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://sv-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_LENGUA_INDIGENA - Path",
       "framework": "PATH",
       "domain": "SV_L3_LENGUA_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1891,27 +1974,30 @@
       }
     },
     {
-      "name": "SV_L3_LENGUA_INDIGENA - List",
-      "framework": "LIST",
+      "name": "SV_L3_LENGUA_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_LENGUA_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "17 — Español · Náhuat · Lenca potón · Kakawira · Lengua de señas salvadoreña · Inglés · …",
+            "regex": "(?iu)(?:(?:castellano|espa(?:nol|ñol)|ingl(?:es|és)|kakawira|le(?:n(?:ca(?: \\(pot(?:on\\)|ón\\)))?|gua de se(?:nas salvadorena|ñas salvadoreña))|ssa)|n(?:ahuat|inguna lengua ind(?:igena|ígena)|áhuat)|otra|p(?:ipil|ot(?:on|ón))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "SV_L3_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1927,27 +2013,30 @@
       }
     },
     {
-      "name": "SV_L3_NACIONALIDAD - List",
-      "framework": "LIST",
+      "name": "SV_L3_NACIONALIDAD - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_NACIONALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-nacionalidades.txt",
-            "matchStrength": 0.7
+            "note": "31 — Salvadoreña · Hondureña · Guatemalteca · Nicaragüense · Costarricense · Mexicana · …",
+            "regex": "(?iu)(?:(?:c(?:hin(?:a|o)|o(?:lombian(?:a|o)|starricense))|e(?:l salvador|s(?:pa(?:nol(?:a)?|ñol(?:a)?)|tado(?:s unidos|unidense))|xtranjer(?:a|o))|guatemal(?:a|tec(?:a|o))|hondur(?:as|e(?:n(?:a|o)|ñ(?:a|o)))|italiana|mexican(?:a|o)|nicarag(?:u(?:a|ense)|üense)|salvadore(?:n(?:a|o)|ñ(?:a|o))|venezolan(?:a|o)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "SV_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -1963,27 +2052,30 @@
       }
     },
     {
-      "name": "SV_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "SV_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "25 — Católica · Evangélica · Protestante histórica · Testigo de Jehová · Iglesia de Jesucristo de los Santos de los Últimos Días · Adventista · …",
+            "regex": "(?iu)(?:(?:a(?:dventista|gn(?:ostico|óstico)|teo)|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|ristian(?:a|o))|evang(?:elic(?:a|o)|élic(?:a|o))|iglesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|jud(?:i(?:a|o)|í(?:a|o))|m(?:orm(?:on|ón)|usulm(?:an(?:a)?|án))|ningun(?:a|o)|otra|protestante(?: hist(?:orica|órica))?|testigo de jehov(?:a|á)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_CONVICCION_FILOSOFICA - Path",
       "framework": "PATH",
       "domain": "SV_L3_CONVICCION_FILOSOFICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2002,7 +2094,7 @@
       "name": "SV_L3_IDEOLOGIA_POLITICA - Path",
       "framework": "PATH",
       "domain": "SV_L3_IDEOLOGIA_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2018,27 +2110,30 @@
       }
     },
     {
-      "name": "SV_L3_IDEOLOGIA_POLITICA - List",
-      "framework": "LIST",
+      "name": "SV_L3_IDEOLOGIA_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_IDEOLOGIA_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-ideologias-politicas.txt",
-            "matchStrength": 0.7
+            "note": "16 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|ninguno|pr(?:efiere no responder|ogresista)|voto nulo))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_AFILIACION_PARTIDARIA - Path",
       "framework": "PATH",
       "domain": "SV_L3_AFILIACION_PARTIDARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2054,27 +2149,30 @@
       }
     },
     {
-      "name": "SV_L3_AFILIACION_PARTIDARIA - List",
-      "framework": "LIST",
+      "name": "SV_L3_AFILIACION_PARTIDARIA - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_AFILIACION_PARTIDARIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "18 — Nuevas Ideas · Alianza Republicana Nacionalista ARENA · Frente Farabundo Martí para la Liberación Nacional FMLN · Gran Alianza por la Unidad Nacional GANA · Partido de Concertación Nacional PCN · Partido Demócrata Cristiano PDC · …",
+            "regex": "(?iu)(?:(?:a(?:lianza republicana nacionalista \\(arena\\)|rena)|c(?:ambio democr(?:atico|ático)|d)|f(?:mln|r(?:aternidad patriota salvadore(?:na|ña)|ente farabundo mart(?:i para la liberacion nacional \\(fmln\\)|í para la liberación nacional \\(fmln\\)))|uerza solidaria)|g(?:ana|ran alianza por la unidad nacional \\(gana\\))|nue(?:stro tiempo|vas ideas)|p(?:artido de(?: concertaci(?:on nacional \\(pcn\\)|ón nacional \\(pcn\\))|m(?:ocrata cristiano \\(pdc\\)|ócrata cristiano \\(pdc\\)))|cn|dc)|sin afiliaci(?:on|ón)|vamos))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "SV_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2090,27 +2188,30 @@
       }
     },
     {
-      "name": "SV_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "SV_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "13 — CATS · CSTS · CTS · SIMETRISSS · ANDES · SITRASAL · …",
+            "regex": "(?iu)(?:(?:a(?:filiado|ndes|sttel)|c(?:ats|onfederaci(?:on sindical de trabajadores|ón sindical de trabajadores)|sts|ts)|feasies|s(?:i(?:metrisss|ndicalizado|tra(?:imagro|sal))|tisss)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "SV_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "SV_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2145,7 +2246,7 @@
       "name": "SV_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "SV_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2161,10 +2262,29 @@
       }
     },
     {
+      "name": "SV_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "SV_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "SV_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "SV_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2180,27 +2300,30 @@
       }
     },
     {
-      "name": "SV_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "SV_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "13 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbti(?:q\\+)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "SV_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2219,7 +2342,7 @@
       "name": "SV_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "SV_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2235,27 +2358,30 @@
       }
     },
     {
-      "name": "SV_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "SV_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "SV_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "15 — Mujer cisgénero · Hombre cisgénero · Mujer trans · Hombre trans · Persona no binaria · Otra · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|hombre(?: (?:cisg(?:enero|énero)|trans))?|mujer(?: (?:cisg(?:enero|énero)|trans))?|no binari(?:a|o)|otra|p(?:ersona no binaria|refiere no responder)|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_L3_SITUACION_FAMILIAR - Path",
       "framework": "PATH",
       "domain": "SV_L3_SITUACION_FAMILIAR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2274,7 +2400,7 @@
       "name": "SV_L3_HABITOS - Path",
       "framework": "PATH",
       "domain": "SV_L3_HABITOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2293,7 +2419,7 @@
       "name": "SV_L3_VICTIMA - Path",
       "framework": "PATH",
       "domain": "SV_L3_VICTIMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2312,7 +2438,7 @@
       "name": "SV_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2339,7 +2465,7 @@
       "name": "SV_SALUD_COBERTURA - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_COBERTURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2355,27 +2481,30 @@
       }
     },
     {
-      "name": "SV_SALUD_COBERTURA - List",
-      "framework": "LIST",
+      "name": "SV_SALUD_COBERTURA - Values",
+      "framework": "REGEX",
       "domain": "SV_SALUD_COBERTURA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-cobertura.txt",
-            "matchStrength": 0.8
+            "note": "17 — ISSS · MINSAL sistema público · Bienestar Magisterial · Sanidad Militar COSAM · ISBM · Seguro médico privado · …",
+            "regex": "(?iu)(?:(?:bienestar magisterial|cosam|fosalud|is(?:bm|ss)|minsal(?: \\(sistema p(?:ublico\\)|úblico\\)))?|p(?:rivado|ublico|úblico)|s(?:anidad militar \\(cosam\\)|eguro m(?:edico privado|édico privado)|in cobertura)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2403,7 +2532,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2413,7 +2542,7 @@
       "name": "SV_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2432,7 +2561,7 @@
       "name": "SV_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2448,27 +2577,30 @@
       }
     },
     {
-      "name": "SV_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "SV_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "SV_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "46 — Acetaminofén · Ibuprofeno · Diclofenaco · Metformina · Glibenclamida · Losartán · …",
+            "regex": "(?iu)(?:(?:a(?:c(?:etaminof(?:en|én)|ido (?:acetilsalicilico|folico|valproico))|lprazolam|m(?:lodipino|oxicilina)|nticonceptivo|torvastatina|zitromicina)|c(?:efalexina|lonazepam|omplejo b)|d(?:iclofenaco|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|o(?:lanzapina|meprazol)|prednisona|quetiapina|risperidona|s(?:albutamol|ertralina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "SV_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2504,7 +2636,7 @@
       "name": "SV_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2531,7 +2663,7 @@
       "name": "SV_SALUD_VIH - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_VIH",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2550,7 +2682,7 @@
       "name": "SV_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2566,27 +2698,30 @@
       }
     },
     {
-      "name": "SV_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "SV_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "SV_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2602,27 +2737,30 @@
       }
     },
     {
-      "name": "SV_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "SV_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "SV_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "22 — Física o motora · Auditiva · Visual · Sordoceguera · Intelectual · Psicosocial · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|c(?:eguera|ognitiva)|f(?:isica(?: o motora)?|ísica(?: o motora)?)|intelectual|m(?:ental|otora|ultiple|últiple)|n(?:inguna|o aplica)|psicosocial|sord(?:era|oceguera)|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "SV_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2638,27 +2776,30 @@
       }
     },
     {
-      "name": "SV_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "SV_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "SV_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con restricciones · pendiente · apto con recomendaciones",
+            "regex": "(?iu)(?:(?:apto(?: con re(?:comendaciones|stricciones))?|no apto|pendiente))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "SV_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2677,7 +2818,7 @@
       "name": "SV_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "SV_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2696,7 +2837,7 @@
       "name": "SV_FIN_HISTORIAL_CREDITICIO - Path",
       "framework": "PATH",
       "domain": "SV_FIN_HISTORIAL_CREDITICIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2715,7 +2856,7 @@
       "name": "SV_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "SV_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2750,7 +2891,7 @@
       "name": "SV_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "SV_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2785,7 +2926,7 @@
       "name": "SV_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "SV_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2820,7 +2961,7 @@
       "name": "SV_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "SV_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2855,7 +2996,7 @@
       "name": "SV_FIN_REMESAS - Path",
       "framework": "PATH",
       "domain": "SV_FIN_REMESAS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2890,7 +3031,7 @@
       "name": "SV_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "SV_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2906,31 +3047,48 @@
       }
     },
     {
-      "name": "SV_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "SV_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "SV_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "14 — Subsidio al gas licuado · Subsidio a la energía eléctrica · Paquete agrícola · Paquete escolar · Pensión Básica Universal · Bono de salud · …",
+            "regex": "(?iu)(?:(?:bono de salud|comunidades solidarias|ninguno|p(?:aquete (?:agr(?:icola|ícola)|escolar)|ensi(?:on basica universal|ón básica universal))|subsidio (?:a(?: la energ(?:ia electrica|ía eléctrica)|l gas licuado)|energ(?:ia|ía)|gas)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://sv-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "SV_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "SV_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2946,27 +3104,30 @@
       }
     },
     {
-      "name": "SV_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "SV_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "SV_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://sv-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "13 — Propia totalmente pagada · Propia pagándose · Alquilada · Cedida o prestada · Guardianía · Otra · …",
+            "regex": "(?iu)(?:(?:alquil(?:ada|er)|c(?:edida(?: o prestada)?|olono)|guardian(?:ia|ía)|otra|pr(?:estada|opia(?: (?:pag(?:andose|ándose)|totalmente pagada))?)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "SV_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "SV_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -2993,7 +3154,7 @@
       "name": "SV_PENAL_EXPEDIENTE - Path",
       "framework": "PATH",
       "domain": "SV_PENAL_EXPEDIENTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas salvadoreños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas salvadoreños.",
       "config": {
         "paths": [
           {
@@ -3024,12 +3185,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,6}-[A-Z]{2,10}-\\d{4}",
+            "regex": "0*(?:\\d{1,6}-[A-Z]{2,10}-\\d{4})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{1,6}-?\\d{1,6}-\\d{4}",
@@ -3037,7 +3198,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3327,7 +3488,7 @@
     },
     {
       "name": "SV_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "SV_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "SV_SALUD_DISCAPACIDAD",
@@ -3351,23 +3512,23 @@
     },
     {
       "name": "SV_FIN_DEUDA",
-      "algorithm": "SV_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "SV_FIN_INGRESOS",
-      "algorithm": "SV_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "SV_FIN_PATRIMONIO",
-      "algorithm": "SV_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "SV_FIN_PENSION",
-      "algorithm": "SV_VALOR_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "SV_FIN_REMESAS",
-      "algorithm": "SV_REMESAS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "SV_FIN_PROGRAMA_SOCIAL",
@@ -3401,7 +3562,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "A123456"
     },
@@ -3413,7 +3575,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "04567890"
     },
@@ -3426,7 +3589,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "P123-456"
     },
@@ -3442,7 +3606,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3671,8 +3836,35 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3694,6 +3886,18 @@
       "input": "Trastorno depresivo recurrente"
     },
     {
+      "name": "SV_CM_DIGITOS_ANCHO_FIJO",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "04567890"
+    },
+    {
       "name": "SV_DUI",
       "framework": "algorithm.plugin.checkdigit.Checkdigit",
       "config": {
@@ -3712,10 +3916,10 @@
         "numDigitsForCheckdigitCalculation": 8,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "SV_CM_DIGITOS"
+          "name": "SV_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "SV_CM_DIGITOS"
+          "name": "SV_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -3895,8 +4099,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4}-?\\d{6}-?(?:0\\d{2}|100)-?\\d)",
+            "regex": "(0*?)(?:(\\d{4}-?\\d{6}-?(?:0\\d{2}|100)-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3906,8 +4113,11 @@
             ]
           },
           {
-            "regex": "(\\d{4}-?\\d{6}-?[1-9]\\d{2}-?\\d)",
+            "regex": "(0*?)(?:(\\d{4}-?\\d{6}-?[1-9]\\d{2}-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3917,8 +4127,11 @@
             ]
           },
           {
-            "regex": "(\\d{8}-?\\d)",
+            "regex": "(0*?)(?:(\\d{8}-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3945,8 +4158,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4}-?\\d{6}-?(?:0\\d{2}|100)-?\\d)",
+            "regex": "(0*?)(?:(\\d{4}-?\\d{6}-?(?:0\\d{2}|100)-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3956,8 +4172,11 @@
             ]
           },
           {
-            "regex": "(\\d{4}-?\\d{6}-?[1-9]\\d{2}-?\\d)",
+            "regex": "(0*?)(?:(\\d{4}-?\\d{6}-?[1-9]\\d{2}-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3967,8 +4186,11 @@
             ]
           },
           {
-            "regex": "(\\d{8}-?\\d)",
+            "regex": "(0*?)(?:(\\d{8}-?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4493,8 +4715,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?503[\\s\\-]?)?([267])(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?503[\\s\\-]?)?([267])(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4546,26 +4771,20 @@
       "input": "Calle Arce #123, Colonia Escalón"
     },
     {
-      "name": "SV_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4162093500381234"
-    },
-    {
       "name": "SV_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "SV_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -4594,8 +4813,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4758,8 +4980,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4786,8 +5011,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -4795,8 +5023,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4812,8 +5043,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4826,8 +5060,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4996,8 +5233,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5029,7 +5269,7 @@
       "input": "Apaneca"
     },
     {
-      "name": "SV_CODIGO_GEOGRAFICO",
+      "name": "SV_CODIGO_GEOGRAFICO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -5038,6 +5278,34 @@
         "delimiter": "|",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "010102"
+    },
+    {
+      "name": "SV_CODIGO_GEOGRAFICO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "SV_CODIGO_GEOGRAFICO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "010102"
     },
@@ -5077,8 +5345,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\d{2})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5144,8 +5415,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5187,8 +5461,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,5})",
+            "regex": "(0*?)(?:(\\d{2,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5271,8 +5548,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5314,16 +5594,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -5386,8 +5672,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5440,8 +5729,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5509,8 +5801,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5563,8 +5858,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5617,8 +5915,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5671,8 +5972,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5725,8 +6029,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5779,8 +6086,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,8})",
+            "regex": "(0*?)(?:(\\d{1,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5917,8 +6227,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,6})",
+            "regex": "(0*?)(?:(\\d{4,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5971,8 +6284,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5992,21 +6308,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "SV_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://sv-grupos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "SV_DISCAPACIDAD_LISTA",
@@ -6040,8 +6341,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6094,8 +6398,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6137,8 +6444,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6169,51 +6479,6 @@
         "requireMask": false
       },
       "input": "Reportado en el buró de crédito"
-    },
-    {
-      "name": "SV_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 100,
-        "maxValue": 250000
-      },
-      "input": "5400"
-    },
-    {
-      "name": "SV_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 365,
-        "maxValue": 6000
-      },
-      "input": "612"
-    },
-    {
-      "name": "SV_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000,
-        "maxValue": 500000
-      },
-      "input": "48000"
-    },
-    {
-      "name": "SV_VALOR_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 304,
-        "maxValue": 3000
-      },
-      "input": "425"
-    },
-    {
-      "name": "SV_REMESAS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 20,
-        "maxValue": 2000
-      },
-      "input": "250"
     },
     {
       "name": "SV_PROGRAMA_SOCIAL_LISTA",
@@ -6247,8 +6512,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6301,8 +6569,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6355,8 +6626,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6383,8 +6657,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6426,8 +6703,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6472,28 +6752,9 @@
     "sv-codigos-geograficos-generalizados.txt",
     "sv-colonias.txt",
     "sv-detectar-apellidos.txt",
-    "sv-detectar-aptitud-laboral.txt",
-    "sv-detectar-cobertura.txt",
-    "sv-detectar-codigos-banderas.txt",
-    "sv-detectar-discapacidades.txt",
-    "sv-detectar-distritos.txt",
-    "sv-detectar-escolaridad.txt",
-    "sv-detectar-estado-familiar.txt",
-    "sv-detectar-grupos-sanguineos.txt",
-    "sv-detectar-identidades-genero.txt",
-    "sv-detectar-ideologias-politicas.txt",
-    "sv-detectar-lenguas.txt",
-    "sv-detectar-medicamentos.txt",
-    "sv-detectar-nacionalidades.txt",
     "sv-detectar-nombres.txt",
-    "sv-detectar-orientaciones-sexuales.txt",
-    "sv-detectar-origen-etnico.txt",
-    "sv-detectar-partidos.txt",
-    "sv-detectar-programas-sociales.txt",
-    "sv-detectar-religiones.txt",
+    "sv-detectar-sexo-letra.txt",
     "sv-detectar-sexo.txt",
-    "sv-detectar-sindicatos.txt",
-    "sv-detectar-tenencia-vivienda.txt",
     "sv-diagnosticos.txt",
     "sv-direcciones.txt",
     "sv-discapacidades.txt",
@@ -6504,7 +6765,6 @@
     "sv-estado-familiar-codigos.txt",
     "sv-estado-familiar.txt",
     "sv-estados-credito.txt",
-    "sv-grupos-sanguineos.txt",
     "sv-identidades-genero.txt",
     "sv-ideologias-politicas.txt",
     "sv-lenguas.txt",

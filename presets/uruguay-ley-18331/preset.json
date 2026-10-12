@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "versionDate": "2026-09-30",
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Uruguay — Ley 18.331 de Protección de Datos Personales",
     "pt-BR": "Uruguai — Ley 18.331 de Protección de Datos Personales",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales uruguayos conforme a la Ley 18.331 y sus modificativas (Ley 19.670 de 2018, Ley 19.924 de 2020) y el Decreto 64/020: identificadores directos (cédula de identidad y RUT con dígito verificador válido, credencial cívica, nombres, razón social — el artículo 4 D) hace titular también a la persona jurídica —, contacto, dirección, cuentas, matrículas), cuasi-identificadores (fecha de nacimiento, localidad y código INE, barrio, código postal), los datos sensibles del artículo 4 E) — origen racial y étnico, preferencias políticas, convicciones religiosas o morales, afiliación sindical, salud y vida sexual —, los datos biométricos del artículo 4 Ñ), datos de salud, los datos comerciales y crediticios del artículo 22 y los datos de infracciones del artículo 18."
   },
   "profileSet": {
-    "name": "UY - Ley 18.331 - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 4 E y art. 4 Ñ), datos de salud, datos de la actividad comercial o crediticia (art. 22) e infracciones (art. 18), conforme a la Ley 18.331 de Protección de Datos Personales del Uruguay y el Decreto 64/020.",
+    "name": "UY - Ley 18.331 - v2",
+    "description": "Ley 18.331 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "UY_L1_CEDULA - Path",
@@ -64,6 +64,7 @@
       "UY_L1_CONTRATO - Path",
       "UY_L1_USUARIO - Path",
       "UY_L1_CREDENCIAL - Path",
+      "UY_L1_CREDENCIAL - Regex",
       "UY_L1_GEOLOCALIZACION - Path",
       "UY_L1_GEOLOCALIZACION - Regex",
       "UY_L1_TEXTO_LIBRE - Path",
@@ -80,63 +81,64 @@
       "UY_L2_SEXO - Path",
       "UY_L2_SEXO - List",
       "UY_L2_LOCALIDAD - Path",
-      "UY_L2_LOCALIDAD - List",
+      "UY_L2_LOCALIDAD - Values",
       "UY_L2_CODIGO_INE - Path",
       "UY_L2_CODIGO_INE - Regex",
       "UY_L2_BARRIO - Path",
       "UY_L2_CODIGO_POSTAL - Path",
       "UY_L2_CODIGO_POSTAL - Type",
       "UY_L2_ESTADO_CIVIL - Path",
-      "UY_L2_ESTADO_CIVIL - List",
+      "UY_L2_ESTADO_CIVIL - Values",
       "UY_L2_OCUPACION - Path",
       "UY_L2_EMPLEADOR - Path",
       "UY_L2_NIVEL_EDUCATIVO - Path",
-      "UY_L2_NIVEL_EDUCATIVO - List",
+      "UY_L2_NIVEL_EDUCATIVO - Values",
       "UY_L2_INSTITUCION_EDUCATIVA - Path",
       "UY_L2_PERSONAS_A_CARGO - Path",
       "UY_L2_PERSONAS_A_CARGO - Type",
       "UY_L3_ASCENDENCIA - Path",
-      "UY_L3_ASCENDENCIA - List",
+      "UY_L3_ASCENDENCIA - Values",
       "UY_L3_PUEBLO_ORIGINARIO - Path",
-      "UY_L3_PUEBLO_ORIGINARIO - List",
+      "UY_L3_PUEBLO_ORIGINARIO - Values",
       "UY_L3_NACIONALIDAD - Path",
       "UY_L3_NACIONALIDAD - List",
       "UY_L3_RELIGION - Path",
-      "UY_L3_RELIGION - List",
+      "UY_L3_RELIGION - Values",
       "UY_L3_CONVICCION_MORAL - Path",
       "UY_L3_PREFERENCIA_POLITICA - Path",
-      "UY_L3_PREFERENCIA_POLITICA - List",
+      "UY_L3_PREFERENCIA_POLITICA - Values",
       "UY_L3_AFILIACION_PARTIDARIA - Path",
-      "UY_L3_AFILIACION_PARTIDARIA - List",
+      "UY_L3_AFILIACION_PARTIDARIA - Values",
       "UY_L3_AFILIACION_SINDICAL - Path",
-      "UY_L3_AFILIACION_SINDICAL - List",
+      "UY_L3_AFILIACION_SINDICAL - Values",
       "UY_L3_BIOMETRICO - Path",
       "UY_L3_BIOMETRICO - Type",
       "UY_L3_GENETICO - Path",
+      "UY_L3_GENETICO - Regex",
       "UY_L3_ORIENTACION_SEXUAL - Path",
-      "UY_L3_ORIENTACION_SEXUAL - List",
+      "UY_L3_ORIENTACION_SEXUAL - Values",
       "UY_L3_VIDA_SEXUAL - Path",
       "UY_L3_IDENTIDAD_GENERO - Path",
-      "UY_L3_IDENTIDAD_GENERO - List",
+      "UY_L3_IDENTIDAD_GENERO - Values",
       "UY_L3_VICTIMA - Path",
       "UY_SALUD_IDENTIFICADOR - Path",
       "UY_SALUD_COBERTURA - Path",
-      "UY_SALUD_COBERTURA - List",
+      "UY_SALUD_COBERTURA - Values",
       "UY_SALUD_DIAGNOSTICO - Path",
       "UY_SALUD_DIAGNOSTICO - Regex",
       "UY_SALUD_PROCEDIMIENTO - Path",
       "UY_SALUD_MEDICAMENTO - Path",
-      "UY_SALUD_MEDICAMENTO - List",
+      "UY_SALUD_MEDICAMENTO - Values",
       "UY_SALUD_TEXTO_CLINICO - Path",
       "UY_SALUD_TEXTO_CLINICO - Type",
       "UY_SALUD_RESULTADO_EXAMEN - Path",
       "UY_SALUD_VIH - Path",
       "UY_SALUD_GRUPO_SANGUINEO - Path",
-      "UY_SALUD_GRUPO_SANGUINEO - List",
+      "UY_SALUD_GRUPO_SANGUINEO - Values",
       "UY_SALUD_DISCAPACIDAD - Path",
-      "UY_SALUD_DISCAPACIDAD - List",
+      "UY_SALUD_DISCAPACIDAD - Values",
       "UY_SALUD_OCUPACIONAL - Path",
-      "UY_SALUD_OCUPACIONAL - List",
+      "UY_SALUD_OCUPACIONAL - Values",
       "UY_SALUD_REPRODUCTIVA - Path",
       "UY_SALUD_MENTAL - Path",
       "UY_FIN_HISTORIAL_CREDITICIO - Path",
@@ -149,11 +151,11 @@
       "UY_FIN_PENSION - Path",
       "UY_FIN_PENSION - Type",
       "UY_FIN_PROGRAMA_SOCIAL - Path",
-      "UY_FIN_PROGRAMA_SOCIAL - List",
+      "UY_FIN_PROGRAMA_SOCIAL - Values",
       "UY_FIN_NIVEL_SOCIOECONOMICO - Path",
-      "UY_FIN_NIVEL_SOCIOECONOMICO - List",
+      "UY_FIN_NIVEL_SOCIOECONOMICO - Values",
       "UY_FIN_VIVIENDA - Path",
-      "UY_FIN_VIVIENDA - List",
+      "UY_FIN_VIVIENDA - Values",
       "UY_PENAL_ANTECEDENTES - Path",
       "UY_PENAL_EXPEDIENTE - Path",
       "UY_PENAL_EXPEDIENTE - Regex"
@@ -161,7 +163,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la Ley 18.331: cédula de identidad, RUT, documentos de extranjeros, pasaporte, nombres, razón social, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial de la Ley 18.331",
       "domains": [
         "UY_L1_CEDULA",
         "UY_L1_RUT",
@@ -184,7 +186,7 @@
       "name": "UY_L1_CEDULA - Path",
       "framework": "PATH",
       "domain": "UY_L1_CEDULA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -236,28 +238,28 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d\\.\\d{3}\\.\\d{3}-\\d",
+            "regex": "0*(?:\\d\\.\\d{3}\\.\\d{3}-\\d)",
             "matchStrength": 0.95,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,3}\\.?\\d{3}\\.?\\d{3}-\\d",
+            "regex": "0*(?:\\d{1,3}\\.?\\d{3}\\.?\\d{3}-\\d)",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{8}",
+            "regex": "0*(?:\\d{8})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -267,7 +269,7 @@
       "name": "UY_L1_RUT - Path",
       "framework": "PATH",
       "domain": "UY_L1_RUT",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -290,20 +292,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{12}",
+            "regex": "0*(?:\\d{12})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{2}[\\s\\-.]?\\d{6}[\\s\\-.]?\\d{3}[\\s\\-.]?\\d",
+            "regex": "0*(?:\\d{2}[\\s\\-.]?\\d{6}[\\s\\-.]?\\d{3}[\\s\\-.]?\\d)",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -313,7 +315,7 @@
       "name": "UY_L1_DOCUMENTO_EXTRANJERO - Path",
       "framework": "PATH",
       "domain": "UY_L1_DOCUMENTO_EXTRANJERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -332,7 +334,7 @@
       "name": "UY_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "UY_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -360,7 +362,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -370,7 +372,7 @@
       "name": "UY_L1_CREDENCIAL_CIVICA - Path",
       "framework": "PATH",
       "domain": "UY_L1_CREDENCIAL_CIVICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -398,7 +400,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -408,7 +410,7 @@
       "name": "UY_L1_PARTIDA - Path",
       "framework": "PATH",
       "domain": "UY_L1_PARTIDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -427,7 +429,7 @@
       "name": "UY_L1_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "UY_L1_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -446,7 +448,7 @@
       "name": "UY_L1_CODIGO_ESTUDIANTE - Path",
       "framework": "PATH",
       "domain": "UY_L1_CODIGO_ESTUDIANTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -465,7 +467,7 @@
       "name": "UY_L1_MATRICULA_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "UY_L1_MATRICULA_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -484,7 +486,7 @@
       "name": "UY_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "UY_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -528,7 +530,7 @@
       "name": "UY_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "UY_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -564,7 +566,7 @@
       "name": "UY_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "UY_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -620,7 +622,7 @@
       "name": "UY_L1_RAZON_SOCIAL - Path",
       "framework": "PATH",
       "domain": "UY_L1_RAZON_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -639,7 +641,7 @@
       "name": "UY_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "UY_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -679,12 +681,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -694,7 +696,7 @@
       "name": "UY_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "UY_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -717,12 +719,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?598[\\s\\-]?)?0?9\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{3}",
+            "regex": "0*(?:(\\+?598[\\s\\-]?)?0?9\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{3})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "\\(?0?[24]\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}",
@@ -730,7 +732,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -740,7 +742,7 @@
       "name": "UY_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "UY_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -785,7 +787,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(apto|apartamento|esq|esquina|padr[oó]n|bis|piso|puerta)\\.?\\s*[a-z0-9]{1,6}.*",
@@ -793,7 +795,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)ruta\\s*\\d{1,3}\\s*(km|kil[oó]metro)\\.?\\s*\\d{1,3}.*",
@@ -801,7 +803,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -811,7 +813,7 @@
       "name": "UY_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "UY_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -830,7 +832,7 @@
       "name": "UY_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "UY_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -849,7 +851,7 @@
       "name": "UY_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "UY_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -872,12 +874,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -887,7 +889,7 @@
       "name": "UY_L1_BILLETERA - Path",
       "framework": "PATH",
       "domain": "UY_L1_BILLETERA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -915,7 +917,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -925,7 +927,7 @@
       "name": "UY_L1_IP - Path",
       "framework": "PATH",
       "domain": "UY_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -948,20 +950,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -971,7 +973,7 @@
       "name": "UY_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "UY_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -994,20 +996,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1017,7 +1019,7 @@
       "name": "UY_L1_COOKIE - Path",
       "framework": "PATH",
       "domain": "UY_L1_COOKIE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1036,7 +1038,7 @@
       "name": "UY_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "UY_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1064,7 +1066,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{3}[\\s\\-]?\\d{3}",
@@ -1072,7 +1074,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1082,7 +1084,7 @@
       "name": "UY_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "UY_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1110,7 +1112,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1120,7 +1122,7 @@
       "name": "UY_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "UY_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1139,7 +1141,7 @@
       "name": "UY_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "UY_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1158,7 +1160,7 @@
       "name": "UY_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "UY_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1177,7 +1179,7 @@
       "name": "UY_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "UY_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1193,10 +1195,61 @@
       }
     },
     {
+      "name": "UY_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "UY_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "UY_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "UY_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1232,7 +1285,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-5[3-8]\\.\\d{4,}",
@@ -1240,7 +1293,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-3[0-5]\\.\\d{4,}",
@@ -1248,7 +1301,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1258,7 +1311,7 @@
       "name": "UY_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "UY_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1298,12 +1351,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d\\.\\d{3}\\.\\d{3}-\\d",
+            "regex": "0*(?:\\d\\.\\d{3}\\.\\d{3}-\\d)",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1311,15 +1364,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "0?9\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{3}",
+            "regex": "0*(?:0?9\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1329,7 +1382,7 @@
       "name": "UY_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "UY_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1372,7 +1425,7 @@
       "name": "UY_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "UY_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1412,7 +1465,7 @@
       "name": "UY_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "UY_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1452,7 +1505,7 @@
       "name": "UY_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "UY_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1495,7 +1548,7 @@
       "name": "UY_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "UY_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1519,10 +1572,14 @@
         "valueLists": [
           {
             "file": "preset-file://uy-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://uy-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1531,7 +1588,7 @@
       "name": "UY_L2_LOCALIDAD - Path",
       "framework": "PATH",
       "domain": "UY_L2_LOCALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1547,27 +1604,30 @@
       }
     },
     {
-      "name": "UY_L2_LOCALIDAD - List",
-      "framework": "LIST",
+      "name": "UY_L2_LOCALIDAD - Values",
+      "framework": "REGEX",
       "domain": "UY_L2_LOCALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-localidades.txt",
-            "matchStrength": 0.8
+            "note": "586 — Baltasar Brum · Bella Unión · Bernabé Rivera · Cainsa · Calnu · Colonia Palma · …",
+            "regex": "(?iu)(?:(?:1(?:8 de (?:julio(?: \\(pueblo nuevo\\))?|mayo)|9 de (?:abril|junio))|25 de (?:agosto|mayo)|a(?:c(?:egua|har)|g(?:raciada|uas (?:buenas|corrientes|dulces))|igu(?:a|á)|l(?:bisu|ejandro gallinal|gorta)|n(?:dresito|sina)|r(?:a(?:chania|m(?:endia|inda)|ujo)|bolito|en(?:as de jos(?:e ignacio|é ignacio)|itas blancas)|gentino|r(?:ivillaga|o(?:cera (?:bonomo|el tigre|l(?:a(?: (?:catumbera|querencia)|s palmas)|os (?:ceibos|teros))|mini|procipa|rinc(?:on|ón)|san(?: fernando|ta fe)|zapata)|yo blanco|zal treinta y tres))|tilleros)|tl(?:antida|ántida))|b(?:a(?:l(?:neario (?:buenos aires|ipora|sol(?:is|ís))|tasar brum)|nado de medina|r(?:ker|r(?:a de(?: (?:carrasco|p(?:edrera|ortezuelo)|valizas)|l chuy)|io (?:anglo|copola|el molino|f(?:ern(?:andez|ández)|rigorifico)|hipico|l(?:a c(?:inacina|oronilla - ancap)|opez benitez|ópez benítez)|pereira|remanso|torres)|os blancos))|ygorria|ñado de medina)|e(?:isso|ll(?:a(?: (?:uni(?:on|ón)|vista)|co)|o horizonte)|r(?:nab(?:e rivera|é rivera)|rondo))|ia(?:rritz|ssini)|lan(?:ca arena|es viale|quillo)|o(?:ca del (?:cufre|rosario)|l(?:ivar|ívar))|risas del plata)|c(?:a(?:bo polonio|insa|lnu|mp(?:a(?:na|ña)|o (?:chico|de todos|militar))|n(?:ada (?:del pueblo|grande|nieto)|teras de marelli)|p(?:acho|illa de(?: cella|l sauce))|r(?:d(?:al|ona)|los reyles|mel(?:o(?: golf)?)?|r(?:asco del sauce|eta quemada))|s(?:a(?:blanca|hona|rone)|erio (?:el cerro|la(?: fundaci(?:on|ón)|s ca(?:nas|ñas)))|t(?:ellanos|illos)|up(?:a|á))|yetano|ñada (?:del pueblo|grande|nieto))|e(?:bollat(?:i|í)|leste|nt(?:enario|urion)|r(?:amicas (?:del sur|salinas)|r(?:illada|o(?: (?:c(?:armelo|ha(?:peu|to)|olorado)|de (?:las (?:armas|cuentas)|pastoreo)|pelado)|s (?:azules|de (?:la calera|san juan|vera))))))|h(?:a(?:cras de(?: (?:bel(?:en|én)|dolores|medell(?:in sur lac|ín sur lac)|paysand(?:u|ú))|l golf)|kras del este|m(?:berlain|izo)|picuy)|i(?:co torino|huahua)|uy)|i(?:ty golf|udad del (?:carmen|plata))|o(?:l(?:inas de (?:carrasco|solymar)|o(?:lo tinosa|n(?:ia (?:18 de julio|co(?:ncordia|smopolita)|del(?: sacramento|ta)|itapebi|nicolich|palma|valdense))?)|ón)|n(?:chillas|st(?:ancia|ituci(?:on|ón)))|ronado|sta(?: (?:azul|de pedernal|y guillamon)|s de pereira))|ruz de los caminos|u(?:ar(?:eim|o)|chilla (?:alta|de(?: (?:buricayupi|fuego|guaviyu|peralta|ram(?:irez|írez)|sierra)|l (?:omb(?:u|ú)|perdido))|verde)|fre|mbres de carrasco|rtina))|d(?:iego lamas|r\\. francisco soca)|e(?:cilda paullier|d(?:en rock|én rock)|ga(?:na|ña)|jido de treinta y tres|l (?:b(?:ellaco|osque)|c(?:aracol|horro|olorado)|e(?:d(?:en|én)|nsue(?:no|ño)|spinillo|ucaliptus)|faro|galeon|monte|omb(?:u|ú)|pinar|qui(?:jote|nton)|semillero|t(?:ala|esoro))|mpalme olmos|s(?:peranza|ta(?:ci(?:on (?:at(?:aques|lantida)|capilla del sauce|la(?: floresta|s flores)|migues|p(?:edrera|iedras de afilar|orvenir)|rincon|solis|tapia)|ón (?:at(?:aques|lántida)|capilla del sauce|la(?: floresta|s flores)|migues|p(?:edrera|iedras de afilar|orvenir)|rincón|solís|tapia))|n(?:que de pando|zuela))))|f(?:a(?:ro de jos(?:e ignacio|é ignacio)|sano las piedras - puerto quetzal)|eliciano|lorencio s(?:anchez|ánchez)|ort(?:in de santa rosa|ín de santa rosa)|ra(?:cc\\. (?:cno\\. andaluz y r\\.84|progreso|sobre ruta 74)|ile muerto|nquia|y (?:bentos|marcos)))|g(?:a(?:etan|llinal|r(?:ibaldi|z(?:on|ón)))|e(?:rona - km 110|tulio vargas)|r(?:al\\. enrique mart(?:inez|ínez)|e(?:cco|gorio aznarez))|ua(?:viyu de arapey|zu - vira))|h(?:aras del lago|ip(?:odromo|ódromo)|uerta de los horneros)|i(?:llescas|n(?:dependencia|stituto adventista)|s(?:idoro nobl(?:ia|ía)|la patrulla \\(mar(?:ia isabel\\)|ía isabel\\))|mael cortinas)|tuzaing(?:o|ó))|j(?:a(?:rdines de pando|ureguiberry|vier de viana)|o(?:aqu(?:in suarez|ín suárez)|s(?:e (?:batlle y ordonez|enrique rodo|pedro varela)|é (?:batlle y ordóñez|enrique rodo|pedro varela)))|uan(?: (?:carlos caseros|j(?:ackson|os(?:e castro|é castro))|lacaze|soler)|ic(?:o|ó)))|kiyu-ordeig|l(?:a(?: (?:a(?:guada y costa azul|sunci(?:on|ón))|b(?:arra|o(?:lsa|yada))|c(?:a(?:ntera|puera|silla)|o(?:ncordia|ronilla)|ruz)|esmeralda|floresta|h(?:ilera|orqueta)|juan(?:a|ita)|l(?:oma|ucha)|m(?:acana|icaela|onta(?:nesa|ñesa))|p(?:a(?:loma|z)|edrera)|ribiera|t(?:ahona|entacion|una))|g(?:o(?: merin|mar|s del norte)|una (?:blanca|de los (?:cisnes - lomas del sauce|patos)|estates))|puente|res|s(?: (?:brujas|ca(?:nas|ñas)|flores|garzas|higueritas|p(?:almas|iedras)|toscas(?: de caraguat(?:a|á))?)|cano)|urel(?:es)?)|ibertad|luveras|o(?:mas de (?:carrasco|la pedrera|solymar)|renzo geyres|s (?:arrayanes|c(?:errillos|orchos)|pinos|t(?:alas|i(?:los|tanes)))))|m(?:a(?:l abrigo|n(?:antiales|grullo)|r(?:co de los reyes|i(?:a albina|ndia|scala)|ía albina)|soller)|e(?:lo|n(?:afra|d(?:izabal \\(el oro\\)|oza(?: chico)?))|rinos)|i(?:g(?:liaro|ue(?:lete|s))|nas(?: de corrales)?|rador de la tahona)|o(?:irones|n(?:es quintela|te(?:coral|s(?: del plata)?|video chico))|rato))|n(?:an(?:do|gapire)|eptunia|ico p(?:erez|érez)|uev(?:a (?:carrara|helvecia|palmira)|o (?:berl(?:in|ín)|paysand(?:u|ú))))|o(?:cean(?: park|ia del polonio)|lmos|mb(?:ues de (?:lavalle|oribe)|úes de (?:lavalle|oribe))|rgoroso|simani y llerena)|p(?:a(?:l(?:m(?:ar(?:es de la coronilla)?|itas)|o(?: solo|mas))|n(?: de azucar|do)|r(?:a(?:da cabrera|je minuano|lle)|que (?:carrasco|del plata|jos(?:e luis|é luis)|medina))|so (?:a(?:ntolin|taques)|bonilla|c(?:a(?:mpamento|rrasco)|ementerio)|de(?: (?:l(?:a(?: cadena|s piedras de arerungua)|os (?:mellizos|novillos|toros))|pache)|l (?:cerro|parque del dayman))|espinosa|far(?:ias|ías)|hospital|palomeque))|e(?:pe n(?:unez|úñez)|rseverano)|i(?:cada varela|edra(?: (?:del toro|sol(?:a|á))|s (?:coloradas|de afilar))|lar de los horneros|n(?:amar - pinepark|era|tad(?:ito|o))|r(?:araja|i(?:apolis|ápolis))|ñera)|la(?:cido rosas|ya (?:azul|britopolis|de los treinta y tres \\(casa blanca\\)|fomento|grande|hermosa|parant|verde))|o(?:blado (?:alonzo|uruguay)|lanco (?:del y(?:i|í)|norte)|r(?:t\\. de hierro y campodonico|venir))|rogreso|ta\\. rubia y sta\\. isabel de la pedrera|u(?:e(?:blo (?:alonzo|de(?: (?:a(?:lvarez|rriba)|álvarez)|l barro)|fe(?:deraci(?:on|ón)|rrer)|gil|m(?:adera/los ceibos|io)|nuevo|sol(?:is|ís))|nte valizas|rto (?:de los botes|ingles))|imayen|nta(?: (?:ballena|colorada|de(?: carretera|l (?:diablo|este))|negra)|s de(?: (?:arroyo negro|cinco sauces|gregorio|maciel|val(?:dez|ent(?:in|ín)))|l parao))))|qu(?:e(?:bracho|guayar)|inta(?: los horneros|s del bosque))|r(?:a(?:dial(?: hern(?:andez|ández))?|fael peraza|igon|m(?:on trigo|ón trigo))|eboledo|i(?:achuelo|nc(?:on de(?: (?:la (?:aldea|laguna)|p(?:acheco|ereira)|valentin)|l (?:bonete|pino))|ón de(?: (?:la (?:aldea|laguna)|p(?:acheco|ereira)|valentín)|l (?:bonete|pino)))|o branco|sso)|ossell y rius|u(?:sso|ta 37 y 9 - sierras del tirol)|ío branco)|s(?:a(?:cachispas|linas|n(?: (?:antonio|bautista|carlos|f(?:elix|rancisco de las sierras|élix)|g(?:abriel|regorio(?: de polanco)?)|j(?:a(?:cinto|vier)|o(?:rge|s(?:e de (?:carrasco|mayo)|é de (?:carrasco|mayo))))|luis(?: al medio)?|pedro|ram(?:on|ón)|vicente)|ta (?:ana(?: del mar)?|c(?:atalina|lara de olimar)|luc(?:ia(?: del este)?|ía(?: del este)?)|m(?:onica|ónica)|r(?:egina|osa)))|rand(?:i (?:de(?: (?:arapey|cuadra|navarro)|l yi)|grande)|í (?:de(?: (?:arapey|cuadra|navarro)|l yí)|grande))|uce(?: de (?:batovi|portezuelo)|do)?)|e(?:is hermanos|queira)|hangril(?:a|á)|o(?:f(?:ia santos|ía santos)|l(?:is de mataojo|ymar|ís de mataojo)|to goro))|t(?:a(?:jamares de la pedrera|la|mbores|rariras)|ermas de(?: (?:almir(?:on|ón)|guaviyu)|l (?:arapey|dayman))|o(?:m(?:as gomensoro|ás gomensoro)|pador|toral del sauce)|r(?:anqueras|es (?:islas|quintas)|opez(?:on|ón))|upambae)|v(?:alentines|i(?:chadero|ejo molino san bernardo|lla (?:a(?:eroparque|r(?:ejo|gentina))|crespo y san andr(?:es|és)|del rosario|el tato|felicidad|general borges|hadita|juana|los nolitos|mar(?:ia(?: \\(tiatucura\\))?|ía(?: \\(tiatucura\\))?)|p(?:a(?:ssano|z s\\.a\\.)|orvenir)|s(?:a(?:n (?:cono|felipe|jos(?:e|é))|ra)|errana|oriano))))|young|za(?:garzazu|pican)|ñangapire))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L2_CODIGO_INE - Path",
       "framework": "PATH",
       "domain": "UY_L2_CODIGO_INE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1590,12 +1650,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(0[1-9]|1[0-9])\\d{3}",
+            "regex": "0*(?:(0[1-9]|1[0-9])\\d{3})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1605,7 +1665,7 @@
       "name": "UY_L2_BARRIO - Path",
       "framework": "PATH",
       "domain": "UY_L2_BARRIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1624,7 +1684,7 @@
       "name": "UY_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "UY_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1665,7 +1725,7 @@
       "name": "UY_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "UY_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1681,27 +1741,30 @@
       }
     },
     {
-      "name": "UY_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "UY_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "UY_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "20 — Soltero a · Casado a · Unión libre o concubinato · Separado a · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:c(?:asad(?:a|o(?:/a)?)|oncubin(?:ato|o))|divorciad(?:a|o(?:/a)?)|s(?:eparad(?:a|o(?:/a)?)|olter(?:a|o(?:/a)?))|uni(?:on libre(?: o concubinato)?|ón libre(?: o concubinato)?)|viud(?:a|o(?:/a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "UY_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1728,7 +1791,7 @@
       "name": "UY_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "UY_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1747,7 +1810,7 @@
       "name": "UY_L2_NIVEL_EDUCATIVO - Path",
       "framework": "PATH",
       "domain": "UY_L2_NIVEL_EDUCATIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1763,27 +1826,30 @@
       }
     },
     {
-      "name": "UY_L2_NIVEL_EDUCATIVO - List",
-      "framework": "LIST",
+      "name": "UY_L2_NIVEL_EDUCATIVO - Values",
+      "framework": "REGEX",
       "domain": "UY_L2_NIVEL_EDUCATIVO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-nivel-educativo.txt",
-            "matchStrength": 0.6
+            "note": "21 — Sin instrucción · Preescolar · Primaria · Ciclo básico · Bachillerato · Enseñanza técnica UTU · …",
+            "regex": "(?iu)(?:(?:bachillerato|ciclo b(?:asico|ásico)|doctorado|ense(?:nanza tecnica \\(utu\\)|ñanza técnica \\(utu\\))|ma(?:estr(?:ia|ía)|gisterio(?: o profesorado)?)|p(?:osgrado|r(?:eescolar|imaria))|sin instrucci(?:on|ón)|terciario(?: no universitario)?|u(?:niversidad|tu)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L2_INSTITUCION_EDUCATIVA - Path",
       "framework": "PATH",
       "domain": "UY_L2_INSTITUCION_EDUCATIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1802,7 +1868,7 @@
       "name": "UY_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "UY_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1842,7 +1908,7 @@
       "name": "UY_L3_ASCENDENCIA - Path",
       "framework": "PATH",
       "domain": "UY_L3_ASCENDENCIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1858,31 +1924,48 @@
       }
     },
     {
-      "name": "UY_L3_ASCENDENCIA - List",
-      "framework": "LIST",
+      "name": "UY_L3_ASCENDENCIA - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_ASCENDENCIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-ascendencia.txt",
-            "matchStrength": 0.9
+            "note": "18 — Afro o negra · Asiática o amarilla · Blanca · Indígena · Otra · Ninguna · …",
+            "regex": "(?iu)(?:(?:a(?:fro(?: o negra|descendiente)?|marilla|si(?:atica(?: o amarilla)?|ática(?: o amarilla)?))|blanc(?:a|o)|charr(?:ua|úa)|ind(?:igena|ígena)|n(?:egr(?:a|o)|inguna)|otra))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://uy-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_PUEBLO_ORIGINARIO - Path",
       "framework": "PATH",
       "domain": "UY_L3_PUEBLO_ORIGINARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1898,27 +1981,30 @@
       }
     },
     {
-      "name": "UY_L3_PUEBLO_ORIGINARIO - List",
-      "framework": "LIST",
+      "name": "UY_L3_PUEBLO_ORIGINARIO - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_PUEBLO_ORIGINARIO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-pueblos.txt",
-            "matchStrength": 0.85
+            "note": "12 — Charrúa · Guaraní · Chaná · Minuán · Otro pueblo originario · No pertenece a ningún pueblo · …",
+            "regex": "(?iu)(?:(?:cha(?:n(?:a|á)|rr(?:ua|úa))|guaran(?:i|í)|minu(?:an|án)|no pertenece a ning(?:un pueblo|ún pueblo)|o(?:riginario|tro pueblo originario)))",
+            "matchStrength": 0.85,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "UY_L3_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1945,7 +2031,7 @@
             "matchStrength": 0.7
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.4,
         "tokenizationDelimiter": " "
       }
@@ -1954,7 +2040,7 @@
       "name": "UY_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "UY_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -1970,27 +2056,30 @@
       }
     },
     {
-      "name": "UY_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "UY_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "23 — Católica · Cristiana no católica · Evangélica · Umbandista o afroumbandista · Testigo de Jehová · Judía · …",
+            "regex": "(?iu)(?:(?:a(?:gn(?:ostico|óstico)|teo(?: o agn(?:ostico|óstico))?)|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|r(?:eyente(?: sin religi(?:on|ón))?|istian(?:a(?: no cat(?:olica|ólica))?|o)))|evang(?:elic(?:a|o)|élic(?:a|o))|jud(?:i(?:a|o)|í(?:a|o))|ningun(?:a|o)|otra|testigo de jehov(?:a|á)|umbandista(?: o afroumbandista)?))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_CONVICCION_MORAL - Path",
       "framework": "PATH",
       "domain": "UY_L3_CONVICCION_MORAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2009,7 +2098,7 @@
       "name": "UY_L3_PREFERENCIA_POLITICA - Path",
       "framework": "PATH",
       "domain": "UY_L3_PREFERENCIA_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2025,27 +2114,30 @@
       }
     },
     {
-      "name": "UY_L3_PREFERENCIA_POLITICA - List",
-      "framework": "LIST",
+      "name": "UY_L3_PREFERENCIA_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_PREFERENCIA_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-preferencias-politicas.txt",
-            "matchStrength": 0.7
+            "note": "16 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|ninguno|pr(?:efiere no responder|ogresista)|voto en blanco))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_AFILIACION_PARTIDARIA - Path",
       "framework": "PATH",
       "domain": "UY_L3_AFILIACION_PARTIDARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2061,27 +2153,30 @@
       }
     },
     {
-      "name": "UY_L3_AFILIACION_PARTIDARIA - List",
-      "framework": "LIST",
+      "name": "UY_L3_AFILIACION_PARTIDARIA - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_AFILIACION_PARTIDARIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "15 — Frente Amplio · Partido Nacional · Partido Colorado · Cabildo Abierto · Partido Independiente · Identidad Soberana · …",
+            "regex": "(?iu)(?:(?:asamblea popular|ca(?:bildo abierto)?|f(?:a|rente amplio)|identidad soberana|p(?:artido (?:co(?:lorado|nstitucional ambientalista)|ecologista radical intransigente|independiente|nacional)|c|i|n)|sin afiliaci(?:on|ón)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "UY_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2097,27 +2192,30 @@
       }
     },
     {
-      "name": "UY_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "UY_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "15 — PIT-CNT · PIT CNT · FUECYS · SUNCA · AEBU · FFOSE · …",
+            "regex": "(?iu)(?:(?:a(?:deom|ebu|filiado)|cofe|f(?:enapes|fose|u(?:ecys|m-tep))|gremio|pit(?: cnt|-cnt)|s(?:indicalizado|u(?:nca|tel))|untmra))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "UY_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "UY_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2152,7 +2250,7 @@
       "name": "UY_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "UY_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2168,10 +2266,29 @@
       }
     },
     {
+      "name": "UY_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "UY_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "UY_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "UY_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2187,27 +2304,30 @@
       }
     },
     {
-      "name": "UY_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "UY_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "13 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbti(?:q\\+)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "UY_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2226,7 +2346,7 @@
       "name": "UY_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "UY_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2242,27 +2362,30 @@
       }
     },
     {
-      "name": "UY_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "UY_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "UY_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "15 — Mujer cisgénero · Hombre cisgénero · Mujer trans · Hombre trans · Persona no binaria · Otra · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|hombre(?: (?:cisg(?:enero|énero)|trans))?|mujer(?: (?:cisg(?:enero|énero)|trans))?|no binari(?:a|o)|otra|p(?:ersona no binaria|refiere no responder)|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_L3_VICTIMA - Path",
       "framework": "PATH",
       "domain": "UY_L3_VICTIMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2281,7 +2404,7 @@
       "name": "UY_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2308,7 +2431,7 @@
       "name": "UY_SALUD_COBERTURA - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_COBERTURA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2324,27 +2447,30 @@
       }
     },
     {
-      "name": "UY_SALUD_COBERTURA - List",
-      "framework": "LIST",
+      "name": "UY_SALUD_COBERTURA - Values",
+      "framework": "REGEX",
       "domain": "UY_SALUD_COBERTURA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-cobertura.txt",
-            "matchStrength": 0.8
+            "note": "15 — ASSE · Mutualista IAMC · Seguro privado integral · Sanidad Militar · Sanidad Policial · Hospital de Clínicas · …",
+            "regex": "(?iu)(?:(?:asse|fonasa|hospital de cl(?:inicas|ínicas)|iamc|mutualista(?: \\(iamc\\))?|p(?:olicl(?:inica municipal|ínica municipal)|rivado)|s(?:anidad(?: (?:militar|policial))?|eguro privado integral|in cobertura)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2372,7 +2498,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2382,7 +2508,7 @@
       "name": "UY_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2401,7 +2527,7 @@
       "name": "UY_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2417,27 +2543,30 @@
       }
     },
     {
-      "name": "UY_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "UY_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "UY_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "46 — Paracetamol · Ibuprofeno · Diclofenac · Metformina · Glibenclamida · Losartán · …",
+            "regex": "(?iu)(?:(?:a(?:cido (?:acetilsalicilico|folico|valproico)|lprazolam|m(?:lodipina|oxicilina)|nticonceptivo|torvastatina|zitromicina)|c(?:efradina|lonazepam|omplejo b)|d(?:iclofenac|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|o(?:lanzapina|meprazol)|p(?:aracetamol|rednisona)|quetiapina|risperidona|s(?:albutamol|ertralina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "UY_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2473,7 +2602,7 @@
       "name": "UY_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2500,7 +2629,7 @@
       "name": "UY_SALUD_VIH - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_VIH",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2519,7 +2648,7 @@
       "name": "UY_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2535,27 +2664,30 @@
       }
     },
     {
-      "name": "UY_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "UY_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "UY_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2571,27 +2703,30 @@
       }
     },
     {
-      "name": "UY_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "UY_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "UY_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "20 — Física o motriz · Auditiva · Visual · Intelectual · Psíquica o mental · Múltiple · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|ceguera|f(?:isica(?: o motriz)?|ísica(?: o motriz)?)|intelectual|m(?:ental|otriz|ultiple|últiple)|n(?:inguna|o aplica)|ps(?:iquica(?: o mental)?|íquica(?: o mental)?)|sordera|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "UY_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2607,27 +2742,30 @@
       }
     },
     {
-      "name": "UY_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "UY_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "UY_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con restricciones · pendiente · apto con recomendaciones",
+            "regex": "(?iu)(?:(?:apto(?: con re(?:comendaciones|stricciones))?|no apto|pendiente))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "UY_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2646,7 +2784,7 @@
       "name": "UY_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "UY_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2665,7 +2803,7 @@
       "name": "UY_FIN_HISTORIAL_CREDITICIO - Path",
       "framework": "PATH",
       "domain": "UY_FIN_HISTORIAL_CREDITICIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2684,7 +2822,7 @@
       "name": "UY_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "UY_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2719,7 +2857,7 @@
       "name": "UY_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "UY_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2754,7 +2892,7 @@
       "name": "UY_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "UY_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2789,7 +2927,7 @@
       "name": "UY_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "UY_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2824,7 +2962,7 @@
       "name": "UY_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "UY_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2840,31 +2978,48 @@
       }
     },
     {
-      "name": "UY_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "UY_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "UY_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "15 — Tarjeta Uruguay Social · Asignaciones Familiares Plan de Equidad · Asistencia a la Vejez · Uruguay Trabaja · Jóvenes en Red · Canasta de servicios · …",
+            "regex": "(?iu)(?:(?:a(?:fam-pe|si(?:gnaciones familiares plan de equidad|stencia a la vejez))|canasta de servicios|j(?:ovenes en red|óvenes en red)|ninguno|plan de equidad|sistema nacional de cuidados|t(?:arjeta uruguay social|us)|uruguay trabaja))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://uy-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_FIN_NIVEL_SOCIOECONOMICO - Path",
       "framework": "PATH",
       "domain": "UY_FIN_NIVEL_SOCIOECONOMICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2880,27 +3035,30 @@
       }
     },
     {
-      "name": "UY_FIN_NIVEL_SOCIOECONOMICO - List",
-      "framework": "LIST",
+      "name": "UY_FIN_NIVEL_SOCIOECONOMICO - Values",
+      "framework": "REGEX",
       "domain": "UY_FIN_NIVEL_SOCIOECONOMICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-nivel-socioeconomico.txt",
-            "matchStrength": 0.6
+            "note": "18 — Quintil 1 · Quintil 2 · Quintil 3 · Quintil 4 · Quintil 5 · Bajo la línea de pobreza · …",
+            "regex": "(?iu)(?:(?:a|b(?:ajo la l(?:inea(?: de pobreza)?|ínea(?: de pobreza)?))?|c|d|e|indigente|no pobre|pobre|quintil(?: (?:1|2|3|4|5))?|s(?:in clasificaci(?:on|ón)|obre la l(?:inea de pobreza|ínea de pobreza))))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "UY_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "UY_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2916,27 +3074,30 @@
       }
     },
     {
-      "name": "UY_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "UY_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "UY_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://uy-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "14 — Propietario de la vivienda y el terreno · Propietario de la vivienda y no del terreno · Inquilino o arrendatario · Ocupante en relación de dependencia · Ocupante gratuito · Ocupante sin permiso · …",
+            "regex": "(?iu)(?:(?:a(?:lquilada|rrendatario)|gratuito|inquilino(?: o arrendatario)?|ocupante(?: (?:en relaci(?:on de dependencia|ón de dependencia)|gratuito|sin permiso))?|propi(?:a|etario(?: de la vivienda y (?:el terreno|no del terreno))?)|sin permiso))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "UY_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "UY_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2963,7 +3124,7 @@
       "name": "UY_PENAL_EXPEDIENTE - Path",
       "framework": "PATH",
       "domain": "UY_PENAL_EXPEDIENTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas uruguayos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas uruguayos.",
       "config": {
         "paths": [
           {
@@ -2994,20 +3155,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,4}-\\d{1,6}/\\d{4}",
+            "regex": "0*(?:\\d{1,4}-\\d{1,6}/\\d{4})",
             "matchStrength": 0.85,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,6}-[A-Z]{2,10}-\\d{4}",
+            "regex": "0*(?:\\d{1,6}-[A-Z]{2,10}-\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3021,7 +3182,7 @@
     },
     {
       "name": "UY_L1_RUT",
-      "algorithm": "UY_RUT"
+      "algorithm": "UY_RUT_COLUMNA"
     },
     {
       "name": "UY_L1_DOCUMENTO_EXTRANJERO",
@@ -3289,7 +3450,7 @@
     },
     {
       "name": "UY_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "UY_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "UY_SALUD_DISCAPACIDAD",
@@ -3313,19 +3474,19 @@
     },
     {
       "name": "UY_FIN_DEUDA",
-      "algorithm": "UY_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "UY_FIN_INGRESOS",
-      "algorithm": "UY_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "UY_FIN_PATRIMONIO",
-      "algorithm": "UY_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "UY_FIN_PENSION",
-      "algorithm": "UY_VALOR_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "UY_FIN_PROGRAMA_SOCIAL",
@@ -3363,7 +3524,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "A1234567"
     },
@@ -3375,7 +3537,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "1.234.567-2"
     },
@@ -3388,7 +3551,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "SAB 1234"
     },
@@ -3404,7 +3568,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3655,8 +3820,29 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3678,6 +3864,18 @@
       "input": "Trastorno depresivo recurrente"
     },
     {
+      "name": "UY_CM_DIGITOS_ANCHO_FIJO",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "1.234.567-2"
+    },
+    {
       "name": "UY_CEDULA_CD",
       "framework": "algorithm.plugin.checkdigit.Checkdigit",
       "config": {
@@ -3695,10 +3893,10 @@
         "numDigitsForCheckdigitCalculation": 7,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "UY_CM_DIGITOS"
+          "name": "UY_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "UY_CM_DIGITOS"
+          "name": "UY_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -3717,7 +3915,7 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3}\\.?\\d{3}\\.?\\d{3}[\\s\\-]?\\d|\\d{6,8})",
+            "regex": "([1-9]\\d{0,2}\\.?\\d{3}\\.?\\d{3}[\\s\\-]?\\d|[1-9]\\d{5,7})",
             "actions": [
               {
                 "type": "APPLY_ALGORITHM",
@@ -4152,13 +4350,47 @@
       "input": "211003420017"
     },
     {
+      "name": "UY_RUT_COLUMNA",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*?)(?:(\\d{12}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "UY_RUT"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "APPLY_ALGORITHM",
+          "algorithm": {
+            "name": "UY_RUT"
+          }
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "211003420017"
+    },
+    {
       "name": "UY_DOCUMENTO",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{12})",
+            "regex": "(0*?)(?:(\\d{12}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4168,8 +4400,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,3}\\.?\\d{3}\\.?\\d{3}[\\s\\-]?\\d|\\d{6,8})",
+            "regex": "(0*?)(?:([1-9]\\d{0,2}\\.?\\d{3}\\.?\\d{3}[\\s\\-]?\\d|[1-9]\\d{5,7}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4709,7 +4944,30 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?598[\\s\\-]?)(0?9\\d)([\\s\\-]?)([\\d\\s\\-]{6,9})",
+            "regex": "(0*?)(?:(\\+?598[\\s\\-]?)(0?9\\d)([\\s\\-]?)([\\d\\s\\-]{6,9}))",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "UY_CM_DIGITOS"
+                }
+              }
+            ]
+          },
+          {
+            "regex": "(0*?)(?:(0?9\\d)([\\s\\-]?)([\\d\\s\\-]{6,9}))",
             "actions": [
               {
                 "type": "PRESERVE"
@@ -4729,25 +4987,11 @@
             ]
           },
           {
-            "regex": "(0?9\\d)([\\s\\-]?)([\\d\\s\\-]{6,9})",
+            "regex": "(0*?)(?:(\\+?598[\\s\\-]?)?(\\(?0?[24]\\)?)([\\s\\-]?)([\\d\\s\\-]{6,10}))",
             "actions": [
               {
                 "type": "PRESERVE"
               },
-              {
-                "type": "PRESERVE"
-              },
-              {
-                "type": "APPLY_ALGORITHM",
-                "algorithm": {
-                  "name": "UY_CM_DIGITOS"
-                }
-              }
-            ]
-          },
-          {
-            "regex": "(\\+?598[\\s\\-]?)?(\\(?0?[24]\\)?)([\\s\\-]?)([\\d\\s\\-]{6,10})",
-            "actions": [
               {
                 "type": "PRESERVE"
               },
@@ -4793,26 +5037,20 @@
       "input": "Av. 18 de Julio 1234 apto. 501"
     },
     {
-      "name": "UY_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4093820000000001"
-    },
-    {
       "name": "UY_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "UY_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -4841,8 +5079,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5002,8 +5243,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5030,8 +5274,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -5039,8 +5286,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5056,8 +5306,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5070,8 +5323,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5240,8 +5496,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5273,7 +5532,7 @@
       "input": "Baltasar Brum"
     },
     {
-      "name": "UY_CODIGO_INE",
+      "name": "UY_CODIGO_INE_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -5282,6 +5541,34 @@
         "delimiter": "|",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "02621"
+    },
+    {
+      "name": "UY_CODIGO_INE",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "UY_CODIGO_INE_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "02621"
     },
@@ -5306,8 +5593,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\d{3})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5373,8 +5663,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5416,8 +5709,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,5})",
+            "regex": "(0*?)(?:(\\d{2,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5500,8 +5796,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5543,16 +5842,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -5615,8 +5920,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5669,8 +5977,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5738,8 +6049,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5792,8 +6106,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5846,8 +6163,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5900,8 +6220,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5954,8 +6277,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6008,8 +6334,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,8})",
+            "regex": "(0*?)(?:(\\d{1,8}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6146,8 +6475,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,6})",
+            "regex": "(0*?)(?:(\\d{4,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6200,8 +6532,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6221,21 +6556,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "UY_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://uy-grupos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "UY_DISCAPACIDAD_LISTA",
@@ -6269,8 +6589,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6323,8 +6646,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6366,8 +6692,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6398,42 +6727,6 @@
         "requireMask": false
       },
       "input": "Informado en el Clearing de Informes"
-    },
-    {
-      "name": "UY_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 5000,
-        "maxValue": 5000000
-      },
-      "input": "184000"
-    },
-    {
-      "name": "UY_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 22000,
-        "maxValue": 400000
-      },
-      "input": "65000"
-    },
-    {
-      "name": "UY_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 50000,
-        "maxValue": 20000000
-      },
-      "input": "3400000"
-    },
-    {
-      "name": "UY_VALOR_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 15000,
-        "maxValue": 200000
-      },
-      "input": "32000"
     },
     {
       "name": "UY_PROGRAMA_SOCIAL_LISTA",
@@ -6467,8 +6760,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6536,8 +6832,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6590,8 +6889,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6644,8 +6946,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6672,8 +6977,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})(-)(\\d{1,6})(/)(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,4})(-)(\\d{1,6})(/)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6698,8 +7006,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])([A-Za-z]{2,10})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6741,8 +7052,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})([\\s\\-/])(\\d{4})",
+            "regex": "(0*?)(?:(\\d{1,6})([\\s\\-/])(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6788,29 +7102,10 @@
     "uy-cobertura-salud.txt",
     "uy-codigos-ine-generalizados.txt",
     "uy-detectar-apellidos.txt",
-    "uy-detectar-aptitud-laboral.txt",
-    "uy-detectar-ascendencia.txt",
-    "uy-detectar-cobertura.txt",
-    "uy-detectar-codigos-banderas.txt",
-    "uy-detectar-discapacidades.txt",
-    "uy-detectar-estado-civil.txt",
-    "uy-detectar-grupos-sanguineos.txt",
-    "uy-detectar-identidades-genero.txt",
-    "uy-detectar-localidades.txt",
-    "uy-detectar-medicamentos.txt",
     "uy-detectar-nacionalidades.txt",
-    "uy-detectar-nivel-educativo.txt",
-    "uy-detectar-nivel-socioeconomico.txt",
     "uy-detectar-nombres.txt",
-    "uy-detectar-orientaciones-sexuales.txt",
-    "uy-detectar-partidos.txt",
-    "uy-detectar-preferencias-politicas.txt",
-    "uy-detectar-programas-sociales.txt",
-    "uy-detectar-pueblos.txt",
-    "uy-detectar-religiones.txt",
+    "uy-detectar-sexo-letra.txt",
     "uy-detectar-sexo.txt",
-    "uy-detectar-sindicatos.txt",
-    "uy-detectar-tenencia-vivienda.txt",
     "uy-diagnosticos.txt",
     "uy-direcciones.txt",
     "uy-discapacidades.txt",
@@ -6818,7 +7113,6 @@
     "uy-estado-civil-codigos.txt",
     "uy-estado-civil.txt",
     "uy-estados-credito.txt",
-    "uy-grupos-sanguineos.txt",
     "uy-identidades-genero.txt",
     "uy-instituciones-educativas.txt",
     "uy-localidades-generalizadas.txt",

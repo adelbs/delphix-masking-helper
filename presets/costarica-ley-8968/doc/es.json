@@ -319,7 +319,7 @@
         "El número de tarjeta, de crédito o de débito, con o sin espacios."
       ],
       "masking": [
-        "El algoritmo Payment Card mantiene válido el dígito de Luhn y los primeros dígitos en su lugar, así que la marca y el emisor sobreviven y un formulario de pago sigue aceptando el valor en una prueba."
+        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "CR_L1_BILLETERA": {
@@ -832,7 +832,7 @@
         "El saldo de una deuda, de un préstamo o de una tarjeta, la cuota, el límite de crédito."
       ],
       "masking": [
-        "Otro monto del mismo orden de magnitud, de cincuenta mil a sesenta millones de colones, para que totales y razones sigan comportándose."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "CR_FIN_INGRESOS": {
@@ -841,7 +841,7 @@
         "El salario, bruto o neto, los honorarios, el ingreso declarado, el ingreso per cápita del hogar."
       ],
       "masking": [
-        "Otro monto entre el salario mínimo y seis millones de colones al mes. Aquí Costa Rica difiere de sus vecinos: el artículo 3 e) nombra la **condición socioeconómica** entre los datos sensibles, así que una columna de ingresos no es meramente comercial."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "CR_FIN_PATRIMONIO": {
@@ -850,7 +850,7 @@
         "El patrimonio, los activos, el valor fiscal o comercial de un inmueble o un vehículo, el saldo de una cuenta o una inversión, una declaración jurada de bienes."
       ],
       "masking": [
-        "Otro monto del mismo orden de magnitud. El artículo 1 de la ley alcanza los datos de una persona \"o **bienes**\", lo que pone esta columna dentro de ella por las palabras expresas del estatuto."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real. El artículo 1 de la ley alcanza los datos de una persona \"o **bienes**\", lo que pone esta columna dentro de ella por las palabras expresas del estatuto."
       ]
     },
     "CR_FIN_PENSION": {
@@ -859,7 +859,7 @@
         "El monto de una pensión o un subsidio: el IVM, el Régimen No Contributivo, una pensión alimentaria, una pensión por invalidez."
       ],
       "masking": [
-        "Otro monto del mismo orden. Una pensión del Régimen No Contributivo dice que la persona es pobre, una pensión por invalidez dice que tiene una discapacidad."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real. Una pensión del Régimen No Contributivo dice que la persona es pobre, una pensión por invalidez dice que tiene una discapacidad."
       ]
     },
     "CR_FIN_PROGRAMA_SOCIAL": {

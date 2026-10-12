@@ -357,7 +357,7 @@
         "Credit and debit card numbers, recognized by the Luhn algorithm."
       ],
       "masking": [
-        "Payment Card: another number that passes the Luhn algorithm. Only card-shaped values reach it."
+        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "EC_L1_BILLETERA": {
@@ -861,7 +861,7 @@
         "Credit and portfolio balances, amounts in arrears, instalments, disbursed amounts and limits."
       ],
       "masking": [
-        "Mapped to a value between 100 and 250,000 dollars, unrelated to the real one — Ecuador uses the US dollar."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_INGRESOS": {
@@ -870,7 +870,7 @@
         "Salary, monthly or household income, fees and rents. The unified basic wage was 470 dollars a month in 2025."
       ],
       "masking": [
-        "Mapped to a value between 450 and 9,000 dollars."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_PATRIMONIO": {
@@ -879,7 +879,7 @@
         "Net worth, assets, valuations and cadastral values, account and fund balances, term deposits and the sworn declaration of assets."
       ],
       "masking": [
-        "Mapped to a value between 1,000 and 600,000 dollars."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_PENSION": {
@@ -888,7 +888,7 @@
         "The amount of the pension, subsidy or benefit, and child support."
       ],
       "masking": [
-        "Mapped to a value between 200 and 3,000 dollars."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "EC_FIN_PROGRAMA_SOCIAL": {

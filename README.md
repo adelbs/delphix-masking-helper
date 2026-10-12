@@ -13,7 +13,7 @@ without creating a Rule Set or running a masking job.
 It covers sensitive data discovery too: the **domains** a column can belong to, the
 **classifiers** that decide it — each one testable against a column you describe — and the
 **profile sets** a profiling job runs. Ready-made profile sets for the data protection laws of
-**Chile, Mexico, Panama, Belize, Brazil, Colombia, Argentina, El Salvador, Peru, Ecuador, Uruguay, Costa Rica and Spain** ship with the tool, each loaded in one click and documented
+**Chile, Mexico, Panama, Belize, Brazil, Colombia, Argentina, El Salvador, Peru, Ecuador, Uruguay, Costa Rica, Spain and Jamaica** ship with the tool, each loaded in one click and documented
 in a PDF.
 
 > **Wording follows Delphix.** A **framework** is a masking technique the plugin provides —
@@ -407,29 +407,43 @@ country, the law and its version (`CL - Ley 21.719 - v3`), and the card shows th
 with **and the day that version was built**, so you can tell how old a set is without opening it.
 The format is described in `presets/README.md`.
 
-Thirteen ship today, one per country, all with a profile set threshold of 60. The counts below are the
+Fourteen ship today, one per country, all with a profile set threshold of 60. The counts below are the
 extended pack; each essential pack has 11 to 13 domains:
 
 | Profile set | Law | Domains | Classifiers | Algorithms | Documentation |
 |---|---|---|---|---|---|
-| [Chile](presets/chile-ley-21719/) | Ley 21.719 | 73 | 132 | 101 | [en](presets/chile-ley-21719/doc.en.pdf) · [pt-BR](presets/chile-ley-21719/doc.pt-BR.pdf) · [es](presets/chile-ley-21719/doc.es.pdf) |
-| [Mexico](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 153 | 154 | [en](presets/mexico-lfpdppp/doc.en.pdf) · [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
-| [Panama](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 135 | 142 | [en](presets/panama-ley-81/doc.en.pdf) · [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) · [es](presets/panama-ley-81/doc.es.pdf) |
-| [Belize](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 124 | 90 | [en](presets/belize-dpa-2021/doc.en.pdf) · [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) · [es](presets/belize-dpa-2021/doc.es.pdf) |
-| [Brazil](presets/brazil-lgpd/) | LGPD (Lei 13.709/2018) | 84 | 148 | 162 | [en](presets/brazil-lgpd/doc.en.pdf) · [pt-BR](presets/brazil-lgpd/doc.pt-BR.pdf) · [es](presets/brazil-lgpd/doc.es.pdf) |
-| [Colombia](presets/colombia-ley-1581/) | Ley 1581 de 2012 | 82 | 143 | 144 | [en](presets/colombia-ley-1581/doc.en.pdf) · [pt-BR](presets/colombia-ley-1581/doc.pt-BR.pdf) · [es](presets/colombia-ley-1581/doc.es.pdf) |
-| [Argentina](presets/argentina-ley-25326/) | Ley 25.326 | 83 | 148 | 119 | [en](presets/argentina-ley-25326/doc.en.pdf) · [pt-BR](presets/argentina-ley-25326/doc.pt-BR.pdf) · [es](presets/argentina-ley-25326/doc.es.pdf) |
-| [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 143 | 110 | [en](presets/elsalvador-ley-144/doc.en.pdf) · [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) · [es](presets/elsalvador-ley-144/doc.es.pdf) |
-| [Peru](presets/peru-ley-29733/) | Ley 29733 | 85 | 144 | 122 | [en](presets/peru-ley-29733/doc.en.pdf) · [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) · [es](presets/peru-ley-29733/doc.es.pdf) |
-| [Ecuador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 141 | 112 | [en](presets/ecuador-lopdp/doc.en.pdf) · [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) · [es](presets/ecuador-lopdp/doc.es.pdf) |
-| [Uruguay](presets/uruguay-ley-18331/) | Ley 18.331 | 83 | 141 | 114 | [en](presets/uruguay-ley-18331/doc.en.pdf) · [pt-BR](presets/uruguay-ley-18331/doc.pt-BR.pdf) · [es](presets/uruguay-ley-18331/doc.es.pdf) |
-| [Costa Rica](presets/costarica-ley-8968/) | Ley 8968 | 81 | 141 | 172 | [en](presets/costarica-ley-8968/doc.en.pdf) · [pt-BR](presets/costarica-ley-8968/doc.pt-BR.pdf) · [es](presets/costarica-ley-8968/doc.es.pdf) |
-| [Spain](presets/spain-lopdgdd/) | GDPR + LOPDGDD | 83 | 147 | 347 | [en](presets/spain-lopdgdd/doc.en.pdf) · [pt-BR](presets/spain-lopdgdd/doc.pt-BR.pdf) · [es](presets/spain-lopdgdd/doc.es.pdf) |
+| [Chile](presets/chile-ley-21719/) | Ley 21.719 | 73 | 134 | 97 | [en](presets/chile-ley-21719/doc.en.pdf) · [pt-BR](presets/chile-ley-21719/doc.pt-BR.pdf) · [es](presets/chile-ley-21719/doc.es.pdf) |
+| [Mexico](presets/mexico-lfpdppp/) | LFPDPPP (2025) | 83 | 155 | 148 | [en](presets/mexico-lfpdppp/doc.en.pdf) · [pt-BR](presets/mexico-lfpdppp/doc.pt-BR.pdf) · [es](presets/mexico-lfpdppp/doc.es.pdf) |
+| [Panama](presets/panama-ley-81/) | Ley 81 de 2019 | 76 | 137 | 138 | [en](presets/panama-ley-81/doc.en.pdf) · [pt-BR](presets/panama-ley-81/doc.pt-BR.pdf) · [es](presets/panama-ley-81/doc.es.pdf) |
+| [Belize](presets/belize-dpa-2021/) | Data Protection Act, 2021 | 72 | 126 | 84 | [en](presets/belize-dpa-2021/doc.en.pdf) · [pt-BR](presets/belize-dpa-2021/doc.pt-BR.pdf) · [es](presets/belize-dpa-2021/doc.es.pdf) |
+| [Brazil](presets/brazil-lgpd/) | LGPD (Lei 13.709/2018) | 84 | 150 | 156 | [en](presets/brazil-lgpd/doc.en.pdf) · [pt-BR](presets/brazil-lgpd/doc.pt-BR.pdf) · [es](presets/brazil-lgpd/doc.es.pdf) |
+| [Colombia](presets/colombia-ley-1581/) | Ley 1581 de 2012 | 82 | 145 | 140 | [en](presets/colombia-ley-1581/doc.en.pdf) · [pt-BR](presets/colombia-ley-1581/doc.pt-BR.pdf) · [es](presets/colombia-ley-1581/doc.es.pdf) |
+| [Argentina](presets/argentina-ley-25326/) | Ley 25.326 | 83 | 150 | 116 | [en](presets/argentina-ley-25326/doc.en.pdf) · [pt-BR](presets/argentina-ley-25326/doc.pt-BR.pdf) · [es](presets/argentina-ley-25326/doc.es.pdf) |
+| [El Salvador](presets/elsalvador-ley-144/) | Decreto 144 (2024) | 85 | 145 | 105 | [en](presets/elsalvador-ley-144/doc.en.pdf) · [pt-BR](presets/elsalvador-ley-144/doc.pt-BR.pdf) · [es](presets/elsalvador-ley-144/doc.es.pdf) |
+| [Peru](presets/peru-ley-29733/) | Ley 29733 | 85 | 146 | 119 | [en](presets/peru-ley-29733/doc.en.pdf) · [pt-BR](presets/peru-ley-29733/doc.pt-BR.pdf) · [es](presets/peru-ley-29733/doc.es.pdf) |
+| [Ecuador](presets/ecuador-lopdp/) | LOPDP (2021) | 82 | 143 | 107 | [en](presets/ecuador-lopdp/doc.en.pdf) · [pt-BR](presets/ecuador-lopdp/doc.pt-BR.pdf) · [es](presets/ecuador-lopdp/doc.es.pdf) |
+| [Uruguay](presets/uruguay-ley-18331/) | Ley 18.331 | 83 | 143 | 111 | [en](presets/uruguay-ley-18331/doc.en.pdf) · [pt-BR](presets/uruguay-ley-18331/doc.pt-BR.pdf) · [es](presets/uruguay-ley-18331/doc.es.pdf) |
+| [Costa Rica](presets/costarica-ley-8968/) | Ley 8968 | 81 | 143 | 168 | [en](presets/costarica-ley-8968/doc.en.pdf) · [pt-BR](presets/costarica-ley-8968/doc.pt-BR.pdf) · [es](presets/costarica-ley-8968/doc.es.pdf) |
+| [Spain](presets/spain-lopdgdd/) | GDPR + LOPDGDD | 83 | 149 | 341 | [en](presets/spain-lopdgdd/doc.en.pdf) · [pt-BR](presets/spain-lopdgdd/doc.pt-BR.pdf) · [es](presets/spain-lopdgdd/doc.es.pdf) |
+| [Jamaica](presets/jamaica-dpa-2020/) | Data Protection Act, 2020 | 74 | 129 | 83 | [en](presets/jamaica-dpa-2020/doc.en.pdf) · [pt-BR](presets/jamaica-dpa-2020/doc.pt-BR.pdf) · [es](presets/jamaica-dpa-2020/doc.es.pdf) |
+
+Detection does not lean on column names alone. Databases pad values — a CHAR column fills them with
+spaces, a code kept as text often comes with zeros on the left — and the profiler tests them as they
+come, so every set removes the padding before matching and its masking keeps the padding in place:
+`0012345678` masks as `00` followed by what `12345678` masks to. Where a column's name says nothing —
+`CAMPO1`, `FLD_07`, the short names of packaged systems — the values alone find the data wherever
+their format is distinctive: documents with a check digit, e-mail addresses, phone numbers, cards,
+places, names.
 
 Each one groups its domains into direct identifiers, quasi-identifiers and the sensitive data its
 law names, and masks national identifiers with a valid check digit wherever the number has one —
 Chile's RUT, Mexico's CURP and RFC, a natural person's RUC in Panama, Brazil's CPF, CNPJ (alphanumeric too), PIS, voter card and CNS, Colombia's NIT, Argentina's CUIT, CUIL, CBU and CVU, El Salvador's DUI and NIT, Peru's DNI and RUC, Ecuador's cédula and RUC, Uruguay's cédula de identidad and RUT, and the two check digits of a Costa Rican IBAN — the only number in Costa Rica that has any —, and in Spain the letter of the DNI and the NIE, the Seguridad Social number, the account and IBAN digits, the referencia catastral and the CUPS. The README in each folder explains the design and
 its limits; the PDF lists every domain, classifier, algorithm and file, with masked examples.
+
+Where the Masking Engine already has an algorithm for the job, the sets use it instead of shipping
+their own: CM Numeric for amounts, Credit Card for card numbers, BloodType SL for blood groups and
+Brazil CPF. `presets/verify-all.sh` checks every set — or the ones you pick — from the command line
+and keeps a log; `presets/README.md` explains it, and what a new preset should reuse.
 
 **Importing.** There is no per-object import: connecting the integration brings the whole engine
 down, and **Refresh from Delphix** brings it down again. An algorithm built on a framework this

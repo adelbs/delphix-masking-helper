@@ -369,7 +369,7 @@
         "Credit and debit card numbers, recognized by the Luhn algorithm."
       ],
       "masking": [
-        "Payment Card: another number that passes the Luhn algorithm. Only card-shaped values reach it."
+        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "UY_L1_BILLETERA": {
@@ -873,7 +873,7 @@
         "Credit and portfolio balances, amounts in arrears, instalments, amounts granted and limits."
       ],
       "masking": [
-        "Mapped to a value between 5,000 and 5,000,000 pesos uruguayos, unrelated to the real one."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_INGRESOS": {
@@ -882,7 +882,7 @@
         "Sueldo nominal and líquido, monthly or household income, fees and rents. The national minimum wage was some 23,600 pesos a month in 2025."
       ],
       "masking": [
-        "Mapped to a value between 22,000 and 400,000 pesos uruguayos."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_PATRIMONIO": {
@@ -891,7 +891,7 @@
         "Net worth, assets, tasaciones and the aforo catastral, account, CTS and fund balances, term deposits and the sworn declaration of assets."
       ],
       "masking": [
-        "Mapped to a value between 50,000 and 20,000,000 pesos uruguayos."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_PENSION": {
@@ -900,7 +900,7 @@
         "The amount of the pasividad, the pension or the benefit, and child support. One in four Uruguayans draws one."
       ],
       "masking": [
-        "Mapped to a value between 15,000 and 200,000 pesos uruguayos."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "UY_FIN_PROGRAMA_SOCIAL": {

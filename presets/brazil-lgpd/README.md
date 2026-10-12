@@ -13,9 +13,9 @@ criminal records.
 
 | | |
 |---|---|
-| Profile set | `BR - LGPD - v1`, assignment threshold 60, built 16 September 2026 |
-| Extended pack | 84 domains, 148 classifiers, 162 algorithms, 96 files — everything below |
-| Essential pack | 13 domains, 27 classifiers, 23 algorithms, 5 files — CPF, RG, CNH, passport, names, contact, address, CEP, birth date |
+| Profile set | `BR - LGPD - v2`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 84 domains, 150 classifiers, 156 algorithms, 74 files — everything below |
+| Essential pack | 13 domains, 27 classifiers, 20 algorithms, 5 files — CPF, RG, CNH, passport, names, contact, address, CEP, birth date |
 | Load it | **Settings → Profile Sets** |
 
 ## Files
@@ -50,11 +50,24 @@ and decide nothing alone.
 **Type** classifiers rule domains out where the column cannot hold the data: an e-mail is text of at
 least 5 characters, a birth date a date, timestamp or text, an amount a number.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in
 every table and every job. Placeholders such as `N/I` or `-` do not fail a row: where there is nothing
 to mask they pass through.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### Check digits
 
@@ -69,7 +82,7 @@ Brazilian applications validate their identifiers, so the ones with a public che
 | RENAVAM | Check Digit with the same weights; nine-digit numbers are padded |
 | Voter card (título de eleitor) | State code kept; both check digits recomputed by Data Cleansing tables, including the São Paulo and Minas Gerais rule (remainder 0 gives 1) |
 | CNS (definitive, 1 or 2) | The PIS part masked by the PIS algorithm, the tail recomputed by tables so the weighted sum stays a multiple of 11 — the masked CNS still carries the masked PIS |
-| Payment card | Payment Card (Luhn) |
+| Payment card | Credit Card, which comes with the engine (Luhn valid, first six digits kept) |
 
 A column that holds CPFs and CNPJs together (`CPF_CNPJ`) is masked value by value by shape.
 
@@ -85,7 +98,7 @@ A column that holds CPFs and CNPJs together (`CPF_CNPJ`) is masked value by valu
 | `BR_L1_TELEFONE` | `+55`, the DDD and the first digit (9 for mobile) kept, the rest masked |
 | `BR_L1_ENDERECO` | A fictitious Brazilian address |
 | `BR_L1_CHAVE_PIX` | By the kind of key: CPF, CNPJ, e-mail, phone or random key (UUID) |
-| `BR_L1_CARTAO` | Payment Card (Luhn stays valid) |
+| `BR_L1_CARTAO` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `BR_L1_IP` | Each IPv4 octet mapped to 1–254 |
 | `BR_L1_PLACA` | Letters to letters and digits to digits, old and Mercosur patterns kept |
 | `BR_L1_GEOLOCALIZACAO` | Integer part and first decimal kept (about 11 km) |
@@ -174,13 +187,18 @@ node presets/_doc/build.mjs brazil-lgpd
 
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
-`verify.mjs` reviews every classifier configuration, profiles 164 columns with the whole set at its
+`verify.mjs` reviews every classifier configuration, profiles 170 columns with the whole set at its
 threshold and again with the essential pack — well named, badly named and 33 columns that are not
 personal data — and audits the generalization table for all 5,570 municipalities. It then masks the
 sample values, placeholders and each algorithm's own sample input through the running app
 (`DLPX_URL`, default `http://localhost:3000`), checking outputs against their vocabulary and every
 CPF, CNPJ, PIS, voter card, CNS and RENAVAM against its check-digit rule; 150 of each for collisions;
 and 20 people whose PIS and CNS must still agree. Each value forks a JVM.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 

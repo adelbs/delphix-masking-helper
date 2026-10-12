@@ -135,7 +135,7 @@
     "CL_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": "Números de cartão de crédito e débito, com ou sem espaços.",
-      "masking": "Trocado por outro número que ainda passa na verificação de Luhn. Valores sem forma de cartão ficam como estão."
+      "masking": "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
     },
     "CL_L1_IP": {
       "title": "Endereço IP",
@@ -390,12 +390,12 @@
     "CL_L3_SOCIOEC_MONTO_DEUDA": {
       "title": "Valores de dívida",
       "what": "Dívidas, atrasos e saldos devedores.",
-      "masking": "Mapeados para um valor entre $10.000 e $50.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "CL_L3_SOCIOEC_INGRESOS": {
       "title": "Renda e salário",
       "what": "Salários, renda tributável, renda do domicílio e per capita, patrimônio.",
-      "masking": "Mapeados para um valor entre $450.000 e $8.000.000: plausível e sem relação com o valor real."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "CL_L3_SOCIOEC_PREVISION_AFP": {
       "title": "Fundo de pensão",
@@ -405,7 +405,7 @@
     "CL_L3_SOCIOEC_SALDO_PREVISIONAL": {
       "title": "Saldos previdenciários",
       "what": "Saldos de conta individual, cotizações, poupança voluntária (APV) e valores de pensão.",
-      "masking": "Mapeados para um valor entre $100.000 e $250.000.000."
+      "masking": "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
     },
     "CL_L3_SOCIOEC_VIVIENDA": {
       "title": "Situação de moradia",

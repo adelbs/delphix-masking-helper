@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "versionDate": "2026-09-15",
+  "version": 3,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Belize — Data Protection Act, 2021 (personal data protection)",
     "pt-BR": "Belize — Data Protection Act, 2021 (proteção de dados pessoais)",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales de Belice conforme a la Data Protection Act, 2021: identificadores directos (número de seguridad social, TIN, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, ciudad o aldea), los datos personales sensibles de la sección 2 — incluidos el historial o la situación financiera y los procesos penales — y registros de salud."
   },
   "profileSet": {
-    "name": "BZ - Data Protection Act 2021 - v2",
-    "description": "Direct identifiers, quasi-identifiers, sensitive personal data (section 2), health records, financial record or position, and criminal record and proceedings, under the Data Protection Act, 2021 of Belize.",
+    "name": "BZ - Data Protection Act 2021 - v3",
+    "description": "Data Protection Act 2021 - personal data",
     "threshold": 60,
     "classifiers": [
       "BZ_L1_SOCIAL_SECURITY_NUMBER - Path",
@@ -56,6 +56,7 @@
       "BZ_L1_CONTRACT_NUMBER - Path",
       "BZ_L1_USERNAME - Path",
       "BZ_L1_CREDENTIAL - Path",
+      "BZ_L1_CREDENTIAL - Regex",
       "BZ_L1_GEOLOCATION - Path",
       "BZ_L1_GEOLOCATION - Regex",
       "BZ_L1_FREE_TEXT - Path",
@@ -72,52 +73,53 @@
       "BZ_L2_SEX - Path",
       "BZ_L2_SEX - List",
       "BZ_L2_TOWN_VILLAGE - Path",
-      "BZ_L2_TOWN_VILLAGE - List",
+      "BZ_L2_TOWN_VILLAGE - Values",
       "BZ_L2_NEIGHBOURHOOD - Path",
       "BZ_L2_NATIONALITY - Path",
-      "BZ_L2_NATIONALITY - List",
+      "BZ_L2_NATIONALITY - Values",
       "BZ_L2_MARITAL_STATUS - Path",
-      "BZ_L2_MARITAL_STATUS - List",
+      "BZ_L2_MARITAL_STATUS - Values",
       "BZ_L2_OCCUPATION - Path",
       "BZ_L2_EMPLOYER - Path",
       "BZ_L2_EDUCATION - Path",
-      "BZ_L2_EDUCATION - List",
+      "BZ_L2_EDUCATION - Values",
       "BZ_L2_SCHOOL - Path",
       "BZ_L2_DEPENDANTS - Path",
       "BZ_L2_DEPENDANTS - Type",
       "BZ_L3_ETHNICITY - Path",
-      "BZ_L3_ETHNICITY - List",
+      "BZ_L3_ETHNICITY - Values",
       "BZ_L3_LANGUAGE - Path",
-      "BZ_L3_LANGUAGE - List",
+      "BZ_L3_LANGUAGE - Values",
       "BZ_L3_RELIGION - Path",
-      "BZ_L3_RELIGION - List",
+      "BZ_L3_RELIGION - Values",
       "BZ_L3_BELIEF - Path",
       "BZ_L3_POLITICAL_OPINION - Path",
-      "BZ_L3_POLITICAL_OPINION - List",
+      "BZ_L3_POLITICAL_OPINION - Values",
       "BZ_L3_POLITICAL_MEMBERSHIP - Path",
-      "BZ_L3_POLITICAL_MEMBERSHIP - List",
+      "BZ_L3_POLITICAL_MEMBERSHIP - Values",
       "BZ_L3_TRADE_UNION - Path",
-      "BZ_L3_TRADE_UNION - List",
+      "BZ_L3_TRADE_UNION - Values",
       "BZ_L3_GENETIC - Path",
+      "BZ_L3_GENETIC - Regex",
       "BZ_L3_BIOMETRIC - Path",
       "BZ_L3_BIOMETRIC - Type",
       "BZ_L3_SEXUAL_ORIENTATION - Path",
-      "BZ_L3_SEXUAL_ORIENTATION - List",
+      "BZ_L3_SEXUAL_ORIENTATION - Values",
       "BZ_L3_SEXUAL_LIFE - Path",
       "BZ_L3_GENDER_IDENTITY - Path",
-      "BZ_L3_GENDER_IDENTITY - List",
+      "BZ_L3_GENDER_IDENTITY - Values",
       "BZ_HEALTH_ID - Path",
       "BZ_HEALTH_DIAGNOSIS - Path",
       "BZ_HEALTH_DIAGNOSIS - Regex",
       "BZ_HEALTH_MEDICATION - Path",
-      "BZ_HEALTH_MEDICATION - List",
+      "BZ_HEALTH_MEDICATION - Values",
       "BZ_HEALTH_CLINICAL_TEXT - Path",
       "BZ_HEALTH_CLINICAL_TEXT - Type",
       "BZ_HEALTH_TEST_RESULT - Path",
       "BZ_HEALTH_BLOOD_GROUP - Path",
-      "BZ_HEALTH_BLOOD_GROUP - List",
+      "BZ_HEALTH_BLOOD_GROUP - Values",
       "BZ_HEALTH_DISABILITY - Path",
-      "BZ_HEALTH_DISABILITY - List",
+      "BZ_HEALTH_DISABILITY - Values",
       "BZ_HEALTH_REPRODUCTIVE - Path",
       "BZ_HEALTH_MENTAL - Path",
       "BZ_FIN_CREDIT_REFERENCE - Path",
@@ -130,13 +132,13 @@
       "BZ_FIN_PENSION - Path",
       "BZ_FIN_PENSION - Type",
       "BZ_FIN_SSB_BENEFIT - Path",
-      "BZ_FIN_SSB_BENEFIT - List",
+      "BZ_FIN_SSB_BENEFIT - Values",
       "BZ_FIN_SOCIAL_PROGRAMME - Path",
-      "BZ_FIN_SOCIAL_PROGRAMME - List",
+      "BZ_FIN_SOCIAL_PROGRAMME - Values",
       "BZ_FIN_POVERTY - Path",
-      "BZ_FIN_POVERTY - List",
+      "BZ_FIN_POVERTY - Values",
       "BZ_FIN_HOUSING - Path",
-      "BZ_FIN_HOUSING - List",
+      "BZ_FIN_HOUSING - Values",
       "BZ_PENAL_CRIMINAL_RECORD - Path",
       "BZ_PENAL_CASE_NUMBER - Path",
       "BZ_PENAL_CASE_NUMBER - Regex"
@@ -144,7 +146,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Essential pack of the Data Protection Act, 2021: social security number, TIN, passport, names, contact, address and birth date.",
+      "description": "Essential pack of the Data Protection Act 2021",
       "domains": [
         "BZ_L1_SOCIAL_SECURITY_NUMBER",
         "BZ_L1_TIN",
@@ -165,7 +167,7 @@
       "name": "BZ_L1_SOCIAL_SECURITY_NUMBER - Path",
       "framework": "PATH",
       "domain": "BZ_L1_SOCIAL_SECURITY_NUMBER",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -188,20 +190,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}[\\s\\-]\\d{3}[\\s\\-]\\d{3}",
+            "regex": "0*(?:\\d{3}[\\s\\-]\\d{3}[\\s\\-]\\d{3})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{9}",
+            "regex": "0*(?:\\d{9})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -211,7 +213,7 @@
       "name": "BZ_L1_TIN - Path",
       "framework": "PATH",
       "domain": "BZ_L1_TIN",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -230,7 +232,7 @@
       "name": "BZ_L1_PASSPORT - Path",
       "framework": "PATH",
       "domain": "BZ_L1_PASSPORT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -258,7 +260,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -268,7 +270,7 @@
       "name": "BZ_L1_VOTER_ID - Path",
       "framework": "PATH",
       "domain": "BZ_L1_VOTER_ID",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -287,7 +289,7 @@
       "name": "BZ_L1_DRIVERS_LICENCE - Path",
       "framework": "PATH",
       "domain": "BZ_L1_DRIVERS_LICENCE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -306,7 +308,7 @@
       "name": "BZ_L1_IMMIGRATION_DOCUMENT - Path",
       "framework": "PATH",
       "domain": "BZ_L1_IMMIGRATION_DOCUMENT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -325,7 +327,7 @@
       "name": "BZ_L1_VITAL_RECORD - Path",
       "framework": "PATH",
       "domain": "BZ_L1_VITAL_RECORD",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -352,7 +354,7 @@
       "name": "BZ_L1_GIVEN_NAME - Path",
       "framework": "PATH",
       "domain": "BZ_L1_GIVEN_NAME",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -396,7 +398,7 @@
       "name": "BZ_L1_SURNAME - Path",
       "framework": "PATH",
       "domain": "BZ_L1_SURNAME",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -432,7 +434,7 @@
       "name": "BZ_L1_FULL_NAME - Path",
       "framework": "PATH",
       "domain": "BZ_L1_FULL_NAME",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -472,11 +474,11 @@
         "valueLists": [
           {
             "file": "preset-file://bz-detect-given-names.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://bz-detect-surnames.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -488,7 +490,7 @@
       "name": "BZ_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "BZ_L1_EMAIL",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -528,12 +530,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -543,7 +545,7 @@
       "name": "BZ_L1_PHONE - Path",
       "framework": "PATH",
       "domain": "BZ_L1_PHONE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -566,36 +568,36 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?\\(?501\\)?[\\s\\-]?)6\\d{2}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?\\(?501\\)?[\\s\\-]?)6\\d{2}[\\s\\-]?\\d{4})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "6\\d{2}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:6\\d{2}[\\s\\-]?\\d{4})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?\\(?501\\)?[\\s\\-]?)?[2-578]\\d{2}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?\\(?501\\)?[\\s\\-]?)?[2-578]\\d{2}[\\s\\-]?\\d{4})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\+?\\d[\\d\\s()\\-]{6,15}",
+            "regex": "0*(?:\\+?\\d[\\d\\s()\\-]{6,15})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -605,7 +607,7 @@
       "name": "BZ_L1_ADDRESS - Path",
       "framework": "PATH",
       "domain": "BZ_L1_ADDRESS",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -650,7 +652,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\bmile\\s+\\d+.*\\b(highway|road|hwy)\\b.*",
@@ -658,7 +660,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\blot\\s*(no\\.?\\s*|#\\s*)?\\d+\\s*,.+",
@@ -666,7 +668,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -676,7 +678,7 @@
       "name": "BZ_L1_ADDRESS_DETAIL - Path",
       "framework": "PATH",
       "domain": "BZ_L1_ADDRESS_DETAIL",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -695,7 +697,7 @@
       "name": "BZ_L1_BANK_ACCOUNT - Path",
       "framework": "PATH",
       "domain": "BZ_L1_BANK_ACCOUNT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -714,7 +716,7 @@
       "name": "BZ_L1_PAYMENT_CARD - Path",
       "framework": "PATH",
       "domain": "BZ_L1_PAYMENT_CARD",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -737,12 +739,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -752,7 +754,7 @@
       "name": "BZ_L1_IP_ADDRESS - Path",
       "framework": "PATH",
       "domain": "BZ_L1_IP_ADDRESS",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -775,20 +777,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -798,7 +800,7 @@
       "name": "BZ_L1_DEVICE_ID - Path",
       "framework": "PATH",
       "domain": "BZ_L1_DEVICE_ID",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -821,20 +823,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -844,7 +846,7 @@
       "name": "BZ_L1_LICENCE_PLATE - Path",
       "framework": "PATH",
       "domain": "BZ_L1_LICENCE_PLATE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -872,7 +874,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z][\\s\\-]\\d{4,5}",
@@ -880,7 +882,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -890,7 +892,7 @@
       "name": "BZ_L1_VIN - Path",
       "framework": "PATH",
       "domain": "BZ_L1_VIN",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -918,7 +920,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -928,7 +930,7 @@
       "name": "BZ_L1_LAND_PARCEL - Path",
       "framework": "PATH",
       "domain": "BZ_L1_LAND_PARCEL",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -956,7 +958,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -966,7 +968,7 @@
       "name": "BZ_L1_CONTRACT_NUMBER - Path",
       "framework": "PATH",
       "domain": "BZ_L1_CONTRACT_NUMBER",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -985,7 +987,7 @@
       "name": "BZ_L1_USERNAME - Path",
       "framework": "PATH",
       "domain": "BZ_L1_USERNAME",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1004,7 +1006,7 @@
       "name": "BZ_L1_CREDENTIAL - Path",
       "framework": "PATH",
       "domain": "BZ_L1_CREDENTIAL",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1020,10 +1022,61 @@
       }
     },
     {
+      "name": "BZ_L1_CREDENTIAL - Regex",
+      "framework": "REGEX",
+      "domain": "BZ_L1_CREDENTIAL",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "BZ_L1_GEOLOCATION - Path",
       "framework": "PATH",
       "domain": "BZ_L1_GEOLOCATION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1054,20 +1107,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "1[5-8]\\.\\d{3,}\\s*,\\s*-8[7-9]\\.\\d{3,}",
+            "regex": "0*(?:1[5-8]\\.\\d{3,}\\s*,\\s*-8[7-9]\\.\\d{3,})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "1[5-8]\\.\\d{3,}",
+            "regex": "0*(?:1[5-8]\\.\\d{3,})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-8[7-9]\\.\\d{3,}",
@@ -1075,7 +1128,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1085,7 +1138,7 @@
       "name": "BZ_L1_FREE_TEXT - Path",
       "framework": "PATH",
       "domain": "BZ_L1_FREE_TEXT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1125,12 +1178,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}-?\\d{3}-?\\d{3}",
+            "regex": "0*(?:\\d{3}-?\\d{3}-?\\d{3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1138,15 +1191,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?501\\s?)?[2-8]\\d{2}-\\d{4}",
+            "regex": "0*(?:(\\+?501\\s?)?[2-8]\\d{2}-\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1156,7 +1209,7 @@
       "name": "BZ_L2_BIRTH_DATE - Path",
       "framework": "PATH",
       "domain": "BZ_L2_BIRTH_DATE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1199,7 +1252,7 @@
       "name": "BZ_L2_BIRTH_YEAR - Path",
       "framework": "PATH",
       "domain": "BZ_L2_BIRTH_YEAR",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1239,7 +1292,7 @@
       "name": "BZ_L2_AGE - Path",
       "framework": "PATH",
       "domain": "BZ_L2_AGE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1279,7 +1332,7 @@
       "name": "BZ_L2_EVENT_DATE - Path",
       "framework": "PATH",
       "domain": "BZ_L2_EVENT_DATE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1322,7 +1375,7 @@
       "name": "BZ_L2_SEX - Path",
       "framework": "PATH",
       "domain": "BZ_L2_SEX",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1346,10 +1399,14 @@
         "valueLists": [
           {
             "file": "preset-file://bz-detect-sex.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://bz-detect-sex-letter.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1358,7 +1415,7 @@
       "name": "BZ_L2_TOWN_VILLAGE - Path",
       "framework": "PATH",
       "domain": "BZ_L2_TOWN_VILLAGE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1382,27 +1439,30 @@
       }
     },
     {
-      "name": "BZ_L2_TOWN_VILLAGE - List",
-      "framework": "LIST",
+      "name": "BZ_L2_TOWN_VILLAGE - Values",
+      "framework": "REGEX",
       "domain": "BZ_L2_TOWN_VILLAGE",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-towns-villages.txt",
-            "matchStrength": 0.8
+            "note": "241 — Corozal Town · Altamira · Buena Vista · Calcutta · Caledonia · Carolina · …",
+            "regex": "(?iu)(?:(?:7 miles|a(?:gua(?: viva|cate)|lta(?: vista|mira)|mbergris caye|r(?:enal|menia)|ugust pine ridge)|b(?:arranco|e(?:aver dam|l(?:ize city|la vista|mopan)|nque(?: viejo(?: del carmen)?)?|rmudian landing)|i(?:g falls|lly white|rd walk|scayne)|l(?:a(?:ckman eddy|den)|ue creek)|o(?:mba|ston)|ranch mouth|u(?:ena vista|llet tree(?: falls)?|rrell boom))|c(?:a(?:l(?:cutta|edonia|la creek)|malote|r(?:melita|olina)|ttle landing|ye caulker)|h(?:an (?:chen|pine ridge)|unox)|o(?:n(?:cepcion|ejo creek|sejo)|pper bank|r(?:azon|ozal(?: town|ito))|tton tree|wpen)|r(?:i(?:que (?:jute|sarco|trosa)|sto rey)|ooked tree))|d(?:angriga|ou(?:ble head cabbage|glas)|u(?:ck run (?:1|2|3)|mp))|e(?:l(?: progresso(?: \\(7 miles\\))?|ridgeville)|speranza)|f(?:i(?:nca solana|re burn)|lowers bank|orest home|ranks eddy)|g(?:a(?:les point|rdenia)|eorge(?:town|ville)|olden stream|r(?:a(?:cie rock|ham creek)|een hill manatee)|uinea grass)|h(?:a(?:rmonyville|ttieville)|icatee|op(?:e creek|kins)|ummingbird community)|i(?:nd(?:ependence(?: and mango creek)?|ian (?:c(?:hurch|reek)|hill estate))|sabella bank)|j(?:a(?:cintoville|lacte)|ordan)|kendal(?:, sanctuary bay)?|l(?:a(?: (?:democracia|gracia)|dyville|guna)|emonal|i(?:bertad|ttle belize)|o(?:ng bank(?:, melinda road)?|rds bank|s tambos|uisville|wer barton creek)|ucky strike)|m(?:a(?:bilha|chakilha|fredi|hogany heights|ngo creek|skall|ya (?:beach|center|mopan))|e(?:dina bank|linda road)|id(?:dlesex|way)|o(?:nkey river|ody hill|re tomorrow|untain valley community)|ullins river)|n(?:e(?:uland|w(?: (?:holland|road area)|land))|uevo san juan)|o(?:ntario|range walk town|toxha)|p(?:a(?:raiso|slow falls|tchakan)|inehill|lacencia|omona|rogreso|u(?:eblo viejo|nta gorda))|r(?:anch(?:ito|o dolores)|ed bank|i(?:chmond hill|ngtail village)|o(?:aring creek|ckstone pond|seville))|s(?:a(?:int (?:anns|ma(?:rgaret|thews)|pauls bank)|n(?: (?:an(?:dres|tonio)|benito poite|carlos|estevan|felipe|i(?:gnacio|sidro)|j(?:o(?:aquin|se(?: (?:palmar|succotz))?)|uan)|l(?:azaro|orenzo|u(?:cas|is))|m(?:arcos|iguel)|narciso|p(?:ablo|edro(?: (?:ambergris caye|columbia|town))?)|roman|vic(?:ente|tor))|ctuary bay|dhill|ta(?: (?:anna|c(?:lara|ruz)|elena|familia|marta|rosa|teresa)|na))|r(?:awee|teneja))|cotland halfmoon|e(?:ine bight|lena|ven miles)|hipyard|i(?:l(?:k grass|ver creek)|ttee river)|outh stann creek|p(?:anish lookout|ringfield)|t(?: (?:anns|ma(?:rgaret|thews)|pauls bank)|\\. (?:anns|ma(?:rgaret|thews)|pauls bank)|eadfast)|unday wood|wasey)|t(?:ambran|eakettle|ower hill|ri(?:al farm|nidad|o))|u(?:nitedville|pper barton creek)|valley (?:community|of peace)|w(?:estern paradise|il(?:lows bank|son road))|xaibe|y(?:emeri grove|o c(?:hen|reek))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L2_NEIGHBOURHOOD - Path",
       "framework": "PATH",
       "domain": "BZ_L2_NEIGHBOURHOOD",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1421,7 +1481,7 @@
       "name": "BZ_L2_NATIONALITY - Path",
       "framework": "PATH",
       "domain": "BZ_L2_NATIONALITY",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1437,27 +1497,30 @@
       }
     },
     {
-      "name": "BZ_L2_NATIONALITY - List",
-      "framework": "LIST",
+      "name": "BZ_L2_NATIONALITY - Values",
+      "framework": "REGEX",
       "domain": "BZ_L2_NATIONALITY",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-nationalities.txt",
-            "matchStrength": 0.7
+            "note": "46 — Belizean · Guatemalan · Salvadoran · Honduran · Mexican · American · …",
+            "regex": "(?iu)(?:(?:american|b(?:eli(?:ce(?:n(?:a|o)|ñ(?:a|o))|ze(?:an)?)|ritish)|c(?:anad(?:a|ian)|hin(?:a|ese)|uba(?:n)?)|el salvador|filipino|guatemal(?:a(?:n)?|tec(?:a|o))|hondur(?:a(?:n|s)|e(?:n(?:a|o)|ñ(?:a|o)))|india(?:n)?|jamaica(?:n)?|mexic(?:an(?:a|o)?|o)|ni(?:caragua(?:n)?|geria(?:n)?)|philippines|salvador(?:an|e(?:n(?:a|o)|ñ(?:a|o))|ian)|taiwan(?:ese)?|u(?:k|nited (?:kingdom|states)|s(?:a)?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L2_MARITAL_STATUS - Path",
       "framework": "PATH",
       "domain": "BZ_L2_MARITAL_STATUS",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1473,27 +1536,30 @@
       }
     },
     {
-      "name": "BZ_L2_MARITAL_STATUS - List",
-      "framework": "LIST",
+      "name": "BZ_L2_MARITAL_STATUS - Values",
+      "framework": "REGEX",
       "domain": "BZ_L2_MARITAL_STATUS",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-marital-status.txt",
-            "matchStrength": 0.7
+            "note": "24 — Never married · Married · Common-law union · Visiting partner · Divorced · Widowed · …",
+            "regex": "(?iu)(?:(?:c(?:asad(?:a|o)|ommon(?: law|-law(?: union)?))|divorc(?:ed|iado)|legally separated|married|never married|s(?:eparated|ingle|olter(?:a|o))|uni(?:on libre|ón libre)|vi(?:siting partner|ud(?:a|o))|widow(?:e(?:d|r))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L2_OCCUPATION - Path",
       "framework": "PATH",
       "domain": "BZ_L2_OCCUPATION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1520,7 +1586,7 @@
       "name": "BZ_L2_EMPLOYER - Path",
       "framework": "PATH",
       "domain": "BZ_L2_EMPLOYER",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1539,7 +1605,7 @@
       "name": "BZ_L2_EDUCATION - Path",
       "framework": "PATH",
       "domain": "BZ_L2_EDUCATION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1555,27 +1621,30 @@
       }
     },
     {
-      "name": "BZ_L2_EDUCATION - List",
-      "framework": "LIST",
+      "name": "BZ_L2_EDUCATION - Values",
+      "framework": "REGEX",
       "domain": "BZ_L2_EDUCATION",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-education.txt",
-            "matchStrength": 0.6
+            "note": "29 — None · Preschool · Primary incomplete · Primary Standard 6 · Secondary incomplete · Secondary Form 4 · …",
+            "regex": "(?iu)(?:(?:associate(?: degree)?|bachelor(?:'s degree|s)?|college|doctorate|high school|junior college|master(?:'s degree|s)|none|p(?:hd|r(?:eschool|imar(?:ia|y(?: (?:\\(standard 6\\)|incomplete))?)))|s(?:ec(?:ondary(?: (?:\\(form 4\\)|incomplete))?|undaria)|ixth form(?: / junior college)?)|tertiary|universi(?:dad|ty)|vocational))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L2_SCHOOL - Path",
       "framework": "PATH",
       "domain": "BZ_L2_SCHOOL",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1594,7 +1663,7 @@
       "name": "BZ_L2_DEPENDANTS - Path",
       "framework": "PATH",
       "domain": "BZ_L2_DEPENDANTS",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1634,7 +1703,7 @@
       "name": "BZ_L3_ETHNICITY - Path",
       "framework": "PATH",
       "domain": "BZ_L3_ETHNICITY",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1650,31 +1719,48 @@
       }
     },
     {
-      "name": "BZ_L3_ETHNICITY - List",
-      "framework": "LIST",
+      "name": "BZ_L3_ETHNICITY - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_ETHNICITY",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-ethnic-groups.txt",
-            "matchStrength": 0.9
+            "note": "42 — Mestizo Hispanic Latino · Creole · Maya Ketchi · Maya Mopan · Maya Yucatec · Garifuna · …",
+            "regex": "(?iu)(?:(?:a(?:frican|sian)|black|c(?:aucasian(?:/white)?|hinese|reole)|east indian|gari(?:funa|nagu)|hispanic|ind(?:i(?:an|gena)|ígena)|k(?:e(?:kchi|tchi)|riol)|latino|m(?:aya(?: (?:ketchi|mopan|yucatec)|n)?|e(?:nnonite|stizo(?:/hispanic/latino)?)|ixed|opan)|not stated|other|q(?:'eqchi'|eqchi)|white|yucatec))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://bz-detect-flag.txt",
-            "matchStrength": 0.3
+            "note": "8 — y · n · yes · no · s · sí · …",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "8 — y · n · yes · no · s · sí · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?|y(?:es)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L3_LANGUAGE - Path",
       "framework": "PATH",
       "domain": "BZ_L3_LANGUAGE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1698,27 +1784,30 @@
       }
     },
     {
-      "name": "BZ_L3_LANGUAGE - List",
-      "framework": "LIST",
+      "name": "BZ_L3_LANGUAGE - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_LANGUAGE",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-languages.txt",
-            "matchStrength": 0.8
+            "note": "29 — English · Spanish · Kriol · Maya Q eqchi · Maya Mopan · Maya Yucatec · …",
+            "regex": "(?iu)(?:(?:c(?:antonese|hinese|reole)|e(?:nglish|spa(?:nol|ñol))|g(?:arifuna|erman(?: \\(plautdietsch\\))?)|hindi|ingl(?:es|és)|k(?:e(?:kchi|tchi)|riol)|low german|m(?:a(?:ndarin|ya(?: (?:mopan|q'eqchi'|yucatec))?)|opan)|other|plautdietsch|q(?:'eqchi'|eqchi)|spanish|yucatec))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "BZ_L3_RELIGION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1734,27 +1823,30 @@
       }
     },
     {
-      "name": "BZ_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "BZ_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_RELIGION",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-religions.txt",
-            "matchStrength": 0.9
+            "note": "48 — Roman Catholic · Pentecostal · Seventh-day Adventist · Anglican · Mennonite · Baptist · …",
+            "regex": "(?iu)(?:(?:a(?:dventist|gnostic|nglican|theist)|b(?:a(?:h(?:a(?:'i|i)|á'í)|ptist)|uddhist)|c(?:at(?:holic|olica|ólica)|h(?:ristian|urch of god))|evangelical|hindu|islam|jehovah(?: witness|'s witness)|l(?:atter-day saints|ds)|m(?:e(?:nnonite|thodist)|ormon|uslim)|n(?:azarene|o(?: religion|ne))|other|p(?:entecostal|rotestant)|r(?:astafari(?:an)?|c|oman catholic)|s(?:alvation army|da|eventh-day adventist)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L3_BELIEF - Path",
       "framework": "PATH",
       "domain": "BZ_L3_BELIEF",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1773,7 +1865,7 @@
       "name": "BZ_L3_POLITICAL_OPINION - Path",
       "framework": "PATH",
       "domain": "BZ_L3_POLITICAL_OPINION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1789,27 +1881,30 @@
       }
     },
     {
-      "name": "BZ_L3_POLITICAL_OPINION - List",
-      "framework": "LIST",
+      "name": "BZ_L3_POLITICAL_OPINION - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_POLITICAL_OPINION",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-political-opinions.txt",
-            "matchStrength": 0.7
+            "note": "19 — Left · Centre-left · Centre · Centre-right · Right · No preference · …",
+            "regex": "(?iu)(?:(?:c(?:ent(?:er(?: (?:left|right))?|re(?: (?:left|right)|-(?:left|right))?)|onservative)|l(?:eft(?: wing)?|iberal)|no preference|pr(?:efers not to say|ogressive)|right(?: wing)?|swing|undecided))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L3_POLITICAL_MEMBERSHIP - Path",
       "framework": "PATH",
       "domain": "BZ_L3_POLITICAL_MEMBERSHIP",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1833,27 +1928,30 @@
       }
     },
     {
-      "name": "BZ_L3_POLITICAL_MEMBERSHIP - List",
-      "framework": "LIST",
+      "name": "BZ_L3_POLITICAL_MEMBERSHIP - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_POLITICAL_MEMBERSHIP",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-political-parties.txt",
-            "matchStrength": 0.8
+            "note": "22 — People s United Party · United Democratic Party · Belize Progressive Party · Belize Justice Movement · People s Democratic Movement · People s National Party · …",
+            "regex": "(?iu)(?:(?:b(?:elize (?:justice movement|p(?:eoples front|rogressive party))|jm|lue|pp)|independent|no(?: party|ne)|p(?:dm|eople's (?:democratic movement|national party|united party)|np|up)|red|u(?:dp|nited democratic party)|vi(?:p|sion inspired by the people)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L3_TRADE_UNION - Path",
       "framework": "PATH",
       "domain": "BZ_L3_TRADE_UNION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1869,27 +1967,30 @@
       }
     },
     {
-      "name": "BZ_L3_TRADE_UNION - List",
-      "framework": "LIST",
+      "name": "BZ_L3_TRADE_UNION - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_TRADE_UNION",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-trade-unions.txt",
-            "matchStrength": 0.6
+            "note": "23 — BNTU · PSU · NTUCB · CWU · BWU · BEWU · …",
+            "regex": "(?iu)(?:(?:a(?:pssm|ssociation of public service senior managers)|b(?:cwu|e(?:lize (?:communication workers union|energy workers union|national teachers union|w(?:ater services workers union|orkers union))|wu)|ntu|w(?:swu|u))|c(?:hristian workers union|wu)|khmhawu|ntucb|p(?:su|ublic service union)|s(?:outhern workers union|wu)|u(?:bfsu|nion(?: member|ized))))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BZ_L3_GENETIC - Path",
       "framework": "PATH",
       "domain": "BZ_L3_GENETIC",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1905,10 +2006,29 @@
       }
     },
     {
+      "name": "BZ_L3_GENETIC - Regex",
+      "framework": "REGEX",
+      "domain": "BZ_L3_GENETIC",
+      "description": "Shape of the values.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "BZ_L3_BIOMETRIC - Path",
       "framework": "PATH",
       "domain": "BZ_L3_BIOMETRIC",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1943,7 +2063,7 @@
       "name": "BZ_L3_SEXUAL_ORIENTATION - Path",
       "framework": "PATH",
       "domain": "BZ_L3_SEXUAL_ORIENTATION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1959,27 +2079,30 @@
       }
     },
     {
-      "name": "BZ_L3_SEXUAL_ORIENTATION - List",
-      "framework": "LIST",
+      "name": "BZ_L3_SEXUAL_ORIENTATION - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_SEXUAL_ORIENTATION",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-sexual-orientations.txt",
-            "matchStrength": 0.8
+            "note": "15 — Heterosexual · Gay · Lesbian · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:eterosexual|omosexual)|l(?:esbian|gbt(?:q(?:i\\+)?)?)|other|p(?:ansexual|refer(?: not to say|s not to say))|queer|straight))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_L3_SEXUAL_LIFE - Path",
       "framework": "PATH",
       "domain": "BZ_L3_SEXUAL_LIFE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -1998,7 +2121,7 @@
       "name": "BZ_L3_GENDER_IDENTITY - Path",
       "framework": "PATH",
       "domain": "BZ_L3_GENDER_IDENTITY",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2014,27 +2137,30 @@
       }
     },
     {
-      "name": "BZ_L3_GENDER_IDENTITY - List",
-      "framework": "LIST",
+      "name": "BZ_L3_GENDER_IDENTITY - Values",
+      "framework": "REGEX",
       "domain": "BZ_L3_GENDER_IDENTITY",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-gender-identities.txt",
-            "matchStrength": 0.7
+            "note": "14 — Woman · Man · Trans woman · Trans man · Non-binary · Gender fluid · …",
+            "regex": "(?iu)(?:(?:cisgender|female|gender fluid|ma(?:le|n)|non(?:-binary|binary)|other|prefers not to say|trans(?: (?:man|woman)|gender)?|woman))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_HEALTH_ID - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_ID",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2061,7 +2187,7 @@
       "name": "BZ_HEALTH_DIAGNOSIS - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_DIAGNOSIS",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2089,7 +2215,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2099,7 +2225,7 @@
       "name": "BZ_HEALTH_MEDICATION - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_MEDICATION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2115,27 +2241,30 @@
       }
     },
     {
-      "name": "BZ_HEALTH_MEDICATION - List",
-      "framework": "LIST",
+      "name": "BZ_HEALTH_MEDICATION - Values",
+      "framework": "REGEX",
       "domain": "BZ_HEALTH_MEDICATION",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-medications.txt",
-            "matchStrength": 0.7
+            "note": "51 — Paracetamol · Ibuprofen · Naproxen · Diclofenac · Metformin · Glibenclamide · …",
+            "regex": "(?iu)(?:(?:a(?:cetaminophen|lprazolam|m(?:lodipine|oxicillin)|spirin|torvastatin|zithromycin)|c(?:etirizine|hlorphenamine|iprofloxacin|lonazepam)|d(?:epo-provera|i(?:azepam|clofenac)|olutegravir)|e(?:favirenz|mtricitabine|nalapril|scitalopram)|f(?:errous sulphate|luoxetine|olic acid)|glibenclamide|h(?:aloperidol|ydrochlorothiazide)|i(?:buprofen|nsulin)|l(?:ev(?:etiracetam|o(?:norgestrel|thyroxine))|ithium|o(?:ratadine|sartan))|m(?:et(?:formin|hylphenidate)|isoprostol|ultivitamin)|na(?:ltrexone|proxen)|o(?:lanzapine|meprazole)|p(?:aracetamol|rednisone)|quetiapine|risperidone|s(?:albutamol|ertraline|imvastatin)|tenofovir|valproic acid|warfarin))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BZ_HEALTH_CLINICAL_TEXT - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_CLINICAL_TEXT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2171,7 +2300,7 @@
       "name": "BZ_HEALTH_TEST_RESULT - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_TEST_RESULT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2198,7 +2327,7 @@
       "name": "BZ_HEALTH_BLOOD_GROUP - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_BLOOD_GROUP",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2214,27 +2343,30 @@
       }
     },
     {
-      "name": "BZ_HEALTH_BLOOD_GROUP - List",
-      "framework": "LIST",
+      "name": "BZ_HEALTH_BLOOD_GROUP - Values",
+      "framework": "REGEX",
       "domain": "BZ_HEALTH_BLOOD_GROUP",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-blood-groups.txt",
-            "matchStrength": 0.9
+            "note": "26 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-|b(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-))|b(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-)|o(?: (?:neg(?:ative)?|pos(?:itive)?)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_HEALTH_DISABILITY - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_DISABILITY",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2250,27 +2382,30 @@
       }
     },
     {
-      "name": "BZ_HEALTH_DISABILITY - List",
-      "framework": "LIST",
+      "name": "BZ_HEALTH_DISABILITY - Values",
+      "framework": "REGEX",
       "domain": "BZ_HEALTH_DISABILITY",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-disabilities.txt",
-            "matchStrength": 0.6
+            "note": "22 — Seeing · Hearing · Walking or climbing steps · Remembering or concentrating · Self-care · Communicating · …",
+            "regex": "(?iu)(?:(?:autism|blind|communicating|deaf|hearing(?: impaired)?|intellectual|learning|m(?:ental|obility|ultiple)|no(?: disability|ne)|p(?:hysical|sychosocial)|remembering or concentrating|se(?:eing|lf-care)|visual|walking or climbing steps))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BZ_HEALTH_REPRODUCTIVE - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_REPRODUCTIVE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2289,7 +2424,7 @@
       "name": "BZ_HEALTH_MENTAL - Path",
       "framework": "PATH",
       "domain": "BZ_HEALTH_MENTAL",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2308,7 +2443,7 @@
       "name": "BZ_FIN_CREDIT_REFERENCE - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_CREDIT_REFERENCE",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2327,7 +2462,7 @@
       "name": "BZ_FIN_DEBT - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_DEBT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2362,7 +2497,7 @@
       "name": "BZ_FIN_INCOME - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_INCOME",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2397,7 +2532,7 @@
       "name": "BZ_FIN_ASSETS - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_ASSETS",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2432,7 +2567,7 @@
       "name": "BZ_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_PENSION",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2467,7 +2602,7 @@
       "name": "BZ_FIN_SSB_BENEFIT - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_SSB_BENEFIT",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2483,27 +2618,30 @@
       }
     },
     {
-      "name": "BZ_FIN_SSB_BENEFIT - List",
-      "framework": "LIST",
+      "name": "BZ_FIN_SSB_BENEFIT - Values",
+      "framework": "REGEX",
       "domain": "BZ_FIN_SSB_BENEFIT",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-ssb-benefits.txt",
-            "matchStrength": 0.8
+            "note": "21 — Sickness benefit · Maternity allowance · Maternity grant · Employment injury benefit · Invalidity pension · Survivors pension · …",
+            "regex": "(?iu)(?:(?:disablement|employment injury(?: benefit)?|funeral(?: grant)?|in(?:jury benefit|validity(?: pension)?)|maternity(?: (?:allowance|grant))?|n(?:cp|on(?:-contributory pension|e))|retirement(?: pension)?|s(?:ickness(?: benefit)?|urvivors(?:' pension)?)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_FIN_SOCIAL_PROGRAMME - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_SOCIAL_PROGRAMME",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2519,31 +2657,48 @@
       }
     },
     {
-      "name": "BZ_FIN_SOCIAL_PROGRAMME - List",
-      "framework": "LIST",
+      "name": "BZ_FIN_SOCIAL_PROGRAMME - Values",
+      "framework": "REGEX",
       "domain": "BZ_FIN_SOCIAL_PROGRAMME",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-social-programmes.txt",
-            "matchStrength": 0.8
+            "note": "16 — BOOST · Food Assistance Programme · Non-Contributory Pension Programme · National Health Insurance · Other programme · None · …",
+            "regex": "(?iu)(?:(?:boost(?:\\+)?|food (?:assistance(?: programme)?|pantry)|grocery bag|n(?:ational health insurance|cp|hi|on(?: contributory pension|-contributory pension programme|e))|other programme|pantry))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://bz-detect-flag.txt",
-            "matchStrength": 0.3
+            "note": "8 — y · n · yes · no · s · sí · …",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "8 — y · n · yes · no · s · sí · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?|y(?:es)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "BZ_FIN_POVERTY - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_POVERTY",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2559,27 +2714,30 @@
       }
     },
     {
-      "name": "BZ_FIN_POVERTY - List",
-      "framework": "LIST",
+      "name": "BZ_FIN_POVERTY - Values",
+      "framework": "REGEX",
       "domain": "BZ_FIN_POVERTY",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-poverty.txt",
-            "matchStrength": 0.4
+            "note": "9 — extremely poor · indigent · poor · not poor · vulnerable · non poor · …",
+            "regex": "(?iu)(?:(?:extremely poor|high|indigent|low|middle|no(?:n poor|t poor)|poor|vulnerable))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BZ_FIN_HOUSING - Path",
       "framework": "PATH",
       "domain": "BZ_FIN_HOUSING",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2603,27 +2761,30 @@
       }
     },
     {
-      "name": "BZ_FIN_HOUSING - List",
-      "framework": "LIST",
+      "name": "BZ_FIN_HOUSING - Values",
+      "framework": "REGEX",
       "domain": "BZ_FIN_HOUSING",
       "description": "Known values.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://bz-detect-housing-tenure.txt",
-            "matchStrength": 0.6
+            "note": "20 — Owned · Owned with mortgage · Rented private · Rented government · Rent free · Leased · …",
+            "regex": "(?iu)(?:(?:family land|government|lease(?:d)?|mortgage(?:d)?|o(?:ther|wn(?:e(?:d(?: with mortgage)?|r))?)|rent(?: free|ed(?: \\((?:government\\)|private\\)))?|ing)?|squatte(?:d|r)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "BZ_PENAL_CRIMINAL_RECORD - Path",
       "framework": "PATH",
       "domain": "BZ_PENAL_CRIMINAL_RECORD",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2650,7 +2811,7 @@
       "name": "BZ_PENAL_CASE_NUMBER - Path",
       "framework": "PATH",
       "domain": "BZ_PENAL_CASE_NUMBER",
-      "description": "Column name (and the variants used in Belizean systems).",
+      "description": "Column name and the variants used in Belizean systems.",
       "config": {
         "paths": [
           {
@@ -2686,7 +2847,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i)\\d{1,6}\\s+of\\s+\\d{4}",
@@ -2694,7 +2855,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2932,7 +3093,7 @@
     },
     {
       "name": "BZ_HEALTH_BLOOD_GROUP",
-      "algorithm": "BZ_BLOOD_GROUP"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "BZ_HEALTH_DISABILITY",
@@ -2952,19 +3113,19 @@
     },
     {
       "name": "BZ_FIN_DEBT",
-      "algorithm": "BZ_DEBT_AMOUNT"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BZ_FIN_INCOME",
-      "algorithm": "BZ_INCOME"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BZ_FIN_ASSETS",
-      "algorithm": "BZ_ASSETS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BZ_FIN_PENSION",
-      "algorithm": "BZ_PENSION_AMOUNT"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "BZ_FIN_SSB_BENEFIT",
@@ -3006,7 +3167,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "000123456"
     },
@@ -3022,7 +3184,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3251,8 +3414,23 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3674,8 +3852,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?\\(?501\\)?[\\s\\-]?)?([2-8])(\\d{2})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?\\(?501\\)?[\\s\\-]?)?([2-8])(\\d{2})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -3727,26 +3908,20 @@
       "input": "#24 Cleghorn Street, Belize City"
     },
     {
-      "name": "BZ_CARD_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4916313123456780"
-    },
-    {
       "name": "BZ_CARD",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "BZ_CARD_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -3775,8 +3950,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3878,8 +4056,11 @@
             ]
           },
           {
-            "regex": "(\\d{3,5})",
+            "regex": "(0*?)(?:(\\d{3,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4061,8 +4242,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4089,8 +4273,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -4098,8 +4285,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)(\\.\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)(\\.\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4115,8 +4305,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4129,8 +4322,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4442,16 +4638,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -4499,8 +4701,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4553,8 +4758,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4607,8 +4815,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4661,8 +4872,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4715,8 +4929,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4769,8 +4986,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4823,8 +5043,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4972,8 +5195,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4993,21 +5219,6 @@
         "requireMask": false
       },
       "input": "Sertraline 50 mg"
-    },
-    {
-      "name": "BZ_BLOOD_GROUP",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://bz-blood-groups.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "BZ_DISABILITY_LIST",
@@ -5041,8 +5252,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5084,8 +5298,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,3})",
+            "regex": "(0*?)(?:(\\d{2,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5116,42 +5333,6 @@
         "requireMask": false
       },
       "input": "90 days past due"
-    },
-    {
-      "name": "BZ_DEBT_AMOUNT",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 200,
-        "maxValue": 1000000
-      },
-      "input": "8500"
-    },
-    {
-      "name": "BZ_INCOME",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 700,
-        "maxValue": 40000
-      },
-      "input": "2400"
-    },
-    {
-      "name": "BZ_ASSETS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 20000,
-        "maxValue": 5000000
-      },
-      "input": "185000"
-    },
-    {
-      "name": "BZ_PENSION_AMOUNT",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 100,
-        "maxValue": 10000
-      },
-      "input": "680"
     },
     {
       "name": "BZ_SSB_BENEFIT_LIST",
@@ -5185,8 +5366,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5239,8 +5423,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5327,8 +5514,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([1-5])",
+            "regex": "(0*?)(?:([1-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5338,8 +5528,11 @@
             ]
           },
           {
-            "regex": "([6-9]|10)",
+            "regex": "(0*?)(?:([6-9]|10))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5420,8 +5613,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5474,8 +5670,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5499,34 +5698,14 @@
   ],
   "files": [
     "bz-addresses.txt",
-    "bz-blood-groups.txt",
     "bz-credit-statuses.txt",
     "bz-criminal-record.txt",
     "bz-decile-high.txt",
     "bz-decile.txt",
-    "bz-detect-blood-groups.txt",
-    "bz-detect-disabilities.txt",
-    "bz-detect-education.txt",
-    "bz-detect-ethnic-groups.txt",
-    "bz-detect-flag.txt",
-    "bz-detect-gender-identities.txt",
     "bz-detect-given-names.txt",
-    "bz-detect-housing-tenure.txt",
-    "bz-detect-languages.txt",
-    "bz-detect-marital-status.txt",
-    "bz-detect-medications.txt",
-    "bz-detect-nationalities.txt",
-    "bz-detect-political-opinions.txt",
-    "bz-detect-political-parties.txt",
-    "bz-detect-poverty.txt",
-    "bz-detect-religions.txt",
+    "bz-detect-sex-letter.txt",
     "bz-detect-sex.txt",
-    "bz-detect-sexual-orientations.txt",
-    "bz-detect-social-programmes.txt",
-    "bz-detect-ssb-benefits.txt",
     "bz-detect-surnames.txt",
-    "bz-detect-towns-villages.txt",
-    "bz-detect-trade-unions.txt",
     "bz-diagnoses.txt",
     "bz-disabilities.txt",
     "bz-education.txt",

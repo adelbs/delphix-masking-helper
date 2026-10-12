@@ -29,8 +29,8 @@ Three things make this set different from the others.
 
 | | |
 |---|---|
-| Profile set | `ES - LOPDGDD - v1`, assignment threshold 60, built 2 October 2026 |
-| Extended pack | 83 domains, 147 classifiers, 347 algorithms, 103 files — everything below |
+| Profile set | `ES - LOPDGDD - v2`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 83 domains, 149 classifiers, 341 algorithms, 82 files — everything below |
 | Essential pack | 12 domains, 27 classifiers, 65 algorithms, 9 files — DNI, NIE, passport, Seguridad Social number, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
@@ -71,11 +71,24 @@ dependency grades, benefits such as the Ingreso Mínimo Vital, and NIGs.
 **Type** classifiers rule domains out where the column cannot hold the data: an e-mail is text of at
 least 5 characters, a birth date a date, timestamp or text, an amount a number.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in every
 table and every job. Placeholders such as `N/A` or `-` do not fail a row: where there is nothing to
 mask they pass through.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### Check characters computed by lookup tables
 
@@ -121,7 +134,7 @@ example (`9872023VH5797S0001WX`); the CUPS one against the python-stdnum example
 | `ES_L1_TELEFONO` | `+34` and the first digit kept, so the number still says mobile or landline |
 | `ES_L1_DIRECCION` | A fictitious street address — calle, avenida, plaza, and the carrer, rúa and kalea of the other official languages |
 | `ES_L1_CUENTA_BANCARIA` | Account changed, **second control digit and IBAN digits recomputed**, bank and branch kept |
-| `ES_L1_TARJETA` | Payment Card (Luhn stays valid) |
+| `ES_L1_TARJETA` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `ES_L1_MATRICULA` | Digits and letters masked inside the DGT alphabet (no vowels, Ñ or Q); provincial prefix kept |
 | `ES_L1_REFERENCIA_CATASTRAL` | Parcel digits changed, map sheet or polígono kept, **control letter recomputed** |
 | `ES_L1_CUPS` | Distributor kept, twelve digits changed, **two control letters recomputed** |
@@ -170,8 +183,8 @@ reproductive health (LO 2/2010), mental health.
 
 Files of defaulters and the CIRBE, debt, income, assets, pension, social benefits (Ingreso Mínimo
 Vital, unemployment, regional minimum income, social bonus) and **tax data** — which article 95 of
-the Ley General Tributaria calls reserved; a refund keeps its sign. Amounts are replaced by another
-amount of the same order of magnitude in euros.
+the Ley General Tributaria calls reserved; a refund keeps its sign. Amounts go through the engine's
+own CM Numeric: another amount of the same order of magnitude.
 
 ### PENAL — Criminal and administrative offences (art. 10 RGPD, arts. 10 and 27 LOPDGDD)
 
@@ -240,7 +253,7 @@ The last one regenerates the PDFs; run it after any change to the set or to `doc
 
 The build itself runs each check-character chain with the masking taken as the identity and fails
 unless a valid example comes back unchanged. `verify.mjs` reviews every classifier configuration,
-profiles 159 columns with the whole set at its threshold and again with the essential pack — well
+profiles 165 columns with the whole set at its threshold and again with the essential pack — well
 named, badly named, named in Catalan, Galician or Basque, and 31 columns that are not personal data,
 among them the NIF of a company — and audits the generalization for all 8,132 municipios, 10,790
 postal codes and 52 provinces, checking that every one of the 68,972 replacements names a municipio
@@ -250,6 +263,11 @@ DNIs, 100 NIEs, 200 Seguridad Social numbers, 200 IBANs (compact and printed), 1
 referencias catastrales and 100 CUPS, checking that every output is **valid under its own rule**,
 distinct, of the same shape, and keeps what it should keep. Each value forks a JVM; the whole run
 takes about eight minutes.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 

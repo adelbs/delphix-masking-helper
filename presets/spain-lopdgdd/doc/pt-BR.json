@@ -330,7 +330,7 @@
         "O número de um cartão de crédito ou débito."
       ],
       "masking": [
-        "Trocado por outro número que passa na verificação de Luhn, mantendo o comprimento e os separadores."
+        "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
       ]
     },
     "ES_L1_BILLETERA": {
@@ -852,7 +852,7 @@
         "Saldo devedor, valor de empréstimo ou hipoteca, parcela mensal, limite de crédito, penhora."
       ],
       "masking": [
-        "Trocada por outro valor entre 100 e 600.000 euros."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_INGRESOS": {
@@ -861,7 +861,7 @@
         "Salário, folha de pagamento, renda do domicílio, rendimentos do trabalho ou do capital."
       ],
       "masking": [
-        "Trocada por outro valor entre 1.000 e 120.000 euros."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_PATRIMONIO": {
@@ -870,7 +870,7 @@
         "Valor catastral ou de avaliação de um imóvel, saldos de contas e investimentos, planos de previdência."
       ],
       "masking": [
-        "Trocado por outro valor entre 1.000 e 3.000.000 de euros."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_PENSION": {
@@ -879,7 +879,7 @@
         "O valor de uma aposentadoria, pensão por viuvez, orfandade, invalidez ou não contributiva, ou de alimentos."
       ],
       "masking": [
-        "Trocada por outro valor entre 500 e 3.400 euros por mês — a faixa das pensões públicas."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "ES_FIN_PRESTACION_SOCIAL": {

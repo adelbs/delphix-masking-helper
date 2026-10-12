@@ -371,7 +371,7 @@
         "Números de cartão de crédito e débito, reconhecidos pelo algoritmo de Luhn."
       ],
       "masking": [
-        "Payment Card: outro número que passa no algoritmo de Luhn. Só valores com forma de cartão chegam até ele."
+        "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
       ]
     },
     "PE_L1_BILLETERA": {
@@ -884,7 +884,7 @@
         "Salário, renda mensal ou familiar, honorários e rendas de qualquer categoria. **O artigo 2, 5 lista os rendimentos econômicos entre os dados sensíveis**: no Peru esta coluna pesa como um diagnóstico. O salário mínimo é de 1.130 soles mensais desde janeiro de 2025."
       ],
       "masking": [
-        "Mapeados para um valor entre 1.025 e 25.000 soles, sem relação com o real."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_HISTORIAL_CREDITICIO": {
@@ -902,7 +902,7 @@
         "Saldos de crédito e de carteira, valores em atraso, parcelas, montantes liberados e limites."
       ],
       "masking": [
-        "Mapeada para um valor entre 100 e 500.000 soles, sem relação com o real."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_PATRIMONIO": {
@@ -911,7 +911,7 @@
         "Patrimônio, ativos, avaliações e autoavaliações, saldos de conta, de CTS e de fundos, depósitos a prazo e a declaração juramentada de bens."
       ],
       "masking": [
-        "Mapeado para um valor entre 1.000 e 900.000 soles."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_PENSION": {
@@ -920,7 +920,7 @@
         "O valor da pensão, do subsídio ou do benefício, e a pensão alimentícia."
       ],
       "masking": [
-        "Mapeado para um valor entre 300 e 8.000 soles."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "PE_FIN_PROGRAMA_SOCIAL": {

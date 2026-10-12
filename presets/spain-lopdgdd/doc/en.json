@@ -330,7 +330,7 @@
         "The number of a credit or debit card."
       ],
       "masking": [
-        "Replaced by another number that passes the Luhn check, keeping its length and separators."
+        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "ES_L1_BILLETERA": {
@@ -852,7 +852,7 @@
         "Outstanding balance, loan or mortgage amount, monthly instalment, credit limit, attachment."
       ],
       "masking": [
-        "Replaced by another amount between 100 and 600,000 euros."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "ES_FIN_INGRESOS": {
@@ -861,7 +861,7 @@
         "Salary, payslip, income of the household, earnings from work or capital."
       ],
       "masking": [
-        "Replaced by another amount between 1,000 and 120,000 euros."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "ES_FIN_PATRIMONIO": {
@@ -870,7 +870,7 @@
         "Cadastral or appraised value of a property, account and investment balances, pension plans."
       ],
       "masking": [
-        "Replaced by another amount between 1,000 and 3,000,000 euros."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "ES_FIN_PENSION": {
@@ -879,7 +879,7 @@
         "The amount of a retirement, widow's, orphan's, disability or non-contributory pension, or of maintenance."
       ],
       "masking": [
-        "Replaced by another amount between 500 and 3,400 euros a month — the range of the public pensions."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "ES_FIN_PRESTACION_SOCIAL": {

@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "versionDate": "2026-09-17",
+  "version": 2,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Colombia — Ley 1581 de 2012 (personal data protection)",
     "pt-BR": "Colômbia — Ley 1581 de 2012 (proteção de dados pessoais)",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales colombianos conforme a la Ley Estatutaria 1581 de 2012: identificadores directos (cédula, NIT con dígito de verificación válido, documentos de extranjeros, nombres, contacto, dirección, llave Bre-B), cuasi-identificadores (fecha de nacimiento, municipio, código postal), los datos sensibles del artículo 5 — origen étnico, política, religión, sindicatos, organizaciones sociales, salud, vida sexual, datos biométricos —, víctimas del conflicto armado, datos financieros de la Ley 1266 de 2008 (estrato, Sisbén, centrales de riesgo) y antecedentes penales."
   },
   "profileSet": {
-    "name": "CO - Ley 1581 de 2012 - v1",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 5), víctimas del conflicto armado, datos de salud, datos financieros (Ley 1266 de 2008) y antecedentes penales, conforme a la Ley Estatutaria 1581 de 2012 de protección de datos personales.",
+    "name": "CO - Ley 1581 de 2012 - v2",
+    "description": "Ley 1581 de 2012 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "CO_L1_CEDULA - Path",
@@ -59,6 +59,7 @@
       "CO_L1_CONTRATO - Path",
       "CO_L1_USUARIO - Path",
       "CO_L1_CREDENCIAL - Path",
+      "CO_L1_CREDENCIAL - Regex",
       "CO_L1_GEOLOCALIZACION - Path",
       "CO_L1_GEOLOCALIZACION - Regex",
       "CO_L1_TEXTO_LIBRE - Path",
@@ -75,7 +76,7 @@
       "CO_L2_SEXO - Path",
       "CO_L2_SEXO - List",
       "CO_L2_MUNICIPIO - Path",
-      "CO_L2_MUNICIPIO - List",
+      "CO_L2_MUNICIPIO - Values",
       "CO_L2_CODIGO_MUNICIPIO - Path",
       "CO_L2_CODIGO_MUNICIPIO - Regex",
       "CO_L2_CODIGO_POSTAL - Path",
@@ -83,60 +84,61 @@
       "CO_L2_BARRIO - Path",
       "CO_L2_VEREDA - Path",
       "CO_L2_NACIONALIDAD - Path",
-      "CO_L2_NACIONALIDAD - List",
+      "CO_L2_NACIONALIDAD - Values",
       "CO_L2_ESTADO_CIVIL - Path",
-      "CO_L2_ESTADO_CIVIL - List",
+      "CO_L2_ESTADO_CIVIL - Values",
       "CO_L2_OCUPACION - Path",
       "CO_L2_EMPLEADOR - Path",
       "CO_L2_ESCOLARIDAD - Path",
-      "CO_L2_ESCOLARIDAD - List",
+      "CO_L2_ESCOLARIDAD - Values",
       "CO_L2_INSTITUCION_EDUCATIVA - Path",
       "CO_L2_PERSONAS_A_CARGO - Path",
       "CO_L2_PERSONAS_A_CARGO - Type",
       "CO_L3_GRUPO_ETNICO - Path",
-      "CO_L3_GRUPO_ETNICO - List",
+      "CO_L3_GRUPO_ETNICO - Values",
       "CO_L3_PUEBLO_INDIGENA - Path",
-      "CO_L3_PUEBLO_INDIGENA - List",
+      "CO_L3_PUEBLO_INDIGENA - Values",
       "CO_L3_LENGUA_NATIVA - Path",
-      "CO_L3_LENGUA_NATIVA - List",
+      "CO_L3_LENGUA_NATIVA - Values",
       "CO_L3_RELIGION - Path",
-      "CO_L3_RELIGION - List",
+      "CO_L3_RELIGION - Values",
       "CO_L3_CONVICCION_FILOSOFICA - Path",
       "CO_L3_ORIENTACION_POLITICA - Path",
-      "CO_L3_ORIENTACION_POLITICA - List",
+      "CO_L3_ORIENTACION_POLITICA - Values",
       "CO_L3_AFILIACION_PARTIDO - Path",
-      "CO_L3_AFILIACION_PARTIDO - List",
+      "CO_L3_AFILIACION_PARTIDO - Values",
       "CO_L3_SINDICATO - Path",
-      "CO_L3_SINDICATO - List",
+      "CO_L3_SINDICATO - Values",
       "CO_L3_ORGANIZACION_SOCIAL - Path",
       "CO_L3_BIOMETRICO - Path",
       "CO_L3_BIOMETRICO - Type",
       "CO_L3_GENETICO - Path",
+      "CO_L3_GENETICO - Regex",
       "CO_L3_ORIENTACION_SEXUAL - Path",
-      "CO_L3_ORIENTACION_SEXUAL - List",
+      "CO_L3_ORIENTACION_SEXUAL - Values",
       "CO_L3_VIDA_SEXUAL - Path",
       "CO_L3_IDENTIDAD_GENERO - Path",
-      "CO_L3_IDENTIDAD_GENERO - List",
+      "CO_L3_IDENTIDAD_GENERO - Values",
       "CO_L3_VICTIMA_CONFLICTO - Path",
-      "CO_L3_VICTIMA_CONFLICTO - List",
+      "CO_L3_VICTIMA_CONFLICTO - Values",
       "CO_L3_REINCORPORACION - Path",
       "CO_SALUD_IDENTIFICADOR - Path",
       "CO_SALUD_AFILIACION - Path",
-      "CO_SALUD_AFILIACION - List",
+      "CO_SALUD_AFILIACION - Values",
       "CO_SALUD_DIAGNOSTICO - Path",
       "CO_SALUD_DIAGNOSTICO - Regex",
       "CO_SALUD_PROCEDIMIENTO - Path",
       "CO_SALUD_MEDICAMENTO - Path",
-      "CO_SALUD_MEDICAMENTO - List",
+      "CO_SALUD_MEDICAMENTO - Values",
       "CO_SALUD_TEXTO_CLINICO - Path",
       "CO_SALUD_TEXTO_CLINICO - Type",
       "CO_SALUD_RESULTADO_EXAMEN - Path",
       "CO_SALUD_GRUPO_SANGUINEO - Path",
-      "CO_SALUD_GRUPO_SANGUINEO - List",
+      "CO_SALUD_GRUPO_SANGUINEO - Values",
       "CO_SALUD_DISCAPACIDAD - Path",
-      "CO_SALUD_DISCAPACIDAD - List",
+      "CO_SALUD_DISCAPACIDAD - Values",
       "CO_SALUD_OCUPACIONAL - Path",
-      "CO_SALUD_OCUPACIONAL - List",
+      "CO_SALUD_OCUPACIONAL - Values",
       "CO_SALUD_REPRODUCTIVA - Path",
       "CO_SALUD_MENTAL - Path",
       "CO_FIN_CREDITO - Path",
@@ -149,13 +151,13 @@
       "CO_FIN_PENSION - Path",
       "CO_FIN_PENSION - Type",
       "CO_FIN_ESTRATO - Path",
-      "CO_FIN_ESTRATO - List",
+      "CO_FIN_ESTRATO - Values",
       "CO_FIN_SISBEN - Path",
       "CO_FIN_SISBEN - Regex",
       "CO_FIN_PROGRAMA_SOCIAL - Path",
-      "CO_FIN_PROGRAMA_SOCIAL - List",
+      "CO_FIN_PROGRAMA_SOCIAL - Values",
       "CO_FIN_VIVIENDA - Path",
-      "CO_FIN_VIVIENDA - List",
+      "CO_FIN_VIVIENDA - Values",
       "CO_PENAL_ANTECEDENTES - Path",
       "CO_PENAL_RADICADO - Path",
       "CO_PENAL_RADICADO - Regex"
@@ -163,7 +165,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la Ley 1581 de 2012: cédula, NIT, documentos de extranjeros, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial de la Ley 1581 de 2012",
       "domains": [
         "CO_L1_CEDULA",
         "CO_L1_NIT",
@@ -185,7 +187,7 @@
       "name": "CO_L1_CEDULA - Path",
       "framework": "PATH",
       "domain": "CO_L1_CEDULA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -237,20 +239,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,3}(\\.\\d{3}){1,3}",
+            "regex": "0*(?:\\d{1,3}(\\.\\d{3}){1,3})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "1\\d{9}",
+            "regex": "0*(?:1\\d{9})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -260,7 +262,7 @@
       "name": "CO_L1_NIT - Path",
       "framework": "PATH",
       "domain": "CO_L1_NIT",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -283,20 +285,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{3}\\.?\\d{3}\\.?\\d{3}-\\d",
+            "regex": "0*(?:\\d{3}\\.?\\d{3}\\.?\\d{3}-\\d)",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,3}(\\.\\d{3}){1,3}-\\d",
+            "regex": "0*(?:\\d{1,3}(\\.\\d{3}){1,3}-\\d)",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -306,7 +308,7 @@
       "name": "CO_L1_DOCUMENTO_EXTRANJERO - Path",
       "framework": "PATH",
       "domain": "CO_L1_DOCUMENTO_EXTRANJERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -325,7 +327,7 @@
       "name": "CO_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "CO_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -353,7 +355,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -363,7 +365,7 @@
       "name": "CO_L1_REGISTRO_CIVIL - Path",
       "framework": "PATH",
       "domain": "CO_L1_REGISTRO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -382,7 +384,7 @@
       "name": "CO_L1_TARJETA_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "CO_L1_TARJETA_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -401,7 +403,7 @@
       "name": "CO_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "CO_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -445,7 +447,7 @@
       "name": "CO_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "CO_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -481,7 +483,7 @@
       "name": "CO_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "CO_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -521,11 +523,11 @@
         "valueLists": [
           {
             "file": "preset-file://co-detectar-nombres.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://co-detectar-apellidos.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -537,7 +539,7 @@
       "name": "CO_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "CO_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -577,12 +579,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -592,7 +594,7 @@
       "name": "CO_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "CO_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -615,20 +617,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?57[\\s\\-]?)?3[0-2]\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?57[\\s\\-]?)?3[0-2]\\d[\\s\\-]?\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?57[\\s\\-]?)?\\(?60[1-8]\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?57[\\s\\-]?)?\\(?60[1-8]\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -638,7 +640,7 @@
       "name": "CO_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "CO_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -683,7 +685,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*\\b(vereda|finca|corregimiento|kil[oó]metro|km)\\b.*",
@@ -691,7 +693,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -701,7 +703,7 @@
       "name": "CO_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "CO_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -720,7 +722,7 @@
       "name": "CO_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "CO_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -739,7 +741,7 @@
       "name": "CO_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "CO_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -762,12 +764,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -777,7 +779,7 @@
       "name": "CO_L1_LLAVE_BREB - Path",
       "framework": "PATH",
       "domain": "CO_L1_LLAVE_BREB",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -805,7 +807,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -815,7 +817,7 @@
       "name": "CO_L1_IP - Path",
       "framework": "PATH",
       "domain": "CO_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -838,20 +840,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -861,7 +863,7 @@
       "name": "CO_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "CO_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -884,20 +886,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -907,7 +909,7 @@
       "name": "CO_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "CO_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -935,7 +937,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{3}[\\s\\-]?\\d{2}[A-Z]",
@@ -943,7 +945,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -953,7 +955,7 @@
       "name": "CO_L1_VEHICULO - Path",
       "framework": "PATH",
       "domain": "CO_L1_VEHICULO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -981,7 +983,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -991,7 +993,7 @@
       "name": "CO_L1_INMUEBLE - Path",
       "framework": "PATH",
       "domain": "CO_L1_INMUEBLE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1014,20 +1016,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{2,3}[A-Z]?-\\d{3,9}",
+            "regex": "0*(?:\\d{2,3}[A-Z]?-\\d{3,9})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{30}",
+            "regex": "0*(?:\\d{30})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1037,7 +1039,7 @@
       "name": "CO_L1_CONTRATO - Path",
       "framework": "PATH",
       "domain": "CO_L1_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1056,7 +1058,7 @@
       "name": "CO_L1_USUARIO - Path",
       "framework": "PATH",
       "domain": "CO_L1_USUARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1075,7 +1077,7 @@
       "name": "CO_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "CO_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1091,10 +1093,61 @@
       }
     },
     {
+      "name": "CO_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "CO_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "CO_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "CO_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1130,7 +1183,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(6[6-9]|7\\d|8[01])\\.\\d{4,}",
@@ -1138,7 +1191,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-?([0-9]|1[0-3])\\.\\d{4,}",
@@ -1146,7 +1199,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1156,7 +1209,7 @@
       "name": "CO_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "CO_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1196,12 +1249,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{1,3}(\\.\\d{3}){2,3}",
+            "regex": "0*(?:\\d{1,3}(\\.\\d{3}){2,3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1209,15 +1262,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "3\\d{2}\\s?\\d{3}\\s?\\d{4}",
+            "regex": "0*(?:3\\d{2}\\s?\\d{3}\\s?\\d{4})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1227,7 +1280,7 @@
       "name": "CO_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "CO_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1270,7 +1323,7 @@
       "name": "CO_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "CO_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1310,7 +1363,7 @@
       "name": "CO_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "CO_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1350,7 +1403,7 @@
       "name": "CO_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "CO_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1393,7 +1446,7 @@
       "name": "CO_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "CO_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1417,10 +1470,14 @@
         "valueLists": [
           {
             "file": "preset-file://co-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://co-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1429,7 +1486,7 @@
       "name": "CO_L2_MUNICIPIO - Path",
       "framework": "PATH",
       "domain": "CO_L2_MUNICIPIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1445,27 +1502,30 @@
       }
     },
     {
-      "name": "CO_L2_MUNICIPIO - List",
-      "framework": "LIST",
+      "name": "CO_L2_MUNICIPIO - Values",
+      "framework": "REGEX",
       "domain": "CO_L2_MUNICIPIO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-municipios.txt",
-            "matchStrength": 0.8
+            "note": "1008 — Medellín · Abejorral · Abriaquí · Alejandría · Amagá · Amalfi · …",
+            "regex": "(?iu)(?:(?:a(?:b(?:ejorral|r(?:ego|iaqu(?:i|í)))|c(?:a(?:c(?:ias|ías)|nd(?:i|í))|evedo|h(?:i|í))|g(?:rado|u(?:a(?: de dios|chica|da(?:s)?|zul)|st(?:in codazzi|ín codazzi)))|ipe|l(?:b(?:an(?:ia)?|án)|cal(?:a|á)|dana|ejandr(?:ia|ía)|g(?:arrobo|eciras)|m(?:aguer|eida)|pujarra|t(?:amira|o(?: baud(?:o|ó)|s del rosario))|varado)|m(?:a(?:g(?:a|á)|lfi)|balema)|n(?:apoima|cuya|d(?:aluc(?:ia|ía)|es)|g(?:el(?:opolis|ópolis)|ostura)|o(?:laima|r(?:i|í))|serma(?:nuevo)?|z(?:a|o(?:ategui|átegui)|á))|p(?:artad(?:o|ó)|ia|ulo|ía)|quitania|r(?:a(?:cataca|nzazu|toca|uquita)|b(?:el(?:aez|áez)|ole(?:da(?:s)?|tes))|cabuco|enal|gelia|iguan(?:i|í)|jona|me(?:nia|ro)|royohondo)|strea|t(?:aco|rato)|yapel)|b(?:a(?:gad(?:o|ó)|h(?:ia solano|ía solano)|jo baud(?:o|ó)|lboa|r(?:a(?:noa|ya)|b(?:acoas|osa)|ichara|ran(?:c(?:a(?: de up(?:ia|ía)|bermeja|s)|o(?: de loba|minas))|quilla)))|e(?:cerril|l(?:alc(?:azar|ázar)|en(?: de (?:los andaquies|umbria))?|lo|mira|én(?: de (?:los andaquíes|umbría))?)|rbeo|t(?:ania|eitiva|ulia|éitiva))|ituima|o(?:avita|chalema|got(?:a d(?:\\.c\\.|c)|á d(?:\\.c\\.|c))|ja(?:c(?:a|á)|y(?:a|á))|sconia)|rice(?:no|ño)|u(?:cara(?:manga|sica)|e(?:n(?:av(?:entura|ista)|os aires)|saco)|galagrande|ritic(?:a|á)|sbanz(?:a|á)))|c(?:a(?:buyaro|c(?:ahual|eres|hi(?:pay|ra)|ota)|i(?:cedonia|mito)|j(?:amarca|i(?:b(?:io|ío)|c(?:a|á)))|l(?:a(?:mar|rc(?:a|á))|dono|i(?:fornia|ma)?|oto)|mp(?:amento|o(?: de la cruz|alegre|hermoso))|n(?:a(?:lete|sgordas)|delaria|tagallo)|p(?:arrap(?:i|í)|itanejo)|queza|r(?:a(?:col(?:i|í)|manta)|cas(?:i|í)|epa|men de(?: (?:apical(?:a|á)|carupa)|l dari(?:en|én))|tag(?:ena(?: de(?: indias|l chair(?:a|á)))?|o)|ur(?:u|ú))|s(?:abianca|tilla la nueva)|ucasia|ñasgordas)|e(?:pit(?:a|á)|r(?:et(?:e|é)|inza|r(?:ito|o de san antonio)|tegui))|h(?:a(?:chag(?:ui|üí)|guan(?:i|í)|l(?:an|án)|meza|parral|r(?:al(?:a|á)|ta))|i(?:a|bolo|gorod(?:o|ó)|m(?:a|ichagua|á)|n(?:a(?:cota|vita)|chin(?:a|á)|u|ácota|ú)|pa(?:que|t(?:a|á))|qui(?:nquir(?:a|á)|za)|riguan(?:a|á)|scas|ta(?:g(?:a|á)|raque)?|v(?:at(?:a|á)|o(?:lo|r)))|o(?:ach(?:i|í)|cont(?:a|á))|ámeza|í(?:a|quiza))|i(?:cuco|en(?:aga(?: de oro)?|ega)|mitarra|rcasia|sneros|udad bol(?:ivar|ívar)|én(?:aga(?: de oro)?|ega))|lemencia|o(?:corn(?:a|á)|ello|gua|l(?:o(?:n|so)|ón)|mbita|n(?:c(?:epci(?:on|ón)|ordia)|doto|fines|sac(?:a|á)|t(?:adero|rataci(?:on|ón))|venci(?:on|ón))|p(?:acabana|er)|r(?:into|o(?:moro|zal)|rales)|t(?:a|orra)|v(?:arach(?:ia|ía)|e(?:nas|ñas))|yaima)|ravo norte|u(?:aspud carlosama|bar(?:a|ral|á)|c(?:aita|u(?:nub(?:a|á)|t(?:a|illa)))|itiva|m(?:ar(?:al|ibo)|b(?:al|itara))|nday|r(?:i(?:llo|t(?:i|í))|uman(?:i|í))|ítiva)|á(?:c(?:eres|hira|ota)|queza)|értegui|ómbita|úcuta)|d(?:a(?:beiba|gua)|i(?:bulla|stracci(?:on|ón))|o(?:lores|nmat(?:ias|ías)|squebradas)|u(?:itama|rania))|e(?:b(?:ejico|éjico)|l(?: (?:aguila|ba(?:gre|nco)|c(?:a(?:iro|lvario|nt(?:on del san pablo|ón del san pablo)|rmen(?: de (?:atrato|bol(?:ivar|ívar)|chucur(?:i|í)|viboral))?|stillo)|errito|harco|o(?:cuy|legio|pey))|do(?:ncello|rado|vio)|e(?:ncanto|spino)|gua(?:camayo|mo)|litoral del san juan|molino|p(?:a(?:so|uj(?:il|íl))|e(?:no(?:l|n)|ñ(?:ol|ón))|i(?:non|ñón)|lay(?:on|ón))|r(?:et(?:en|orno|én)|o(?:ble|sa(?:l|rio)))|santuario|ta(?:bl(?:on de gomez|ón de gómez)|mbo|rra)|zulia|águila)|ias|ías)|n(?:ci(?:no|so)|trerr(?:ios|íos)|vigado)|spinal)|f(?:a(?:catativ(?:a|á)|lan)|i(?:la(?:delfia|ndia)|ravitoba)|l(?:andes|or(?:e(?:ncia|sta)|i(?:an|da(?:blanca)?|án)))|o(?:meque|nseca|rtul|sca)|r(?:ancisco pizarro|e(?:donia|sno)|ontino)|u(?:ente de oro|n(?:daci(?:on|ón)|es|za)|quene|sagasug(?:a|á))|ómeque|úquene)|g(?:a(?:ch(?:a(?:l(?:a|á)|n(?:cip(?:a|á)|tiv(?:a|á)))|et(?:a|á))|l(?:a(?:n|pa)|eras|án)|m(?:a(?:rra)?|bita|eza)|ragoa)|enova|i(?:gante|nebra|r(?:ardot(?:a)?|on|ón))|omez plata|ra(?:malote|nada)|u(?:a(?:c(?:a(?:mayas|r(?:i|í))?|h(?:e(?:n(?:e|é)|t(?:a|á))|ucal))|d(?:alajara de buga|uas)|itarilla|lmat(?:an|án)|m(?:al|o)|p(?:i|ot(?:a|á))|r(?:anda|ne)|sca|t(?:a(?:p(?:e|é)|qu(?:i|í)|vita)|eque|ica)|vat(?:a|á)|ya(?:b(?:al de s(?:iquima|íquima)|etal)|t(?:a|á)))|epsa|ican de la sierra|ática)|ám(?:bita|eza)|énova|ómez plata|ü(?:epsa|icán de la sierra))|h(?:a(?:car(?:i|í)|t(?:illo de loba|o(?: corozal|nuevo)?))|e(?:liconia|r(?:r(?:an|án)|veo))|ispania|o(?:bo|nda))|i(?:bagu(?:e|é)|cononzo|les|mu(?:es|és)|n(?:irida|z(?:a|á)|írida)|piales|quira|s(?:nos|tmina)|t(?:ag(?:ui|üí)|uango)|za)|j(?:a(?:m(?:bal(?:o|ó)|und(?:i|í))|rd(?:in|ín))|e(?:nesano|r(?:ic(?:o|ó)|usal(?:en|én))|s(?:us maria|ús maría))|ord(?:an|án)|u(?:an de acosta|n(?:in|ín)|rad(?:o|ó)))|l(?:a(?: (?:a(?:partada|rgentina)|belleza|c(?:a(?:lera|pilla)|e(?:ja|lia)|horrera|ruz|umbre)|dorada|es(?:peranza|trella)|florida|g(?:loria|uadalupe)|jagua de(?: ibirico|l pilar)|llanada|m(?:acarena|e(?:rced|sa)|onta(?:nita|ñita))|p(?:a(?:lma|z)|e(?:drera|na|ña)|intada|la(?:ta|ya)|rimavera)|s(?:alina|ierra)|t(?:ebaida|ola)|u(?:ni(?:on|ón)|vita)|v(?:ega|i(?:ctoria|rginia)))|b(?:ateca|ranzagrande)|nd(?:azuri|ázuri))|e(?:brija|iva|jan(?:ias|ías)|nguazaque|rida|ticia)|i(?:b(?:ano|orina)|nares)|lor(?:o|ó)|o(?:pez de micay|rica|s (?:andes|c(?:ordobas|órdobas)|pa(?:lmitos|tios)|santos)|urdes)|uruaco|érida|íbano|ópez de micay)|m(?:a(?:c(?:a(?:nal|ravita)|eo|het(?:a|á))|drid|g(?:angu(?:e|é)|ui|üí)|hates|icao|jagual|l(?:a(?:ga|mbo)|lama)|n(?:a(?:t(?:i|í)|ure(?: balc(?:on del cesar|ón del cesar))?)|i(?:zales)?|ta|zanares|í)|pirip(?:an(?:a)?|án)|r(?:i(?:a la baja|nilla|p(?:i|í)|quita)|mato|quetalia|sella|ulanda|ía la baja)|tanza)|e(?:d(?:ell(?:in|ín)|io (?:atrato|baud(?:o|ó)|san juan))|lgar|rcaderes|setas)|i(?:l(?:an|án)|r(?:a(?:flores|nda)|iti - paran(?:a|á))|strat(?:o|ó)|t(?:u|ú))|o(?:coa|gotes|lagavita|m(?:il|p(?:o(?:s|x)|ós))|n(?:gu(?:a|i|í)|i(?:quir(?:a|á)|tos)|te(?:bello|cristo|l(?:ibano|íbano)|r(?:ia|rey|ía)))|r(?:elia|ichal|roa)|tavita|ñitos)|u(?:rind(?:o|ó)|t(?:at(?:a|á)|iscua)|zo)|álaga)|n(?:ataga(?:ima)?|e(?:c(?:h(?:i|í)|ocl(?:i|í))|i(?:ra|va)|moc(?:on|ón))|i(?:lo|maima)|o(?:bsa|caima|r(?:casia|os(?:i|í))|vita)|u(?:ev(?:a granada|o col(?:on|ón))|nch(?:ia|ía)|qu(?:i|í))|átaga|óvita)|o(?:ca(?:monte|na|ña)|i(?:ba|cat(?:a|á))|laya herrera|nzaga|porapa|r(?:ito|ocu(?:e|é))|tanche|vejas)|p(?:a(?:c(?:h(?:avita|o)|o(?:a|ra))|dilla|i(?:col|litas|me|pa)|jarito|l(?:e(?:rmo|stina)|m(?:a(?:r(?: de varela)?|s del socorro)|i(?:ra|to))|ocabildo)|mplon(?:a|ita)|n(?:a pana|di|queba)|punahua|ra(?:mo|tebueno)|s(?:ca|to)|t(?:ia|ía)|una|ya|z de (?:ariporo|r(?:io|ío)))|e(?:draza|laya|n(?:ol|silvania)|que|reira|sca|ñol)|i(?:amonte|e(?:d(?:ecuesta|ras)|ndam(?:o - tunia|ó - tunía))|j(?:ao|i(?:no del carmen|ño del carmen))|n(?:chote|illos)|oj(?:o|ó)|sba|tal(?:ito)?|vijay)|la(?:n(?:adas|eta rica)|to)|o(?:l(?:icarpa|onuevo)|nedera|pay(?:an|án)|re|tos(?:i|í))|r(?:ad(?:era|o)|ovidencia)|u(?:e(?:blo(?: (?:bello|nuevo|rico)|rrico|viejo)|nte nacional|r(?:res|to (?:a(?:legr(?:ia|ía)|rica|s(?:is|ís))|b(?:err(?:io|ío)|oyac(?:a|á))|c(?:a(?:icedo|rre(?:no|ño))|o(?:lombia|ncordia))|escondido|g(?:ait(?:an|án)|uzm(?:an|án))|l(?:egu(?:izamo|ízamo)|ibertador|leras|opez|ópez)|nar(?:e|i(?:no|ño))|parra|r(?:ico|ond(?:on|ón))|sa(?:lgar|ntander)|t(?:ejada|riunfo)|wilches)))|l(?:i|í)|piales|r(?:ac(?:e|é)|i(?:ficaci(?:on|ón)|sima de la concepcion)|ísima de la concepción))|á(?:cora|ramo))|qu(?:e(?:bradanegra|tame)|i(?:bd(?:o|ó)|mbaya|nch(?:ia|ía)|p(?:ama|ile))|ípama)|r(?:a(?:gonvalia|miriqu(?:i|í)|quira)|e(?:cetor|gidor|m(?:edios|olino)|pel(?:on|ón)|tiro)|i(?:caurte|o(?: (?:de oro|iro|quito|viejo)|blanco|fr(?:io|ío)|hacha|negro|sucio))|o(?:berto pay(?:an|án)|ldanillo|n(?:cesvalles|d(?:on|ón))|sas|vira)|áquira|ío (?:de oro|iró|quito|viejo))|s(?:a(?:b(?:an(?:a(?: de torres|grande|larga|s de san (?:angel|ángel))|eta)|oy(?:a|á))|c(?:ama|hica)|hag(?:un|ún)|l(?:a(?:doblanco|mina)|da(?:na|ña)|ento|gar)|m(?:a(?:c(?:a|á)|n(?:a|iego|á))|pu(?:es|és))|n(?: (?:a(?:gust(?:in|ín)|lberto|n(?:dr(?:es(?: (?:de (?:cuerquia|sotavento|tumaco)|isla|sotavento))?|és(?: (?:de (?:cuerquía|sotavento|tumaco)|isla|sotavento))?)|t(?:ero|onio(?: del tequendama)?)))|be(?:nito(?: abad)?|rnardo(?: del viento)?)|c(?:a(?:lixto|rlos(?: de guaroa)?|yetano)|rist(?:obal|óbal))|diego|e(?:duardo|stanislao)|f(?:e(?:lipe|rnando)|rancisco)|gil|j(?:acinto(?: del cauca)?|er(?:onimo|ónimo)|o(?:aqu(?:in|ín)|s(?:e(?: de(?: (?:cucuta|la montana|miranda|pare|toluviejo|ure)|l (?:fragua|guaviare|palmar)))?|é(?: de(?: (?:cúcuta|la montaña|miranda|pare|toluviejo|uré)|l (?:fragua|guaviare|palmar)))?))|uan(?: (?:de(?: (?:arama|betulia|rioseco|urab(?:a|á))|l cesar)|nepomuceno)|ito))|l(?:orenzo|uis(?: de (?:gaceno|palenque|sinc(?:e|é)))?)|m(?:a(?:r(?:cos|t(?:in(?: de loba)?|ín(?: de loba)?))|teo)|iguel(?: de sema)?)|onofre|p(?:ablo(?: de borbur)?|e(?:dro(?: de (?:cartago|los milagros|urab(?:a|á)))?|layo))|r(?:afael|oque)|sebasti(?:an(?: de (?:buenavista|mariquita))?|án(?: de (?:buenavista|mariquita))?)|vicente(?: (?:de(?: chucur(?:i|í)|l cagu(?:an|án))|ferrer))?|zen(?:on|ón))|don(?:a|á)|t(?:a(?: (?:ana|b(?:arbara(?: de pinto)?|árbara(?: de pinto)?)|c(?:atalina|ruz de mompox)|f(?:e de antioquia|é de antioquia)|helena del op(?:on|ón)|isabel|luc(?:ia|ía)|mar(?:ia|ta|ía)|rosa(?: de(?: (?:cabal|osos|viterbo)|l sur)|l(?:ia|ía))?|sof(?:ia|ía))|cruz|f(?:e de (?:antioquia|bogota)|é de (?:antioquia|bogotá))|nder de quilichao)|iago de (?:cali|tol(?:u|ú))|o (?:domingo|tom(?:as|ás))|uario))|puyes|r(?:avena|dinata)|saima|tiva(?:norte|sur))|e(?:govia|squil(?:e|é)|villa)|i(?:achoque|b(?:at(?:e|é)|undoy)|l(?:os|v(?:ania|ia))|m(?:acota|i(?:jaca|t(?:i|í)))|ncelejo|p(?:i|í)|tionuevo)|o(?:a(?:cha|t(?:a|á))|c(?:ha|o(?:rro|t(?:a|á)))|gamoso|l(?:edad|ita)|mondoco|ns(?:on|ón)|p(?:etr(?:an|án)|laviento|o|ó)|ra(?:c(?:a|á))?|ta(?:quir(?:a|á)|r(?:a (?:- paispamba|paispamba)|á (?:- paispamba|paispamba))))|u(?:a(?:ita|n|za)|bachoque|esca|p(?:at(?:a|á)|ia|ía)|rat(?:a|á)|sa(?:c(?:on|ón))?|ta(?:march(?:an|án)|t(?:ausa|enza)))|ác(?:ama|hica))|t(?:a(?:bio|d(?:o|ó)|laigua nuevo|m(?:a(?:lameque|ra)|e(?:sis)?|inango)|ngua|r(?:a(?:ira|pac(?:a|á)|z(?:a|á))|qui|so)|sco|u(?:ramena|sa))|e(?:n(?:a|erife|jo|za)|orama|ruel|salia)|i(?:b(?:a(?:cuy|n(?:a|á)|sosa)|irita|u|ú)|erralta|m(?:an(?:a|á)|b(?:i(?:o|qu(?:i|í))|ío))|njac(?:a|á)|pacoque|quisio|tirib(?:i|í))|o(?:ca(?:ima|ncip(?:a|á))?|g(?:ui|üí)|l(?:u(?: viejo|viejo)|ú viejo)|na|pa(?:ga|ip(?:i|í))|rib(?:io|ío)|t(?:a|or(?:o|ó)))|rinidad|u(?:bar(?:a|á)|ch(?:in|ín)|lu(?:a|á)|n(?:ja|ungu(?:a|á))|querres|r(?:b(?:a(?:co|n(?:a|á))|o)|mequ(?:e|é))|ta(?:z(?:a|á))?)|ám(?:ara|esis)|ópaga|úquerres)|u(?:ba(?:l(?:a|á)|que)|mbita|n(?:e|gu(?:ia|ía)|i(?:on panamericana|ón panamericana))|r(?:amita|ibia|rao|umita)|siacur(?:i|í)|tica)|v(?:al(?:divia|le(?: de(?: san j(?:os(?:e|é)|uan)|l guamuez)|dupar)|para(?:iso|íso))|e(?:gach(?:i|í)|n(?:adillo|ecia|taquemada)|r(?:gara|salles)|tas)|i(?:an(?:i|í)|g(?:ia del fuerte|ía del fuerte)|jes|ll(?:a(?: (?:caro|de(?: (?:leyva|san diego de ubat(?:e|é))|l rosario)|rica)|g(?:arz(?:on|ón)|omez|ómez)|hermosa|mar(?:ia|ía)|nueva|pinz(?:on|ón)|rrica|vi(?:cencio|eja))|eta)|ot(?:a|á)|racach(?:a|á)|stahermosa|terbo))|y(?:a(?:c(?:op(?:i|í)|uanquer)|guar(?:a|á)|l(?:i|í)|rumal|varat(?:e|é))|o(?:lomb(?:o|ó)|nd(?:o|ó)|pal|toco)|umbo)|z(?:a(?:pa(?:toca|y(?:an|án))|r(?:agoza|zal))|etaquira|ipa(?:c(?:on|ón)|quir(?:a|á))|ona bananera)|ábrego|íquira|ú(?:mbita|tica)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L2_CODIGO_MUNICIPIO - Path",
       "framework": "PATH",
       "domain": "CO_L2_CODIGO_MUNICIPIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1488,12 +1548,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(05|08|11|13|15|17|18|19|20|23|25|27|41|44|47|50|52|54|63|66|68|70|73|76|81|85|86|88|91|94|95|97|99)\\d{3}",
+            "regex": "0*(?:(05|08|11|13|15|17|18|19|20|23|25|27|41|44|47|50|52|54|63|66|68|70|73|76|81|85|86|88|91|94|95|97|99)\\d{3})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1503,7 +1563,7 @@
       "name": "CO_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "CO_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1544,7 +1604,7 @@
       "name": "CO_L2_BARRIO - Path",
       "framework": "PATH",
       "domain": "CO_L2_BARRIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1563,7 +1623,7 @@
       "name": "CO_L2_VEREDA - Path",
       "framework": "PATH",
       "domain": "CO_L2_VEREDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1582,7 +1642,7 @@
       "name": "CO_L2_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "CO_L2_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1598,27 +1658,30 @@
       }
     },
     {
-      "name": "CO_L2_NACIONALIDAD - List",
-      "framework": "LIST",
+      "name": "CO_L2_NACIONALIDAD - Values",
+      "framework": "REGEX",
       "domain": "CO_L2_NACIONALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-nacionalidades.txt",
-            "matchStrength": 0.7
+            "note": "41 — Colombiana · Venezolana · Ecuatoriana · Peruana · Estadounidense · Española · …",
+            "regex": "(?iu)(?:(?:a(?:lem(?:an(?:a)?|án)|rgentin(?:a|o))|brasile(?:n(?:a|o)|ñ(?:a|o))|c(?:hi(?:len(?:a|o)|n(?:a|o))|olombia(?:n(?:a|o))?|uban(?:a|o))|e(?:cua(?:dor|torian(?:a|o))|s(?:pa(?:n(?:a|ol(?:a)?)|ñ(?:a|ol(?:a)?))|tado(?:s unidos|unidense))|xtranjer(?:a|o))|franc(?:es(?:a)?|és)|italian(?:a|o)|m(?:exic(?:an(?:a|o)|o)|éxico)|p(?:aname(?:n(?:a|o)|ñ(?:a|o))|er(?:u(?:an(?:a|o))?|ú))|venez(?:olan(?:a|o)|uela)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "CO_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1634,27 +1697,30 @@
       }
     },
     {
-      "name": "CO_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "CO_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "CO_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "19 — Soltero a · Casado a · Unión marital de hecho · Separado a · Divorciado a · Viudo a · …",
+            "regex": "(?iu)(?:(?:casad(?:a|o(?:\\(a\\))?)|divorciad(?:a|o(?:\\(a\\))?)|s(?:eparad(?:a|o(?:\\(a\\))?)|olter(?:a|o(?:\\(a\\))?))|uni(?:on (?:libre|marital(?: de hecho)?)|ón (?:libre|marital(?: de hecho)?))|viud(?:a|o(?:\\(a\\))?)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "CO_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1681,7 +1747,7 @@
       "name": "CO_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "CO_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1700,7 +1766,7 @@
       "name": "CO_L2_ESCOLARIDAD - Path",
       "framework": "PATH",
       "domain": "CO_L2_ESCOLARIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1716,27 +1782,30 @@
       }
     },
     {
-      "name": "CO_L2_ESCOLARIDAD - List",
-      "framework": "LIST",
+      "name": "CO_L2_ESCOLARIDAD - Values",
+      "framework": "REGEX",
       "domain": "CO_L2_ESCOLARIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-escolaridad.txt",
-            "matchStrength": 0.6
+            "note": "24 — Ninguno · Preescolar · Básica primaria · Básica secundaria · Media bachiller · Técnica profesional · …",
+            "regex": "(?iu)(?:(?:b(?:a(?:chiller(?:ato)?|sica (?:primaria|secundaria))|ásica (?:primaria|secundaria))|doctorado|especiali(?:sta|zaci(?:on|ón))|m(?:a(?:estr(?:ia|ía)|g(?:ister|íster))|edia \\(bachiller\\))|ninguno|p(?:osgrado|r(?:e(?:escolar|grado)|imaria|ofesional))|secundaria|t(?:ecn(?:ic(?:a profesional|o)|ol(?:og(?:ica|o)|ógica)|ólogo)|écnic(?:a profesional|o))|universitari(?:a|o)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L2_INSTITUCION_EDUCATIVA - Path",
       "framework": "PATH",
       "domain": "CO_L2_INSTITUCION_EDUCATIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1755,7 +1824,7 @@
       "name": "CO_L2_PERSONAS_A_CARGO - Path",
       "framework": "PATH",
       "domain": "CO_L2_PERSONAS_A_CARGO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1795,7 +1864,7 @@
       "name": "CO_L3_GRUPO_ETNICO - Path",
       "framework": "PATH",
       "domain": "CO_L3_GRUPO_ETNICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1811,31 +1880,48 @@
       }
     },
     {
-      "name": "CO_L3_GRUPO_ETNICO - List",
-      "framework": "LIST",
+      "name": "CO_L3_GRUPO_ETNICO - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_GRUPO_ETNICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-grupos-etnicos.txt",
-            "matchStrength": 0.9
+            "note": "20 — Indígena · Gitano a o Rrom · Raizal del Archipiélago de San Andrés Providencia y Santa Catalina · Palenquero a de San Basilio · Negro a mulato a afrodescendiente afrocolombiano a · Ningún grupo étnico · …",
+            "regex": "(?iu)(?:(?:afro(?:colombian(?:a|o)|descendiente)|blanco|gitano(?:\\(a\\) o rrom)?|ind(?:igena|ígena)|m(?:estizo|ulato)|n(?:egro(?:\\(a\\), mulato\\(a\\), afrodescendiente, afrocolombiano\\(a\\))?|ing(?:un(?: grupo etnico|a|o)|ún grupo étnico))|palenquero(?:\\(a\\) de san basilio)?|r(?:aizal(?: del archipi(?:elago de san andres, providencia y santa catalina|élago de san andrés, providencia y santa catalina))?|rom)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://co-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_PUEBLO_INDIGENA - Path",
       "framework": "PATH",
       "domain": "CO_L3_PUEBLO_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1851,27 +1937,30 @@
       }
     },
     {
-      "name": "CO_L3_PUEBLO_INDIGENA - List",
-      "framework": "LIST",
+      "name": "CO_L3_PUEBLO_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_PUEBLO_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-pueblos-indigenas.txt",
-            "matchStrength": 0.9
+            "note": "112 — Achagua · Amorúa · Andoke · Arhuaco · Awá · Bara · …",
+            "regex": "(?iu)(?:(?:a(?:chagua|m(?:bal(?:o|ó)|or(?:ua|úa))|ndoke|rhuaco|w(?:a|á))|b(?:ar(?:a(?:sano)?|i|í)|etoye|ora)|c(?:a(?:lima|namomo lomaprieta|rapana|ñamomo lomaprieta)|h(?:am(?:i|í)|i(?:mila|ricoa|tarero))|o(?:c(?:ama|onuco)|reguaje)|u(?:beo|iba|na tule|rripaco))|d(?:esano|ujos)|e(?:mber(?:a(?: (?:chami|dobida|katio))?|á(?: (?:chamí|dobida|katío))?)|perara siapidara)|gua(?:jiro|mbiano|n(?:aca|e)|yabero)|h(?:itnu|uitoto)|inga|k(?:a(?:m(?:entsa|ëntsá)|nkuamo|rijona|t(?:io|ío))|i(?:chwa|zg(?:o|ó))|o(?:f(?:an|án)|gui)|una)|letuama|m(?:a(?:k(?:aguaje|una)|siguare|tap(?:i|í))|i(?:ra(?:na|ña)|sak)|okan(?:a|á)|u(?:i(?:nane|sca)|ru(?:i|í)))|n(?:asa|onuya|u(?:kak|tabe))|ocaina|p(?:a(?:ez|nches|stos)|i(?:a(?:poco|roa)|jao|ratapuyo|samira)|olindara|uinave|áez)|qui(?:llacinga|mbaya)|s(?:aliva|en(?:u|ú)|i(?:kuani|ona|riano)|áliva)|t(?:a(?:iwano|nimuka|riano|tuyo|yrona)|i(?:cuna|kuna)|otor(?:o|ó)|siripu|u(?:kano|le|yuca))|u(?:'wa|itoto)|w(?:a(?:nano|y(?:u(?:u)?|ú(?:u)?))|i(?:toto|wa)|ounaan)|y(?:a(?:gua|nacona|una)|u(?:k(?:pa|una)|rut(?:i|í)))|zen(?:u|ú)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_LENGUA_NATIVA - Path",
       "framework": "PATH",
       "domain": "CO_L3_LENGUA_NATIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1887,27 +1976,30 @@
       }
     },
     {
-      "name": "CO_L3_LENGUA_NATIVA - List",
-      "framework": "LIST",
+      "name": "CO_L3_LENGUA_NATIVA - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_LENGUA_NATIVA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "32 — Español · Wayuunaiki · Nasa Yuwe · Emberá · Namtrik · Sikuani · …",
+            "regex": "(?iu)(?:(?:arhuaco|c(?:astellano|reole|urripaco)|e(?:mber(?:a|á)|spa(?:nol|ñol))|i(?:kʉ \\(arhuaco\\)|nga)|k(?:am(?:entsa|ëntsá)|ogui|riol(?: \\(creole sanandresano\\))?)|lengua palenquera|misak|n(?:a(?:mtrik|sa yuwe)|inguna lengua nativa)|palenquero|roman(?:es|i|és|í)|sikuani|t(?:ikuna|ukano)|wayuunaiki))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "CO_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1923,27 +2015,30 @@
       }
     },
     {
-      "name": "CO_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "CO_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "29 — Católica · Cristiana evangélica · Pentecostal · Adventista del Séptimo Día · Testigo de Jehová · Iglesia de Jesucristo de los Santos de los Últimos Días · …",
+            "regex": "(?iu)(?:(?:a(?:dventista(?: del s(?:eptimo dia|éptimo día))?|gn(?:ostico|óstico)|teo)|budista|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|ristian(?:a(?: evang(?:elica|élica))?|o))|e(?:spiritualidad ancestral|vang(?:elico|élico))|iglesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|jud(?:i(?:a|o)|í(?:a|o))|m(?:orm(?:on|ón)|usulm(?:an(?:a)?|án))|ningun(?:a|o)|otra|p(?:entecostal|rotestante)|testigo de jehov(?:a|á)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_CONVICCION_FILOSOFICA - Path",
       "framework": "PATH",
       "domain": "CO_L3_CONVICCION_FILOSOFICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1962,7 +2057,7 @@
       "name": "CO_L3_ORIENTACION_POLITICA - Path",
       "framework": "PATH",
       "domain": "CO_L3_ORIENTACION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -1978,27 +2073,30 @@
       }
     },
     {
-      "name": "CO_L3_ORIENTACION_POLITICA - List",
-      "framework": "LIST",
+      "name": "CO_L3_ORIENTACION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_ORIENTACION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-orientaciones-politicas.txt",
-            "matchStrength": 0.7
+            "note": "19 — Izquierda · Centroizquierda · Centro · Centroderecha · Derecha · Independiente · …",
+            "regex": "(?iu)(?:(?:c(?:entro(?:derecha|izquierda)?|onservador)|derecha|i(?:nde(?:ciso|pendiente)|zquierda)|liberal|ninguno|p(?:etrista|r(?:efiere no responder|ogresista))|uribista|voto en blanco))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_AFILIACION_PARTIDO - Path",
       "framework": "PATH",
       "domain": "CO_L3_AFILIACION_PARTIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2014,27 +2112,30 @@
       }
     },
     {
-      "name": "CO_L3_AFILIACION_PARTIDO - List",
-      "framework": "LIST",
+      "name": "CO_L3_AFILIACION_PARTIDO - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_AFILIACION_PARTIDO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "50 — Partido Liberal Colombiano · Partido Conservador Colombiano · Partido Cambio Radical · Partido Alianza Verde · Movimiento Autoridades Indígenas de Colombia AICO · Partido Alianza Social Independiente ASI · …",
+            "regex": "(?iu)(?:(?:a(?:ico|lianza verde|si)|c(?:ambio radical|entro democr(?:atico|ático)|o(?:lombia (?:humana|justa libres)|munes|nse(?:jo comunitario el naranjo|rvador)))|d(?:efensores de la patria|ignidad)|en marcha|l(?:a u|iberal)|m(?:ais|ira|ovimiento (?:a(?:l(?:ianza democr(?:atica amplia|ática amplia)|ternativo ind(?:igena y social \\(mais\\)|ígena y social \\(mais\\)))|utoridades ind(?:igenas de colombia \\(aico\\)|ígenas de colombia \\(aico\\)))|pol(?:itico pacto historico|ítico pacto histórico)|salvaci(?:on nacional|ón nacional)|unidad en minga por colombia))|nuevo liberalismo|ox(?:igeno|ígeno)|p(?:a(?:cto hist(?:orico|órico)|rtido (?:alianza (?:social independiente \\(asi\\)|verde)|c(?:ambio radical|entro democr(?:atico|ático)|o(?:lombia (?:justa libres|renaciente)|munes|nservador colombiano))|d(?:e(?: la u|m(?:ocrata colombiano|ócrata colombiano))|ignidad & compromiso)|ecologista colombiano|liberal(?: colombiano)?|nuevo liberalismo|pol(?:itico (?:defensores de la patria|e(?:n marcha|speranza democratica)|la fuerza|mira|oxigeno)|ítico (?:defensores de la patria|e(?:n marcha|speranza democrática)|la fuerza|mira|oxígeno))|republicano))|olo democr(?:atico|ático))|salvaci(?:on nacional|ón nacional)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_SINDICATO - Path",
       "framework": "PATH",
       "domain": "CO_L3_SINDICATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2050,27 +2151,30 @@
       }
     },
     {
-      "name": "CO_L3_SINDICATO - List",
-      "framework": "LIST",
+      "name": "CO_L3_SINDICATO - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_SINDICATO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "19 — CUT · CGT · CTC · FECODE · USO · SINTRAINAL · …",
+            "regex": "(?iu)(?:(?:a(?:d(?:e|ida)|nthoc|s(?:medas|oinca))|c(?:entral unitaria de trabajadores|gt|onfederaci(?:on (?:de trabajadores de colombia|general del trabajo)|ón (?:de trabajadores de colombia|general del trabajo))|tc|ut)|fe(?:code|deraci(?:on colombiana de trabajadores de la educacion|ón colombiana de trabajadores de la educación))|sin(?:dicalizado|tra(?:emcali|inal|unicol))|u(?:ni(?:on sindical obrera|ón sindical obrera)|so)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CO_L3_ORGANIZACION_SOCIAL - Path",
       "framework": "PATH",
       "domain": "CO_L3_ORGANIZACION_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2089,7 +2193,7 @@
       "name": "CO_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "CO_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2124,7 +2228,7 @@
       "name": "CO_L3_GENETICO - Path",
       "framework": "PATH",
       "domain": "CO_L3_GENETICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2140,10 +2244,29 @@
       }
     },
     {
+      "name": "CO_L3_GENETICO - Regex",
+      "framework": "REGEX",
+      "domain": "CO_L3_GENETICO",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "CO_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "CO_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2159,27 +2282,30 @@
       }
     },
     {
-      "name": "CO_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "CO_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-orientaciones-sexuales.txt",
-            "matchStrength": 0.8
+            "note": "13 — Heterosexual · Gay · Lesbiana · Bisexual · Pansexual · Asexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omosexual)|l(?:esbiana|gbti(?:q\\+)?)|otra|p(?:ansexual|refiere no responder)|queer))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "CO_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2198,7 +2324,7 @@
       "name": "CO_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "CO_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2214,27 +2340,30 @@
       }
     },
     {
-      "name": "CO_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "CO_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-identidades-genero.txt",
-            "matchStrength": 0.7
+            "note": "17 — Mujer cisgénero · Hombre cisgénero · Mujer trans · Hombre trans · Persona no binaria · Otra · …",
+            "regex": "(?iu)(?:(?:cis(?:g(?:enero|énero))?|femenino|hombre(?: (?:cisg(?:enero|énero)|trans))?|m(?:asculino|ujer(?: (?:cisg(?:enero|énero)|trans))?)|no binari(?:a|o)|otra|p(?:ersona no binaria|refiere no responder)|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_VICTIMA_CONFLICTO - Path",
       "framework": "PATH",
       "domain": "CO_L3_VICTIMA_CONFLICTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2250,31 +2379,48 @@
       }
     },
     {
-      "name": "CO_L3_VICTIMA_CONFLICTO - List",
-      "framework": "LIST",
+      "name": "CO_L3_VICTIMA_CONFLICTO - Values",
+      "framework": "REGEX",
       "domain": "CO_L3_VICTIMA_CONFLICTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-hechos-victimizantes.txt",
-            "matchStrength": 0.8
+            "note": "24 — Desplazamiento forzado · Homicidio · Amenaza · Desaparición forzada · Pérdida de bienes muebles o inmuebles · Secuestro · …",
+            "regex": "(?iu)(?:(?:a(?:bandono o despojo forzado de tierras|cto terrorista|menaza)|confinamiento|de(?:litos contra la libertad y la integridad sexual|s(?:aparici(?:on forzada|ón forzada)|p(?:laza(?:d(?:a|o)|miento forzado)|ojo de tierras)))|homicidio|incluido|lesiones personales|m(?:asacre|ina(?: antipersonal|s antipersonal, munici(?:on sin explotar y artefacto explosivo improvisado|ón sin explotar y artefacto explosivo improvisado)))|no (?:es v(?:ictima|íctima)|incluido)|p(?:erdida de bienes muebles o inmuebles|érdida de bienes muebles o inmuebles)|reclutamiento forzado|secuestro|tortura|v(?:i(?:ctima|nculaci(?:on de ninos, ninas y adolescentes a grupos armados|ón de niños, niñas y adolescentes a grupos armados))|íctima)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://co-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_L3_REINCORPORACION - Path",
       "framework": "PATH",
       "domain": "CO_L3_REINCORPORACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2293,7 +2439,7 @@
       "name": "CO_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2320,7 +2466,7 @@
       "name": "CO_SALUD_AFILIACION - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_AFILIACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2336,27 +2482,30 @@
       }
     },
     {
-      "name": "CO_SALUD_AFILIACION - List",
-      "framework": "LIST",
+      "name": "CO_SALUD_AFILIACION - Values",
+      "framework": "REGEX",
       "domain": "CO_SALUD_AFILIACION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-afiliacion-salud.txt",
-            "matchStrength": 0.8
+            "note": "37 — Contributivo · Subsidiado · Especial · De excepción · No afiliado · Nueva EPS · …",
+            "regex": "(?iu)(?:(?:a(?:liansalud eps|smet salud eps)|c(?:a(?:fesalud|jacopi eps|p(?:ital salud eps|resoca eps))|o(?:m(?:fenalco valle eps|pensar(?: eps)?)|ntributivo|o(?:meva eps|salud(?: eps)?)))|de excepci(?:on|ón)|e(?:mssanar eps|ps s(?:anitas|ura)|special)|famisanar(?: eps)?|m(?:edim(?:as|ás)|utual ser eps)|n(?:o afiliado|ueva eps)|r(?:egimen especial|égimen especial)|s(?:a(?:lud (?:m(?:ia eps|ía eps)|total(?: eps)?)|nitas|via salud(?: eps)?)|os eps|u(?:bsidiado|ra))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2384,7 +2533,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2394,7 +2543,7 @@
       "name": "CO_SALUD_PROCEDIMIENTO - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_PROCEDIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2413,7 +2562,7 @@
       "name": "CO_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2429,27 +2578,30 @@
       }
     },
     {
-      "name": "CO_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "CO_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "CO_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "48 — Acetaminofén · Ibuprofeno · Naproxeno · Diclofenaco · Metformina · Glibenclamida · …",
+            "regex": "(?iu)(?:(?:a(?:c(?:etaminof(?:en|én)|ido (?:acetilsalicilico|folico|valproico))|lprazolam|m(?:lodipino|oxicilina)|nticonceptivo|torvastatina|zitromicina)|c(?:efalexina|lonazepam|omplejo b)|d(?:exametasona|iclofenaco|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|h(?:aloperidol|idroclorotiazida)|i(?:buprofeno|nsulina)|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ra(?:tadina|zepam)|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|naproxeno|o(?:lanzapina|meprazol)|prednisolona|quetiapina|risperidona|s(?:albutamol|ertralina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|fólico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CO_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2485,7 +2637,7 @@
       "name": "CO_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2512,7 +2664,7 @@
       "name": "CO_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2528,27 +2680,30 @@
       }
     },
     {
-      "name": "CO_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "CO_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "CO_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-grupos-sanguineos.txt",
-            "matchStrength": 0.9
+            "note": "18 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo)|\\+|-|b(?: (?:negativo|positivo)|\\+|-))|b(?: (?:negativo|positivo)|\\+|-)|o(?: (?:negativo|positivo)|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2564,27 +2719,30 @@
       }
     },
     {
-      "name": "CO_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "CO_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "CO_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-discapacidades.txt",
-            "matchStrength": 0.6
+            "note": "24 — Física · Auditiva · Visual · Sordoceguera · Intelectual · Psicosocial mental · …",
+            "regex": "(?iu)(?:(?:au(?:ditiva|tismo)|baja visi(?:on|ón)|c(?:eguera|ognitiva)|f(?:isica|ísica)|intelectual|m(?:ental|otora|ultiple|últiple)|n(?:inguna|o aplica)|psicosocial(?: \\(mental\\))?|sord(?:era|oceguera)|visual))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CO_SALUD_OCUPACIONAL - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_OCUPACIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2600,27 +2758,30 @@
       }
     },
     {
-      "name": "CO_SALUD_OCUPACIONAL - List",
-      "framework": "LIST",
+      "name": "CO_SALUD_OCUPACIONAL - Values",
+      "framework": "REGEX",
       "domain": "CO_SALUD_OCUPACIONAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-aptitud-laboral.txt",
-            "matchStrength": 0.6
+            "note": "5 — apto · no apto · apto con restricciones · aplazado · apto con recomendaciones",
+            "regex": "(?iu)(?:(?:ap(?:lazado|to(?: con re(?:comendaciones|stricciones))?)|no apto))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CO_SALUD_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2639,7 +2800,7 @@
       "name": "CO_SALUD_MENTAL - Path",
       "framework": "PATH",
       "domain": "CO_SALUD_MENTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2658,7 +2819,7 @@
       "name": "CO_FIN_CREDITO - Path",
       "framework": "PATH",
       "domain": "CO_FIN_CREDITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2677,7 +2838,7 @@
       "name": "CO_FIN_DEUDA - Path",
       "framework": "PATH",
       "domain": "CO_FIN_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2712,7 +2873,7 @@
       "name": "CO_FIN_INGRESOS - Path",
       "framework": "PATH",
       "domain": "CO_FIN_INGRESOS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2747,7 +2908,7 @@
       "name": "CO_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "CO_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2782,7 +2943,7 @@
       "name": "CO_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "CO_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2817,7 +2978,7 @@
       "name": "CO_FIN_ESTRATO - Path",
       "framework": "PATH",
       "domain": "CO_FIN_ESTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2833,27 +2994,39 @@
       }
     },
     {
-      "name": "CO_FIN_ESTRATO - List",
-      "framework": "LIST",
+      "name": "CO_FIN_ESTRATO - Values",
+      "framework": "REGEX",
       "domain": "CO_FIN_ESTRATO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-estratos.txt",
-            "matchStrength": 0.4
+            "note": "12 — 1 · 2 · 3 · 4 · 5 · 6 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "12 — 1 · 2 · 3 · 4 · 5 · 6 · …",
+            "regex": "(?iu)(?:estrato (?:1|2|3|4|5|6))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_FIN_SISBEN - Path",
       "framework": "PATH",
       "domain": "CO_FIN_SISBEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2881,7 +3054,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2891,7 +3064,7 @@
       "name": "CO_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "CO_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2907,31 +3080,48 @@
       }
     },
     {
-      "name": "CO_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "CO_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "CO_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-programas-sociales.txt",
-            "matchStrength": 0.8
+            "note": "16 — Renta Ciudadana · Renta Joven · Colombia Mayor · Devolución del IVA · Mi Casa Ya · Subsidio familiar de vivienda · …",
+            "regex": "(?iu)(?:(?:colombia mayor|devoluci(?:on (?:del iva|iva)|ón (?:del iva|iva))|familias en acci(?:on|ón)|ingreso solidario|j(?:ovenes en accion|óvenes en acción)|mi casa ya|ninguno|renta (?:ciudadana|joven)|subsidio (?:de desempleo|familiar de vivienda)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://co-detectar-codigos-banderas.txt",
-            "matchStrength": 0.3
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "0*(?:(?:1|2|3|4|5|6))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "10 — s · n · sí · no · 1 · 2 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "CO_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "CO_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2947,27 +3137,30 @@
       }
     },
     {
-      "name": "CO_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "CO_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "CO_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://co-detectar-tenencia-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "15 — Propia totalmente pagada · Propia la están pagando · En arriendo o subarriendo · En usufructo · Posesión sin título · Propiedad colectiva · …",
+            "regex": "(?iu)(?:(?:arr(?:endada|iendo)|colectiva|en (?:arriendo o subarriendo|usufructo)|familiar|invasi(?:on|ón)|otra|p(?:osesi(?:on(?: sin titulo)?|ón(?: sin título)?)|ropi(?:a(?:, (?:la est(?:an pagando|án pagando)|totalmente pagada))?|edad colectiva))|usufructo))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "CO_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "CO_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -2994,7 +3187,7 @@
       "name": "CO_PENAL_RADICADO - Path",
       "framework": "PATH",
       "domain": "CO_PENAL_RADICADO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas colombianos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas colombianos.",
       "config": {
         "paths": [
           {
@@ -3025,20 +3218,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{23}",
+            "regex": "0*(?:\\d{23})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{21}",
+            "regex": "0*(?:\\d{21})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3312,7 +3505,7 @@
     },
     {
       "name": "CO_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "CO_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "CO_SALUD_DISCAPACIDAD",
@@ -3336,19 +3529,19 @@
     },
     {
       "name": "CO_FIN_DEUDA",
-      "algorithm": "CO_VALOR_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CO_FIN_INGRESOS",
-      "algorithm": "CO_INGRESOS"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CO_FIN_PATRIMONIO",
-      "algorithm": "CO_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CO_FIN_PENSION",
-      "algorithm": "CO_VALOR_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "CO_FIN_ESTRATO",
@@ -3390,7 +3583,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "PA1234567"
     },
@@ -3402,7 +3596,8 @@
           "0123456789"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "1.023.456.789"
     },
@@ -3415,7 +3610,8 @@
           "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "KDZ"
     },
@@ -3431,7 +3627,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3660,8 +3857,29 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3705,6 +3923,18 @@
       "input": "8001972684"
     },
     {
+      "name": "CO_CM_DIGITOS_ANCHO_FIJO",
+      "framework": "algorithm.plugin.characterMapping.CharacterMapping",
+      "config": {
+        "characterGroups": [
+          "0123456789"
+        ],
+        "caseSensitive": true,
+        "minMaskedPositions": 0
+      },
+      "input": "1.023.456.789"
+    },
+    {
       "name": "CO_NIT_6_AUX",
       "framework": "algorithm.plugin.checkdigit.Checkdigit",
       "config": {
@@ -3721,10 +3951,10 @@
         "numDigitsForCheckdigitCalculation": 6,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -3832,10 +4062,10 @@
         "numDigitsForCheckdigitCalculation": 7,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -3945,10 +4175,10 @@
         "numDigitsForCheckdigitCalculation": 8,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -4060,10 +4290,10 @@
         "numDigitsForCheckdigitCalculation": 9,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -4177,10 +4407,10 @@
         "numDigitsForCheckdigitCalculation": 10,
         "calculateChecksumRightToLeft": true,
         "numericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "alphaNumericAlgorithm": {
-          "name": "CO_CM_DIGITOS"
+          "name": "CO_CM_DIGITOS_ANCHO_FIJO"
         },
         "preserveRegex": "[.\\-\\s]",
         "inputHandlingConfig": {
@@ -4280,8 +4510,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3}\\.?\\d{3}\\s?-?\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{3}\\.?\\d{3}\\s?-?\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4291,8 +4524,11 @@
             ]
           },
           {
-            "regex": "(\\d{1}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{1}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4302,8 +4538,11 @@
             ]
           },
           {
-            "regex": "(\\d{2}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{2}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4313,8 +4552,11 @@
             ]
           },
           {
-            "regex": "(\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4324,8 +4566,11 @@
             ]
           },
           {
-            "regex": "(\\d{1}\\.?\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{1}\\.?\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-?\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4352,8 +4597,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3}(?:\\.\\d{3})+|\\d{3,11})",
+            "regex": "(0*?)(?:(\\d{1,3}(?:\\.\\d{3})+|\\d{3,11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4363,8 +4611,11 @@
             ]
           },
           {
-            "regex": "(\\d{3}\\.?\\d{3}\\s?-\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{3}\\.?\\d{3}\\s?-\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4374,8 +4625,11 @@
             ]
           },
           {
-            "regex": "(\\d{1}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{1}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4385,8 +4639,11 @@
             ]
           },
           {
-            "regex": "(\\d{2}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{2}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4396,8 +4653,11 @@
             ]
           },
           {
-            "regex": "(\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4407,8 +4667,11 @@
             ]
           },
           {
-            "regex": "(\\d{1}\\.?\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d)",
+            "regex": "(0*?)(?:(\\d{1}\\.?\\d{3}\\.?\\d{3}\\.?\\d{3}\\s?-\\s?\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -4904,8 +5167,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?57[\\s\\-]?)?(\\(?3\\d{2}\\)?)([\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?57[\\s\\-]?)?(\\(?3\\d{2}\\)?)([\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4933,8 +5199,11 @@
             ]
           },
           {
-            "regex": "(\\+?57[\\s\\-]?)?(\\(?60[1-8]\\)?)([\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?57[\\s\\-]?)?(\\(?60[1-8]\\)?)([\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -4962,8 +5231,11 @@
             ]
           },
           {
-            "regex": "([2-8]\\d{2})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:([2-8]\\d{2})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5009,26 +5281,20 @@
       "input": "Carrera 7 # 32-16 Oficina 1203"
     },
     {
-      "name": "CO_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      },
-      "input": "4539578763621486"
-    },
-    {
       "name": "CO_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "CO_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -5073,8 +5339,11 @@
             ]
           },
           {
-            "regex": "(3\\d{9})",
+            "regex": "(0*?)(?:(3\\d{9}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5084,8 +5353,11 @@
             ]
           },
           {
-            "regex": "(\\d{3,11})",
+            "regex": "(0*?)(?:(\\d{3,11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5121,8 +5393,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5230,8 +5505,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,3}[A-Za-z]?)([\\s\\-]+)(\\d{3,9})",
+            "regex": "(0*?)(?:(\\d{2,3}[A-Za-z]?)([\\s\\-]+)(\\d{3,9}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5247,8 +5525,11 @@
             ]
           },
           {
-            "regex": "(\\d{5})(\\d{25})",
+            "regex": "(0*?)(?:(\\d{5})(\\d{25}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5393,8 +5674,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5421,8 +5705,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -5430,8 +5717,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)([.,]\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)([.,]\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5447,8 +5737,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5461,8 +5754,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5631,8 +5927,11 @@
             ]
           },
           {
-            "regex": "([12])",
+            "regex": "(0*?)(?:([12]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5664,7 +5963,7 @@
       "input": "Jardín"
     },
     {
-      "name": "CO_CODIGO_MUNICIPIO",
+      "name": "CO_CODIGO_MUNICIPIO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -5677,13 +5976,44 @@
       "input": "05364"
     },
     {
+      "name": "CO_CODIGO_MUNICIPIO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "CO_CODIGO_MUNICIPIO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "05364"
+    },
+    {
       "name": "CO_CODIGO_POSTAL",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\d{4})",
+            "regex": "(0*?)(?:(\\d{2})(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5794,8 +6124,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5837,8 +6170,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{4,5})",
+            "regex": "(0*?)(?:(\\d{4,5}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5921,8 +6257,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5964,16 +6303,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -6036,8 +6381,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6105,8 +6453,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*)([1-9]\\d{0,5}|0)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6159,8 +6510,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6213,8 +6567,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6267,8 +6624,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6321,8 +6681,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6375,8 +6738,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6429,8 +6795,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6483,8 +6852,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6563,8 +6935,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6716,8 +7091,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{6}|\\d{2}\\.\\d{2}\\.\\d{2})",
+            "regex": "(0*?)(?:(\\d{6}|\\d{2}\\.\\d{2}\\.\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6770,8 +7148,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6791,21 +7172,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "CO_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://co-grupos-sanguineos.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "CO_DISCAPACIDAD_LISTA",
@@ -6839,8 +7205,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6893,8 +7262,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6936,8 +7308,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,4})",
+            "regex": "(0*?)(?:(\\d{1,4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6968,42 +7343,6 @@
         "requireMask": false
       },
       "input": "Reportado en DataCrédito"
-    },
-    {
-      "name": "CO_VALOR_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 100000,
-        "maxValue": 1000000000
-      },
-      "input": "8500000"
-    },
-    {
-      "name": "CO_INGRESOS",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000000,
-        "maxValue": 60000000
-      },
-      "input": "3200000"
-    },
-    {
-      "name": "CO_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 10000000,
-        "maxValue": 2000000000
-      },
-      "input": "185000000"
-    },
-    {
-      "name": "CO_VALOR_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1750905,
-        "maxValue": 30000000
-      },
-      "input": "2400000"
     },
     {
       "name": "CO_ESTRATO_BAJO",
@@ -7243,8 +7582,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,3})([.,]\\d+)?",
+            "regex": "(0*?)(?:(\\d{1,3})([.,]\\d+)?)",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7300,8 +7642,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7354,8 +7699,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7408,8 +7756,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7436,8 +7787,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{5}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}[\\s\\-]?)(\\d{5})([\\s\\-]?\\d{2})",
+            "regex": "(0*?)(?:(\\d{5}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}[\\s\\-]?)(\\d{5})([\\s\\-]?\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -7480,32 +7834,10 @@
     "co-cie10.txt",
     "co-codigos-municipio-generalizados.txt",
     "co-cups.txt",
-    "co-detectar-afiliacion-salud.txt",
     "co-detectar-apellidos.txt",
-    "co-detectar-aptitud-laboral.txt",
-    "co-detectar-codigos-banderas.txt",
-    "co-detectar-discapacidades.txt",
-    "co-detectar-escolaridad.txt",
-    "co-detectar-estado-civil.txt",
-    "co-detectar-estratos.txt",
-    "co-detectar-grupos-etnicos.txt",
-    "co-detectar-grupos-sanguineos.txt",
-    "co-detectar-hechos-victimizantes.txt",
-    "co-detectar-identidades-genero.txt",
-    "co-detectar-lenguas.txt",
-    "co-detectar-medicamentos.txt",
-    "co-detectar-municipios.txt",
-    "co-detectar-nacionalidades.txt",
     "co-detectar-nombres.txt",
-    "co-detectar-orientaciones-politicas.txt",
-    "co-detectar-orientaciones-sexuales.txt",
-    "co-detectar-partidos.txt",
-    "co-detectar-programas-sociales.txt",
-    "co-detectar-pueblos-indigenas.txt",
-    "co-detectar-religiones.txt",
+    "co-detectar-sexo-letra.txt",
     "co-detectar-sexo.txt",
-    "co-detectar-sindicatos.txt",
-    "co-detectar-tenencia-vivienda.txt",
     "co-diagnosticos.txt",
     "co-direcciones.txt",
     "co-discapacidades.txt",
@@ -7521,7 +7853,6 @@
     "co-estrato-medio.txt",
     "co-grupos-etnicos-codigos.txt",
     "co-grupos-etnicos.txt",
-    "co-grupos-sanguineos.txt",
     "co-hechos-victimizantes.txt",
     "co-identidades-genero.txt",
     "co-instituciones-educativas.txt",

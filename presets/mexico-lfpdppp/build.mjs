@@ -19,6 +19,9 @@
 import fs from 'node:fs'
 import nodePath from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { engineTextProblems } from '../_lib/engine-text.mjs'
+import { ENGINE, isEngineAlgorithm } from '../_lib/engine-algorithms.mjs'
+import { cleaning, zeroPadded, keepingZeros, wordByWord, valuePatterns } from '../_lib/detect.mjs'
 
 const HERE = nodePath.dirname(fileURLToPath(import.meta.url))
 const SOURCE = nodePath.join(HERE, 'source')
@@ -83,6 +86,29 @@ function cleansing(name, fileName, pairs, input, delimiter = ',') {
   }, input)
 }
 
+/**
+ * A Data Cleansing of place codes, looked up without the zeros on the left, which stay where they are:
+ * 05364, 5364 and 0005364 all become the same place. Only for codes — check-digit tables keep their
+ * zeros, which count there.
+ */
+function codeCleansing(name, fileName, pairs, input, delimiter = ',') {
+  for (const [from, to] of pairs) if (from.includes(delimiter) || to.includes(delimiter)) throw new Error(`${fileName}: "${from}" holds the delimiter`)
+  if (!pairs.every(([from, to]) => /^\d+$/.test(from) && /^\d+$/.test(to))) throw new Error(`${fileName}: not a table of codes`)
+  // The zero-free forms join the table.
+  const strip = (code) => code.replace(/^0+(?=\d)/, '')
+  const rows = new Map(pairs)
+  const stripped = new Map()
+  for (const [from, to] of pairs) {
+    const [key, value] = [strip(from), strip(to)]
+    if (stripped.has(key) && stripped.get(key) !== value) throw new Error(`${fileName}: ${key} becomes ${stripped.get(key)} and ${value}`)
+    stripped.set(key, value)
+    if (rows.has(key) && rows.get(key) !== value) throw new Error(`${fileName}: ${key} becomes ${rows.get(key)} and, without zeros, ${value}`)
+    rows.set(key, value)
+  }
+  cleansing(`${name}_TABLA`, fileName, [...rows], input, delimiter)
+  return decompose(name, [[String.raw`(0*)([1-9]\d*)`, keep, apply(`${name}_TABLA`)]], keep, input)
+}
+
 /** String Algorithm Chain. Delphix allows eight algorithms per chain, so longer ones are nested. */
 function chain(name, steps, input) {
   if (steps.length <= 8) return algorithm(name, 'stringAlgorithmChain.StringAlgorithmChain', { algorithmReferences: steps.map(use) }, input)
@@ -130,7 +156,7 @@ const DIGITS = [...'0123456789']
 const domains = []
 const classifiers = []
 function domain(name, algorithmName, ...detect) {
-  if (!algorithms.some((a) => a.name === algorithmName)) throw new Error(`${name}: no algorithm ${algorithmName}`)
+  if (!isEngineAlgorithm(algorithmName) && !algorithms.some((a) => a.name === algorithmName)) throw new Error(`${name}: no algorithm ${algorithmName}`)
   domains.push({ name, algorithm: algorithmName })
   for (const make of detect) classifiers.push(make(name))
 }
@@ -140,7 +166,7 @@ const words = (alternatives) => String.raw`(?i)(?<![a-z])(?:${alternatives})(?![
 
 const byName = (...rules) => (d) => ({
   name: `${d} - Path`, framework: 'PATH', domain: d,
-  description: 'Nombre de la columna (y variantes usadas en sistemas mexicanos).',
+  description: 'Nombre de la columna y variantes usadas en sistemas mexicanos.',
   config: {
     paths: rules.map(([alternatives, strength]) => ({
       matchType: 'REGEX', fieldValue: words(alternatives), parentValue: '',
@@ -156,33 +182,56 @@ const byType = (...allowed) => (d) => ({
   config: { allowedTypes: allowed, matchAutoIncrementingColumn: false, matchStrength: 0, rejectStrength: 1 },
 })
 
-/** Values: [regex, strength, { checksum, clean, note }]. Whole value unless `partial`. */
+/**
+ * Values: [regex, strength, { checksum, clean, note }]. Whole value unless `partial`. The spaces a
+ * CHAR column pads with are cleaned away, and a pattern that starts with a digit also takes zeros
+ * on the left (see presets/_lib/detect.mjs).
+ */
 const byPattern = (rules, { reject = 0.3, partial = false } = {}) => (d) => ({
   name: `${d} - Regex`, framework: 'REGEX', domain: d,
   description: 'Formato de los valores.',
   config: {
     dataPatterns: rules.map(([regex, strength, extra = {}]) => ({
       ...(extra.note ? { note: extra.note } : {}),
-      regex, matchStrength: strength,
+      regex: zeroPadded(regex), matchStrength: strength,
       checksumType: extra.checksum ?? 'NONE',
       caseSensitive: false, allowPartialMatch: partial,
-      dataCleanRegex: extra.clean ?? '',
+      dataCleanRegex: cleaning(extra.clean),
     })),
     rejectStrength: reject,
   },
 })
 
-/** Values found in lists: [fileName, values, strength]. */
-const byList = (lists, { reject = 0.3, tokenize = false } = {}) => (d) => ({
-  name: `${d} - List`, framework: 'LIST', domain: d,
-  description: 'Valores conocidos.',
-  config: {
-    valueLists: lists.map(([fileName, values, strength]) => ({ file: file(fileName, withFolded(values)), matchStrength: strength })),
-    tokenizeInput: tokenize,
-    rejectStrength: reject,
-    tokenizationDelimiter: ' ',
-  },
-})
+/**
+ * Values found in lists: [fileName, values, strength]. A List classifier compares the whole value,
+ * padding included, unless it splits it into words: lists of single words are looked up word by
+ * word, and lists with multi-word values become Regex patterns (presets/_lib/detect.mjs).
+ */
+const byList = (lists, { reject = 0.3, tokenize = false } = {}) => (d) => {
+  const known = lists.map(([fileName, values, strength]) => ({ fileName, values: withFolded(values), shown: unique(values), strength }))
+  if (tokenize || known.every((l) => wordByWord(l.values))) {
+    return {
+      name: `${d} - List`, framework: 'LIST', domain: d,
+      description: 'Valores conocidos.',
+      config: {
+        valueLists: known.map((l) => ({ file: file(l.fileName, l.values), matchStrength: l.strength })),
+        tokenizeInput: true,
+        rejectStrength: reject,
+        tokenizationDelimiter: ' ',
+      },
+    }
+  }
+  return {
+    name: `${d} - Values`, framework: 'REGEX', domain: d,
+    description: 'Valores conocidos.',
+    config: {
+      dataPatterns: known.flatMap((l) => valuePatterns(l.values, l.shown).map(({ note, regex, dataCleanRegex }) => ({
+        note, regex, matchStrength: l.strength, checksumType: 'NONE', caseSensitive: false, allowPartialMatch: false, dataCleanRegex,
+      }))),
+      rejectStrength: reject,
+    },
+  }
+}
 
 const STRING = (min = 0, max = 0) => ({ typeName: 'String', ...(min ? { minimumLength: min } : {}), ...(max ? { maximumLength: max } : {}) })
 const NUMBER = (min = 0, max = 0) => ({ typeName: 'Number', ...(min ? { minimumLength: min } : {}), ...(max ? { maximumLength: max } : {}) })
@@ -220,12 +269,14 @@ algorithm('MX_CM_ALFANUM', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'AEIOU', 'BCDFGHJKLMNPQRSTVWXYZ', 'aeiou', 'bcdfghjklmnpqrstvwxyz', 'ÁÉÍÓÚÜ', 'áéíóúü'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, 'HEGA850720')
 // Hex letters form their own group, so a MAC, UUID or IPv6 stays valid hex.
 algorithm('MX_CM_HEX', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'abcdef', 'ABCDEF', 'ghijklmnopqrstuvwxyz', 'GHIJKLMNOPQRSTUVWXYZ'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, '3c:22:fb:9a:10:e4')
 decompose('MX_REDACTAR', [['(.+)', { type: 'REDACT', redactCharacter: 'X' }]], keep, 'secreto123')
 lookup('MX_SUPRIMIR', 'mx-sin-informacion.txt', ['Sin información'], 'Trastorno depresivo', 'PRESERVE_LOOKUP_FILE')
@@ -449,7 +500,9 @@ domain('MX_L1_NOMBRE_COMPLETO', 'MX_NOMBRE_COMPLETO',
     // A bare NOMBRE holds a given name or a full name: the values decide between the two domains.
     [`nombre(?!_?(${NOT_A_PERSON}|${PERSON_ROLE}|completo|compl|full|y_?apellidos?|apellidos?))|name(?!_?(${NOT_A_PERSON}))`, 0.5],
   ),
-  byList([['mx-detectar-nombres.txt', NOMBRES, 0.6], ['mx-detectar-apellidos.txt', APELLIDOS, 0.6]], { tokenize: true, reject: 0.3 }))
+  // 0.65: a full name found word by word reaches the threshold without the column name, and a
+  // single word still goes to the given-name or surname domain, at 0.7.
+  byList([['mx-detectar-nombres.txt', NOMBRES, 0.65], ['mx-detectar-apellidos.txt', APELLIDOS, 0.65]], { tokenize: true, reject: 0.3 }))
 
 // ── L1 · Contact ────────────────────────────────────────────────────────────
 
@@ -460,7 +513,7 @@ decompose('MX_EMAIL', [
 domain('MX_L1_EMAIL', 'MX_EMAIL',
   byName(['e_?mail[a-z0-9_]*|mail[a-z0-9_]*|correo(_?electronico)?[a-z0-9_]*|email_?address|correo_?(personal|laboral|contacto|receptor|cliente)', 0.85]),
   byType(STRING(5)),
-  byPattern([[String.raw`[A-Za-z0-9._%+'\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}`, 1]], { reject: 0.2 }))
+  byPattern([[String.raw`[\p{L}\p{N}._%+'\-]+@[\p{L}\p{N}.\-]+\.[A-Za-z]{2,24}`, 1]], { reject: 0.2 }))
 
 // Since 2019 every Mexican number has 10 digits: a 2-digit area code for Mexico City, Guadalajara
 // and Monterrey (55, 56, 33, 81), 3 digits elsewhere. +52, the old mobile 1 and the area code stay.
@@ -529,12 +582,12 @@ domain('MX_L1_CUENTA_BANCARIA', 'MX_CM_ALFANUM',
   byName(['cuenta_?(bancaria|banco|cheques|ahorro|deposito|abono|pago|destino|origen|nomina|debito|inversion)|cta_?(bancaria|banco|cheques|ahorro|nomina)|n(o|um|ro|umero)?_?(de_?)?cuenta(_?(banco|bancaria|cheques|nomina))?|account_?(number|no|num|nbr)|bank_?account|num_?cta|no_?cta', 0.85]))
 
 // Payment Card fails a row that has no digits to mask; only values shaped like a card reach it.
-algorithm('MX_TARJETA_LUHN', 'characterMapping.PaymentCard', { minMaskedPositions: 6, preserve: 0 })
-decompose('MX_TARJETA', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply('MX_TARJETA_LUHN')]], keep, '4152 3131 2345 6780')
+decompose('MX_TARJETA', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply(ENGINE.CREDIT_CARD)]], keep, '4152 3131 2345 6780')
 domain('MX_L1_TARJETA', 'MX_TARJETA',
   byName(['tarjeta(_?(credito|debito|cred|deb|num|no|numero|bancaria))?|n(o|um|ro|umero)_?tarjeta|pan|card_?(number|no|num)|credit_?card|cc_?(number|num)|tdc|tdd|num_?tdc|plastico', 0.85]),
-  // 0.9, not 1: an IMEI is 15 Luhn-valid digits too, and its own column name should win.
-  byPattern([[String.raw`\d{13,19}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
+  // An IMEI is 15 Luhn-valid digits too: 15-digit cards are American Express (34, 37), and the rest
+  // is left to the device domain. 0.9, not 1, so that a column name still wins.
+  byPattern([[String.raw`3[47]\d{13}|[1-9]\d{12,13}|[1-9]\d{15,18}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
 
 // ── L1 · Other documents ────────────────────────────────────────────────────
 
@@ -601,8 +654,18 @@ domain('MX_L1_NUMERO_CONTRATO', 'MX_CM_ALFANUM',
 domain('MX_L1_USUARIO_RRSS', 'MX_CM_ALFANUM',
   byName(['usuario|username|user_?name|login|nick(name)?|alias|cuenta_?usuario|usr|facebook|instagram|twitter|tiktok|linkedin|red_?social|perfil_?(facebook|instagram|twitter|linkedin|tiktok)|telegram|handle', 0.7]))
 
+// Password hashes carry their scheme: bcrypt, crypt (MD5, SHA-256, SHA-512), Argon2, PBKDF2 and the
+// LDAP {SSHA} forms. A bare hex digest could be any hash, and is left to the column name.
+const PASSWORD_HASHES = [
+  [String.raw`\$2[abxy]?\$\d{2}\$[./A-Za-z0-9]{53}`, 0.95],
+  [String.raw`\$(1|5|6)\$(rounds=\d+\$)?[./A-Za-z0-9]{1,16}\$[./A-Za-z0-9]{22,86}`, 0.95],
+  [String.raw`\$argon2(id|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$\S+`, 0.95],
+  [String.raw`pbkdf2_sha(1|256|512)\$\d+\$\S+\$\S+`, 0.95],
+  [String.raw`\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\}\S+`, 0.95],
+]
 domain('MX_L1_CREDENCIAL', 'MX_REDACTAR',
-  byName(['password|passwd|pwd|pass|contrasen[aã]|contraseña|clave(?!_?(producto|prod|serv|prodserv|articulo|sucursal|interna|tipo|registro|primaria|foranea|elector|electoral|unica|bancaria|interbancaria|municipio|mun|entidad|ent|localidad|loc|escuela|centro|cct|clues|sat|producto|servicio|unidad|plaza|banco|pais|moneda|regimen|uso|cfdi|postal|lada|zona|ageb|area))[a-z_]*|pin|nip|ciec|contrasena_?(sat|efirma|fiel)|hash_?password|password_?hash|secret|token_?acceso|access_?token|refresh_?token|api_?key|otp|respuesta_?secreta|pregunta_?secreta', 0.9]))
+  byName(['password|passwd|pwd|pass|contrasen[aã]|contraseña|clave(?!_?(producto|prod|serv|prodserv|articulo|sucursal|interna|tipo|registro|primaria|foranea|elector|electoral|unica|bancaria|interbancaria|municipio|mun|entidad|ent|localidad|loc|escuela|centro|cct|clues|sat|producto|servicio|unidad|plaza|banco|pais|moneda|regimen|uso|cfdi|postal|lada|zona|ageb|area))[a-z_]*|pin|nip|ciec|contrasena_?(sat|efirma|fiel)|hash_?password|password_?hash|secret|token_?acceso|access_?token|refresh_?token|api_?key|otp|respuesta_?secreta|pregunta_?secreta', 0.9]),
+  byPattern(PASSWORD_HASHES, { reject: 0.3 }))
 
 decompose('MX_COORDENADA', [
   // The integer part and first decimal stay (about 11 km): the place is generalized, not moved.
@@ -669,7 +732,7 @@ domain('MX_L2_ANIO_NACIMIENTO', 'MX_ANIO',
 
 // 37 becomes 3x. From 100 on, 90.
 decompose('MX_EDAD', [
-  [String.raw`(\d{3,})`, redactAs('90')],
+  [String.raw`([1-9]\d{2,})`, redactAs('90')],
   [String.raw`([1-9])(\d)(\.\d+)`, keep, CM, keep],
   [String.raw`([1-9])(\d)`, keep, CM],
   [String.raw`(\d)`, CM],
@@ -692,7 +755,11 @@ decompose('MX_SEXO', [
 ], keep, 'M')
 domain('MX_L2_SEXO', 'MX_SEXO',
   byName(['sexo(_?(biologico|registral|paciente|cliente|asegurado|trabajador))?|sex|g[eé]nero(?!_?(identidad|social|autopercibido))|gender|cve_?sexo|cod_?sexo', 0.85]),
-  byList([['mx-detectar-sexo.txt', ['h', 'm', 'f', 'x', 'hombre', 'mujer', 'femenino', 'masculino', 'female', 'male', 'fem', 'masc'], 0.5]], { reject: 0.5 }))
+  // A column of single letters is the sex on its own; the words are stronger evidence.
+  byList([
+    ['mx-detectar-sexo.txt', ['hombre', 'mujer', 'femenino', 'masculino', 'female', 'male', 'fem', 'masc'], 0.8],
+    ['mx-detectar-sexo-letra.txt', ['h', 'm', 'f', 'x'], 0.6],
+  ], { reject: 0.5 }))
 
 // Municipalities under 20,000 inhabitants (2020 census) become the nearest municipality of the
 // same state that has at least 20,000. The result is a real municipality, nearby, and every group
@@ -733,7 +800,7 @@ domain('MX_L2_MUNICIPIO', 'MX_MUNICIPIO',
   ),
   byList([['mx-detectar-municipios.txt', [...byMunicipioName.keys()].filter((name) => !PERSONAL_WORDS.has(fold(name).toLowerCase())), 0.9]], { reject: 0.4 }))
 
-cleansing('MX_CLAVE_MUNICIPIO', 'mx-clave-municipio-generalizada.txt', unique(MUNICIPIOS.flatMap((m) => {
+codeCleansing('MX_CLAVE_MUNICIPIO', 'mx-clave-municipio-generalizada.txt', unique(MUNICIPIOS.flatMap((m) => {
   const to = generalized.get(m.code).code
   return [`${m.code},${to}`, `${Number(m.code)},${Number(to)}`]
 })).map((line) => line.split(',')), '20426')
@@ -848,8 +915,7 @@ domain('MX_L3_SALUD_RESULTADO_EXAMEN', 'MX_CM_ALFANUM',
   ))
 
 const GRUPOS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
-lookup('MX_GRUPO_SANGUINEO', 'mx-grupo-sanguineo.txt', GRUPOS, 'O+', 'PRESERVE_LOOKUP_FILE')
-domain('MX_L3_SALUD_GRUPO_SANGUINEO', 'MX_GRUPO_SANGUINEO',
+domain('MX_L3_SALUD_GRUPO_SANGUINEO', ENGINE.BLOOD_TYPE,
   byName(['grupo_?sangu[ií]neo|grupo_?sang|tipo_?(de_?)?sangre|tipo_?sanguineo|factor_?rh|rh|blood_?type|blood_?group', 0.9]),
   byList([['mx-detectar-grupo-sanguineo.txt', [...GRUPOS, '0+', '0-', 'a rh+', 'a rh-', 'b rh+', 'b rh-', 'ab rh+', 'ab rh-', 'o rh+', 'o rh-', 'a positivo', 'a negativo', 'b positivo', 'b negativo', 'ab positivo', 'ab negativo', 'o positivo', 'o negativo'], 0.9]], { reject: 0.4 }))
 
@@ -873,7 +939,9 @@ domain('MX_L3_BIOMETRICO', 'MX_REDACTAR',
   byType(STRING()))
 
 domain('MX_L3_INFORMACION_GENETICA', 'MX_REDACTAR',
-  byName(['adn|dna|genoma|genotipo|genetic[a-z_]*|gen[eé]tic[ao]|informacion_?genetica|secuencia_?genetica|marcador_?genetico|perfil_?(genetico|biologico)|mutacion(_?genetica)?|snp|brca|haplotipo|cariotipo|tamiz_?(genetico|metabolico)|prueba_?(de_?)?paternidad', 0.9]))
+  byName(['adn|dna|genoma|genotipo|genetic[a-z_]*|gen[eé]tic[ao]|informacion_?genetica|secuencia_?genetica|marcador_?genetico|perfil_?(genetico|biologico)|mutacion(_?genetica)?|snp|brca|haplotipo|cariotipo|tamiz_?(genetico|metabolico)|prueba_?(de_?)?paternidad', 0.9]),
+  // A nucleotide sequence (IUPAC letters) long enough not to be a word.
+  byPattern([[String.raw`[ACGTUN]{24,}`, 0.9]], { reject: 0.3 }))
 
 const ORIENTACIONES = ['Heterosexual', 'Homosexual', 'Lesbiana', 'Gay', 'Bisexual', 'Pansexual', 'Asexual', 'Otra', 'Prefiere no responder']
 categorical('MX_PREFERENCIA_SEXUAL', 'mx-preferencia-sexual.txt', ORIENTACIONES, 'Bisexual')
@@ -930,23 +998,19 @@ decompose('MX_BURO_CREDITO', [
 domain('MX_FIN_BURO_CREDITO', 'MX_BURO_CREDITO',
   byName(['buro(_?(de_?)?credito)?|bur[oó]|circulo_?(de_?)?credito|historial_?crediticio|score(_?(buro|crediticio|credito|riesgo|bc))?|bc_?score|puntaje_?(crediticio|buro|riesgo|credito)|calificacion_?(crediticia|buro|riesgo)|mop|forma_?de_?pago_?buro|clave_?(de_?)?observacion|morosidad|moroso|morosa|atraso|dias_?(de_?)?atraso|dias_?(de_?)?mora|cartera_?vencida|quebranto|estatus_?(credito|crediticio|cartera)|estado_?(de_?)?(cuenta_?)?(credito|crediticio|cartera)|credit_?score|delinquen[a-z]*|reestructura|insolvencia|concurso_?mercantil', 0.9]))
 
-algorithm('MX_MONTO_DEUDA', 'characterMapping.NumericMapping', { minValue: 1000, maxValue: 5000000 }, '85000')
-domain('MX_FIN_MONTO_DEUDA', 'MX_MONTO_DEUDA',
+domain('MX_FIN_MONTO_DEUDA', ENGINE.CM_NUMERIC,
   byName(['monto_?(deuda|adeudo|adeudado|vencido|quebranto|credito|prestamo|financiado)|adeudo(_?(total|vigente|vencido))?|deuda(_?(total|vigente|vencida))?|saldo_?(deudor|insoluto|vencido|credito|prestamo|tarjeta|adeudo)|limite_?(de_?)?credito|linea_?(de_?)?credito|pago_?minimo|debt(_?amount)?|outstanding_?balance', 0.85]),
   byType(NUMBER()))
 
-algorithm('MX_INGRESO_MENSUAL', 'characterMapping.NumericMapping', { minValue: 8000, maxValue: 250000 }, '18500')
-domain('MX_FIN_INGRESO_MENSUAL', 'MX_INGRESO_MENSUAL',
+domain('MX_FIN_INGRESO_MENSUAL', ENGINE.CM_NUMERIC,
   byName(['sueldo(?!_?(diario|base_?cotizacion))[a-z_]*|salario(?!_?(diario|base_?(de_?)?cotizacion|minimo_?(general|profesional|zona)))[a-z_]*|remuneraci[oó]n[a-z_]*|ingreso_?(mensual|neto|bruto|familiar|del_?hogar|hogar|per_?capita|total|promedio|declarado|laboral|comprobable|anual)|ingresos(_?[a-z]+)?|percepciones?(_?(totales|gravadas|exentas))?|total_?percepciones|neto_?a_?pagar|nomina_?(neta|bruta)|gasto_?(mensual|familiar)|capacidad_?(de_?)?pago|salary|wage|income|gross_?pay|net_?pay', 0.85]),
   byType(NUMBER()))
 
-algorithm('MX_SALARIO_DIARIO', 'characterMapping.NumericMapping', { minValue: 280, maxValue: 3000 }, '452.10')
-domain('MX_FIN_SALARIO_DIARIO', 'MX_SALARIO_DIARIO',
+domain('MX_FIN_SALARIO_DIARIO', ENGINE.CM_NUMERIC,
   byName(['sdi|sbc|salario_?diario(_?integrado)?|sueldo_?diario|salario_?base_?(de_?)?cotizacion|sal_?(diario|base|integrado)|sd_?integrado|cuota_?diaria|daily_?wage', 0.9]),
   byType(NUMBER()))
 
-algorithm('MX_PATRIMONIO', 'characterMapping.NumericMapping', { minValue: 200000, maxValue: 30000000 }, '1850000')
-domain('MX_FIN_PATRIMONIO', 'MX_PATRIMONIO',
+domain('MX_FIN_PATRIMONIO', ENGINE.CM_NUMERIC,
   byName(['patrimonio(_?(neto|total))?|valor_?(catastral|comercial|avaluo|inmueble|propiedad|vivienda|vehiculo|de_?la_?garantia)|avaluo|bienes_?(inmuebles|muebles)|valor_?bienes|activos_?(personales|totales)|saldo_?(inversion|ahorro|cuenta)|monto_?(inversion|ahorro)|net_?worth|assets', 0.85]),
   byType(NUMBER()))
 
@@ -956,8 +1020,7 @@ domain('MX_FIN_AFORE', 'MX_AFORE',
   byName(['afore|nombre_?afore|cve_?afore|clave_?afore|administradora_?(de_?)?fondos_?(para_?el_?)?retiro|sar|siefore|cuenta_?individual_?(afore|retiro)|regimen_?(de_?)?pension(_?(ley_?73|ley_?97))?|pension_?fund', 0.95]),
   byList([['mx-detectar-afores.txt', [...AFORES, 'azteca', 'banamex', 'citibanamex', 'coppel', 'inbursa', 'invercap', 'pensionissste', 'principal', 'profuturo', 'profuturo gnp', 'sura', 'xxi banorte', 'xxi', 'banorte', 'prestadora de servicios', 'cuenta asignada'], 0.9]], { reject: 0.4 }))
 
-algorithm('MX_SALDO_RETIRO', 'characterMapping.NumericMapping', { minValue: 5000, maxValue: 5000000 }, '385000')
-domain('MX_FIN_SALDO_RETIRO', 'MX_SALDO_RETIRO',
+domain('MX_FIN_SALDO_RETIRO', ENGINE.CM_NUMERIC,
   byName(['saldo_?(afore|retiro|rcv|subcuenta|vivienda|infonavit|fovissste|sar|cuenta_?individual|voluntario)|subcuenta_?(de_?)?(retiro|vivienda|rcv)|aportaciones?_?(voluntarias|patronales|infonavit)|monto_?pension|pension_?(mensual|monto)|retiro_?cesantia_?vejez|rcv|ahorro_?voluntario|retirement_?balance', 0.9]),
   byType(NUMBER()))
 
@@ -1039,8 +1102,16 @@ if (notDomains.length) throw new Error(`essential pack names domains the set doe
 
 // The version and the day it was built: bump both whenever anything in the set changes, so that
 // whoever loaded an older one can see how old it is.
-const VERSION = 2
-const VERSION_DATE = '2026-09-15'
+const VERSION = 3
+const VERSION_DATE = '2026-10-11'
+// Zeros on the left are padding only in the value a column holds — the top of a domain's tree. Inside
+// it, a step may read a digit at a fixed position, and an optional zero would shift what it reads.
+for (const d of domains) {
+  const top = algorithms.find((a) => a.name === d.algorithm)
+  if (top?.framework === 'algorithm.plugin.decompose.RegexDecompose') {
+    top.config.maskPatterns = top.config.maskPatterns.map(({ regex, actions }) => keepingZeros(regex, actions))
+  }
+}
 const preset = {
   version: VERSION,
   versionDate: VERSION_DATE,
@@ -1056,13 +1127,13 @@ const preset = {
   },
   profileSet: {
     name: `MX - LFPDPPP - v${VERSION}`,
-    description: 'Identificadores directos, cuasi-identificadores, datos sensibles (art. 2, VI) y datos financieros y patrimoniales (art. 7) de la LFPDPPP 2025.',
+    description: 'LFPDPPP 2025 - datos personales y sensibles',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
   },
   packs: {
     essential: {
-      description: 'Paquete esencial de la LFPDPPP 2025: CURP, RFC, NSS, clave de elector, pasaporte, nombres, contacto, domicilio y fecha de nacimiento.',
+      description: 'Paquete esencial de la LFPDPPP 2025',
       domains: ESSENTIAL,
     },
   },
@@ -1072,6 +1143,9 @@ const preset = {
   files: [...files.keys()].sort(),
 }
 
+// The texts the engine reads must pass as they are: no refused character, a short set description.
+const engineProblems = engineTextProblems(preset)
+if (engineProblems.length) throw new Error(`texts the engine would refuse:\n  ${engineProblems.join('\n  ')}`)
 fs.rmSync(FILES, { recursive: true, force: true })
 fs.mkdirSync(FILES, { recursive: true })
 for (const [name, lines] of files) fs.writeFileSync(nodePath.join(FILES, name), `${lines.join('\n')}\n`)

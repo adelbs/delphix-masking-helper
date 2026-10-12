@@ -16,13 +16,15 @@ presets/
     └── doc.<locale>.pdf   documentation, per language: en, pt-BR, es — generated
 ```
 
-Folders starting with `_` are not presets: `_doc/` holds the documentation builder they share.
+Folders starting with `_` are not presets: `_doc/` holds the documentation builder they share,
+`_lib/` the helpers every builder uses (see [Writing a preset](#writing-a-preset)), and `_logs/` the
+logs of [`verify-all.sh`](#checking-every-preset), which git ignores.
 
 The documentation button serves the PDF in the interface language, falling back to English and
 then to whichever exists.
 
 The app reads nothing else in the folder, so a preset can keep whatever produces it next to the
-output. The thirteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
+output. The fourteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
 its own definitions and the raw lists in `source/`, and `verify.mjs` checks the result — reviewing
 every classifier, profiling sample columns with the local evaluator in `classifiers/` and masking
 sample values through the running app. Each folder's `README.md` explains the design of its set.
@@ -42,6 +44,73 @@ sample values through the running app. Each folder's `README.md` explains the de
 | [`uruguay-ley-18331/`](uruguay-ley-18331/) | Uruguay — Ley 18.331 |
 | [`costarica-ley-8968/`](costarica-ley-8968/) | Costa Rica — Ley 8968 |
 | [`spain-lopdgdd/`](spain-lopdgdd/) | Spain — GDPR and Ley Orgánica 3/2018 (LOPDGDD) |
+| [`jamaica-dpa-2020/`](jamaica-dpa-2020/) | Jamaica — Data Protection Act, 2020 |
+
+## Writing a preset
+
+Start from the preset closest to the new one — same language, same kind of identity number — and
+copy its `build.mjs` and `verify.mjs`. What the existing ones learned the hard way is in `_lib/`, and
+a new preset should use it rather than solve it again:
+
+- **Padded values** ([`_lib/detect.mjs`](_lib/detect.mjs)). The profiler tests values as the database
+  hands them over: a CHAR column pads with spaces, a code kept as text with zeros on the left. Every
+  Regex pattern takes `cleaning()`, which strips the spaces, and `zeroPadded()`, which lets a pattern
+  that starts with a digit take zeros on the left. A List classifier compares the whole value,
+  padding included, unless it splits it into words: `byList` looks single-word lists up word by word
+  and turns multi-word lists into a Regex classifier (`… - Values`) with `valuePatterns()`. Patterns
+  for accented words use `(?iu)`: the engine's case-insensitive flag alone folds ASCII only.
+- **Padding stays in place when masking.** The Character Mappings run with `preserveLeadingZeros`.
+  The patterns of the Regex Decompose at the **top** of each domain get `keepingZeros()`, which sets
+  the zeros on the left apart in a group of their own — in a loop at the end of `build.mjs`, and
+  only there: inside a chain, a step may read a digit at a fixed position, and an optional zero would
+  shift it. Where a zero is a digit and not padding — the body of a number fed to a Check Digit, a
+  fixed-width segment — use a Character Mapping without `preserveLeadingZeros` (the presets call it
+  `fixedWidth()`), or that zero is never masked.
+- **Tables of codes.** A Data Cleansing of place codes is built with `codeCleansing()`, which looks
+  the code up without its zeros on the left and keeps them where they were; the build fails if two
+  codes become the same once stripped. It is opt-in: a check-digit table must not use it, because
+  there the zeros count.
+- **What the engine refuses** ([`_lib/engine-text.mjs`](_lib/engine-text.mjs)). The names and
+  descriptions of profile sets, classifiers and domains cannot hold any of
+  ``~!@#$%^&*()"?:;,/\`+=[]{}|<>'``, and a profile set description is at most 50 characters. Every
+  `build.mjs` calls `engineTextProblems()` and fails before writing, so a set that would not load on
+  an engine is never generated.
+- **Algorithms that come with the engine** ([`_lib/engine-algorithms.mjs`](_lib/engine-algorithms.mjs)).
+  Before building an algorithm, check whether the engine already has one that does the job:
+  **CM Numeric** for amounts, **Credit Card** for card numbers, **BloodType SL** for blood groups,
+  **Brazil CPF**. A domain names it as `ENGINE.CM_NUMERIC` and so on (`dlpx-core:<name>`): it is not
+  shipped in `preset.json`, the documentation names it as the engine's own, and `verify.mjs` runs it
+  through the runner's catalog. The file also records the built-ins that were compared and left
+  aside, and why — check there before trying one again.
+- **Columns with names that say nothing.** Give every domain whose values have a distinctive shape
+  a value classifier, so a column called `FIELD1` or `PFNOM` is still found. In `verify.mjs`, add new
+  test columns **at the end** of `COLUMNS`: the test values come from a seeded generator, and a column
+  inserted in the middle changes the values of every column after it.
+
+Then run `build.mjs`, `verify.mjs` and `_doc/build.mjs <id>` (with the app running), and bump
+`VERSION` and `VERSION_DATE` together whenever a set that has shipped changes.
+
+## Checking every preset
+
+```bash
+presets/verify-all.sh
+```
+
+Runs the `verify.mjs` of every preset, or of the ones you pick. It asks which presets (all, or
+numbers, names or a unique prefix such as `chile`), what to check — `classifiers`, in seconds and
+with nothing running, or `full`, which also masks through the running app and takes minutes per
+preset — and whether to rebuild first. Presets are found by folder, so a new one is checked as
+soon as it has a `verify.mjs`. Every run writes the whole output to `presets/_logs/`, ends with a
+summary and the app's own review of each preset, and exits non-zero when anything fails.
+
+```bash
+presets/verify-all.sh all --mode classifiers --yes
+presets/verify-all.sh chile peru --mode full --build --jobs 3
+```
+
+`--mode`, `--build`, `--jobs N` (presets at a time), `--url` (the app, default `$DLPX_URL` or
+`http://localhost:3000`) and `--yes` (ask nothing) answer the questions from the command line;
+`--help` lists them.
 
 ## Documentation
 
@@ -140,10 +209,10 @@ guide in `docs/`; the shared wording and how each framework's configuration read
   a set loaded from an older version says a new one is available, and resetting applies it.
 - **`versionDate`** — the day that version was built, written `YYYY-MM-DD`. It is what says how old
   a set is, so bump it together with the version; the card and the cover of the PDF show it beside
-  the version number. It is optional, so a preset that does not say still loads, but all thirteen
+  the version number. It is optional, so a preset that does not say still loads, but all fourteen
   that ship carry it. In a `build.mjs` it sits next to the version as `VERSION_DATE`.
 - **`name.en`** is required; the other languages fall back to it.
-- **`profileSet.name`** is what gets saved and sent to Delphix. The thirteen that ship name the
+- **`profileSet.name`** is what gets saved and sent to Delphix. The fourteen that ship name the
   country, the law (or its number) and the version: `CL - Ley 21.719 - v3`. The set is found by
   the preset it came from, not by name, so a new version renames it and keeps its link to the engine.
 - **`packs.essential`** — the domains of the essential pack. Loading it brings those domains, the

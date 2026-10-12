@@ -213,7 +213,7 @@
     "AR_L1_TARJETA": {
       "title": "Tarjeta de pago",
       "what": ["Números de tarjetas de crédito y débito, reconocidos por el algoritmo de Luhn."],
-      "masking": ["Payment Card: otro número que pasa el algoritmo de Luhn. Solo los valores con forma de tarjeta llegan a él."]
+      "masking": ["Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."]
     },
     "AR_L1_IP": {
       "title": "Dirección IP",
@@ -493,22 +493,22 @@
     "AR_FIN_DEUDA": {
       "title": "Deudas",
       "what": ["Saldos deudores, montos de préstamos y cuotas, importes en mora y límites de compra."],
-      "masking": ["Mapeado a un valor entre 10.000 y 500.000.000 de pesos, sin relación con el valor real."]
+      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "AR_FIN_INGRESOS": {
       "title": "Ingresos y remuneración",
       "what": ["Sueldo básico, bruto o neto, remuneración imponible, haberes, ingresos familiares y facturación anual."],
-      "masking": ["Mapeado a un valor entre 300.000 y 30.000.000 de pesos."]
+      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "AR_FIN_PATRIMONIO": {
       "title": "Patrimonio",
       "what": ["Patrimonio, bienes personales, valuaciones fiscales y tasaciones, saldos en cuentas y plazos fijos, tenencias en moneda extranjera."],
-      "masking": ["Mapeado a un valor entre 1.000.000 y 3.000.000.000 de pesos."]
+      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "AR_FIN_JUBILACION": {
       "title": "Haberes y prestaciones",
       "what": ["El haber jubilatorio o de pensión, el monto de una asignación o prestación y la cuota alimentaria."],
-      "masking": ["Mapeado a un valor entre 250.000 y 12.000.000 de pesos."]
+      "masking": ["Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."]
     },
     "AR_FIN_PROGRAMA_SOCIAL": {
       "title": "Prestaciones y programas sociales",

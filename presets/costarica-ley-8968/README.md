@@ -28,9 +28,9 @@ Three things make this set different from its neighbours.
 
 | | |
 |---|---|
-| Profile set | `CR - Ley 8968 - v1`, assignment threshold 60, built 1 October 2026 |
-| Extended pack | 81 domains, 141 classifiers, 172 algorithms, 81 files — everything below |
-| Essential pack | 12 domains, 26 classifiers, 19 algorithms, 5 files — cédula, DIMEX, NITE, passport, names, contact, address, birth date |
+| Profile set | `CR - Ley 8968 - v2`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 81 domains, 143 classifiers, 168 algorithms, 59 files — everything below |
+| Essential pack | 12 domains, 26 classifiers, 20 algorithms, 5 files — cédula, DIMEX, NITE, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
 ## Files
@@ -67,11 +67,24 @@ régimen, SUGEF categories and judicial file numbers.
 **Type** classifiers rule domains out where the column cannot hold the data: an e-mail is text of at
 least 5 characters, a birth date a date, timestamp or text, an amount a number.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in every
 table and every job. Placeholders such as `N/A` or `-` do not fail a row: where there is nothing to
 mask they pass through.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### The IBAN and its check digits
 
@@ -121,7 +134,7 @@ company is no titular in Costa Rica.
 | `CR_L1_TELEFONO` | `+506` and the first digit kept, so the number still says landline or mobile; spacing preserved |
 | `CR_L1_DIRECCION` | A fictitious set of señas (`200 metros norte de la iglesia católica, casa esquinera color verde`) — **art. 9.3 takes the dirección exacta out of the data of unrestricted access** |
 | `CR_L1_CUENTA_BANCARIA` | The account mapped and the **two IBAN check digits recomputed**, bank kept |
-| `CR_L1_TARJETA` | Payment Card (Luhn stays valid) |
+| `CR_L1_TARJETA` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `CR_L1_PLACA` | Class prefix (`MOT`, `CL`, `AB`, `TSJ`) kept, digits mapped |
 | `CR_L1_INMUEBLE` | Folio real and plano catastrado digit by digit, separators and provincia letters kept — **art. 1 reaches the data of a person "o bienes"** |
 | `CR_L1_IMAGEN` | Every character becomes `X` — **art. 9.3 names la fotografía** |
@@ -172,9 +185,9 @@ professional secrecy — which a test environment is not.
 
 SUGEF category and the Centro de Información Crediticia, debt, income, patrimony, pension, social
 programmes (Avancemos, Crecemos, BANHVI, FONABE, IMAS, RNC), **condición socioeconómica** (the
-SINIRUBE classification and the ficha de información social) and housing tenure. Amounts are
-replaced by another amount of the same order of magnitude in colones, so totals and ratios still
-behave. Article 3 e) calls the condición socioeconómica sensitive and article 1 reaches the data of
+SINIRUBE classification and the ficha de información social) and housing tenure. Amounts go
+through the engine's own CM Numeric: another amount of the same order of magnitude, so totals and
+ratios still behave. Article 3 e) calls the condición socioeconómica sensitive and article 1 reaches the data of
 a person's bienes; article 9.4 sends credit behaviour to the rules of the Sistema Financiero
 Nacional without taking it out of the law.
 
@@ -246,7 +259,7 @@ node presets/_doc/build.mjs costarica-ley-8968
 
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
-`verify.mjs` reviews every classifier configuration, profiles 146 columns with the whole set at its
+`verify.mjs` reviews every classifier configuration, profiles 152 columns with the whole set at its
 threshold and again with the essential pack — well named, badly named and 30 columns that are not
 personal data, among them a cédula jurídica — and audits the generalization for all 492 distritos,
 84 cantones and 7 provincias, checking that every one of the 11,582 replacements names a place of at
@@ -256,6 +269,11 @@ and each algorithm's own sample input through the running app (`DLPX_URL`, defau
 shape and a provincia digit that is never zero; and 200 IBANs, one hundred compact and one hundred
 printed in groups of four, for **validity under ISO 13616**, distinctness and the bank they keep.
 Each value forks a JVM.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 

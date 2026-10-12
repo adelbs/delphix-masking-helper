@@ -35,6 +35,9 @@
 import fs from 'node:fs'
 import nodePath from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { engineTextProblems } from '../_lib/engine-text.mjs'
+import { ENGINE, isEngineAlgorithm } from '../_lib/engine-algorithms.mjs'
+import { cleaning, zeroPadded, keepingZeros, wordByWord, valuePatterns } from '../_lib/detect.mjs'
 
 const HERE = nodePath.dirname(fileURLToPath(import.meta.url))
 const SOURCE = nodePath.join(HERE, 'source')
@@ -104,6 +107,29 @@ function cleansing(name, fileName, pairs, input, delimiter = ',') {
 }
 
 /**
+ * A Data Cleansing of place codes, looked up without the zeros on the left, which stay where they are:
+ * 05364, 5364 and 0005364 all become the same place. Only for codes — check-digit tables keep their
+ * zeros, which count there.
+ */
+function codeCleansing(name, fileName, pairs, input, delimiter = ',') {
+  for (const [from, to] of pairs) if (from.includes(delimiter) || to.includes(delimiter)) throw new Error(`${fileName}: "${from}" holds the delimiter`)
+  if (!pairs.every(([from, to]) => /^\d+$/.test(from) && /^\d+$/.test(to))) throw new Error(`${fileName}: not a table of codes`)
+  // The zero-free forms join the table.
+  const strip = (code) => code.replace(/^0+(?=\d)/, '')
+  const rows = new Map(pairs)
+  const stripped = new Map()
+  for (const [from, to] of pairs) {
+    const [key, value] = [strip(from), strip(to)]
+    if (stripped.has(key) && stripped.get(key) !== value) throw new Error(`${fileName}: ${key} becomes ${stripped.get(key)} and ${value}`)
+    stripped.set(key, value)
+    if (rows.has(key) && rows.get(key) !== value) throw new Error(`${fileName}: ${key} becomes ${rows.get(key)} and, without zeros, ${value}`)
+    rows.set(key, value)
+  }
+  cleansing(`${name}_TABLA`, fileName, [...rows], input, delimiter)
+  return decompose(name, [[String.raw`(0*)([1-9]\d*)`, keep, apply(`${name}_TABLA`)]], keep, input)
+}
+
+/**
  * String Algorithm Chain. Delphix allows eight algorithms per chain, so a longer chain nests, and
  * each part opens in the tester with the sample input of its own first step.
  */
@@ -122,7 +148,7 @@ function chain(name, steps, input) {
 const domains = []
 const classifiers = []
 function domain(name, algorithmName, ...detect) {
-  if (!algorithms.some((a) => a.name === algorithmName)) throw new Error(`${name}: no algorithm ${algorithmName}`)
+  if (!isEngineAlgorithm(algorithmName) && !algorithms.some((a) => a.name === algorithmName)) throw new Error(`${name}: no algorithm ${algorithmName}`)
   domains.push({ name, algorithm: algorithmName })
   for (const make of detect) classifiers.push(make(name))
 }
@@ -132,7 +158,7 @@ const words = (alternatives) => String.raw`(?i)(?<![a-z])(?:${alternatives})(?![
 
 const byName = (...rules) => (d) => ({
   name: `${d} - Path`, framework: 'PATH', domain: d,
-  description: 'Nombre de la columna (y variantes usadas en sistemas costarricenses).',
+  description: 'Nombre de la columna y variantes usadas en sistemas costarricenses.',
   config: {
     paths: rules.map(([alternatives, strength]) => ({
       matchType: 'REGEX', fieldValue: words(alternatives), parentValue: '',
@@ -148,33 +174,56 @@ const byType = (...allowed) => (d) => ({
   config: { allowedTypes: allowed, matchAutoIncrementingColumn: false, matchStrength: 0, rejectStrength: 1 },
 })
 
-/** Values: [regex, strength, { checksum, clean, note }]. Whole value unless `partial`. */
+/**
+ * Values: [regex, strength, { checksum, clean, note }]. Whole value unless `partial`. The spaces a
+ * CHAR column pads with are cleaned away, and a pattern that starts with a digit also takes zeros
+ * on the left (see presets/_lib/detect.mjs).
+ */
 const byPattern = (rules, { reject = 0.3, partial = false } = {}) => (d) => ({
   name: `${d} - Regex`, framework: 'REGEX', domain: d,
   description: 'Formato de los valores.',
   config: {
     dataPatterns: rules.map(([regex, strength, extra = {}]) => ({
       ...(extra.note ? { note: extra.note } : {}),
-      regex, matchStrength: strength,
+      regex: zeroPadded(regex), matchStrength: strength,
       checksumType: extra.checksum ?? 'NONE',
       caseSensitive: false, allowPartialMatch: partial,
-      dataCleanRegex: extra.clean ?? '',
+      dataCleanRegex: cleaning(extra.clean),
     })),
     rejectStrength: reject,
   },
 })
 
-/** Values found in lists: [fileName, values, strength]. */
-const byList = (lists, { reject = 0.3, tokenize = false } = {}) => (d) => ({
-  name: `${d} - List`, framework: 'LIST', domain: d,
-  description: 'Valores conocidos.',
-  config: {
-    valueLists: lists.map(([fileName, values, strength]) => ({ file: file(fileName, withFolded(values)), matchStrength: strength })),
-    tokenizeInput: tokenize,
-    rejectStrength: reject,
-    tokenizationDelimiter: ' ',
-  },
-})
+/**
+ * Values found in lists: [fileName, values, strength]. A List classifier compares the whole value,
+ * padding included, unless it splits it into words: lists of single words are looked up word by
+ * word, and lists with multi-word values become Regex patterns (presets/_lib/detect.mjs).
+ */
+const byList = (lists, { reject = 0.3, tokenize = false } = {}) => (d) => {
+  const known = lists.map(([fileName, values, strength]) => ({ fileName, values: withFolded(values), shown: unique(values), strength }))
+  if (tokenize || known.every((l) => wordByWord(l.values))) {
+    return {
+      name: `${d} - List`, framework: 'LIST', domain: d,
+      description: 'Valores conocidos.',
+      config: {
+        valueLists: known.map((l) => ({ file: file(l.fileName, l.values), matchStrength: l.strength })),
+        tokenizeInput: true,
+        rejectStrength: reject,
+        tokenizationDelimiter: ' ',
+      },
+    }
+  }
+  return {
+    name: `${d} - Values`, framework: 'REGEX', domain: d,
+    description: 'Valores conocidos.',
+    config: {
+      dataPatterns: known.flatMap((l) => valuePatterns(l.values, l.shown).map(({ note, regex, dataCleanRegex }) => ({
+        note, regex, matchStrength: l.strength, checksumType: 'NONE', caseSensitive: false, allowPartialMatch: false, dataCleanRegex,
+      }))),
+      rejectStrength: reject,
+    },
+  }
+}
 
 const STRING = (min = 0, max = 0) => ({ typeName: 'String', ...(min ? { minimumLength: min } : {}), ...(max ? { maximumLength: max } : {}) })
 const NUMBER = (min = 0, max = 0) => ({ typeName: 'Number', ...(min ? { minimumLength: min } : {}), ...(max ? { maximumLength: max } : {}) })
@@ -248,12 +297,14 @@ algorithm('CR_CM_ALFANUM', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'AEIOU', 'BCDFGHJKLMNPQRSTVWXYZ', 'aeiou', 'bcdfghjklmnpqrstvwxyz', 'ÁÉÍÓÚÜ', 'áéíóúü'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, 'A1234567')
 // Digits only: the hyphens of a cédula stay.
 algorithm('CR_CM_DIGITOS', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, '1-0234-0567')
 // A digit that may not become a zero: the first of a cédula is the provincia of the birth entry,
 // and 0 is not a provincia.
@@ -267,12 +318,14 @@ algorithm('CR_CM_DIGITOS_LETRAS', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, 'BLM123')
 // Hex letters form their own group, so a MAC, UUID or IPv6 stays valid hex.
 algorithm('CR_CM_HEX', 'characterMapping.CharacterMapping', {
   characterGroups: ['0123456789', 'abcdef', 'ABCDEF', 'ghijklmnopqrstuvwxyz', 'GHIJKLMNOPQRSTUVWXYZ'],
   caseSensitive: true,
   minMaskedPositions: 0,
+  preserveLeadingZeros: true,
 }, '3c:22:fb:9a:10:e4')
 decompose('CR_REDACTAR', [['(.+)', { type: 'REDACT', redactCharacter: 'X' }]], keep, 'clave123')
 lookup('CR_SUPRIMIR', 'cr-sin-informacion.txt', ['Sin información'], 'Trastorno depresivo recurrente', 'PRESERVE_LOOKUP_FILE')
@@ -295,7 +348,9 @@ const FLAG = String.raw`(?i)(s[ií]|no|true|false|yes|[snyx01])`
 function categorical(name, fileName, values, input, codes) {
   const replacement = values ? lookup(`${name}_LISTA`, fileName, values) : 'CR_SUPRIMIR'
   const code = codes ? apply(lookup(`${name}_CODIGO`, fileName.replace(/\.txt$/, '-codigos.txt'), codes)) : apply('CR_CM_ALFANUM')
-  return decompose(name, [[FLAG, apply('CR_BANDERA')], [String.raw`(\d{1,6})`, code]], apply(replacement), input)
+  // A code that goes through a lookup is looked up without the zeros on the left, which stay.
+  const pattern = codes ? [String.raw`(0*)([1-9]\d{0,5}|0)`, keep, code] : [String.raw`(\d{1,6})`, code]
+  return decompose(name, [[FLAG, apply('CR_BANDERA')], pattern], apply(replacement), input)
 }
 categorical('CR_CATEGORIA_SUPRIMIDA', null, null, 'Trastorno depresivo recurrente')
 const CM = apply('CR_CM_ALFANUM')
@@ -317,13 +372,20 @@ const PROV_DIGIT = apply('CR_CM_DIGITO_1_9')
 // line: only a **persona física** is a titular under art. 3 b) and g), so a NITE of the 3-120
 // series is masked while the **cédula jurídica** of a company — the same `3-NNN-NNNNNN` shape, and
 // from the fourth quarter of 2026 `3-101-A00001` under Decreto 44648-MJ — is left exactly as it is.
+// Tomo and asiento have a fixed width, so a zero in them is a digit: their mapping keeps no zeros.
+// The nine bare digits split as the canonical ten do, so 102340567 and 0102340567 mask alike.
+const SEGMENT = apply(algorithm('CR_CM_DIGITOS_ANCHO_FIJO', 'characterMapping.CharacterMapping', {
+  characterGroups: ['0123456789'],
+  caseSensitive: true,
+  minMaskedPositions: 0,
+}, '0234'))
 const CEDULA_SHAPES = [
   // 0P-TTTT-AAAA, the canonical ten digits.
-  [String.raw`(0)(\d)[\s\-]?(\d{4})[\s\-]?(\d{4})`, keep, PROV_DIGIT, DIGITS, DIGITS],
+  [String.raw`(0)(\d)[\s\-]?(\d{4})[\s\-]?(\d{4})`, keep, PROV_DIGIT, SEGMENT, SEGMENT],
   // P-TTTT-AAAA with separators, the form documents and forms use.
-  [String.raw`(\d)[\s\-](\d{3,4})[\s\-](\d{3,4})`, PROV_DIGIT, DIGITS, DIGITS],
+  [String.raw`(\d)[\s\-](\d{3,4})[\s\-](\d{3,4})`, PROV_DIGIT, SEGMENT, SEGMENT],
   // Nine bare digits.
-  [String.raw`(\d)(\d{8})`, PROV_DIGIT, DIGITS],
+  [String.raw`(\d)(\d{4})(\d{4})`, PROV_DIGIT, SEGMENT, SEGMENT],
 ]
 decompose('CR_CEDULA', CEDULA_SHAPES, DIGITS, '1-0234-0567')
 const CEDULA_SHAPE = String.raw`0?\d[\s\-]?\d{3,4}[\s\-]?\d{3,4}`
@@ -343,7 +405,8 @@ decompose('CR_DOCUMENTO', [
   [String.raw`(3[\s\-]?120[\s\-]?\d{6})`, apply('CR_NITE')],
   // Any other 3-NNN-NNNNNN is a company, with the numeric series or the alphanumeric one of 2026.
   [String.raw`(3[\s\-]?\d{3}[\s\-]?[\dA-Za-z]{6})`, keep],
-  [String.raw`(\d{11,12})`, apply('CR_DIMEX')],
+  // A DIMEX opens with the country code, never with a zero: a cédula padded to eleven digits is not one.
+  [String.raw`([1-9]\d{10,11})`, apply('CR_DIMEX')],
   [`(${CEDULA_SHAPE})`, apply('CR_CEDULA')],
 ], CM, '1-0234-0567')
 
@@ -366,7 +429,7 @@ domain('CR_L1_CEDULA', 'CR_DOCUMENTO',
 
 domain('CR_L1_DIMEX', 'CR_DIMEX',
   byName([`dimex|c[eé]dula_?(de_?)?residencia|documento_?(de_?)?identidad_?migratorio|n(o|ro|um|umero)_?(dimex|residencia|extranjer[ií]a|refugiado)|carn[eé]_?(de_?)?(residencia|refugiado)|id_?migratorio|(${DOC_OWNER})_?dimex`, 0.9]),
-  byPattern([[String.raw`\d{11,12}`, 0.5]], { reject: 0.3 }))
+  byPattern([[String.raw`[1-9]\d{10,11}`, 0.5]], { reject: 0.3 }))
 
 domain('CR_L1_NITE', 'CR_NITE',
   byName(['nite|n(o|ro|um|umero)_?(de_?)?identificaci[oó]n_?(tributaria_?)?especial|identificacion_?tributaria_?especial', 0.9]),
@@ -461,7 +524,7 @@ decompose('CR_EMAIL', [
 domain('CR_L1_EMAIL', 'CR_EMAIL',
   byName(['e_?mail[a-z0-9_]*|mail[a-z0-9_]*|correo(_?electr[oó]nico)?[a-z0-9_]*|dir_?correo|direcci[oó]n_?(de_?)?correo|direcci[oó]n_?electr[oó]nica', 0.85]),
   byType(STRING(5)),
-  byPattern([[String.raw`[A-Za-z0-9._%+'\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}`, 1]], { reject: 0.2 }))
+  byPattern([[String.raw`[\p{L}\p{N}._%+'\-]+@[\p{L}\p{N}.\-]+\.[A-Za-z]{2,24}`, 1]], { reject: 0.2 }))
 
 // Every Costa Rican number has eight digits and no area code: 2 for a landline, 4 for IP telephony,
 // 5 to 8 for a mobile. Article 9.3 keeps the **números de teléfono privados** out of the data of
@@ -602,12 +665,12 @@ domain('CR_L1_CUENTA_BANCARIA', 'CR_CUENTA',
 // ── L1 · Cards, wallets, network, devices, vehicles, property ──────────────
 
 // Payment Card fails a row that has no digits to mask; only values shaped like a card reach it.
-algorithm('CR_TARJETA_LUHN', 'characterMapping.PaymentCard', { minMaskedPositions: 6, preserve: 0 }, '4532000000000001')
-decompose('CR_TARJETA', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply('CR_TARJETA_LUHN')]], keep, '4532 0000 0000 0001')
+decompose('CR_TARJETA', [[String.raw`(\d[\d\s\-]{11,22}\d)`, apply(ENGINE.CREDIT_CARD)]], keep, '4532 0000 0000 0001')
 domain('CR_L1_TARJETA', 'CR_TARJETA',
   byName(['tarjeta(_?(cr[eé]dito|d[eé]bito|n(o|ro|um|umero)))?|n(o|ro|um|umero)_?tarjeta|pan|card_?(no|num|number)|credit_?card|tc_?(numero|num|nro)', 0.85]),
-  // 0.9, not 1: an IMEI is 15 Luhn-valid digits too, and its own column name should win.
-  byPattern([[String.raw`\d{13,19}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
+  // An IMEI is 15 Luhn-valid digits too: 15-digit cards are American Express (34, 37), and the rest
+  // is left to the device domain. 0.9, not 1, so that a column name still wins.
+  byPattern([[String.raw`3[47]\d{13}|[1-9]\d{12,13}|[1-9]\d{15,18}`, 0.9, { checksum: 'LUHN', clean: String.raw`[\s\-]` }]], { reject: 0.3 }))
 
 domain('CR_L1_BILLETERA', 'CR_CM_ALFANUM',
   byName(['billetera(_?(digital|electr[oó]nica|m[oó]vil))?|wallet(_?(id|address|direccion))?|kash|tapp|monedero_?(digital|electr[oó]nico)|dinero_?electr[oó]nico|c[oó]digo_?qr|qr_?(id|codigo)|direcci[oó]n_?(bitcoin|btc|wallet)|btc_?(address|direccion)', 0.85]),
@@ -672,8 +735,18 @@ domain('CR_L1_CONTRATO', 'CR_CM_ALFANUM',
 domain('CR_L1_USUARIO', 'CR_CM_ALFANUM',
   byName(['usuario|user_?name|username|login|alias|apodo|nick(_?name)?|perfil_?(instagram|facebook|twitter|tiktok|linkedin|x)|instagram|facebook|twitter|tiktok|linkedin|red_?social|handle', 0.7]))
 
+// Password hashes carry their scheme: bcrypt, crypt (MD5, SHA-256, SHA-512), Argon2, PBKDF2 and the
+// LDAP {SSHA} forms. A bare hex digest could be any hash, and is left to the column name.
+const PASSWORD_HASHES = [
+  [String.raw`\$2[abxy]?\$\d{2}\$[./A-Za-z0-9]{53}`, 0.95],
+  [String.raw`\$(1|5|6)\$(rounds=\d+\$)?[./A-Za-z0-9]{1,16}\$[./A-Za-z0-9]{22,86}`, 0.95],
+  [String.raw`\$argon2(id|i|d)\$v=\d+\$m=\d+,t=\d+,p=\d+\$\S+`, 0.95],
+  [String.raw`pbkdf2_sha(1|256|512)\$\d+\$\S+\$\S+`, 0.95],
+  [String.raw`\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\}\S+`, 0.95],
+]
 domain('CR_L1_CREDENCIAL', 'CR_REDACTAR',
-  byName(['contrase[nñ]a|clave(?!_?(catastral|primaria|for[aá]nea|valor|producto))|password|passwd|pwd|pass|hash_?(clave|contrasena|password)|pin|c[oó]digo_?(seguridad|verificaci[oó]n|acceso|otp)|cvv|cvc|token(_?(acceso|refresh|api))?|access_?token|refresh_?token|api_?key|llave_?(api|privada)|secreto|secret|otp|firma_?(electr[oó]nica|digital)_?(clave|pin)|pregunta_?secreta|respuesta_?secreta|frase_?semilla|seed_?phrase', 0.9]))
+  byName(['contrase[nñ]a|clave(?!_?(catastral|primaria|for[aá]nea|valor|producto))|password|passwd|pwd|pass|hash_?(clave|contrasena|password)|pin|c[oó]digo_?(seguridad|verificaci[oó]n|acceso|otp)|cvv|cvc|token(_?(acceso|refresh|api))?|access_?token|refresh_?token|api_?key|llave_?(api|privada)|secreto|secret|otp|firma_?(electr[oó]nica|digital)_?(clave|pin)|pregunta_?secreta|respuesta_?secreta|frase_?semilla|seed_?phrase', 0.9]),
+  byPattern(PASSWORD_HASHES, { reject: 0.3 }))
 
 // Article 9.3 takes **la fotografía** out of the data of unrestricted access by name.
 domain('CR_L1_IMAGEN', 'CR_REDACTAR',
@@ -745,7 +818,7 @@ domain('CR_L2_ANIO_NACIMIENTO', 'CR_ANIO',
 
 // 37 becomes 3x. From 100 on, 90.
 decompose('CR_EDAD', [
-  [String.raw`(\d{3,})`, redactAs('90')],
+  [String.raw`([1-9]\d{2,})`, redactAs('90')],
   [String.raw`([1-9])(\d)([.,]\d+)`, keep, DIGITS, keep],
   [String.raw`([1-9])(\d)`, keep, DIGITS],
   [String.raw`(\d)`, DIGITS],
@@ -769,7 +842,11 @@ decompose('CR_SEXO', [
 ], keep, 'F')
 domain('CR_L2_SEXO', 'CR_SEXO',
   byName(['sexo(_?(biol[oó]gico|al_?nacer|paciente|afiliado|cliente))?|(tp|tipo|cod|cd|id)_?sexo|g[eé]nero(?!_?(identidad|autopercibido))|sex|gender(?!_?identity)', 0.85]),
-  byList([['cr-detectar-sexo.txt', ['f', 'm', 'h', 'femenino', 'masculino', 'mujer', 'hombre', 'female', 'male'], 0.5]], { reject: 0.5 }))
+  // A column of single letters is the sex on its own; the words are stronger evidence.
+  byList([
+    ['cr-detectar-sexo.txt', ['femenino', 'masculino', 'mujer', 'hombre', 'female', 'male'], 0.8],
+    ['cr-detectar-sexo-letra.txt', ['f', 'm', 'h'], 0.6],
+  ], { reject: 0.5 }))
 
 // ── L2 · Where people live ──────────────────────────────────────────────────
 //
@@ -912,7 +989,7 @@ const codePairs = [
   ...distritoPlaces.filter((d) => d.small).map((d) => [d.code, d.to.code]),
   ...cantonPlaces.filter((c) => c.small).map((c) => [c.code, c.to.code]),
 ]
-cleansing('CR_CODIGO_DTA', 'cr-codigos-generalizados.txt', codePairs, '10707', '|')
+codeCleansing('CR_CODIGO_DTA', 'cr-codigos-generalizados.txt', codePairs, '10707', '|')
 
 const PERSONAL_WORDS = new Set([...GIVEN_NAMES, ...SURNAMES].map((w) => fold(w).toLowerCase()))
 const PROVINCE_NAMES = new Set([...PROVINCIAS.map((p) => p.name), 'Costa Rica'].map((n) => fold(n).toLowerCase()))
@@ -1061,7 +1138,9 @@ domain('CR_L3_BIOMETRICO', 'CR_REDACTAR',
   byType(STRING()))
 
 domain('CR_L3_GENETICO', 'CR_REDACTAR',
-  byName(['adn|dna|gen[eé]tic[oa]s?|datos?_?gen[eé]ticos?|genoma|genotip[a-z_]*|prueba_?(gen[eé]tica|de_?adn|de_?paternidad|de_?filiaci[oó]n)|perfil_?gen[eé]tico|mutaci[oó]n|brca[12]?|cariotipo|tamizaje_?neonatal|genetic[a-z_]*', 0.9]))
+  byName(['adn|dna|gen[eé]tic[oa]s?|datos?_?gen[eé]ticos?|genoma|genotip[a-z_]*|prueba_?(gen[eé]tica|de_?adn|de_?paternidad|de_?filiaci[oó]n)|perfil_?gen[eé]tico|mutaci[oó]n|brca[12]?|cariotipo|tamizaje_?neonatal|genetic[a-z_]*', 0.9]),
+  // A nucleotide sequence (IUPAC letters) long enough not to be a word.
+  byPattern([[String.raw`[ACGTUN]{24,}`, 0.9]], { reject: 0.3 }))
 
 const ORIENTATIONS = ['Heterosexual', 'Gay', 'Lesbiana', 'Bisexual', 'Pansexual', 'Asexual', 'Otra', 'Prefiere no responder']
 categorical('CR_ORIENTACION_SEXUAL', 'cr-orientaciones-sexuales.txt', ORIENTATIONS, 'Homosexual')
@@ -1152,8 +1231,7 @@ domain('CR_SALUD_VIH', 'CR_CATEGORIA_SUPRIMIDA',
   byName(['vih(_?(estado|resultado|prueba|diagn[oó]stico|positivo))?|hiv|sida|aids|serolog[ií]a_?(vih|hiv)|estado_?serol[oó]gico|carga_?viral|cd4|tar|antirretroviral(es)?|its|ets|infecci[oó]n(es)?_?(de_?)?transmisi[oó]n_?sexual|s[ií]filis|hepatitis_?[bc]|tuberculosis|tbc', 0.9]))
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
-lookup('CR_GRUPO_SANGUINEO', 'cr-grupos-sanguineos.txt', BLOOD_GROUPS, 'O+', 'PRESERVE_LOOKUP_FILE')
-domain('CR_SALUD_GRUPO_SANGUINEO', 'CR_GRUPO_SANGUINEO',
+domain('CR_SALUD_GRUPO_SANGUINEO', ENGINE.BLOOD_TYPE,
   byName(['grupo_?sangu[ií]neo|tipo_?(de_?)?sangre|rh|factor_?rh|gs_?rh|grupo_?rh|abo(_?rh)?|blood_?(type|group)', 0.9]),
   byList([['cr-detectar-grupos-sanguineos.txt', [...BLOOD_GROUPS, '0+', '0-', 'a positivo', 'a negativo', 'b positivo', 'b negativo', 'ab positivo', 'ab negativo', 'o positivo', 'o negativo'], 0.9]], { reject: 0.4 }))
 
@@ -1196,23 +1274,19 @@ domain('CR_FIN_HISTORIAL_CREDITICIO', 'CR_HISTORIAL_CREDITICIO',
 
 // Costa Rica uses the colón; the monthly minimum wage for an unskilled worker was around 380,000
 // colones in 2026.
-algorithm('CR_VALOR_DEUDA', 'characterMapping.NumericMapping', { minValue: 50000, maxValue: 60000000 }, '2400000')
-domain('CR_FIN_DEUDA', 'CR_VALOR_DEUDA',
+domain('CR_FIN_DEUDA', ENGINE.CM_NUMERIC,
   byName(['saldo_?(deuda|cr[eé]dito|capital|obligaci[oó]n|cartera|en_?mora|adeudado)|monto_?(de_?la_?)?(deuda|cuota|obligaci[oó]n|cr[eé]dito|pr[eé]stamo|mora|otorgado)|deuda(_?total)?|l[ií]mite_?(de_?)?(cr[eé]dito|tarjeta)|l[ií]nea_?(de_?)?cr[eé]dito|cuota_?mensual|loan_?(amount|balance)|outstanding_?balance|debt', 0.85]),
   byType(NUMBER()))
 
-algorithm('CR_INGRESOS', 'characterMapping.NumericMapping', { minValue: 360000, maxValue: 6000000 }, '780000')
-domain('CR_FIN_INGRESOS', 'CR_INGRESOS',
+domain('CR_FIN_INGRESOS', ENGINE.CM_NUMERIC,
   byName(['sueldo(_?(bruto|neto|mensual|base|ordinario))?|salario(_?(bruto|neto|mensual|base|m[ií]nimo|escolar))?|remuneraci[oó]n(_?mensual)?|ingresos?(_?(mensuales?|totales?|familiares?|declarados?|netos?|brutos?))?|haberes|honorarios|renta(_?(bruta|neta|mensual|anual))?|ingreso_?(base|familiar|per_?capita)|salary|income|wages?', 0.85]),
   byType(NUMBER()))
 
-algorithm('CR_PATRIMONIO', 'characterMapping.NumericMapping', { minValue: 1000000, maxValue: 500000000 }, '48000000')
-domain('CR_FIN_PATRIMONIO', 'CR_PATRIMONIO',
+domain('CR_FIN_PATRIMONIO', ENGINE.CM_NUMERIC,
   byName(['patrimonio(_?(neto|l[ií]quido|fiscal))?|activos?_?(totales?)?|valor_?(del_?)?(inmueble|finca|veh[ií]culo|bienes|tasaci[oó]n|fiscal|comercial)|tasaci[oó]n|valor_?(fiscal|catastral)|saldo_?(cuenta|ahorro|dep[oó]sito|inversi[oó]n|fondo)|certificado_?(de_?)?dep[oó]sito|inversiones|declaraci[oó]n_?(jurada_?)?(de_?)?(bienes|patrimonio)|net_?worth|account_?balance', 0.85]),
   byType(NUMBER()))
 
-algorithm('CR_VALOR_PENSION', 'characterMapping.NumericMapping', { minValue: 150000, maxValue: 2500000 }, '420000')
-domain('CR_FIN_PENSION', 'CR_VALOR_PENSION',
+domain('CR_FIN_PENSION', ENGINE.CM_NUMERIC,
   byName(['jubilaci[oó]n(_?(monto|mensual|valor))?|pensi[oó]n(_?(monto|mensual|valor|alimentaria|alimenticia|por_?invalidez|por_?vejez))?|monto_?(jubilaci[oó]n|pensi[oó]n|beneficio|subsidio)|valor_?(pensi[oó]n|subsidio|beneficio)|rnc(_?monto)?|ivm(_?monto)?|r[eé]gimen_?no_?contributivo|pension_?amount', 0.9]),
   byType(NUMBER()))
 
@@ -1294,8 +1368,16 @@ if (notDomains.length) throw new Error(`essential pack names domains the set doe
 
 // The version and the day it was built: bump both whenever anything in the set changes, so that
 // whoever loaded an older one can see how old it is.
-const VERSION = 1
-const VERSION_DATE = '2026-10-01'
+const VERSION = 2
+const VERSION_DATE = '2026-10-11'
+// Zeros on the left are padding only in the value a column holds — the top of a domain's tree. Inside
+// it, a step may read a digit at a fixed position, and an optional zero would shift what it reads.
+for (const d of domains) {
+  const top = algorithms.find((a) => a.name === d.algorithm)
+  if (top?.framework === 'algorithm.plugin.decompose.RegexDecompose') {
+    top.config.maskPatterns = top.config.maskPatterns.map(({ regex, actions }) => keepingZeros(regex, actions))
+  }
+}
 const preset = {
   version: VERSION,
   versionDate: VERSION_DATE,
@@ -1311,13 +1393,13 @@ const preset = {
   },
   profileSet: {
     name: `CR - Ley 8968 - v${VERSION}`,
-    description: 'Identificadores directos, cuasi-identificadores, datos sensibles (art. 3 e y art. 9.1), datos de salud, condición socioeconómica y datos de bienes (art. 3 e y art. 1) y antecedentes penales, conforme a la Ley 8968 de Protección de la Persona frente al Tratamiento de sus Datos Personales de Costa Rica y su reglamento.',
+    description: 'Ley 8968 - datos personales y sensibles',
     threshold: 60,
     classifiers: classifiers.map((c) => c.name),
   },
   packs: {
     essential: {
-      description: 'Paquete esencial de la Ley 8968: cédula de identidad, DIMEX, NITE, pasaporte, nombres, contacto, dirección y fecha de nacimiento.',
+      description: 'Paquete esencial de la Ley 8968',
       domains: ESSENTIAL,
     },
   },
@@ -1327,6 +1409,9 @@ const preset = {
   files: [...files.keys()].sort(),
 }
 
+// The texts the engine reads must pass as they are: no refused character, a short set description.
+const engineProblems = engineTextProblems(preset)
+if (engineProblems.length) throw new Error(`texts the engine would refuse:\n  ${engineProblems.join('\n  ')}`)
 fs.rmSync(FILES, { recursive: true, force: true })
 fs.mkdirSync(FILES, { recursive: true })
 for (const [name, lines] of files) fs.writeFileSync(nodePath.join(FILES, name), `${lines.join('\n')}\n`)

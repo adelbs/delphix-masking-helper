@@ -146,7 +146,7 @@
     "MX_L1_TARJETA": {
       "title": "Tarjeta de pago",
       "what": "Números de tarjeta de crédito y débito.",
-      "masking": "Se reemplaza por otro número de tarjeta que sigue pasando la verificación de Luhn. Los valores sin forma de tarjeta pasan sin cambio en lugar de hacer fallar la fila."
+      "masking": "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
     },
     "MX_L1_PASAPORTE": {
       "title": "Pasaporte",
@@ -421,22 +421,22 @@
     "MX_FIN_MONTO_DEUDA": {
       "title": "Monto del adeudo",
       "what": "Saldo deudor, monto vencido, límite de crédito, pago mínimo.",
-      "masking": "Se mapea a un monto entre 1,000 y 5,000,000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "MX_FIN_INGRESO_MENSUAL": {
       "title": "Ingreso mensual",
       "what": "Sueldo, percepciones, neto a pagar, ingreso del hogar.",
-      "masking": "Se mapea a un monto entre 8,000 y 250,000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "MX_FIN_SALARIO_DIARIO": {
       "title": "Salario diario (SDI, SBC)",
       "what": "El salario diario integrado y el salario base de cotización del IMSS — la forma en que las nóminas mexicanas guardan la remuneración.",
-      "masking": "Se mapea a un monto entre 280 y 3,000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "MX_FIN_PATRIMONIO": {
       "title": "Patrimonio",
       "what": "Patrimonio neto, valores catastrales y de avalúo, inversiones y ahorro.",
-      "masking": "Se mapea a un monto entre 200,000 y 30,000,000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "MX_FIN_AFORE": {
       "title": "AFORE",
@@ -446,7 +446,7 @@
     "MX_FIN_SALDO_RETIRO": {
       "title": "Ahorro para el retiro y la vivienda",
       "what": "Saldos de las subcuentas de retiro y de vivienda, ahorro voluntario, montos de pensión.",
-      "masking": "Se mapea a un monto entre 5,000 y 5,000,000."
+      "masking": "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
     },
     "MX_FIN_CREDITO_VIVIENDA": {
       "title": "Crédito de vivienda",

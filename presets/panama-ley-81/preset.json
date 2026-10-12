@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "versionDate": "2026-09-15",
+  "version": 3,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Panama — Ley 81 de 2019 (personal data protection)",
     "pt-BR": "Panamá — Ley 81 de 2019 (proteção de dados pessoais)",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales panameños conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021: identificadores directos (cédula, RUC con DV válido, nombres, contacto, documentos), cuasi-identificadores (fecha de nacimiento, distrito, corregimiento), los datos sensibles del artículo 4, datos económicos y de crédito, y antecedentes penales."
   },
   "profileSet": {
-    "name": "PA - Ley 81 de 2019 - v2",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 4, 11), datos económicos y de crédito, y antecedentes penales, conforme a la Ley 81 de 2019 y el Decreto Ejecutivo 285 de 2021.",
+    "name": "PA - Ley 81 de 2019 - v3",
+    "description": "Ley 81 de 2019 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "PA_L1_CEDULA - Path",
@@ -59,6 +59,7 @@
       "PA_L1_NUMERO_CONTRATO - Path",
       "PA_L1_USUARIO_RRSS - Path",
       "PA_L1_CREDENCIAL - Path",
+      "PA_L1_CREDENCIAL - Regex",
       "PA_L1_GEOLOCALIZACION - Path",
       "PA_L1_GEOLOCALIZACION - Regex",
       "PA_L1_TEXTO_LIBRE - Path",
@@ -75,62 +76,63 @@
       "PA_L2_SEXO - Path",
       "PA_L2_SEXO - List",
       "PA_L2_DISTRITO - Path",
-      "PA_L2_DISTRITO - List",
+      "PA_L2_DISTRITO - Values",
       "PA_L2_CORREGIMIENTO - Path",
-      "PA_L2_CORREGIMIENTO - List",
+      "PA_L2_CORREGIMIENTO - Values",
       "PA_L2_CODIGO_LUGAR - Path",
       "PA_L2_CODIGO_LUGAR - Type",
-      "PA_L2_CODIGO_LUGAR - List",
+      "PA_L2_CODIGO_LUGAR - Values",
       "PA_L2_LUGAR_POBLADO - Path",
       "PA_L2_BARRIADA - Path",
       "PA_L2_CODIGO_POSTAL - Path",
       "PA_L2_CODIGO_POSTAL - Regex",
       "PA_L2_NACIONALIDAD - Path",
-      "PA_L2_NACIONALIDAD - List",
+      "PA_L2_NACIONALIDAD - Values",
       "PA_L2_ESTADO_CIVIL - Path",
-      "PA_L2_ESTADO_CIVIL - List",
+      "PA_L2_ESTADO_CIVIL - Values",
       "PA_L2_OCUPACION - Path",
       "PA_L2_EMPLEADOR - Path",
       "PA_L2_ESCOLARIDAD - Path",
-      "PA_L2_ESCOLARIDAD - List",
+      "PA_L2_ESCOLARIDAD - Values",
       "PA_L2_ESCUELA - Path",
       "PA_L2_DEPENDIENTES - Path",
       "PA_L2_DEPENDIENTES - Type",
       "PA_L3_ETNIA - Path",
-      "PA_L3_ETNIA - List",
+      "PA_L3_ETNIA - Values",
       "PA_L3_LENGUA_INDIGENA - Path",
-      "PA_L3_LENGUA_INDIGENA - List",
+      "PA_L3_LENGUA_INDIGENA - Values",
       "PA_L3_SALUD_DIAGNOSTICO - Path",
       "PA_L3_SALUD_DIAGNOSTICO - Regex",
       "PA_L3_SALUD_MEDICAMENTO - Path",
-      "PA_L3_SALUD_MEDICAMENTO - List",
+      "PA_L3_SALUD_MEDICAMENTO - Values",
       "PA_L3_SALUD_IDENTIFICADOR - Path",
       "PA_L3_SALUD_TEXTO_CLINICO - Path",
       "PA_L3_SALUD_TEXTO_CLINICO - Type",
       "PA_L3_SALUD_RESULTADO_EXAMEN - Path",
       "PA_L3_SALUD_GRUPO_SANGUINEO - Path",
-      "PA_L3_SALUD_GRUPO_SANGUINEO - List",
+      "PA_L3_SALUD_GRUPO_SANGUINEO - Values",
       "PA_L3_SALUD_DISCAPACIDAD - Path",
-      "PA_L3_SALUD_DISCAPACIDAD - List",
+      "PA_L3_SALUD_DISCAPACIDAD - Values",
       "PA_L3_SALUD_SEXUAL_REPRODUCTIVA - Path",
       "PA_L3_SALUD_MENTAL_ADICCIONES - Path",
       "PA_L3_BIOMETRICO - Path",
       "PA_L3_BIOMETRICO - Type",
       "PA_L3_INFORMACION_GENETICA - Path",
+      "PA_L3_INFORMACION_GENETICA - Regex",
       "PA_L3_ORIENTACION_SEXUAL - Path",
-      "PA_L3_ORIENTACION_SEXUAL - List",
+      "PA_L3_ORIENTACION_SEXUAL - Values",
       "PA_L3_IDENTIDAD_GENERO - Path",
-      "PA_L3_IDENTIDAD_GENERO - List",
+      "PA_L3_IDENTIDAD_GENERO - Values",
       "PA_L3_VIDA_SEXUAL - Path",
       "PA_L3_RELIGION - Path",
-      "PA_L3_RELIGION - List",
+      "PA_L3_RELIGION - Values",
       "PA_L3_CREENCIA_FILOSOFICA_MORAL - Path",
       "PA_L3_OPINION_POLITICA - Path",
-      "PA_L3_OPINION_POLITICA - List",
+      "PA_L3_OPINION_POLITICA - Values",
       "PA_L3_AFILIACION_POLITICA - Path",
-      "PA_L3_AFILIACION_POLITICA - List",
+      "PA_L3_AFILIACION_POLITICA - Values",
       "PA_L3_AFILIACION_SINDICAL - Path",
-      "PA_L3_AFILIACION_SINDICAL - List",
+      "PA_L3_AFILIACION_SINDICAL - Values",
       "PA_FIN_REFERENCIA_CREDITO - Path",
       "PA_FIN_MONTO_DEUDA - Path",
       "PA_FIN_MONTO_DEUDA - Type",
@@ -141,13 +143,13 @@
       "PA_FIN_PENSION - Path",
       "PA_FIN_PENSION - Type",
       "PA_FIN_SEGURO_SOCIAL - Path",
-      "PA_FIN_SEGURO_SOCIAL - List",
+      "PA_FIN_SEGURO_SOCIAL - Values",
       "PA_FIN_PROGRAMA_SOCIAL - Path",
-      "PA_FIN_PROGRAMA_SOCIAL - List",
+      "PA_FIN_PROGRAMA_SOCIAL - Values",
       "PA_FIN_NIVEL_SOCIOECONOMICO - Path",
-      "PA_FIN_NIVEL_SOCIOECONOMICO - List",
+      "PA_FIN_NIVEL_SOCIOECONOMICO - Values",
       "PA_FIN_VIVIENDA - Path",
-      "PA_FIN_VIVIENDA - List",
+      "PA_FIN_VIVIENDA - Values",
       "PA_PENAL_ANTECEDENTES - Path",
       "PA_PENAL_CAUSA - Path",
       "PA_PENAL_CAUSA - Regex"
@@ -155,7 +157,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la Ley 81 de 2019: cédula, RUC, pasaporte, nombres, contacto, dirección y fecha de nacimiento.",
+      "description": "Paquete esencial de la Ley 81 de 2019",
       "domains": [
         "PA_L1_CEDULA",
         "PA_L1_RUC",
@@ -177,7 +179,7 @@
       "name": "PA_L1_CEDULA - Path",
       "framework": "PATH",
       "domain": "PA_L1_CEDULA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -230,15 +232,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "([1-9]|1[0-3])-NT-\\d{1,4}-\\d{1,6}",
+            "regex": "0*(?:([1-9]|1[0-3])-NT-\\d{1,4}-\\d{1,6})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -248,7 +250,7 @@
       "name": "PA_L1_RUC - Path",
       "framework": "PATH",
       "domain": "PA_L1_RUC",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -288,12 +290,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(?:(?:[1-9]|1[0-3])(?:AV|PI)?-\\d{1,4}-\\d{1,6}|(?:E|N|PE)-\\d{1,4}-\\d{1,6})(?: +DV +| +DV|-| +)\\d{2}",
+            "regex": "0*(?:(?:(?:[1-9]|1[0-3])(?:AV|PI)?-\\d{1,4}-\\d{1,6}|(?:E|N|PE)-\\d{1,4}-\\d{1,6})(?: +DV +| +DV|-| +)\\d{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?!\\d{1,2}-\\d{1,2}-(19|20)\\d{2}$)(([1-9]|1[0-3])(AV|PI)?|E|N|PE)-\\d{1,4}-\\d{1,6}",
@@ -301,15 +303,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{3,10}-\\d{1,4}-\\d{1,7}(\\s*DV\\s*\\d{2})?",
+            "regex": "0*(?:\\d{3,10}-\\d{1,4}-\\d{1,7}(\\s*DV\\s*\\d{2})?)",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -319,7 +321,7 @@
       "name": "PA_L1_RUC_DV - Path",
       "framework": "PATH",
       "domain": "PA_L1_RUC_DV",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -359,7 +361,7 @@
       "name": "PA_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "PA_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -387,7 +389,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -397,7 +399,7 @@
       "name": "PA_L1_DOCUMENTO_MIGRATORIO - Path",
       "framework": "PATH",
       "domain": "PA_L1_DOCUMENTO_MIGRATORIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -416,7 +418,7 @@
       "name": "PA_L1_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "PA_L1_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -435,7 +437,7 @@
       "name": "PA_L1_IDONEIDAD - Path",
       "framework": "PATH",
       "domain": "PA_L1_IDONEIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -454,7 +456,7 @@
       "name": "PA_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "PA_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -498,7 +500,7 @@
       "name": "PA_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "PA_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -534,7 +536,7 @@
       "name": "PA_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "PA_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -574,11 +576,11 @@
         "valueLists": [
           {
             "file": "preset-file://pa-detectar-nombres.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://pa-detectar-apellidos.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -590,7 +592,7 @@
       "name": "PA_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "PA_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -630,12 +632,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -645,7 +647,7 @@
       "name": "PA_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "PA_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -668,28 +670,28 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?\\(?507\\)?[\\s\\-]?)?6\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?\\(?507\\)?[\\s\\-]?)?6\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?\\(?507\\)?[\\s\\-]?)?[2-9]\\d{2}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?\\(?507\\)?[\\s\\-]?)?[2-9]\\d{2}[\\s\\-]?\\d{4})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\+?\\d[\\d\\s()\\-]{6,15}",
+            "regex": "0*(?:\\+?\\d[\\d\\s()\\-]{6,15})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -699,7 +701,7 @@
       "name": "PA_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "PA_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -744,7 +746,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*(edificio|edif\\.?|torre|ph)\\s+.+(piso|apto\\.?|apartamento|oficina|local)\\s*\\w+.*",
@@ -752,7 +754,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).*(barriada|urbanizaci[oó]n|urb\\.|residencial|sector|manzana)\\s+.+(casa|lote)\\s*(n[oº°]\\.?\\s*)?\\w+.*",
@@ -760,7 +762,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -770,7 +772,7 @@
       "name": "PA_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "PA_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -789,7 +791,7 @@
       "name": "PA_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "PA_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -808,7 +810,7 @@
       "name": "PA_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "PA_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -831,12 +833,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -846,7 +848,7 @@
       "name": "PA_L1_IP - Path",
       "framework": "PATH",
       "domain": "PA_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -869,20 +871,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -892,7 +894,7 @@
       "name": "PA_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "PA_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -915,20 +917,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -938,7 +940,7 @@
       "name": "PA_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "PA_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -966,7 +968,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(ADM|MB|MI|PR|BC|CD|CC|M|T|B|G|D|E)[\\s\\-]?\\d{3,6}",
@@ -974,15 +976,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{6}",
+            "regex": "0*(?:\\d{6})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -992,7 +994,7 @@
       "name": "PA_L1_VIN - Path",
       "framework": "PATH",
       "domain": "PA_L1_VIN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1020,7 +1022,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1030,7 +1032,7 @@
       "name": "PA_L1_FINCA - Path",
       "framework": "PATH",
       "domain": "PA_L1_FINCA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1049,7 +1051,7 @@
       "name": "PA_L1_NUMERO_CONTRATO - Path",
       "framework": "PATH",
       "domain": "PA_L1_NUMERO_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1068,7 +1070,7 @@
       "name": "PA_L1_USUARIO_RRSS - Path",
       "framework": "PATH",
       "domain": "PA_L1_USUARIO_RRSS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1087,7 +1089,7 @@
       "name": "PA_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "PA_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1103,10 +1105,61 @@
       }
     },
     {
+      "name": "PA_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "PA_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "PA_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "PA_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1137,20 +1190,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[7-9]\\.\\d{3,}\\s*,\\s*-(7[7-9]|8[0-3])\\.\\d{3,}",
+            "regex": "0*(?:[7-9]\\.\\d{3,}\\s*,\\s*-(7[7-9]|8[0-3])\\.\\d{3,})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[7-9]\\.\\d{3,}",
+            "regex": "0*(?:[7-9]\\.\\d{3,})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(7[7-9]|8[0-3])\\.\\d{3,}",
@@ -1158,7 +1211,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1168,7 +1221,7 @@
       "name": "PA_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "PA_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1208,12 +1261,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(([1-9]|1[0-3])(AV|PI)?|E|N|PE)-\\d{1,4}-\\d{1,6}",
+            "regex": "0*(?:(([1-9]|1[0-3])(AV|PI)?|E|N|PE)-\\d{1,4}-\\d{1,6})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1221,15 +1274,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?507\\s?)?6\\d{3}-?\\d{4}",
+            "regex": "0*(?:(\\+?507\\s?)?6\\d{3}-?\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1239,7 +1292,7 @@
       "name": "PA_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "PA_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1282,7 +1335,7 @@
       "name": "PA_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "PA_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1322,7 +1375,7 @@
       "name": "PA_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "PA_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1362,7 +1415,7 @@
       "name": "PA_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "PA_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1405,7 +1458,7 @@
       "name": "PA_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "PA_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1429,10 +1482,14 @@
         "valueLists": [
           {
             "file": "preset-file://pa-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://pa-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1441,7 +1498,7 @@
       "name": "PA_L2_DISTRITO - Path",
       "framework": "PATH",
       "domain": "PA_L2_DISTRITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1457,27 +1514,30 @@
       }
     },
     {
-      "name": "PA_L2_DISTRITO - List",
-      "framework": "LIST",
+      "name": "PA_L2_DISTRITO - Values",
+      "framework": "REGEX",
       "domain": "PA_L2_DISTRITO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-distritos.txt",
-            "matchStrength": 0.8
+            "note": "79 — Bocas del Toro · Changuinola · Chiriquí Grande · Almirante · Aguadulce · Antón · …",
+            "regex": "(?iu)(?:(?:a(?:guadulce|l(?:anje|mirante)|nt(?:on|ón)|rraij(?:an|án)|talaya)|b(?:a(?:lboa|r(?:u|ú))|esiko|o(?:cas del toro|que(?:r(?:on|ón)|te))|ugaba)|c(?:a(?:lobre|nazas|pira|ñazas)|emaco \\(area no\\. 1\\)|h(?:a(?:gres|me|nguinola)|ep(?:igana|o)|i(?:m(?:an|án)|riqu(?:i grande|í grande)|tr(?:e|é)))|ol(?:on|ón)|émaco \\(área no\\. 1\\))|do(?:lega|noso)|gua(?:laca|rar(?:e|é))|jirondai|k(?:ankint(?:u|ú)|usap(?:in|ín))|l(?:a(?: (?:chorrera|mesa|pintada)|s (?:minas|palmas|tablas))|os (?:pozos|santos))|m(?:a(?:caracas|riato)|iron(?:o|ó)|ontijo|una|üna)|n(?:at(?:a|á)|ole duima|urun)|o(?:c(?:u|ú)|l(?:a|á)|mar torrijos herrera)|p(?:a(?:nam(?:a|á)|rita)|e(?:das(?:i|í)|nonom(?:e|é)|s(?:e|é))|inogana|o(?:cr(?:i|í)|rtobelo))|r(?:e(?:medios|nacimiento)|io de jesus|ío de jesús)|s(?:a(?:mb(?:u \\(area no\\. 2\\)|ú \\(área no\\. 2\\))|n(?: (?:carlos|f(?:elix|rancisco|élix)|lorenzo|miguelito)|t(?:a (?:catalina o calov(?:ebora|ébora)|fe|isabel|mar(?:ia|ía))|iago)))|on(?:a|á))|t(?:aboga|ierras altas|o(?:l(?:e|é)|nos(?:i|í)))|ñürün))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L2_CORREGIMIENTO - Path",
       "framework": "PATH",
       "domain": "PA_L2_CORREGIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1501,27 +1561,30 @@
       }
     },
     {
-      "name": "PA_L2_CORREGIMIENTO - List",
-      "framework": "LIST",
+      "name": "PA_L2_CORREGIMIENTO - Values",
+      "framework": "REGEX",
       "domain": "PA_L2_CORREGIMIENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-corregimientos.txt",
-            "matchStrength": 0.8
+            "note": "618 — Bocas del Toro · Bastimentos · Punta Laurel · Tierra Oscura · Bocas del Drago · San Cristóbal · …",
+            "regex": "(?iu)(?:(?:24 de diciembre|a(?:chiote|gua(?: (?:buena|de salud|fr(?:ia|ía))|dulce)|iligand(?:i|í)|l(?:anje|calde d(?:iaz|íaz)|mirante|to(?: (?:b(?:iling(?:ue o gdogueshia|üe o gdogüeshia)|oquete)|caballero|de jes(?:us|ús))|s de g(?:uera|üera)))|m(?:ador|elia denis de icaza)|n(?:c(?:on|ón)|t(?:on|ón))|r(?:enas|nulfo arias|raij(?:an|án))|serr(?:io de gariche|ío de gariché)|talaya)|b(?:a(?:co|gala|h(?:ia (?:azul|honda)|ía (?:azul|honda))|jo(?: (?:boquete o boquete|c(?:edro|orral|ulubre))|s de g(?:uera|üera))|kama|r(?:nizal|r(?:anco adentro|i(?:ada (?:4 de abril|guaym(?:i|í))|o(?: (?:balboa|col(?:on|ón)|franc(?:es|és)|norte|sur)|s unidos))))|stimentos|yano)|e(?:juco|l(?:isario (?:fr(?:ias|ías)|porras)|la vista)|tania)|i(?:jagual|s(?:ira|valles))|o(?:ca(?: (?:chica|de(?: (?:balsa|cupe)|l monte))|s del (?:drago|toro))|quer(?:on|ón)|r(?:o|ó))|r(?:e(?:non|ñón)|ujas)|u(?:en(?:a vista|os aires)|gaba|r(?:i|unga))|ágala|üri)|c(?:a(?:buya|cique|imit(?:illo|o)|l(?:ante|dera|idonia(?: o la exposici(?:on|ón))?|o(?:bre|v(?:ebora|ébora)))|m(?:ar(?:on arriba|ón arriba)|butal|ogant(?:i|í)|pana)|n(?:a(?:s(?: gordas)?|veral|zas)|delario ovalle|ita|t(?:a gallo|o del llano))|p(?:ellan(?:ia|ía)|ira)|rlos santana (?:avila|ávila)|scabel|t(?:iv(?:a|e|á|é)|orce de noviembre)|uchero|ñ(?:a(?:s(?: gordas)?|veral|zas)|ita))|e(?:baco|iba|r(?:me(?:no|ño)|ro (?:banco|ca(?:na|ña)|de (?:casa|p(?:atena|lata))|iglesias|largo|p(?:elado|u(?:erco|nta))|silvestre|viejo)))|h(?:a(?:me|nguinola)|ep(?:i(?:gana|llo)|o)|i(?:c(?:a|hica|á)|guir(?:i arriba|í arriba)|libre|m(?:an|án)|riqu(?:i(?: grande)?|í(?: grande)?)|tr(?:a|e|é))|u(?:mical|p(?:a(?:mpa)?|á)))|ir(?:i(?: (?:de los sotos|grande)|cito|lo guaynora)|í (?:de los sotos|grande))|o(?:c(?:h(?:ea|igro)|l(?:e(?: del norte)?|é(?: del norte)?))|marca kuna de (?:madungand(?:i|í)|wargand(?:i|í))|r(?:dillera|ozal|ral falso)|sta hermosa)|rist(?:obal(?: este)?|óbal(?: este)?)|u(?:ango|cunat(?:i|í)|esta de piedra|rund(?:u|ú))|ébaco)|d(?:avid (?:este|sur)|i(?:k(?:eri|o)|val(?:a|á))|o(?:lega|minical|n bosco|s r(?:ios|íos)))|e(?:dwin f(?:abrega|ábrega)|l (?:a(?:lto|r(?:ado|omillo))|b(?:a(?:le|rr(?:ero|ito))|ebedero|ongo)|c(?:a(?:cao|labacito|n(?:afistulo|o)|pur(?:i|í)|rate|ñ(?:afístulo|o))|edro|h(?:ir(?:u|ú)|orrillo)|iruelo|o(?:c(?:al|la|o)|p(?:e|é)|rtezo)|risto|uay)|e(?:jido|mpalme|spin(?:al|o))|gu(?:a(?:bo|simo)|ásimo)|h(?:a(?:rino|to(?: de san juan de dios)?)|igo)|l(?:i(?:bano|m(?:on|ón))|lano|íbano)|m(?:a(?:cano|nantial|r(?:a(?:non|ñón)|ia|ía))|u(?:noz|ñóz))|nancito|p(?:a(?:jaro|lmar|ntano|red(?:on|ón))|e(?:dregoso|non|ñón)|i(?:ca(?:cho|dor)|ro(?: n°2)?)|o(?:rvenir|trero)|rado|uerto|ájaro)|r(?:e(?:al de santa mar(?:ia|ía)|tiro)|inc(?:on|ón)|oble)|silencio|t(?:e(?:jar|ribe)|ijera|oro)|valle)|mplanada de chorcha|ntradero del castillo|rnesto c(?:ordoba campos|órdoba campos)|s(?:cobal|pino amarillo))|f(?:euillet|inca (?:12|30|4|51|6(?:0|6)?))|g(?:a(?:rachin(?:e|é)|t(?:u o gatuncito|ú o gatuncito))|o(?:be(?:a|rnadora)|nzalo v(?:asquez|ásquez))|u(?:a(?:b(?:al|ito)|c(?:a|á)|dalupe|laca|nico|r(?:ar(?:e(?: arriba)?|é(?: arriba)?)|umal)|yab(?:al|ito))|ibale|zm(?:an|án)|ánico)|w(?:aribiara|oroni)|üibale)|h(?:ato (?:c(?:ham(?:i|í)|orot(?:u|ú)|ulantro)|j(?:obo|ul(?:i|í))|pil(?:on|ón))|icaco|or(?:concitos|nito)|urtado)|i(?:sla (?:de ca(?:nas|ñas)|grande)|turralde)|j(?:a(?:deberi|qu(?:e|é))|ingurud(?:o|ó)|os(?:e domingo espinar|é domingo espinar)|u(?:a(?:n d(?:em(?:ostenes arosemena|óstenes arosemena)|iaz|íaz)|y o las mareas)|sto fidel palacios)|ädeberi)|k(?:ankint(?:u|ú)|ikari|r(?:ua|üa)|usap(?:in|ín))|l(?:a(?: (?:arena|c(?:arrillo|o(?:lorada|ncepci(?:on|ón)))|e(?:n(?:cantada|ea|senada)|rmita|s(?:meralda|pigadilla|trella))|g(?:arceana|loria|uinea)|la(?:guna|ja)|m(?:esa|iel|onta(?:nuela|ñuela))|p(?:a(?:lma|sera|va)|e(?:na|ña)|i(?:ntada|taloza))|r(?:aya de (?:calobre|santa mar(?:ia|ía))|epresa)|soledad|t(?:etilla|iza|r(?:in(?:chera|idad)|onosa))|villa de los santos|yeguada)|j(?:a(?:mina|s (?:adentro|blancas|de tol(?:e|é)))|ero)|s (?:c(?:abras|ruces|umbres)|delicias|g(?:arzas|u(?:abas|ias|ías))|huacas|l(?:ajas|lanas|omas)|m(?:a(?:nanitas|rgaritas|ñanitas)|inas)|ollas arriba|palm(?:as|itas)|t(?:ablas(?: abajo)?|rancas)|uvas))|eones|i(?:dice|m(?:on(?:es)?|ón))|lano (?:abajo|bonito|de (?:catival o mariato|la cruz|piedras)|grande|largo|norte)|o(?:l(?:a|á)|ma yuca o ijuicho|s (?:a(?:lgarrobos|n(?:astacios|geles)|sientos)|c(?:a(?:nelos|stillos)|err(?:itos|os de paja))|d(?:iaz|íaz)|hatillos|llan(?:itos|os)|milagros|naranjos|olivos|pozos|valles|ángeles))|ídice)|m(?:a(?:caracas|n(?: creek|aca|uel (?:e\\. amador terrero|ortega))|r(?:aca|ia(?: chiquita|b(?:e|é))|ía chiquita)|teo iturralde)|e(?:nchaca|tet(?:i|í))|i(?:guel de la borda|ra(?:flores|mar))|o(?:goll(?:on|ón)|n(?:agrillo|jar(?:as|ás)|t(?:e lirio|ijo)))|reeni|ununi|ününi)|n(?:a(?:mnoni|nce de risc(?:o|ó)|rgan(?:a|á)|t(?:a|á))|ib(?:a|ra)|ombre de dios|u(?:ario|ev(?:a (?:california|esperanza|gorgona|providencia)|o (?:chagres|emperador|m(?:exico|éxico)|santiago)))|ämnoni)|o(?:bald(?:ia|ía)|c(?:u|ú)|l(?:a|á)|mar torrijos|ria arriba|toque o(?:ccidente|riente))|p(?:a(?:cora|j(?:a de sombrero|onal)|l(?:enque|m(?:as bellas|ira)|o grande)|r(?:a(?:iso|íso)|i(?:s|t(?:a|illa))|que lefevre|ís)|s(?:iga|o ancho)|ya)|e(?:d(?:as(?:i|í)|r(?:egal|o gonz(?:alez|ález)))|n(?:a (?:blanca|chatas)|onom(?:e|é))|rales|s(?:e|é)|ña (?:blanca|chatas))|i(?:edra(?: roja|s gordas)|l(?:on|ón)|n(?:a|ogana)|xvae|ña)|la(?:ya (?:chiquita|leona)|za cais(?:an|án))|o(?:cr(?:i|í)|nuga|rtobel(?:illo|o)|t(?:rer(?:illos(?: abajo)?|o de ca(?:na|ña))|uga))|rogreso|u(?:curo|e(?:blo(?: nuevo|s unidos)|rto (?:armuelles|caimito|lindo o garrote|obald(?:ia|ía)|pi(?:l(?:on|ón)|na|ña)|vidal))|nta (?:chame|laurel|pe(?:na|ña)|r(?:obalo|óbalo))|rio)|ásiga|úcuro)|que(?:br(?:ada (?:de(?: (?:loro|oro|piedra)|l rosario)|el cipri(?:an|án))|o)|r(?:evalo|évalo))|r(?:ambala|e(?:icito|m(?:ance|edios))|i(?:nc(?:on(?: hondo)?|ón(?: hondo)?)|o (?:abajo|c(?:hiriqui|ongo(?: arriba)?)|de jesus|grande|h(?:ato|ondo)|i(?:glesias|ndio)|luis|s(?:abalo|ereno)))|o(?:d(?:eo viejo|olfo aguilar delgado|rigo luque)|ka o rokari|vira)|u(?:b(?:en cantu|én cantú)|fina alfaro)|ío (?:abajo|c(?:hiriquí|ongo(?: arriba)?)|de jesús|grande|h(?:ato|ondo)|i(?:glesias|ndio)|luis|s(?:ereno|ábalo)))|s(?:a(?:b(?:an(?:a grande|itas)|oga)|jalices|l(?:amanca|to dup(?:i|í)|ud)|mb(?:oa|u|ú)|n(?: (?:an(?:dr(?:es|és)|tonio)|bartolo|c(?:arlos|rist(?:obal|óbal))|f(?:eli(?:pe|x)|rancisco|élix)|isidro|j(?:os(?:e(?:  del general)?|é(?:  del general)?)|uan(?: (?:bautista|de (?:dios|turbe)))?)|lorenzo|m(?:ar(?:celo|t(?:in(?: de porres)?|ín(?: de porres)?))|iguel)|p(?:ablo (?:nuevo|viejo)|edr(?:ito o jik(?:ui|üi)|o del espino)))|t(?:a (?:ana|c(?:atalina o calov(?:ebora o bledeshia|ébora o bledeshia)|lara|ruz(?: de chinina)?)|fe|isabel|luc(?:ia|ía)|mar(?:ia|ta|ía)|r(?:ita|osa))|iago(?: (?:este|sur))?|o (?:domingo|tom(?:as|ás)))))|e(?:steadero|tegant(?:i|í))|itio prado|o(?:l(?:ano|oy)|n(?:a|á)|r(?:a|tov(?:a|á)|á))|usama)|t(?:a(?:boga|imat(?:i|í))|ebario|i(?:erra oscura|jeras|najas)|o(?:abr(?:e|é)|bobe|cumen|l(?:e|ote|é)|nos(?:i|í)|rt(?:i|í)|za)|res quebradas|u(?: gwai|bual(?:a|á)|cu(?:e|t(?:i|í))|l(?:u|ú)))|u(?:mani|ni(?:on (?:del norte|santena)|ón (?:del norte|santeña))|rrac(?:a|á)|tira)|v(?:a(?:camonte|lle(?: (?:bonito o dogata|de (?:agua arriba|risc(?:o|ó))|rico)|rriquito))|e(?:ladero|racruz)|i(?:ctoriano lorenzo|ento fr(?:io|ío)|gu(?:i|í)|lla (?:carmen|lourdes|rosario)|rgen del carmen|sta alegre)|olc(?:an|án))|ya(?:pe|viza)|zap(?:allal|otillo)|ümani))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L2_CODIGO_LUGAR - Path",
       "framework": "PATH",
       "domain": "PA_L2_CODIGO_LUGAR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1558,27 +1621,30 @@
       }
     },
     {
-      "name": "PA_L2_CODIGO_LUGAR - List",
-      "framework": "LIST",
+      "name": "PA_L2_CODIGO_LUGAR - Values",
+      "framework": "REGEX",
       "domain": "PA_L2_CODIGO_LUGAR",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-codigo-lugar.txt",
-            "matchStrength": 0.4
+            "note": "1405 — 010101 · 10101 · 010102 · 10102 · 010104 · 10104 · …",
+            "regex": "0*(?:(?:1(?:0(?:000(?:1|2|3|4)|1(?:0(?:1|2|4|5|6|7))?|2(?:0(?:1|3|4|6|7|8|9)|1(?:0|3|4|5|6|7|8|9)|2(?:0|1|2|3))?|3(?:0(?:1|2|3|4|5|6))?|4(?:0(?:1|2|3|4|5|6|7|8|9)|10)?)|10(?:1(?:0(?:1|2|3))?|2(?:0(?:1|2))?)|20(?:1(?:0(?:1|2|3|4|5|6|7|8))?|2(?:0(?:1|2|3|4|5|6|7|8))?|3(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6))?|4(?:0(?:1|2|3|4|5))?|5(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1))?|6(?:0(?:1|4|5|6|7)|1(?:0|1))?|7(?:0(?:1|2|5|6|8))?|8(?:0(?:1|2|3|4|5))?|9(?:0(?:1|2|3|4|5))?)|30(?:1(?:0(?:1|2|3|4|5|6|7|8|9))?|3(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3))?|4(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1))?|7(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8))?|9(?:0(?:1|2|3|4|5|6|7|8|9))?))|20(?:1(?:0(?:1|2|3|4|5|6|7|8))?|2(?:0(?:1|2|3|4|5|6|7|8|9)|10)?|3(?:0(?:1|2|3|4|5|6|7))?|4(?:0(?:1|2|3|4|5|6|7))?|5(?:0(?:1|2|3|4|5))?|6(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6))?)|30(?:1(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5))?|2(?:0(?:1|2|3|4|5|6|7))?|3(?:0(?:1|2|3|4|5))?|4(?:0(?:1|2|3|4|5))?|5(?:0(?:1|2|3|4|5|6|7|8))?|6(?:0(?:1|2|3))?)|4(?:0(?:1(?:0(?:1|2|3|4|5|6|7|8|9))?|2(?:0(?:1|2|3|4|5|6|7))?|3(?:0(?:1|2|3|4|5|6|7|8))?|4(?:0(?:1|2|3|4|5|6))?|5(?:0(?:1|2|3|5|6|7|8|9)|1(?:0|1|3|4|5))?|6(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2))?|7(?:0(?:1|2|3|4|5|6|7|8))?|8(?:0(?:1|2|3|4|5))?|9(?:0(?:1|2|3|4|5))?)|1(?:0(?:0(?:1|2|3|4|5|6|7|8))?|1(?:0(?:1|2|3|4|5))?|2(?:0(?:1|2|3|4|5))?|3(?:0(?:1|2|3|4|5|6|7|8|9))?|4(?:0(?:1|2|3|4|5))?))|50(?:1(?:0(?:1|2|3|4|5|6|9)|1(?:0|1|2))?|2(?:0(?:1|2|3|4|5|6|7|8|9))?|3(?:0(?:7|8)|1(?:3|4|5|6|7))?)|60(?:1(?:0(?:1|2|3|4|5))?|2(?:0(?:1|2|3|4|5|6|7))?|3(?:0(?:1|2|3|4|5|6|7|8|9))?|4(?:0(?:1|2|3|4|5|6|7|8))?|5(?:0(?:1|2|3|4|5|6|7))?|6(?:0(?:1|2|3|4|5|6|7|8))?|7(?:0(?:1|2|3|4|5))?)|70(?:1(?:0(?:1|2|3|4|5|6|7|8|9)|10)?|2(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4))?|3(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5))?|4(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1))?|5(?:0(?:1|2|3|4|5))?|6(?:0(?:1|2|3|4|5))?|7(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1))?)|8(?:0(?:2(?:0(?:1|2|3|4|5|6))?|5(?:0(?:1|2|3|4|5|6|7|8))?|6(?:0(?:1|2|3|4|5))?|8(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6))?)|1(?:0(?:0(?:1|2|3|4|5|6|7|8|9))?|1(?:0(?:1|2|3))?))|9(?:0(?:1(?:0(?:1|2|3|4|5))?|2(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2))?|3(?:0(?:1|2|3|4|5|6|7|8))?|4(?:0(?:1|2|3|4|5|6|7))?|5(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3))?|6(?:0(?:1|2|3|4|5|6|7|8))?|7(?:0(?:1|2|3|4|5))?|8(?:0(?:1|2|3|4|5|6))?|9(?:0(?:1|2|3|4|5|6|7|8))?)|1(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6))?|1(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2))?|2(?:0(?:1|2|3|4|5))?))))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PA_L2_LUGAR_POBLADO - Path",
       "framework": "PATH",
       "domain": "PA_L2_LUGAR_POBLADO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1597,7 +1663,7 @@
       "name": "PA_L2_BARRIADA - Path",
       "framework": "PATH",
       "domain": "PA_L2_BARRIADA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1616,7 +1682,7 @@
       "name": "PA_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "PA_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1639,12 +1705,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{4,5}",
+            "regex": "0*(?:\\d{4,5})",
             "matchStrength": 0.2,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1654,7 +1720,7 @@
       "name": "PA_L2_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "PA_L2_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1670,27 +1736,30 @@
       }
     },
     {
-      "name": "PA_L2_NACIONALIDAD - List",
-      "framework": "LIST",
+      "name": "PA_L2_NACIONALIDAD - Values",
+      "framework": "REGEX",
       "domain": "PA_L2_NACIONALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-nacionalidades.txt",
-            "matchStrength": 0.7
+            "note": "50 — Panameña · Colombiana · Venezolana · Nicaragüense · China · Estadounidense · …",
+            "regex": "(?iu)(?:(?:argentin(?:a|o)|c(?:hin(?:a|o)|o(?:lombia(?:n(?:a|o))?|sta(?: rica|rricense))|uba(?:n(?:a|o))?)|dominican(?:a|o)|e(?:cuatorian(?:a|o)|s(?:pa(?:nol(?:a)?|ñol(?:a)?)|tado(?:s unidos|unidense))|xtranjer(?:a|o))|h(?:aitian(?:a|o)|ondure(?:n(?:a|o)|ñ(?:a|o)))|i(?:ndi(?:a|o)|talian(?:a|o))|liban(?:es(?:a)?|és)|mexican(?:a|o)|nicarag(?:u(?:a|ense)|üense)|p(?:anam(?:a|e(?:n(?:a|o)|ñ(?:a|o))|á)|eruan(?:a|o))|rep(?:ublica dominicana|ública dominicana)|salvadore(?:n(?:a|o)|ñ(?:a|o))|venez(?:olan(?:a|o)|uela)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "PA_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1706,27 +1775,30 @@
       }
     },
     {
-      "name": "PA_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "PA_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "PA_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "18 — soltero · soltera · casado · casada · unido · unida · …",
+            "regex": "(?iu)(?:(?:casad(?:a|o)|divorc(?:ed|iad(?:a|o))|married|s(?:eparad(?:a|o)|ingle|olter(?:a|o))|uni(?:d(?:a|o)|on libre|ón libre)|viud(?:a|o)|widowed))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "PA_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1745,7 +1817,7 @@
       "name": "PA_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "PA_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1764,7 +1836,7 @@
       "name": "PA_L2_ESCOLARIDAD - Path",
       "framework": "PATH",
       "domain": "PA_L2_ESCOLARIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1780,27 +1852,30 @@
       }
     },
     {
-      "name": "PA_L2_ESCOLARIDAD - List",
-      "framework": "LIST",
+      "name": "PA_L2_ESCOLARIDAD - Values",
+      "framework": "REGEX",
       "domain": "PA_L2_ESCOLARIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-escolaridad.txt",
-            "matchStrength": 0.6
+            "note": "25 — Ningún grado · Primaria incompleta · Primaria completa · Premedia incompleta · Premedia completa · Media incompleta · …",
+            "regex": "(?iu)(?:(?:bachiller(?:ato)?|doctorado|especialidad o postgrado|licenciatura|m(?:aestr(?:ia|ía)|edia(?: incompleta)?)|ning(?:un(?: grado|a|o)|ún grado)|p(?:os(?:grado|tgrado)|r(?:emedia(?: (?:completa|incompleta))?|imaria(?: (?:completa|incompleta))?))|superior no universitaria|t(?:ecnico|écnico)|universi(?:dad|taria)|vocacional))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L2_ESCUELA - Path",
       "framework": "PATH",
       "domain": "PA_L2_ESCUELA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1819,7 +1894,7 @@
       "name": "PA_L2_DEPENDIENTES - Path",
       "framework": "PATH",
       "domain": "PA_L2_DEPENDIENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1859,7 +1934,7 @@
       "name": "PA_L3_ETNIA - Path",
       "framework": "PATH",
       "domain": "PA_L3_ETNIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1875,31 +1950,48 @@
       }
     },
     {
-      "name": "PA_L3_ETNIA - List",
-      "framework": "LIST",
+      "name": "PA_L3_ETNIA - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_ETNIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-pueblos.txt",
-            "matchStrength": 0.9
+            "note": "42 — Guna · Ngäbe · Buglé · Naso Tjërdi · Bokota · Emberá · …",
+            "regex": "(?iu)(?:(?:afro(?:antillan(?:a|o)|colonial|descendiente|paname(?:n(?:a|o)|ñ(?:a|o)))|b(?:okota|ri(?: bri|bri)|ugl(?:e|é))|cuna|ember(?:a|á)|gu(?:aym(?:i|í)|na(?: yala|dule)?)|ind(?:igena|ígena)|kuna|moren(?:a|o)|n(?:aso(?: tj(?:erdi|ërdi))?|egr(?:a|o(?: (?:antillano|colonial))?)|g(?:abe|obe|äbe|öbe)|ingun(?:a|o)|o ind(?:igena|ígena))|otro pueblo ind(?:igena|ígena)|t(?:er(?:ibe|raba)|érraba)|w(?:aunana|ouna(?:an|n))))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://pa-detectar-bandera.txt",
-            "matchStrength": 0.3
+            "note": "7 — s · n · sí · no · y · 0 · …",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "7 — s · n · sí · no · y · 0 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?|y))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_LENGUA_INDIGENA - Path",
       "framework": "PATH",
       "domain": "PA_L3_LENGUA_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1915,27 +2007,30 @@
       }
     },
     {
-      "name": "PA_L3_LENGUA_INDIGENA - List",
-      "framework": "LIST",
+      "name": "PA_L3_LENGUA_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_LENGUA_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "23 — Ngäbere · Buglere · Guna · Emberá · Wounmeu · Naso Tjërdi · …",
+            "regex": "(?iu)(?:(?:b(?:ribri|ugle(?:re)?)|dulegaya|e(?:mber(?:a|á)|spa(?:nol|ñol))|gu(?:aym(?:i|í)|na)|kuna|n(?:aso(?: tj(?:erdi|ërdi))?|g(?:abere|obere|äbere|öbere)|inguna|o habla(?: lengua ind(?:igena|ígena))?)|otra lengua ind(?:igena|ígena)|teribe|woun(?:aan|meu)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1963,7 +2058,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1973,7 +2068,7 @@
       "name": "PA_L3_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -1989,27 +2084,30 @@
       }
     },
     {
-      "name": "PA_L3_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "PA_L3_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "54 — Acetaminofén · Ibuprofeno · Naproxeno · Diclofenaco · Ketorolaco · Metformina · …",
+            "regex": "(?iu)(?:(?:a(?:c(?:etaminof(?:en|én)|ido (?:acetilsalicilico|valproico))|lprazolam|m(?:broxol|lodipina|oxicilina)|ripiprazol|torvastatina)|bictegravir|c(?:arbonato de litio|iprofloxacina|lo(?:nazepam|rfeniramina)|omplejo b)|d(?:i(?:azepam|clofenaco)|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|hidroclorotiazida|i(?:buprofeno|nsulina(?: glargina)?)|ketorolaco|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ratadina|sart(?:an|án)))|m(?:et(?:formina|ilfenidato)|isoprostol)|na(?:ltrexona|proxeno)|o(?:lanzapina|meprazol)|p(?:ar(?:acetamol|oxetina)|rednisona)|quetiapina|r(?:anitidina|isperidona)|s(?:albutamol|ertralina|imvastatina|ulfato ferroso)|tenofovir|warfarina|ácido (?:acetilsalicílico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PA_L3_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2036,7 +2134,7 @@
       "name": "PA_L3_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2072,7 +2170,7 @@
       "name": "PA_L3_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2099,7 +2197,7 @@
       "name": "PA_L3_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2115,27 +2213,30 @@
       }
     },
     {
-      "name": "PA_L3_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "PA_L3_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-grupo-sanguineo.txt",
-            "matchStrength": 0.9
+            "note": "26 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-|b(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-))|b(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-)|o(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2151,27 +2252,30 @@
       }
     },
     {
-      "name": "PA_L3_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "PA_L3_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-discapacidad.txt",
-            "matchStrength": 0.6
+            "note": "21 — Física · Visual · Auditiva · Intelectual · Psicosocial · Visceral · …",
+            "regex": "(?iu)(?:(?:auditiva|f(?:isica(?: motora)?|ísica(?: motora)?)|intelectual|m(?:ental|otora|ultiple|últiple)|ninguna|psicosocial|s(?:ensorial|in (?:discapacidad|limitaci(?:on|ón)))|vis(?:ceral|ual)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PA_L3_SALUD_SEXUAL_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_SEXUAL_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2190,7 +2294,7 @@
       "name": "PA_L3_SALUD_MENTAL_ADICCIONES - Path",
       "framework": "PATH",
       "domain": "PA_L3_SALUD_MENTAL_ADICCIONES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2209,7 +2313,7 @@
       "name": "PA_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "PA_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2244,7 +2348,7 @@
       "name": "PA_L3_INFORMACION_GENETICA - Path",
       "framework": "PATH",
       "domain": "PA_L3_INFORMACION_GENETICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2260,10 +2364,29 @@
       }
     },
     {
+      "name": "PA_L3_INFORMACION_GENETICA - Regex",
+      "framework": "REGEX",
+      "domain": "PA_L3_INFORMACION_GENETICA",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "PA_L3_ORIENTACION_SEXUAL - Path",
       "framework": "PATH",
       "domain": "PA_L3_ORIENTACION_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2279,27 +2402,30 @@
       }
     },
     {
-      "name": "PA_L3_ORIENTACION_SEXUAL - List",
-      "framework": "LIST",
+      "name": "PA_L3_ORIENTACION_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_ORIENTACION_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-orientacion-sexual.txt",
-            "matchStrength": 0.8
+            "note": "17 — Heterosexual · Homosexual · Lesbiana · Gay · Bisexual · Pansexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omo(?:sexual)?)|l(?:esbian(?:a)?|gbt(?:iq\\+)?)|no responde|otra|p(?:ansexual|refiere no responder)|queer|straight))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "PA_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2315,27 +2441,30 @@
       }
     },
     {
-      "name": "PA_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "PA_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-identidad-genero.txt",
-            "matchStrength": 0.7
+            "note": "14 — Mujer · Hombre · Mujer trans · Hombre trans · No binario · Género fluido · …",
+            "regex": "(?iu)(?:(?:cisg(?:enero|énero)|femenino|g(?:enero fluido|énero fluido)|hombre(?: trans)?|m(?:asculino|ujer(?: trans)?)|no binari(?:a|o)|otra|prefiere no responder|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "PA_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2354,7 +2483,7 @@
       "name": "PA_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "PA_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2370,27 +2499,30 @@
       }
     },
     {
-      "name": "PA_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "PA_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "42 — Católica · Evangélica · Adventista del Séptimo Día · Testigo de Jehová · Iglesia de Jesucristo de los Santos de los Últimos Días · Bahá í · …",
+            "regex": "(?iu)(?:(?:a(?:dventista(?: del s(?:eptimo dia|éptimo día))?|gn(?:ostic(?:a|o)|óstic(?:a|o))|te(?:a|o))|b(?:a(?:h(?:a(?:'i|i)|á'í)|utista)|udis(?:mo|ta))|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|r(?:eyente|istian(?:a|o)))|e(?:piscopal|vang(?:elic(?:a|o)|élic(?:a|o)))|hind(?:u(?:ismo)?|ú)|i(?:beorgun|glesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|slam)|jud(?:i(?:a|o)|í(?:a|o))|m(?:ama(?: tata|tata)|etodista|orm(?:on|ón)|usulm(?:an(?:a)?|án))|ninguna|otra(?: religi(?:on|ón))?|p(?:entecostal|rotestante)|sin religi(?:on|ón)|testigo(?: de jehov(?:a|á)|s de jehov(?:a|á))))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_CREENCIA_FILOSOFICA_MORAL - Path",
       "framework": "PATH",
       "domain": "PA_L3_CREENCIA_FILOSOFICA_MORAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2409,7 +2541,7 @@
       "name": "PA_L3_OPINION_POLITICA - Path",
       "framework": "PATH",
       "domain": "PA_L3_OPINION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2425,27 +2557,30 @@
       }
     },
     {
-      "name": "PA_L3_OPINION_POLITICA - List",
-      "framework": "LIST",
+      "name": "PA_L3_OPINION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_OPINION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-opiniones-politicas.txt",
-            "matchStrength": 0.7
+            "note": "14 — Izquierda · Centro izquierda · Centro · Centro derecha · Derecha · Sin preferencia · …",
+            "regex": "(?iu)(?:(?:apartidista|c(?:entro(?: (?:derecha|izquierda)|derecha|izquierda)?|onservador)|derecha|izquierda|liberal|ninguna|pr(?:efiere no responder|ogresista)|sin preferencia))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_AFILIACION_POLITICA - Path",
       "framework": "PATH",
       "domain": "PA_L3_AFILIACION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2461,27 +2596,30 @@
       }
     },
     {
-      "name": "PA_L3_AFILIACION_POLITICA - List",
-      "framework": "LIST",
+      "name": "PA_L3_AFILIACION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_AFILIACION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "28 — Partido Revolucionario Democrático · Realizando Metas · Cambio Democrático · Partido Panameñista · MOLIRENA · Movimiento Otro Camino · …",
+            "regex": "(?iu)(?:(?:a(?:cci(?:on ciudadana independiente|ón ciudadana independiente)|lianza)|c(?:ambio democr(?:atico|ático)|d)|f(?:ad|rente amplio por la democracia)|independiente|libre postulaci(?:on|ón)|mo(?:ca|lirena|vimiento (?:liberal republicano nacionalista|otro camino|radix))|ninguno|p(?:a(?:name(?:nista|ñista)|rtido (?:alianza|nacional humanitario|p(?:aname(?:nista|ñista)|opular)|revolucionario democr(?:atico|ático)))|p|rd)|r(?:ealizando metas|m)|sin partido))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "PA_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2497,27 +2635,30 @@
       }
     },
     {
-      "name": "PA_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "PA_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "PA_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "13 — SUNTRACS · CONATO · CONUSI · CONATRAB · ASOPROF · AEVE · …",
+            "regex": "(?iu)(?:(?:a(?:eve|nep|so(?:ciaci(?:on de educadores veraguenses|ón de educadores veragüenses)|prof))|con(?:at(?:o|rab)|usi)|fenasep|s(?:i(?:ndica(?:lizado|to (?:unico nacional de trabajadores de la construccion|único nacional de trabajadores de la construcción))|trachilco)|untracs)|unep))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PA_FIN_REFERENCIA_CREDITO - Path",
       "framework": "PATH",
       "domain": "PA_FIN_REFERENCIA_CREDITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2536,7 +2677,7 @@
       "name": "PA_FIN_MONTO_DEUDA - Path",
       "framework": "PATH",
       "domain": "PA_FIN_MONTO_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2571,7 +2712,7 @@
       "name": "PA_FIN_INGRESO_MENSUAL - Path",
       "framework": "PATH",
       "domain": "PA_FIN_INGRESO_MENSUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2606,7 +2747,7 @@
       "name": "PA_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "PA_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2641,7 +2782,7 @@
       "name": "PA_FIN_PENSION - Path",
       "framework": "PATH",
       "domain": "PA_FIN_PENSION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2676,7 +2817,7 @@
       "name": "PA_FIN_SEGURO_SOCIAL - Path",
       "framework": "PATH",
       "domain": "PA_FIN_SEGURO_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2692,27 +2833,30 @@
       }
     },
     {
-      "name": "PA_FIN_SEGURO_SOCIAL - List",
-      "framework": "LIST",
+      "name": "PA_FIN_SEGURO_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "PA_FIN_SEGURO_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-seguro-social.txt",
-            "matchStrength": 0.8
+            "note": "19 — Asegurado directo · Beneficiario · Jubilado o pensionado por vejez · Pensionado por enfermedad o accidente · Jubilado o pensionado de otro país · No tiene seguro social · …",
+            "regex": "(?iu)(?:(?:asegurad(?:a|o(?: directo)?)|beneficiari(?:a|o)|c(?:otizante|ss)|jubilad(?:a|o(?: o pensionado (?:de otro pa(?:is|ís)|por vejez))?)|minsa|no (?:asegurado|tiene(?: seguro social)?)|pensionad(?:a|o(?: por enfermedad o accidente)?)|seguro privado))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "PA_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2728,27 +2872,30 @@
       }
     },
     {
-      "name": "PA_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "PA_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "PA_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-programas.txt",
-            "matchStrength": 0.8
+            "note": "20 — 120 a los 65 · Red de Oportunidades · Ángel Guardián · Bono Alimenticio Nutricional · PASE-U · Beca de excelencia IFARHU · …",
+            "regex": "(?iu)(?:(?:120 a los 65|a(?:ngel guardian|uxilio econ(?:omico ifarhu|ómico ifarhu))|b(?:eca (?:de excelencia ifarhu|universal)|ono (?:alimenticio(?: nutricional)?|solidario))|ciento veinte a los sesenta y cinco|ninguno|pa(?:nam(?:a solidario|á solidario)|se(?: u|-u))|red (?:de oportunidades|oportunidades)|s(?:enapan|ubsidio senadis)|vale digital|ángel guardián))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "PA_FIN_NIVEL_SOCIOECONOMICO - Path",
       "framework": "PATH",
       "domain": "PA_FIN_NIVEL_SOCIOECONOMICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2764,27 +2911,30 @@
       }
     },
     {
-      "name": "PA_FIN_NIVEL_SOCIOECONOMICO - List",
-      "framework": "LIST",
+      "name": "PA_FIN_NIVEL_SOCIOECONOMICO - Values",
+      "framework": "REGEX",
       "domain": "PA_FIN_NIVEL_SOCIOECONOMICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-pobreza.txt",
-            "matchStrength": 0.4
+            "note": "10 — pobreza extrema · pobreza general · pobre · no pobre · indigente · vulnerable · …",
+            "regex": "(?iu)(?:(?:alto|bajo|indigente|m(?:edio|uy bajo)|no pobre|pobre(?:za (?:extrema|general))?|vulnerable))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PA_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "PA_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2800,27 +2950,30 @@
       }
     },
     {
-      "name": "PA_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "PA_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "PA_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://pa-detectar-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "15 — Propia · Propia hipotecada · Alquilada · Cedida o prestada · Condena · Otra situación · …",
+            "regex": "(?iu)(?:(?:alquilada|c(?:edida(?: o prestada)?|ondena)|familiar|hipotecada|invasi(?:on|ón)|otra situaci(?:on|ón)|pr(?:e(?:carista|stada)|opia(?: hipotecada)?)|rentada))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "PA_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "PA_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2839,7 +2992,7 @@
       "name": "PA_PENAL_CAUSA - Path",
       "framework": "PATH",
       "domain": "PA_PENAL_CAUSA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas panameños).",
+      "description": "Nombre de la columna y variantes usadas en sistemas panameños.",
       "config": {
         "paths": [
           {
@@ -2862,20 +3015,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{12,15}",
+            "regex": "0*(?:\\d{12,15})",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,6}-\\d{4}",
+            "regex": "0*(?:\\d{1,6}-\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3089,7 +3242,7 @@
     },
     {
       "name": "PA_L3_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "PA_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "PA_L3_SALUD_DISCAPACIDAD",
@@ -3149,19 +3302,19 @@
     },
     {
       "name": "PA_FIN_MONTO_DEUDA",
-      "algorithm": "PA_MONTO_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PA_FIN_INGRESO_MENSUAL",
-      "algorithm": "PA_INGRESO_MENSUAL"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PA_FIN_PATRIMONIO",
-      "algorithm": "PA_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PA_FIN_PENSION",
-      "algorithm": "PA_MONTO_PENSION"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "PA_FIN_SEGURO_SOCIAL",
@@ -3203,7 +3356,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "8-442-445"
     },
@@ -3219,7 +3373,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3417,8 +3572,23 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3454,8 +3624,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([1-9]|1[0-3])([\\s\\-])(\\d{1,4})([\\s\\-])(\\d{1,6})",
+            "regex": "(0*?)(?:([1-9]|1[0-3])([\\s\\-])(\\d{1,4})([\\s\\-])(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3483,8 +3656,11 @@
             ]
           },
           {
-            "regex": "([1-9]|1[0-3])(AV|PI)([\\s\\-])(\\d{1,4})([\\s\\-])(\\d{1,6})",
+            "regex": "(0*?)(?:([1-9]|1[0-3])(AV|PI)([\\s\\-])(\\d{1,4})([\\s\\-])(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -3567,8 +3743,11 @@
             ]
           },
           {
-            "regex": "([1-9]|1[0-3])([\\s\\-]NT[\\s\\-])(\\d{1,4})([\\s\\-])(\\d{1,6})",
+            "regex": "(0*?)(?:([1-9]|1[0-3])([\\s\\-]NT[\\s\\-])(\\d{1,4})([\\s\\-])(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5809,8 +5988,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "((?:(?:[1-9]|1[0-3])(?:AV|PI)?-\\d{1,4}-\\d{1,6}|(?:E|N|PE)-\\d{1,4}-\\d{1,6})(?: +DV +| +DV|-| +)\\d{2})",
+            "regex": "(0*?)(?:((?:(?:[1-9]|1[0-3])(?:AV|PI)?-\\d{1,4}-\\d{1,6}|(?:E|N|PE)-\\d{1,4}-\\d{1,6})(?: +DV +| +DV|-| +)\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5820,8 +6002,11 @@
             ]
           },
           {
-            "regex": "((?:(?:[1-9]|1[0-3])(?:AV|PI)?-\\d{1,4}-\\d{1,6}|(?:E|N|PE)-\\d{1,4}-\\d{1,6}))",
+            "regex": "(0*?)(?:((?:(?:[1-9]|1[0-3])(?:AV|PI)?-\\d{1,4}-\\d{1,6}|(?:E|N|PE)-\\d{1,4}-\\d{1,6})))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5831,8 +6016,11 @@
             ]
           },
           {
-            "regex": "([1-9]|1[0-3])(-NT-)(\\d{1,4})(-)(\\d{1,6})(.*)",
+            "regex": "(0*?)(?:([1-9]|1[0-3])(-NT-)(\\d{1,4})(-)(\\d{1,6})(.*))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5866,8 +6054,11 @@
             ]
           },
           {
-            "regex": "(\\d{3,10}-\\d{1,4}-\\d{1,7}.*)",
+            "regex": "(0*?)(?:(\\d{3,10}-\\d{1,4}-\\d{1,7}.*))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
@@ -5891,8 +6082,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,2})",
+            "regex": "(0*?)(?:(\\d{1,2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6373,8 +6567,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?\\(?507\\)?[\\s\\-]?)?(6)(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?\\(?507\\)?[\\s\\-]?)?(6)(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6399,8 +6596,11 @@
             ]
           },
           {
-            "regex": "(\\+?\\(?507\\)?[\\s\\-]?)?([2-9])(\\d{2})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?\\(?507\\)?[\\s\\-]?)?([2-9])(\\d{2})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6452,25 +6652,20 @@
       "input": "Vía España, Edificio Plaza, Piso 12, Apto. 12B"
     },
     {
-      "name": "PA_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      }
-    },
-    {
       "name": "PA_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "PA_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -6498,8 +6693,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6581,8 +6779,11 @@
             ]
           },
           {
-            "regex": "(\\d{6})",
+            "regex": "(0*?)(?:(\\d{6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6718,8 +6919,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6746,8 +6950,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -6755,8 +6962,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)(\\.\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)(\\.\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6772,8 +6982,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6786,8 +6999,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6971,7 +7187,7 @@
       "input": "Cerro Punta"
     },
     {
-      "name": "PA_CODIGO_CORREGIMIENTO",
+      "name": "PA_CODIGO_CORREGIMIENTO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -6984,7 +7200,35 @@
       "input": "040612"
     },
     {
-      "name": "PA_CODIGO_DISTRITO",
+      "name": "PA_CODIGO_CORREGIMIENTO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "PA_CODIGO_CORREGIMIENTO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "040612"
+    },
+    {
+      "name": "PA_CODIGO_DISTRITO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -6997,13 +7241,44 @@
       "input": "0306"
     },
     {
+      "name": "PA_CODIGO_DISTRITO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "PA_CODIGO_DISTRITO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
+      },
+      "input": "0306"
+    },
+    {
       "name": "PA_CODIGO_LUGAR",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{5,6})",
+            "regex": "(0*?)(?:((?:0[1-9]|1[0-3]|[1-9])\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7013,8 +7288,11 @@
             ]
           },
           {
-            "regex": "(\\d{3,4})",
+            "regex": "(0*?)(?:((?:0[1-9]|1[0-3]|[1-9])\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7068,8 +7346,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2})(\\d{2,3})",
+            "regex": "(0*?)(?:(0[1-9]|1[0-3])(\\d{2,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -7187,16 +7468,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -7243,8 +7530,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7296,8 +7586,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7441,8 +7734,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7462,21 +7758,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "PA_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://pa-grupo-sanguineo.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "PA_DISCAPACIDAD_LISTA",
@@ -7509,8 +7790,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7562,8 +7846,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7615,8 +7902,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7668,8 +7958,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7721,8 +8014,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7774,8 +8070,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7816,8 +8115,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{2,3})",
+            "regex": "(0*?)(?:(\\d{2,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7850,42 +8152,6 @@
       "input": "Morosidad de 90 días"
     },
     {
-      "name": "PA_MONTO_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 100,
-        "maxValue": 500000
-      },
-      "input": "8500"
-    },
-    {
-      "name": "PA_INGRESO_MENSUAL",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 350,
-        "maxValue": 25000
-      },
-      "input": "1850"
-    },
-    {
-      "name": "PA_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 10000,
-        "maxValue": 3000000
-      },
-      "input": "185000"
-    },
-    {
-      "name": "PA_MONTO_PENSION",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 120,
-        "maxValue": 6000
-      },
-      "input": "680"
-    },
-    {
       "name": "PA_SEGURO_SOCIAL_LISTA",
       "framework": "algorithm.plugin.secureLookup.SecureLookup",
       "config": {
@@ -7916,8 +8182,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,2})",
+            "regex": "(0*?)(?:(\\d{1,2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7969,8 +8238,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8053,8 +8325,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([1-5])",
+            "regex": "(0*?)(?:([1-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8064,8 +8339,11 @@
             ]
           },
           {
-            "regex": "([6-9]|10)",
+            "regex": "(0*?)(?:([6-9]|10))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8145,8 +8423,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8198,8 +8479,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -8238,30 +8522,9 @@
     "pa-decil-alto.txt",
     "pa-decil.txt",
     "pa-detectar-apellidos.txt",
-    "pa-detectar-bandera.txt",
-    "pa-detectar-codigo-lugar.txt",
-    "pa-detectar-corregimientos.txt",
-    "pa-detectar-discapacidad.txt",
-    "pa-detectar-distritos.txt",
-    "pa-detectar-escolaridad.txt",
-    "pa-detectar-estado-civil.txt",
-    "pa-detectar-grupo-sanguineo.txt",
-    "pa-detectar-identidad-genero.txt",
-    "pa-detectar-lenguas.txt",
-    "pa-detectar-medicamentos.txt",
-    "pa-detectar-nacionalidades.txt",
     "pa-detectar-nombres.txt",
-    "pa-detectar-opiniones-politicas.txt",
-    "pa-detectar-orientacion-sexual.txt",
-    "pa-detectar-partidos.txt",
-    "pa-detectar-pobreza.txt",
-    "pa-detectar-programas.txt",
-    "pa-detectar-pueblos.txt",
-    "pa-detectar-religiones.txt",
-    "pa-detectar-seguro-social.txt",
+    "pa-detectar-sexo-letra.txt",
     "pa-detectar-sexo.txt",
-    "pa-detectar-sindicatos.txt",
-    "pa-detectar-vivienda.txt",
     "pa-diagnosticos.txt",
     "pa-direcciones.txt",
     "pa-discapacidad.txt",
@@ -8270,7 +8533,6 @@
     "pa-escolaridad.txt",
     "pa-escuelas.txt",
     "pa-estado-civil.txt",
-    "pa-grupo-sanguineo.txt",
     "pa-identidad-genero.txt",
     "pa-lenguas.txt",
     "pa-lugares-poblados.txt",

@@ -319,7 +319,7 @@
         "The card number, credit or debit, with or without spaces."
       ],
       "masking": [
-        "The Payment Card algorithm keeps the Luhn digit valid and the first digits in place, so the brand and the issuer survive and a payment form still accepts the value in a test."
+        "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
       ]
     },
     "CR_L1_BILLETERA": {
@@ -832,7 +832,7 @@
         "The balance of a debt, a loan or a card, the instalment, the credit limit."
       ],
       "masking": [
-        "Another amount of the same order of magnitude, from fifty thousand to sixty million colones, so totals and ratios still behave."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
       ]
     },
     "CR_FIN_INGRESOS": {
@@ -841,7 +841,7 @@
         "The salary, gross or net, the fees, the declared income, the income per person of the household."
       ],
       "masking": [
-        "Another amount between the minimum wage and six million colones a month. This is where Costa Rica differs from its neighbours: article 3 e) names the **condición socioeconómica** among the sensitive data, so an income column is not merely commercial."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value. This is where Costa Rica differs from its neighbours: article 3 e) names the **condición socioeconómica** among the sensitive data, so an income column is not merely commercial."
       ]
     },
     "CR_FIN_PATRIMONIO": {
@@ -850,7 +850,7 @@
         "The patrimony, the assets, the fiscal or commercial value of a property or a vehicle, the balance of an account or an investment, a sworn declaration of assets."
       ],
       "masking": [
-        "Another amount of the same order of magnitude. Article 1 of the law reaches the data of a person \"o **bienes**\", which puts this column inside it by the plain words of the statute."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value. Article 1 of the law reaches the data of a person \"o **bienes**\", which puts this column inside it by the plain words of the statute."
       ]
     },
     "CR_FIN_PENSION": {
@@ -859,7 +859,7 @@
         "The amount of a pension or a subsidy: the IVM, the Régimen No Contributivo, an alimony, a disability pension."
       ],
       "masking": [
-        "Another amount of the same order. A pension of the Régimen No Contributivo says the person is poor, a pension by disability says the person has one."
+        "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value. A pension of the Régimen No Contributivo says the person is poor, a pension by disability says the person has one."
       ]
     },
     "CR_FIN_PROGRAMA_SOCIAL": {

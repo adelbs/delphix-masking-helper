@@ -330,7 +330,7 @@
         "El número de una tarjeta de crédito o débito."
       ],
       "masking": [
-        "Se reemplaza por otro número que supera la comprobación de Luhn, conservando la longitud y los separadores."
+        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "ES_L1_BILLETERA": {
@@ -852,7 +852,7 @@
         "Saldo deudor, importe de un préstamo o una hipoteca, cuota mensual, límite de crédito, embargo."
       ],
       "masking": [
-        "Se reemplaza por otro importe entre 100 y 600.000 euros."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "ES_FIN_INGRESOS": {
@@ -861,7 +861,7 @@
         "Sueldo, nómina, ingresos del hogar, rendimientos del trabajo o del capital."
       ],
       "masking": [
-        "Se reemplaza por otro importe entre 1.000 y 120.000 euros."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "ES_FIN_PATRIMONIO": {
@@ -870,7 +870,7 @@
         "Valor catastral o de tasación de un inmueble, saldos de cuentas e inversiones, planes de pensiones."
       ],
       "masking": [
-        "Se reemplaza por otro importe entre 1.000 y 3.000.000 de euros."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "ES_FIN_PENSION": {
@@ -879,7 +879,7 @@
         "El importe de una pensión de jubilación, viudedad, orfandad, incapacidad o no contributiva, o de alimentos."
       ],
       "masking": [
-        "Se reemplaza por otro importe entre 500 y 3.400 euros al mes — el intervalo de las pensiones públicas."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "ES_FIN_PRESTACION_SOCIAL": {

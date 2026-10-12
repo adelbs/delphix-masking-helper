@@ -217,7 +217,7 @@
     "BR_L1_CARTAO": {
       "title": "Cartão de pagamento",
       "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
-      "masking": ["Payment Card: outro número que passa no algoritmo de Luhn. Só valores com forma de cartão chegam a ele."]
+      "masking": ["Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
     },
     "BR_L1_CHAVE_PIX": {
       "title": "Chave PIX",
@@ -487,22 +487,22 @@
     "BR_FIN_DIVIDA": {
       "title": "Dívidas",
       "what": ["Saldo devedor, valor em atraso, parcelas e limites de crédito."],
-      "masking": ["Mapeado para um valor entre R$ 200 e R$ 1.000.000, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "BR_FIN_RENDA": {
       "title": "Renda e salário",
       "what": ["Salário, remuneração, proventos e renda mensal ou familiar."],
-      "masking": ["Mapeado para um valor entre R$ 1.500 e R$ 50.000."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "BR_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": ["Valor de imóveis e bens, saldos em conta, poupança, investimentos e FGTS."],
-      "masking": ["Mapeado para um valor entre R$ 20.000 e R$ 5.000.000."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "BR_FIN_VALOR_BENEFICIO": {
       "title": "Valor de benefício e pensão",
       "what": ["Valor de aposentadoria, pensão, auxílio, BPC e pensão alimentícia."],
-      "masking": ["Mapeado para um valor entre R$ 1.500 e R$ 8.000."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "BR_FIN_BENEFICIO_INSS": {
       "title": "Espécie de benefício do INSS",

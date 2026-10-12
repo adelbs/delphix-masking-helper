@@ -11,8 +11,8 @@ puts under express consent.
 
 | | |
 |---|---|
-| Profile set | `MX - LFPDPPP - v2`, assignment threshold 60, built 15 September 2026 |
-| Extended pack | 83 domains, 153 classifiers, 154 algorithms, 97 files — everything below |
+| Profile set | `MX - LFPDPPP - v3`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 83 domains, 155 classifiers, 148 algorithms, 74 files — everything below |
 | Essential pack | 13 domains, 31 classifiers, 63 algorithms, 25 files — CURP, RFC, NSS, voter key, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
@@ -47,12 +47,25 @@ social security institutions, social programs, case numbers.
 **Type** classifiers rule domains out where the column cannot hold the data: a CURP is text of at
 least 18 characters, an NSS 11, a birth date a date, timestamp or text.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in
 every table and every job. Placeholders such as `S/D` or `-` do not fail a row: where there is
 nothing to mask they pass through, and text in a key column that does not have the expected shape
 is masked character by character instead of being left as it was.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### L1 — Direct identifiers
 
@@ -68,7 +81,7 @@ is masked character by character instead of being left as it was.
 | `MX_L1_EMAIL` | Name and domain mapped character by character, top-level domain `.test` |
 | `MX_L1_TELEFONO` | Subscriber digits masked; `+52`, the old mobile `1` and the area code kept |
 | `MX_L1_DIRECCION` | A fictitious Mexican street address, with interior numbers and block and lot |
-| `MX_L1_TARJETA` | Payment Card (Luhn stays valid) |
+| `MX_L1_TARJETA` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `MX_L1_IP` | Each IPv4 octet mapped to 1–254 |
 | `MX_L1_PLACA` | Letters among the plate alphabet (no `I`, `O`, `Q`), digits among digits |
 | `MX_L1_GEOLOCALIZACION` | Integer part and first decimal kept (about 11 km), the rest masked |
@@ -111,7 +124,7 @@ mental health, sexual life, philosophical beliefs, union membership — they are
 ### FIN — Financial and patrimonial data (art. 7)
 
 Credit bureau records (MOP codes stay MOP codes), debt, monthly income, daily wage (SDI/SBC), assets
-and retirement savings (mapped into plausible ranges), AFORE, housing credit, social security
+and retirement savings (masked by the engine's own CM Numeric, which keeps the order of magnitude), AFORE, housing credit, social security
 coverage, social programs, AMAI socioeconomic level, housing tenure and SAT tax regime (replaced
 within their own notation).
 
@@ -173,13 +186,18 @@ node presets/_doc/build.mjs mexico-lfpdppp
 
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
-`verify.mjs` reviews every classifier configuration, profiles 151 columns with the whole set at its
+`verify.mjs` reviews every classifier configuration, profiles 157 columns with the whole set at its
 threshold — well named, badly named and 26 columns that are not personal data — and masks 350
 sample values and 228 placeholders through the running app (`DLPX_URL`, default
 `http://localhost:3000`), including 60 random CURPs, 60 RFCs, 40 NSS and 30 CLABEs checked for a
 valid check digit. It then masks 150 of each key to check that none collide, and 20 CURP and RFC
 pairs of the same person to check they still share their first ten characters. Each value forks a
 JVM: the algorithm check takes about ten minutes.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 

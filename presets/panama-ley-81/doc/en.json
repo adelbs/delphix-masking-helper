@@ -153,7 +153,7 @@
     "PA_L1_TARJETA": {
       "title": "Payment card",
       "what": "Credit, debit and prepaid card numbers, including the Tarjeta Clave Social through which MIDES pays its programs.",
-      "masking": "Replaced by another card number that still passes the Luhn check. Values not shaped like a card pass unchanged instead of failing the row."
+      "masking": "Credit Card, which comes with the Masking Engine: another number that passes the Luhn check, keeping the first six digits — the issuer, not the holder. Only values shaped like a card reach it; the others pass unchanged instead of failing the row."
     },
     "PA_L1_IP": {
       "title": "IP address",
@@ -408,22 +408,22 @@
     "PA_FIN_MONTO_DEUDA": {
       "title": "Debt amount",
       "what": "Balances of loans, cards and mortgages, past-due amounts, credit limits, installments.",
-      "masking": "Mapped to an amount between B/.100 and B/.500,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_INGRESO_MENSUAL": {
       "title": "Salary and income",
       "what": "Salary, thirteenth-month pay, household income.",
-      "masking": "Mapped to an amount between B/.350 and B/.25,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_PATRIMONIO": {
       "title": "Assets",
       "what": "Cadastral or market value of real estate and vehicles, savings, term deposits, net worth.",
-      "masking": "Mapped to an amount between B/.10,000 and B/.3,000,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_PENSION": {
       "title": "Pension and individual account",
       "what": "CSS retirement or pension amount, balance of the individual account, of SIACAP or of the severance fund.",
-      "masking": "Mapped to an amount between B/.120 and B/.6,000."
+      "masking": "Masked by CM Numeric, which comes with the Masking Engine: each digit becomes another, and the amount keeps its number of digits, its sign and its decimal places — the same order of magnitude, with no link to the real value."
     },
     "PA_FIN_SEGURO_SOCIAL": {
       "title": "Social security coverage",

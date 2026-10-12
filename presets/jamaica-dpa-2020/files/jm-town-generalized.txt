@@ -1,0 +1,315 @@
+Kingston|Kingston
+KINGSTON|KINGSTON
+Portmore|Portmore
+PORTMORE|PORTMORE
+Montego Bay|Montego Bay
+MONTEGO BAY|MONTEGO BAY
+Mobay|Mobay
+MOBAY|MOBAY
+Mo Bay|Mo Bay
+MO BAY|MO BAY
+Spanish Town|Spanish Town
+SPANISH TOWN|SPANISH TOWN
+May Pen|May Pen
+MAY PEN|MAY PEN
+Mandeville|Mandeville
+MANDEVILLE|MANDEVILLE
+Old Harbour|Old Harbour
+OLD HARBOUR|OLD HARBOUR
+Savanna-la-Mar|Savanna-la-Mar
+SAVANNA-LA-MAR|SAVANNA-LA-MAR
+Savanna la Mar|Savanna la Mar
+SAVANNA LA MAR|SAVANNA LA MAR
+Savanna La Mar|Savanna La Mar
+Sav-la-Mar|Sav-la-Mar
+SAV-LA-MAR|SAV-LA-MAR
+Sav la Mar|Sav la Mar
+SAV LA MAR|SAV LA MAR
+Ocho Rios|Saint Ann's Bay
+OCHO RIOS|SAINT ANN'S BAY
+Linstead|Linstead
+LINSTEAD|LINSTEAD
+Port Antonio|Port Antonio
+PORT ANTONIO|PORT ANTONIO
+Constant Spring|Constant Spring
+CONSTANT SPRING|CONSTANT SPRING
+Saint Ann's Bay|Saint Ann's Bay
+SAINT ANN'S BAY|SAINT ANN'S BAY
+Saint Anns Bay|Saint Anns Bay
+SAINT ANNS BAY|SAINT ANNS BAY
+St. Ann's Bay|St. Ann's Bay
+ST. ANN'S BAY|ST. ANN'S BAY
+St. Anns Bay|St. Anns Bay
+ST. ANNS BAY|ST. ANNS BAY
+St Ann's Bay|St Ann's Bay
+ST ANN'S BAY|ST ANN'S BAY
+St Anns Bay|St Anns Bay
+ST ANNS BAY|ST ANNS BAY
+Morant Bay|Morant Bay
+MORANT BAY|MORANT BAY
+Yallahs|Morant Bay
+YALLAHS|MORANT BAY
+Hayes|Hayes
+HAYES|HAYES
+Santa Cruz|Santa Cruz
+SANTA CRUZ|SANTA CRUZ
+Ewarton|Ewarton
+EWARTON|EWARTON
+Bog Walk|Bog Walk
+BOG WALK|BOG WALK
+Brown's Town|Brown's Town
+BROWN'S TOWN|BROWN'S TOWN
+Browns Town|Browns Town
+BROWNS TOWN|BROWNS TOWN
+Falmouth|Falmouth
+FALMOUTH|FALMOUTH
+Runaway Bay|Runaway Bay
+RUNAWAY BAY|RUNAWAY BAY
+Lucea|Lucea
+LUCEA|LUCEA
+Negril|Negril
+NEGRIL|NEGRIL
+Porus|Porus
+PORUS|PORUS
+Old Harbour Bay|Old Harbour Bay
+OLD HARBOUR BAY|OLD HARBOUR BAY
+Half Way Tree|Half Way Tree
+HALF WAY TREE|HALF WAY TREE
+Halfway Tree|Halfway Tree
+HALFWAY TREE|HALFWAY TREE
+Half-Way-Tree|Half-Way-Tree
+HALF-WAY-TREE|HALF-WAY-TREE
+Discovery Bay|Discovery Bay
+DISCOVERY BAY|DISCOVERY BAY
+Kellits|Kellits
+KELLITS|KELLITS
+Above Rocks|Spanish Town
+ABOVE ROCKS|SPANISH TOWN
+Aenon Town|May Pen
+AENON TOWN|MAY PEN
+Adelphi|Montego Bay
+ADELPHI|MONTEGO BAY
+Albert Town|Falmouth
+ALBERT TOWN|FALMOUTH
+Alexandria|Saint Ann's Bay
+ALEXANDRIA|SAINT ANN'S BAY
+Alligator Pond|Mandeville
+ALLIGATOR POND|MANDEVILLE
+Alston|May Pen
+ALSTON|MAY PEN
+Anchovy|Montego Bay
+ANCHOVY|MONTEGO BAY
+Annotto Bay|Port Maria
+ANNOTTO BAY|PORT MARIA
+Balaclava|Black River
+BALACLAVA|BLACK RIVER
+Bamboo|Saint Ann's Bay
+BAMBOO|SAINT ANN'S BAY
+Bath|Morant Bay
+BATH|MORANT BAY
+Bethel Town|Savanna-la-Mar
+BETHEL TOWN|SAVANNA-LA-MAR
+Black River|Black River
+BLACK RIVER|BLACK RIVER
+Bluefields|Savanna-la-Mar
+BLUEFIELDS|SAVANNA-LA-MAR
+Buff Bay|Port Antonio
+BUFF BAY|PORT ANTONIO
+Bull Savanna|Black River
+BULL SAVANNA|BLACK RIVER
+Cambridge|Montego Bay
+CAMBRIDGE|MONTEGO BAY
+Carron Hall|Port Maria
+CARRON HALL|PORT MARIA
+Cascade|Lucea
+CASCADE|LUCEA
+Cave Valley|Saint Ann's Bay
+CAVE VALLEY|SAINT ANN'S BAY
+Cedar Valley|Morant Bay
+CEDAR VALLEY|MORANT BAY
+Chapelton|May Pen
+CHAPELTON|MAY PEN
+Christiana|Mandeville
+CHRISTIANA|MANDEVILLE
+Claremont|Saint Ann's Bay
+CLAREMONT|SAINT ANN'S BAY
+Clark's Town|Falmouth
+CLARK'S TOWN|FALMOUTH
+Clarks Town|Falmouth
+CLARKS TOWN|FALMOUTH
+Coleyville|Mandeville
+COLEYVILLE|MANDEVILLE
+Comfort Castle|Port Antonio
+COMFORT CASTLE|PORT ANTONIO
+Croft's Hill|May Pen
+CROFT'S HILL|MAY PEN
+Crofts Hill|May Pen
+CROFTS HILL|MAY PEN
+Cross Keys|Mandeville
+CROSS KEYS|MANDEVILLE
+Dalvey|Morant Bay
+DALVEY|MORANT BAY
+Darliston|Savanna-la-Mar
+DARLISTON|SAVANNA-LA-MAR
+Dias|Lucea
+DIAS|LUCEA
+Duncans|Falmouth
+DUNCANS|FALMOUTH
+Easington|Morant Bay
+EASINGTON|MORANT BAY
+Frankfield|May Pen
+FRANKFIELD|MAY PEN
+Frome|Savanna-la-Mar
+FROME|SAVANNA-LA-MAR
+Gayle|Port Maria
+GAYLE|PORT MARIA
+Gimme-Me-Bit|May Pen
+GIMME-ME-BIT|MAY PEN
+Glengoffe|Spanish Town
+GLENGOFFE|SPANISH TOWN
+Golden Grove|Morant Bay
+GOLDEN GROVE|MORANT BAY
+Gordon Town|Half Way Tree
+GORDON TOWN|HALF WAY TREE
+Grange Hill|Savanna-la-Mar
+GRANGE HILL|SAVANNA-LA-MAR
+Green Island|Lucea
+GREEN ISLAND|LUCEA
+Guy's Hill|Spanish Town
+GUY'S HILL|SPANISH TOWN
+Guys Hill|Spanish Town
+GUYS HILL|SPANISH TOWN
+Hector's River|Port Antonio
+HECTOR'S RIVER|PORT ANTONIO
+Hectors River|Port Antonio
+HECTORS RIVER|PORT ANTONIO
+Highgate|Port Maria
+HIGHGATE|PORT MARIA
+Hope Bay|Port Antonio
+HOPE BAY|PORT ANTONIO
+Hopewell|Lucea
+HOPEWELL|LUCEA
+Islington|Port Maria
+ISLINGTON|PORT MARIA
+Jackson Town|Falmouth
+JACKSON TOWN|FALMOUTH
+James Hill|May Pen
+JAMES HILL|MAY PEN
+Johns Hall|Montego Bay
+JOHNS HALL|MONTEGO BAY
+Junction|Black River
+JUNCTION|BLACK RIVER
+Kemps Hill|May Pen
+KEMPS HILL|MAY PEN
+Lacovia|Black River
+LACOVIA|BLACK RIVER
+Lionel Town|May Pen
+LIONEL TOWN|MAY PEN
+Little London|Savanna-la-Mar
+LITTLE LONDON|SAVANNA-LA-MAR
+Lluidas Vale|Spanish Town
+LLUIDAS VALE|SPANISH TOWN
+Long Bay|Port Antonio
+LONG BAY|PORT ANTONIO
+Lucky Hill|Port Maria
+LUCKY HILL|PORT MARIA
+Maggotty|Black River
+MAGGOTTY|BLACK RIVER
+Malvern|Black River
+MALVERN|BLACK RIVER
+Manchioneal|Port Antonio
+MANCHIONEAL|PORT ANTONIO
+Maroon Town|Montego Bay
+MAROON TOWN|MONTEGO BAY
+Mavis Bank|Half Way Tree
+MAVIS BANK|HALF WAY TREE
+Mile Gully|Mandeville
+MILE GULLY|MANDEVILLE
+Milk River|May Pen
+MILK RIVER|MAY PEN
+Mitchell Town|May Pen
+MITCHELL TOWN|MAY PEN
+Mocho|May Pen
+MOCHO|MAY PEN
+Moneague|Saint Ann's Bay
+MONEAGUE|SAINT ANN'S BAY
+Moore Town|Port Antonio
+MOORE TOWN|PORT ANTONIO
+Mountainside|Black River
+MOUNTAINSIDE|BLACK RIVER
+Nain|Black River
+NAIN|BLACK RIVER
+New Market|Black River
+NEW MARKET|BLACK RIVER
+Newell|Black River
+NEWELL|BLACK RIVER
+Newport|Mandeville
+NEWPORT|MANDEVILLE
+Oracabessa|Port Maria
+ORACABESSA|PORT MARIA
+Osbourne Store|May Pen
+OSBOURNE STORE|MAY PEN
+Petersfield|Savanna-la-Mar
+PETERSFIELD|SAVANNA-LA-MAR
+Point Hill|Spanish Town
+POINT HILL|SPANISH TOWN
+Port Morant|Morant Bay
+PORT MORANT|MORANT BAY
+Port Maria|Port Maria
+PORT MARIA|PORT MARIA
+Port Royal|Kingston
+PORT ROYAL|KINGSTON
+Pratville|Mandeville
+PRATVILLE|MANDEVILLE
+Race Course|May Pen
+RACE COURSE|MAY PEN
+Ramble|Lucea
+RAMBLE|LUCEA
+Retreat|Port Maria
+RETREAT|PORT MARIA
+Richmond|Port Maria
+RICHMOND|PORT MARIA
+Rio Bueno|Falmouth
+RIO BUENO|FALMOUTH
+Riversdale|Spanish Town
+RIVERSDALE|SPANISH TOWN
+Rock River|May Pen
+ROCK RIVER|MAY PEN
+Rocky Point|May Pen
+ROCKY POINT|MAY PEN
+Sandy Bay|Lucea
+SANDY BAY|LUCEA
+Seaforth|Morant Bay
+SEAFORTH|MORANT BAY
+Siloah|Black River
+SILOAH|BLACK RIVER
+Southfield|Black River
+SOUTHFIELD|BLACK RIVER
+Spalding|Mandeville
+SPALDING|MANDEVILLE
+Spur Tree|May Pen
+SPUR TREE|MAY PEN
+Stony Hill|Half Way Tree
+STONY HILL|HALF WAY TREE
+Thompson Town|May Pen
+THOMPSON TOWN|MAY PEN
+Toll Gate|May Pen
+TOLL GATE|MAY PEN
+Trinity Ville|Morant Bay
+TRINITY VILLE|MORANT BAY
+Troja|Spanish Town
+TROJA|SPANISH TOWN
+Ulster Spring|Falmouth
+ULSTER SPRING|FALMOUTH
+Wait-A-Bit|Falmouth
+WAIT-A-BIT|FALMOUTH
+Wakefield|Falmouth
+WAKEFIELD|FALMOUTH
+Watt Town|Saint Ann's Bay
+WATT TOWN|SAINT ANN'S BAY
+White House|Savanna-la-Mar
+WHITE HOUSE|SAVANNA-LA-MAR
+Williamsfield|Mandeville
+WILLIAMSFIELD|MANDEVILLE
+York Town|May Pen
+YORK TOWN|MAY PEN

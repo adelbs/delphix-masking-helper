@@ -213,7 +213,7 @@
     "AR_L1_TARJETA": {
       "title": "Cartão de pagamento",
       "what": ["Números de cartões de crédito e débito, reconhecidos pelo algoritmo de Luhn."],
-      "masking": ["Payment Card: outro número que passa no algoritmo de Luhn. Só os valores com forma de cartão chegam a ele."]
+      "masking": ["Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."]
     },
     "AR_L1_IP": {
       "title": "Endereço IP",
@@ -493,22 +493,22 @@
     "AR_FIN_DEUDA": {
       "title": "Dívidas",
       "what": ["Saldos devedores, valores de empréstimos e parcelas, valores em atraso e limites de compra."],
-      "masking": ["Mapeado para um valor entre 10.000 e 500.000.000 de pesos, sem relação com o valor real."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_INGRESOS": {
       "title": "Renda e remuneração",
       "what": ["Salário básico, bruto ou líquido, remuneração tributável, vencimentos, renda familiar e faturamento anual."],
-      "masking": ["Mapeado para um valor entre 300.000 e 30.000.000 de pesos."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_PATRIMONIO": {
       "title": "Patrimônio",
       "what": ["Patrimônio, bens pessoais, valores venais e avaliações, saldos em contas e prazos fixos, posições em moeda estrangeira."],
-      "masking": ["Mapeado para um valor entre 1.000.000 e 3.000.000.000 de pesos."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_JUBILACION": {
       "title": "Aposentadorias e benefícios",
       "what": ["O valor da aposentadoria ou pensão, o de um auxílio ou benefício e a pensão alimentícia."],
-      "masking": ["Mapeado para um valor entre 250.000 e 12.000.000 de pesos."]
+      "masking": ["Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."]
     },
     "AR_FIN_PROGRAMA_SOCIAL": {
       "title": "Benefícios e programas sociais",

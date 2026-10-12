@@ -369,7 +369,7 @@
         "Números de tarjeta de crédito y débito, reconocidos por el algoritmo de Luhn."
       ],
       "masking": [
-        "Payment Card: otro número que pasa el algoritmo de Luhn. Solo los valores con forma de tarjeta llegan a él."
+        "Credit Card, que viene con el Masking Engine: otro número que pasa el control de Luhn, manteniendo los seis primeros dígitos — el emisor, no el titular. Solo los valores con forma de tarjeta llegan a él; los demás pasan sin cambio en lugar de hacer fallar la fila."
       ]
     },
     "UY_L1_BILLETERA": {
@@ -873,7 +873,7 @@
         "Saldos de crédito y de cartera, montos en mora, cuotas, montos otorgados y límites."
       ],
       "masking": [
-        "Mapeada a un valor entre 5.000 y 5.000.000 de pesos uruguayos, sin relación con el real."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_INGRESOS": {
@@ -882,7 +882,7 @@
         "Sueldo nominal y líquido, ingreso mensual o familiar, honorarios y rentas. El salario mínimo nacional fue de unos 23.600 pesos mensuales en 2025."
       ],
       "masking": [
-        "Mapeados a un valor entre 22.000 y 400.000 pesos uruguayos."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_PATRIMONIO": {
@@ -891,7 +891,7 @@
         "Patrimonio, activos, tasaciones y el aforo catastral, saldos de cuenta y de fondos, depósitos a plazo y la declaración jurada de bienes."
       ],
       "masking": [
-        "Mapeado a un valor entre 50.000 y 20.000.000 de pesos uruguayos."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_PENSION": {
@@ -900,7 +900,7 @@
         "El monto de la pasividad, la pensión o el beneficio, y la pensión alimenticia. Uno de cada cuatro uruguayos cobra una."
       ],
       "masking": [
-        "Mapeado a un valor entre 15.000 y 200.000 pesos uruguayos."
+        "Enmascarado por CM Numeric, que viene con el Masking Engine: cada dígito pasa a ser otro, y el monto mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
       ]
     },
     "UY_FIN_PROGRAMA_SOCIAL": {

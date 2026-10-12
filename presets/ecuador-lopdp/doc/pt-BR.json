@@ -357,7 +357,7 @@
         "Números de cartão de crédito e débito, reconhecidos pelo algoritmo de Luhn."
       ],
       "masking": [
-        "Payment Card: outro número que passa no algoritmo de Luhn. Só valores com forma de cartão chegam até ele."
+        "Credit Card, que vem com o Masking Engine: outro número que passa no Luhn, mantendo os seis primeiros dígitos — o emissor, não o titular. Só valores com forma de cartão chegam a ele; os outros passam sem mudança em vez de derrubar a linha."
       ]
     },
     "EC_L1_BILLETERA": {
@@ -861,7 +861,7 @@
         "Saldos de crédito e de carteira, valores em atraso, parcelas, montantes liberados e limites."
       ],
       "masking": [
-        "Mapeada para um valor entre 100 e 250.000 dólares, sem relação com o real — o Equador usa o dólar dos EUA."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "EC_FIN_INGRESOS": {
@@ -870,7 +870,7 @@
         "Salário, renda mensal ou familiar, honorários e rendas. O salário básico unificado foi de 470 dólares mensais em 2025."
       ],
       "masking": [
-        "Mapeados para um valor entre 450 e 9.000 dólares."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "EC_FIN_PATRIMONIO": {
@@ -879,7 +879,7 @@
         "Patrimônio, ativos, avaliações e valores catastrais, saldos de conta e de fundos, depósitos a prazo e a declaração juramentada de bens."
       ],
       "masking": [
-        "Mapeado para um valor entre 1.000 e 600.000 dólares."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "EC_FIN_PENSION": {
@@ -888,7 +888,7 @@
         "O valor da pensão, do subsídio ou do benefício, e a pensão alimentícia."
       ],
       "masking": [
-        "Mapeado para um valor entre 200 e 3.000 dólares."
+        "Mascarado pelo CM Numeric, que vem com o Masking Engine: cada dígito vira outro, e o valor mantém a quantidade de dígitos, o sinal e as casas decimais — a mesma ordem de grandeza, sem relação com o valor real."
       ]
     },
     "EC_FIN_PROGRAMA_SOCIAL": {

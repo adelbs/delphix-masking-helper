@@ -12,8 +12,8 @@ proceedings** — and health records.
 
 | | |
 |---|---|
-| Profile set | `BZ - Data Protection Act 2021 - v2`, assignment threshold 60, built 15 September 2026 |
-| Extended pack | 72 domains, 124 classifiers, 90 algorithms, 70 files — everything below |
+| Profile set | `BZ - Data Protection Act 2021 - v3`, assignment threshold 60, built 11 October 2026 |
+| Extended pack | 72 domains, 126 classifiers, 84 algorithms, 50 files — everything below |
 | Essential pack | 11 domains, 22 classifiers, 10 algorithms, 5 files — social security number, TIN, passport, names, contact, address, birth date |
 | Load it | **Settings → Profile Sets** |
 
@@ -46,11 +46,24 @@ parties, trade unions, social security benefits and social programmes.
 **Type** classifiers rule domains out where the column cannot hold the data: an e-mail is text of at
 least 5 characters, a birth date a date, timestamp or text, an amount a number.
 
+**Padded values.** The profiler tests values as the database hands them over, without trimming
+them, and databases pad: a CHAR column fills a value with spaces, and a code kept as text often comes
+with zeros on the left. Every value pattern first removes the surrounding spaces, and patterns of
+digits also accept zeros on the left. Lists of single words are looked up word by word, which drops
+the padding; lists of multi-word values (places, categories) are **Regex** classifiers whose pattern
+holds the values as a prefix tree, case-insensitive also for accented letters — named `… - Values`.
+The rules are shared by every preset, in [`_lib/detect.mjs`](../_lib/detect.mjs).
+
 ## Masking
 
 All algorithms are deterministic for the engine's key, so the same value masks the same way in
 every table and every job. Placeholders such as `N/A` or `-` do not fail a row: where there is
 nothing to mask they pass through.
+
+Padding stays where it is. Spaces around a value are kept, and zeros on the left are not masked: a
+Regex Decompose pattern that starts with a digit keeps them in a group of their own, and the
+Character Mappings run with `preserveLeadingZeros`. So `0012345678` masks as `00` followed by what
+`12345678` masks to, and a value in a zero-filled CHAR column still joins its twin kept as a number.
 
 ### L1 — Direct identifiers
 
@@ -62,7 +75,7 @@ nothing to mask they pass through.
 | `BZ_L1_EMAIL` | Name and domain mapped character by character, top-level domain `.test` |
 | `BZ_L1_PHONE` | `+501` and the first digit (mobile or district) kept, the other six masked |
 | `BZ_L1_ADDRESS` | A fictitious Belizean address: street, highway mile marker, or lot and neighbourhood |
-| `BZ_L1_PAYMENT_CARD` | Payment Card (Luhn stays valid) |
+| `BZ_L1_PAYMENT_CARD` | Credit Card, which comes with the engine (Luhn stays valid, the first six digits — the issuer — kept) |
 | `BZ_L1_IP_ADDRESS` | Each IPv4 octet mapped to 1–254 |
 | `BZ_L1_LICENCE_PLATE` | District code and category letter kept, serial digits masked |
 | `BZ_L1_LAND_PARCEL` | Block and parcel numbers masked, registration section kept |
@@ -107,7 +120,7 @@ mental health are suppressed.
 ### FIN — Financial record or position (s. 2 (i))
 
 Sensitive in Belize. Credit references (scores keep their digits' shape, statuses are replaced),
-debt, income, assets and pensions (mapped into plausible ranges in Belize dollars), Social Security
+debt, income, assets and pensions (masked by the engine's own CM Numeric, which keeps the order of magnitude), Social Security
 Board benefits, BOOST and other social programmes, poverty status and quintiles, and housing tenure.
 
 ### PENAL — Criminal record and proceedings (s. 2 (j), (k))
@@ -152,12 +165,17 @@ node presets/_doc/build.mjs belize-dpa-2021
 
 The last one regenerates the PDFs; run it after any change to the set or to `doc/`.
 
-`verify.mjs` reviews every classifier configuration, profiles 141 columns with the whole set at its
+`verify.mjs` reviews every classifier configuration, profiles 147 columns with the whole set at its
 threshold — well named, badly named and 32 columns that are not personal data — and audits the
 generalization table for all 221 places. It then masks 145 sample values, 198 placeholders and each
 of the 90 algorithms' own sample input through the running app (`DLPX_URL`, default
 `http://localhost:3000`), checking outputs against their vocabulary, and 150 social security numbers
 for collisions. Each value forks a JVM.
+
+The same columns are profiled again as a database may hand them over — CHAR values padded with
+spaces, codes of digits with zeros on the left — and must land on the same domain; every sample
+value is masked padded the same way too, and must come out as the bare value does, around the spaces
+and after the zeros.
 
 ## Sources
 

@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "versionDate": "2026-09-15",
+  "version": 3,
+  "versionDate": "2026-10-11",
   "name": {
     "en": "Mexico — LFPDPPP (personal data held by private parties)",
     "pt-BR": "México — LFPDPPP (dados pessoais em posse de particulares)",
@@ -12,8 +12,8 @@
     "es": "Descubre y enmascara datos personales mexicanos conforme a la ley federal de 2025: identificadores directos (CURP, RFC y NSS con dígito verificador válido, clave de elector, CLABE, nombres, contacto), cuasi-identificadores (fecha de nacimiento, municipio, código postal), los datos sensibles del artículo 2 y los datos financieros y patrimoniales que requieren consentimiento expreso."
   },
   "profileSet": {
-    "name": "MX - LFPDPPP - v2",
-    "description": "Identificadores directos, cuasi-identificadores, datos sensibles (art. 2, VI) y datos financieros y patrimoniales (art. 7) de la LFPDPPP 2025.",
+    "name": "MX - LFPDPPP - v3",
+    "description": "LFPDPPP 2025 - datos personales y sensibles",
     "threshold": 60,
     "classifiers": [
       "MX_L1_CURP - Path",
@@ -70,6 +70,7 @@
       "MX_L1_NUMERO_CONTRATO - Path",
       "MX_L1_USUARIO_RRSS - Path",
       "MX_L1_CREDENCIAL - Path",
+      "MX_L1_CREDENCIAL - Regex",
       "MX_L1_GEOLOCALIZACION - Path",
       "MX_L1_GEOLOCALIZACION - Regex",
       "MX_L1_TEXTO_LIBRE - Path",
@@ -86,62 +87,63 @@
       "MX_L2_SEXO - Path",
       "MX_L2_SEXO - List",
       "MX_L2_MUNICIPIO - Path",
-      "MX_L2_MUNICIPIO - List",
+      "MX_L2_MUNICIPIO - Values",
       "MX_L2_CLAVE_MUNICIPIO - Path",
       "MX_L2_CLAVE_MUNICIPIO - Type",
-      "MX_L2_CLAVE_MUNICIPIO - List",
+      "MX_L2_CLAVE_MUNICIPIO - Values",
       "MX_L2_LOCALIDAD - Path",
       "MX_L2_COLONIA - Path",
       "MX_L2_CODIGO_POSTAL - Path",
       "MX_L2_CODIGO_POSTAL - Regex",
       "MX_L2_NACIONALIDAD - Path",
-      "MX_L2_NACIONALIDAD - List",
+      "MX_L2_NACIONALIDAD - Values",
       "MX_L2_ESTADO_CIVIL - Path",
-      "MX_L2_ESTADO_CIVIL - List",
+      "MX_L2_ESTADO_CIVIL - Values",
       "MX_L2_OCUPACION - Path",
       "MX_L2_EMPLEADOR - Path",
       "MX_L2_ESCOLARIDAD - Path",
-      "MX_L2_ESCOLARIDAD - List",
+      "MX_L2_ESCOLARIDAD - Values",
       "MX_L2_ESCUELA - Path",
       "MX_L2_CCT - Path",
       "MX_L2_CCT - Regex",
       "MX_L2_DEPENDIENTES - Path",
       "MX_L2_DEPENDIENTES - Type",
       "MX_L3_ETNIA - Path",
-      "MX_L3_ETNIA - List",
+      "MX_L3_ETNIA - Values",
       "MX_L3_LENGUA_INDIGENA - Path",
-      "MX_L3_LENGUA_INDIGENA - List",
+      "MX_L3_LENGUA_INDIGENA - Values",
       "MX_L3_SALUD_DIAGNOSTICO - Path",
       "MX_L3_SALUD_DIAGNOSTICO - Regex",
       "MX_L3_SALUD_MEDICAMENTO - Path",
-      "MX_L3_SALUD_MEDICAMENTO - List",
+      "MX_L3_SALUD_MEDICAMENTO - Values",
       "MX_L3_SALUD_IDENTIFICADOR - Path",
       "MX_L3_SALUD_TEXTO_CLINICO - Path",
       "MX_L3_SALUD_TEXTO_CLINICO - Type",
       "MX_L3_SALUD_RESULTADO_EXAMEN - Path",
       "MX_L3_SALUD_GRUPO_SANGUINEO - Path",
-      "MX_L3_SALUD_GRUPO_SANGUINEO - List",
+      "MX_L3_SALUD_GRUPO_SANGUINEO - Values",
       "MX_L3_SALUD_DISCAPACIDAD - Path",
-      "MX_L3_SALUD_DISCAPACIDAD - List",
+      "MX_L3_SALUD_DISCAPACIDAD - Values",
       "MX_L3_SALUD_SEXUAL_REPRODUCTIVA - Path",
       "MX_L3_SALUD_MENTAL_ADICCIONES - Path",
       "MX_L3_BIOMETRICO - Path",
       "MX_L3_BIOMETRICO - Type",
       "MX_L3_INFORMACION_GENETICA - Path",
+      "MX_L3_INFORMACION_GENETICA - Regex",
       "MX_L3_PREFERENCIA_SEXUAL - Path",
-      "MX_L3_PREFERENCIA_SEXUAL - List",
+      "MX_L3_PREFERENCIA_SEXUAL - Values",
       "MX_L3_IDENTIDAD_GENERO - Path",
-      "MX_L3_IDENTIDAD_GENERO - List",
+      "MX_L3_IDENTIDAD_GENERO - Values",
       "MX_L3_VIDA_SEXUAL - Path",
       "MX_L3_RELIGION - Path",
-      "MX_L3_RELIGION - List",
+      "MX_L3_RELIGION - Values",
       "MX_L3_CREENCIA_FILOSOFICA_MORAL - Path",
       "MX_L3_OPINION_POLITICA - Path",
-      "MX_L3_OPINION_POLITICA - List",
+      "MX_L3_OPINION_POLITICA - Values",
       "MX_L3_AFILIACION_POLITICA - Path",
-      "MX_L3_AFILIACION_POLITICA - List",
+      "MX_L3_AFILIACION_POLITICA - Values",
       "MX_L3_AFILIACION_SINDICAL - Path",
-      "MX_L3_AFILIACION_SINDICAL - List",
+      "MX_L3_AFILIACION_SINDICAL - Values",
       "MX_FIN_BURO_CREDITO - Path",
       "MX_FIN_MONTO_DEUDA - Path",
       "MX_FIN_MONTO_DEUDA - Type",
@@ -152,19 +154,19 @@
       "MX_FIN_PATRIMONIO - Path",
       "MX_FIN_PATRIMONIO - Type",
       "MX_FIN_AFORE - Path",
-      "MX_FIN_AFORE - List",
+      "MX_FIN_AFORE - Values",
       "MX_FIN_SALDO_RETIRO - Path",
       "MX_FIN_SALDO_RETIRO - Type",
       "MX_FIN_CREDITO_VIVIENDA - Path",
-      "MX_FIN_CREDITO_VIVIENDA - List",
+      "MX_FIN_CREDITO_VIVIENDA - Values",
       "MX_FIN_SEGURIDAD_SOCIAL - Path",
-      "MX_FIN_SEGURIDAD_SOCIAL - List",
+      "MX_FIN_SEGURIDAD_SOCIAL - Values",
       "MX_FIN_PROGRAMA_SOCIAL - Path",
-      "MX_FIN_PROGRAMA_SOCIAL - List",
+      "MX_FIN_PROGRAMA_SOCIAL - Values",
       "MX_FIN_NIVEL_SOCIOECONOMICO - Path",
-      "MX_FIN_NIVEL_SOCIOECONOMICO - List",
+      "MX_FIN_NIVEL_SOCIOECONOMICO - Values",
       "MX_FIN_VIVIENDA - Path",
-      "MX_FIN_VIVIENDA - List",
+      "MX_FIN_VIVIENDA - Values",
       "MX_FIN_REGIMEN_FISCAL - Path",
       "MX_PENAL_ANTECEDENTES - Path",
       "MX_PENAL_CAUSA - Path",
@@ -173,7 +175,7 @@
   },
   "packs": {
     "essential": {
-      "description": "Paquete esencial de la LFPDPPP 2025: CURP, RFC, NSS, clave de elector, pasaporte, nombres, contacto, domicilio y fecha de nacimiento.",
+      "description": "Paquete esencial de la LFPDPPP 2025",
       "domains": [
         "MX_L1_CURP",
         "MX_L1_RFC",
@@ -196,7 +198,7 @@
       "name": "MX_L1_CURP - Path",
       "framework": "PATH",
       "domain": "MX_L1_CURP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -241,7 +243,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Z]{4}\\d{6}[HMX][A-Z]{5}[0-9A-Z]\\d",
@@ -249,7 +251,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -259,7 +261,7 @@
       "name": "MX_L1_RFC - Path",
       "framework": "PATH",
       "domain": "MX_L1_RFC",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -304,7 +306,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-ZÑ&]{3}\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])[A-Z0-9]{2}[0-9A]",
@@ -312,7 +314,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-ZÑ&]{4}\\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])",
@@ -320,7 +322,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -330,7 +332,7 @@
       "name": "MX_L1_NSS - Path",
       "framework": "PATH",
       "domain": "MX_L1_NSS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -376,20 +378,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{11}",
+            "regex": "0*(?:\\d{11})",
             "matchStrength": 0.7,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{2}-?\\d{2}-?\\d{2}-?\\d{4}-?\\d",
+            "regex": "0*(?:\\d{2}-?\\d{2}-?\\d{2}-?\\d{4}-?\\d)",
             "matchStrength": 0.4,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -399,7 +401,7 @@
       "name": "MX_L1_CLAVE_ELECTOR - Path",
       "framework": "PATH",
       "domain": "MX_L1_CLAVE_ELECTOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -444,7 +446,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -454,7 +456,7 @@
       "name": "MX_L1_CREDENCIAL_INE - Path",
       "framework": "PATH",
       "domain": "MX_L1_CREDENCIAL_INE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -485,20 +487,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13}",
+            "regex": "0*(?:\\d{13})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{9}",
+            "regex": "0*(?:\\d{9})",
             "matchStrength": 0.2,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -508,7 +510,7 @@
       "name": "MX_L1_NOMBRE - Path",
       "framework": "PATH",
       "domain": "MX_L1_NOMBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -552,7 +554,7 @@
       "name": "MX_L1_APELLIDO - Path",
       "framework": "PATH",
       "domain": "MX_L1_APELLIDO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -588,7 +590,7 @@
       "name": "MX_L1_NOMBRE_COMPLETO - Path",
       "framework": "PATH",
       "domain": "MX_L1_NOMBRE_COMPLETO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -628,11 +630,11 @@
         "valueLists": [
           {
             "file": "preset-file://mx-detectar-nombres.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           },
           {
             "file": "preset-file://mx-detectar-apellidos.txt",
-            "matchStrength": 0.6
+            "matchStrength": 0.65
           }
         ],
         "tokenizeInput": true,
@@ -644,7 +646,7 @@
       "name": "MX_L1_EMAIL - Path",
       "framework": "PATH",
       "domain": "MX_L1_EMAIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -684,12 +686,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "[A-Za-z0-9._%+'\\-]+@[A-Za-z0-9.\\-]+\\.[A-Za-z]{2,24}",
+            "regex": "[\\p{L}\\p{N}._%+'\\-]+@[\\p{L}\\p{N}.\\-]+\\.[A-Za-z]{2,24}",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -699,7 +701,7 @@
       "name": "MX_L1_TELEFONO - Path",
       "framework": "PATH",
       "domain": "MX_L1_TELEFONO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -722,28 +724,28 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?\\(?(55|56|33|81)\\)?[\\s\\-]?\\d{4}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?\\(?(55|56|33|81)\\)?[\\s\\-]?\\d{4}[\\s\\-]?\\d{4})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?\\(?[2-9]\\d{2}\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}",
+            "regex": "0*(?:(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?\\(?[2-9]\\d{2}\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\+?\\d[\\d\\s()\\-]{7,15}",
+            "regex": "0*(?:\\+?\\d[\\d\\s()\\-]{7,15})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -753,7 +755,7 @@
       "name": "MX_L1_DIRECCION - Path",
       "framework": "PATH",
       "domain": "MX_L1_DIRECCION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -798,7 +800,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-Za-zÁÉÍÓÚÑáéíóúñ'.\\s]{4,}\\s(#|no\\.?\\s?)?\\d{1,5}(\\s*(int|interior|depto|dpto|local)\\.?\\s*\\w+)?",
@@ -806,7 +808,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "(?i).+\\s(mz|mza|manzana)\\.?\\s*\\d+\\s*(lt|lte|lote)\\.?\\s*\\d+",
@@ -814,7 +816,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.2
@@ -824,7 +826,7 @@
       "name": "MX_L1_DIRECCION_COMPLEMENTO - Path",
       "framework": "PATH",
       "domain": "MX_L1_DIRECCION_COMPLEMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -843,7 +845,7 @@
       "name": "MX_L1_CLABE - Path",
       "framework": "PATH",
       "domain": "MX_L1_CLABE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -887,12 +889,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{18}",
+            "regex": "0*(?:\\d{18})",
             "matchStrength": 0.7,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -902,7 +904,7 @@
       "name": "MX_L1_CUENTA_BANCARIA - Path",
       "framework": "PATH",
       "domain": "MX_L1_CUENTA_BANCARIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -921,7 +923,7 @@
       "name": "MX_L1_TARJETA - Path",
       "framework": "PATH",
       "domain": "MX_L1_TARJETA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -944,12 +946,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{13,19}",
+            "regex": "0*(?:3[47]\\d{13}|[1-9]\\d{12,13}|[1-9]\\d{15,18})",
             "matchStrength": 0.9,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": "[\\s\\-]"
+            "dataCleanRegex": "[\\s\\-]|^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -959,7 +961,7 @@
       "name": "MX_L1_PASAPORTE - Path",
       "framework": "PATH",
       "domain": "MX_L1_PASAPORTE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -987,7 +989,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -997,7 +999,7 @@
       "name": "MX_L1_DOCUMENTO_MIGRATORIO - Path",
       "framework": "PATH",
       "domain": "MX_L1_DOCUMENTO_MIGRATORIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1016,7 +1018,7 @@
       "name": "MX_L1_CEDULA_PROFESIONAL - Path",
       "framework": "PATH",
       "domain": "MX_L1_CEDULA_PROFESIONAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1039,12 +1041,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{7,8}",
+            "regex": "0*(?:\\d{7,8})",
             "matchStrength": 0.3,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1054,7 +1056,7 @@
       "name": "MX_L1_LICENCIA_CONDUCIR - Path",
       "framework": "PATH",
       "domain": "MX_L1_LICENCIA_CONDUCIR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1073,7 +1075,7 @@
       "name": "MX_L1_EFIRMA - Path",
       "framework": "PATH",
       "domain": "MX_L1_EFIRMA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1096,12 +1098,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "0000[0-9]{16}",
+            "regex": "0*(?:0000[0-9]{16})",
             "matchStrength": 0.8,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1111,7 +1113,7 @@
       "name": "MX_L1_IP - Path",
       "framework": "PATH",
       "domain": "MX_L1_IP",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1134,20 +1136,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d)",
+            "regex": "0*(?:((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7}",
+            "regex": "0*(?:[0-9A-Fa-f]{1,4}(:[0-9A-Fa-f]{0,4}){2,7})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1157,7 +1159,7 @@
       "name": "MX_L1_DISPOSITIVO - Path",
       "framework": "PATH",
       "domain": "MX_L1_DISPOSITIVO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1180,20 +1182,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2}",
+            "regex": "0*(?:([0-9A-Fa-f]{2}[:\\-]){5}[0-9A-Fa-f]{2})",
             "matchStrength": 1,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{15}",
+            "regex": "0*(?:\\d{15})",
             "matchStrength": 0.8,
             "checksumType": "LUHN",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1203,7 +1205,7 @@
       "name": "MX_L1_PLACA - Path",
       "framework": "PATH",
       "domain": "MX_L1_PLACA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1231,7 +1233,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[ABCDEFGHJKLMNPRSTUVWXYZ][\\s\\-]?\\d{2}[\\s\\-]?[ABCDEFGHJKLMNPRSTUVWXYZ]{3}",
@@ -1239,7 +1241,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[ABCDEFGHJKLMNPRSTUVWXYZ]{3}[\\s\\-]?\\d{2}[\\s\\-]?\\d{2}",
@@ -1247,15 +1249,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{3}[\\s\\-]?[ABCDEFGHJKLMNPRSTUVWXYZ]{3}",
+            "regex": "0*(?:\\d{3}[\\s\\-]?[ABCDEFGHJKLMNPRSTUVWXYZ]{3})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1265,7 +1267,7 @@
       "name": "MX_L1_NIV - Path",
       "framework": "PATH",
       "domain": "MX_L1_NIV",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1293,7 +1295,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1303,7 +1305,7 @@
       "name": "MX_L1_NUMERO_CONTRATO - Path",
       "framework": "PATH",
       "domain": "MX_L1_NUMERO_CONTRATO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1322,7 +1324,7 @@
       "name": "MX_L1_USUARIO_RRSS - Path",
       "framework": "PATH",
       "domain": "MX_L1_USUARIO_RRSS",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1341,7 +1343,7 @@
       "name": "MX_L1_CREDENCIAL - Path",
       "framework": "PATH",
       "domain": "MX_L1_CREDENCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1357,10 +1359,61 @@
       }
     },
     {
+      "name": "MX_L1_CREDENCIAL - Regex",
+      "framework": "REGEX",
+      "domain": "MX_L1_CREDENCIAL",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "\\$2[abxy]?\\$\\d{2}\\$[./A-Za-z0-9]{53}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$(1|5|6)\\$(rounds=\\d+\\$)?[./A-Za-z0-9]{1,16}\\$[./A-Za-z0-9]{22,86}",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\$argon2(id|i|d)\\$v=\\d+\\$m=\\d+,t=\\d+,p=\\d+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "pbkdf2_sha(1|256|512)\\$\\d+\\$\\S+\\$\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "regex": "\\{(SSHA|SHA|SSHA256|SSHA512|SMD5|MD5|CRYPT)\\}\\S+",
+            "matchStrength": 0.95,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "MX_L1_GEOLOCALIZACION - Path",
       "framework": "PATH",
       "domain": "MX_L1_GEOLOCALIZACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1391,20 +1444,20 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "(1[4-9]|2\\d|3[0-3])\\.\\d{3,}\\s*,\\s*-(8[6-9]|9\\d|1[01]\\d)\\.\\d{3,}",
+            "regex": "0*(?:(1[4-9]|2\\d|3[0-3])\\.\\d{3,}\\s*,\\s*-(8[6-9]|9\\d|1[01]\\d)\\.\\d{3,})",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(1[4-9]|2\\d|3[0-3])\\.\\d{3,}",
+            "regex": "0*(?:(1[4-9]|2\\d|3[0-3])\\.\\d{3,})",
             "matchStrength": 0.6,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "-(8[6-9]|9\\d|1[01]\\d)\\.\\d{3,}",
@@ -1412,7 +1465,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1422,7 +1475,7 @@
       "name": "MX_L1_TEXTO_LIBRE - Path",
       "framework": "PATH",
       "domain": "MX_L1_TEXTO_LIBRE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1467,7 +1520,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[\\w.+\\-]+@[\\w\\-]+\\.[A-Za-z]{2,}",
@@ -1475,7 +1528,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
             "regex": "[A-ZÑ&]{4}\\d{6}[A-Z0-9]{3}",
@@ -1483,15 +1536,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "(\\+?52\\s?)?\\d{2,3}\\s?\\d{3,4}\\s?\\d{4}",
+            "regex": "0*(?:(\\+?52\\s?)?\\d{2,3}\\s?\\d{3,4}\\s?\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": true,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0
@@ -1501,7 +1554,7 @@
       "name": "MX_L2_FECHA_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "MX_L2_FECHA_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1544,7 +1597,7 @@
       "name": "MX_L2_ANIO_NACIMIENTO - Path",
       "framework": "PATH",
       "domain": "MX_L2_ANIO_NACIMIENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1584,7 +1637,7 @@
       "name": "MX_L2_EDAD - Path",
       "framework": "PATH",
       "domain": "MX_L2_EDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1624,7 +1677,7 @@
       "name": "MX_L2_FECHA_EVENTO - Path",
       "framework": "PATH",
       "domain": "MX_L2_FECHA_EVENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1667,7 +1720,7 @@
       "name": "MX_L2_SEXO - Path",
       "framework": "PATH",
       "domain": "MX_L2_SEXO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1691,10 +1744,14 @@
         "valueLists": [
           {
             "file": "preset-file://mx-detectar-sexo.txt",
-            "matchStrength": 0.5
+            "matchStrength": 0.8
+          },
+          {
+            "file": "preset-file://mx-detectar-sexo-letra.txt",
+            "matchStrength": 0.6
           }
         ],
-        "tokenizeInput": false,
+        "tokenizeInput": true,
         "rejectStrength": 0.5,
         "tokenizationDelimiter": " "
       }
@@ -1703,7 +1760,7 @@
       "name": "MX_L2_MUNICIPIO - Path",
       "framework": "PATH",
       "domain": "MX_L2_MUNICIPIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1727,27 +1784,30 @@
       }
     },
     {
-      "name": "MX_L2_MUNICIPIO - List",
-      "framework": "LIST",
+      "name": "MX_L2_MUNICIPIO - Values",
+      "framework": "REGEX",
       "domain": "MX_L2_MUNICIPIO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-municipios.txt",
-            "matchStrength": 0.9
+            "note": "2288 — Aguascalientes · Asientos · Calvillo · Cosío · Jesús María · Pabellón de Arteaga · …",
+            "regex": "(?iu)(?:(?:a(?:b(?:a(?:l(?:a|á)|solo)|ejones)|c(?:a(?:coyagua|jete|la|mba(?:ro|y de ru(?:iz castaneda|íz castañeda))|nceh|p(?:etahua|oneta|ulco de ju(?:arez|árez))|t(?:e(?:no|pec)|ic|l(?:an(?: de (?:juarez|perez figueroa))?|án(?: de (?:juárez|pérez figueroa))?)|zingo)|xochitl(?:an|án)|yucan)|o(?:lman|nchi)|t(?:eopan|opan)|u(?:amanala de miguel hidalgo|itzio|l(?:a|co|tzingo)|na|ña)|ámbaro)|gu(?:a(?: (?:blanca de iturbide|dulce|prieta)|leguas|scalientes)|ililla)|h(?:ome|u(?:a(?:c(?:atl(?:an|án)|uotzingo)|lulco(?: de mercado)?|tl(?:an|án)|zotepec)|ehuetitla|mada))|j(?:a(?:cuba|lpan)|uchitl(?:an del progreso|án del progreso))|kil|l(?:a(?:mo(?: temapache|s)|quines)|bino zertuche|cozauca de guerrero|dama|fajayucan|jojuca|lende|moloya(?: de(?: (?:alquisiras|ju(?:arez|árez))|l r(?:io|ío)))?|p(?:atl(?:ahuac|áhuac)|oyeca)|t(?:a(?:mira|r)|epexi|o(?: lucero de guti(?:errez barrios|érrez barrios)|tonga))|varo obregon)|m(?:a(?:cu(?:eca|zac)|nalco|t(?:an|e(?:nango de(?: la frontera|l valle)|pec)|it(?:an|l(?:an|án)|án)|l(?:an de (?:canas|los reyes)|án de (?:cañas|los reyes))|án)|xac de guerrero)|e(?:alco de bonfil|ca(?:meca)?)|ixtl(?:an|án)|ozoc)|n(?:ahuac|g(?:a(?:macutiro|ngueo)|el (?:albino corzo|r\\. cabada)|ostura)|imas trujano|tiguo morelos|áhuac)|p(?:a(?:n|seo el (?:alto|grande)|tzing(?:an|án)|x(?:co|tla)|zapan)|etatitl(?:an de antonio carvajal|án de antonio carvajal)|izaco|o(?:daca|ro|zol)|ulco)|qui(?:l(?:a|es serd(?:an|án))|sm(?:on|ón)|xtla)|r(?:a(?:mberri|ndas)|celia|i(?:o|vechi|zpe)|m(?:adillo de los infante|er(?:ia|ía))|royo seco)|s(?:censi(?:on|ón)|ientos|tacinga|unci(?:on (?:c(?:acalotepec|uyotepeji)|ixtaltepec|nochixtlan|ocotlan|tlacolulita)|ón (?:c(?:acalotepec|uyotepeji)|ixtaltepec|nochixtlán|ocotlán|tlacolulita)))|t(?:arjea|e(?:m(?:ajac de brizuela|pan)|n(?:ango del r(?:io|ío)|co|g(?:o|uillo))|xcal)|i(?:l|talaquia|zap(?:an(?: de zaragoza)?|án(?: de zaragoza)?))|l(?:a(?:comulco|huilco|majalcingo del monte|ngatepec|pexco|tlahucan|utla)|equizayan|ix(?:co|tac)|tzayanca)|o(?:linga|tonilco (?:de tula|el (?:alto|grande))|ya(?:c(?: de (?:alvarez|álvarez))?|tempan))|z(?:a(?:can|la(?:n)?)|itzi(?:huac(?:an|án)|ntla)))|utl(?:an de navarro|án de navarro)|x(?:apusco|ochiapan|tla de terrazas|utla)|y(?:a(?:hualulco|pango)|o(?:quezco de aldama|t(?:l(?:an|án)|oxco de guerrero|zintepec))|utla(?: de los libres)?)|z(?:capotzalco|oy(?:u|ú)))|b(?:a(?:c(?:a(?:d(?:ehuachi|éhuachi)|lar|nora)?|erac|h(?:iniva|íniva)|oachi|um)|diraguato|h(?:ia de banderas|ía de banderas)|l(?:anc(?:an|án)|leza)|n(?:amichi|derilla|ámichi)|topilas de manuel g(?:omez morin|ómez morín)|vi(?:acora|spe|ácora))|e(?:jucal de ocampo|lla vista|n(?:em(?:erito de las americas|érito de las américas)|ito ju(?:arez|árez)|jam(?:in hill|ín hill))|rrioz(?:abal|ábal))|o(?:c(?:a del r(?:io|ío)|hil|oyna)|kob(?:a|á)|la(?:nos|ños))|rise(?:nas|ñas)|u(?:ctzotz|enav(?:entura|ista(?: de cu(?:ellar|éllar))?)|rgos)|ácum)|c(?:a(?:bo(?: corrientes|rca)|ca(?:hoat(?:an|án)|lch(?:en|én))|dereyta (?:de montes|jim(?:enez|énez))|jeme|l(?:akmul|cahualco|era|i(?:hual(?:a|á)|maya)|kin(?:i|í)|nali|otmul|p(?:an|ulalpan)|tepec|villo)|m(?:ar(?:go|on de tejeda|ón de tejeda)|erino z\\. mendoza|ocuautla|peche)|n(?:a(?:da(?: morelos|s de obregon)|nea|tl(?:an|án))|dela(?:ria(?: loxicha)?)?|elas|itas de felipe pescador|sahcab|tamayec)|p(?:it(?:an luis angel vidal|án luis ángel vidal)|ul(?:alpam de mendez|huac|álpam de méndez))|r(?:acuaro|b(?:o|ó)|donal|ich(?:i|í)|los a\\. carrillo|rillo puerto|ácuaro)|s(?:as grandes|imiro castillo|t(?:a(?:nos|ños)|illo de teayo))|t(?:azaj(?:a|á)|emaco|orce)|xhuacan|zones de herrera|ñ(?:ada(?: morelos|s de obregón)|itas de felipe pescador))|e(?:dral|l(?:aya|est(?:un|ún))|n(?:otillo|t(?:la|ro))|rr(?:alvo|itos|o (?:azul|de san pedro)))|h(?:a(?:c(?:altianguis|sink(?:in|ín))|huites|l(?:c(?:atongo de hidalgo|hi(?:comula de sesma|huit(?:an|es|án))|o)|ma)|m(?:pot(?:on|ón)|ula)|n(?:al|kom)|p(?:a(?: de mota|b|la|ntongo)|ul(?:co|huac(?:an|án)|te(?:nango|pec)))|r(?:apan|cas|o)|vinda)|e(?:max|nalh(?:o|ó)|r(?:an|án))|i(?:a(?:p(?:a de corzo|illa)|ut(?:empan|la|zingo))|c(?:hi(?:mil(?:a|á)|quila)|o(?:as(?:en|én)|loapan|muselo|n(?:amel|cua(?:c|utla)|quiaco|tepec))|xulub pueblo)|etla|g(?:mecatitl(?:an|án)|na(?:huapan|utla))|huahua|kindzonot|l(?:a(?: de la sal|pa de (?:alvarez|álvarez))?|c(?:hot(?:a|la)|uautla)|on|pancingo de los bravo|ón)|mal(?:huac(?:an|án)|tit(?:an|án))|n(?:a(?:m(?:eca|pa de gorostiza)|ntla)?|i(?:cuila|pas))|qui(?:huitl(?:an de benito juarez|án de benito juárez)|listl(?:an|án)))|o(?:c(?:am(?:an|án)|hol(?:a|á))|ix|ntla)|u(?:c(?:andiro|ándiro)|ma(?:tl(?:an|án)|yel)|r(?:intzio|umuco))|ínipas)|i(?:enega de (?:flores|zimatlan)|huatl(?:an|án)|ntalapa|tlalt(?:epetl|épetl)|udad (?:del ma(?:iz|íz)|fern(?:andez|ández)|ixtepec|madero|valles)|énega de (?:flores|zimatlán))|o(?:a(?:c(?:alco de berrioz(?:abal|ábal)|oatzintla)|hu(?:ay(?:ana|utla de jos(?:e maria izazaga|é maría izazaga))|itl(?:an|án))|lcom(?:an de vazquez pallares|án de vázquez pallares)|pilla|t(?:e(?:cas altas|pec(?: harinas)?|telco)|l(?:an del rio|án del río)|z(?:acoalcos|in(?:go|tla))))|c(?:hoapa el grande|otitl(?:an|án)|ula)|e(?:neo|tzala)|h(?:etzala|uecan)|icoy(?:an de las flores|án de las flores)|jumatl(?:an de regules|án de régules)|l(?:i(?:ma|pa)|o(?:n|tl(?:an|án))|ón)|m(?:a(?:l(?:a|calco)|pa)|it(?:an de dominguez|án de domínguez)|on(?:d(?:u|ú)|fort)|postela)|n(?:c(?:epci(?:on (?:buenavista|de(?: buenos aires|l oro)|papalo)|ón (?:buenavista|de(?: buenos aires|l oro)|pápalo))|ordia)|eto de comonfort|kal|stancia del rosario|t(?:epec|la de juan cuamatzi))|p(?:a(?:inal(?:a|á)|l(?:a|illo)|n(?:atoyac|daro))|ándaro)|quimatl(?:an|án)|r(?:doba|on(?:ango|eo)|regidora|tazar)|s(?:a(?:l(?:a|á)|maloapan de carpio|utl(?:an de carvajal|án de carvajal))|comatepec|io|ol(?:apa|eacaque|tepec)|ío)|t(?:axtla|ija)|x(?:catl(?:an|án)|quihui)|y(?:ame del sotol|o(?:ac(?:an|án)|meapan|tepec)|u(?:ca de (?:ben(?:itez|ítez)|catal(?:an|án))|tla))|zumel)|ruillas|u(?:a(?:ji(?:malpa de morelos|nicuilapa)|l(?:ac|ác)|piaxtla(?: de madero)?|tro ci(?:enegas|énegas)|ut(?:e(?:mpan|pec(?: de hinojosa)?)|i(?:nch(?:an|án)|tl(?:an(?: (?:de garcia barragan|izcalli))?|án(?: (?:de garcía barragán|izcalli))?))|la(?:ncingo)?)|xomulco|yuca de andrade)|curpe|e(?:ncam(?:e|é)|r(?:amaro|navaca|ámaro)|tzala(?: del progreso|n del progreso))|i(?:chapa|l(?:apam de guerrero|ápam de guerrero)|t(?:l(?:ahuac|áhuac)|zeo))|liac(?:an|án)|mpas|n(?:cunul|duac(?:an|án))|qu(?:io|ío)|sihuiriachi|tzamala de pinz(?:on|ón)|y(?:amecalco villa de zaragoza|oaco)|zam(?:a|á))|órdoba)|d(?:e(?:gollado|l(?: nayar|icias))|ivisaderos|o(?:ctor (?:arroyo|coss|gonz(?:alez|ález)|mora)|lores hidalgo cuna de la independencia nacional|mingo arenas|nato guerra)|r\\. belisario dom(?:inguez|ínguez)|urango|z(?:an|emul|i(?:dzant(?:un|ún)|lam (?:de bravo|gonz(?:alez|ález))|t(?:as|ás))|oncauich|án))|e(?:bano|c(?:at(?:epec de morelos|zingo)|uandureo)|duardo neri|jutla|l(?: (?:arenal|b(?:arrio de la soledad|osque)|carmen(?: tequexquitla)?|espinal|fuerte|grullo|higo|l(?:im(?:on|ón)|lano)|ma(?:nte|rqu(?:es|és))|naranjo|oro|p(?:arral|lateado de joaqu(?:in amaro|ín amaro)|orvenir)|sal(?:to|vador)|tule)|o(?:ta|xochitl(?:an(?: de flores magon)?|án(?: de flores magón)?)))|m(?:iliano zapata|palme)|n(?:carnaci(?:on de diaz|ón de díaz)|senada)|p(?:a(?:tl(?:an|án)|zoyucan)|itacio huerta)|rongar(?:icuaro|ícuaro)|s(?:c(?:arcega|uin(?:apa|tla)|árcega)|p(?:a(?:nita|ñita)|i(?:nal|ta)))|t(?:chojoa|zatl(?:an|án))|zequiel montes)|f(?:elipe carrillo puerto|ilomeno mata|lorencio villarreal|ort(?:in|ín)|r(?:ancisco (?:i\\. madero|le(?:on|ón)|z\\. mena)|esnillo(?: de trujano)?|ontera(?: (?:comalapa|hidalgo)|s)?))|g(?:a(?:briel zamora|leana)|en(?:aro codina|eral (?:bravo|c(?:anuto a\\. neri|epeda)|e(?:nrique estrada|scobedo)|f(?:elipe (?:angeles|ángeles)|rancisco r\\. murgu(?:ia|ía))|heliodoro castillo|p(?:anfilo natera|lutarco el(?:ias calles|ías calles)|ánfilo natera)|sim(?:on bolivar|ón bolívar)|t(?:er(?:an|án)|revi(?:no|ño))|z(?:aragoza|uazua)))|omez (?:farias|palacio)|ran morelos|u(?:a(?:ch(?:inango|ochi)|dal(?:ajara|c(?:azar|ázar)|upe (?:de ram(?:irez|írez)|etla|victoria|y calvo))|na(?:cev(?:i|í)|juato)|save|ymas|zapares)|e(?:latao de ju(?:arez|árez)|mez|vea de humboldt)|stavo (?:a\\. madero|d(?:iaz ordaz|íaz ordaz))|ti(?:errez zamora|érrez zamora))|ómez (?:farías|palacio)|üémez)|h(?:alach(?:o|ó)|e(?:celchak(?:an|án)|r(?:m(?:enegildo galeana|osillo)|oica (?:ciudad de (?:ejutla de crespo|huajuapan de le(?:on|ón)|tlaxiaco)|villa tezoatl(?:an de segura y luna, cuna de la independencia de oaxaca|án de segura y luna, cuna de la independencia de oaxaca))))|i(?:dalgo(?: del parral|titl(?:an|án))|gueras)|o(?:c(?:ab(?:a|á)|t(?:un|ún))|m(?:un|ún)|n(?:duras de la sierra|ey)|pelch(?:en|én)|stotipaquillo)|u(?:a(?:chinera|jicori|lahuises|m(?:antla|uxtitl(?:an|án))|n(?:dacareo|i(?:maro|queo)|usco|ímaro)|quechula|s(?:abas|ca de ocampo)|t(?:abampo|latlauca|usco)|u(?:chinango|t(?:epec|la(?: de jim(?:enez|énez))?))|yacocotla|zalingo)|e(?:huet(?:an|l(?:a(?:n(?: el (?:chico|grande))?)?|án(?: el (?:chico|grande))?)|oca|án)|j(?:ot(?:it(?:an|án)|zingo)|u(?:car|quilla el alto|tla de reyes)|úcar)|pac|tamo|y(?:apan(?: de ocampo)?|otlipan|poxtla|t(?:amalco|lalpan)))|h(?:i|í)|i(?:chapan|loapan de cuauht(?:emoc|émoc)|m(?:anguillo|ilpan)|ramba|t(?:iup(?:an|án)|z(?:il(?:a(?:c|n de serd(?:an|án))|tepec)|uco de los figueroa))|x(?:quilucan|t(?:an|la|án)))|nucm(?:a|á)|ásabas|épac))|i(?:g(?:nacio (?:de la llave|zaragoza)|uala(?: de la independencia|pa))|l(?:amatl(?:an|án)|iatenco)|muris|nd(?:aparapeo|e|é)|r(?:apuato|imbo)|s(?:idro fabela|la(?: mujeres)?)|turbide|x(?:ca(?:milpa de guerrero|quixtla|te(?:opan de cuauht(?:emoc|émoc)|pec))|hua(?:c(?:an de los reyes|án de los reyes)|t(?:an|l(?:an(?: de(?: madero|l (?:cafe|sureste))|cillo)|án de(?: madero|l (?:café|sureste)))|án))|il|m(?:atlahuacan|iquilpan)|pantepec nieves|t(?:a(?:c(?:amaxtitl(?:an|án)|omit(?:an|án)|uixtla de mariano matamoros|zoquitl(?:an|án))|pa(?:luca|n(?: de(?: la sal|l oro)|gajoya))?)|e(?:nco|pec)|l(?:a(?:huac(?:a(?:n(?: de(?: los membrillos|l rio))?)?|án(?: de(?: los membrillos|l río))?)|n(?: de(?: juarez|l rio))?)|án(?: de(?: juárez|l río))?)))|z(?:amal|ta(?:calco|palapa)|ucar de matamoros|úcar de matamoros))|j(?:a(?:c(?:ala de ledezma|ona)|l(?:a(?:cingo|pa)?|comulco|ostotitl(?:an|án)|pa(?: de m(?:endez|éndez)|n(?: de serra)?)?|t(?:enco|ipan|oc(?:an|án)))|ma(?:pa|y)|n(?:os|tetelco)|ral del progreso|umave)|e(?:r(?:e(?:cuaro|z)|écuaro)|s(?:us (?:carranza|maria)|ús (?:carranza|maría)))|i(?:lot(?:epec|l(?:an de los dolores|án de los dolores)|zingo)|m(?:enez del teul|énez del teul)|qui(?:lpan|pil(?:as|co))|totol|utepec)|o(?:cot(?:epec|itl(?:an|án))|jutla|lalpan|n(?:acatepec de leandro valle|otla|uta)|pala|quicingo|s(?:e (?:azueta|joaquin de herrera|maria morelos|sixto verduzco)|é (?:azueta|joaquín de herrera|maría morelos|sixto verduzco)))|u(?:a(?:n(?: (?:aldama|c\\. bonilla|galindo|n\\. m(?:endez|éndez)|r(?:\\. escudero|odr(?:iguez clara|íguez clara)))|acatl(?:an|án))|rez hidalgo)|chi(?:pila|que de ferrer|t(?:an(?: de zaragoza)?|epec|l(?:an|án)|án(?: de zaragoza)?))|limes|ngapeo|árez hidalgo)|áltipan)|k(?:a(?:n(?:as(?:in|ín)|tunil)|ua)|inchil|opom(?:a|á))|l(?:a(?: (?:antigua|barca|c(?:o(?:lorada|mpa(?:nia|ñía)|ncordia)|ruz)|grandeza|hu(?:acana|erta)|independencia|libertad|m(?:a(?:gdalena (?:contreras|tla(?:ltelulco|tlauquitepec))|nzanilla de la paz)|isi(?:on|ón))|p(?:az|e(?:rla)?|iedad)|reforma|trini(?:dad vista hermosa|taria)|uni(?:on de isidoro montes de oca|ón de isidoro montes de oca)|yesca)|fragua|g(?:os de moreno|unillas)|m(?:adrid|pazos de naranjo)|nd(?:a de matamoros|ero y coss)|rr(?:ainzar|áinzar)|s (?:choapas|m(?:argaritas|inas)|rosas|vigas de ram(?:irez|írez))|zaro cardenas)|e(?:onardo bravo|r(?:do(?: de tejada)?|ma))|i(?:bres|nares)|lera|o(?:lotla|ma bonita|reto|s (?:aldamas|cabos|herreras|r(?:amones|eyes(?: de ju(?:arez|árez))?)))|u(?:is moya|vianos)|ázaro cárdenas)|m(?:a(?:cuspana|der(?:a|o)|g(?:dalena (?:apasco|jaltepec|mixtepec|ocotl(?:an|án)|pe(?:nasco|ñasco)|t(?:e(?:itipac|quisistl(?:an|án))|lacotepec)|yodocono de porfirio d(?:iaz|íaz)|zahuatl(?:an|án))|uarichi)|inero|l(?:inal(?:co|tepec)|trata)|ma|n(?:i|lio fabio altamirano|uel (?:benavides|doblado)|zanillo|í)|p(?:astepec|im(?:i|í))|r(?:av(?:at(?:io|ío)|illa tenejapa)|cos castellanos|i(?:ano escobedo|scala de ju(?:arez|árez))|qu(?:e(?:lia|s de comillas)|és de comillas)|t(?:i(?:nez de la torre|r(?: de cuilapan|es de tacubaya))|ínez de la torre))|scota|t(?:a(?:ch(?:i|í)|moros)|ehuala|ias romero avendano|lapa|ías romero avendaño)|xcan(?:u|ú)|yap(?:an|án)|za(?:mitla|p(?:a de madero|il(?:tepec de ju(?:arez|árez))?)|t(?:an|e(?:cochco de jos(?:e maria morelos|é maría morelos)|pec)|l(?:an(?: villa de flores)?|án(?: villa de flores)?)|án)))|e(?:ca(?:tl(?:an|án)|yapan)|dell(?:in de bravo|ín de bravo)|lchor ocampo|oqui|rida|sones hidalgo|t(?:apa|epec|lat(?:onoc|ónoc)|ztitl(?:an|án))|x(?:ical(?:i|tzingo)|quitic de carmona|ticac(?:an|án))|z(?:calapa|quit(?:al(?: del oro)?|ic)))|i(?:a(?:catl(?:an|án)|huatl(?:an(?: de porfirio diaz)?|án(?: de porfirio díaz)?))|er(?: y noriega)?|guel (?:a(?:lem(?:an|án)|uza)|hidalgo)|lpa alta|n(?:a(?:titl(?:an|án))?|eral de(?: la reforma|l (?:chico|monte)))|quihuana|santla|tontic|x(?:istl(?:an de la reforma|án de la reforma)|quiahuala de ju(?:arez|árez)|tl(?:a(?: de altamirano|n)?|án)))|o(?:c(?:hitl(?:an|án)|o(?:ch(?:a|á)|rito)|tezuma)|l(?:ango de escamilla|caxac|oac(?:an|án))|max|n(?:clova|jas|te(?: escobedo|cristo de guerrero|morelos|rrey))|r(?:el(?:ia|os)|is|ole(?:on|ón))|t(?:ozintla|ul)|yahua de estrada)|u(?:gica|leg(?:e|é)|n(?:a|oz de domingo arenas)|xupip|zquiz|ñoz de domingo arenas)|ártir(?: de cuilapan|es de tacubaya)|érida|ú(?:gica|zquiz))|n(?:a(?:c(?:ajuca|o(?:ri chico|zari de garc(?:ia|ía))?)|dadores|huatzen|miquipa|n(?:acamilpa de mariano arista|chital de l(?:azaro cardenas del rio|ázaro cárdenas del río))|olinco|ranj(?:al|os amatl(?:an|án))|t(?:ivi(?:dad|tas)|ívitas)|u(?:calpan de ju(?:arez|árez)|pan|tla|zontla)|vo(?:joa|lato)|za(?:reno etla|s))|e(?:altican|japa de madero|xtlalpan|zahualc(?:oyotl|óyotl))|icol(?:as (?:bravo|flores|r(?:omero|uiz))|ás (?:bravo|flores|r(?:omero|uíz)))|o(?:c(?:histl(?:an de mejia|án de mejía)|up(?:etaro|étaro))|gales|mbre de dios|noava|pal(?:a de villagr(?:an|án)|tepec|ucan)|ria de (?:angeles|ángeles))|u(?:evo (?:casas grandes|ideal|laredo|morelos|parangaricutiro|urecho|zoqui(?:apam|ápam))|mar(?:an|án))|ácori chico)|o(?:axaca de ju(?:arez|árez)|c(?:o(?:singo|t(?:epec|l(?:an(?: de morelos)?|án(?: de morelos)?))|y(?:oacac|ucan)|zocoautla de espinosa)|ui(?:lan|tuco))|j(?:inaga|ocaliente|uelos de jalisco)|l(?:in(?:al(?:a|á)|tla)|uta)|m(?:e(?:alca|tepec)|itl(?:an de juarez|án de juárez))|navas|p(?:ich(?:en|én)|odepe)|quitoa|ri(?:ental|zaba)|s(?:tuac(?:an|án)|umacinta)|t(?:a(?:ez|titl(?:an|án))|eapan|h(?:on p\\. blanco|ón p\\. blanco)|umba|zolo(?:apan|tepec)|áez)|x(?:chuc|kutzcab)|zu(?:luama de mascare(?:nas|ñas)|mba))|p(?:a(?:bell(?:on de arteaga|ón de arteaga)|c(?:huca de soto|ula)|huatl(?:an|án)|ja(?:cuar(?:an|án)|pan)|l(?:enque|izada|m(?:ar de bravo|illas))|n(?:ab(?:a|á)|ind(?:icuaro|ícuaro)|otla|te(?:lh(?:o|ó)|pec)|uco(?: de coronado)?)|pa(?:lotla(?: de xicoht(?:encatl|éncatl))?|ntla)|r(?:a(?:c(?:ho|uaro)|iso|s|íso)|ras|á(?:cuaro|s))|so de(?: ovejas|l macho)|tzcuaro)|e(?:dro (?:ascencio alquisiras|escobedo)|n(?:amiller|jam(?:illo|o)|on blanco)|r(?:ib(?:an|án)|ote)|squer(?:ia|ía)|t(?:atl(?:an|án)|lalcingo|o)|ñ(?:amiller|ón blanco))|i(?:axtla|chucalco|edras negras|huamo|jijiapan|lcaya|n(?:al de amoles|o(?:s|tepa de don luis))|saflores|tiquito)|l(?:a(?:t(?:on sanchez|ón sánchez)|ya(?: vicente|s de rosarito))|uma hidalgo)|o(?:anas|lotitl(?:an|án)|ncitl(?:an|án)|za rica de hidalgo)|r(?:axedis g\\. guerrero|ogreso(?: de obreg(?:on|ón))?)|u(?:e(?:bl(?:a|o (?:nuevo(?: solistahuac(?:an|án))?|viejo))|nte (?:de ixtla|nacional)|rto (?:morelos|pe(?:nasco|ñasco)|vallarta))|ngarabato|r(?:epero|isima del rincon|u(?:andiro|ándiro)|épero|ísima del rincón)|tla villa de guerrero)|á(?:nuco(?: de coronado)?|tzcuaro)|énjamo)|qu(?:e(?:ch(?:olac|ultenango)|r(?:e(?:ndaro|taro)|é(?:ndaro|taro)))|i(?:mixtl(?:an|án)|ntana roo|r(?:iego|oga)|tupan))|r(?:a(?:fael (?:delgado|l(?:ara grajales|ucio))|mos arizpe|y(?:on(?:es)?|ón))|e(?:forma(?: de pineda)?|y(?:es etla|nosa))|i(?:nc(?:on (?:chamula san pedro|de romos)|ón (?:chamula san pedro|de romos))|o(?: (?:b(?:lanco|ravo)|grande|lagartos)|verde)|va palacio)|o(?:deo|jas de cuauht(?:emoc|émoc)|mita|samorada)|ío (?:b(?:lanco|ravo)|grande|lagartos))|s(?:a(?:b(?:anilla|inas(?: hidalgo)?)|c(?:alum|ramento)|hua(?:ripa|yo)|in alto|l(?:amanca|ina(?: cruz|s victoria)|t(?:abarranca|illo|o de agua)|va(?:dor (?:alvarado|escalante)|tierra))|mahil|n(?: (?:a(?:gust(?:in (?:a(?:matengo|tenango)|chayuco|de las juntas|etla|loxicha|metzquititlan|tla(?:cotepec|xiaca)|yatareni)|ín (?:a(?:matengo|tenango)|chayuco|de las juntas|etla|loxicha|metzquititlán|tla(?:cotepec|xiaca)|yatareni))|n(?:dr(?:es (?:c(?:abecera nueva|holula)|d(?:inicuiti|uraznal)|hua(?:xpaltepec|yapam)|ixtlahuaca|lagunas|nuxino|paxtlan|s(?:inaxtla|olaga)|t(?:e(?:nejapan|otilalpam|petlapa)|uxtla)|yaa|za(?:bache|utla))|és (?:c(?:abecera nueva|holula)|d(?:inicuiti|uraznal)|hua(?:xpaltepec|yápam)|ixtlahuaca|lagunas|nuxiño|paxtlán|s(?:inaxtla|olaga)|t(?:e(?:nejapan|otilálpam|petlapa)|uxtla)|yaá|za(?:bache|utla)))|toni(?:no (?:castillo velasco|el alto|monte verde)|o(?: (?:acutla|ca(?:nada|ñada)|de la cal|huitepec|la isla|nanahuat(?:ipam|ípam)|sinicahua|tepetlapa))?)))|b(?:a(?:ltazar (?:chichic(?:apam|ápam)|loxicha|yatzachi el bajo)|rtolo(?: (?:coyotepec|soyaltepec|tutotepec|yautepec)|m(?:e (?:ayautla|loxicha|quialana|yucuane|zoogocho)|é (?:ayautla|loxicha|quialana|yucuañe|zoogocho))))|ernardo(?: mixtepec)?|las(?: atempa)?|uenaventura)|c(?:arlos(?: yautepec)?|iro de acosta|rist(?:obal (?:am(?:atlan|oltepec)|de la(?: barranca|s casas)|lachirioag|suchixtlahuaca)|óbal (?:am(?:atlán|oltepec)|de la(?: barranca|s casas)|lachirioag|suchixtlahuaca)))|d(?:ami(?:an texoloc|án texóloc)|i(?:ego (?:de (?:alejandr(?:ia|ía)|la uni(?:on|ón))|la mesa tochimiltzingo)|mas|onisio (?:del mar|ocot(?:epec|l(?:an|án)))))|esteban atatlahuca|f(?:e(?:lipe(?: (?:de(?: jes(?:us|ús)|l progreso)|jalapa de d(?:iaz|íaz)|orizatl(?:an|án)|te(?:jal(?:apam|ápam)|otlalcingo|patl(?:an|án))|usila))?|rnando)|rancisco (?:c(?:a(?:huacu(?:a|á)|jonos)|h(?:apulapa|ind(?:ua|úa)))|de(?: (?:borja|conchos|los romo)|l (?:mar|oro|rinc(?:on|ón)))|huehuetl(?:an|án)|ixhuat(?:an|án)|jaltepetongo|l(?:achigol(?:o|ó)|ogueche)|nuxa(?:no|ño)|ozolotepec|sola|t(?:e(?:lixtlahuaca|opan|tlanohcan)|lapancingo)))|g(?:abriel(?: (?:chilac|mixtepec))?|regorio atzompa)|i(?:gnacio(?: (?:cerro gordo|r(?:io muerto|ío muerto)))?|ldefonso (?:amatl(?:an|án)|sola|villa alta))|j(?:a(?:cinto (?:amilpas|tlacotepec)|vier)|er(?:onimo (?:coatlan|s(?:ilacayoapilla|osola)|t(?:aviche|ec(?:oatl|uanipan)|lacochahuaya)|xayacatlan|zacualpan)|ónimo (?:coatlán|s(?:ilacayoapilla|osola)|t(?:aviche|ec(?:uanipan|óatl)|lacochahuaya)|xayacatlán|zacualpan))|o(?:aqu(?:in|ín)|rge nuchita|s(?:e (?:ayuquila|chi(?:apa|ltepec)|de(?: gracia|l (?:p(?:enasco|rogreso)|rincon))|estancia grande|i(?:ndependencia|turbide)|lachiguiri|miahuatlan|te(?:acalco|nango))|é (?:ayuquila|chi(?:apa|ltepec)|de(?: gracia|l (?:p(?:eñasco|rogreso)|rincón))|estancia grande|i(?:ndependencia|turbide)|lachiguiri|miahuatlán|te(?:acalco|nango))))|u(?:an(?: (?:a(?:chiutla|t(?:e(?:nco|pec)|zompa))|bautista (?:atatlahuca|c(?:oixtlahuaca|uicatl(?:an|án))|guelache|jayacatl(?:an|án)|lo de soto|suchitepec|t(?:lac(?:hichilco|oatzintepec)|uxtepec)|valle nacional)|c(?:a(?:cahuatepec|ncuc)|hi(?:comez(?:uchil|úchil)|lateca)|ieneguilla|o(?:atz(?:ospam|óspam)|lorado|maltepec|tzoc(?:on|ón)))|d(?:e(?: (?:guadalupe|los (?:cu(?:es|és)|lagos)|sabinas)|l (?:estado|r(?:io|ío)))|iuxi)|evangelista(?: analco)?|gu(?:elav(?:ia|ía)|ichicovi)|huactzinco|ihualtepec|juquila (?:mixes|vijanos)|la(?:ch(?:ao|igalla)|jarcia|lana)|m(?:azatl(?:an|án)|ixtepec)|numi|ozolotepec|petlapa|qui(?:ahije|otepec)|sayultepec|t(?:a(?:ba(?:a|á)|mazola)|e(?:it(?:a|ipac)|p(?:euxila|oscolula)))|y(?:a(?:e(?:e|é)|tzona)|ucuita)|ñumí)|ito de escobedo)|li(?:an|án)))|l(?:orenzo(?: (?:a(?:lbarradas|xocomanitla)|c(?:acaotepec|uaunecuiltitla)|texmel(?:ucan|úcan)|victoria))?|u(?:cas(?: (?:camotl(?:an|án)|ojitl(?:an|án)|quiavin(?:i|í)|tecopilco|zoqui(?:apam|ápam)))?|is (?:a(?:catl(?:an|án)|matl(?:an|án))|de(?: la paz|l cordero)|potos(?:i|í)|r(?:io colorado|ío colorado))))|m(?:a(?:r(?:c(?:ial ozolotepec|os(?: arteaga)?)|t(?:in (?:chalchicuautla|de (?:bolanos|l(?:as piramides|os cansecos))|h(?:idalgo|uamelulpam)|itunyoso|lachila|peras|t(?:exmelucan|ilcajete|o(?:toltepec|xpalan))|zacatepec)|ín (?:chalchicuautla|de (?:bolaños|l(?:as pirámides|os cansecos))|h(?:idalgo|uamelúlpam)|itunyoso|lachilá|peras|t(?:exmelucan|ilcajete|o(?:toltepec|xpalan))|zacatepec)))|t(?:eo (?:atenco|cajonos|del mar|etlatongo|nej(?:apam|ápam)|p(?:e(?:nasco|ñasco)|i(?:nas|ñas))|r(?:io hondo|ío hondo)|sindihui|tlapiltepec|y(?:oloxochitl(?:an|án)|ucutindoo))|ias tlalancaleca|ías tlalancaleca))|elchor betaza|iguel (?:a(?:chiutla|huehuetitl(?:an|án)|lo(?:apam|ápam)|mat(?:itl(?:an|án)|l(?:an|án)))|c(?:hi(?:cahua|malapa)|oatl(?:an|án))|de(?: (?:allende|horcasitas)|l (?:puerto|r(?:io|ío)))|e(?:jutla|l (?:alto|grande))|huautla|ixitl(?:an|án)|mixtepec|p(?:anixtlahuaca|eras|iedras)|quetzaltepec|s(?:anta flor|oyaltepec|uchixtepec)|t(?:e(?:comatl(?:an|án)|nango|quixtepec)|ilqui(?:apam|ápam)|lac(?:amama|otepec)|otolapan|ulancingo)|xoxtla|yotao))|nicol(?:as(?: (?:buenos aires|de los (?:garza|ranchos)|hidalgo|tolentino))?|ás(?: (?:buenos aires|de los (?:garza|ranchos)|hidalgo|tolentino))?)|p(?:ablo (?:anicano|c(?:oatl(?:an|án)|uatro venados)|del monte|etla|hui(?:tzo|xtepec)|macuiltianguis|tijaltepec|villa de mitla|yaganiza)|edro(?: (?:a(?:muzgos|p(?:ostol|óstol)|toyac)|c(?:ajonos|holula|o(?:mitancillo|xcaltepec c(?:antaros|ántaros)))|de(?: la cueva|l gallo)|el alto|garza garc(?:ia|ía)|hu(?:amelula|ilotepec)|ix(?:catl(?:an|án)|tlahuaca)|j(?:altepetongo|icay(?:an|án)|ocotipac|uchatengo)|lagunillas|m(?:artir(?: (?:quiechapa|yucuxaco))?|ixtepec|olinos|ártir(?: (?:quiechapa|yucuxaco))?)|nopala|oco(?:petatillo|tepec)|pochutla|quiatoni|sochi(?:apam|ápam)|t(?:a(?:panatepec|viche)|e(?:ozacoalco|utila)|ida(?:a|á)|laquepaque|o(?:piltepec|tol(?:apam|ápam)))|y(?: san pablo (?:ayutla|te(?:poscolula|quixtepec))|aneri|eloixtlahuaca|olox|ucunama|ólox)))?)|quint(?:in|ín)|ra(?:fael|ymundo jalpan)|s(?:alvador(?: (?:el (?:seco|verde)|huixcolotla))?|ebasti(?:an (?:abasolo|coatlan|del oeste|ixcapa|nicananduta|rio hondo|t(?:e(?:comaxtlahuaca|itipac)|lacotepec|utla))|án (?:abasolo|coatlán|del oeste|ixcapa|nicananduta|río hondo|t(?:e(?:comaxtlahuaca|itipac)|lacotepec|utla)))|im(?:on (?:almolongas|de guerrero|zahuatlan)|ón (?:almolongas|de guerrero|zahuatlán)))|vicente (?:coatl(?:an|án)|lachix(?:io|ío)|nu(?:nu|ñú)|tancuayalab))|ahcat|ct(?:orum de lazaro cardenas|órum de lázaro cárdenas)|t(?:a (?:a(?:na(?: (?:ateixtlahuaca|cuauht(?:emoc|émoc)|del valle|maya|nopalucan|t(?:avela|lapacoyan)|yareni|zegache))?|polonia teacalco)|b(?:arbara|árbara)|c(?:ata(?:lina quier(?:i|í)|rina(?: (?:ayometla|cuixtla|ixtepeji|juquila|l(?:achatao|oxicha)|m(?:echoac(?:an|án)|inas)|qui(?:an(?:e|é)|oquitani)|t(?:ayata|icu(?:a|á)|laltempan)|yosonot(?:u|ú)|zapoquila))?)|lara|ruz(?: (?:a(?:catepec|milpas)|de (?:bravo|juventino rosas)|itundujia|mixtepec|nundaco|papalutla|quilehtla|t(?:a(?:ca(?:che de mina|hua)|yata)|laxcala)|x(?:itla|oxocotl(?:an|án))|zenzontepec))?)|elena|gertrudis|i(?:n(?:es (?:ahuatempan|de(?: zaragoza|l monte)|yatzeche)|és (?:ahuatempan|de(?: zaragoza|l monte)|yatzeche))|sabel(?: (?:cholula|xiloxoxtla))?)|luc(?:ia (?:del camino|m(?:iahuatlan|onteverde)|ocotlan)|ía (?:del camino|m(?:iahuatlán|onteverde)|ocotlán))|ma(?:gdalena jicotl(?:an|án)|r(?:ia (?:a(?:lotepec|pazco|tzompa)|c(?:amotlan|h(?:achoapam|i(?:lchotla|malapa))|o(?:lotepec|rtijo|yotepec))|de(?: l(?:a paz|os angeles)|l (?:oro|r(?:io|osario)|tule))|ecatepec|gu(?:elace|ienagati)|hua(?:tulco|zolotitlan)|i(?:palapa|xcatlan)|ja(?:catepec|l(?:apa del marques|tianguis))|la(?: asuncion|chixio)|mixtequilla|n(?:ativitas|duayaco)|ozolotepec|p(?:apalo|e(?:noles|tapa))|quiegolani|sola|t(?:ataltepec|e(?:comavaca|maxcal(?:apa|tepec)|opoxco|pantlali|xcatitlan)|la(?:huitoltepec|lixtac)|o(?:nameca|tolapilla))|xadani|y(?:a(?:lina|vesia)|o(?:lotepec|soyua)|ucuhiti)|z(?:a(?:catepec|niza)|oquitlan))|ía (?:a(?:lotepec|pazco|tzompa)|c(?:amotlán|h(?:achoápam|i(?:lchotla|malapa))|o(?:lotepec|rtijo|yotepec))|de(?: l(?:a paz|os ángeles)|l (?:oro|r(?:osario|ío)|tule))|ecatepec|gu(?:elacé|ienagati)|hua(?:tulco|zolotitlán)|i(?:palapa|xcatlán)|ja(?:catepec|l(?:apa del marqués|tianguis))|la(?: asunción|chixío)|mixtequilla|n(?:ativitas|duayaco)|ozolotepec|p(?:e(?:tapa|ñoles)|ápalo)|quiegolani|sola|t(?:ataltepec|e(?:comavaca|maxcal(?:apa|tepec)|opoxco|pantlali|xcatitlán)|la(?:huitoltepec|lixtac)|o(?:nameca|tolapilla))|xadani|y(?:a(?:lina|vesía)|o(?:lotepec|soyúa)|ucuhiti)|z(?:a(?:catepec|niza)|oquitlán)))))|iago (?:a(?:moltepec|p(?:o(?:ala|stol)|óstol)|stata|titl(?:an|án)|yuquililla)|c(?:a(?:caloxtepec|motl(?:an|án))|ho(?:apam|ápam)|omaltepec)|de(?: anaya|l r(?:io|ío))|el pinar|hua(?:jolotitl(?:an|án)|uclilla)|i(?:huitl(?:an plumas|án plumas)|x(?:cuint(?:epec|la)|tayutla))|j(?:amiltepec|ocotepec|uxtlahuaca)|l(?:a(?:chiguiri|lopa|ollaga|xopa)|lano grande)|m(?:a(?:ravat(?:io|ío)|tatl(?:an|án))|i(?:ahuatl(?:an|án)|ltepec|nas))|n(?:acaltepec|ejapilla|iltepec|u(?:ndiche|yo(?:o|ó)))|p(?:apasquiaro|inotepa nacional)|s(?:ochiapan|uchilquitongo)|t(?:a(?:mazola|pextla)|e(?:nango|petlapa|tepec|x(?:calcingo|titl(?:an|án)))|il(?:antongo|lo)|lazoyaltepec|u(?:lantepec de lugo guerrero|xtla))|x(?:anica|iacu(?:i|í))|y(?:a(?:itepec|veo)|o(?:lom(?:ecatl|écatl)|sond(?:ua|úa))|ucuyachi)|z(?:acatepec|oochila))|o(?: (?:domingo(?: (?:a(?:lbarradas|rmenta)|chihuit(?:an|án)|de morelos|i(?:ngenio|xcatl(?:an|án))|nuxa(?:a|á)|ozolotepec|petapa|roayaga|t(?:e(?:huantepec|ojomulco|puxtepec)|latay(?:apam|ápam)|o(?:maltepec|nal(?:a|tepec|á)))|xagac(?:ia|ía)|y(?:anhuitl(?:an|án)|odohino)|zanatepec))?|tom(?:as(?: (?:hueyotlipan|jalieza|mazaltepec|ocotepec|tamazulapan))?|ás(?: (?:hueyotlipan|jalieza|mazaltepec|ocotepec|tamazulapan))?))|s reyes (?:nopala|p(?:apalo|ápalo)|tepejillo|yucun(?:a|á)))))|ric|tev(?:o|ó)|ucillo|yula(?: de alem(?:an|án))?)|e(?:nguio|y(?:baplaya|e|é))|i(?:erra mojada|l(?:a(?:cayo(?:apam|ápam)|o de la victoria)|tepec)|mojovel|n(?:a(?:loa|nch(?:e|é))|guilucan)|t(?:al(?:a|á)|io de xitlapehua))|o(?:c(?:hiapa|o(?:ltenango|nusco))|l(?:edad (?:atzompa|de (?:doblado|graciano s(?:anchez|ánchez))|etla)|idaridad|osuchiapa|tepec)|mbrerete|t(?:eapan|o la marina|uta)|y(?:a(?:l(?:o|ó)|niquilpan de ju(?:arez|árez))|opa))|u(?:aqui grande|c(?:hi(?:a(?:pa|te)|l)|il(?:a|á))|dzal|ltepec|ma|nuapa|s(?:ticac(?:an|án)|upuato))|áric|úchil)|t(?:a(?:basco|c(?:ambaro|otalpa|ámbaro)|h(?:dzi(?:u|ú)|mek)|l(?:a|pa de allende)|m(?:a(?:l(?:in|ín)|sopo|zu(?:l(?:a(?: de gordiano|pam del espiritu santo)?|ápam del espíritu santo)|nchale))|iahua|p(?:a(?:c(?:an|án)|mol(?:on corona|ón corona))|ico(?: alto)?)|u(?:in|ín))|n(?:c(?:anhuitz|itaro|oco|ítaro)|etze de zaragoza|ga(?:mandapio|nc(?:icuaro|ícuaro))|huato|iche|laj(?:as|ás)|qui(?:an de escobedo|án de escobedo)|t(?:ima|oyuca))|p(?:a(?:chula|l(?:apa|pa))|ilula)|r(?:andacuao|etan|im(?:baro|oro)|ímbaro)|squillo|ta(?:huicapan de ju(?:arez|árez)|ltepec de vald(?:es|és)|tila)|xco de alarc(?:on|ón))|e(?:a(?:bo|pa)|c(?:a(?:li(?: de herrera|tl(?:an|án))|mac(?:halco)?|te)|haluta de montenegro|o(?:anapa|h|l(?:otl(?:an|án)|utla)|m(?:a(?:n|tl(?:an|án))|án)|zautla)|pa(?:n de galeana|t(?:an|án))|uala|ámac)|hu(?:ac(?:an|án)|i(?:pango|tzingo))|jupilco|k(?:a(?:l de venegas|nt(?:o|ó)|x)|it|om)|l(?:chac pue(?:blo|rto)|oloapan)|m(?:a(?:matla|scal(?:apa|cingo|tepec)|x)|ixco|o(?:a(?:c|ya)|sachic|z(?:on|ón))|poal|ósachic)|n(?:a(?:bo|m(?:axtl(?:an|án)|p(?:a|ulco))|n(?:cingo|go de(?: doria|l (?:aire|valle))))|ejapa|o(?:chtitl(?:an|án)|sique))|o(?:c(?:altiche|elo|ocuilco de marcos p(?:erez|érez)|uitatl(?:an de corona|án de corona))|lo(?:cholco|yucan)|p(?:antl(?:an|án)|isca)|t(?:i(?:huac(?:an|án)|tl(?:an de(?: flores magon|l valle)|án de(?: flores magón|l valle)))|lalco|ongo))|p(?:a(?:che|k(?:an|án)|lc(?:atepec|ingo)|n(?:co de l(?:opez|ópez)|go de rodr(?:iguez|íguez))|t(?:itl(?:an de morelos|án de morelos)|laxco(?: de hidalgo)?))|e(?:a(?:ca|pulco)|c(?:hitl(?:an|án)|oacuilco de trujano)|hua(?:c(?:an de guerrero|án de guerrero)|nes)|ji del r(?:io de ocampo|ío de ocampo)|lmeme villa de morelos|maxalco|ojuma|t(?:itl(?:a(?: de lardiz(?:abal|ábal)|n)|án)|l(?:a(?:n|oxtoc)|ixpa|án)|ongo|zintla)|x(?:co|i de rodr(?:iguez|íguez))|ya(?:hualco(?: de cuauht(?:emoc|émoc))?|nco)|zal(?:a|á))|ic|o(?:tzotl(?:an|án)|ztl(?:an|án)))|qui(?:la|squiapan|xquiac)|rrenate|t(?:e(?:cala|l(?:a de(?: ocampo|l volc(?:an|án))|es de avila castillo)|pango)|i(?:pac|z)|la(?: de la solidaridad|tlahuca))|u(?:chitl(?:an|án)|l de gonzalez ortega)|x(?:c(?:a(?:l(?:titl(?:an|án)|yacac)|tepec)|oco)|huac(?:an|án)|istepec)|ya|z(?:iutl(?:an|án)|o(?:n(?:apa|tepec de aldama)|yuca))|úl de gonzález ortega)|i(?:anguis(?:manalco|ten(?:co|go))|cul|erra (?:blanca|nueva)|huatl(?:an|án)|juana|la(?:pa)?|m(?:ilpan|ucuy)|n(?:g(?:ambato|uindin|üindín)|um)|quicheo de nicol(?:as romero|ás romero)|x(?:cacalcupul|kokob|mehuac|p(?:ehual|éhual)|tla de guerrero)|z(?:a(?:p(?:an el alto|án el alto)|yuca)|im(?:in|ín)))|l(?:a(?:c(?:hich(?:ilco|uca)|o(?:a(?:chistlahuaca|pa)|jalpan|lula(?: de matamoros|n)|t(?:alpan|epec (?:de (?:benito ju(?:arez|árez)|mej(?:ia|ía))|plumas)))|uilotepec)|hu(?:a(?:c|lilo|pan)|elilpan|iltepa)|jomulco de z(?:uniga|úñiga)|l(?:chapa|ix(?:coyan|ta(?:c de cabrera|quilla de maldonado))|manalco|ne(?:lhuayocan|pantla(?: de baz)?)|p(?:an|ujahua)|t(?:e(?:nango(?: de s(?:anchez roman|ánchez román))?|tela)|izap(?:an de zapata|án de zapata)))|n(?:alapa|chinol|epantla)|ola|p(?:a(?: de comonfort|coya(?:n)?|nal(?:a|á))|ehuala)|quil(?:pa|tenango)|tla(?:uquitepec|ya)|xc(?:ala|o(?:apan)?)|yacapan|zazalca)|ilapan|áhuac)|o(?:c(?:atl(?:an|án)|h(?:imilco|tepec)|umbo)|l(?:cayuca|im(?:an|án)|uca)|matl(?:an|án)|n(?:a(?:l(?:a|á)|nitla|tico|y(?:a(?:n)?|án))|ila)|pia|rre(?:on|ón)|t(?:atiche|o(?:l(?:a(?:c|pa(?:n)?)|tepec de guerrero)|ntepec villa de morelos|tl(?:an|án))|utla))|r(?:ancoso|es valles|in(?:cheras|idad (?:garc(?:ia de la cadena|ía de la cadena)|zaachila)))|u(?:butama|l(?:a(?: de allende|ncingo de bravo)?|cingo|t(?:epec|itl(?:an|án))|um)|mb(?:al(?:a|á)|iscat(?:io|ío))|nk(?:as|ás)|ricato|x(?:c(?:acuesco|ueca)|pan|t(?:illa|la (?:chico|guti(?:errez|érrez))))|za(?:mapan de galeana|nt(?:an|la|án)))|z(?:i(?:catlacoyan|mol|ntzuntzan|tzio)|ompantepec|ucacab)|écpan de galeana)|u(?:ayma|c(?:u|ú)|m(?:an|án)|ni(?:on (?:de (?:san antonio|tula)|hidalgo|juarez)|ón (?:de (?:san antonio|tula)|hidalgo|juárez))|r(?:es|i(?:angato|que)|sulo galv(?:an|án)|ua(?:chi|pan))|xpanapa)|v(?:a(?:l(?:erio trujano|l(?:adolid|e(?: (?:de (?:bravo|chalco solidaridad|guadalupe|ju(?:arez|árez)|santiago|zaragoza)|hermoso)|cillo))|para(?:iso|íso))|negas)|e(?:ga de alatorre|n(?:ado|ustiano carranza)|racruz|tagrande)|i(?:cente guerrero|esca|lla(?: (?:aldama|co(?:maltitl(?:an|án)|r(?:ona|zo))|d(?:e(?: (?:a(?:l(?:lende|varez)|r(?:ista|riaga))|c(?:hilapa de d(?:iaz|íaz)|os)|etla|guadalupe|la paz|r(?:amos|eyes)|santiago chazumba|t(?:amazul(?:apam del progreso|ápam del progreso)|ezontepec|ututepec)|zaachila|álvarez)|l carb(?:on|ón))|iaz ordaz|íaz ordaz)|g(?:arc(?:ia|ía)|onz(?:alez ortega|ález ortega)|uerrero)|hidalgo|ju(?:arez|árez)|p(?:esqueira|urificaci(?:on|ón))|sola de vega|t(?:alea de castro|ej(?:upam de la union|úpam de la unión))|uni(?:on|ón)|victoria)|flores|gr(?:an|án)|ldama|mar)|sta hermosa))|x(?:a(?:l(?:a(?:pa|tlaco)|isco|oztoc|patl(?:ahuac|áhuac)|tocan)|yacatl(?:an de bravo|án de bravo))|i(?:c(?:h(?:u|ú)|o(?:htzinco|t(?:e(?:ncatl|pec)|l(?:an|án)|éncatl))?)|litla|utetelco)|o(?:c(?:chel|hi(?:a(?:pulco|tipan)|coatl(?:an|án)|huehuetl(?:an|án)|ltepec|milco|stlahuaca|t(?:epec|l(?:an (?:de vicente suarez|todos santos)|án (?:de vicente suárez|todos santos)))))|nacatl(?:an|án)|xocotla))|y(?:a(?:hualica(?: de gonz(?:alez gallo|ález gallo))?|jal(?:on|ón)|nga|on(?:ahuac|áhuac)|u(?:hquemehcan|tepec)|x(?:cab(?:a|á)|e|kukul))|e(?:c(?:apixtla|ora|uatla)|hualtepec)|o(?:ba(?:in|ín)|gana)|u(?:r(?:ecuaro|iria|écuaro)|tanduchi de guerrero)|écora)|z(?:a(?:c(?:a(?:p(?:ala|oaxtla|u)|t(?:e(?:cas|lco|pec)|l(?:an|án))|zonapan)|oalco de torres|ual(?:pan(?: de amilpas)?|tip(?:an de angeles|án de ángeles)))|po(?:pan|t(?:i(?:ltic|tl(?:an(?: (?:de (?:mendez|vadillo)|lagunas|palmas|tablas))?|án(?: (?:de (?:méndez|vadillo)|lagunas|palmas|tablas))?))|l(?:an(?: (?:de(?: juarez|l rey)|el grande)|ejo)|án (?:de(?: juárez|l rey)|el grande))))|utla)|e(?:mpoala|ntla)|i(?:huat(?:anejo de azueta|eutla)|ltlalt(?:epec de trinidad sanchez santos|épec de trinidad sánchez santos)|ma(?:p(?:an|án)|tl(?:an de alvarez|án de álvarez))|n(?:a(?:ca(?:nt(?:an|epec|án)|tepec)|p(?:aro|ecuaro|écuaro))|áparo)|r(?:a(?:cuaretiro|ndaro)|ándaro)|t(?:acuaro|lala|ácuaro))|o(?:n(?:go(?:lica|zotla)|tecomatl(?:an de lopez y fuentes|án de lópez y fuentes))|qui(?:apan|tl(?:an|án))|zocolco de hidalgo)|umpa(?:huac(?:an|án)|ngo))|á(?:l(?:amo temapache|varo obregón)|nimas trujano)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L2_CLAVE_MUNICIPIO - Path",
       "framework": "PATH",
       "domain": "MX_L2_CLAVE_MUNICIPIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1784,27 +1844,30 @@
       }
     },
     {
-      "name": "MX_L2_CLAVE_MUNICIPIO - List",
-      "framework": "LIST",
+      "name": "MX_L2_CLAVE_MUNICIPIO - Values",
+      "framework": "REGEX",
       "domain": "MX_L2_CLAVE_MUNICIPIO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-clave-municipio.txt",
-            "matchStrength": 0.5
+            "note": "2758 — 01001 · 1001 · 01002 · 1002 · 01003 · 1003 · …",
+            "regex": "0*(?:(?:1(?:0(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)?|2(?:0|1|2|3|4|5|6|7|8|9)?|3(?:0|1|2|3|4|5|6|7|8|9)?|4|5|6|7|8|9)|1(?:0|1))|10(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6))|20(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1))|30(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4))|4(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5)))|5(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5)))|6(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3)))|70(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6))|80(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|20)|90(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1)))|2(?:0(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)?|2(?:0|1|2|3|4|5|6|7|8|9)?|3(?:0|1|2|3|4|5|6|7|8|9)?|4(?:0|1|2|3|4|5|6|7|8|9)?|5(?:0|1|2|3|4|5|6|7|8|9)?|6(?:0|1|2|3|4|5|6|7|8|9)?|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|2(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|3(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|4(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|5(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|70))|1(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|2(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7)))|20(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8))|30(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1))|40(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8))|50(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8))|60(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2))|70(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7))|80(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3))|90(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|60))|3(?:0(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)?|2(?:0|1|2|3|4|5|6|7|8|9)?|3(?:0|1|2|3|4|5|6|7|8|9)?|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)?|9(?:0|1|2|3|4|5|6|7|8|9)?)|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|2(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2)))|1(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|5|6|7|8|9))|10(?:0|1|2|3|4|5|6))|20(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8)))|40(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2))|50(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8))|60(?:0(?:1|2|3|4|5|6|7|8|9)|10)|7(?:0(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7|8|9)|7(?:0|1|2|3|4|5|6|7|8|9)|8(?:0|1|2|3|4|5|6|7|8|9)|9(?:0|1|2|3|4|6|7|8|9))|1(?:0(?:0|1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5)))|80(?:0(?:1|2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7|8|9)|2(?:0|1|2|3|4|5|6|7|8|9)|3(?:0|1|2|3|4|5|6|7|8|9)|4(?:0|1|2|3|4|5|6|7|8|9)|5(?:0|1|2|3|4|5|6|7|8|9)|6(?:0|1|2|3|4|5|6|7))|90(?:0(?:2|3|4|5|6|7|8|9)|1(?:0|1|2|3|4|5|6|7))))",
+            "matchStrength": 0.5,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "MX_L2_LOCALIDAD - Path",
       "framework": "PATH",
       "domain": "MX_L2_LOCALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1823,7 +1886,7 @@
       "name": "MX_L2_COLONIA - Path",
       "framework": "PATH",
       "domain": "MX_L2_COLONIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1842,7 +1905,7 @@
       "name": "MX_L2_CODIGO_POSTAL - Path",
       "framework": "PATH",
       "domain": "MX_L2_CODIGO_POSTAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1865,12 +1928,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{5}",
+            "regex": "0*(?:\\d{5})",
             "matchStrength": 0.2,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -1880,7 +1943,7 @@
       "name": "MX_L2_NACIONALIDAD - Path",
       "framework": "PATH",
       "domain": "MX_L2_NACIONALIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1896,27 +1959,30 @@
       }
     },
     {
-      "name": "MX_L2_NACIONALIDAD - List",
-      "framework": "LIST",
+      "name": "MX_L2_NACIONALIDAD - Values",
+      "framework": "REGEX",
       "domain": "MX_L2_NACIONALIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-nacionalidades.txt",
-            "matchStrength": 0.7
+            "note": "50 — Mexicana · Estadounidense · Guatemalteca · Hondureña · Salvadoreña · Venezolana · …",
+            "regex": "(?iu)(?:(?:a(?:lem(?:an(?:a)?|án)|rgentin(?:a|o))|brasile(?:n(?:a|o)|ñ(?:a|o))|c(?:anadiense|hi(?:len(?:a|o)|n(?:a|o))|olombia(?:n(?:a|o))?|uba(?:n(?:a|o))?)|e(?:l salvador|s(?:pa(?:nol(?:a)?|ñol(?:a)?)|tado(?:s unidos|unidense))|xtranjer(?:a|o))|franc(?:es(?:a)?|és)|guatemal(?:a|tec(?:a|o))|h(?:ait(?:i(?:an(?:a|o))?|í)|ondur(?:as|e(?:n(?:a|o)|ñ(?:a|o))))|italian(?:a|o)|m(?:exic(?:an(?:a|o)|o)|éxico)|nicarag(?:uense|üense)|peruan(?:a|o)|salvadore(?:n(?:a|o)|ñ(?:a|o))|venez(?:olan(?:a|o)|uela)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L2_ESTADO_CIVIL - Path",
       "framework": "PATH",
       "domain": "MX_L2_ESTADO_CIVIL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1932,27 +1998,30 @@
       }
     },
     {
-      "name": "MX_L2_ESTADO_CIVIL - List",
-      "framework": "LIST",
+      "name": "MX_L2_ESTADO_CIVIL - Values",
+      "framework": "REGEX",
       "domain": "MX_L2_ESTADO_CIVIL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-estado-civil.txt",
-            "matchStrength": 0.7
+            "note": "19 — soltero · soltera · casado · casada · unión libre · union libre · …",
+            "regex": "(?iu)(?:(?:c(?:asad(?:a|o)|oncubin(?:a(?:to)?|o))|divorc(?:ed|iad(?:a|o))|married|s(?:eparad(?:a|o)|ingle|olter(?:a|o))|uni(?:on libre|ón libre)|viud(?:a|o)|widowed))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L2_OCUPACION - Path",
       "framework": "PATH",
       "domain": "MX_L2_OCUPACION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1971,7 +2040,7 @@
       "name": "MX_L2_EMPLEADOR - Path",
       "framework": "PATH",
       "domain": "MX_L2_EMPLEADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -1990,7 +2059,7 @@
       "name": "MX_L2_ESCOLARIDAD - Path",
       "framework": "PATH",
       "domain": "MX_L2_ESCOLARIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2006,27 +2075,30 @@
       }
     },
     {
-      "name": "MX_L2_ESCOLARIDAD - List",
-      "framework": "LIST",
+      "name": "MX_L2_ESCOLARIDAD - Values",
+      "framework": "REGEX",
       "domain": "MX_L2_ESCOLARIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-escolaridad.txt",
-            "matchStrength": 0.6
+            "note": "23 — Sin escolaridad · Preescolar · Primaria incompleta · Primaria completa · Secundaria incompleta · Secundaria completa · …",
+            "regex": "(?iu)(?:(?:bachillerato|carrera t(?:ecnica(?: o comercial)?|écnica(?: o comercial)?)|doctorado|licenciatura|maestr(?:ia|ía)|n(?:ingun(?:a|o)|ormal)|p(?:osgrado|r(?:e(?:escolar|paratoria(?: o bachillerato)?)|imaria(?: (?:completa|incompleta))?|ofesional))|s(?:ecundaria(?: (?:completa|incompleta))?|in escolaridad)|t(?:ecnico|écnico)|universidad))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L2_ESCUELA - Path",
       "framework": "PATH",
       "domain": "MX_L2_ESCUELA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2045,7 +2117,7 @@
       "name": "MX_L2_CCT - Path",
       "framework": "PATH",
       "domain": "MX_L2_CCT",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2068,12 +2140,12 @@
       "config": {
         "dataPatterns": [
           {
-            "regex": "\\d{2}[A-Z]{3}\\d{4}[A-Z]",
+            "regex": "0*(?:\\d{2}[A-Z]{3}\\d{4}[A-Z])",
             "matchStrength": 0.9,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2083,7 +2155,7 @@
       "name": "MX_L2_DEPENDIENTES - Path",
       "framework": "PATH",
       "domain": "MX_L2_DEPENDIENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2123,7 +2195,7 @@
       "name": "MX_L3_ETNIA - Path",
       "framework": "PATH",
       "domain": "MX_L3_ETNIA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2139,31 +2211,48 @@
       }
     },
     {
-      "name": "MX_L3_ETNIA - List",
-      "framework": "LIST",
+      "name": "MX_L3_ETNIA - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_ETNIA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-pueblos.txt",
-            "matchStrength": 0.9
+            "note": "87 — Nahua · Maya · Zapoteco · Mixteco · Otomí · Totonaco · …",
+            "regex": "(?iu)(?:(?:a(?:fro(?:descendiente|mexican(?:a|o))|muzg(?:a|o)|yuuk)|c(?:h(?:'ol|atin(?:a|o)|inanteco|o(?:l|ntal de tabasco))|o(?:mcaac|ra))|h(?:a shuta enima|nahnu|u(?:a(?:stec(?:a|o)|ve)|ichol)|ñähñu)|i(?:koots|nd(?:igena|ígena))|j(?:natho|ñatho)|k(?:ickapoo|umiai)|lacand(?:on|ón)|m(?:a(?:m|y(?:a(?: peninsular)?|o)|za(?:hua|teco))|e(?:'phaa|xicanero)|ix(?:e|tec(?:a|o))|oreno)|n(?:a(?:ayeri|hua(?:tl)?)|egr(?:a|o)|hanu|inguno|o (?:ind(?:igena|ígena)|se considera ind(?:igena|ígena))|uu sa(?:u|vi)|á(?:ayeri|huatl))|o(?:'dam|tom(?:i|í))|p(?:'urh(?:epecha|épecha)|ame|opol(?:oca|uca)|ur(?:epecha|épecha))|rar(?:amuri|ámuri)|seri|t(?:ara(?:humara|sco)|e(?:enek|nek|pehua(?:no)?)|lapanec(?:a|o)|o(?:jolabal|tonac(?:a|o))|riqui|s(?:eltal|otsil)|z(?:eltal|otzil)|ének)|wix(?:arika|árika)|y(?:aqui|o(?:eme|kot|reme)|ucateco)|z(?:apotec(?:a|o)|oque)|ñ(?:hañu|uu sa(?:u|vi))))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "file": "preset-file://mx-detectar-bandera.txt",
-            "matchStrength": 0.3
+            "note": "7 — s · n · sí · no · y · 0 · …",
+            "regex": "0*(?:(?:0|1))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          },
+          {
+            "note": "7 — s · n · sí · no · y · 0 · …",
+            "regex": "(?iu)(?:(?:n(?:o)?|s(?:i|í)?|y))",
+            "matchStrength": 0.3,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_LENGUA_INDIGENA - Path",
       "framework": "PATH",
       "domain": "MX_L3_LENGUA_INDIGENA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2179,27 +2268,30 @@
       }
     },
     {
-      "name": "MX_L3_LENGUA_INDIGENA - List",
-      "framework": "LIST",
+      "name": "MX_L3_LENGUA_INDIGENA - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_LENGUA_INDIGENA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-lenguas.txt",
-            "matchStrength": 0.8
+            "note": "46 — Náhuatl · Maya · Tseltal · Tsotsil · Mixteco · Zapoteco · …",
+            "regex": "(?iu)(?:(?:a(?:muzgo|yuuk)|c(?:h(?:'ol|atino|inanteco|ol)|ora)|espa(?:nol|ñol)|h(?:nahnu|u(?:asteco|ichol)|ñähñu)|m(?:a(?:y(?:a|o)|za(?:hua|teco))|ix(?:e|teco))|n(?:ahuatl|inguna|o habla(?: lengua ind(?:igena|ígena))?|áhuatl)|otom(?:i|í)|pur(?:epecha|épecha)|rar(?:amuri|ámuri)|t(?:ara(?:humara|sco)|enek|lapaneco|o(?:jolabal|tonac(?:a|o))|riqui|s(?:eltal|otsil)|z(?:eltal|otzil)|ének)|wix(?:arika|árika)|yaqui|z(?:apoteco|oque)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_SALUD_DIAGNOSTICO - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_DIAGNOSTICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2227,7 +2319,7 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -2237,7 +2329,7 @@
       "name": "MX_L3_SALUD_MEDICAMENTO - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_MEDICAMENTO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2253,27 +2345,30 @@
       }
     },
     {
-      "name": "MX_L3_SALUD_MEDICAMENTO - List",
-      "framework": "LIST",
+      "name": "MX_L3_SALUD_MEDICAMENTO - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_SALUD_MEDICAMENTO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-medicamentos.txt",
-            "matchStrength": 0.7
+            "note": "54 — Paracetamol · Ibuprofeno · Naproxeno · Metamizol · Ketorolaco · Diclofenaco · …",
+            "regex": "(?iu)(?:(?:a(?:cido (?:acetilsalicilico|valproico)|lprazolam|m(?:broxol|lodipino|oxicilina)|ripiprazol|torvastatina)|b(?:ezafibrato|ictegravir|utilhioscina)|c(?:a(?:ptopril|rbonato de litio)|iprofloxacino|lo(?:nazepam|rfenamina)|omplejo b)|d(?:i(?:azepam|clofenaco)|olutegravir)|e(?:favirenz|mtricitabina|nalapril|scitalopram)|fluoxetina|glibenclamida|i(?:buprofeno|nsulina(?: glargina)?)|ketorolaco|l(?:ev(?:etiracetam|o(?:norgestrel|tiroxina))|itio|o(?:ratadina|sart(?:an|án)))|m(?:et(?:amizol|formina|ilfenidato)|i(?:fepristona|soprostol))|na(?:ltrexona|proxeno)|o(?:lanzapina|meprazol)|p(?:ar(?:acetamol|oxetina)|rednisona)|quetiapina|risperidona|s(?:albutamol|ertralina)|tenofovir|warfarina|ácido (?:acetilsalicílico|valproico)))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "MX_L3_SALUD_IDENTIFICADOR - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_IDENTIFICADOR",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2300,7 +2395,7 @@
       "name": "MX_L3_SALUD_TEXTO_CLINICO - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_TEXTO_CLINICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2336,7 +2431,7 @@
       "name": "MX_L3_SALUD_RESULTADO_EXAMEN - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_RESULTADO_EXAMEN",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2363,7 +2458,7 @@
       "name": "MX_L3_SALUD_GRUPO_SANGUINEO - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_GRUPO_SANGUINEO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2379,27 +2474,30 @@
       }
     },
     {
-      "name": "MX_L3_SALUD_GRUPO_SANGUINEO - List",
-      "framework": "LIST",
+      "name": "MX_L3_SALUD_GRUPO_SANGUINEO - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_SALUD_GRUPO_SANGUINEO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-grupo-sanguineo.txt",
-            "matchStrength": 0.9
+            "note": "26 — A · A- · B · B- · AB · AB- · …",
+            "regex": "(?iu)(?:(?:0(?:\\+|-)|a(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-|b(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-))|b(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-)|o(?: (?:negativo|positivo|rh(?:\\+|-))|\\+|-)))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_SALUD_DISCAPACIDAD - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_DISCAPACIDAD",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2415,27 +2513,30 @@
       }
     },
     {
-      "name": "MX_L3_SALUD_DISCAPACIDAD - List",
-      "framework": "LIST",
+      "name": "MX_L3_SALUD_DISCAPACIDAD - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_SALUD_DISCAPACIDAD",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-discapacidad.txt",
-            "matchStrength": 0.6
+            "note": "20 — Caminar subir o bajar · Ver aun usando lentes · Oír aun usando aparato auditivo · Hablar o comunicarse · Recordar o concentrarse · Bañarse vestirse o comer · …",
+            "regex": "(?iu)(?:(?:auditiva|ba(?:narse, vestirse o comer|ñarse, vestirse o comer)|c(?:aminar, subir o bajar|ondici(?:on mental|ón mental))|de lenguaje|f(?:isica|ísica)|hablar o comunicarse|intelectual|m(?:ental|otriz|ultiple|últiple)|ninguna|o(?:ir, aun usando aparato auditivo|ír, aun usando aparato auditivo)|psicosocial|recordar o concentrarse|s(?:ensorial|in (?:discapacidad|limitaci(?:on|ón)))|v(?:er, aun usando lentes|isual)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "MX_L3_SALUD_SEXUAL_REPRODUCTIVA - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_SEXUAL_REPRODUCTIVA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2454,7 +2555,7 @@
       "name": "MX_L3_SALUD_MENTAL_ADICCIONES - Path",
       "framework": "PATH",
       "domain": "MX_L3_SALUD_MENTAL_ADICCIONES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2473,7 +2574,7 @@
       "name": "MX_L3_BIOMETRICO - Path",
       "framework": "PATH",
       "domain": "MX_L3_BIOMETRICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2508,7 +2609,7 @@
       "name": "MX_L3_INFORMACION_GENETICA - Path",
       "framework": "PATH",
       "domain": "MX_L3_INFORMACION_GENETICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2524,10 +2625,29 @@
       }
     },
     {
+      "name": "MX_L3_INFORMACION_GENETICA - Regex",
+      "framework": "REGEX",
+      "domain": "MX_L3_INFORMACION_GENETICA",
+      "description": "Formato de los valores.",
+      "config": {
+        "dataPatterns": [
+          {
+            "regex": "[ACGTUN]{24,}",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
+          }
+        ],
+        "rejectStrength": 0.3
+      }
+    },
+    {
       "name": "MX_L3_PREFERENCIA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "MX_L3_PREFERENCIA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2543,27 +2663,30 @@
       }
     },
     {
-      "name": "MX_L3_PREFERENCIA_SEXUAL - List",
-      "framework": "LIST",
+      "name": "MX_L3_PREFERENCIA_SEXUAL - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_PREFERENCIA_SEXUAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-preferencia-sexual.txt",
-            "matchStrength": 0.8
+            "note": "17 — Heterosexual · Homosexual · Lesbiana · Gay · Bisexual · Pansexual · …",
+            "regex": "(?iu)(?:(?:asexual|bisexual|gay|h(?:etero(?:sexual)?|omo(?:sexual)?)|l(?:esbian(?:a)?|gbt(?:iq\\+)?)|no responde|otra|p(?:ansexual|refiere no responder)|queer|straight))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_IDENTIDAD_GENERO - Path",
       "framework": "PATH",
       "domain": "MX_L3_IDENTIDAD_GENERO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2579,27 +2702,30 @@
       }
     },
     {
-      "name": "MX_L3_IDENTIDAD_GENERO - List",
-      "framework": "LIST",
+      "name": "MX_L3_IDENTIDAD_GENERO - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_IDENTIDAD_GENERO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-identidad-genero.txt",
-            "matchStrength": 0.7
+            "note": "16 — Mujer · Hombre · Mujer trans · Hombre trans · No binario · Género fluido · …",
+            "regex": "(?iu)(?:(?:cisg(?:enero|énero)|femenino|g(?:enero fluido|énero fluido)|hombre(?: trans)?|m(?:asculino|u(?:jer(?: trans)?|xe))|no binari(?:a|e|o)|otra|prefiere no responder|trans(?:g(?:enero|énero))?))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_VIDA_SEXUAL - Path",
       "framework": "PATH",
       "domain": "MX_L3_VIDA_SEXUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2618,7 +2744,7 @@
       "name": "MX_L3_RELIGION - Path",
       "framework": "PATH",
       "domain": "MX_L3_RELIGION",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2634,27 +2760,30 @@
       }
     },
     {
-      "name": "MX_L3_RELIGION - List",
-      "framework": "LIST",
+      "name": "MX_L3_RELIGION - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_RELIGION",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-religiones.txt",
-            "matchStrength": 0.9
+            "note": "37 — Católica · Protestante o cristiana evangélica · Pentecostal · Testigo de Jehová · Adventista del Séptimo Día · Iglesia de Jesucristo de los Santos de los Últimos Días · …",
+            "regex": "(?iu)(?:(?:a(?:dventista(?: del s(?:eptimo dia|éptimo día))?|gn(?:ostic(?:a|o)|óstic(?:a|o))|te(?:a|o))|budis(?:mo|ta)|c(?:at(?:olic(?:a|o)|ólic(?:a|o))|r(?:eyente|istian(?:a|o)))|e(?:spiritualista|vang(?:elic(?:a|o)|élic(?:a|o)))|i(?:glesia de jesucristo de los santos de los (?:ultimos dias|últimos días)|sl(?:am(?:ica)?|ámica))|jud(?:aica|i(?:a|o)|í(?:a|o))|luz del mundo|m(?:orm(?:on|ón)|usulm(?:an|án))|ninguna|otra(?: religi(?:on|ón))?|p(?:entecostal|rotestante(?: o cristiana evang(?:elica|élica))?)|sin (?:adscripci(?:on religiosa|ón religiosa)|religi(?:on|ón))|testigo(?: de jehov(?:a|á)|s de jehov(?:a|á))))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_CREENCIA_FILOSOFICA_MORAL - Path",
       "framework": "PATH",
       "domain": "MX_L3_CREENCIA_FILOSOFICA_MORAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2673,7 +2802,7 @@
       "name": "MX_L3_OPINION_POLITICA - Path",
       "framework": "PATH",
       "domain": "MX_L3_OPINION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2689,27 +2818,30 @@
       }
     },
     {
-      "name": "MX_L3_OPINION_POLITICA - List",
-      "framework": "LIST",
+      "name": "MX_L3_OPINION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_OPINION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-opiniones-politicas.txt",
-            "matchStrength": 0.7
+            "note": "14 — Izquierda · Centro izquierda · Centro · Centro derecha · Derecha · Sin preferencia · …",
+            "regex": "(?iu)(?:(?:apartidista|c(?:entro(?: (?:derecha|izquierda)|derecha|izquierda)?|onservador)|derecha|izquierda|liberal|ninguna|pr(?:efiere no responder|ogresista)|sin preferencia))",
+            "matchStrength": 0.7,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_AFILIACION_POLITICA - Path",
       "framework": "PATH",
       "domain": "MX_L3_AFILIACION_POLITICA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2725,27 +2857,30 @@
       }
     },
     {
-      "name": "MX_L3_AFILIACION_POLITICA - List",
-      "framework": "LIST",
+      "name": "MX_L3_AFILIACION_POLITICA - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_AFILIACION_POLITICA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-partidos.txt",
-            "matchStrength": 0.8
+            "note": "29 — Morena · Partido Acción Nacional · Partido Revolucionario Institucional · Partido del Trabajo · Partido Verde Ecologista de México · Movimiento Ciudadano · …",
+            "regex": "(?iu)(?:(?:candidatura independiente|fuerza por m(?:exico|éxico)|independiente|m(?:c|o(?:rena|vimiento (?:ciudadano|regeneraci(?:on nacional|ón nacional))))|n(?:inguno|ueva alianza)|p(?:a(?:n(?:al)?|rtido (?:acci(?:on nacional|ón nacional)|de(?: la revoluci(?:on democratica|ón democrática)|l trabajo)|encuentro solidario|paz|revolucionario institucional|verde ecologista de m(?:exico|éxico))|z)|es|r(?:d|i)|t|vem)|redes sociales progresistas|s(?:in (?:militancia|partido)|omos m(?:exico|éxico))))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_L3_AFILIACION_SINDICAL - Path",
       "framework": "PATH",
       "domain": "MX_L3_AFILIACION_SINDICAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2761,27 +2896,30 @@
       }
     },
     {
-      "name": "MX_L3_AFILIACION_SINDICAL - List",
-      "framework": "LIST",
+      "name": "MX_L3_AFILIACION_SINDICAL - Values",
+      "framework": "REGEX",
       "domain": "MX_L3_AFILIACION_SINDICAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-sindicatos.txt",
-            "matchStrength": 0.6
+            "note": "15 — SNTE · CNTE · STPRM · SUTERM · CTM · CROC · …",
+            "regex": "(?iu)(?:(?:c(?:nte|onfianza|ro(?:c|m)|tm)|fstse|s(?:indica(?:lizado|to nacional de trabajadores de la educaci(?:on|ón))|me|nt(?:e|ss)|t(?:prm|rm|unam)|uterm)))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "MX_FIN_BURO_CREDITO - Path",
       "framework": "PATH",
       "domain": "MX_FIN_BURO_CREDITO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2800,7 +2938,7 @@
       "name": "MX_FIN_MONTO_DEUDA - Path",
       "framework": "PATH",
       "domain": "MX_FIN_MONTO_DEUDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2835,7 +2973,7 @@
       "name": "MX_FIN_INGRESO_MENSUAL - Path",
       "framework": "PATH",
       "domain": "MX_FIN_INGRESO_MENSUAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2870,7 +3008,7 @@
       "name": "MX_FIN_SALARIO_DIARIO - Path",
       "framework": "PATH",
       "domain": "MX_FIN_SALARIO_DIARIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2905,7 +3043,7 @@
       "name": "MX_FIN_PATRIMONIO - Path",
       "framework": "PATH",
       "domain": "MX_FIN_PATRIMONIO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2940,7 +3078,7 @@
       "name": "MX_FIN_AFORE - Path",
       "framework": "PATH",
       "domain": "MX_FIN_AFORE",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -2956,27 +3094,30 @@
       }
     },
     {
-      "name": "MX_FIN_AFORE - List",
-      "framework": "LIST",
+      "name": "MX_FIN_AFORE - Values",
+      "framework": "REGEX",
       "domain": "MX_FIN_AFORE",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-afores.txt",
-            "matchStrength": 0.9
+            "note": "27 — Afore Azteca · Afore Banamex · Afore Coppel · Afore Inbursa · Afore Invercap · PensionISSSTE · …",
+            "regex": "(?iu)(?:(?:a(?:fore (?:azteca|banamex|coppel|in(?:bursa|vercap)|pr(?:incipal|ofuturo)|sura|xxi banorte)|zteca)|ban(?:amex|orte)|c(?:itibanamex|oppel|uenta asignada)|in(?:bursa|vercap)|p(?:ensionissste|r(?:estadora de servicios|incipal|ofuturo(?: gnp)?))|s(?:in afore|ura)|xxi(?: banorte)?))",
+            "matchStrength": 0.9,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_FIN_SALDO_RETIRO - Path",
       "framework": "PATH",
       "domain": "MX_FIN_SALDO_RETIRO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3011,7 +3152,7 @@
       "name": "MX_FIN_CREDITO_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "MX_FIN_CREDITO_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3027,27 +3168,30 @@
       }
     },
     {
-      "name": "MX_FIN_CREDITO_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "MX_FIN_CREDITO_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "MX_FIN_CREDITO_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-credito-vivienda.txt",
-            "matchStrength": 0.8
+            "note": "14 — Crédito Infonavit · Crédito Fovissste · Cofinavit · Crédito hipotecario bancario · Crédito de otra institución · Sin crédito de vivienda · …",
+            "regex": "(?iu)(?:(?:bancario|c(?:ofinavit|r(?:edito (?:de otra institucion|fovissste|hipotecario bancario|infonavit)|édito (?:de otra institución|fovissste|hipotecario bancario|infonavit)))|fovissste|hipotecario|infonavit|mejoravit|ninguno|sin cr(?:edito(?: de vivienda)?|édito(?: de vivienda)?)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_FIN_SEGURIDAD_SOCIAL - Path",
       "framework": "PATH",
       "domain": "MX_FIN_SEGURIDAD_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3063,27 +3207,30 @@
       }
     },
     {
-      "name": "MX_FIN_SEGURIDAD_SOCIAL - List",
-      "framework": "LIST",
+      "name": "MX_FIN_SEGURIDAD_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "MX_FIN_SEGURIDAD_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-seguridad-social.txt",
-            "matchStrength": 0.8
+            "note": "21 — IMSS · ISSSTE · ISSSTE estatal · IMSS-Bienestar · Pemex · Sedena · …",
+            "regex": "(?iu)(?:(?:i(?:mss(?: bienestar|-bienestar)?|nsabi|ssste(?: estatal)?)|n(?:inguna|o (?:afiliado|derechohabiente))|otra instituci(?:on|ón)|p(?:emex|rivado)|s(?:e(?:dena|guro p(?:opular|rivado)|mar)|in derechohabiencia)))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_FIN_PROGRAMA_SOCIAL - Path",
       "framework": "PATH",
       "domain": "MX_FIN_PROGRAMA_SOCIAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3099,27 +3246,30 @@
       }
     },
     {
-      "name": "MX_FIN_PROGRAMA_SOCIAL - List",
-      "framework": "LIST",
+      "name": "MX_FIN_PROGRAMA_SOCIAL - Values",
+      "framework": "REGEX",
       "domain": "MX_FIN_PROGRAMA_SOCIAL",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-programas.txt",
-            "matchStrength": 0.8
+            "note": "25 — Pensión para el Bienestar de las Personas Adultas Mayores · Pensión Mujeres Bienestar · Pensión para el Bienestar de las Personas con Discapacidad · Beca Universal Rita Cetina · Beca Universal Benito Juárez · Jóvenes Construyendo el Futuro · …",
+            "regex": "(?iu)(?:(?:65 y m(?:as|ás)|adultos mayores|beca (?:benito ju(?:arez|árez)|rita cetina|universal (?:benito ju(?:arez|árez)|rita cetina))|j(?:ovenes (?:construyendo el futuro|escribiendo el futuro)|óvenes (?:construyendo el futuro|escribiendo el futuro))|liconsa|ninguno|oportunidades|p(?:ensi(?:on (?:bienestar|mujeres bienestar|para el bienestar de las personas (?:adultas mayores|con discapacidad))|ón (?:bienestar|mujeres bienestar|para el bienestar de las personas (?:adultas mayores|con discapacidad)))|ro(?:ducci(?:on para el bienestar|ón para el bienestar)|gr(?:ama para el bienestar de ni(?:nas y ninos|ñas y niños)|esa)|spera))|sembrando vida|tandas para el bienestar|vivienda para el bienestar))",
+            "matchStrength": 0.8,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.4,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.4
       }
     },
     {
       "name": "MX_FIN_NIVEL_SOCIOECONOMICO - Path",
       "framework": "PATH",
       "domain": "MX_FIN_NIVEL_SOCIOECONOMICO",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3135,27 +3285,30 @@
       }
     },
     {
-      "name": "MX_FIN_NIVEL_SOCIOECONOMICO - List",
-      "framework": "LIST",
+      "name": "MX_FIN_NIVEL_SOCIOECONOMICO - Values",
+      "framework": "REGEX",
       "domain": "MX_FIN_NIVEL_SOCIOECONOMICO",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-nse.txt",
-            "matchStrength": 0.4
+            "note": "13 — a b · ab · c · c · c- · d · …",
+            "regex": "(?iu)(?:(?:a(?:/b|b|lto)|bajo|c(?:\\+|-)?|d(?:\\+)?|e|m(?:edio|uy (?:alto|bajo))))",
+            "matchStrength": 0.4,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "MX_FIN_VIVIENDA - Path",
       "framework": "PATH",
       "domain": "MX_FIN_VIVIENDA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3171,27 +3324,30 @@
       }
     },
     {
-      "name": "MX_FIN_VIVIENDA - List",
-      "framework": "LIST",
+      "name": "MX_FIN_VIVIENDA - Values",
+      "framework": "REGEX",
       "domain": "MX_FIN_VIVIENDA",
       "description": "Valores conocidos.",
       "config": {
-        "valueLists": [
+        "dataPatterns": [
           {
-            "file": "preset-file://mx-detectar-vivienda.txt",
-            "matchStrength": 0.6
+            "note": "14 — Propia · Propia en proceso de pago · Rentada o alquilada · Prestada · Intestada o en litigio · Otra situación · …",
+            "regex": "(?iu)(?:(?:alquilada|en litigio|familiar|hipotecada|intestada(?: o en litigio)?|otra situaci(?:on|ón)|pr(?:estada|opia(?: en proceso de pago)?)|rentada(?: o alquilada)?))",
+            "matchStrength": 0.6,
+            "checksumType": "NONE",
+            "caseSensitive": false,
+            "allowPartialMatch": false,
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
-        "tokenizeInput": false,
-        "rejectStrength": 0.3,
-        "tokenizationDelimiter": " "
+        "rejectStrength": 0.3
       }
     },
     {
       "name": "MX_FIN_REGIMEN_FISCAL - Path",
       "framework": "PATH",
       "domain": "MX_FIN_REGIMEN_FISCAL",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3210,7 +3366,7 @@
       "name": "MX_PENAL_ANTECEDENTES - Path",
       "framework": "PATH",
       "domain": "MX_PENAL_ANTECEDENTES",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3229,7 +3385,7 @@
       "name": "MX_PENAL_CAUSA - Path",
       "framework": "PATH",
       "domain": "MX_PENAL_CAUSA",
-      "description": "Nombre de la columna (y variantes usadas en sistemas mexicanos).",
+      "description": "Nombre de la columna y variantes usadas en sistemas mexicanos.",
       "config": {
         "paths": [
           {
@@ -3257,15 +3413,15 @@
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           },
           {
-            "regex": "\\d{1,5}/\\d{4}",
+            "regex": "0*(?:\\d{1,5}/\\d{4})",
             "matchStrength": 0.5,
             "checksumType": "NONE",
             "caseSensitive": false,
             "allowPartialMatch": false,
-            "dataCleanRegex": ""
+            "dataCleanRegex": "^\\s+|\\s+$"
           }
         ],
         "rejectStrength": 0.3
@@ -3491,7 +3647,7 @@
     },
     {
       "name": "MX_L3_SALUD_GRUPO_SANGUINEO",
-      "algorithm": "MX_GRUPO_SANGUINEO"
+      "algorithm": "dlpx-core:BloodType SL"
     },
     {
       "name": "MX_L3_SALUD_DISCAPACIDAD",
@@ -3551,19 +3707,19 @@
     },
     {
       "name": "MX_FIN_MONTO_DEUDA",
-      "algorithm": "MX_MONTO_DEUDA"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "MX_FIN_INGRESO_MENSUAL",
-      "algorithm": "MX_INGRESO_MENSUAL"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "MX_FIN_SALARIO_DIARIO",
-      "algorithm": "MX_SALARIO_DIARIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "MX_FIN_PATRIMONIO",
-      "algorithm": "MX_PATRIMONIO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "MX_FIN_AFORE",
@@ -3571,7 +3727,7 @@
     },
     {
       "name": "MX_FIN_SALDO_RETIRO",
-      "algorithm": "MX_SALDO_RETIRO"
+      "algorithm": "dlpx-core:CM Numeric"
     },
     {
       "name": "MX_FIN_CREDITO_VIVIENDA",
@@ -3621,7 +3777,8 @@
           "áéíóúü"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "HEGA850720"
     },
@@ -3637,7 +3794,8 @@
           "GHIJKLMNOPQRSTUVWXYZ"
         ],
         "caseSensitive": true,
-        "minMaskedPositions": 0
+        "minMaskedPositions": 0,
+        "preserveLeadingZeros": true
       },
       "input": "3c:22:fb:9a:10:e4"
     },
@@ -3835,8 +3993,23 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(0*?)(?:(\\d{1,6}))))))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5132,8 +5305,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{11})",
+            "regex": "(0*?)(?:(\\d{11}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5575,8 +5751,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?(\\(?(?:55|56|33|81)\\)?[\\s\\-]?)(\\d{4})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?(\\(?(?:55|56|33|81)\\)?[\\s\\-]?)(\\d{4})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5604,8 +5783,11 @@
             ]
           },
           {
-            "regex": "(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?(\\(?[2-9]\\d{2}\\)?[\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{4})",
+            "regex": "(0*?)(?:(\\+?52[\\s\\-]?)?(1[\\s\\-]?)?(\\(?[2-9]\\d{2}\\)?[\\s\\-]?)(\\d{3})([\\s\\-]?)(\\d{4}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -5731,8 +5913,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{18})",
+            "regex": "(0*?)(?:(\\d{18}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5754,25 +5939,20 @@
       "input": "002180700545678911"
     },
     {
-      "name": "MX_TARJETA_LUHN",
-      "framework": "algorithm.plugin.characterMapping.PaymentCard",
-      "config": {
-        "minMaskedPositions": 6,
-        "preserve": 0
-      }
-    },
-    {
       "name": "MX_TARJETA",
       "framework": "algorithm.plugin.decompose.RegexDecompose",
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d[\\d\\s\\-]{11,22}\\d)",
+            "regex": "(0*?)(?:(\\d[\\d\\s\\-]{11,22}\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
-                  "name": "MX_TARJETA_LUHN"
+                  "name": "dlpx-core:Credit Card"
                 }
               }
             ]
@@ -5800,8 +5980,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})",
+            "regex": "(0*?)(?:(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -5974,8 +6157,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d)",
+            "regex": "(0*?)(?:(\\d{3})(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6002,8 +6188,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3,})",
+            "regex": "(0*?)(?:([1-9]\\d{2,}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "90"
@@ -6011,8 +6200,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)(\\.\\d+)",
+            "regex": "(0*?)(?:([1-9])(\\d)(\\.\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6028,8 +6220,11 @@
             ]
           },
           {
-            "regex": "([1-9])(\\d)",
+            "regex": "(0*?)(?:([1-9])(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6042,8 +6237,11 @@
             ]
           },
           {
-            "regex": "(\\d)",
+            "regex": "(0*?)(?:(\\d))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6200,7 +6398,7 @@
       "input": "Santa María Tlahuitoltepec"
     },
     {
-      "name": "MX_CLAVE_MUNICIPIO",
+      "name": "MX_CLAVE_MUNICIPIO_TABLA",
       "framework": "algorithm.plugin.dataCleansing.DataCleansing",
       "config": {
         "lookupFile": {
@@ -6209,6 +6407,34 @@
         "delimiter": ",",
         "caseSensitive": true,
         "trimWhitespace": true
+      },
+      "input": "20426"
+    },
+    {
+      "name": "MX_CLAVE_MUNICIPIO",
+      "framework": "algorithm.plugin.decompose.RegexDecompose",
+      "config": {
+        "maskPatterns": [
+          {
+            "regex": "(0*)([1-9]\\d*)",
+            "actions": [
+              {
+                "type": "PRESERVE"
+              },
+              {
+                "type": "APPLY_ALGORITHM",
+                "algorithm": {
+                  "name": "MX_CLAVE_MUNICIPIO_TABLA"
+                }
+              }
+            ]
+          }
+        ],
+        "fallbackAction": {
+          "type": "PRESERVE"
+        },
+        "trimInput": true,
+        "requireMask": false
       },
       "input": "20426"
     },
@@ -6248,8 +6474,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(\\d{3})(\\d{2})",
+            "regex": "(0*?)(?:(\\d{3})(\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               },
@@ -6367,16 +6596,22 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([0-5])",
+            "regex": "(0*?)(?:([0-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "PRESERVE"
               }
             ]
           },
           {
-            "regex": "(\\d+)",
+            "regex": "(0*?)(?:(\\d+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "REDACT",
                 "redactString": "5"
@@ -6423,8 +6658,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6476,8 +6714,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6621,8 +6862,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6642,21 +6886,6 @@
         "requireMask": false
       },
       "input": "Sertralina 50 mg"
-    },
-    {
-      "name": "MX_GRUPO_SANGUINEO",
-      "framework": "algorithm.plugin.secureLookup.SecureLookup",
-      "config": {
-        "lookupFile": {
-          "uri": "preset-file://mx-grupo-sanguineo.txt"
-        },
-        "hashMethod": "SHA256",
-        "maskedValueCase": "PRESERVE_LOOKUP_FILE",
-        "inputCaseSensitive": false,
-        "trimWhitespaceFromInput": true,
-        "trimWhitespaceInLookupFile": true
-      },
-      "input": "O+"
     },
     {
       "name": "MX_DISCAPACIDAD_LISTA",
@@ -6689,8 +6918,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6742,8 +6974,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6795,8 +7030,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6848,8 +7086,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6901,8 +7142,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -6954,8 +7198,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7010,8 +7257,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(0[0-7]|9[679])",
+            "regex": "(0*?)(?:(0[0-7]|9[679]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7035,8 +7285,11 @@
             ]
           },
           {
-            "regex": "(\\d{3})",
+            "regex": "(0*?)(?:(\\d{3}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7069,42 +7322,6 @@
       "input": "MOP 05"
     },
     {
-      "name": "MX_MONTO_DEUDA",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 1000,
-        "maxValue": 5000000
-      },
-      "input": "85000"
-    },
-    {
-      "name": "MX_INGRESO_MENSUAL",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 8000,
-        "maxValue": 250000
-      },
-      "input": "18500"
-    },
-    {
-      "name": "MX_SALARIO_DIARIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 280,
-        "maxValue": 3000
-      },
-      "input": "452.10"
-    },
-    {
-      "name": "MX_PATRIMONIO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 200000,
-        "maxValue": 30000000
-      },
-      "input": "1850000"
-    },
-    {
       "name": "MX_AFORE_LISTA",
       "framework": "algorithm.plugin.secureLookup.SecureLookup",
       "config": {
@@ -7135,8 +7352,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7156,15 +7376,6 @@
         "requireMask": false
       },
       "input": "Afore Coppel"
-    },
-    {
-      "name": "MX_SALDO_RETIRO",
-      "framework": "algorithm.plugin.characterMapping.NumericMapping",
-      "config": {
-        "minValue": 5000,
-        "maxValue": 5000000
-      },
-      "input": "385000"
     },
     {
       "name": "MX_CREDITO_VIVIENDA_LISTA",
@@ -7197,8 +7408,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7250,8 +7464,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,2})",
+            "regex": "(0*?)(?:(\\d{1,2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7303,8 +7520,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7387,8 +7607,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "([1-5])",
+            "regex": "(0*?)(?:([1-5]))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7398,8 +7621,11 @@
             ]
           },
           {
-            "regex": "([6-9]|10)",
+            "regex": "(0*?)(?:([6-9]|10))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7465,8 +7691,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7521,8 +7750,11 @@
       "config": {
         "maskPatterns": [
           {
-            "regex": "(6\\d{2})",
+            "regex": "(0*?)(?:(6\\d{2}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7532,8 +7764,11 @@
             ]
           },
           {
-            "regex": "(6\\d{2})(\\s*[-–]\\s*)(.+)",
+            "regex": "(0*?)(?:(6\\d{2})(\\s*[-–]\\s*)(.+))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7594,8 +7829,11 @@
             ]
           },
           {
-            "regex": "(\\d{1,6})",
+            "regex": "(0*?)(?:(\\d{1,6}))",
             "actions": [
+              {
+                "type": "PRESERVE"
+              },
               {
                 "type": "APPLY_ALGORITHM",
                 "algorithm": {
@@ -7641,32 +7879,10 @@
     "mx-curp-dv-8.txt",
     "mx-decil-alto.txt",
     "mx-decil.txt",
-    "mx-detectar-afores.txt",
     "mx-detectar-apellidos.txt",
-    "mx-detectar-bandera.txt",
-    "mx-detectar-clave-municipio.txt",
-    "mx-detectar-credito-vivienda.txt",
-    "mx-detectar-discapacidad.txt",
-    "mx-detectar-escolaridad.txt",
-    "mx-detectar-estado-civil.txt",
-    "mx-detectar-grupo-sanguineo.txt",
-    "mx-detectar-identidad-genero.txt",
-    "mx-detectar-lenguas.txt",
-    "mx-detectar-medicamentos.txt",
-    "mx-detectar-municipios.txt",
-    "mx-detectar-nacionalidades.txt",
     "mx-detectar-nombres.txt",
-    "mx-detectar-nse.txt",
-    "mx-detectar-opiniones-politicas.txt",
-    "mx-detectar-partidos.txt",
-    "mx-detectar-preferencia-sexual.txt",
-    "mx-detectar-programas.txt",
-    "mx-detectar-pueblos.txt",
-    "mx-detectar-religiones.txt",
-    "mx-detectar-seguridad-social.txt",
+    "mx-detectar-sexo-letra.txt",
     "mx-detectar-sexo.txt",
-    "mx-detectar-sindicatos.txt",
-    "mx-detectar-vivienda.txt",
     "mx-diagnosticos.txt",
     "mx-direcciones.txt",
     "mx-discapacidad.txt",
@@ -7677,7 +7893,6 @@
     "mx-escuelas.txt",
     "mx-estado-civil.txt",
     "mx-estado-crediticio.txt",
-    "mx-grupo-sanguineo.txt",
     "mx-identidad-genero.txt",
     "mx-lenguas.txt",
     "mx-localidades.txt",
