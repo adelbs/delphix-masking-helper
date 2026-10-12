@@ -166,7 +166,9 @@ Three places say so, and none of them touches the network:
 The number comes from the git tag of the checkout, so it is the release you actually have —
 `v1.0.3` on a release, `v1.0.3-5-gabc1234` when the code is ahead of the last tag, and
 `-dirty` appended when the working tree has edits. Without git it falls back to the version
-declared in `package.json`, which may be behind.
+declared in `package.json`, which may be behind. Packaged deployments that intentionally omit the
+Git checkout may set `DLPX_PACKAGED_RELEASE=true` to mark that package version as the release
+metadata.
 
 **There is no update check.** The tool tells you what you have, never what exists elsewhere;
 `dlpx-helper update` is how you find out, by running it. That keeps the same promise as the
