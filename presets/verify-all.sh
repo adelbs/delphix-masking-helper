@@ -198,6 +198,9 @@ for id in "${SELECTED[@]}"; do
   read -r status _ < "$WORK/$id.status"
   [ "$status" -eq 0 ] || failed+=("$id")
 done
+# What an install lists — and downloads — is the catalog, so it has to match the folders.
+( cd "$ROOT" && node preset-catalog.js --check ) 2>&1 | tee -a "$LOG"
+[ "${PIPESTATUS[0]}" -eq 0 ] || failed+=("(presets/index.json)")
 if [ -n "$SERVER_NOTES" ]; then
   { echo "════ the app's own review of each preset"; echo "$SERVER_NOTES"; echo; } | tee -a "$LOG"
   echo "$SERVER_NOTES" | grep -q REFUSED && failed+=("(app review)")

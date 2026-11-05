@@ -794,6 +794,7 @@ module.exports = {
   ...dispatch, coreFrameworkId,
   listHookTemplates: (cfg) => dct.listHookTemplates(cfg),
   saveHookTemplate: (cfg, hook) => dct.saveHookTemplate(cfg, hook),
+  listJobOrchestrators: (cfg) => dct.listJobOrchestrators(cfg),
   frameworkNameFor, classNameFor, FRAMEWORK_BY_CLASS,
   engineFileName, engineFileNames, configStrings,
   waitForTask, readZip,

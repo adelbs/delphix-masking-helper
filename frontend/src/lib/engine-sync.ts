@@ -26,6 +26,9 @@ export interface EngineImportResult {
   downloaded: string[]
   /** Files still to be copied by hand — the engine offers no download for them. */
   needsFiles: Array<{ name: string; files: string[] }>
+  /** DCT's hook templates, brought down as hooks — only with DCT as the destination. */
+  hooks?: string[]
+  hookError?: string | null
 }
 
 /**
@@ -108,6 +111,8 @@ const listed = (names: string[]) => ({ n: names.length, names: names.join(', ') 
 
 /** Tells what came along with an import, and what could not come. */
 export function announceImport(t: Translate, out: EngineImportResult) {
+  if (out.hooks?.length) toast.success(t('sync.importedHooks', listed(out.hooks)))
+  if (out.hookError) toast.warning(t('sync.hooksFailed', { error: out.hookError }))
   if (out.related.classifiers.length) toast.success(t('sync.importedClassifiers', listed(out.related.classifiers)))
   if (out.related.domains.length) toast.success(t('sync.importedDomains', listed(out.related.domains)))
   if (out.related.algorithms.length) toast.success(t('sync.importedAlgorithms', listed(out.related.algorithms)))

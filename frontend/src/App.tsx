@@ -9,6 +9,7 @@ import { DomainEditor } from '@/components/DomainEditor'
 import { ClassifierEditor } from '@/components/ClassifierEditor'
 import { ProfileSetEditor } from '@/components/ProfileSetEditor'
 import { HookEditor } from '@/components/HookEditor'
+import { NewHookWizard } from '@/components/HookWizard'
 import { Settings } from '@/components/Settings'
 import { SetupNeeded } from '@/components/SetupNeeded'
 import { isLocalePref, readStoredPref, resolveLocale, storePref } from '@/lib/i18n'
@@ -166,10 +167,15 @@ export default function App() {
   }
 
   const selectHook = (h: Hook) => {
+    setHookTab(undefined)
     setHook(h)
     setView('hook')
     setSidebarOpen(false)
   }
+
+  const [hookWizard, setHookWizard] = useState(false)
+  // A hook the wizard just wrote opens on its test run, with the variables it reads.
+  const [hookTab, setHookTab] = useState<'test' | undefined>(undefined)
 
   const newHook = () => {
     setHook(null)
@@ -209,6 +215,7 @@ export default function App() {
     onNewProfileSet: newProfileSet,
     onSelectHook: selectHook,
     onNewHook: newHook,
+    onHookWizard: () => setHookWizard(true),
     onOpenSettings: showSettings,
     onGoHome: showHome,
     localePref,
@@ -305,8 +312,11 @@ export default function App() {
               onToggleSidebar={toggleSidebar}
               onDeleted={showHome}
               onCreated={selectHook}
+              onOpenSettings={() => showSettings()}
+              initialTab={hookTab}
             />
           )}
+          {hookWizard && <NewHookWizard onClose={() => setHookWizard(false)} onCreated={h => { setHookWizard(false); selectHook(h); setHookTab('test') }} />}
           {view === 'settings' && (
             <Settings
               key={settingsTab ?? 'default'}

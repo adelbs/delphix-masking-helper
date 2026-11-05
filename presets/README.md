@@ -9,6 +9,7 @@ it again is a **reset**: the same rows are found and put back the way they ship,
 
 ```
 presets/
+├── index.json             the catalog — generated, commit it (see Downloaded on first use)
 └── <id>/                  lower-case letters, digits and hyphens; the folder name is the id
     ├── preset.json        what gets created
     ├── files/             files the configurations read (optional)
@@ -24,7 +25,7 @@ The documentation button serves the PDF in the interface language, falling back 
 then to whichever exists.
 
 The app reads nothing else in the folder, so a preset can keep whatever produces it next to the
-output. The fifteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
+output. The sixteen that ship share one layout: `build.mjs` generates `preset.json` and `files/` from
 its own definitions and the raw lists in `source/`, and `verify.mjs` checks the result — reviewing
 every classifier, discovery sample columns with the local evaluator in `classifiers/` and masking
 sample values through the running app. Each folder's `README.md` explains the design of its set.
@@ -46,6 +47,35 @@ sample values through the running app. Each folder's `README.md` explains the de
 | [`spain-lopdgdd/`](spain-lopdgdd/) | Spain — GDPR and Ley Orgánica 3/2018 (LOPDGDD) |
 | [`jamaica-dpa-2020/`](jamaica-dpa-2020/) | Jamaica — Data Protection Act, 2020 |
 | [`uk-gdpr-dpa-2018/`](uk-gdpr-dpa-2018/) | United Kingdom — UK GDPR and Data Protection Act 2018 |
+| [`portugal-lei-58-2019/`](portugal-lei-58-2019/) | Portugal — GDPR and Lei n.º 58/2019 |
+
+## Downloaded on first use
+
+An install does not have these folders: they are most of the repository, and a user loads one or
+two. The installer clones without them (a partial, sparse checkout), and the app lists the presets
+from **`index.json`** — for each one, what the list shows and the size and SHA-256 of every file it
+uses (`preset.json`, `files/`, `doc.<locale>.pdf`). The first time a preset is loaded, unloaded or
+packaged, its manifest and files come down from GitHub, at the commit the install runs, into
+`db/presets/<id>/` — from the files attached to the release (`preset-<id>.zip` with the manifest
+and `files/`, `preset-<id>.doc.<locale>.pdf`), and file by file from the repository for what the
+release lacks or between releases. A documentation PDF comes down when it is opened, one language
+at a time. Each file is checked against the catalog, so a preset always loads as this version
+shipped it. A machine without access to GitHub takes either zip by hand — the data or the package,
+which carries `data/preset.json` for this — through *Import package…*.
+
+The release files are built by [`scripts/release-assets.mjs`](../scripts/release-assets.mjs) from
+the tag and attached by [`scripts/publish-release.sh`](../scripts/publish-release.sh), with the
+maintainer's own `gh` login; CI only builds them to check the tag can.
+Unloading a preset deletes its download. A checkout that has the folder — this one — reads it from
+here and downloads nothing. The code is in [`preset-catalog.js`](../preset-catalog.js).
+
+So **the catalog must follow every change to a preset**: after building one, run
+
+```bash
+npm run presets:catalog
+```
+
+and commit `index.json` with it. `npm run check` and `verify-all.sh` fail while it is out of date.
 
 ## Writing a preset
 
@@ -212,10 +242,10 @@ guide in `docs/`; the shared wording and how each framework's configuration read
   a policy loaded from an older version says a new one is available, and resetting applies it.
 - **`versionDate`** — the day that version was built, written `YYYY-MM-DD`. It is what says how old
   a policy is, so bump it together with the version; the card and the cover of the PDF show it beside
-  the version number. It is optional, so a preset that does not say still loads, but all fifteen
+  the version number. It is optional, so a preset that does not say still loads, but all sixteen
   that ship carry it. In a `build.mjs` it sits next to the version as `VERSION_DATE`.
 - **`name.en`** is required; the other languages fall back to it.
-- **`profileSet.name`** is what gets saved and sent to Delphix. The fifteen that ship name the
+- **`profileSet.name`** is what gets saved and sent to Delphix. The sixteen that ship name the
   country, the law (or its number) and the version: `CL - Ley 21.719 - v3`. The policy is found by
   the preset it came from, not by name, so a new version renames it and keeps its link to the engine.
 - **`packs.essential`** — the data classes of the essential pack. Loading it brings those data classes, the

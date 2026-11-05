@@ -145,9 +145,14 @@ curl -fsSL https://adelbs.github.io/delphix-masking-helper/install.sh -o install
 less install.sh && bash install.sh
 ```
 
-O script pergunta onde instalar, confere se Node, Java e git estão presentes — ele nunca os
-instala, apenas avisa o que falta —, clona a release mais nova, compila e coloca o comando `dlpx-helper`
-no seu PATH.
+O script pergunta onde instalar, confere se Node e Java estão presentes — ele nunca os instala,
+apenas avisa o que falta —, baixa a release mais nova (o app já compilado, uns 5 MB, conferido
+contra o `SHA256SUMS` da release) e coloca o comando `dlpx-helper` no seu PATH. O git não é
+necessário: só uma release publicada sem esse arquivo, ou seguir o branch padrão, recai em clonar e
+compilar, e aí usa o git. Atualizar troca os arquivos do app e nunca toca em `db/` — o que você
+salvou, as políticas baixadas — nem nos JARs de `lib/`; uma instalação feita com git passa para os
+arquivos de release na primeira atualização, liberando o `.git`. `DLPX_RELEASES_URL` aponta o script
+para um espelho das releases em vez do GitHub.
 
 | | |
 |---|---|
@@ -156,7 +161,7 @@ no seu PATH.
 | `dlpx-helper status` | está rodando? |
 | `dlpx-helper version` | qual versão está instalada |
 | `dlpx-helper logs` | acompanha o log |
-| `dlpx-helper update` | vai para a release mais nova e recompila |
+| `dlpx-helper update` | vai para a release mais nova |
 | `dlpx-helper uninstall` | remove (pergunta antes) |
 
 ### Em que versão eu estou?
@@ -167,10 +172,10 @@ Três lugares dizem, e nenhum deles acessa a rede:
 - **Configurações → Geral → Sobre**, com o commit e o comando de atualização;
 - `dlpx-helper version` no terminal, mais a linha que o servidor imprime ao subir.
 
-O número vem da tag git do checkout, então é a release que você tem de fato — `v1.0.3` numa
-release, `v1.0.3-5-gabc1234` quando o código está à frente da última tag, e com `-dirty` no fim
-quando há alterações não commitadas. Sem git, cai para a versão declarada no `package.json`, que
-pode estar atrasada.
+Uma instalação feita pelo arquivo da release diz a release que é, pelo `release.json` que ela
+trouxe. Um checkout git diz a tag dele — `v1.0.3` numa release, `v1.0.3-5-gabc1234` quando o código
+está à frente da última tag, e com `-dirty` no fim quando há alterações não commitadas. Sem nenhum
+dos dois, cai para a versão declarada no `package.json`, que pode estar atrasada.
 
 **Não há verificação de atualização.** A ferramenta diz o que você tem, nunca o que existe em
 outro lugar; `dlpx-helper update` é como você descobre — rodando. Isso mantém a mesma promessa do
@@ -190,7 +195,10 @@ está nela.
 
 ### Ou faça na mão
 
-O script não faz nada que você não possa fazer sozinho:
+O script não faz nada que você não possa fazer sozinho. Pela release: baixe
+`delphix-masking-helper-<versão>.tar.gz` (ou `.zip`) na
+[página de releases](https://github.com/adelbs/delphix-masking-helper/releases), confira contra o
+`SHA256SUMS`, descompacte e rode `node server.js`. Pelo código:
 
 ```bash
 git clone https://github.com/adelbs/delphix-masking-helper.git
@@ -456,6 +464,17 @@ A lista é agrupada por região — América do Norte, América Central, Caribe,
 e estreitada por uma caixa de filtro (país, lei, número; acentos são ignorados), pelos botões de
 região e por *Só as carregadas aqui*.
 
+**Baixadas quando usadas.** A instalação não traz os arquivos das políticas: são dezesseis, cada
+uma com dezenas de megabytes, e você vai usar uma ou duas. A lista vem de um catálogo pequeno, e os
+arquivos de uma política descem da release instalada no GitHub — um zip, `preset-<id>.zip` — na
+primeira vez que ela é carregada (0,3 a 4 MB); cada PDF da documentação desce quando é aberto, um
+idioma por vez, e *Baixar pacote* traz o que o pacote leva. Cada arquivo é conferido contra o
+catálogo. Entre releases, ou numa release publicada sem esses arquivos, eles vêm um a um do
+repositório. O cartão diz quando a política ainda não está nesta máquina e quanto carregar vai
+baixar; descarregar apaga o que foi baixado. **Sem acesso ao GitHub**, leve à máquina o zip da
+política, da página da release — `preset-<id>.zip`, ou o pacote `<id>-v<N>.zip` — e use **Importar
+pacote…** no topo da aba: ela carrega sem baixar nada, e um zip de outra versão é recusado.
+
 **Baixar pacote.** Cada política também pode ser baixada como um `.zip` que a carrega no Delphix
 sem esta ferramenta: a documentação nos três idiomas, `import.sh` (Linux e macOS: bash, curl, jq) e
 `import.ps1` (Windows PowerShell 5.1, que vem com o Windows, ou PowerShell 7), e cada objeto já no
@@ -467,8 +486,8 @@ da importação, e o que o Delphix se recusar a apagar — porque algo mais o us
 disso. Cada passo vai para `import-<data>.log` ao lado do script; segredos, nunca. Rodar de novo
 retoma de onde parou.
 
-Hoje são quinze, uma por país, todas com limiar de 60. Os números abaixo são do pacote
-estendido; cada pacote essencial tem de 11 a 13 classes de dados:
+Hoje são dezesseis, uma por país, todas com limiar de 60. Os números abaixo são do pacote
+estendido; cada pacote essencial tem de 11 a 14 classes de dados:
 
 | Política de descoberta | Lei | Classes de dados | Classifiers | Algoritmos | Documentação |
 |---|---|---|---|---|---|
@@ -487,6 +506,7 @@ estendido; cada pacote essencial tem de 11 a 13 classes de dados:
 | [Espanha](presets/spain-lopdgdd/) | RGPD + LOPDGDD | 83 | 149 | 341 | [pt-BR](presets/spain-lopdgdd/doc.pt-BR.pdf) · [en](presets/spain-lopdgdd/doc.en.pdf) · [es](presets/spain-lopdgdd/doc.es.pdf) |
 | [Jamaica](presets/jamaica-dpa-2020/) | Data Protection Act, 2020 | 74 | 129 | 83 | [pt-BR](presets/jamaica-dpa-2020/doc.pt-BR.pdf) · [en](presets/jamaica-dpa-2020/doc.en.pdf) · [es](presets/jamaica-dpa-2020/doc.es.pdf) |
 | [Reino Unido](presets/uk-gdpr-dpa-2018/) | UK GDPR + DPA 2018 | 73 | 130 | 105 | [pt-BR](presets/uk-gdpr-dpa-2018/doc.pt-BR.pdf) · [en](presets/uk-gdpr-dpa-2018/doc.en.pdf) · [es](presets/uk-gdpr-dpa-2018/doc.es.pdf) |
+| [Portugal](presets/portugal-lei-58-2019/) | RGPD + Lei 58/2019 | 87 | 155 | 299 | [pt-BR](presets/portugal-lei-58-2019/doc.pt-BR.pdf) · [en](presets/portugal-lei-58-2019/doc.en.pdf) · [es](presets/portugal-lei-58-2019/doc.es.pdf) |
 
 A descoberta não depende só do nome da coluna. Bancos de dados completam os valores — uma coluna CHAR
 os preenche com espaços, um código guardado como texto muitas vezes vem com zeros à esquerda — e a
@@ -558,21 +578,43 @@ Control Tower guarda como **hook templates**. Um hook aqui tem nome, uma **descr
 faz, um shell (bash, sh, expect, PowerShell ou PowerShell delegado), o script e os nomes base das
 variáveis de credencial que o DCT entrega a ele (`<BASE>_USER`, `<BASE>_PASSWORD`).
 
-- **Hooks prontos**: *Rodar um job de mascaramento (DCT)* e *Rodar uma job collection (DCT)*, em
-  bash e em PowerShell (compatível com o Windows PowerShell 5.1). Os dois iniciam o job pelo DCT,
-  acompanham até o fim e fazem o hook falhar quando ele falha — no Configure Clone, uma VDB só é
-  entregue mascarada.
-- **Rodar nesta máquina**: o script da tela roda aqui — bash ou sh no Linux e macOS, PowerShell no
+- **Hook wizard** (no menu de Hooks) pergunta, página a página, o que um hook deve fazer numa VDB e
+  o escreve — em bash, sh, expect, PowerShell ou PowerShell delegado — chamando o Data Control
+  Tower: apontar uma **conexão de mascaramento** para a VDB (procurada pelo nome, atualizada, ou
+  criada; uma com esse nome para outro banco faz o hook falhar), **esperar o banco** aceitar
+  conexões, preencher um **rule set** com todas as tabelas que a conexão enxerga, criar ou atualizar
+  o **discovery job** (com a política de descoberta e *Clear previous auto data class assignment*
+  marcado) e o **masking job**, deixar uma **job collection** com exatamente esses jobs, **rodar** um
+  discovery job, um masking job ou uma collection (os de cima ou outros, pelo nome ou id) e esperar,
+  fazer **refresh das VDBs filhas** (depois de um snapshot, esperando ou não) e gravar um **arquivo
+  de log** para investigar problemas. Os nomes aceitam tokens da VDB — `Masking - [VDB_NAME]` — ou
+  qualquer `[VARIÁVEL]` do ambiente. A VDB é achada no DCT pelas variáveis que o Delphix define para
+  o hook, então um hook template serve a qualquer VDB. Os scripts sh só precisam de curl, grep e sed;
+  os de PowerShell ficam no Windows PowerShell 5.1. Um hook escrito pelo wizard reabre nele, e
+  trocar o shell o reescreve na outra linguagem. No passo dos nomes, a barra de tokens fica fixa no
+  topo e cada token, clicado, entra no cursor do campo em que se estava. O endereço do DCT vem da
+  integração das Configurações, e o hook novo abre em **Rodar aqui** com as variáveis que o script
+  lê.
+- **Ao lado do script**, cinco abas: o **assistente** (o provedor de IA das Configurações, que lê o
+  script da tela e responde com um que vai para o editor com um clique), **o que um hook pode ler**
+  (as variáveis de ambiente que o Delphix documenta para hooks, inseridas no cursor — e, se pedido,
+  também acrescentadas aos valores de teste), **snippets** (cada pedaço dos scripts do wizard,
+  inserido no cursor com as funções auxiliares que ele chama, e com as credenciais e variáveis de teste de que ele precisa já criadas), **sintaxe** (o básico da linguagem do
+  shell escolhido — variáveis, if, laços for e while, funções, chamada de API com curl ou
+  Invoke-RestMethod, ler JSON, erros, esperar e tentar de novo, log, código de saída; no expect,
+  também spawn/expect/send) e **rodar aqui**. O script pode ser **maximizado** para a janela inteira, com as abas ao lado.
+- **Rodar aqui**: o script da tela roda nesta máquina — bash ou sh no Linux e macOS, PowerShell no
   Windows (ou PowerShell 7 onde estiver instalado) — com valores de teste para as variáveis, a saída
-  aparecendo enquanto é impressa, limite de tempo e botão Parar. Valores de credencial são digitados
-  a cada execução e nunca salvos; os segredos da própria ferramenta ficam fora do ambiente do script.
-- **O que um hook pode ler**: as variáveis de ambiente que o Delphix documenta para hooks (Oracle,
-  SQL Server, AppData/DB2, credenciais), cada uma inserida no cursor com um clique.
-- **Baixar script** salva como `.sh` ou `.ps1` para testar em outro servidor.
-- **Enviar ao Delphix** cria ou atualiza o hook template no DCT, e *Atualizar do Delphix* traz os
-  hook templates do DCT. Credenciais nunca viajam: adicione as variáveis de credencial no template
-  no DCT. Um Continuous Compliance Engine não tem hook templates, então isso exige a integração com
-  o DCT.
+  aparecendo enquanto é impressa, limite de tempo e botão Parar. Os valores de teste — inclusive os
+  de credencial, mostrados mascarados — ficam salvos com o hook nesta máquina ao salvar ou rodar, e
+  nunca vão para o DCT. A senha da chave de API do DCT pode vir da integração das Configurações em
+  vez de ser digitada. Os segredos da própria ferramenta ficam fora do ambiente do script.
+- **Baixar script** salva como `.sh`, `.exp` ou `.ps1` para testar em outro servidor.
+- **Enviar ao DCT** cria ou atualiza o hook template no DCT (salvando as alterações antes), e
+  *Atualizar do Delphix* traz os hook templates do DCT junto com o resto (também os que o DCT
+  importou dos engines), mesmo que outra parte da importação falhe. Credenciais nunca viajam: adicione as
+  variáveis de credencial no template no DCT. Um Continuous Compliance Engine não tem hook
+  templates, então isso exige a integração com o DCT.
 
 ## Idioma da interface
 

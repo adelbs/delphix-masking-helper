@@ -9,6 +9,8 @@ frontend/dist/
 db/*.db
 db/*.db-shm
 db/*.db-wal
+# Presets downloaded on first use (preset-catalog.js)
+db/presets/
 
 # Delphix product libraries — licensed files, never committed.
 # Obtain them from the Delphix Masking Devkit (SDK); see lib/README.md.
@@ -40,3 +42,6 @@ CLAUDE.local.md
 
 # Logs of presets/verify-all.sh
 presets/_logs/
+
+# Files built for a release (scripts/release-assets.mjs)
+release-assets/

@@ -2,7 +2,7 @@ import type {
   Algorithm, AiStatus, AppConfig, ChatHandlers, ChatMessage, Classifier, ClassifierCatalog,
   ClassifierFrameworkName, ClassifierReview, ClassifierTestField, ClassifierTestResult,
   PresetConflict, PresetPack, ProfileSet, ProfileSetPreset,
-  BuiltinReferences, Domain, EngineReferences, Framework, Hook, HookRuntime, HookShell, JsonSchema, MaskResult, ServerFile, VersionInfo,
+  BuiltinReferences, Domain, EngineReferences, Framework, Hook, HookRuntime, HookShell, HookVariable, HookWizardOptions, JsonSchema, MaskResult, ServerFile, VersionInfo,
 } from '@/types'
 import type {
   AlgorithmExportResult, ClassifierExportResult, DomainExportResult, EngineImportResult, ImportProgress,
@@ -351,7 +351,7 @@ export const api = {
    * server kills the run when the page stops listening.
    */
   runHook: async (
-    body: { shell: HookShell; command: string; env: Array<{ name: string; value: string }>; timeoutSec?: number },
+    body: { shell: HookShell; command: string; env: HookVariable[]; timeoutSec?: number },
     on: {
       start?: (p: { interpreter: string }) => void
       out: (p: { stream: 'stdout' | 'stderr'; text: string }) => void
@@ -368,6 +368,25 @@ export const api = {
       else if (event === 'exit') on.exit(payload)
       else if (event === 'error') on.error(payload)
     })
+  },
+
+  /** What the hook wizard picks from: the DCT the integration points at, its policies and orchestrators. */
+  getHookWizardOptions: () => request<HookWizardOptions>('/api/hooks/wizard-options'),
+
+  /** Asks the assistant about the hook on screen; the reply streams in pieces. */
+  streamHookAssist: async (
+    body: { messages: ChatMessage[]; hook: Pick<Hook, 'name' | 'description' | 'shell' | 'command' | 'credentials'> },
+    onDelta: (delta: string) => void,
+    signal: AbortSignal,
+  ) => {
+    const res = await fetch('/api/hooks/assist', { method: 'POST', signal, ...json(body) })
+    if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`)
+    let failure: string | null = null
+    await readEvents(res.body, (event, payload) => {
+      if (event === 'delta') onDelta(payload.delta)
+      else if (event === 'error') failure = String(payload.message ?? '')
+    })
+    if (failure !== null) throw new Error(failure || 'The AI provider did not answer.')
   },
 
   // ── Pre-configured profile sets ────────────────────────────────────────────
@@ -391,6 +410,12 @@ export const api = {
     }>(`/api/presets/${encodeURIComponent(id)}/load`, { method: 'POST', ...json({ overwrite, pack }) }),
 
   /** Removes what the preset brought, except what something else here still uses. */
+  /** Takes a preset's zip copied here by hand (its data or its package, from the release). */
+  importPresetPackage: (file: Blob) =>
+    request<{ id: string; files: number }>('/api/presets/import', {
+      method: 'POST', headers: { 'Content-Type': 'application/zip' }, body: file,
+    }),
+
   unloadPreset: (id: string) =>
     request<{ removed: PresetConflict[]; kept: PresetConflict[] }>(
       `/api/presets/${encodeURIComponent(id)}/unload`, { method: 'POST' }),

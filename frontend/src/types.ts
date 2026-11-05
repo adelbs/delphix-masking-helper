@@ -151,6 +151,12 @@ export interface ProfileSetPreset {
   loaded: { version: number; pack: PresetPack; loaded_at: string } | null
   /** Why it cannot be loaded; empty when it can. */
   problems: string[]
+  /**
+   * Whether its files are on this machine. `local`: in the checkout; `downloaded`: brought down
+   * already; `outdated`: an older version was; `remote`: not yet. `size` is what a load would still
+   * download, `total` everything it has (PDFs included), in bytes; null where it is all local.
+   */
+  download: { state: 'local' | 'downloaded' | 'outdated' | 'remote'; size: number; total: number | null }
 }
 
 /** Something already here that loading a preset would overwrite or remove. */
@@ -378,14 +384,34 @@ export interface Hook {
   command: string
   /** Base names of the credential variables DCT sets (<BASE>_USER, <BASE>_PASSWORD…). */
   credentials: string[]
-  /** Test values for a run on this machine. Never a credential's. */
-  variables: Array<{ name: string; value: string }>
-  /** The ready-made hook it started from, if any. */
+  /** Test values for a run on this machine, credentials' included — kept here only, never sent to DCT. */
+  variables: HookVariable[]
+  /** The hook wizard's plan, as JSON, when the wizard wrote the script. */
   template: string | null
   delphix_id: string | null
   delphix_origin: string | null
   created_at: string
   updated_at: string
+}
+
+/** A test value for a run on this machine. */
+export interface HookVariable {
+  name: string
+  value: string
+  /** A credential's part (<BASE>_PASSWORD…): shown masked. */
+  secret?: boolean
+  /** Takes the API key of the Delphix integration when the hook runs, instead of a value. */
+  fromSettings?: boolean
+}
+
+/** What the hook wizard fills its fields from. Lists are empty without a DCT integration. */
+export interface HookWizardOptions {
+  target: 'dct' | 'engine' | null
+  dctUrl: string
+  insecure: boolean
+  policies: Array<{ id: string; name: string }>
+  orchestrators: Array<{ id: string; name: string }>
+  error?: string
 }
 
 /** Which interpreters this machine has, by shell; null where a shell cannot run here. */

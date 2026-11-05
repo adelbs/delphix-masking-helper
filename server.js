@@ -37,6 +37,12 @@ function detectVersion() {
     } catch { return null; }
   })();
 
+  // An install made from a release archive has no .git: release.json says what it is.
+  try {
+    const release = JSON.parse(fs.readFileSync(path.join(__dirname, 'release.json'), 'utf8'));
+    if (release.tag) return { display: release.tag, commit: String(release.commit ?? '').slice(0, 7) || null, channel: 'release' };
+  } catch { /* a checkout */ }
+
   const git = (...args) => execFileSync('git', ['-C', __dirname, ...args],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 3000 }).trim();
 
@@ -664,7 +670,7 @@ function parseStoredConfig(raw) {
 
 const delphixCfg = () => delphix.settings(readConfig());
 
-const hooks = mountHooks(app, { db, delphix, delphixCfg });
+const hooks = mountHooks(app, { db, delphix, delphixCfg, ai, readConfig });
 
 /** Reports whether the configured engine is reachable and the credentials work. */
 app.get('/api/delphix/status', async (req, res) => {
@@ -2187,14 +2193,19 @@ app.post('/api/delphix/sync/import', async (req, res) => {
     return job.finish('error', { message: err.message });
   }
 
+  // Hook templates live in DCT; an engine has none. They reference nothing else, so they come
+  // first and on their own: a failure in the rest does not keep them from coming, nor the reverse.
+  let hookNames = [];
+  let hookError = null;
+  if (cfg.target === 'dct') {
+    try { hookNames = await hooks.importHooks(cfg); } catch (err) { hookError = err.message; }
+  }
   try {
     const out = await importFromEngine(cfg, { ...selection, onProgress: (p) => job.emit('progress', p) });
-    // Hook templates live in DCT; an engine has none.
-    const hookNames = cfg.target === 'dct' ? await hooks.importHooks(cfg) : [];
     job.finish('done', { ...importReply(out, 'all',
-      [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms, ...hookNames]), hooks: hookNames });
+      [...out.profileSets, ...out.classifiers, ...out.domains, ...out.algorithms, ...hookNames]), hooks: hookNames, hookError });
   } catch (err) {
-    job.finish('error', { message: err.message });
+    job.finish('error', { message: hookNames.length ? `${err.message} (${hookNames.length} hook template(s) came down before it)` : err.message });
   }
 });
 
@@ -2355,11 +2366,11 @@ app.delete('/api/delphix/integration', (req, res) => {
 // A preset loads as one of two packs. The extended pack is everything in it; the essential pack is
 // the domains the manifest lists under packs.essential, with only what those lean on.
 
-const PRESETS_DIR = path.join(__dirname, 'presets');
-const PRESET_LOCALES = ['en', 'pt-BR', 'es'];
-const PRESET_PACKS = ['essential', 'extended'];
-/** How a preset's configuration names one of its own files; rewritten to a path here on load. */
-const PRESET_FILE_SCHEME = 'preset-file://';
+// The files of a preset come down from GitHub when first used; preset-catalog.js says how.
+const presetCatalog = require('./preset-catalog');
+const {
+  PRESET_LOCALES, listOf, mapStrings, presetFileName, presetFileRefs, presetPackIds, presetPack, presetCounts,
+} = presetCatalog;
 
 const PRESET_TABLES = {
   algorithm: 'saved_algorithms',
@@ -2386,31 +2397,12 @@ if (!db.prepare("SELECT COUNT(*) AS n FROM pragma_table_info('preset_loads') WHE
   db.exec('ALTER TABLE preset_loads ADD COLUMN pack TEXT');
 }
 
-/** Every string in a configuration, passed through `fn`. */
-function mapStrings(value, fn) {
-  if (typeof value === 'string') return fn(value);
-  if (Array.isArray(value)) return value.map((v) => mapStrings(v, fn));
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, mapStrings(v, fn)]));
-  }
-  return value;
-}
-
-const presetFileName = (s) => (s.startsWith(PRESET_FILE_SCHEME) ? s.slice(PRESET_FILE_SCHEME.length) : null);
-
-function presetFileRefs(config) {
-  const names = [];
-  mapStrings(config ?? {}, (s) => { const name = presetFileName(s); if (name) names.push(name); return s; });
-  return names;
-}
-
 /** The configuration as it is stored here: each `preset-file://` pointing at the copy in filesDir. */
 const resolvePresetFiles = (config, dir) => mapStrings(config ?? {}, (s) => {
   const name = presetFileName(s);
   return name ? pathToFileURL(path.join(dir, name)).href : s;
 });
 
-const listOf = (value) => (Array.isArray(value) ? value : []);
 /** A real day written YYYY-MM-DD — "2026-02-30" is not one, and "2026-13-01" does not even parse. */
 const isCalendarDate = (value) => {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -2418,8 +2410,8 @@ const isCalendarDate = (value) => {
   return Number.isFinite(day.getTime()) && day.toISOString().startsWith(value);
 };
 
-function readPreset(id) {
-  const dir = path.join(PRESETS_DIR, id);
+/** A preset read from the folder its files are in. */
+function readPreset(id, dir) {
   let manifest = null;
   let unreadable = null;
   try {
@@ -2453,13 +2445,33 @@ function readPreset(id) {
 /** The regions the list of presets is grouped by, in the order it shows them. */
 const PRESET_REGIONS = ['north-america', 'central-america', 'caribbean', 'south-america', 'europe', 'africa', 'asia', 'oceania'];
 
+/**
+ * Every preset, for the list: read from its folder when this checkout has one, else as the catalog
+ * describes it — a preset not downloaded yet is listed all the same.
+ */
 function readPresets() {
-  if (!fs.existsSync(PRESETS_DIR)) return [];
-  return fs.readdirSync(PRESETS_DIR, { withFileTypes: true })
-    // A folder starting with _ holds tooling shared by the presets (the documentation builder).
-    .filter((entry) => entry.isDirectory() && !entry.name.startsWith('.') && !entry.name.startsWith('_'))
-    .map((entry) => readPreset(entry.name))
-    .sort((a, b) => a.id.localeCompare(b.id));
+  return presetCatalog.presetIds().map((id) => {
+    if (presetCatalog.isLocal(id)) return { ...readPreset(id, presetCatalog.presetDir(id)), download: presetCatalog.downloadState(id) };
+    const entry = presetCatalog.catalogEntryOf(id);
+    return { ...entry, catalog: true, problems: [], download: presetCatalog.downloadState(id) };
+  });
+}
+
+/**
+ * One preset with the files `wanted` needs here, downloading them first when they are missing —
+ * 'load' (the manifest and what it reads), a documentation locale, or 'all'. Null when there is no
+ * such preset; a failed download throws a PresetDownloadError.
+ */
+async function presetWith(id, wanted) {
+  if (!presetCatalog.presetIds().includes(id)) return null;
+  const dir = await presetCatalog.ensurePreset(id, wanted);
+  return dir ? readPreset(id, dir) : null;
+}
+
+/** The answer for a preset that could not come down. */
+function presetDownloadFailed(res, err) {
+  if (!(err instanceof presetCatalog.PresetDownloadError)) return res.status(500).json({ error: err.message });
+  return res.status(502).json({ code: 'preset-download', error: err.message });
 }
 
 /**
@@ -2545,56 +2557,6 @@ function presetProblems(p) {
   return out;
 }
 
-/** The packs a preset can load as, smallest first. */
-const presetPackIds = (p) => PRESET_PACKS.filter((pack) => pack === 'extended' || p.packs?.essential);
-
-/**
- * The part of a preset one pack loads. Extended is all of it. Essential is the listed domains, the
- * classifiers that vote for them, the algorithms those domains name together with everything those
- * reference, and the files any of that reads — the same closure the engine sync follows.
- */
-function presetPack(p, pack) {
-  if (pack === 'extended') return { ...p, pack };
-  const essential = p.packs.essential;
-  const wanted = new Set(listOf(essential.domains));
-  const domains = p.domains.filter((d) => wanted.has(d.name.trim()));
-  const classifiers = p.classifiers.filter((c) => wanted.has(c.domain));
-
-  const byName = new Map(p.algorithms.map((a) => [a.name.trim(), a]));
-  const reached = new Set();
-  const reach = (name) => {
-    const key = String(name ?? '').trim();
-    if (reached.has(key) || !byName.has(key)) return;
-    reached.add(key);
-    for (const ref of delphix.algorithmReferenceNames(byName.get(key).config)) reach(ref);
-  };
-  for (const d of domains) { reach(d.algorithm); reach(d.tokenization); }
-  const algorithms = p.algorithms.filter((a) => reached.has(a.name.trim()));
-
-  const read = new Set([...algorithms, ...classifiers].flatMap((item) => presetFileRefs(item.config)));
-  const members = new Set(classifiers.map((c) => c.name.trim()));
-  return {
-    ...p,
-    pack,
-    domains,
-    classifiers,
-    algorithms,
-    files: p.files.filter((file) => read.has(file)),
-    profileSet: {
-      ...p.profileSet,
-      description: essential.description ?? p.profileSet.description,
-      classifiers: listOf(p.profileSet.classifiers).filter((name) => members.has(name.trim())),
-    },
-  };
-}
-
-const presetCounts = (view) => ({
-  classifiers: view.classifiers.length,
-  domains: view.domains.length,
-  algorithms: view.algorithms.length,
-  files: view.files.length,
-});
-
 const presetLoad = (id) => db.prepare(`
   SELECT version, COALESCE(pack, 'extended') AS pack, loaded_at FROM preset_loads WHERE preset_id = ?
 `).get(id) ?? null;
@@ -2602,7 +2564,8 @@ const presetLoad = (id) => db.prepare(`
 /** What the settings tab lists. */
 function presetListing(p) {
   // A broken manifest may not hold the shapes a pack is cut from; its counts are all it can show.
-  const packs = p.problems.length ? ['extended'] : presetPackIds(p);
+  const packs = p.catalog ? Object.keys(p.packs) : p.problems.length ? ['extended'] : presetPackIds(p);
+  const size = (p.files ?? []).length && p.catalog ? p.files.reduce((n, f) => n + f.size, 0) : null;
   return {
     id: p.id,
     version: p.version,
@@ -2612,10 +2575,12 @@ function presetListing(p) {
     name: p.name,
     summary: p.summary,
     profileSet: { name: p.profileSet.name ?? '' },
-    packs: Object.fromEntries(packs.map((pack) => [pack, presetCounts(presetPack(p, pack))])),
+    packs: p.catalog ? p.packs : Object.fromEntries(packs.map((pack) => [pack, presetCounts(presetPack(p, pack))])),
     docs: p.docs,
     loaded: presetLoad(p.id),
     problems: p.problems,
+    // Whether its files are here, and how much a load would still bring down (bytes).
+    download: { ...p.download, total: size },
   };
 }
 
@@ -2909,12 +2874,15 @@ app.get('/api/presets', (req, res) => {
 });
 
 /** The documentation PDF, in the requested language when there is one, else English, else any. */
-app.get('/api/presets/:id/doc', (req, res) => {
-  const p = readPresets().find((x) => x.id === req.params.id);
-  if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
-  const locale = [req.query.locale, 'en', ...p.docs].find((l) => p.docs.includes(l));
+app.get('/api/presets/:id/doc', async (req, res) => {
+  const listed = readPresets().find((x) => x.id === req.params.id);
+  if (!listed) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
+  const locale = [req.query.locale, 'en', ...listed.docs].find((l) => listed.docs.includes(l));
   if (!locale) return res.status(404).json({ code: 'no-doc', error: 'This discovery policy has no documentation yet.' });
-  res.download(path.join(p.dir, `doc.${locale}.pdf`), `${p.id}.${locale}.pdf`);
+  // Only the PDF asked for comes down, not the other languages.
+  let dir;
+  try { dir = await presetCatalog.ensurePreset(listed.id, locale); } catch (err) { return presetDownloadFailed(res, err); }
+  res.download(path.join(dir, `doc.${locale}.pdf`), `${listed.id}.${locale}.pdf`);
 });
 
 /**
@@ -2922,8 +2890,9 @@ app.get('/api/presets/:id/doc', (req, res) => {
  * script for bash and one for PowerShell, and every object already shaped for the engine's API and
  * for Data Control Tower's. See preset-bundle.js.
  */
-app.get('/api/presets/:id/bundle', (req, res) => {
-  const p = readPresets().find((x) => x.id === req.params.id);
+app.get('/api/presets/:id/bundle', async (req, res) => {
+  let p;
+  try { p = await presetWith(req.params.id, 'all'); } catch (err) { return presetDownloadFailed(res, err); }
   if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
   if (p.problems.length) {
     return res.status(400).json({ code: 'preset-invalid', problems: p.problems, error: p.problems.join(' ') });
@@ -2939,13 +2908,28 @@ app.get('/api/presets/:id/bundle', (req, res) => {
 });
 
 /**
+ * Takes a preset's zip copied here by hand — its data or its package, from the release — for a
+ * machine that cannot reach GitHub. The body is the zip itself.
+ */
+app.post('/api/presets/import', express.raw({ type: () => true, limit: '200mb' }), async (req, res) => {
+  if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(400).json({ error: 'Send the zip as the request body.' });
+  try {
+    res.json(await presetCatalog.importPackage(req.body));
+  } catch (err) {
+    if (err instanceof presetCatalog.PresetDownloadError) return res.status(400).json({ code: 'preset-package', error: err.message });
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
  * Creates one pack of the preset — `pack` is essential or extended, extended when left out. When
  * the preset was loaded before, every row goes back the way it ships, and what the chosen pack does
  * not carry is removed. Answers 409 with `conflicts` when that would overwrite something that did
  * not come from it; sending `overwrite: true` is the confirmation.
  */
 app.post('/api/presets/:id/load', async (req, res) => {
-  const p = readPresets().find((x) => x.id === req.params.id);
+  let p;
+  try { p = await presetWith(req.params.id, 'load'); } catch (err) { return presetDownloadFailed(res, err); }
   if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
   if (p.problems.length) {
     return res.status(400).json({ code: 'preset-invalid', problems: p.problems, error: p.problems.join(' ') });
@@ -2987,8 +2971,11 @@ app.post('/api/presets/:id/load', async (req, res) => {
  * reads any more. What something else here still uses is kept and named in `kept`. The engine is
  * not touched — what was sent to Delphix stays there.
  */
-app.post('/api/presets/:id/unload', (req, res) => {
-  const p = readPresets().find((x) => x.id === req.params.id);
+app.post('/api/presets/:id/unload', async (req, res) => {
+  // What it brought is found by its tag; the files are compared with the ones it ships, so those
+  // come down if they are not here.
+  let p;
+  try { p = await presetWith(req.params.id, 'load'); } catch (err) { return presetDownloadFailed(res, err); }
   if (!p) return res.status(404).json({ error: 'No pre-configured discovery policy by that id.' });
 
   const copied = presetCopiedFiles(p, presetLoad(p.id));
@@ -3003,6 +2990,8 @@ app.post('/api/presets/:id/unload', (req, res) => {
     return res.status(500).json({ error: err.message });
   }
   const files = removePresetFiles(p, [...copied]);
+  // Unloaded, its download is only taking room: it comes down again if it is used again.
+  presetCatalog.dropDownload(p.id);
   res.json({ removed: [...rows.removed, ...files.removed], kept: [...rows.kept, ...files.kept] });
 });
 

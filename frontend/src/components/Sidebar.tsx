@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   Search, ShieldCheck, X, Settings, ChevronDown, ChevronRight,
-  MoreHorizontal, Server, Plus, Check, Layers, Package,
+  MoreHorizontal, Server, Plus, Check, Layers, Package, Wand2,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -91,6 +91,7 @@ interface Props {
   onNewProfileSet: () => void
   onSelectHook: (hook: Hook) => void
   onNewHook: () => void
+  onHookWizard: () => void
   onOpenSettings: (tab?: 'profileSets') => void
   onGoHome: () => void
   localePref: LocalePref
@@ -102,7 +103,7 @@ export function Sidebar({
   frameworks, loadError, activeClassName, activeAlgorithmId, activeDomainId, activeClassifierId,
   activeProfileSetId, activeHookId,
   onSelectFramework, onSelectAlgorithm, onNewAlgorithm, onSelectDomain, onNewDomain, onSelectClassifier, onNewClassifier,
-  onSelectProfileSet, onNewProfileSet, onSelectHook, onNewHook,
+  onSelectProfileSet, onNewProfileSet, onSelectHook, onNewHook, onHookWizard,
   onOpenSettings, onGoHome, localePref, onLocaleChange, onClose,
 }: Props) {
   const { t } = useT()
@@ -364,6 +365,9 @@ export function Sidebar({
                       title={t('hook.actions')}
                       newLabel={t('hook.new')}
                       onNew={onNewHook}
+                      extraLabel={t('hook.wizard')}
+                      extraIcon={Wand2}
+                      onExtra={onHookWizard}
                     />
                   ) : null
                 }
@@ -639,13 +643,14 @@ function AlgorithmList({ algorithms, buckets, mode, open, onToggleGroup, activeI
  * Frameworks has nothing to create (they come from the plugin) and Profile Sets nothing to group
  * by, and each simply leaves that half out.
  */
-function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, extraLabel, onExtra, grouping }: {
+function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, extraLabel, extraIcon: ExtraIcon = Package, onExtra, grouping }: {
   title: string
   newLabel?: string
   importLabel?: string
   onImportFromEngine?: () => void
   onNew?: () => void
   extraLabel?: string
+  extraIcon?: typeof Package
   onExtra?: () => void
   grouping?: {
     section: GroupableSection
@@ -718,7 +723,7 @@ function SectionMenu({ title, newLabel, importLabel, onImportFromEngine, onNew, 
           )}
           {extra && (
             <button onClick={() => { close(); onExtra() }} className={menuItem}>
-              <Package size={13} /> {extraLabel}
+              <ExtraIcon size={13} /> {extraLabel}
             </button>
           )}
           {grouping && (

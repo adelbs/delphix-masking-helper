@@ -26,7 +26,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
-const zlib = require('node:zlib');
+const { zip } = require('./zip');
 const delphix = require('./delphix');
 
 const SCRIPTS_DIR = path.join(__dirname, 'presets', '_bundle');
@@ -191,6 +191,9 @@ function bundleEntries(p, presetPack) {
   }
 
   add('data/index.json', json(index));
+  // The manifest as it ships, so this zip also loads the preset into the Helper of a machine that
+  // cannot reach GitHub (Settings → Discovery Policies → Import package).
+  add('data/preset.json', fs.readFileSync(path.join(p.dir, 'preset.json')));
   for (const name of p.files) add(`data/files/${name}`, fs.readFileSync(path.join(p.dir, 'files', name)));
   for (const locale of p.docs) add(`docs/doc.${locale}.pdf`, fs.readFileSync(path.join(p.dir, `doc.${locale}.pdf`)));
 
@@ -203,70 +206,6 @@ function bundleEntries(p, presetPack) {
   const ps1 = fs.readFileSync(path.join(SCRIPTS_DIR, 'import.ps1'), 'utf8').replace(/^\uFEFF/, '').replace(/\r?\n/g, '\r\n');
   add('import.ps1', Buffer.concat([Buffer.from([0xEF, 0xBB, 0xBF]), Buffer.from(ps1, 'utf8')]));
   return entries;
-}
-
-// ── Zip ───────────────────────────────────────────────────────────────────────
-//
-// Small enough to write by hand: deflated entries, UTF-8 names, and the Unix mode in the external
-// attributes so import.sh unpacks executable.
-
-function dosTime(date) {
-  const time = (date.getHours() << 11) | (date.getMinutes() << 5) | Math.floor(date.getSeconds() / 2);
-  const day = ((date.getFullYear() - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate();
-  return { time, day };
-}
-
-function zip(entries, when = new Date()) {
-  const { time, day } = dosTime(when);
-  const locals = [];
-  const centrals = [];
-  let offset = 0;
-  for (const e of entries) {
-    const data = Buffer.isBuffer(e.content) ? e.content : Buffer.from(e.content, 'utf8');
-    const name = Buffer.from(e.path, 'utf8');
-    const deflated = zlib.deflateRawSync(data, { level: 9 });
-    const stored = deflated.length >= data.length;
-    const body = stored ? data : deflated;
-    const crc = zlib.crc32(data);
-    const local = Buffer.alloc(30);
-    local.writeUInt32LE(0x04034b50, 0);
-    local.writeUInt16LE(20, 4);
-    local.writeUInt16LE(0x0800, 6);            // names are UTF-8
-    local.writeUInt16LE(stored ? 0 : 8, 8);
-    local.writeUInt16LE(time, 10);
-    local.writeUInt16LE(day, 12);
-    local.writeUInt32LE(crc, 14);
-    local.writeUInt32LE(body.length, 18);
-    local.writeUInt32LE(data.length, 22);
-    local.writeUInt16LE(name.length, 26);
-    local.writeUInt16LE(0, 28);
-    locals.push(local, name, body);
-
-    const central = Buffer.alloc(46);
-    central.writeUInt32LE(0x02014b50, 0);
-    central.writeUInt16LE((3 << 8) | 20, 4);   // made by Unix, so the mode below is read
-    central.writeUInt16LE(20, 6);
-    central.writeUInt16LE(0x0800, 8);
-    central.writeUInt16LE(stored ? 0 : 8, 10);
-    central.writeUInt16LE(time, 12);
-    central.writeUInt16LE(day, 14);
-    central.writeUInt32LE(crc, 16);
-    central.writeUInt32LE(body.length, 20);
-    central.writeUInt32LE(data.length, 24);
-    central.writeUInt16LE(name.length, 28);
-    central.writeUInt32LE(((0o100000 | (e.mode ?? 0o644)) << 16) >>> 0, 38);
-    central.writeUInt32LE(offset, 42);
-    centrals.push(central, name);
-    offset += local.length + name.length + body.length;
-  }
-  const centralSize = centrals.reduce((n, b) => n + b.length, 0);
-  const end = Buffer.alloc(22);
-  end.writeUInt32LE(0x06054b50, 0);
-  end.writeUInt16LE(entries.length, 8);
-  end.writeUInt16LE(entries.length, 10);
-  end.writeUInt32LE(centralSize, 12);
-  end.writeUInt32LE(offset, 16);
-  return Buffer.concat([...locals, ...centrals, end]);
 }
 
 /** The zip of a preset, ready to send. */

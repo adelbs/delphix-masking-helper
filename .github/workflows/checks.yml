@@ -58,6 +58,18 @@ jobs:
           fi
           echo "package.json $pkg matches $GITHUB_REF_NAME"
 
+      # What an install lists, and downloads, is presets/index.json: it has to match the folders.
+      - name: Catalog of presets
+        run: node preset-catalog.js --check
+
+      # The files a release carries — the app archives, each preset's data, PDFs and package —
+      # built from the tag, the way the maintainer will before publishing them, so a tag that
+      # cannot produce them fails here. Nothing is published from CI: the maintainer attaches the
+      # files with scripts/publish-release.sh, under their own account.
+      - name: Release files build
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: node scripts/release-assets.mjs --tag "$GITHUB_REF_NAME" --out "$RUNNER_TEMP/release-assets"
+
       # The Java runner is committed as a jar; this proves the source still compiles against the
       # API. The Delphix jars are licensed and absent here, so compilation is expected to fail on
       # missing classes — only a syntax error should stop the build.

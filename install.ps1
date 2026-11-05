@@ -10,6 +10,10 @@
 # It only ever touches its own install directory and a launcher in %LOCALAPPDATA%\Programs\bin.
 # Node, Java and git are checked, never installed: this will not change your toolchain.
 #
+# A release installs from the archive attached to it on GitHub - the app already built, checked
+# against the release's SHA256SUMS - so only Node and Java are needed. git is needed only for a
+# release without that archive, or to follow the default branch: then it clones and builds.
+#
 # The Delphix libraries are licensed and cannot be downloaded by anything — the app itself
 # explains how to supply them on first run.
 
@@ -18,6 +22,11 @@ $ErrorActionPreference = 'Stop'
 $RepoUrl    = if ($env:DLPX_REPO_URL) { $env:DLPX_REPO_URL } else { 'https://github.com/adelbs/delphix-masking-helper.git' }
 # Pins the install to one ref. Empty means "the newest release", resolved from the remote.
 $DlpxRef    = if ($env:DLPX_REF) { $env:DLPX_REF } else { '' }
+# Where the files of the releases are; a mirror can stand in for GitHub. Each release is a folder
+# named after its tag, holding delphix-masking-helper-<tag>.zip and SHA256SUMS.
+$RepoPath   = ($RepoUrl -replace '^.*github\.com[/:]', '') -replace '\.git$', ''
+$ReleasesUrl = if ($env:DLPX_RELEASES_URL) { $env:DLPX_RELEASES_URL.TrimEnd('/') } else { "https://github.com/$RepoPath/releases/download" }
+$script:HaveGit = $false
 $DefaultDir = Join-Path $HOME 'delphix-masking-helper'
 $BinDir     = Join-Path $env:LOCALAPPDATA 'Programs\bin'
 $Launcher   = Join-Path $BinDir 'dlpx-helper.cmd'
@@ -46,6 +55,16 @@ function Ask {
 # unauthenticated rate limit to trip over. Only vMAJOR.MINOR.PATCH counts, so a pre-release tag
 # (v2.0.0-rc1) is never picked up by someone running the plain one-liner.
 function Get-LatestRef {
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) {
+        # Without git: where GitHub sends .../releases/latest, which ends in the newest tag.
+        try {
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $r = Invoke-WebRequest -UseBasicParsing -Method Head "https://github.com/$RepoPath/releases/latest"
+            $final = if ($r.BaseResponse.ResponseUri) { "$($r.BaseResponse.ResponseUri)" } else { "$($r.BaseResponse.RequestMessage.RequestUri)" }
+            if ($final -match '/releases/tag/(v\d+\.\d+\.\d+)$') { return $Matches[1] }
+        } catch { }
+        return ''
+    }
     try {
         $tags = @(git ls-remote --tags --refs $RepoUrl 2>$null |
             ForEach-Object { ($_ -split '\s+')[1] -replace '^refs/tags/', '' } |
@@ -127,9 +146,10 @@ function Test-Prereqs {
         Show-Missing java "Java $JavaMin or newer" $javaHint; $missing = $true
     }
 
+    # Only a release without its archive, or the default branch, needs git: checked, not required.
     $gitOut = Get-ToolVersion git '--version'
-    if ($gitOut -match 'git version (\S+)') { Ok "git $($Matches[1])" }
-    else { Show-Missing git 'git' $gitHint; $missing = $true }
+    if ($gitOut -match 'git version (\S+)') { Ok "git $($Matches[1])"; $script:HaveGit = $true }
+    else { Say "  - git is not installed: fine for a release, needed only to follow the default branch." }
 
     if ($missing) { Die "Install what is missing above, then run this again. Nothing was changed." }
 }
@@ -199,6 +219,11 @@ function Stop-App {
 # the version must never be what takes the launcher down.
 function Get-AppVersion {
     $v = $null
+    $release = Join-Path $AppDir 'release.json'
+    if (Test-Path $release) {
+        try { $v = (Get-Content -Raw $release | ConvertFrom-Json).tag } catch { $v = $null }
+        if ($v) { return "$v" }
+    }
     try {
         $v = & git -C $AppDir describe --tags --always --dirty 2>$null
         if ($LASTEXITCODE -ne 0) { $v = $null }
@@ -289,7 +314,7 @@ function Invoke-Install {
     Step "Where should it be installed?"
     $dir = Ask "  Directory [$DefaultDir]" $DefaultDir
 
-    if (Test-Path (Join-Path $dir '.git')) {
+    if ((Test-Path (Join-Path $dir '.git')) -or (Test-Path (Join-Path $dir 'release.json'))) {
         Warn "There is already an install at $dir."
         if (Confirm "  Update it instead?") { Invoke-Update $dir; return }
         Die "Nothing was changed."
@@ -300,31 +325,174 @@ function Invoke-Install {
 
     Step "Downloading"
     $ref = Resolve-Ref
-    if ($ref) {
-        # A release is checked out detached by definition; git's advice about that is noise here.
-        git -c advice.detachedHead=false clone --quiet --depth 1 --branch $ref $RepoUrl $dir
-        if ($LASTEXITCODE -ne 0) { Die "Could not clone $ref from $RepoUrl." }
-        Ok "Cloned $ref into $dir"
+    $new = if ($ref) { Get-Release $ref } else { $null }
+    if ($new) {
+        New-Item -ItemType Directory -Force -Path $dir | Out-Null
+        Copy-Item -Recurse -Force (Join-Path $new '*') $dir
+        Remove-Item -Recurse -Force (Split-Path $new)
+        Ok "Installed $ref into $dir"
+    } elseif ($script:HaveGit) {
+        if ($ref) {
+            Warn "$ref has no release archive - cloning and building it instead."
+            Copy-App $ref $dir
+            if ($LASTEXITCODE -ne 0) { Die "Could not clone $ref from $RepoUrl." }
+            Ok "Cloned $ref into $dir"
+        } else {
+            # No tag to track: better a working install off the default branch than none at all.
+            Copy-App '' $dir
+            if ($LASTEXITCODE -ne 0) { Die "Could not clone $RepoUrl." }
+            Warn "No release tag found - installed the default branch instead."
+        }
+        Invoke-Build $dir
     } else {
-        # No tag to track: better a working install off the default branch than none at all.
-        git clone --quiet --depth 1 $RepoUrl $dir
-        if ($LASTEXITCODE -ne 0) { Die "Could not clone $RepoUrl." }
-        Warn "No release tag found - installed the default branch instead."
+        $which = if ($ref) { $ref } else { 'The newest release' }
+        Die "$which has no release archive to install, and without git it cannot be cloned. Install git and run this again."
     }
 
-    Invoke-Build $dir
     Write-Launcher $dir
     Add-ToPath
     if (Confirm "  Create a desktop shortcut?") { New-Shortcut $dir }
     Show-Finish $dir
 }
 
+# The presets are most of the repository, and a user loads one or two: the app downloads a
+# preset's files from GitHub the first time it is used (preset-catalog.js). So the checkout leaves
+# their folders out, keeping presets/index.json, the shared tooling under presets/_*/ and the rest.
+$PresetPatterns = @('/*', '!/presets/*/', '/presets/_*/')
+
+# A partial clone (blobs fetched only for what is checked out) without the preset folders. An
+# empty ref is the default branch. A git too old for either gets the whole repository, which works
+# the same. A release is checked out detached by definition; git's advice about that is noise here.
+function Copy-App($Ref, $Dir) {
+    # Git writes to stderr when it falls short, and Windows PowerShell 5.1 turns that into a
+    # terminating error under Stop: the fallback below would never run.
+    $ErrorActionPreference = 'Continue'
+    $branch = @(); if ($Ref) { $branch = @('--branch', $Ref) }
+    git -c advice.detachedHead=false clone --quiet --depth 1 --filter=blob:none --no-checkout @branch $RepoUrl $Dir 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        git -C $Dir sparse-checkout set --no-cone @PresetPatterns 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            if ($Ref) { git -C $Dir -c advice.detachedHead=false checkout --quiet --detach $Ref }
+            else { git -C $Dir checkout --quiet }
+            if ($LASTEXITCODE -eq 0) { return }
+        }
+    }
+    if (Test-Path $Dir) { Remove-Item -Recurse -Force $Dir }
+    git -c advice.detachedHead=false clone --quiet --depth 1 @branch $RepoUrl $Dir
+}
+
+# An install from before: from now on it fetches without the blobs it does not check out, and its
+# preset folders leave the working tree. What the old clone already holds in .git stays there;
+# reinstalling frees that too.
+function Limit-Presets($Dir) {
+    $ErrorActionPreference = 'Continue'   # "not sparse" on stderr is an answer, not a failure
+    $list = @(git -C $Dir sparse-checkout list 2>$null)
+    if ($LASTEXITCODE -eq 0 -and $list -contains '!/presets/*/') { return }
+    git -C $Dir config remote.origin.promisor true
+    git -C $Dir config remote.origin.partialclonefilter blob:none
+    git -C $Dir sparse-checkout set --no-cone @PresetPatterns 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Ok "Preset folders left out of the checkout - each comes down when it is first used"
+    } else {
+        git -C $Dir config --unset remote.origin.promisor
+        git -C $Dir config --unset remote.origin.partialclonefilter
+    }
+}
+
+# ---- the release archive ----------------------------------------------------
+
+# The app archive of a release and its SHA256SUMS, checked and unpacked into a new temporary
+# folder; answers the folder of the app inside, or $null when that release has no archive (one
+# published before there were any). An archive that is there but wrong stops everything.
+function Get-Release($Tag) {
+    $ErrorActionPreference = 'Stop'
+    $ProgressPreference = 'SilentlyContinue'   # Windows PowerShell 5.1 crawls while drawing it
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    $name = "delphix-masking-helper-$Tag"
+    $tmp = Join-Path ([IO.Path]::GetTempPath()) ("dlpx-" + [guid]::NewGuid())
+    New-Item -ItemType Directory -Path $tmp | Out-Null
+    try {
+        Invoke-WebRequest -UseBasicParsing -OutFile (Join-Path $tmp 'SHA256SUMS') "$ReleasesUrl/$Tag/SHA256SUMS"
+    } catch { Remove-Item -Recurse -Force $tmp; return $null }
+    $want = Get-Content (Join-Path $tmp 'SHA256SUMS') | ForEach-Object { $f = $_ -split '\s+'; if ($f[1] -eq "$name.zip") { $f[0] } } | Select-Object -First 1
+    if (-not $want) { Remove-Item -Recurse -Force $tmp; return $null }
+    $zip = Join-Path $tmp "$name.zip"
+    Say "  Downloading $name.zip"
+    try { Invoke-WebRequest -UseBasicParsing -OutFile $zip "$ReleasesUrl/$Tag/$name.zip" } catch { Remove-Item -Recurse -Force $tmp; return $null }
+    if ((Get-FileHash -Algorithm SHA256 $zip).Hash.ToLower() -ne $want.ToLower()) {
+        Remove-Item -Recurse -Force $tmp; Die "$name.zip does not match the release's SHA256SUMS."
+    }
+    Expand-Archive -Path $zip -DestinationPath $tmp
+    $app = Join-Path $tmp $name
+    if (-not (Test-Path (Join-Path $app 'release.json'))) { Remove-Item -Recurse -Force $tmp; Die "$name.zip is not a Delphix Masking Helper release." }
+    return $app
+}
+
+function Get-ReleaseFiles($Json) { @((Get-Content -Raw $Json | ConvertFrom-Json).files) }
+
+# Puts the release unpacked at $New in place of the app at $Dir. What the old version brought and
+# the new one does not is removed; what is not the app's - db\ (everything saved in it, the
+# downloaded presets), the jars in lib\, test files - is never touched. An install made with git
+# loses its .git and its build tools: from here on it updates from archives.
+function Sync-Release($New, $Dir) {
+    $ErrorActionPreference = 'Continue'
+    if (-not $Dir -or -not $New) { Die "Nothing to update." }
+    $old = @()
+    if (Test-Path (Join-Path $Dir 'release.json')) { $old = Get-ReleaseFiles (Join-Path $Dir 'release.json') }
+    elseif (Test-Path (Join-Path $Dir '.git')) { $old = @(git -C $Dir ls-files 2>$null) }
+    $keep = @{}; foreach ($f in (Get-ReleaseFiles (Join-Path $New 'release.json'))) { $keep[$f] = $true }
+    foreach ($f in $old) {
+        if (-not $f -or $keep.ContainsKey($f) -or $f -like 'db/*' -or $f -like 'lib/*.jar' -or $f -match '\.\.') { continue }
+        $path = Join-Path $Dir ($f -replace '/', '\')
+        Remove-Item -Force -ErrorAction SilentlyContinue $path
+        # And the folders it leaves empty.
+        $parent = Split-Path $path
+        while ($parent -and $parent.Length -gt $Dir.Length -and (Test-Path $parent) -and -not (Get-ChildItem -Force $parent)) {
+            Remove-Item -Force $parent; $parent = Split-Path $parent
+        }
+    }
+    foreach ($sub in 'node_modules', 'frontend\dist', 'frontend\node_modules', '.git') {
+        $path = Join-Path $Dir $sub
+        if (Test-Path $path) { Remove-Item -Recurse -Force $path }
+    }
+    Copy-Item -Recurse -Force (Join-Path $New '*') $Dir
+}
+
 function Invoke-Update {
     param($Dir = '')
     if (-not $Dir) { $Dir = Get-InstallDir }
-    if (-not (Test-Path (Join-Path $Dir '.git'))) { Die "No install found. Run without -Update to install." }
+    $release = Join-Path $Dir 'release.json'
+    if (-not (Test-Path (Join-Path $Dir '.git')) -and -not (Test-Path $release)) { Die "No install found. Run without -Update to install." }
 
     Step "Updating $Dir"
+    $ref = Resolve-Ref
+
+    # From the release archive whenever the release has one - a git install moves over to archives.
+    if ($ref) {
+        $current = if (Test-Path $release) { (Get-Content -Raw $release | ConvertFrom-Json).tag } else { '' }
+        if ($current -eq $ref) {
+            Ok "Already up to date ($ref)."
+            Write-Launcher $Dir
+            return
+        }
+        $new = Get-Release $ref
+        if ($new) {
+            if (Test-Path (Join-Path $Dir '.git')) { Say "  This install was made with git; from now on it updates from release archives." }
+            $from = if ($current) { $current } else { 'the old version' }
+            Sync-Release $new $Dir
+            Remove-Item -Recurse -Force (Split-Path $new)
+            Ok "Updated $from -> $ref"
+            Write-Launcher $Dir
+            Say ""
+            Ok "Your saved algorithms and settings were untouched - they live in $Dir\db\."
+            Say "  Restart it with: dlpx-helper restart"
+            return
+        }
+        if (-not (Test-Path (Join-Path $Dir '.git'))) { Die "$ref has no release archive, and this install was not made with git." }
+        Warn "$ref has no release archive - updating with git instead."
+    }
+    if (-not (Test-Path (Join-Path $Dir '.git'))) { Die "No release to update to was found." }
+    if (-not (Get-Command git -ErrorAction SilentlyContinue)) { Die "This install updates with git, which is not installed." }
 
     # git refuses to move a working tree that has edits in it, and the message it gives back
     # is one line with no names in it. Ask first, list them, and let the answer decide - an
@@ -344,7 +512,7 @@ function Invoke-Update {
     }
 
     $before = (git -C $Dir rev-parse --short HEAD)
-    $ref = Resolve-Ref
+    Limit-Presets $Dir
 
     if ($ref) {
         # Fetching the one tag keeps the clone shallow. It is allowed to fail - an install that
@@ -422,7 +590,7 @@ function Invoke-Entry {
     Say "Delphix Masking Helper"
     Say "An independent open source project. Requires an active Delphix licence."
     $existing = Get-InstallDir
-    if ((Test-Path (Join-Path $existing '.git')) -and (Test-Path $Launcher)) {
+    if (((Test-Path (Join-Path $existing '.git')) -or (Test-Path (Join-Path $existing 'release.json'))) -and (Test-Path $Launcher)) {
         Say ""
         Say "  An install was found at $existing."
         $choice = Ask "  [u]pdate, [r]emove, or [q]uit? [u]" 'u'

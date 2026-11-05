@@ -9,6 +9,8 @@
 //   GET  /api/hooks/runtime      which interpreters this machine has
 //   POST /api/hooks/run          runs a script now; server-sent events: out, exit, error
 //   POST /api/delphix/hooks/export/:id   sends one hook to DCT as a hook template
+//   GET  /api/hooks/wizard-options       what the hook wizard offers: DCT's policies and orchestrators
+//   POST /api/hooks/assist       the assistant on a hook; server-sent events: delta, done, error
 //
 // What a hook runs is the user's own script, on the user's own machine, started only by a click on
 // Run: the same trust as typing it in a terminal. It gets this machine's environment minus the
@@ -24,6 +26,7 @@ const POWERSHELL = new Set(['ps', 'psd']);
 const MAX_OUTPUT = 1024 * 1024;
 const RUN_TIMEOUT_DEFAULT = 300;
 const RUN_TIMEOUT_MAX = 3600;
+const WIZARD_WAIT_MS = 10000;
 
 /** Whether a command is on PATH. */
 function found(command) {
@@ -91,12 +94,69 @@ function cleanVariables(list) {
     const name = varName(v?.name);
     if (!isVarName(name) || seen.has(name)) continue;
     seen.add(name);
-    out.push({ name, value: String(v?.value ?? '') });
+    // A credential's test value is kept too, marked secret so the screen hides it; fromSettings
+    // takes the API key of the integration at run time instead of a copy of it.
+    out.push({
+      name, value: v?.fromSettings ? '' : String(v?.value ?? ''),
+      ...(v?.secret ? { secret: true } : {}), ...(v?.fromSettings ? { fromSettings: true } : {}),
+    });
   }
   return out;
 }
 
-module.exports = function mountHooks(app, { db, delphix, delphixCfg }) {
+// What the assistant knows about hooks, beyond what any model knows about shells. The DCT calls are
+// the ones the hook wizard uses, measured against a DCT 3.30 lab.
+const ASSIST_PROMPT = `You help write Delphix hooks: scripts a Delphix Continuous Data engine runs on the host of a
+dataset at a point of its life, kept in Data Control Tower (DCT) as hook templates.
+
+Hook points: dSource Pre-sync, Post-sync; VDB Configure Clone (after provision and after each refresh,
+with the database open), Pre/Post-refresh, Pre/Post-rollback, Pre/Post-snapshot, Pre/Post-start,
+Pre/Post-stop. A hook that exits non-zero fails the operation.
+
+Shells, as DCT names them: bash, shell (POSIX sh), expect, ps (PowerShell), psd (delegated PowerShell).
+Unix hosts often lack jq and python: prefer POSIX sh with curl, grep and sed. Windows hosts run Windows
+PowerShell 5.1: no ternaries, no ?? operator, no -SkipCertificateCheck (use
+ServicePointManager.ServerCertificateValidationCallback), ConvertTo-Json needs -Depth.
+
+Variables Delphix sets: Oracle — ORACLE_SID, ORACLE_BASE, ORACLE_HOME, CRS_HOME, DELPHIX_DATABASE_NAME,
+DELPHIX_DATABASE_UNIQUE_NAME, DELPHIX_PDB_NAME, DELPHIX_MOUNT_PATH; SQL Server — VDB_DATABASE_NAME,
+VDB_INSTANCE_NAME, VDB_INSTANCE_HOST, VDB_INSTANCE_PORT; AppData, files, DB2 — DLPX_DATA_DIRECTORY.
+Each credential configured on the hook template gives <BASE>_USER, <BASE>_PASSWORD (and _PUBKEY,
+_PRIVKEY for SSH keys). Secrets belong in credentials, never in the script.
+
+DCT API (base {host}/dct/v3, header "Authorization: apk <key>"; a lab often needs curl -k):
+- Writes answer {id?, job}; follow GET /jobs/{id} until status COMPLETED, or FAILED / CANCELED /
+  TIMEDOUT / ABANDONED / SUSPENDED (error_details says why).
+- POST /<objects>/search {"filter_expression": "name eq 'X' and dct_managed eq true"} answers
+  {items, response_metadata: {total, next_cursor}}; limit up to 1000.
+- VDBs: GET /vdbs/{id}; POST /vdbs/search (fields name, database_name, parent_id, fqdn, ip_address,
+  jdbc_connection_string, instance_name, content_type); POST /vdbs/{id}/snapshots;
+  POST /vdbs/{id}/refresh_by_timestamp {} refreshes from the parent's latest point.
+- Masking connections: POST /connectors {name, type: DATABASE, database_type: ORACLE|MSSQL|POSTGRES|
+  MYSQL|MARIADB|DB2|SYBASE, job_orchestrator_id, hostname, port, sid (Oracle) or database_name,
+  instance_name (SQL Server), schema_name, username, password} or jdbc_url instead of host/port/sid;
+  PATCH /connectors/{id}; POST /connectors/{id}/test answers {status: SUCCEEDED|FAILED, message};
+  POST /connectors/{id}/fetch-table-names answers {items: [table names]}. GET /job-orchestrators.
+- Rule sets: POST /rule-sets {name, connector_id}; tables via POST /database-table-metadata/search
+  (filter rule_set_id eq '…') and POST /rule-sets/{id}/bulk-table-delta-update
+  {add: [{table_name}], delete: [{table_name}]} — adding fails while the connection does not work.
+- Compliance jobs: POST /compliance-jobs {name, type: MASKING|DISCOVERY, rule_set_id,
+  discovery_policy_id, reset_profiling_assignments}; PATCH /compliance-jobs/{id};
+  POST /compliance-jobs/{id}/execute {}; a masking job of an engine runs at /masking-jobs/{id}/execute.
+  Discovery policies at /discovery-policies.
+- Job collections: POST /compliance-job-collections {name, failure_handling: CANCEL_ALL|
+  CANCEL_SUBSEQUENT|IGNORE, members: [{sequence, compliance_job_id}]} (the new id is job.target_id);
+  PATCH to replace members; POST /compliance-job-collections/{id}/execute {}.
+- Hook templates: GET|POST /hook-templates {name, description, shell, command}.
+
+A database that has just opened may refuse connections for a while (Oracle registers its service with
+the listener late): wait on /connectors/{id}/test before masking. A child VDB refreshed while its parent
+is being masked gets the parent's last snapshot: snapshot the parent first.
+
+Answer in the language the user writes in, briefly. When you change or write the script, give the whole
+script in one fenced code block, in the language of the hook's shell, and say in a line what changed.`;
+
+module.exports = function mountHooks(app, { db, delphix, delphixCfg, ai, readConfig }) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS hooks (
       id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -141,6 +201,69 @@ module.exports = function mountHooks(app, { db, delphix, delphixCfg }) {
 
   app.get('/api/hooks/runtime', (req, res) => res.json(runtime()));
 
+  /**
+   * What the wizard fills its fields from: the DCT the integration points at, and the discovery
+   * policies and job orchestrators there. Without a DCT integration the wizard still works, with
+   * every name typed.
+   */
+  app.get('/api/hooks/wizard-options', async (req, res) => {
+    const cfg = delphixCfg();
+    const out = { target: delphix.isConfigured(cfg) ? cfg.target : null, dctUrl: '', insecure: false, policies: [], orchestrators: [] };
+    if (out.target !== 'dct') return res.json(out);
+    out.dctUrl = cfg.baseUrl;
+    out.insecure = cfg.allowSelfSigned;
+    try {
+      // The wizard opens on this answer: a DCT that does not answer soon is typed around, not waited for.
+      let timer;
+      const late = new Promise((_, reject) => { timer = setTimeout(() => reject(new Error(`no answer from ${cfg.baseUrl} in ${WIZARD_WAIT_MS / 1000} s`)), WIZARD_WAIT_MS); });
+      const [policies, orchestrators] = await Promise.race([
+        Promise.all([delphix.listProfileSets(cfg), delphix.listJobOrchestrators(cfg)]),
+        late,
+      ]).finally(() => clearTimeout(timer));
+      out.policies = policies.map((p) => ({ id: p.profileSetId, name: p.profileSetName }));
+      out.orchestrators = orchestrators;
+    } catch (err) {
+      out.error = err.message;
+    }
+    res.json(out);
+  });
+
+  /** The assistant on the hook on screen: it reads the script, and answers with a whole new one. */
+  app.post('/api/hooks/assist', async (req, res) => {
+    const config = readConfig();
+    const cfg = ai.providerSettings(config, config.aiProvider);
+    const hook = req.body?.hook ?? {};
+    const messages = (Array.isArray(req.body?.messages) ? req.body.messages : [])
+      .map((m) => ({ role: m.role === 'assistant' ? 'assistant' : 'user', content: String(m.content ?? '') }));
+    const shell = SHELLS.includes(hook.shell) ? hook.shell : 'bash';
+    const system = `${ASSIST_PROMPT}
+
+The hook on screen — name: ${String(hook.name ?? '') || '(none yet)'}; shell: ${shell}; credentials:
+${(Array.isArray(hook.credentials) && hook.credentials.length ? hook.credentials : ['none']).join(', ')}.
+Description: ${String(hook.description ?? '') || '(none)'}
+Script:
+\`\`\`
+${String(hook.command ?? '').slice(0, 60000) || '(empty)'}
+\`\`\``;
+
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+    const send = (event, data) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+    const controller = new AbortController();
+    res.on('close', () => controller.abort());
+    try {
+      await ai.streamChat({ cfg, system, messages, onDelta: (delta) => send('delta', { delta }), signal: controller.signal });
+      send('done', {});
+    } catch (err) {
+      if (!controller.signal.aborted) {
+        send('error', { message: err.message || err.cause?.message || `The ${cfg.id ?? 'AI'} provider did not answer.` });
+      }
+    }
+    res.end();
+  });
+
   app.post('/api/hooks', (req, res) => {
     const problem = validate(req.body);
     if (problem) return res.status(problem.status ?? 400).json(problem);
@@ -163,11 +286,12 @@ module.exports = function mountHooks(app, { db, delphix, delphixCfg }) {
     if (problem) return res.status(problem.status ?? 400).json(problem);
     db.prepare(`
       UPDATE hooks SET name = ?, description = ?, shell = ?, command = ?, credentials = ?, variables = ?,
-             updated_at = datetime('now')
+             template = ?, updated_at = datetime('now')
       WHERE id = ?
     `).run(
       String(merged.name).trim(), String(merged.description ?? ''), merged.shell, String(merged.command ?? ''),
-      JSON.stringify(cleanCredentials(merged.credentials)), JSON.stringify(cleanVariables(merged.variables)), current.id,
+      JSON.stringify(cleanCredentials(merged.credentials)), JSON.stringify(cleanVariables(merged.variables)),
+      merged.template ? String(merged.template) : null, current.id,
     );
     res.json(get(current.id));
   });
@@ -209,7 +333,9 @@ module.exports = function mountHooks(app, { db, delphix, delphixCfg }) {
     const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => !PRIVATE_ENV.test(k)));
     for (const v of Array.isArray(req.body?.env) ? req.body.env : []) {
       const name = varName(v?.name);
-      if (isVarName(name)) env[name] = String(v?.value ?? '');
+      if (!isVarName(name)) continue;
+      // The integration's API key, read here: the page only ever sees it masked.
+      env[name] = v?.fromSettings ? String(readConfig()['delphix.apiKey'] ?? '') : String(v?.value ?? '');
     }
 
     const started = Date.now();

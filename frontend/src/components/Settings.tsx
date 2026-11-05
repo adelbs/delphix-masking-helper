@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   PanelLeftOpen, Save, Plus, Upload, Pencil, Trash2, X, Check, RefreshCw, CheckCircle2,
-  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers, ChevronDown, Search, Globe2, PackageOpen,
+  AlertTriangle, CloudUpload, Lock, Loader2, FileDown, Download, RotateCcw, Layers, ChevronDown, Search, Globe2, PackageOpen, CloudDownload,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { api, type DelphixTarget } from '@/lib/api'
@@ -365,6 +365,10 @@ const formatLoadedAt = (value: string, locale: Locale) =>
  * A preset's version date is a plain day: read it as UTC so it is not shown as the day before. A
  * value that does not parse is shown as it came, rather than as "Invalid Date".
  */
+/** Bytes as megabytes, one decimal, in the reader's number format. */
+const megabytes = (bytes: number, locale: Locale) =>
+  `${(bytes / 1e6).toLocaleString(locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} MB`
+
 const formatVersionDate = (value: string | null, locale: Locale) => {
   if (!value) return '—'
   const day = new Date(`${value}T00:00:00Z`)
@@ -388,6 +392,24 @@ function PresetsTab() {
   const [query, setQuery] = useState('')
   const [region, setRegion] = useState<PresetRegion | 'other' | 'all'>('all')
   const [onlyLoaded, setOnlyLoaded] = useState(false)
+  const [importing, setImporting] = useState(false)
+  const packageInput = useRef<HTMLInputElement>(null)
+
+  /** A zip copied by hand, for a machine that cannot download from GitHub. */
+  const importPackage = async (file: File) => {
+    setImporting(true)
+    try {
+      const out = await api.importPresetPackage(file)
+      const listed = presets?.find(p => p.id === out.id)
+      toast.success(t('presets.imported', { name: listed ? text(listed.name) : out.id }))
+      setPresets(await api.getPresets())
+    } catch (e) {
+      toast.error((e as Error).message)
+    } finally {
+      setImporting(false)
+      if (packageInput.current) packageInput.current.value = ''
+    }
+  }
 
   useEffect(() => {
     api.getPresets().then(setPresets).catch(() => { setFailed(true); setPresets([]) })
@@ -482,6 +504,12 @@ function PresetsTab() {
           {preset.loaded && preset.version !== null && preset.loaded.version !== preset.version && (
             <p className="text-xs text-amber-700 mt-1">{t('presets.newVersion', { version: preset.version, date: formatVersionDate(preset.versionDate, locale) })}</p>
           )}
+          {(preset.download.state === 'remote' || preset.download.state === 'outdated') && (
+            <p className="flex items-center gap-1 text-xs text-slate-400 mt-1">
+              <CloudDownload size={12} />
+              {t(preset.download.state === 'outdated' ? 'presets.downloadOutdated' : 'presets.downloadRemote', { size: megabytes(preset.download.size, locale) })}
+            </p>
+          )}
           {blocked && (
             <div className="mt-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               <p className="font-medium">{t('presets.invalid')}</p>
@@ -537,7 +565,9 @@ function PresetsTab() {
             )}
           >
             {working && !busy.unloading ? <Loader2 size={13} className="animate-spin" /> : preset.loaded ? <RotateCcw size={13} /> : <Download size={13} />}
-            {working && !busy.unloading ? t('presets.working') : preset.loaded ? t('presets.reset') : t('presets.load')}
+            {working && !busy.unloading
+              ? t(preset.download.state === 'remote' || preset.download.state === 'outdated' ? 'presets.downloading' : 'presets.working')
+              : preset.loaded ? t('presets.reset') : t('presets.load')}
           </PackMenu>
           {preset.loaded && (
             <button
@@ -585,6 +615,18 @@ function PresetsTab() {
   return (
     <div className="max-w-2xl space-y-4">
       <p className="text-sm text-slate-500">{t('presets.intro')}</p>
+      <div className="flex items-start gap-3 text-xs text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
+        <CloudDownload size={14} className="shrink-0 mt-0.5 text-slate-400" />
+        <p className="flex-1">{t('presets.downloadIntro')}</p>
+        <input ref={packageInput} type="file" accept=".zip,application/zip" className="hidden"
+               onChange={e => { const f = e.target.files?.[0]; if (f) void importPackage(f) }} />
+        <button type="button" onClick={() => packageInput.current?.click()} disabled={importing}
+                title={t('presets.importHint')}
+                className="shrink-0 flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg disabled:opacity-60">
+          {importing ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
+          {t('presets.import')}
+        </button>
+      </div>
 
       {presets !== null && !failed && presets.length > 0 && (
         <div className="space-y-2">

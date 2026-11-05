@@ -617,6 +617,13 @@ async function saveHookTemplate(cfg, { name, description, shell, command, existi
   return { mode: 'created', id: out?.hook_template?.id ?? null, name };
 }
 
+// ── What a hook made by the wizard picks from ─────────────────────────────────
+
+/** The job orchestrators a new masking connection can belong to. */
+async function listJobOrchestrators(cfg) {
+  return (await list(cfg, '/job-orchestrators')).map((o) => ({ id: o.id, name: o.name }));
+}
+
 module.exports = {
   DctError, apiRoot, probe, list, waitForJob,
   frameworks, listAlgorithms, getAlgorithm, saveAlgorithm,
@@ -624,6 +631,6 @@ module.exports = {
   classifierFrameworks, listClassifiers, getClassifier, saveClassifier,
   listProfileSets, getProfileSet, saveProfileSet,
   uploadFile, uploadedFiles, classifierFiles, lookupFile,
-  listHookTemplates, saveHookTemplate,
+  listHookTemplates, saveHookTemplate, listJobOrchestrators,
   builtinKey,
 };
