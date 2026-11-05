@@ -1,0 +1,306 @@
+{
+  "PT_L1_CARTAO_CIDADAO": [
+    "12345678 9 ZZ1",
+    "123456789ZY3",
+    "12345678-9"
+  ],
+  "PT_L1_NIF": [
+    "234567899",
+    "PT234567899",
+    "501964843"
+  ],
+  "PT_L1_NISS": [
+    "12345678902",
+    "21234567890"
+  ],
+  "PT_L1_PASSAPORTE": [
+    "CB123456"
+  ],
+  "PT_L1_TITULO_RESIDENCIA": [
+    "A123456789"
+  ],
+  "PT_L1_CARTA_CONDUCAO": [
+    "L-123456 7"
+  ],
+  "PT_L1_NUMERO_ESTUDANTE": [
+    "2012345"
+  ],
+  "PT_L1_CEDULA_PROFISSIONAL": [
+    "54321"
+  ],
+  "PT_L1_NOME": [
+    "Maria da Conceição",
+    "JOÃO PEDRO",
+    "Inês"
+  ],
+  "PT_L1_APELIDO": [
+    "Ferreira dos Santos",
+    "Sousa e Silva"
+  ],
+  "PT_L1_NOME_COMPLETO": [
+    "Maria da Conceição Ferreira dos Santos",
+    "Inês Gonçalves",
+    "SILVA, JOÃO PEDRO"
+  ],
+  "PT_L1_EMAIL": [
+    "ines.goncalves@gmail.com"
+  ],
+  "PT_L1_TELEFONE": [
+    "+351 912 345 678",
+    "912345678",
+    "21 123 4567"
+  ],
+  "PT_L1_MORADA": [
+    "Rua da Liberdade, 12, 3.º Esq.",
+    "Avenida 25 de Abril 45, R/C"
+  ],
+  "PT_L1_MORADA_COMPLEMENTO": [
+    "3.º Esq.",
+    "Lote 12"
+  ],
+  "PT_L1_CONTA_BANCARIA": [
+    "PT50003506510000002073145",
+    "PT50 0035 0651 0000 0020 7314 5",
+    "003506510000002073145"
+  ],
+  "PT_L1_CARTAO_PAGAMENTO": [
+    "4532 0000 0000 0001"
+  ],
+  "PT_L1_CARTEIRA_DIGITAL": [
+    "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"
+  ],
+  "PT_L1_IP": [
+    "85.243.120.12"
+  ],
+  "PT_L1_DISPOSITIVO": [
+    "3c:22:fb:9a:10:e4",
+    "356938035643809"
+  ],
+  "PT_L1_COOKIE": [
+    "GA1.2.123456789.1700000000"
+  ],
+  "PT_L1_MATRICULA": [
+    "AA-12-BC",
+    "12-AB-34",
+    "12-34-AB"
+  ],
+  "PT_L1_VEICULO": [
+    "VF1RFB00X56123456"
+  ],
+  "PT_L1_IMOVEL": [
+    "110508-U-1234",
+    "R-123"
+  ],
+  "PT_L1_PONTO_ENTREGA": [
+    "PT0002000066435112QY"
+  ],
+  "PT_L1_CONTRATO": [
+    "CT-123456"
+  ],
+  "PT_L1_UTILIZADOR": [
+    "ines_goncalves"
+  ],
+  "PT_L1_CREDENCIAL": [
+    "Senha#2024"
+  ],
+  "PT_L1_IMAGEM": [
+    "/fotos/pessoa_12.jpg"
+  ],
+  "PT_L1_GEOLOCALIZACAO": [
+    "38.722252,-9.139337"
+  ],
+  "PT_L1_TEXTO_LIVRE": [
+    "Cliente Gonçalves, NIF 234567899, email i.goncalves@gmail.com, telemóvel 912345678"
+  ],
+  "PT_L2_DATA_NASCIMENTO": [
+    "1985-07-20"
+  ],
+  "PT_L2_ANO_NASCIMENTO": [
+    "1985"
+  ],
+  "PT_L2_IDADE": [
+    "37",
+    "104"
+  ],
+  "PT_L2_DATA_EVENTO": [
+    "2021-03-15"
+  ],
+  "PT_L2_SEXO": [
+    "F",
+    "Masculino"
+  ],
+  "PT_L2_CONCELHO": [
+    "Mértola",
+    "Corvo",
+    "Lisboa"
+  ],
+  "PT_L2_FREGUESIA": [
+    "Alvarenga",
+    "Ajuda (Lisboa)",
+    "Amora"
+  ],
+  "PT_L2_CODIGO_AUTARQUICO": [
+    "0209",
+    "020901",
+    "1106"
+  ],
+  "PT_L2_CODIGO_POSTAL": [
+    "7750-320",
+    "1000-001"
+  ],
+  "PT_L2_NACIONALIDADE": [
+    "Timorense"
+  ],
+  "PT_L2_SITUACAO_RESIDENCIA": [
+    "Autorização de residência CPLP"
+  ],
+  "PT_L2_ESTADO_CIVIL": [
+    "União de facto",
+    "2"
+  ],
+  "PT_L2_PROFISSAO": [
+    "Diretor de operações",
+    "2221"
+  ],
+  "PT_L2_ENTIDADE_EMPREGADORA": [
+    "Corporação Industrial do Atlântico, S.A."
+  ],
+  "PT_L2_ESCOLARIDADE": [
+    "Licenciatura",
+    "7"
+  ],
+  "PT_L2_ESTABELECIMENTO_ENSINO": [
+    "Universidade de Évora"
+  ],
+  "PT_L2_AGREGADO": [
+    "9"
+  ],
+  "PT_L3_ORIGEM_ETNICA": [
+    "Cigana",
+    "N"
+  ],
+  "PT_L3_RELIGIAO": [
+    "Anglicana"
+  ],
+  "PT_L3_CONVICCAO_FILOSOFICA": [
+    "Objetor a transfusões"
+  ],
+  "PT_L3_OPINIAO_POLITICA": [
+    "Progressista",
+    "7"
+  ],
+  "PT_L3_FILIACAO_PARTIDARIA": [
+    "PEV"
+  ],
+  "PT_L3_FILIACAO_SINDICAL": [
+    "CGTP",
+    "S"
+  ],
+  "PT_L3_BIOMETRICO": [
+    "A1B2C3D4E5F6"
+  ],
+  "PT_L3_GENETICO": [
+    "BRCA1 positivo"
+  ],
+  "PT_L3_ORIENTACAO_SEXUAL": [
+    "Homossexual"
+  ],
+  "PT_L3_VIDA_SEXUAL": [
+    "Ativa"
+  ],
+  "PT_L3_IDENTIDADE_GENERO": [
+    "Transgénero"
+  ],
+  "PT_L3_VITIMA": [
+    "Violência doméstica",
+    "S"
+  ],
+  "PT_SAUDE_NUMERO_UTENTE": [
+    "629033874"
+  ],
+  "PT_SAUDE_RECEITA": [
+    "3010000123456789016"
+  ],
+  "PT_SAUDE_IDENTIFICADOR": [
+    "12345678"
+  ],
+  "PT_SAUDE_SUBSISTEMA": [
+    "ADSE - titular"
+  ],
+  "PT_SAUDE_DIAGNOSTICO": [
+    "F33.1",
+    "K86",
+    "Depressão major"
+  ],
+  "PT_SAUDE_PROCEDIMENTO": [
+    "0DTJ4ZZ",
+    "Carga viral do VIH"
+  ],
+  "PT_SAUDE_MEDICAMENTO": [
+    "Sertralina 50 mg"
+  ],
+  "PT_SAUDE_TEXTO_CLINICO": [
+    "Doente Gonçalves, utente 629033874, consulta por cefaleia."
+  ],
+  "PT_SAUDE_RESULTADO_EXAME": [
+    "Positivo"
+  ],
+  "PT_SAUDE_VIH": [
+    "Positivo"
+  ],
+  "PT_SAUDE_GRUPO_SANGUINEO": [
+    "O+"
+  ],
+  "PT_SAUDE_INCAPACIDADE": [
+    "Perturbação do espetro do autismo"
+  ],
+  "PT_SAUDE_DEPENDENCIA": [
+    "Dependência de 2.º grau",
+    "1"
+  ],
+  "PT_SAUDE_TRABALHO": [
+    "Inapto temporariamente"
+  ],
+  "PT_SAUDE_REPRODUTIVA": [
+    "12 semanas de gestação"
+  ],
+  "PT_SAUDE_MENTAL": [
+    "Perturbação bipolar"
+  ],
+  "PT_FIN_CREDITO": [
+    "Em PERSI",
+    "745"
+  ],
+  "PT_FIN_DIVIDA": [
+    "18500"
+  ],
+  "PT_FIN_RENDIMENTO": [
+    "1450"
+  ],
+  "PT_FIN_PATRIMONIO": [
+    "185000"
+  ],
+  "PT_FIN_PENSAO": [
+    "650"
+  ],
+  "PT_FIN_PRESTACAO_SOCIAL": [
+    "Rendimento Social de Inserção"
+  ],
+  "PT_FIN_FISCAL": [
+    "-1240.55",
+    "24350"
+  ],
+  "PT_PENAL_REGISTO_CRIMINAL": [
+    "Condenado por furto em 2019"
+  ],
+  "PT_PENAL_CERTIFICADO_MENORES": [
+    "Certificado apresentado"
+  ],
+  "PT_PENAL_PROCESSO": [
+    "123/24.5PBLSB",
+    "1234/23.0T8LSB"
+  ],
+  "PT_PENAL_CONTRAORDENACAO": [
+    "Perda de pontos"
+  ]
+}

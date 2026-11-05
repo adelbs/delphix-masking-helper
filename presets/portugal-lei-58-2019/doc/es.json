@@ -1,0 +1,1057 @@
+{
+  "title": "Portugal — RGPD y Lei n.º 58/2019",
+  "subtitle": "Descubrimiento y enmascaramiento de datos personales portugueses: los cuatro números del Cartão de Cidadão con caracteres de control válidos, el IBAN y el NIB, el CPE de un punto de suministro y el número de receta médica recalculados, concelhos, freguesias y códigos postales generalizados por debajo de 20.000 habitantes, las categorías especiales del artículo 9 y del artículo 35 de la Constitución, datos de salud, económicos y tributarios, y registo criminal y contraordenações.",
+  "sections": [
+    {
+      "title": "Acerca de esta política de descubrimiento",
+      "body": [
+        "Esta política de descubrimiento encuentra los datos personales de una base portuguesa y los enmascara, para que una copia fuera de producción — de pruebas, desarrollo, formación o análisis — deje de identificar a alguien.",
+        "Enmascarar solo nombres y números de documento no basta: una fecha de nacimiento, un sexo y un concelho pequeño ya apuntan a un puñado de personas, y 188 de los 308 concelhos de Portugal tienen menos de 20.000 habitantes. La política trabaja en las capas donde está el riesgo:",
+        {
+          "list": [
+            "**Identificadores directos** — los números del Cartão de Cidadão (número de identificación civil y número de documento, NIF, NISS; el número de utente está con la salud), pasaporte, título de residencia, permiso de conducir, número de alumno y cédula profesional, nombres, contacto, dirección, cuentas bancarias, tarjetas, dispositivos, cookies, matrículas, el artigo matricial de un inmueble, el CPE de un suministro de electricidad o gas, fotografías, texto libre.",
+            "**Cuasi-identificadores** — fecha de nacimiento, año de nacimiento, edad, sexo, concelho, freguesia y sus códigos, código postal, nacionalidad y situación de residencia, estado civil, profesión, empleador, nivel educativo, hogar.",
+            "**Categorías especiales** — los datos del artículo 9 del Reglamento y del artículo 35, n.º 3 de la Constitución: origen étnico, opiniones políticas y afiliación partidaria, convicciones religiosas o filosóficas, afiliación sindical, datos genéticos y biométricos, vida sexual y orientación sexual; con la identidad de género y las víctimas de violencia doméstica, que la ley portuguesa protege por sí mismas.",
+            "**Datos de salud** — el número de utente del SNS, el número de receta, los subsistemas como la ADSE, diagnósticos, procedimientos, medicamentos, VIH, discapacidad y dependencia, salud laboral, salud reproductiva y mental.",
+            "**Datos económicos** — la Central de Responsabilidades de Crédito y el PERSI, deudas, ingresos, patrimonio, pensiones, prestaciones sociales, y los datos tributarios que el artículo 64 de la Lei Geral Tributária mantiene confidenciales.",
+            "**Infracciones penales y contraordenacionales** — registo criminal, el certificado para trabajar con menores, números de proceso, y contraordenações como multas y los puntos del permiso de conducir."
+          ]
+        },
+        "Cada grupo de abajo dice qué es cada clase de datos, cómo se enmascara y por qué. El descubrimiento ejecuta una política de descubrimiento de 155 classifiers con umbral 60; el enmascaramiento son 87 clases de datos con sus algoritmos. Los nombres de columna se reconocen en portugués europeo y en inglés; los valores, en la grafía portuguesa — `telemóvel`, `morada`, `apelido`, `freguesia`."
+      ]
+    },
+    {
+      "title": "La ley en Portugal: el Reglamento, la Lei n.º 58/2019 y la Constitución",
+      "body": [
+        "Portugal no tiene una ley de protección de datos autónoma: la ley es el **Reglamento General de Protección de Datos**, Reglamento (UE) 2016/679, que se aplica directamente, y la **Lei n.º 58/2019, de 8 de agosto**, que \"assegura a execução, na ordem jurídica nacional\" del Reglamento y llena el espacio que deja a los Estados miembros. La Lei n.º 58/2019 no se ha modificado desde su publicación. La autoridad de control es la **Comissão Nacional de Proteção de Dados** (CNPD), entidad administrativa independiente que funciona junto a la Assembleia da República (arts. 3.º y 4.º).",
+        "El derecho en sí es anterior al Reglamento: el **artículo 35.º de la Constitución de 1976** fue una de las primeras normas constitucionales del mundo sobre informática. Su n.º 3 dice que \"a informática não pode ser utilizada para tratamento de dados referentes a convicções filosóficas ou políticas, filiação partidária ou sindical, fé religiosa, vida privada e origem étnica\", salvo consentimiento expreso, autorización legal con garantías de no discriminación, o \"dados estatísticos não individualmente identificáveis\". Su n.º 4 prohíbe el acceso a datos personales de terceros, y su n.º 5 dice: **\"É proibida a atribuição de um número nacional único aos cidadãos.\"** Por eso el Cartão de Cidadão lleva cuatro números de cuatro registros distintos, y la Lei n.º 7/2007 prohíbe interconectarlos (art. 16.º, n.º 2); esta política enmascara cada uno por separado, y ninguno se deriva de otro.",
+        "El Reglamento protege solo a **personas físicas**: el artículo 4.1 define dato personal como información sobre una persona física, y el considerando 14 deja fuera a las personas jurídicas. Por eso el NIF de una empresa y el NISS de una persona jurídica atraviesan esta política intactos, mientras que el NIF de un empresario individual se enmascara como cualquier otro.",
+        "La Lei n.º 58/2019 da forma a esta política en varios puntos:",
+        {
+          "list": [
+            "**Artículo 21.º, n.º 4** — \"Quando cesse a finalidade que motivou o tratamento, inicial ou posterior, de dados pessoais, o responsável pelo tratamento deve proceder à sua destruição ou anonimização\": cuando cesa la finalidad, destruir o anonimizar.",
+            "**Artículo 29.º** — los datos de salud y genéticos se rigen por el principio de **necesidad de conocer** (n.º 1), solo son accesibles a quien está sujeto a secreto (n.os 2 y 4), y **el titular debe ser notificado de cualquier acceso** a sus datos (n.º 6), con registro electrónico de los accesos (n.º 7). Un equipo de desarrollo no tiene necesidad de conocer la salud de nadie.",
+            "**Artículo 31.º** — el tratamiento con fines de archivo, investigación o estadística debe \"incluir a anonimização ou a pseudonimização\" siempre que los fines puedan alcanzarse así (n.º 1), y los datos estadísticos deben anonimizarse o seudonimizarse (n.º 5).",
+            "**Artículo 28.º, n.º 6** — el empleador solo puede tratar datos biométricos de los trabajadores para el control de asistencia y de acceso, y solo como representaciones cuya recogida \"não permita a reversibilidade\".",
+            "**Artículo 17.º** — los datos de **personas fallecidas** siguen protegidos cuando son categorías especiales o se refieren a la intimidad de la vida privada, la imagen o las comunicaciones.",
+            "**Artículo 16.º** — la edad del consentimiento digital es de **13 años**.",
+            "**Artículo 13.º, alínea b)** — habla de datos \"relacionados com condenações penais e contraordenacionais\": en Portugal, las infracciones administrativas también cuentan."
+          ]
+        },
+        "Las infracciones están en los artículos 37.º y 38.º. Tratar categorías especiales fuera del artículo 9, o datos penales fuera del artículo 10, es **infracción muy grave** (art. 37.º, n.º 1, d) y e)), y violar las reglas de seguridad del artículo 32 del Reglamento es grave (art. 38.º, n.º 1, i)). La CNPD decidió, en la **Deliberação 2019/494** de 3 de septiembre de 2019, inaplicar por primacía del derecho de la Unión nueve normas de la ley — entre ellas los rangos de multa de los artículos 37.º, n.º 2 y 38.º, n.º 2 —, y por eso aplica directamente los del artículo 83 del Reglamento: hasta 20 millones de euros o el 4% del volumen de negocio mundial. Las alíneas d) y e) del artículo 37.º, n.º 1 siguen valiendo para la prescripción.",
+        "Y la ley tiene **delitos**, que el Reglamento no tiene. El artículo 46.º castiga utilizar datos personales de forma incompatible con la finalidad de la recogida; el 47.º, el acceso indebido; y el **artículo 48.º, \"Desvio de dados\"**, castiga con prisión de hasta un año o multa a \"quem copiar, subtrair, ceder ou transferir, a título oneroso ou gratuito, dados pessoais sem previsão legal ou consentimento, independentemente da finalidade prosseguida\". En los tres casos la pena se duplica cuando se trata de datos de los artículos 9 y 10 del Reglamento, y la tentativa es punible (art. 53.º)."
+      ]
+    },
+    {
+      "title": "Seudonimización, anonimización y copias fuera de producción",
+      "body": [
+        "El Reglamento nombra la técnica. El artículo 4.5 define la **seudonimización** como el tratamiento de datos personales de manera que ya no puedan atribuirse a un interesado sin utilizar información adicional, \"siempre que dicha información adicional figure por separado y esté sujeta a medidas técnicas y organizativas\". El considerando 26 deja la información anónima totalmente fuera del Reglamento y mide la identificabilidad por \"todos los medios que razonablemente pueda utilizar\". El artículo 25.1 cita la seudonimización como primer ejemplo de protección de datos desde el diseño, el artículo 32.1 a) como primer ejemplo de medida de seguridad, y el artículo 6.4 e) como garantía que hace compatible un tratamiento ulterior con el original.",
+        "Enmascarar con el engine es seudonimización exactamente en ese sentido: el resultado es determinista para la clave del engine, y quien tiene la clave y los datos de producción puede reproducir el mapeo. Una copia enmascarada sigue siendo dato personal **para quien alcanza la clave**, y la clave debe quedar separada de la copia. El Tribunal de Justicia sacó la consecuencia el 4 de septiembre de 2025, en **EDPS v SRB (C‑413/23 P)**: los datos seudonimizados pueden no ser datos personales para un destinatario sin medios razonables de reidentificarlos, mientras siguen siéndolo para quien posee la información adicional. El Comité Europeo de Protección de Datos dijo lo mismo en sus Directrices 01/2025 sobre seudonimización, de 16 de enero de 2025, y adoptó el 7 de julio de 2026 Directrices sobre anonimización, en consulta pública hasta el 30 de octubre de 2026, según las cuales retirar los identificadores directos no basta mientras subsista riesgo de reidentificación — la razón de ser de las capas L2 y L3 de esta política.",
+        "La ley portuguesa es más directa que el Reglamento sobre la copia misma. Una copia de producción para un entorno de pruebas es un tratamiento con una finalidad distinta de la recogida; el artículo 48.º de la Lei n.º 58/2019 hace de **copiar datos personales sin base legal ni consentimiento un delito**, \"independentemente da finalidade prosseguida\", y el artículo 46.º hace lo mismo con el uso incompatible. Una copia enmascarada deja de ser, para quien trabaja con ella, la copia de datos personales de la que hablan esos artículos.",
+        "Para la Administración Pública hay una norma técnica. La **Resolução do Conselho de Ministros n.º 41/2018**, de 28 de marzo, aprobó los requisitos técnicos mínimos de las redes y sistemas de información del Estado que tratan datos personales — obligatorios para la administración directa e indirecta y recomendados al sector empresarial del Estado —, y entre los requisitos de la **capa de base de datos** está el **\"mascaramento, anonimização ou, sendo necessário, cifra dos dados pessoais transmitidos ou acedidos\"**, junto al registro de toda actividad sobre datos personales. El artículo 58.º de la Lei n.º 58/2019 remite a esas orientaciones técnicas.",
+        "En salud, la **Lei n.º 12/2005** (información genética personal e información de salud) pide a las unidades de salud que garanticen \"a separação entre a informação de saúde e genética e a restante informação pessoal\" y solo admite el acceso para investigación a la información **anonimizada** (art. 4.º). Una base clínica copiada para pruebas sin enmascarar deshace esa separación."
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "L1",
+      "title": "Identificadores directos",
+      "intro": [
+        "Datos que identifican a una persona por sí solos. Los identificadores portugueses llevan caracteres de control — el dígito del número de identificación civil y el dígito final del número de documento del Cartão de Cidadão, el dígito del NIF y del NISS, los dos dígitos del NIB, las dos letras del CPE — y todo sistema portugués los valida, por eso la política recalcula cada uno a partir de los dígitos enmascarados. El NIF de una empresa y el NISS de una persona jurídica no son datos personales de nadie y atraviesan intactos."
+      ],
+      "domains": [
+        "PT_L1_CARTAO_CIDADAO",
+        "PT_L1_NIF",
+        "PT_L1_NISS",
+        "PT_L1_PASSAPORTE",
+        "PT_L1_TITULO_RESIDENCIA",
+        "PT_L1_CARTA_CONDUCAO",
+        "PT_L1_NUMERO_ESTUDANTE",
+        "PT_L1_CEDULA_PROFISSIONAL",
+        "PT_L1_NOME",
+        "PT_L1_APELIDO",
+        "PT_L1_NOME_COMPLETO",
+        "PT_L1_EMAIL",
+        "PT_L1_TELEFONE",
+        "PT_L1_MORADA",
+        "PT_L1_MORADA_COMPLEMENTO",
+        "PT_L1_CONTA_BANCARIA",
+        "PT_L1_CARTAO_PAGAMENTO",
+        "PT_L1_CARTEIRA_DIGITAL",
+        "PT_L1_IP",
+        "PT_L1_DISPOSITIVO",
+        "PT_L1_COOKIE",
+        "PT_L1_MATRICULA",
+        "PT_L1_VEICULO",
+        "PT_L1_IMOVEL",
+        "PT_L1_PONTO_ENTREGA",
+        "PT_L1_CONTRATO",
+        "PT_L1_UTILIZADOR",
+        "PT_L1_CREDENCIAL",
+        "PT_L1_IMAGEM",
+        "PT_L1_GEOLOCALIZACAO",
+        "PT_L1_TEXTO_LIVRE"
+      ]
+    },
+    {
+      "id": "L2",
+      "title": "Cuasi-identificadores",
+      "intro": [
+        "Datos que no identifican a nadie por sí solos y a casi todos juntos. El considerando 26 del Reglamento pregunta cuán identificable es una persona por \"todos los medios que razonablemente pueda utilizar\", la singularización incluida — y una fecha de nacimiento, un sexo y una freguesia pequeña son esos medios. Estas columnas no se vacían — una prueba necesita edades y lugares que se comporten — sino que se engruesan hasta que una combinación deja de apuntar a una persona."
+      ],
+      "domains": [
+        "PT_L2_DATA_NASCIMENTO",
+        "PT_L2_ANO_NASCIMENTO",
+        "PT_L2_IDADE",
+        "PT_L2_DATA_EVENTO",
+        "PT_L2_SEXO",
+        "PT_L2_CONCELHO",
+        "PT_L2_FREGUESIA",
+        "PT_L2_CODIGO_AUTARQUICO",
+        "PT_L2_CODIGO_POSTAL",
+        "PT_L2_NACIONALIDADE",
+        "PT_L2_SITUACAO_RESIDENCIA",
+        "PT_L2_ESTADO_CIVIL",
+        "PT_L2_PROFISSAO",
+        "PT_L2_ENTIDADE_EMPREGADORA",
+        "PT_L2_ESCOLARIDADE",
+        "PT_L2_ESTABELECIMENTO_ENSINO",
+        "PT_L2_AGREGADO"
+      ]
+    },
+    {
+      "id": "L3",
+      "title": "Categorías especiales (art. 9 RGPD y art. 35.º, n.º 3 de la Constitución)",
+      "intro": [
+        "El artículo 9.1 del Reglamento prohíbe tratar estos datos salvo una de las excepciones del artículo 9.2, y la Constitución portuguesa ya lo decía desde 1976 para \"convicções filosóficas ou políticas, filiação partidária ou sindical, fé religiosa, vida privada e origem étnica\" (art. 35.º, n.º 3). Una copia de pruebas no es ninguna de esas excepciones: tratar estos datos fuera de ellas es infracción muy grave (art. 37.º, n.º 1, d) de la Lei n.º 58/2019), y copiarlos sin base legal es delito con la pena duplicada (art. 48.º, n.º 2). La identidad de género y las víctimas de violencia doméstica se suman porque la ley portuguesa las protege por sí mismas: la Lei n.º 38/2018 garantiza la autodeterminación de la identidad y la expresión de género, y la Lei n.º 112/2009 da a las víctimas un estatuto propio. Las columnas categóricas se sustituyen dentro de su propio vocabulario, o se suprimen."
+      ],
+      "domains": [
+        "PT_L3_ORIGEM_ETNICA",
+        "PT_L3_RELIGIAO",
+        "PT_L3_CONVICCAO_FILOSOFICA",
+        "PT_L3_OPINIAO_POLITICA",
+        "PT_L3_FILIACAO_PARTIDARIA",
+        "PT_L3_FILIACAO_SINDICAL",
+        "PT_L3_BIOMETRICO",
+        "PT_L3_GENETICO",
+        "PT_L3_ORIENTACAO_SEXUAL",
+        "PT_L3_VIDA_SEXUAL",
+        "PT_L3_IDENTIDADE_GENERO",
+        "PT_L3_VITIMA"
+      ]
+    },
+    {
+      "id": "SAUDE",
+      "title": "Datos de salud (art. 9 RGPD, art. 29.º de la Lei n.º 58/2019 y Lei n.º 12/2005)",
+      "intro": [
+        "La salud es categoría especial del artículo 9, y el artículo 29.º de la Lei n.º 58/2019 le añade reglas propias: acceso por el principio de **necesidad de conocer**, solo por quien está sujeto a secreto, con registro electrónico de cada acceso y **notificación al titular de cualquier acceso** a sus datos. La Lei n.º 12/2005 hace de la información de salud propiedad de la persona, que \"não pode ser utilizada para outros fins que não os da prestação de cuidados e a investigação em saúde\" (art. 3.º), pide que se mantenga separada del resto de la información personal y solo la abre a la investigación anonimizada (art. 4.º). Los números del SNS — el número de utente, el número de receta — llevan caracteres de control y se recalculan."
+      ],
+      "domains": [
+        "PT_SAUDE_NUMERO_UTENTE",
+        "PT_SAUDE_RECEITA",
+        "PT_SAUDE_IDENTIFICADOR",
+        "PT_SAUDE_SUBSISTEMA",
+        "PT_SAUDE_DIAGNOSTICO",
+        "PT_SAUDE_PROCEDIMENTO",
+        "PT_SAUDE_MEDICAMENTO",
+        "PT_SAUDE_TEXTO_CLINICO",
+        "PT_SAUDE_RESULTADO_EXAME",
+        "PT_SAUDE_VIH",
+        "PT_SAUDE_GRUPO_SANGUINEO",
+        "PT_SAUDE_INCAPACIDADE",
+        "PT_SAUDE_DEPENDENCIA",
+        "PT_SAUDE_TRABALHO",
+        "PT_SAUDE_REPRODUTIVA",
+        "PT_SAUDE_MENTAL"
+      ]
+    },
+    {
+      "id": "FIN",
+      "title": "Datos económicos y tributarios (art. 64.º LGT)",
+      "intro": [
+        "Los datos financieros no son categoría especial, pero una copia de pruebas con ellos es la que más daño hace cuando se escapa, y un salario junto a un concelho identifica. El **artículo 64.º de la Lei Geral Tributária** obliga al secreto a todos los que, en la Autoridade Tributária, conocen la situación tributaria de un contribuyente; la **Central de Responsabilidades de Crédito** del Banco de Portugal guarda todo crédito de todo deudor; y el **PERSI** (Decreto-Lei n.º 227/2012) es el procedimiento que un banco debe seguir antes de ejecutar un crédito al consumo impagado. Los importes se enmascaran manteniendo el orden de magnitud; las situaciones, dentro de su vocabulario."
+      ],
+      "domains": [
+        "PT_FIN_CREDITO",
+        "PT_FIN_DIVIDA",
+        "PT_FIN_RENDIMENTO",
+        "PT_FIN_PATRIMONIO",
+        "PT_FIN_PENSAO",
+        "PT_FIN_PRESTACAO_SOCIAL",
+        "PT_FIN_FISCAL"
+      ]
+    },
+    {
+      "id": "PENAL",
+      "title": "Infracciones penales y administrativas (art. 10 RGPD y art. 13.º, alínea b) de la Lei n.º 58/2019)",
+      "intro": [
+        "El artículo 10 del Reglamento solo admite tratar datos de condenas e infracciones penales bajo el control de una autoridad pública o de una ley que lo autorice, y Portugal lo lee también para las infracciones administrativas: el artículo 13.º, alínea b) de la Lei n.º 58/2019 habla de datos \"relacionados com condenações penais e contraordenacionais\". El registo criminal lo lleva la Direção-Geral da Administração da Justiça (Lei n.º 37/2015), que cancela las decisiones entre cinco y diez años después de extinguidas las penas — una copia las guarda mientras viva la copia."
+      ],
+      "domains": [
+        "PT_PENAL_REGISTO_CRIMINAL",
+        "PT_PENAL_CERTIFICADO_MENORES",
+        "PT_PENAL_PROCESSO",
+        "PT_PENAL_CONTRAORDENACAO"
+      ]
+    }
+  ],
+  "domains": {
+    "PT_L1_CARTAO_CIDADAO": {
+      "title": "Cartão de Cidadão y número de identificación civil",
+      "what": [
+        "El **número de identificação civil** — el antiguo número del bilhete de identidade — tiene ocho dígitos y un **dígito de control** (Lei n.º 12/91): pesos 9 a 2, módulo 11, once menos el resto, escrito 0 cuando da 10 u 11. El **número de documento** del Cartão de Cidadão (Lei n.º 7/2007, art. 17.º) es ese número, dos caracteres de la versión de la tarjeta y un último dígito de control: `12345678 9 ZZ1`. El último dígito es un Luhn calculado sobre dígitos **y letras** (A = 10 … Z = 35).",
+        "La misma clase de datos recibe lo que una columna de identificación guarda al lado: el número civil con o sin su dígito, un bilhete de identidade antiguo de siete dígitos, un pasaporte."
+      ],
+      "masking": [
+        "Los ocho dígitos cambian; el **primer dígito de control se recalcula** con el Check Digit, cuya regla es exactamente la portuguesa; la versión de la tarjeta se mantiene; y el **último dígito se recalcula** con un estado — la suma hasta ahí y si el siguiente carácter se duplica — que atraviesa los once caracteres uno a uno, con una tabla de 1.300 líneas, saltando espacios y guiones. El número enmascarado es válido por las dos reglas y no pertenece a nadie. El número civil solo y dentro del número de documento usan el mismo mapeo, así que los dos siguen coincidiendo."
+      ]
+    },
+    "PT_L1_NIF": {
+      "title": "NIF de persona física",
+      "what": [
+        "El Número de Identificação Fiscal de la Autoridade Tributária: nueve dígitos, el último un dígito de control por la misma regla del número civil. El primer dígito dice qué es el contribuyente: **1, 2 y 3** persona física, **45** persona física no residente, **8** el antiguo empresario individual; **5** persona jurídica, **6** administración pública, **7** herencias indivisas, fondos y otras entidades, **9** sociedades irregulares y comunidades de propietarios. A veces escrito con el prefijo de IVA `PT`."
+      ],
+      "masking": [
+        "El NIF de una persona física mantiene el primer dígito — sigue siendo de una persona —, los otros siete cambian y el **dígito de control se recalcula** con el Check Digit. El NIF de una empresa, un organismo público o una herencia atraviesa intacto: el artículo 4.1 del Reglamento solo alcanza a personas físicas. El NIF no es el número civil: comparten la regla, no el valor, y cada uno tiene su mapeo."
+      ]
+    },
+    "PT_L1_NISS": {
+      "title": "Número de Identificação da Segurança Social (NISS)",
+      "what": [
+        "Once dígitos: **1** para una persona física, **2** para una persona jurídica, nueve dígitos y un dígito de control — nueve menos la suma de los diez primeros con los pesos 29, 23, 19, 17, 13, 11, 7, 5, 3 y 2, módulo 10."
+      ],
+      "masking": [
+        "El NISS de una persona mantiene el 1, los nueve dígitos cambian y el **dígito de control se recalcula** con el Check Digit: el Check Digit escribe diez menos el resto, y dar al 1 inicial el peso 0 en lugar de 29 suma exactamente la unidad que convierte una regla en la otra. El NISS de una persona jurídica atraviesa intacto."
+      ]
+    },
+    "PT_L1_PASSAPORTE": {
+      "title": "Pasaporte",
+      "what": [
+        "El número del pasaporte electrónico portugués: una o dos letras y seis dígitos."
+      ],
+      "masking": [
+        "Letras por letras y dígitos por dígitos, manteniendo la forma."
+      ]
+    },
+    "PT_L1_TITULO_RESIDENCIA": {
+      "title": "Título de residencia",
+      "what": [
+        "El número de la autorización o tarjeta de residencia emitida por la AIMA (Agência para a Integração, Migrações e Asilo, sucesora del SEF), o del certificado de registro de ciudadano de la Unión. No tiene regla pública."
+      ],
+      "masking": [
+        "Carácter a carácter: vocales por vocales, consonantes por consonantes, dígitos por dígitos; los separadores se mantienen."
+      ]
+    },
+    "PT_L1_CARTA_CONDUCAO": {
+      "title": "Permiso de conducir",
+      "what": [
+        "El número de la carta de condução emitida por el IMT. No tiene regla pública de dígito de control."
+      ],
+      "masking": [
+        "Letras por letras y dígitos por dígitos, manteniendo la forma y los separadores."
+      ]
+    },
+    "PT_L1_NUMERO_ESTUDANTE": {
+      "title": "Número de alumno",
+      "what": [
+        "El número de alumno o de expediente en una escuela o universidad, o el número mecanográfico."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_CEDULA_PROFISSIONAL": {
+      "title": "Cédula profesional",
+      "what": [
+        "El número de inscripción en una orden profesional — de Médicos, Enfermeros, Abogados, Ingenieros — o la cédula de un contable certificado. En un registro de actos médicos identifica al médico y, al lado, al paciente."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_NOME": {
+      "title": "Nombre",
+      "what": [
+        "Uno o más nombres de pila — `Maria da Conceição`, `João Pedro`, `Inês`."
+      ],
+      "masking": [
+        "Palabra a palabra, a partir de una lista de 282 nombres portugueses, femeninos y masculinos, de varias generaciones, con la caja de la entrada. `de`, `da`, `do`, `dos`, `das` y `e` se quedan donde están."
+      ]
+    },
+    "PT_L1_APELIDO": {
+      "title": "Apellido",
+      "what": [
+        "Uno o más apellidos — `Ferreira dos Santos`, `Sousa e Silva`. En Portugal la persona suele llevar el apellido de la madre antes que el del padre, hasta cuatro en total (Código do Registo Civil, art. 103.º)."
+      ],
+      "masking": [
+        "Palabra a palabra, a partir de una lista de 425 apellidos portugueses, de los más frecuentes — Silva, Santos, Ferreira, Pereira — a otros menos comunes; las partículas se mantienen."
+      ]
+    },
+    "PT_L1_NOME_COMPLETO": {
+      "title": "Nombre completo",
+      "what": [
+        "Nombre y apellidos en una sola columna: `Maria da Conceição Ferreira dos Santos`, o `SILVA, JOÃO PEDRO` con los apellidos delante."
+      ],
+      "masking": [
+        "Dos palabras son un nombre y un apellido; tres, un nombre y dos apellidos; cuatro, dos y dos; más, dos nombres y el resto apellidos. Con coma, lo que va antes son los apellidos. Cada palabra pasa a otra de su lista, y las partículas se mantienen."
+      ]
+    },
+    "PT_L1_EMAIL": {
+      "title": "Correo electrónico",
+      "what": [
+        "Una dirección de correo electrónico, con letras acentuadas incluidas."
+      ],
+      "masking": [
+        "La parte local y el dominio se enmascaran carácter a carácter, y el dominio de nivel superior pasa a `.test`, reservado para pruebas: una dirección enmascarada nunca entrega."
+      ]
+    },
+    "PT_L1_TELEFONE": {
+      "title": "Teléfono",
+      "what": [
+        "Un número portugués de nueve dígitos — **91, 92, 93 y 96** para móvil, **2** y el prefijo de área para un fijo, **30** para uno nómada —, con o sin `+351`. MB WAY hace de un móvil también una dirección de pago."
+      ],
+      "masking": [
+        "El prefijo del país y los dos primeros dígitos se mantienen — el operador o el área, no más fino que un distrito —, así que el número enmascarado sigue siendo móvil o fijo; los otros siete cambian, y los separadores se mantienen."
+      ]
+    },
+    "PT_L1_MORADA": {
+      "title": "Dirección",
+      "what": [
+        "Una dirección portuguesa: tipo de vía, nombre, número de policía, piso y lado — `Rua da Liberdade, 12, 3.º Esq.`."
+      ],
+      "masking": [
+        "La línea entera pasa a una dirección ficticia de una lista de 4.000 — calles, avenidas, travesías, plazas y urbanizaciones con nombres comunes en Portugal, números, pisos y lados."
+      ]
+    },
+    "PT_L1_MORADA_COMPLEMENTO": {
+      "title": "Complemento de la dirección",
+      "what": [
+        "Piso, lado, puerta, lote, bloque, fracción, apartado de correos."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_CONTA_BANCARIA": {
+      "title": "IBAN y NIB",
+      "what": [
+        "Una cuenta portuguesa es un **NIB** de veintiún dígitos — cuatro del banco, cuatro de la sucursal, once de la cuenta y dos **dígitos de control**, 98 menos los diecinueve primeros por 100 módulo 97 — y el **IBAN** pone `PT50` delante. La regla del NIB hace que el NIB entero dé resto 1 por 97, y eso hace que los dígitos de control del IBAN de toda cuenta portuguesa sean **50**."
+      ],
+      "masking": [
+        "Los once dígitos de la cuenta cambian y banco y sucursal se mantienen. Los dos dígitos de control del NIB se **recalculan** con un estado — el número hasta ahí módulo 97 — que atraviesa los diecinueve dígitos con una tabla de 1.261 líneas y se convierte él mismo en los dos dígitos; rehecho el NIB, el IBAN vuelve a ser válido con el mismo `PT50`. En un IBAN impreso en grupos de cuatro un espacio cae entre los dos dígitos de control, y la última tabla lo repone en su sitio. El algoritmo IBAN del plugin recalcularía los dígitos ISO y dejaría el NIB mal; solo se usa para el IBAN de otro país que aparezca en la columna."
+      ]
+    },
+    "PT_L1_CARTAO_PAGAMENTO": {
+      "title": "Tarjeta de pago",
+      "what": [
+        "El número de una tarjeta de crédito o de débito (Multibanco)."
+      ],
+      "masking": [
+        "Enmascarado con el algoritmo Credit Card que viene con Delphix: otro número que pasa el Luhn, manteniendo los seis primeros dígitos (el emisor, no el titular)."
+      ]
+    },
+    "PT_L1_CARTEIRA_DIGITAL": {
+      "title": "Monedero digital",
+      "what": [
+        "La dirección de un monedero de criptomoneda."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_IP": {
+      "title": "Dirección IP",
+      "what": [
+        "Una dirección IPv4 o IPv6. El Tribunal de Justicia ya dijo que una IP dinámica es dato personal para quien tiene medios legales de llegar al abonado (Breyer, C‑582/14)."
+      ],
+      "masking": [
+        "Cada octeto de una IPv4 pasa a un número de 1 a 254; una IPv6 se enmascara como hexadecimal."
+      ]
+    },
+    "PT_L1_DISPOSITIVO": {
+      "title": "Identificador de dispositivo",
+      "what": [
+        "IMEI, IMSI, ICCID, dirección MAC, identificador publicitario, identificador de sesión."
+      ],
+      "masking": [
+        "Carácter a carácter, con las letras hexadecimales en un grupo propio, de modo que una MAC o un UUID siguen siendo hexadecimales válidos."
+      ]
+    },
+    "PT_L1_COOKIE": {
+      "title": "Cookie e identificador en línea",
+      "what": [
+        "El valor de una cookie, un identificador de visitante o de seguimiento."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_MATRICULA": {
+      "title": "Matrícula",
+      "what": [
+        "Cuatro series de matrículas han corrido desde 1937, cada una con dos pares de letras y de dígitos en otro orden: `AA-00-00`, `00-00-AA` (1992), `00-AA-00` (2005) y `AA-00-AA` (2020)."
+      ],
+      "masking": [
+        "Las letras cambian dentro de las 23 letras que usan las series — sin K, W ni Y —, los dígitos entre dígitos, y el orden se mantiene: una matrícula enmascarada sigue fechando el coche por su serie."
+      ]
+    },
+    "PT_L1_VEICULO": {
+      "title": "Identificación del vehículo",
+      "what": [
+        "Número de bastidor (VIN), de motor, del certificado de matrícula o del documento único automóvel."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_IMOVEL": {
+      "title": "Inmueble",
+      "what": [
+        "Un inmueble en el registro de Hacienda es un **artigo matricial** — la freguesia, U para urbano o R para rústico, y un número: `110508-U-1234` — y en el registro de la propiedad una descrição. Junto al nombre de una persona, dice dónde tiene casa."
+      ],
+      "masking": [
+        "El número del artículo cambia; la freguesia y el tipo se mantienen."
+      ]
+    },
+    "PT_L1_PONTO_ENTREGA": {
+      "title": "CPE y CUI",
+      "what": [
+        "El **CPE** (Código de Ponto de Entrega) identifica cada punto de suministro de electricidad, y el **CUI** cada uno de gas: `PT`, cuatro dígitos del operador de red — `0002` para E-Redes en el continente —, doce del punto y dos **letras de control**. Siguen la misma regla que el CUPS español: los dieciséis dígitos módulo 529, divididos por 23, leídos en la tabla `TRWAGMYFPDXBNJZSQVHLCKE` — comprobada en dos CPE publicados en licitaciones públicas. Un CPE identifica una vivienda: la factura, la curva de consumo del contador inteligente y la tarifa social dependen de él."
+      ],
+      "masking": [
+        "El operador se mantiene y los doce dígitos cambian. Las dos letras se **recalculan** con un estado de tres dígitos que atraviesa el valor con una tabla de 6.877 líneas, y una última tabla de 529 líneas lo convierte en las letras."
+      ]
+    },
+    "PT_L1_CONTRATO": {
+      "title": "Número de contrato o de cliente",
+      "what": [
+        "Número de contrato, póliza, préstamo, cliente, socio, empleado, siniestro o reclamación."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_UTILIZADOR": {
+      "title": "Nombre de usuario",
+      "what": [
+        "Login, alias o perfil en una red social."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_L1_CREDENCIAL": {
+      "title": "Credencial",
+      "what": [
+        "Contraseña, PIN, token, clave de API, códigos de seguridad — y los hashes de contraseña, reconocidos por su esquema (bcrypt, crypt, Argon2, PBKDF2, `{SSHA}`)."
+      ],
+      "masking": [
+        "Redactada: cada carácter pasa a `X`. Una credencial no tiene uso en una copia de pruebas."
+      ]
+    },
+    "PT_L1_IMAGEM": {
+      "title": "Imagen y voz",
+      "what": [
+        "Fotografía, vídeo, grabación de voz, o la ruta hacia ellos. La imagen es un derecho propio (art. 26.º de la Constitución, art. 79.º del Código Civil), la Lei n.º 58/2019 protege la de las personas fallecidas (art. 17.º) y limita la videovigilancia (art. 19.º)."
+      ],
+      "masking": [
+        "Redactada: cada carácter pasa a `X`."
+      ]
+    },
+    "PT_L1_GEOLOCALIZACAO": {
+      "title": "Geolocalización",
+      "what": [
+        "Latitud y longitud, juntas o en columnas separadas."
+      ],
+      "masking": [
+        "La parte entera y el primer decimal se mantienen — unos 11 km — y los otros decimales cambian: el lugar se generaliza, no se mueve."
+      ]
+    },
+    "PT_L1_TEXTO_LIVRE": {
+      "title": "Texto libre",
+      "what": [
+        "Observaciones, comentarios, notas, descripciones de reclamaciones — donde se escribe de todo, identificadores incluidos."
+      ],
+      "masking": [
+        "Free Text Redaction: números de documento, NIF y números de nueve dígitos, NISS, correos, teléfonos, IBAN, NIB, tarjetas, IP y matrículas pasan a `[DADO]`, y cualquier palabra que sea un nombre o apellido de la lista pasa a `[NOME]`."
+      ]
+    },
+    "PT_L2_DATA_NASCIMENTO": {
+      "title": "Fecha de nacimiento",
+      "what": [
+        "La fecha de nacimiento, como fecha, marca de tiempo o texto."
+      ],
+      "masking": [
+        "Desplazada hasta 60 días hacia adelante o hacia atrás: lo bastante para romper el vínculo con la persona, lo bastante poco para que edades y cursos escolares cambien para pocas personas."
+      ]
+    },
+    "PT_L2_ANO_NASCIMENTO": {
+      "title": "Año de nacimiento",
+      "what": [
+        "El año de nacimiento solo."
+      ],
+      "masking": [
+        "La década se mantiene y el último dígito cambia."
+      ]
+    },
+    "PT_L2_IDADE": {
+      "title": "Edad",
+      "what": [
+        "Edad, grupo o tramo de edad."
+      ],
+      "masking": [
+        "La decena se mantiene y la unidad cambia; a partir de 100 años, la edad pasa a 90."
+      ]
+    },
+    "PT_L2_DATA_EVENTO": {
+      "title": "Fecha de evento personal",
+      "what": [
+        "Fechas de la vida de una persona: defunción, matrimonio, divorcio, alta y baja laboral, ingreso y alta hospitalaria, diagnóstico, parto, detención, expedición y caducidad del documento."
+      ],
+      "masking": [
+        "Desplazadas hasta 30 días hacia adelante o hacia atrás."
+      ]
+    },
+    "PT_L2_SEXO": {
+      "title": "Sexo",
+      "what": [
+        "El sexo — `F`/`M`, `Feminino`/`Masculino`, `Mulher`/`Homem`, `1`/`2`."
+      ],
+      "masking": [
+        "Cada vocabulario se sustituye dentro de sí: una columna F/M sigue siendo F/M. Una `M` sola se lee como masculino, la convención del Cartão de Cidadão y de todo registro portugués."
+      ]
+    },
+    "PT_L2_CONCELHO": {
+      "title": "Concelho",
+      "what": [
+        "El concelho (municipio) de residencia o de nacimiento, o la naturalidade — `Mértola`, `Corvo`, `Lisboa` —, solo o con el distrito al lado."
+      ],
+      "masking": [
+        "Un concelho de menos de 20.000 habitantes pasa al **concelho de al menos 20.000 más cercano en el mismo distrito** — o, en las islas, en la misma región autónoma; uno mayor se mantiene, así como el distrito y la región. Un nombre solo se generaliza cuando todo concelho que lo lleva es pequeño; escrito con el distrito, la misma regla vale dentro de él y el distrito se mantiene."
+      ]
+    },
+    "PT_L2_FREGUESIA": {
+      "title": "Freguesia",
+      "what": [
+        "La freguesia — la entidad local más pequeña de Portugal —, por el nombre del mapa de 2013 (`União das freguesias de …`) o por el de las freguesias que la reorganización de 2025 repuso, sola o con el concelho al lado."
+      ],
+      "masking": [
+        "Una freguesia de menos de 20.000 habitantes — 2.973 de las 3.092 del censo — pasa a la **freguesia más poblada del concelho al que va su concelho**: por regla, la sede del concelho. Escrita con el concelho, el concelho escrito pasa a ser el de destino. Las 119 freguesias mayores se mantienen."
+      ]
+    },
+    "PT_L2_CODIGO_AUTARQUICO": {
+      "title": "Código de concelho o freguesia (DICO y DICOFRE)",
+      "what": [
+        "El código del INE de un concelho — **DICO**, dos dígitos del distrito o la isla y dos del concelho, `0209` — o de una freguesia — **DICOFRE**, el DICO y dos más, `020901`. Barcelos, que tuvo más de 99 freguesias, tiene códigos con letras: `0302FA`."
+      ],
+      "masking": [
+        "Los códigos siguen a los nombres: el DICO de un concelho pequeño pasa al del concelho al que se generaliza, y el DICOFRE de una freguesia pequeña al de la freguesia que la sustituye. Los ceros a la izquierda perdidos — `209` por `0209` — se reconocen y se mantienen."
+      ]
+    },
+    "PT_L2_CODIGO_POSTAL": {
+      "title": "Código postal",
+      "what": [
+        "El código postal de CTT: cuatro dígitos (CP4) y tres (CP3), `7750-320`, a veces con la designación postal al lado. Hay 760 CP4, cada uno con 13.600 personas de media; el CP3 lo estrecha hasta una calle."
+      ],
+      "masking": [
+        "El CP4 sigue al concelho al que más sirve: un CP4 cuyo concelho principal es pequeño pasa al CP4 principal del concelho al que se generaliza — 253 de los 760 —, así que el código enmascarado coincide con el concelho enmascarado de al lado. El **CP3 cambia dígito a dígito**. La designación postal pasa por la tabla de los concelhos."
+      ]
+    },
+    "PT_L2_NACIONALIDADE": {
+      "title": "Nacionalidad",
+      "what": [
+        "Nacionalidad o país de nacimiento. No es categoría especial, pero el artículo 13.º de la Constitución prohíbe discriminar por el \"território de origem\", y Portugal tiene más de un millón de residentes extranjeros — en un lugar pequeño, la nacionalidad apunta a pocos."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de las nacionalidades más numerosas entre los residentes en Portugal."
+      ]
+    },
+    "PT_L2_SITUACAO_RESIDENCIA": {
+      "title": "Situación de residencia",
+      "what": [
+        "El tipo de autorización de residencia, de visado o de protección: temporal, permanente, CPLP, larga duración, ciudadano de la Unión, protección internacional o temporal, situación irregular."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de situaciones; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_L2_ESTADO_CIVIL": {
+      "title": "Estado civil",
+      "what": [
+        "Soltero, casado, unión de hecho, divorciado, separado judicialmente, viudo — en texto o código."
+      ],
+      "masking": [
+        "Sustituido dentro de la lista; un código pasa a otro código."
+      ]
+    },
+    "PT_L2_PROFISSAO": {
+      "title": "Profesión",
+      "what": [
+        "Profesión, categoría profesional o función, en texto o con el código de la Classificação Portuguesa das Profissões (CPP 2010)."
+      ],
+      "masking": [
+        "Un código pasa a otro con el mismo número de dígitos; un texto, a otra profesión de una lista."
+      ]
+    },
+    "PT_L2_ENTIDADE_EMPREGADORA": {
+      "title": "Empleador",
+      "what": [
+        "El nombre del empleador o del lugar de trabajo."
+      ],
+      "masking": [
+        "Sustituido por una empresa ficticia de una lista."
+      ]
+    },
+    "PT_L2_ESCOLARIDADE": {
+      "title": "Nivel educativo",
+      "what": [
+        "El nivel de escolaridad o las titulaciones, del 1.º ciclo al doctorado."
+      ],
+      "masking": [
+        "Sustituido dentro de la lista; un código pasa a otro código."
+      ]
+    },
+    "PT_L2_ESTABELECIMENTO_ENSINO": {
+      "title": "Centro educativo",
+      "what": [
+        "Escuela, agrupación de escuelas, colegio o universidad."
+      ],
+      "masking": [
+        "Sustituido por otro centro de una lista."
+      ]
+    },
+    "PT_L2_AGREGADO": {
+      "title": "Dependientes y hogar",
+      "what": [
+        "Número de hijos, de dependientes o de miembros del hogar."
+      ],
+      "masking": [
+        "Limitado a 5: los hogares grandes son raros, y un recuento raro identifica."
+      ]
+    },
+    "PT_L3_ORIGEM_ETNICA": {
+      "title": "Origen étnico",
+      "what": [
+        "Origen étnico o racial, o pertenencia a una comunidad — la gitana, por ejemplo. El censo portugués no pregunta la etnia; la encuesta del INE sobre condiciones de vida, orígenes y trayectorias (2023) pidió la autoidentificación con estos grupos."
+      ],
+      "masking": [
+        "Sustituido dentro de una lista; un código pasa a otro código; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_L3_RELIGIAO": {
+      "title": "Religión",
+      "what": [
+        "Religión o confesión — incluida la inscripción en Educación Moral y Religiosa Católica y la asignación del IRS a una iglesia."
+      ],
+      "masking": [
+        "Sustituida dentro de la lista de religiones de la pregunta de los Censos 2021; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_L3_CONVICCAO_FILOSOFICA": {
+      "title": "Convicción filosófica",
+      "what": [
+        "Convicciones filosóficas, morales o éticas, objeción de conciencia, masonería."
+      ],
+      "masking": [
+        "Suprimida: pasa a `Sem informação`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_L3_OPINIAO_POLITICA": {
+      "title": "Opinión política",
+      "what": [
+        "Autoubicación ideológica, intención o recuerdo de voto, simpatía política."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de posiciones; un número en una escala pasa a otro número."
+      ]
+    },
+    "PT_L3_FILIACAO_PARTIDARIA": {
+      "title": "Afiliación partidaria",
+      "what": [
+        "Partido, militancia, cuota de afiliado."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de partidos con escaño parlamentario; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_L3_FILIACAO_SINDICAL": {
+      "title": "Afiliación sindical",
+      "what": [
+        "Sindicato, cuota sindical descontada del salario, delegado sindical."
+      ],
+      "masking": [
+        "Suprimida: pasa a `Sem informação`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_L3_BIOMETRICO": {
+      "title": "Dato biométrico",
+      "what": [
+        "Huella dactilar, plantilla facial, iris, voz — \"dirigidos a identificar de manera unívoca a una persona física\" (art. 9.1 RGPD). El artículo 28.º, n.º 6 de la Lei n.º 58/2019 solo permite al empleador tratarlos para el control de asistencia y de acceso, como representaciones irreversibles."
+      ],
+      "masking": [
+        "Redactado: cada carácter pasa a `X`."
+      ]
+    },
+    "PT_L3_GENETICO": {
+      "title": "Dato genético",
+      "what": [
+        "Resultado de prueba genética, perfil de ADN, secuencia de nucleótidos. La Lei n.º 12/2005 hace de la información genética propiedad de la persona y prohíbe su uso por empleadores y aseguradoras."
+      ],
+      "masking": [
+        "Redactado: cada carácter pasa a `X`."
+      ]
+    },
+    "PT_L3_ORIENTACAO_SEXUAL": {
+      "title": "Orientación sexual",
+      "what": [
+        "La orientación sexual declarada."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de orientaciones."
+      ]
+    },
+    "PT_L3_VIDA_SEXUAL": {
+      "title": "Vida sexual",
+      "what": [
+        "Actividad, conducta o parejas sexuales."
+      ],
+      "masking": [
+        "Suprimida: pasa a `Sem informação`."
+      ]
+    },
+    "PT_L3_IDENTIDADE_GENERO": {
+      "title": "Identidad de género",
+      "what": [
+        "Identidad y expresión de género, nombre sentido, pronombres. La Lei n.º 38/2018 garantiza la autodeterminación de la identidad de género y permite cambiar la mención del sexo en el registro civil por declaración."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de identidades."
+      ]
+    },
+    "PT_L3_VITIMA": {
+      "title": "Víctima de violencia",
+      "what": [
+        "Estatuto de víctima, tipo de violencia, medidas de alejamiento o de protección, casa de acogida. La Lei n.º 112/2009 protege la identidad de la víctima de violencia doméstica."
+      ],
+      "masking": [
+        "Suprimida: pasa a `Sem informação`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_NUMERO_UTENTE": {
+      "title": "Número de utente del SNS",
+      "what": [
+        "El número nacional de usuario del servicio de salud (Decreto-Lei n.º 198/95, Portaria n.º 981/95): nueve dígitos — la región sanitaria de la primera inscripción (**1** Norte, **2** Centro, **3** Lisboa e Vale do Tejo, **4** Alentejo, **5** Algarve, **6** Azores, **7** Madeira, **9** inscrito con el Cartão de Cidadão), siete de la persona y un **dígito de control por la ISO/IEC 7064 MOD 11,10**. La portaria dice MOD 11-2, una errata que un matemático de la Universidade dos Açores señaló al descubrir el sistema correcto. Es uno de los cuatro números del Cartão de Cidadão."
+      ],
+      "masking": [
+        "La región se mantiene, los siete dígitos cambian y el dígito de control se **recalcula** con un estado — lo que el MOD 11,10 lleva de un dígito al siguiente, de 1 a 10 — que atraviesa el número con una tabla de 130 líneas."
+      ]
+    },
+    "PT_SAUDE_RECEITA": {
+      "title": "Número de receta médica",
+      "what": [
+        "El número de la receta sin papel: diecinueve caracteres, la región sanitaria delante y un **carácter de control por la ISO/IEC 7064 MOD 11-2**, escrito X cuando vale diez. Es el código que el paciente recibe por SMS para retirar los medicamentos, y lo vincula a ellos."
+      ],
+      "masking": [
+        "La región se mantiene, los diecisiete dígitos del medio cambian y el carácter de control se **recalcula** con un estado de 0 a 10 que atraviesa el número con una tabla de 143 líneas."
+      ]
+    },
+    "PT_SAUDE_IDENTIFICADOR": {
+      "title": "Identificador clínico o de subsistema",
+      "what": [
+        "Número de historia clínica, episodio, ingreso o consulta en un hospital, y el número de beneficiario de un subsistema — ADSE, SAD, ADM, SAMS."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_SAUDE_SUBSISTEMA": {
+      "title": "Subsistema y seguro de salud",
+      "what": [
+        "La entidad responsable de pagar la asistencia: SNS, ADSE, SAD de la GNR y de la PSP, ADM, SAMS, un seguro privado."
+      ],
+      "masking": [
+        "Sustituido dentro de una lista; un número cambia dígito a dígito; un indicador sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_DIAGNOSTICO": {
+      "title": "Diagnóstico",
+      "what": [
+        "Diagnóstico, enfermedad, alergia o causa de muerte, en texto o codificado — en **CIE-10-MC** en los hospitales desde 2017, en **ICPC-2** en atención primaria: `F33.1`, `K86`."
+      ],
+      "masking": [
+        "Un código pasa a otro código de la misma forma, de una lista de diagnósticos comunes; un texto, a otro diagnóstico; un indicador sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_PROCEDIMENTO": {
+      "title": "Procedimiento",
+      "what": [
+        "Acto médico, cirugía, prueba complementaria (MCDT), en texto o codificado en CIE-10-PCS."
+      ],
+      "masking": [
+        "Un código de siete caracteres mantiene la forma; un número cambia dígito a dígito; un texto pasa a otro procedimiento."
+      ]
+    },
+    "PT_SAUDE_MEDICAMENTO": {
+      "title": "Medicamento",
+      "what": [
+        "Medicamento, principio activo, terapéutica, posología. Un antirretroviral, un antipsicótico o la metadona dicen el diagnóstico."
+      ],
+      "masking": [
+        "Sustituido dentro de una lista de medicamentos comunes."
+      ]
+    },
+    "PT_SAUDE_TEXTO_CLINICO": {
+      "title": "Texto clínico",
+      "what": [
+        "Diario clínico, anamnesis, informes de alta, informes, triaje."
+      ],
+      "masking": [
+        "Free Text Redaction, como el texto libre: los identificadores pasan a `[DADO]` y los nombres a `[NOME]`."
+      ]
+    },
+    "PT_SAUDE_RESULTADO_EXAME": {
+      "title": "Resultado de prueba",
+      "what": [
+        "Resultado de análisis, de prueba o de medición clínica."
+      ],
+      "masking": [
+        "Carácter a carácter, manteniendo la forma."
+      ]
+    },
+    "PT_SAUDE_VIH": {
+      "title": "VIH e infecciones de transmisión sexual",
+      "what": [
+        "Estado serológico, carga viral, terapia antirretroviral, PrEP, otras ITS, tuberculosis."
+      ],
+      "masking": [
+        "Suprimido: pasa a `Sem informação`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_GRUPO_SANGUINEO": {
+      "title": "Grupo sanguíneo",
+      "what": [
+        "Grupo ABO y factor Rh."
+      ],
+      "masking": [
+        "Enmascarado con el BloodType SL que viene con Delphix: uno de los ocho grupos."
+      ]
+    },
+    "PT_SAUDE_INCAPACIDADE": {
+      "title": "Discapacidad",
+      "what": [
+        "Tipo o grado de discapacidad — el Atestado Médico de Incapacidade Multiuso, bajo la Tabela Nacional de Incapacidades, abre beneficios fiscales y sociales a partir del 60%."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de tipos; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_DEPENDENCIA": {
+      "title": "Dependencia",
+      "what": [
+        "El grado del complemento por dependencia de la Segurança Social, el estatuto del cuidador informal (Lei n.º 100/2019), los cuidados continuados."
+      ],
+      "masking": [
+        "Sustituida dentro de la lista; un código pasa a otro código."
+      ]
+    },
+    "PT_SAUDE_TRABALHO": {
+      "title": "Salud laboral",
+      "what": [
+        "Ficha de aptitud, exámenes de medicina del trabajo, accidentes de trabajo, enfermedades profesionales, bajas. La Lei n.º 102/2009 solo deja a la medicina del trabajo decir al empleador si el trabajador es apto, y el Código do Trabalho (arts. 17.º y 19.º) protege la salud del trabajador frente al empleador."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de resultados de aptitud; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_REPRODUTIVA": {
+      "title": "Salud reproductiva",
+      "what": [
+        "Embarazo, parto, interrupción voluntaria del embarazo (Lei n.º 16/2007), anticoncepción, procreación médicamente asistida (Lei n.º 32/2006)."
+      ],
+      "masking": [
+        "Suprimida: pasa a `Sem informação`; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_SAUDE_MENTAL": {
+      "title": "Salud mental",
+      "what": [
+        "Trastornos psiquiátricos, conducta suicida, adicciones, internamiento involuntario."
+      ],
+      "masking": [
+        "Suprimida: pasa a `Sem informação`."
+      ]
+    },
+    "PT_FIN_CREDITO": {
+      "title": "Historial crediticio",
+      "what": [
+        "Responsabilidades en la Central del Banco de Portugal, PERSI, impago, insolvencia, calificación de riesgo."
+      ],
+      "masking": [
+        "Una situación pasa a otra de una lista; una puntuación cambia dígito a dígito; un indicador sigue siendo indicador."
+      ]
+    },
+    "PT_FIN_DIVIDA": {
+      "title": "Deuda",
+      "what": [
+        "Saldo deudor, importe de préstamo o cuota, límite de crédito, embargo."
+      ],
+      "masking": [
+        "Enmascarado con el CM Numeric, que viene con Delphix: cada dígito pasa a otro, y el importe mantiene la cantidad de dígitos, el signo y los decimales — el mismo orden de magnitud, sin relación con el valor real."
+      ]
+    },
+    "PT_FIN_RENDIMENTO": {
+      "title": "Ingresos",
+      "what": [
+        "Sueldo, salario, remuneración, ingresos del hogar."
+      ],
+      "masking": [
+        "Enmascarado con el CM Numeric, manteniendo el orden de magnitud."
+      ]
+    },
+    "PT_FIN_PATRIMONIO": {
+      "title": "Patrimonio",
+      "what": [
+        "Valor patrimonial tributario, tasación de un inmueble, saldos, depósitos, inversiones financieras, planes de ahorro para la jubilación (PPR)."
+      ],
+      "masking": [
+        "Enmascarado con el CM Numeric, manteniendo el orden de magnitud."
+      ]
+    },
+    "PT_FIN_PENSAO": {
+      "title": "Pensión",
+      "what": [
+        "Importe de una pensión de vejez, invalidez o supervivencia, de alimentos, o de otra prestación."
+      ],
+      "masking": [
+        "Enmascarado con el CM Numeric, manteniendo el orden de magnitud."
+      ]
+    },
+    "PT_FIN_PRESTACAO_SOCIAL": {
+      "title": "Prestación social",
+      "what": [
+        "Rendimento Social de Inserção, subsidio de desempleo, abono de família y su tramo, Complemento Solidário para Idosos, Prestação Social para a Inclusão, tarifa social, ayuda social escolar — la necesidad económica de una familia."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de prestaciones; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_FIN_FISCAL": {
+      "title": "Dato tributario",
+      "what": [
+        "Base liquidable, cuota, devolución o importe a pagar del IRS, el IMI, retenciones — protegidos por el secreto fiscal del artículo 64.º de la Lei Geral Tributária."
+      ],
+      "masking": [
+        "Cada dígito pasa a otro: el importe mantiene el signo — una devolución sigue siendo devolución — y los decimales."
+      ]
+    },
+    "PT_PENAL_REGISTO_CRIMINAL": {
+      "title": "Registo criminal",
+      "what": [
+        "Antecedentes penales, condenas, delitos, situación procesal y penitenciaria, medidas cautelares."
+      ],
+      "masking": [
+        "Sustituido dentro de una lista de situaciones; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_PENAL_CERTIFICADO_MENORES": {
+      "title": "Certificado para trabajar con menores",
+      "what": [
+        "La Lei n.º 113/2009 obliga a quien contrata para funciones con contacto regular con menores a pedir el certificado de registo criminal del candidato, y la Lei n.º 103/2015 creó el registro de los condenados por delitos contra la autodeterminación sexual de menores. Escuelas, clubes y empresas guardan la columna — y su valor es un dato de antecedentes penales."
+      ],
+      "masking": [
+        "Sustituido dentro de una lista de situaciones del certificado; un indicador sí/no sigue siendo indicador."
+      ]
+    },
+    "PT_PENAL_PROCESSO": {
+      "title": "Número de proceso",
+      "what": [
+        "El NUIPC de un proceso penal — `123/24.5PBLSB`: el número, el año, un dígito de control y el código del órgano y del lugar — o el número de un proceso judicial, escrito igual: `1234/23.0T8LSB`."
+      ],
+      "masking": [
+        "El número cambia; el año, el dígito y el código se mantienen. La regla del dígito de control no es pública, así que el número enmascarado deja de pasarla."
+      ]
+    },
+    "PT_PENAL_CONTRAORDENACAO": {
+      "title": "Contraordenação",
+      "what": [
+        "Multas, actas de contraordenação, infracciones de tráfico, los puntos del permiso de conducir (doce, desde 2016), la inhabilitación para conducir."
+      ],
+      "masking": [
+        "Sustituida dentro de una lista de situaciones; un número cambia dígito a dígito; un indicador sigue siendo indicador."
+      ]
+    }
+  },
+  "closing": [
+    {
+      "title": "Caracteres de control",
+      "body": [
+        "Casi todo identificador portugués se comprueba por aritmética, y un valor enmascarado cuyos caracteres de control no se recalcularon es rechazado por todo formulario, banco o sistema de la administración que lo reciba — justo lo que una prueba debe evitar. La política recalcula seis reglas.",
+        "Dos caben en el framework Check Digit tal como es. El **número de identificación civil y el NIF** son ocho dígitos y un noveno con los pesos 9 a 2, módulo 11, once menos el resto — y Portugal escribe tanto el 10 como el 11 como 0, que es exactamente lo que escribe el Check Digit. Un matemático de la Universidade de Coimbra mostró que eso deja pasar muchos errores de tecleo en los números terminados en 0; para el enmascaramiento es una suerte, porque no pide corrección. El **NISS** son diez dígitos y un undécimo, nueve menos la suma ponderada módulo 10: el Check Digit escribe diez menos el resto, y como solo se enmascaran NISS de personas — que empiezan por 1 — dar a ese 1 el peso 0 en lugar de 29 suma la unidad que convierte una regla en la otra.",
+        "Las demás no son sumas ponderadas que el Check Digit escriba: el último dígito del **número de documento** del Cartão de Cidadão es un Luhn sobre dígitos y letras; el del **número de utente**, un ISO/IEC 7064 MOD 11,10; el de la **receta**, un MOD 11-2 que escribe X; los dos del **NIB**, un resto módulo 97; las dos letras del **CPE**, un resto módulo 529. La política los calcula con tablas. Un **estado** — lo que la regla acumuló hasta ahí — se pone delante del valor y lo atraviesa carácter a carácter. Cada paso es un Regex Decompose que entrega \"estado + siguiente carácter\" a un Data Cleansing cuya tabla responde \"siguiente carácter + nuevo estado\"; los separadores se saltan con líneas que llevan el estado sin cambiarlo, y un paso que no encuentra línea deja el valor como está, así que una sola cadena atiende todas las formas escritas. Al final, una última tabla convierte el estado en los caracteres de control.",
+        "Las tablas son pequeñas — 130 líneas para el número de utente, 143 para la receta, 1.261 para el NIB, 1.300 para el Cartão de Cidadão, 6.877 para el CPE —, y cada cadena se ejecuta en el propio build con el enmascaramiento tomado como identidad: tiene que devolver intacto un ejemplo válido, o el build falla. El ejemplo del número de utente es el publicado por la Universidade dos Açores, `629033874`; los del CPE, dos códigos de licitaciones públicas."
+      ]
+    },
+    {
+      "title": "Dónde vive la gente: concelhos, freguesias y códigos postales",
+      "body": [
+        "Portugal se divide en 18 distritos en el continente y dos regiones autónomas, **308 concelhos** y, desde las elecciones municipales de 2025, 3.259 freguesias. En los Censos 2021, **188 concelhos tenían menos de 20.000 habitantes** — 1,6 millones de personas — y también **2.973 de las 3.092 freguesias** de entonces, donde vivían 6,3 millones, más del 60% del país. Una fecha de nacimiento, un sexo y una de esas freguesias apuntan a un puñado de vecinos.",
+        "Un concelho por debajo del umbral pasa al **concelho de al menos 20.000 más cercano en el mismo distrito**, medido entre los centros; todo distrito tiene uno — al menos la capital —, así que un valor generalizado nunca sale de su distrito. En las islas la referencia es la región autónoma: en las Azores se mantienen Ponta Delgada, Ribeira Grande y Angra do Heroísmo, y un concelho pequeño de otra isla va al mayor más cercano, en otra isla; en Madeira se mantienen Funchal, Santa Cruz y Câmara de Lobos, y Porto Santo va a Madeira.",
+        "Una freguesia por debajo del umbral pasa a la **freguesia más poblada del concelho al que va su concelho** — la sede, por regla —, elegida entre las que todavía existen. La **Lei n.º 25-A/2025** repuso 302 freguesias agregadas en 2013, con efecto en la toma de posesión de los órganos elegidos en 2025; la tabla trae los nombres de las dos generaciones — las 3.092 del mapa de 2013, con las uniones, y las 303 que volvieron, con la población que GeoNames les da —, así que una base antigua y una nueva se reconocen ambas. Los nombres compartidos por varias freguesias — `Santa Maria`, `São Pedro`, `Sé` — solo se generalizan solos cuando todas las que los llevan son pequeñas; escritos con el concelho al lado, la regla vale dentro de él.",
+        "Los códigos siguen a los nombres. El DICO de un concelho pequeño pasa al del concelho de destino, el DICOFRE de una freguesia pequeña al de su freguesia de destino, siempre en el mismo distrito o región. El código postal sigue al concelho al que más sirve el CP4, por las direcciones de la base de códigos postales de CTT: un CP4 cuyo concelho principal es pequeño pasa al CP4 principal del concelho de destino — 253 de los 760 —, así que código postal y concelho enmascarados coinciden."
+      ]
+    },
+    {
+      "title": "Límites",
+      "body": [
+        {
+          "list": [
+            "**Enmascarar con clave es seudonimización, no anonimización.** Quien tiene la clave y los datos de producción puede reproducir el mapeo, así que la copia enmascarada sigue siendo dato personal para esa persona y sigue exigiendo las medidas del artículo 32 del Reglamento. Mantenga la clave separada de la copia y no llame anónima a la copia mientras la clave exista.",
+            "**Las poblaciones son las de los Censos 2021**, y las de las freguesias repuestas en 2025 las que GeoNames les atribuye. Una freguesia o un concelho cerca de 20.000 puede cruzar la línea; rehaga la política cuando el INE publique poblaciones de las nuevas freguesias.",
+            "**Los nombres de freguesia anteriores a 2013** que no volvieron en 2025 no están en la tabla y pasan sin cambios, como cualquier nombre que la tabla no conozca: un lugar, una aldea, una errata. Un nombre que, sin acentos, coincide con un distrito o región — `Madeirã` es `Madeira` — solo se generaliza escrito con el concelho.",
+            "**Un CP4 puede cubrir más de un concelho.** La política sigue al concelho con más direcciones; el CP4 de una ciudad grande que también sirve aldeas de concelhos vecinos se mantiene, y con él la pista de que la persona vive en una de ellas. La base de códigos postales usada es de 2020.",
+            "**El CP3 enmascarado puede no existir.** Los tres dígitos cambian uno a uno; el código mantiene la forma de un código postal y el CP4 correcto, pero no todo CP4-CP3 así formado está asignado por CTT.",
+            "**Banco y sucursal se conservan.** No son datos personales, y mantenerlos mantiene una cuenta de pruebas dentro de un banco real; pero la sucursal puede indicar una ciudad. Enmascare la sucursal con una regla propia donde eso importe.",
+            "**El dígito de control del NUIPC no se recalcula**: su regla no es pública. El número enmascarado tiene la forma de un NUIPC, pero no pasa la comprobación.",
+            "**Permiso de conducir, título de residencia y beneficiario de la ADSE** no tienen regla pública de formación — el número de la ADSE usa la misma regla que el NIF, pero su formato completo no es público — y se enmascaran carácter a carácter, sin recalcular nada.",
+            "**Una M sola se lee como masculino.** Es la convención del Cartão de Cidadão (F/M); una columna que codifique H/M recibiría F en algunas filas y debería tener un algoritmo propio.",
+            "**Un número de nueve dígitos es ambiguo.** NIF, número civil con dígito, número de utente y teléfono fijo tienen la misma forma; sin un nombre de columna que diga cuál es, el descubrimiento elige el NIF, y el enmascaramiento del NIF mantiene el primer dígito y recalcula el último — lo que, en un número de utente, rompería su dígito.",
+            "**El texto libre** se suprime palabra a palabra: Free Text Redaction separa por espacios, así que un número escrito en grupos se alcanza por partes, y los patrones de la política cubren los ocho o nueve dígitos de cada parte.",
+            "**Menores**: una fecha de nacimiento se mueve como máximo 60 días, así que pocas personas cruzan los 13 años — la edad del consentimiento digital por el artículo 16.º de la Lei n.º 58/2019 — o los 18; pero algunas cruzan. Divida la regla por tramo de edad con Multi-Column Condition donde eso importe.",
+            "**Las columnas binarias y los adjuntos quedan fuera de alcance.** Una copia escaneada del Cartão de Cidadão — que el artículo 5.º de la Lei n.º 7/2007 solo permite con consentimiento —, una fotografía, el PDF de un informe médico guardan todo lo que las columnas de al lado ya no dicen. Inventaríelos y repórtelos como riesgo residual.",
+            "**El descubrimiento es una propuesta, no un veredicto.** Los classifiers leen nombres de columna y valores; una columna con un nombre que nadie reconoce puede escaparse, y una con nombre de persona puede capturarse por error. Revise el inventario antes de ejecutar un job de enmascaramiento."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Verificación",
+      "body": [
+        "La política se comprueba en cada build. Cada cadena que calcula un carácter de control se ejecuta primero en el propio build con el enmascaramiento tomado como identidad, y tiene que devolver intacto un ejemplo válido — el Cartão de Cidadão `12345678 9 ZZ1`, el NIB y el IBAN compacto e impreso, el número de utente `629033874`, un número de receta y el CPE `PT0002000066435112QY`. Las reglas se comprueban antes contra ejemplos publicados: el número de utente de la Universidade dos Açores, un ORCID para el MOD 11-2, los números de documento de python-stdnum, dos CPE de licitaciones públicas.",
+        "Las 155 configuraciones de classifier se revisan una a una, y una batería de 153 columnas — bien nombradas, mal nombradas, nombradas en inglés, con nombres opacos como los de un paquete bancario, y 31 que ni siquiera son datos personales, entre ellas el NIF de una empresa — se perfila con la política entera en el umbral de 60 y de nuevo solo con el paquete esencial: toda columna cae donde debe, y ninguna de las 31 es reclamada. Las mismas columnas se perfilan otra vez con los valores rellenados con espacios y ceros, como los entrega una columna CHAR.",
+        "La generalización se audita offline: los 308 concelhos, las 3.395 freguesias de las dos generaciones y los 760 CP4 se comprueban contra la regla — cada sustitución nombra un lugar de al menos 20.000, o la freguesia sede del concelho de destino, en el mismo distrito o región.",
+        "El enmascaramiento se ejecuta de verdad, en el plugin, en todas las clases de datos — muestras, indicadores y la entrada de ejemplo de cada algoritmo —, cada valor comprobado contra lo que debe resultar, y de nuevo con espacios y ceros alrededor. Después, en masa: 200 números de documento del Cartão de Cidadão, 100 números civiles, 200 NIF, 150 NISS, 150 números de utente, 100 recetas, 200 IBAN — cien compactos y cien impresos en grupos de cuatro —, 100 NIB y 100 CPE dan otras tantas salidas distintas, **todas válidas por su propia regla**, de la misma forma, y manteniendo lo que deben mantener: la versión de la tarjeta, el tipo de contribuyente, la región sanitaria, banco y sucursal, el operador de red."
+      ]
+    },
+    {
+      "title": "Fuentes",
+      "body": [
+        {
+          "list": [
+            "Reglamento (UE) 2016/679, Reglamento General de Protección de Datos: artículos 4, 6, 9, 10, 25, 32 y 83, y considerandos 14 y 26.",
+            "Lei n.º 58/2019, de 8 de agosto, que asegura la ejecución del RGPD (sin modificaciones desde su publicación): artículos 13.º, 16.º, 17.º, 19.º, 21.º, 28.º a 31.º, 37.º, 38.º, 46.º a 48.º, 53.º y 58.º.",
+            "Comissão Nacional de Proteção de Dados, Deliberação 2019/494, de 3 de septiembre de 2019 (inaplicación de normas de la Lei n.º 58/2019).",
+            "Constitución de la República Portuguesa, artículos 13.º, 26.º y 35.º.",
+            "Resolução do Conselho de Ministros n.º 41/2018, de 28 de marzo, requisitos técnicos mínimos de las redes y sistemas de información de la Administración Pública.",
+            "Tribunal de Justicia de la Unión Europea, sentencia de 4 de septiembre de 2025, EDPS v SRB, C‑413/23 P; sentencia de 19 de octubre de 2016, Breyer, C‑582/14. Comité Europeo de Protección de Datos, Directrices 01/2025 sobre seudonimización (16 de enero de 2025) y Directrices sobre anonimización (adoptadas el 7 de julio de 2026, en consulta pública).",
+            "Lei n.º 7/2007 (Cartão de Cidadão), artículos 2.º, 5.º, 16.º y 17.º; Lei n.º 12/91 (bilhete de identidade); Lei n.º 12/2005 (información genética personal e información de salud), artículos 3.º y 4.º; Decreto-Lei n.º 198/95 y Portaria n.º 981/95 (tarjeta de usuario); Lei n.º 102/2009 (seguridad y salud en el trabajo); Código do Trabalho, artículos 17.º y 19.º; Lei n.º 38/2018; Lei n.º 112/2009; Lei n.º 100/2019; Lei n.º 16/2007; Lei n.º 32/2006.",
+            "Lei Geral Tributária, artículo 64.º; Decreto-Lei n.º 227/2012 (PERSI); Lei n.º 37/2015 (identificación criminal); Lei n.º 113/2009 y Lei n.º 103/2015 (protección de menores); Código da Estrada.",
+            "Lei n.º 25-A/2025, de 13 de marzo, que repone freguesias agregadas por la Lei n.º 11-A/2013.",
+            "Instituto Nacional de Estatística, Censos 2021: población residente por concelho y freguesia (indicador 0011609). GeoNames: centros de los concelhos y de las freguesias de 2025 con su código DICO y DICOFRE. Base de códigos postales de CTT (2020).",
+            "Las reglas de los caracteres de control: R. C. Teixeira, Universidade dos Açores, sobre el número de identificación civil y el NIF y sobre el número de utente (MOD 11,10); ISO/IEC 7064 para el MOD 11,10 y el MOD 11-2; la Agência para a Modernização Administrativa, \"Validação de Número de Documento do Cartão de Cidadão\", y las implementaciones independientes de python-stdnum y django-localflavor para el número de documento y el NISS; el Banco de Portugal y la ISO 13616 para el NIB y el IBAN; el CPE comprobado contra códigos publicados en licitaciones públicas."
+          ]
+        }
+      ]
+    }
+  ]
+}
